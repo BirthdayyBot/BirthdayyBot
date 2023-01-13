@@ -105,3 +105,16 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Yarn files
+.yarn/install-state.gz
+.yarn/build-state.yml
+
+# Ignore the config file (contains sensitive information such as tokens)
+config.ts
+
+# Ignore heapsnapshot
+*.heapsnapshot
+
+#dist
+dist/
