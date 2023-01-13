@@ -1,16 +1,17 @@
+import './lib/setup';
 import { LogLevel, SapphireClient } from '@sapphire/framework';
-// import '@sapphire/plugin-logger/register';
-import { GatewayIntentBits } from 'discord.js';
-import { config } from 'dotenv';
-
-config();
+import { GatewayIntentBits, Partials } from 'discord.js';
 
 const client = new SapphireClient({
-	defaultPrefix: '!',
-    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+	defaultPrefix: 'b!',
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+	regexPrefix: /^(hey +)?bot[,! ]/i,
+	caseInsensitiveCommands: true,
 	logger: {
 		level: LogLevel.Debug
 	},
+	shards: 'auto',
+	partials: [Partials.Channel],
 	loadMessageCommandListeners: true
 });
 
