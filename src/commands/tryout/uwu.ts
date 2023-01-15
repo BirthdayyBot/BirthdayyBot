@@ -4,6 +4,7 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
 import findOption from '../../helpers/utils/findOption';
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',
 	subcommands: [
@@ -18,6 +19,10 @@ import findOption from '../../helpers/utils/findOption';
 		{
 			name: 'random',
 			chatInputRun: 'runRandom'
+		},
+		{
+			name: 'fetch',
+			chatInputRun: 'runFetch'
 		}
 	]
 })
@@ -51,6 +56,20 @@ export class UwuCommand extends Subcommand {
 	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const user = findOption(interaction, 'user', interaction.user.id);
 		const embed = await generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
+		return await interaction.reply({ embeds: [embed] });
+	}
+
+	public async runFetch(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		interface JsonPlaceholderResponse {
+			userId: number;
+			id: number;
+			title: string;
+			completed: boolean;
+		}
+
+		// Fetch the data. No need to call `.json()` after making the request!
+		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
+		const embed = await generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
 		return await interaction.reply({ embeds: [embed] });
 	}
 
@@ -88,6 +107,11 @@ export class UwuCommand extends Subcommand {
 							required: true
 						}
 					]
+				},
+				{
+					type: 1,
+					name: 'fetch',
+					description: 'Fetch a user'
 				}
 			]
 		});
