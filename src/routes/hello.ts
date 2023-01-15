@@ -1,8 +1,13 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 
-@ApplyOptions<Route.Options>({ route: 'hello-world' })
 export class UserRoute extends Route {
+	public constructor(context: Route.Context, options: Route.Options) {
+		super(context, {
+			...options,
+			route: 'test'
+		});
+	}
+
 	public [methods.GET](_request: ApiRequest, response: ApiResponse) {
 		response.json({ message: 'Hello World' });
 	}
