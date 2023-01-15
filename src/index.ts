@@ -14,6 +14,7 @@ const client = new SapphireClient({
 	shards: 'auto',
 	partials: [Partials.Channel],
 	loadMessageCommandListeners: true,
+	typing: true,
 	hmr: {
 		enabled: process.env.NODE_ENV === 'development'
 	}
