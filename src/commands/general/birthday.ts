@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 // import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 // import type { Message } from 'discord.js';
-import CommandBirthday from '../../helpers/template/commands/birthday';
+import CommandBirthday from '../../lib/template/commands/birthday';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
