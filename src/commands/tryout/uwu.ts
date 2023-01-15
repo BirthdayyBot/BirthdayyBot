@@ -1,7 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import type { Message } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
 import findOption from '../../helpers/utils/findOption';
@@ -38,7 +37,7 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public async runTimes(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const times = findOption(interaction, 'times') ?? 1;
+		const times = findOption(interaction, 'times', 1);
 		container.logger.info('times', times);
 
 		let uwu = '';
@@ -49,9 +48,10 @@ export class UwuCommand extends Subcommand {
 		return await interaction.reply({ embeds: [embed] });
 	}
 
-	public async runRandom(message: Message, args: Args) {
-		const user = await args.pick('user');
-		return message.channel.send(`UwU ${user}`);
+	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		const user = findOption(interaction, 'user', interaction.user.id);
+		const embed = await generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
+		return await interaction.reply({ embeds: [embed] });
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
