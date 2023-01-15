@@ -10,7 +10,7 @@ import findOption from '../../helpers/utils/findOption';
 	subcommands: [
 		{
 			name: 'once',
-			chatInputRun: 'runOnce',
+			chatInputRun: 'runOnce'
 		},
 		{
 			name: 'times',
@@ -37,15 +37,10 @@ export class UwuCommand extends Subcommand {
 		return await interaction.reply({ embeds: [embed] });
 	}
 
-	public async runTimes(interaction: Subcommand.ChatInputCommandInteraction, args: Args) {
-		//console info args
-		container.logger.info('args', args);
-		container.logger.info('interaction.options', interaction.options);
-		container.logger.info('get', interaction.options.get('times'));
-        interaction.options.get('times');
+	public async runTimes(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		const times = findOption(interaction, 'times') ?? 1;
+		container.logger.info('times', times);
 
-		const times = findOption(interaction, 'times');
-        container.logger.info('times', times);
 		let uwu = '';
 		for (let i = 0; i < times!; i++) {
 			uwu += 'UwU ';
@@ -77,8 +72,7 @@ export class UwuCommand extends Subcommand {
 						{
 							type: 4,
 							name: 'times',
-							description: 'How many UwUs to send',
-							required: true
+							description: 'How many UwUs to send'
 						}
 					]
 				},
