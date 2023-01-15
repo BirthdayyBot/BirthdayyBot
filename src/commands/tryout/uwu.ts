@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { Message } from 'discord.js';
-
+import generateEmbed from '../../helpers/generate/embed';
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',
 	subcommands: [
@@ -67,9 +67,11 @@ export class UwuCommand extends Subcommand {
 		});
 	}
 
-	public async runOnce(message: Message, _args: Args) {
+	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		//respond with an interaction
-		await message.reply('UwU');
+		const embed = await generateEmbed({ title: 'Uwu', description: 'Uwu' });
+		console.log("embed", embed);
+		await interaction.reply({ embeds: [embed] });
 	}
 
 	public async runTimes(message: Message, args: Args) {
