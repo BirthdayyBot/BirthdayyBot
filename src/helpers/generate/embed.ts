@@ -1,5 +1,4 @@
 import * as env from '../provide/environment';
-import { container } from '@sapphire/framework';
 
 /**
  * Creates a RichEmbed object with the given information
@@ -27,7 +26,6 @@ export default async function generateEmbed(embed_information: {
 	fields?: Array<Object>;
 	color?: string;
 }): Promise<object> {
-	container.logger.info('log message');
 	const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
 
 	const currentDate = new Date();
@@ -39,6 +37,7 @@ export default async function generateEmbed(embed_information: {
 	const footer = { text: `${env.BOT_NAME} ${env.ENV === 'premium' ? '👑' : ''}`, icon_url: env.BOT_AVATAR };
 	const thumbnail = !thumbnail_url ? {} : { url: thumbnail_url };
 	const image = !image_url ? {} : { url: image_url };
+    const embedFields = !fields ? [] : fields;
 
 	const embed = {
 		title: title,
@@ -47,7 +46,7 @@ export default async function generateEmbed(embed_information: {
 		timestamp: timestamp,
 		author: author,
 		footer: footer,
-		fields: fields,
+		fields: embedFields,
 		thumbnail: thumbnail,
 		image: image
 	};
