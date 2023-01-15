@@ -15,7 +15,7 @@ export const BOT_NAME = process.env.BOT_NAME;
 export const BOT_ID = process.env.BOT_ID;
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = process.env.BOT_COLOR;
+export const BOT_COLOR = parseInt(process.env.BOT_COLOR!);
 export const BOT_OWNER = process.env.BOT_OWNER;
 export const BOT_ADMIN = '267614892821970945';
 export const WEBSITE_URL = 'https://birthdayy.xyz/';

@@ -29,13 +29,11 @@ export default async function generateEmbed(embed_information: {
 }): Promise<object> {
 	container.logger.info('log message');
 	const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
-    
+
 	const currentDate = new Date();
 	const timestamp = currentDate.toISOString();
-	const embedColor = !color ? env.BOT_COLOR : color;
-	container.logger.info('env.BOT_COLOR ', env.BOT_COLOR);
-	console.log('color', color);
-	console.log('embedColor', embedColor);
+
+	const embedColor = !color ? env.BOT_COLOR : parseInt(color);
 
 	const author = !author_name && !author_avatar ? {} : { name: author_name, icon_url: author_avatar };
 	const footer = { text: `${env.BOT_NAME} ${env.ENV === 'premium' ? '👑' : ''}`, icon_url: env.BOT_AVATAR };
