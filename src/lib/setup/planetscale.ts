@@ -16,7 +16,7 @@ container.sequelize = new Sequelize(process.env.DB_NAME!, process.env.DB_USERNAM
 const connectToPlanetscale = async () => {
 	try {
 		await container.sequelize.authenticate();
-		container.logger.info('Connection has been established successfully.');
+		container.logger.info('Connection to Database has been established successfully.');
 	} catch (error) {
 		container.logger.fatal('Unable to connect to the database:', error);
 	}
