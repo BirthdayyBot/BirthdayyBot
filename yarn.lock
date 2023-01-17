@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@babel/runtime@^7.20.6":
+  version "7.20.7"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.7.tgz#fcb41a5a70550e04a7b708037c7c32f7f356d8fd"
+  integrity sha512-UF0tvkUtxwAgZ5W/KrkHf0Rn0fdnLDU9ScxBrEVNUprE/MzirjK4MJUX1/BVDv00Sv8cljtukVK1aky++X1SjQ==
+  dependencies:
+    regenerator-runtime "^0.13.11"
+
 "@discordjs/builders@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.4.0.tgz#b951b5e6ce4e459cd06174ce50dbd51c254c1d47"
@@ -134,17 +141,7 @@
   dependencies:
     discord-api-types "^0.37.25"
 
-"@sapphire/discord.js-utilities@6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/discord.js-utilities/-/discord.js-utilities-6.0.0.tgz#0b55eabfe43ec0f3d28b1f3a49238af37bc9993c"
-  integrity sha512-WqYeLeUATpIZysTEeYbHxYxrR4A/lQidTJX0vTgbTORAEUo0Zn5H7zDeoJz1zZtaS1wTL1qrnnY5rNYvH1D9Bg==
-  dependencies:
-    "@sapphire/discord-utilities" "^3.0.0"
-    "@sapphire/duration" "^1.0.0"
-    "@sapphire/utilities" "^3.11.0"
-    tslib "^2.4.1"
-
-"@sapphire/discord.js-utilities@6.0.1":
+"@sapphire/discord.js-utilities@6.0.1", "@sapphire/discord.js-utilities@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@sapphire/discord.js-utilities/-/discord.js-utilities-6.0.1.tgz#999ac28c4f4dbce2f3c6586235735ab950109f55"
   integrity sha512-9XXLe/pycr203RMk6gVyI7ox3PuElGuix+1y+GLCOIhSC8JV2YmTO4A+G9zzggOmV7l5iwmRt8ttQMJnPaUG2w==
@@ -236,6 +233,17 @@
   dependencies:
     chokidar "^3.5.3"
     tslib "2.x"
+
+"@sapphire/plugin-i18next@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-i18next/-/plugin-i18next-5.0.0.tgz#7484e8f093bc365bec8917f59619d9864d1b9bed"
+  integrity sha512-+sYsZuOflMEcqjHM3P2QSwWmN8OPa8V+r1oDDHz1xPkKncPi13aRd7kWClKPSa5KSPqnLJRK54jGl+9F6bbD/w==
+  dependencies:
+    "@sapphire/utilities" "^3.11.0"
+    "@skyra/i18next-backend" "^2.0.1"
+    chokidar "^3.5.3"
+    i18next "^22.4.8"
+    tslib "^2.4.1"
 
 "@sapphire/plugin-logger@^3.0.1":
   version "3.0.1"
@@ -339,6 +347,13 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-3.0.0.tgz#f22ea15bab8c74627fff006b0a9ee68c9ec23208"
   integrity sha512-xP0yQDvNAjK1SsEqa9kwnkvr/jvzrrc5a6vp64hQULQezMXFBD23NBYMphV0CgLIDCifJHZfgQPBPL3zUAz5+A==
+
+"@skyra/i18next-backend@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@skyra/i18next-backend/-/i18next-backend-2.0.1.tgz#20b8072943984c5ecf7c54d8bb2a18f87a370baf"
+  integrity sha512-KDk7RcTI5NzuWM9dAY7FIMWOh4195Azcj3Ec+0kFjUk6kL/sgecVr+x717Rh34+u3ZxLoGpJSLe1ChuuHwq2XQ==
+  dependencies:
+    tslib "^2.4.1"
 
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
@@ -1335,6 +1350,13 @@ https-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
+i18next@^22.4.8:
+  version "22.4.9"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.4.9.tgz#98c8384c6bd41ff937da98b1e809ba03d3b41053"
+  integrity sha512-8gWMmUz460KJDQp/ob3MNUX84cVuDRY9PLFPnV8d+Qezz/6dkjxwOaH70xjrCNDO+JrUL25iXfAIN9wUkInNZw==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+
 iconv-lite@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.6.3.tgz#a52f80bf38da1952eb5c681790719871a1a72501"
@@ -2032,6 +2054,11 @@ reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+
+regenerator-runtime@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 regexp.prototype.flags@^1.4.3:
   version "1.4.3"
