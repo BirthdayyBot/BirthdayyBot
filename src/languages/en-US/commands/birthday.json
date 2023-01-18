@@ -1,0 +1,17 @@
+{
+	"name": "birthday",
+	"description": "Commands for managing birthdays",
+	"subcommand": {
+		"register": {
+			"name": "register",
+			"description": "Register a new Birthday",
+			"options": {
+				"user": { "name": "user", "description": "Update a Birthday for a Person - MANAGER ONLY" },
+				"day": { "name": "day", "description": "Day of the Birthday" },
+				"month": { "name": "month", "description": "Month of the Birthday" },
+				"year": { "name": "year", "description": "Year of the Birthday" }
+			}
+		},
+		"update": { "name": "update", "description": "Update an existing birthday" }
+	}
+}

@@ -28,8 +28,8 @@ export class UwuCommand extends Subcommand {
 			description: 'Birthday Command'
 		});
 	}
-	public override registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(CommandBirthday);
+	public override async registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(await CommandBirthday());
 	}
 
 	// public async birthdayAdd(message: Message, args: Args) {}

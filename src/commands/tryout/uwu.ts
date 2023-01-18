@@ -37,7 +37,7 @@ export class UwuCommand extends Subcommand {
 	readonly uwuString = 'UwU';
 
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const title = await resolveKey(interaction, 'commands/uwu:uwu');
+		const title = await resolveKey(interaction, 'commands/uwu:uwuss');
 		const embed = await generateEmbed({ title: title, description: 'Uwu' });
 		return await interaction.reply({ embeds: [embed] });
 	}
@@ -75,6 +75,7 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
+
 		registry.registerChatInputCommand({
 			name: 'uwu',
 			description: 'UwU Command',
