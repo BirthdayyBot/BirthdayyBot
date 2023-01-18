@@ -23,6 +23,7 @@
 		"discord-api-types": "^0.37.28",
 		"discord.js": "^14.7.1",
 		"dotenv-cra": "^3.0.2",
+		"lib": "^4.3.3",
 		"mysql2": "^3.0.1",
 		"reflect-metadata": "^0.1.13",
 		"sequelize": "^6.28.0"

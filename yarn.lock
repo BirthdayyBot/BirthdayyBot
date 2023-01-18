@@ -1600,6 +1600,11 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
+lib@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/lib/-/lib-4.3.3.tgz#a92c85b27610e1f1361cc54110a3653abce35b5f"
+  integrity sha512-5ZIjwJvbfVJjbu0BTpfkqJrQ2ykXzo+XRFkHkTPHGpAPNS9vWwhLn1caQsedTKXmQ2U9gKYFSAlfjAXdXuWBjA==
+
 load-json-file@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-4.0.0.tgz#2f5f45ab91e33216234fd53adab668eb4ec0993b"
