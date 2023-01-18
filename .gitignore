@@ -110,9 +110,6 @@ dist
 .yarn/install-state.gz
 .yarn/build-state.yml
 
-# Ignore the config file (contains sensitive information such as tokens)
-config.ts
-
 # Ignore heapsnapshot
 *.heapsnapshot
 
