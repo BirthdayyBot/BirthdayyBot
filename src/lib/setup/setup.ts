@@ -12,7 +12,7 @@ import * as colorette from 'colorette';
 import { config } from 'dotenv-cra';
 import { join } from 'path';
 import { inspect } from 'util';
-import { srcDir } from './constants';
+import { srcDir } from '../constants';
 
 // Read env var
 config({ path: join(srcDir, '.env') });

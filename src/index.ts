@@ -1,4 +1,4 @@
-import './lib/setup';
+import './lib/setup/start';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';

@@ -4,7 +4,6 @@ import { send } from '@sapphire/plugin-editable-commands';
 import { cyan } from 'colorette';
 import type { APIUser } from 'discord-api-types/v9';
 import { EmbedBuilder, Guild, Message, User } from 'discord.js';
-import { RandomLoadingMessage } from './constants';
 
 /**
  * Picks a random item from an array
@@ -22,6 +21,7 @@ export function pickRandom<T>(array: readonly T[]): T {
  * @param message The message data for which to send the loading message
  */
 export function sendLoadingMessage(message: Message): Promise<typeof message> {
+	const RandomLoadingMessage = ['Loading...', 'Please wait...', 'Fetching...', 'Processing...'];
 	return send(message, { embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')] });
 }
 
