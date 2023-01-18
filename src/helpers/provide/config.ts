@@ -17,7 +17,8 @@ export async function getConfig(guild_id: string) {
 		LOG_CHANNEL: req.result.log_channel,
 		OVERVIEW_MESSAGE: req.result.overview_message,
 		TIMEZONE: req.result.timezone,
-		PREMIUM: req.result.premium
+		LANGUAGE: req.result.language,
+		PREMIUM: req.result.premium === 1 ? true : false
 	};
 }
 
