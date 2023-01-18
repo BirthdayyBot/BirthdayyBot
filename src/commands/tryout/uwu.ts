@@ -5,7 +5,7 @@ import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
 import findOption from '../../helpers/utils/findOption';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { fetchLanguage, resolveKey } from '@sapphire/plugin-i18next';
+import { resolveKey } from '@sapphire/plugin-i18next';
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',
 	subcommands: [
@@ -35,12 +35,10 @@ export class UwuCommand extends Subcommand {
 		});
 	}
 	readonly uwuString = 'UwU';
+
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const title = await resolveKey(interaction, 'commands/uwu:uwu');
-		//respond with an interaction
-		console.log(await fetchLanguage(interaction));
 		const embed = await generateEmbed({ title: title, description: 'Uwu' });
-		console.log('embed', embed);
 		return await interaction.reply({ embeds: [embed] });
 	}
 
