@@ -1,6 +1,7 @@
 import './lib/setup';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
+import { getGuildLanguage } from './helpers/provide/config';
 
 container.client = new SapphireClient({
 	defaultPrefix: 'b!',
@@ -20,6 +21,16 @@ container.client = new SapphireClient({
 		listenOptions: {
 			port: 4000
 		}
+	},
+	i18n: {
+		fetchLanguage: async (context) => {
+			if (!context.guild) {
+				return 'en-US';
+			}
+
+			const guildLanguage = await getGuildLanguage(context.guild.id);
+			return guildLanguage || 'en-US';
+		}
 	}
 });
 
@@ -37,3 +48,4 @@ const main = async () => {
 
 main();
 import './lib/setup/planetscale';
+import { config } from 'dotenv-cra';
