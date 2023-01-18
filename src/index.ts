@@ -31,7 +31,8 @@ container.client = new SapphireClient({
 			const guildLanguage: string = await getGuildLanguage(context.guild.id);
 			console.log(guildLanguage);
 			return guildLanguage || 'en-US';
-		}
+		},
+        defaultMissingKey: 'generic:key_not_found',
 	}
 });
 
