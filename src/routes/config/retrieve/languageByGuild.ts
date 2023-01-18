@@ -5,7 +5,7 @@ export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
-			route: 'guild/config/retrieve/languageByGuild'
+			route: 'config/retrieve/languageByGuild'
 		});
 	}
 
@@ -24,6 +24,6 @@ export class UserRoute extends Route {
 		});
 		response.statusCode = 200;
 		response.statusMessage = 'OK';
-		response.json(results);
+		response.json(results[0]);
 	}
 }

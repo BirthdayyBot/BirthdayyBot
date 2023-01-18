@@ -28,7 +28,8 @@ container.client = new SapphireClient({
 				return 'en-US';
 			}
 
-			const guildLanguage = await getGuildLanguage(context.guild.id);
+			const guildLanguage: string = await getGuildLanguage(context.guild.id);
+			console.log(guildLanguage);
 			return guildLanguage || 'en-US';
 		}
 	}
@@ -48,4 +49,3 @@ const main = async () => {
 
 main();
 import './lib/setup/planetscale';
-import { config } from 'dotenv-cra';

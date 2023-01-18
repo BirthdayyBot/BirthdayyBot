@@ -13,7 +13,6 @@ export class UserRoute extends Route {
 		const { query } = _request;
 		const { guild_id, user_id } = query;
 
-		//gate
 		if (!guild_id && !user_id) {
 			response.statusCode = 400;
 			response.statusMessage = 'Missing Parameter - guild_id and user_id';
