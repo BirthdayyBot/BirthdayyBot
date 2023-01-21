@@ -2,7 +2,6 @@ import type { Command } from '@sapphire/framework';
 
 /**
 Find an option in an interaction object
-    @function
     @param {Command.ChatInputCommandInteraction} interaction - interaction object
     @param {string} option - option key
     @param {?any} defaultValue - default value - null by default
