@@ -1,0 +1,31 @@
+name: Deployment (dev)
+
+# I have no idea what I am doing
+# https://github.com/marketplace/actions/ssh-deploy
+# Trigger deployment only on push to develop branch
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    name: Deploy develop to Amazon VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v3
+        with: 
+          ref: develop
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_PUBLIC_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+        
+      - name: install dependencies
+        run: yarn
