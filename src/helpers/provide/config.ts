@@ -194,7 +194,7 @@ export async function logAll(config: any) {
 
 export async function getGuildLanguage(guild_id: string) {
 	// fetch the language from the database
-	const requestURL = new URL(`${process.env.ENV_URL}:4000/api/config/retrieve/languageByGuild`);
+	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/languageByGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const data = await fetch<{ guild_id: string; language: string }>(requestURL, FetchResultTypes.JSON);
 	return data.language;
