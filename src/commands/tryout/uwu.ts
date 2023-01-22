@@ -75,7 +75,6 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
-
 		registry.registerChatInputCommand({
 			name: 'uwu',
 			description: 'UwU Command',
