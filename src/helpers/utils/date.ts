@@ -18,6 +18,7 @@ export function getCurrentDate(): string {
 }
 
 export function getBeautifiedDate(date: string, fromHumanFormat = false) {
+	console.log('fromHumanFormat', fromHumanFormat);
 	//DD.MM.YYY
 	let items;
 	let day: string;
@@ -30,6 +31,7 @@ export function getBeautifiedDate(date: string, fromHumanFormat = false) {
 		month = numberToMonthname(parseInt(month));
 		year = items[2];
 	} else {
+		console.log('date', date);
 		items = date.split('-');
 		day = items[2];
 		month = items[1];

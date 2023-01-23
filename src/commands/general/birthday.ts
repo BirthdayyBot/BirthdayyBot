@@ -7,7 +7,7 @@ import { ARROW_RIGHT, FAIL, SUCCESS } from '../../helpers/provide/environment';
 import type { Args } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import generateBirthdayList from '../../helpers/generate/birthdayList';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
@@ -96,23 +96,11 @@ export class UwuCommand extends Subcommand {
 	// public async birthdayRemove(message: Message, args: Args) {}
 
 	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		// const guild_id = interaction.guildId!;
-		type BirthdayListResponse = Array<BirthdaWithUserModel>;
-		const getBirthdaysUrl = new URL(`${process.env.API_URL}/birthday/retrieve/entriesByGuild`);
-		getBirthdaysUrl.searchParams.append('guild_id', '111');
-		try {
-			const request = await fetch<BirthdayListResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
-			interaction.reply('done');
+		const guild_id = interaction.guildId!;
 
+		const { embed, components } = await generateBirthdayList(1, guild_id);
 
-
-		} catch (error: any) {
-			if (error.code === 404) {
-				interaction.reply('No birthdays found');
-			}
-		}
-
-		// const generatedEmbed = await generateEmbed(embed);
-		// interaction.reply({ embeds: [generatedEmbed] });
+		const generatedEmbed = await generateEmbed(embed);
+		interaction.reply({ embeds: [generatedEmbed], components: components });
 	}
 }

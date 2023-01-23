@@ -66,3 +66,6 @@ export const VOTE_ROLE_ID = '1039089174948626473';
 
 //Testing
 export const TEST_OVERVIEW_MESSAGE = '1034565132426149980';
+
+//Config
+export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80;
