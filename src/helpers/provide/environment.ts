@@ -71,4 +71,4 @@ export const TEST_OVERVIEW_MESSAGE = '1034565132426149980';
 export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80;
 
 //Autocode
-export const AUTOCODE_ENV = process.env.AUTOCODE_ENV;
+export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;

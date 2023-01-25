@@ -3,33 +3,35 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import CommandBirthday from '../../lib/template/commands/birthday';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, AUTOCODE_ENV, FAIL, SUCCESS } from '../../helpers/provide/environment';
 import type { Args } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
+import replyToInteraction from '../../helpers/send/response';
+import thinking from '../../helpers/send/thinking';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
 	subcommands: [
 		{
-			name: 'register',
+			name: 'register', //DONE
 			chatInputRun: 'birthdayRegister'
 		},
 		{
-			name: 'remove',
+			name: 'remove', //TODO
 			chatInputRun: 'birthdayRemove'
 		},
 		{
-			name: 'list',
+			name: 'list', //DONE
 			chatInputRun: 'birthdayList'
 		},
 		{
-			name: 'update',
+			name: 'update', //TODO
 			chatInputRun: 'birthdayUpdate'
 		},
 		{
-			name: 'test',
+			name: 'test', //TODO
 			chatInputRun: 'birthdayTest'
 		}
 	]
@@ -57,10 +59,13 @@ export class UwuCommand extends Subcommand {
 	content = ``;
 
 	public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		thinking(interaction, true);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const birthday = getDateFromInteraction(interaction);
 		const guild_id = interaction.guildId;
-
+		console.log('USERID', user_id);
+		console.log('GUILDID', guild_id);
+		console.log('BIRTHDAY', birthday);
 		if (!birthday.isValidDate) {
 			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
 		}
@@ -68,12 +73,12 @@ export class UwuCommand extends Subcommand {
 		if (birthday.isValidDate) {
 			this.embed.title = `${SUCCESS} Success`;
 			console.log(`USERID`, user_id);
-			let request = await lib.chillihero[`birthday-api`][`@${process.env.AUTOCODE_ENV}`].birthday.create({
+			let request = await lib.chillihero[`birthday-api`][AUTOCODE_ENV].birthday.create({
 				user_id: user_id,
 				birthday: birthday.date,
 				guild_id: guild_id
 			});
-
+			console.log('REQUEST', request);
 			if (request.success) {
 				const beautifiedDate = getBeautifiedDate(birthday.date);
 				console.log('FINAL DATE', beautifiedDate);
@@ -88,12 +93,17 @@ export class UwuCommand extends Subcommand {
 					console.warn(request.message);
 				}
 			}
-			const generatedEmbed = await generateEmbed(this.embed);
-			interaction.reply({ embeds: [generatedEmbed] });
+		} else {
+			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
 		}
+		const generatedEmbed = await generateEmbed(this.embed);
+		replyToInteraction({ interaction, embeds: [generatedEmbed], ephemeral: false });
 	}
 
-	// public async birthdayRemove(message: Message, args: Args) {}
+	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, args: Args) {
+		//TODO: Check if User fullfills permissions to remove birthday ()
+		const user = findOption(interaction, 'user', null);
+	}
 
 	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const guild_id = interaction.guildId!;
@@ -102,5 +112,9 @@ export class UwuCommand extends Subcommand {
 
 		const generatedEmbed = await generateEmbed(embed);
 		interaction.reply({ embeds: [generatedEmbed], components: components });
+	}
+
+	public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		const user = findOption(interaction, 'user', interaction.user.id);
 	}
 }
