@@ -7,9 +7,10 @@ export const DEBUG = process.env.DEBUG === 'TRUE' ? true : false;
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 export const BIRTHDAYY_HQ = '934467365389893704';
 export const BIRTHDAYY_ID = '916434908728164372';
+
 //GENERIC
 export const BOT_AVATAR = process.env.BOT_AVATAR; //BOT_AVATAR instead of PFP
-export const IMG_CAKE = process.env.IMG_CAKE;
+export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
 export const IMG_BLOCK = process.env.IMG_BLOCK;
 export const BOT_NAME = process.env.BOT_NAME;
 export const BOT_ID = process.env.BOT_ID;
