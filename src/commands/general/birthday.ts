@@ -3,13 +3,16 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import CommandBirthday from '../../lib/template/commands/birthday';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, AUTOCODE_ENV, FAIL, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
 import type { Args } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../helpers/send/thinking';
+import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
@@ -31,6 +34,10 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 			chatInputRun: 'birthdayUpdate'
 		},
 		{
+			name: 'show', //DONE
+			chatInputRun: 'birthdayShow'
+		},
+		{
 			name: 'test', //TODO
 			chatInputRun: 'birthdayTest'
 		}
@@ -50,16 +57,18 @@ export class UwuCommand extends Subcommand {
 	updateList = false;
 	adminLog = false;
 	userLog = false;
+
+	content = ``;
 	embed = {
 		title: `${FAIL} Failure`,
 		description: `Something went wrong`,
-		fields: []
+		fields: [],
+		thumbnail_url: ''
 	};
 	components = [];
-	content = ``;
 
 	public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		thinking(interaction, true);
+		thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const birthday = getDateFromInteraction(interaction);
 		const guild_id = interaction.guildId;
@@ -97,12 +106,15 @@ export class UwuCommand extends Subcommand {
 			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
 		}
 		const generatedEmbed = await generateEmbed(this.embed);
-		replyToInteraction({ interaction, embeds: [generatedEmbed], ephemeral: false });
+		await replyToInteraction(interaction, { embeds: [generatedEmbed], ephemeral: false });
 	}
 
-	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, args: Args) {
+	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		//TODO: Check if User fullfills permissions to remove birthday ()
 		const user = findOption(interaction, 'user', null);
+
+		const generatedEmbed = await generateEmbed(this.embed);
+		replyToInteraction(interaction, { content: user, embeds: [generatedEmbed] });
 	}
 
 	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -111,10 +123,27 @@ export class UwuCommand extends Subcommand {
 		const { embed, components } = await generateBirthdayList(1, guild_id);
 
 		const generatedEmbed = await generateEmbed(embed);
-		interaction.reply({ embeds: [generatedEmbed], components: components });
+		await replyToInteraction(interaction, { embeds: [generatedEmbed], components: components });
 	}
 
 	public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const user = findOption(interaction, 'user', interaction.user.id);
+		await thinking(interaction);
+		const user_id = findOption(interaction, 'user', interaction.user.id);
+		const guild_id = interaction.guildId!;
+		let request = await getBirthdayByGuildAndUser(guild_id, user_id); //try catch request
+		// console.log("request", request);
+		this.embed.title = `${BOOK} Show Birthday`;
+		if (isNullOrUndefinedOrEmpty(request)) {
+			// console.log("isEmpty");
+			this.embed.description = `${ARROW_RIGHT} \`This user has no registered birthday.\``;
+		} else {
+			// console.log("isNotEmpty");
+			const birthday = request[0];
+			const readableDate = getBeautifiedDate(birthday.birthday);
+			this.embed.thumbnail_url = IMG_CAKE;
+			this.embed.description = `${ARROW_RIGHT} <@${birthday.user_id}>'s birthday is at the \`${readableDate}\``;
+		}
+		const generatedEmbed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
 	}
 }
