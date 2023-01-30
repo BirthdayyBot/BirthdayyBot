@@ -75,46 +75,52 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand({
-			name: 'uwu',
-			description: 'UwU Command',
-			options: [
-				{
-					type: 1,
-					name: 'once',
-					description: 'Send one uwu'
-				},
-				{
-					type: 1,
-					name: 'times',
-					description: 'Send multiple uwus',
-					options: [
-						{
-							type: 4,
-							name: 'times',
-							description: 'How many UwUs to send'
-						}
-					]
-				},
-				{
-					type: 1,
-					name: 'random',
-					description: 'Random added fields',
-					options: [
-						{
-							type: 6,
-							name: 'user',
-							description: 'Send a UwU to a user',
-							required: true
-						}
-					]
-				},
-				{
-					type: 1,
-					name: 'fetch',
-					description: 'Fetch a user'
-				}
-			]
-		});
+		registry.registerChatInputCommand(
+			{
+				name: 'uwu',
+				description: 'UwU Command',
+				options: [
+					{
+						type: 1,
+						name: 'once',
+						description: 'Send one uwu'
+					},
+					{
+						type: 1,
+						name: 'times',
+						description: 'Send multiple uwus',
+						options: [
+							{
+								type: 4,
+								name: 'times',
+								description: 'How many UwUs to send'
+							}
+						]
+					},
+					{
+						type: 1,
+						name: 'random',
+						description: 'Random added fields',
+						options: [
+							{
+								type: 6,
+								name: 'user',
+								description: 'Send a UwU to a user',
+								required: true
+							}
+						]
+					},
+					{
+						type: 1,
+						name: 'fetch',
+						description: 'Fetch a user'
+					}
+				]
+			},
+			{
+				idHints: ['1063803770636603422'],
+				guildIds: ['766707453994729532']
+			}
+		);
 	}
 }
