@@ -13,6 +13,7 @@ import thinking from '../../helpers/send/thinking';
 import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
+import updateBirthdayOverview from '../../helpers/update/overview';
 
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -52,7 +53,9 @@ export class UwuCommand extends Subcommand {
 		});
 	}
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(await CommandBirthday());
+		registry.registerChatInputCommand(await CommandBirthday(), {
+			idHints: [`1063803768409436210`]
+		});
 	}
 	//todo: check where updateList needs to be set to true
 	updateList = false;
@@ -72,7 +75,7 @@ export class UwuCommand extends Subcommand {
 		thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const birthday = getDateFromInteraction(interaction);
-		const guild_id = interaction.guildId;
+		const guild_id = interaction.guildId!;
 		console.log('USERID', user_id);
 		console.log('GUILDID', guild_id);
 		console.log('BIRTHDAY', birthday);
@@ -108,13 +111,14 @@ export class UwuCommand extends Subcommand {
 		}
 		const generatedEmbed = await generateEmbed(this.embed);
 		await replyToInteraction(interaction, { embeds: [generatedEmbed], ephemeral: false });
+		await updateBirthdayOverview(guild_id);
 	}
 
 	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		//TODO: Check if User fullfills permissions to remove birthday ()
 		const user = findOption(interaction, 'user', interaction.user.id);
-		const guild_id = interaction.guildId;
+		const guild_id = interaction.guildId!;
 		if (user === interaction.user.id) {
 			//TODO: remove own birthday
 		} else {
@@ -131,6 +135,7 @@ export class UwuCommand extends Subcommand {
 
 		const generatedEmbed = await generateEmbed(this.embed);
 		await replyToInteraction(interaction, { content: user, embeds: [generatedEmbed] });
+		await updateBirthdayOverview(guild_id);
 	}
 
 	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -167,7 +172,7 @@ export class UwuCommand extends Subcommand {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const birthday = getDateFromInteraction(interaction);
-		const guild_id = interaction.guildId;
+		const guild_id = interaction.guildId!;
 
 		if (!birthday.isValidDate) {
 			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
@@ -189,6 +194,7 @@ export class UwuCommand extends Subcommand {
 			}
 			const generatedEmbed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [generatedEmbed] });
+			await updateBirthdayOverview(guild_id);
 		}
 	}
 
