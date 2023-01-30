@@ -178,7 +178,7 @@ export async function setTIMEZONE(timezone: string, guild_id: string) {
 //   return await setConfig(config, guild_id);
 // }
 
-export async function logAll(config: any) {
+export function logAll(config: any) {
 	console.log('===============================');
 	if (config.GUILD_ID !== null) console.log('GUILD_ID: ', config.GUILD_ID);
 	if (config.BIRTHDAY_ROLE !== null) console.log('BIRTHDAY_ROLE: ', config.BIRTHDAY_ROLE);
