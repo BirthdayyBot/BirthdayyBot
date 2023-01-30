@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import type { Channel, Message } from 'discord.js';
+import type { Channel } from 'discord.js';
 import { getTextChannel } from './channel';
 
 export async function fetchMessage(channel_id: string, message_id: string) {
@@ -7,9 +7,11 @@ export async function fetchMessage(channel_id: string, message_id: string) {
 	if (channel == null || !channel.isTextBased()) {
 		throw new Error('Channel is not text based');
 	}
-	await channel.messages.fetch(message_id);
-	const message: Message = await channel.messages.fetch(message_id);
-	return message;
+	try {
+		return await channel.messages.fetch(message_id);
+	} catch (error) {
+		throw new Error('Message not found');
+	}
 }
 
 export async function sendMessage(channel_id: string, options: { content?: string; embeds: any[]; components?: any[] }) {
