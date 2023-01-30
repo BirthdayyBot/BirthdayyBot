@@ -12,6 +12,7 @@ import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../helpers/send/thinking';
 import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import birthdayEvent from '../../lib/birthday/birthdayEvent';
 
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -53,7 +54,7 @@ export class UwuCommand extends Subcommand {
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(await CommandBirthday());
 	}
-
+	//todo: check where updateList needs to be set to true
 	updateList = false;
 	adminLog = false;
 	userLog = false;
@@ -110,11 +111,26 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
 		//TODO: Check if User fullfills permissions to remove birthday ()
-		const user = findOption(interaction, 'user', null);
+		const user = findOption(interaction, 'user', interaction.user.id);
+		const guild_id = interaction.guildId;
+		if (user === interaction.user.id) {
+			//TODO: remove own birthday
+		} else {
+			//TODO: can remove other users birthday?
+		}
+		let request = await lib.chillihero[`birthday-api`][AUTOCODE_ENV].birthday.delete({
+			user_id: user,
+			guild_id: guild_id
+		});
+		if (request.success) {
+			this.embed.title = `${SUCCESS} Success`;
+			this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user}>. 🎂`;
+		}
 
 		const generatedEmbed = await generateEmbed(this.embed);
-		replyToInteraction(interaction, { content: user, embeds: [generatedEmbed] });
+		await replyToInteraction(interaction, { content: user, embeds: [generatedEmbed] });
 	}
 
 	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -143,6 +159,47 @@ export class UwuCommand extends Subcommand {
 			this.embed.thumbnail_url = IMG_CAKE;
 			this.embed.description = `${ARROW_RIGHT} <@${birthday.user_id}>'s birthday is at the \`${readableDate}\``;
 		}
+		const generatedEmbed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
+	}
+
+	public async birthdayUpdate(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		const user_id = findOption(interaction, 'user', interaction.user.id);
+		const birthday = getDateFromInteraction(interaction);
+		const guild_id = interaction.guildId;
+
+		if (!birthday.isValidDate) {
+			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
+		}
+
+		if (birthday.isValidDate) {
+			let request = await lib.chillihero[`birthday-api`][AUTOCODE_ENV].birthday.update({
+				user_id: user_id,
+				birthday: birthday.date,
+				guild_id: guild_id
+			});
+			if (request.success) {
+				const beautifiedDate = getBeautifiedDate(birthday.date);
+				this.embed.title = `${SUCCESS} Success`;
+				this.embed.description = `${ARROW_RIGHT} I updated the Birthday from <@${user_id}> to the \`${beautifiedDate}\`. 🎂`;
+				this.updateList = true;
+			} else {
+				this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
+			}
+			const generatedEmbed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [generatedEmbed] });
+		}
+	}
+
+	public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		const guild_id = interaction.guildId!;
+		const user_id = interaction.user.id;
+		//TODO: check if enough permissions are provided
+		await birthdayEvent(guild_id, user_id, true);
+		this.embed.title = `${SUCCESS} Success`;
+		this.embed.description = `${ARROW_RIGHT} Birthday Test run!`;
 		const generatedEmbed = await generateEmbed(this.embed);
 		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
 	}
