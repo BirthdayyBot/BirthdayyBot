@@ -10,20 +10,20 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
 	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		//sort all birthdays by day and month
-		let sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
+		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
 		//split the sorted birthdays into multiple lists
-		let splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, MAX_BIRTHDAYS);
+		const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, MAX_BIRTHDAYS);
 		//get the birthdays for the current page
-		let birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
+		const birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
 
 		const finalList = prepareBirthdays(birthdays);
-		let embed = await createEmbed(guild_id, finalList);
+		const embed = await createEmbed(guild_id, finalList);
 
 		const components = generateComponents(page_id, splitBirthdayList.listAmount);
 		return { embed: embed, components: components };
 	} else {
 		console.log('no birthdays');
-		let embed = await createEmbed(guild_id, []);
+		const embed = await createEmbed(guild_id, []);
 		return { embed: embed, components: [] };
 	}
 }

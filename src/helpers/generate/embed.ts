@@ -16,7 +16,7 @@ import { BOT_AVATAR, BOT_COLOR, BOT_NAME, ENV } from '../provide/environment';
  * @returns embed - A RichEmbed object with the given information
  */
 
-export default function generateEmbed(embed_information: {
+export default async function generateEmbed(embed_information: {
 	title?: string;
 	description?: string;
 	author_name?: string;
@@ -25,7 +25,7 @@ export default function generateEmbed(embed_information: {
 	image_url?: string;
 	fields?: Array<Object>;
 	color?: string;
-}): Object {
+}): Promise<Object> {
 	const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
 
 	const currentDate = new Date();

@@ -1,4 +1,4 @@
-import { DEBUG } from '../provide/environment';
+// import { DEBUG } from '../provide/environment';
 
 export function getCurrentDate(): string {
 	const d1 = new Date().toLocaleString('en-US', {
@@ -32,7 +32,7 @@ export function getBeautifiedDate(date: string, fromHumanFormat = false) {
 		month = numberToMonthname(parseInt(month));
 		year = items[2];
 	} else {
-		console.log(DEBUG ? 'date: ' + date : '');
+		// console.log(DEBUG ? 'date: ' + date : '');
 		items = date.split('-');
 		day = items[2];
 		month = items[1];

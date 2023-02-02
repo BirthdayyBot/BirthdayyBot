@@ -77,7 +77,7 @@ export class UwuCommand extends Subcommand {
 		const birthday = getDateFromInteraction(interaction);
 		const guild_id = interaction.guildId!;
 
-        //TODO: #10 
+		//TODO: #10
 		console.log(DEBUG ? 'USERID: ' + user_id : '');
 		console.log(DEBUG ? 'GUILDID: ' + guild_id : '');
 		console.log(DEBUG ? 'BIRTHDAY: ' + birthday : '');
@@ -119,24 +119,24 @@ export class UwuCommand extends Subcommand {
 	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		//TODO: Check if User fullfills permissions to remove birthday ()
-		const user = findOption(interaction, 'user', interaction.user.id);
+		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const guild_id = interaction.guildId!;
-		if (user === interaction.user.id) {
+		if (user_id === interaction.user.id) {
 			//TODO: remove own birthday
 		} else {
 			//TODO: can remove other users birthday?
 		}
 		let request = await lib.chillihero[`birthday-api`][AUTOCODE_ENV].birthday.delete({
-			user_id: user,
+			user_id: user_id,
 			guild_id: guild_id
 		});
 		if (request.success) {
 			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user}>. 🎂`;
+			this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
 		}
 
 		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { content: user, embeds: [generatedEmbed] });
+		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
 		await updateBirthdayOverview(guild_id);
 	}
 
@@ -192,7 +192,7 @@ export class UwuCommand extends Subcommand {
 				this.embed.description = `${ARROW_RIGHT} I updated the Birthday from <@${user_id}> to the \`${beautifiedDate}\`. 🎂`;
 				this.updateList = true;
 			} else {
-				this.embed.description = `${ARROW_RIGHT} \`${request. message}\``;
+				this.embed.description = `${ARROW_RIGHT} \`${request.message}\``;
 			}
 			const generatedEmbed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [generatedEmbed] });
