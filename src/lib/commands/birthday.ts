@@ -1,4 +1,4 @@
-import { getLocalizedString } from '../../../helpers/utils/translate';
+import { getLocalizedString } from '../../helpers/utils/translate';
 import { PermissionFlagsBits } from 'discord.js';
 
 export default async function BirthdayCommand() {
