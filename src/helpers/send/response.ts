@@ -33,7 +33,7 @@ export default async function replyToInteraction(
 
 	console.log(DEBUG ? 'ephemeral: ' + response.ephemeral : '');
 
-	if (interaction.replied || interaction.deferred) {
+	if (interaction?.replied || interaction?.deferred) {
 		interaction.editReply(response);
 		return;
 	}

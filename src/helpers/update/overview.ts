@@ -24,10 +24,9 @@ export default async function updateBirthdayOverview(guild_id: string) {
 				try {
 					await editMessage(OVERVIEW_CHANNEL, OVERVIEW_MESSAGE, { embeds: [birthdayEmbedObj], components: birthdayList.components });
 				} catch (error: any) {
-					console.log('error', error);
-
-					if (error.message === 'Unknown Message') {
-						generateNewOverviewMessage(OVERVIEW_CHANNEL, birthdayList);
+					generateNewOverviewMessage(OVERVIEW_CHANNEL, birthdayList);
+					console.error('error', error);
+					if (error.message === 'Unknown Message' || error.message.includes('authored by another user')) {
 					}
 				}
 				console.log(`Updated Overview Message in guild: ${guild_id}`);

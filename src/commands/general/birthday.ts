@@ -3,7 +3,7 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import CommandBirthday from '../../lib/template/commands/birthday';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, DEBUG, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
 import type { Args } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
@@ -32,7 +32,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 			chatInputRun: 'birthdayList'
 		},
 		{
-			name: 'update', //TODO
+			name: 'update', //Done
 			chatInputRun: 'birthdayUpdate'
 		},
 		{
@@ -76,9 +76,11 @@ export class UwuCommand extends Subcommand {
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const birthday = getDateFromInteraction(interaction);
 		const guild_id = interaction.guildId!;
-		console.log('USERID', user_id);
-		console.log('GUILDID', guild_id);
-		console.log('BIRTHDAY', birthday);
+
+        //TODO: #10 
+		console.log(DEBUG ? 'USERID: ' + user_id : '');
+		console.log(DEBUG ? 'GUILDID: ' + guild_id : '');
+		console.log(DEBUG ? 'BIRTHDAY: ' + birthday : '');
 		if (!birthday.isValidDate) {
 			this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
 		}
@@ -151,7 +153,7 @@ export class UwuCommand extends Subcommand {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const guild_id = interaction.guildId!;
-		let request = await getBirthdayByGuildAndUser(guild_id, user_id); //try catch request
+		const request = await getBirthdayByGuildAndUser(guild_id, user_id); //try catch request
 		// console.log("request", request);
 		this.embed.title = `${BOOK} Show Birthday`;
 		if (isNullOrUndefinedOrEmpty(request)) {
@@ -190,7 +192,7 @@ export class UwuCommand extends Subcommand {
 				this.embed.description = `${ARROW_RIGHT} I updated the Birthday from <@${user_id}> to the \`${beautifiedDate}\`. 🎂`;
 				this.updateList = true;
 			} else {
-				this.embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
+				this.embed.description = `${ARROW_RIGHT} \`${request. message}\``;
 			}
 			const generatedEmbed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [generatedEmbed] });

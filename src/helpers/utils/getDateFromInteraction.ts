@@ -38,8 +38,8 @@ export default function getDateFromInteraction(
 		result.message = 'The provided day is invalid. Please provide a day between 1 and 31';
 		return result;
 	}
-	result.message = 'The provided date is valid';
 	result.isValidDate = true;
+	result.message = 'The provided date is valid';
 	result.date = `${year}-${month}-${day}`;
 	return result;
 }
