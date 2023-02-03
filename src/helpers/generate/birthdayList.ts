@@ -5,6 +5,7 @@ import { getGuildInformation } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
 import { getBirthdaysByGuild } from '../provide/birthday';
 import type { CustomEmbed } from '../../lib/model/CustomEmbed.model';
+import type { BirthdaWithUserModel } from '../../lib/model';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);

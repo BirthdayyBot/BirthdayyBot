@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import CommandBirthday from '../../lib/commands/birthday';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
 import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, DEBUG, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
@@ -14,6 +13,7 @@ import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
 import updateBirthdayOverview from '../../helpers/update/overview';
+import BirthdayCMD from '../../lib/commands/birthday';
 
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -45,7 +45,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 		}
 	]
 })
-export class UwuCommand extends Subcommand {
+export class BirthdayCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
 			...options,
@@ -53,7 +53,7 @@ export class UwuCommand extends Subcommand {
 		});
 	}
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(await CommandBirthday(), {
+		registry.registerChatInputCommand(await BirthdayCMD(), {
 			idHints: [`1063803768409436210`]
 		});
 	}
