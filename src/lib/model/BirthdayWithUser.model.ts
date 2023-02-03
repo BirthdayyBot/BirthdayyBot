@@ -1,4 +1,4 @@
-type BirthdaWithUserModel = {
+export type BirthdaWithUserModel = {
 	user_id: string;
 	birthday: string;
 	username?: string;
