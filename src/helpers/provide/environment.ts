@@ -9,11 +9,11 @@ export const BIRTHDAYY_HQ = '934467365389893704';
 export const BIRTHDAYY_ID = '916434908728164372';
 
 //GENERIC
-export const BOT_AVATAR = process.env.BOT_AVATAR; //BOT_AVATAR instead of PFP
-export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
-export const IMG_BLOCK = process.env.IMG_BLOCK;
 export const BOT_NAME = process.env.BOT_NAME;
 export const BOT_ID = process.env.BOT_ID;
+export const BOT_AVATAR = process.env.BOT_AVATAR;
+export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
+export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
 export const BOT_COLOR = parseInt(process.env.BOT_COLOR!);
