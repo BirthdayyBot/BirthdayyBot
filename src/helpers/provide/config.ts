@@ -2,8 +2,10 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { AUTOCODE_ENV } from './environment';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
+import type { GuildConfigModel } from '../../lib/model';
+import type { RawGuildConfigModel } from '../../lib/model/RawGuildConfig.model';
 
-export async function getConfig(guild_id: string) {
+export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 	const req = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.retrieve.byGuild({
 		guild_id: guild_id
 	});
@@ -19,6 +21,25 @@ export async function getConfig(guild_id: string) {
 		TIMEZONE: req.result.timezone,
 		LANGUAGE: req.result.language,
 		PREMIUM: req.result.premium === 1 ? true : false
+	};
+}
+
+export async function getConfig(guild_id: string) {
+	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/languageByGuild`);
+	requestURL.searchParams.append('guild_id', guild_id);
+	const result = await fetch<RawGuildConfigModel>(requestURL, FetchResultTypes.JSON);
+	return {
+		GUILD_ID: result.guild_id,
+		BIRTHDAY_ROLE: result.birthday_role,
+		BIRTHDAY_PING_ROLE: result.birthday_ping_role,
+		ANNOUNCEMENT_CHANNEL: result.announcement_channel,
+		ANNOUNCEMENT_MESSAGE: result.announcement_message,
+		OVERVIEW_CHANNEL: result.overview_channel,
+		LOG_CHANNEL: result.log_channel,
+		OVERVIEW_MESSAGE: result.overview_message,
+		TIMEZONE: result.timezone,
+		LANGUAGE: result.language,
+		PREMIUM: result.premium === 1 ? true : false
 	};
 }
 
