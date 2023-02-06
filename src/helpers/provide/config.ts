@@ -21,7 +21,7 @@ export async function getConfig(guild_id: string) {
 	};
 }
 
-export async function setConfig(config: any, guild_id: string) {
+export async function setCompleteConfig(config: any, guild_id: string) {
 	const {
 		BIRTHDAY_ROLE,
 		BIRTHDAY_PING_ROLE,
@@ -94,6 +94,7 @@ export async function removeConfig(config_name: string, guild_id: string) {
 }
 
 export async function setDefaultConfig(guild_id: string) {
+    //TODO #12 Adjust default configs
 	const config = {
 		BIRTHDAY_ROLE: 'null',
 		BIRTHDAY_PING_ROLE: 'null',
@@ -103,7 +104,7 @@ export async function setDefaultConfig(guild_id: string) {
 		OVERVIEW_MESSAGE: 'null',
 		TIMEZONE: 'UTC'
 	};
-	await setConfig(config, guild_id);
+	await setCompleteConfig(config, guild_id);
 	return true;
 }
 
@@ -173,7 +174,7 @@ export async function setTIMEZONE(timezone: string, guild_id: string) {
 }
 
 // export async function setBulkConfig(guild_id, config) {
-//   return await setConfig(config, guild_id);
+//   return await setCompleteConfig(config, guild_id);
 // }
 
 export function logAll(config: any) {
