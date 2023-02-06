@@ -1,4 +1,4 @@
-export type GuildConfig = {
+export type GuildConfigModel = {
 	GUILD_ID: string;
 	BIRTHDAY_ROLE?: string;
 	BIRTHDAY_PING_ROLE?: string;

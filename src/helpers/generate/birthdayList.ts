@@ -4,7 +4,7 @@ import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
 import { getBirthdaysByGuild } from '../provide/birthday';
-import type { CustomEmbed } from '../../lib/model/CustomEmbed.model';
+import type { CustomEmbedModel } from '../../lib/model';
 import type { BirthdaWithUserModel } from '../../lib/model';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
@@ -57,7 +57,7 @@ function getBirthdaysAsLists(
  */
 async function createEmbed(guild_id: string, birthdays: Array<Array<BirthdaWithUserModel> | any[]>) {
 	let guild = await getGuildInformation(guild_id);
-	let embed: CustomEmbed = {
+	let embed: CustomEmbedModel = {
 		title: `Birthday List - ${guild!.name || 'Unknown Guild'}`,
 		description: `${ARROW_RIGHT}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
 		thumbnail_url: IMG_CAKE

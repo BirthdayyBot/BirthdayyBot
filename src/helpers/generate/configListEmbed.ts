@@ -1,5 +1,5 @@
 import { getGuildInformation } from '../../lib/discord/guild';
-import type { GuildConfig } from '../../lib/model';
+import type { GuildConfigModel } from '../../lib/model';
 import { getConfig } from '../provide/config';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
@@ -18,7 +18,7 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 }
 
 async function generateFields(guild_id: string): Promise<any[]> {
-	const config: GuildConfig = await getConfig(guild_id);
+	const config: GuildConfigModel = await getConfig(guild_id);
 	// const { ANNOUNCEMENT_CHANNEL, ANNOUNCEMENT_MESSAGE, BIRTHDAY_ROLE, PING_ROLE, TIMEZONE, OVERVIEW_CHANNEL, OVERVIEW_MESSAGE } = config;
 
 	let fields: any[] = [];
