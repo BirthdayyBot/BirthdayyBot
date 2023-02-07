@@ -19,7 +19,6 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 
 async function generateFields(guild_id: string): Promise<any[]> {
 	const config: GuildConfigModel = await getConfig(guild_id);
-	// const { ANNOUNCEMENT_CHANNEL, ANNOUNCEMENT_MESSAGE, BIRTHDAY_ROLE, PING_ROLE, TIMEZONE, OVERVIEW_CHANNEL, OVERVIEW_MESSAGE } = config;
 
 	let fields: any[] = [];
 
@@ -43,8 +42,6 @@ function getValueString(name: string, value: any) {
 	let str: string;
 	if (value === null) {
 		str = `${ARROW_RIGHT} not set`;
-	} else if (name === 'PREMIUM') {
-		str = `${ARROW_RIGHT} ${value === 0 ? 'false' : 'true'}`;
 	} else if (name === 'TIMEZONE') {
 		str = value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
 	} else if (name.includes('CHANNEL')) {

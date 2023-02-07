@@ -5,6 +5,7 @@ import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
 import type { RawGuildConfigModel } from '../../lib/model/RawGuildConfig.model';
 
+//  ! Autocode implementation, will be deprecated in favor of the fetch implementation
 export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 	const req = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.retrieve.byGuild({
 		guild_id: guild_id
@@ -25,7 +26,7 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 }
 
 export async function getConfig(guild_id: string) {
-	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/languageByGuild`);
+	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const result = await fetch<RawGuildConfigModel>(requestURL, FetchResultTypes.JSON);
 	return {
