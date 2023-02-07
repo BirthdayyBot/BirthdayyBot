@@ -31,13 +31,13 @@ export async function getConfig(guild_id: string) {
 	const result = await fetch<RawGuildConfigModel>(requestURL, FetchResultTypes.JSON);
 	return {
 		GUILD_ID: result.guild_id,
-		BIRTHDAY_ROLE: result.birthday_role,
-		BIRTHDAY_PING_ROLE: result.birthday_ping_role,
 		ANNOUNCEMENT_CHANNEL: result.announcement_channel,
 		ANNOUNCEMENT_MESSAGE: result.announcement_message,
 		OVERVIEW_CHANNEL: result.overview_channel,
-		LOG_CHANNEL: result.log_channel,
 		OVERVIEW_MESSAGE: result.overview_message,
+		BIRTHDAY_ROLE: result.birthday_role,
+		BIRTHDAY_PING_ROLE: result.birthday_ping_role,
+		LOG_CHANNEL: result.log_channel,
 		TIMEZONE: result.timezone,
 		LANGUAGE: result.language,
 		PREMIUM: result.premium === 1 ? true : false
