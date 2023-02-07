@@ -8,7 +8,7 @@ import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import replyToInteraction from '../../helpers/send/response';
-import thinking from '../../helpers/send/thinking';
+import thinking from '../../lib/discord/thinking';
 import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
