@@ -2,6 +2,7 @@
  * @file Environment Variables
  */
 
+export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const ENV = process.env.ENV; //dev; release; premium
 export const DEBUG = process.env.DEBUG === 'TRUE' ? true : false;
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
