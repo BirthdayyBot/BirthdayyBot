@@ -13,7 +13,7 @@ import { config } from 'dotenv-cra';
 import { join } from 'path';
 import { inspect } from 'util';
 import { srcDir } from '../../helpers/db/constants';
-
+import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';
 // Read env var
 config({ path: join(srcDir, '.env') });
 
@@ -22,3 +22,5 @@ inspect.defaultOptions.depth = 1;
 
 // Enable colorette
 colorette.createColors({ useColor: true });
+
+ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
