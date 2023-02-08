@@ -1,6 +1,6 @@
 import { PermissionFlagsBits } from 'discord.js';
 
-export default async function ConfigCMD() {
+export async function ConfigCMD() {
 	return {
 		name: 'config',
 		description: 'Configure your Server configurations. - MANAGER ONLY',

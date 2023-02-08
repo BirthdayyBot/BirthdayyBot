@@ -3,7 +3,7 @@ import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
-import ConfigCMD from '../../lib/commands/config';
+import { ConfigCMD } from '../../lib/commands/config';
 import { ARROW_RIGHT, DEBUG, FAIL, PLUS, PREMIUM_URL, SUCCESS } from '../../helpers/provide/environment';
 import generateConfigListEmbed from '../../helpers/generate/configListEmbed';
 import thinking from '../../lib/discord/thinking';
@@ -21,6 +21,7 @@ import {
 } from '../../helpers/provide/config';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -69,8 +70,7 @@ export class ConfigCommand extends Subcommand {
 
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(await ConfigCMD(), {
-			// idHints: ['1070852354959740928'], //only test guild ['1070853299072413746']
-			guildIds: ['766707453994729532']
+			guildIds: getCommandGuilds('global')
 		});
 	}
 

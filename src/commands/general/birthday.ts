@@ -13,7 +13,8 @@ import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
 import updateBirthdayOverview from '../../helpers/update/overview';
-import BirthdayCMD from '../../lib/commands/birthday';
+import { BirthdayCMD } from '../../lib/commands/birthday';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -48,13 +49,12 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export class BirthdayCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options,
-			description: 'Birthday Command'
+			...options
 		});
 	}
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(await BirthdayCMD(), {
-			idHints: [`1063803768409436210`]
+			guildIds: getCommandGuilds('global')
 		});
 	}
 	//todo: check where updateList needs to be set to true

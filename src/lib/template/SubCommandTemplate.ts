@@ -6,9 +6,10 @@ import { container } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
+import { TemplateCMD } from '../commands/template';
 @ApplyOptions<Subcommand.Options>({
 	name: 'template',
-	description: 'a description of the command',
+	description: 'Template Command',
 	enabled: true,
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
@@ -27,29 +28,16 @@ export class TemplateCommand extends Subcommand {
 		});
 	}
 
+	public override async registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(await TemplateCMD(), {
+			guildIds: getCommandGuilds('testing')
+		});
+	}
+
 	public async testCommand(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		container.logger.info('testCommand Command');
 		await thinking(interaction);
 		const embed = await generateEmbed({ title: 'Test', description: 'A Test Command' });
 		return await replyToInteraction(interaction, { embeds: [embed] });
-	}
-
-	public override registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(
-			{
-				name: 'template',
-				description: 'Template Command',
-				options: [
-					{
-						type: 1,
-						name: 'once',
-						description: 'its a template'
-					}
-				]
-			},
-			{
-				guildIds: getCommandGuilds('global')
-			}
-		);
 	}
 }

@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { fetchMessage } from '../../lib/discord/message';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 @ApplyOptions<Command.Options>({
 	description: 'test things'
@@ -14,8 +15,7 @@ export class TestCommand extends Command {
 				description: this.description
 			},
 			{
-				idHints: ['1069742031569690644'],
-				guildIds: ['766707453994729532']
+				guildIds: getCommandGuilds('testing')
 			}
 		);
 	}
