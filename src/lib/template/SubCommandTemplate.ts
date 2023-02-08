@@ -3,37 +3,38 @@ import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
-import { PRIVATE_TESTING_GUILD } from '../../helpers/provide/environment';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
+import thinking from '../discord/thinking';
+import replyToInteraction from '../../helpers/send/response';
 @ApplyOptions<Subcommand.Options>({
-	description: 'send uwus',
+	name: 'template',
+	description: 'a description of the command',
+	enabled: true,
+	runIn: ['GUILD_TEXT'],
+	requiredUserPermissions: ['ViewChannel'],
+	requiredClientPermissions: ['SendMessages'],
 	subcommands: [
 		{
-			name: 'once',
-			chatInputRun: 'runOnce'
+			name: 'test',
+			chatInputRun: 'testCommand'
 		}
 	]
 })
 export class TemplateCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options,
-			description: 'A Template Command'
+			...options
 		});
 	}
 
-	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		container.logger.info('Run Once Command');
-		const embed = await generateEmbed({ title: 'Template', description: 'A Template Command' });
-		return await interaction.reply({ embeds: [embed] });
+	public async testCommand(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		container.logger.info('testCommand Command');
+		await thinking(interaction);
+		const embed = await generateEmbed({ title: 'Test', description: 'A Test Command' });
+		return await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
-		//TODO: Remove calls that are not needed
-		// @ts-ignore
-		const PrivateCommand = PRIVATE_TESTING_GUILD;
-		//TODO: #11 Get premium guilds from API
-		// @ts-ignore
-		const PremiumCommand = [];
 		registry.registerChatInputCommand(
 			{
 				name: 'template',
@@ -47,8 +48,7 @@ export class TemplateCommand extends Subcommand {
 				]
 			},
 			{
-				idHints: ['1064263486865150003'],
-				guildIds: [PrivateCommand]
+				guildIds: getCommandGuilds('global')
 			}
 		);
 	}
