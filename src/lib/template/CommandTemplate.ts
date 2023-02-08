@@ -5,7 +5,7 @@ import { container } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
-import { TemplateCMD } from '../commands/template';
+import { TemplateCMD } from '../commands';
 
 @ApplyOptions<Command.Options>({
 	name: 'template',
