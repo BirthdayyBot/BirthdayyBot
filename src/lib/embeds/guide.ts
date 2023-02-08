@@ -1,6 +1,6 @@
 import { HEART, ARROW_RIGHT, EXCLAMATION, DISCORD_INVITE, CAKE, PLUS, PREMIUM_URL } from '../../helpers/provide/environment';
 
-export const guideEmbed = {
+export const GuideEmbed = {
 	title: `${HEART} ${process.env.BOT_NAME} Guide!`,
 	description: `
   ${ARROW_RIGHT} By typing **/help** in chat, you can check out all my features and available commands.
