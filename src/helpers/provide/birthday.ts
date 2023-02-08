@@ -1,4 +1,5 @@
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import type { BirthdaWithUserModel } from '../../lib/model';
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
 	type BirthdayListResponse = Array<BirthdaWithUserModel>;

@@ -9,17 +9,17 @@ import { container } from '@sapphire/framework';
 export async function addRoleToUser(user_id: string, role_id: string, guild_id: string) {
 	try {
 		const guild = await container.client.guilds.fetch(guild_id);
-        if (!guild) throw new Error('Guild not found');
+		if (!guild) throw new Error('Guild not found');
 
 		const member = await guild.members.fetch(user_id);
-        if (!member) throw new Error('Member not found');
-        
+		if (!member) throw new Error('Member not found');
+
 		const role = await guild.roles.fetch(role_id);
 		if (!role) throw new Error('Role not found');
 
 		// Add the role to the member
 		await member.roles.add(role);
-        //TODO: #10 Create a LogHandler that works with the DEBUG env variable
+		//TODO: #10 Create a LogHandler that works with the DEBUG env variable
 		console.log(`Successfully added role ${role.name} to user ${member.user.id}`);
 	} catch (error: any) {
 		if (error.message.includes('Missing Permissions')) {

@@ -35,7 +35,7 @@ export class UserRoute extends Route {
 			response.statusMessage = 'Guild not found';
 			return response.json({ error: 'Guild not Found' });
 		}
-        
+
 		response.statusCode = 200;
 		response.statusMessage = 'OK';
 		response.json(results);

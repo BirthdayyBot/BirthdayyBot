@@ -11,7 +11,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export default async function checkCurrentBirthdays(): Promise<void> {
 	const today = getCurrentDate();
 
-    // Retrieve today's birthdays from the birthday-api
+	// Retrieve today's birthdays from the birthday-api
 	let checkTodaysBirthdays = await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.todaysBirthdays({
 		birthday: today
 	});
@@ -22,7 +22,7 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 	console.log('birthdayCount', birthdayCount);
 	if (birthdayCount !== 0) {
 		console.time('BirthdayLoop Time');
-        // If there are birthdays today, loop through and send messages
+		// If there are birthdays today, loop through and send messages
 		for (let index = 0; index < birthdayCount; index++) {
 			let birthday = todaysBirthdays[index];
 			console.log('BIRTHDAYY LOOP: ', index + 1);
