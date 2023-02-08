@@ -116,7 +116,7 @@ export async function removeConfig(config_name: string, guild_id: string) {
 	return true;
 }
 
-export async function setDefaultConfig(guild_id: string) {
+export async function setDefaultConfigs(guild_id: string) {
 	//TODO #12 Adjust default configs
 	const config = {
 		BIRTHDAY_ROLE: 'null',
@@ -128,7 +128,40 @@ export async function setDefaultConfig(guild_id: string) {
 		TIMEZONE: 'UTC'
 	};
 	await setCompleteConfig(config, guild_id);
-	return true;
+}
+
+export async function setDefaultConfig(config_name: string, guild_id: string) {
+	let reset;
+	switch (config_name) {
+		case 'announcement_channel':
+			reset = await setANNOUNCEMENT_CHANNEL('null', guild_id);
+			break;
+		case 'overview_channel':
+			reset = await setOVERVIEW_CHANNEL('null', guild_id);
+			break;
+		case 'log_channel':
+			reset = await setLOG_CHANNEL('null', guild_id);
+			break;
+		case 'announcement_message':
+			reset = await setANNOUNCEMENT_MESSAGE('DEFAULT', guild_id); //TODO: check how to set this to default
+			break;
+		case 'overview_message':
+			reset = await setOVERVIEW_MESSAGE('null', guild_id);
+			break;
+		case 'timezone':
+			reset = await setTIMEZONE('0', guild_id);
+			break;
+		case 'birthday_role':
+			reset = await setBIRTHDAY_ROLE('null', guild_id);
+			break;
+		case 'birthday_ping_role':
+			reset = await setBIRTHDAY_PING_ROLE('null', guild_id);
+			break;
+		default:
+			console.log('config not defined: ', config_name);
+			break;
+	}
+	return reset;
 }
 
 export async function setBIRTHDAY_ROLE(role_id: string, guild_id: string): Promise<APIResponseModel> {

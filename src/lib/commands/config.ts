@@ -192,23 +192,23 @@ export default async function ConfigCMD() {
 						choices: [
 							{
 								name: 'Announcement Channel',
-								value: 'announcement-channel'
+								value: 'announcement_channel'
 							},
 							{
 								name: 'Overview Channel',
-								value: 'overview-channel'
+								value: 'overview_channel'
 							},
 							{
 								name: 'Birthday Role',
-								value: 'birthday-role'
+								value: 'birthday_role'
 							},
 							{
 								name: 'Ping Role',
-								value: 'ping-role'
+								value: 'ping_role'
 							},
 							{
 								name: 'Announcement Message',
-								value: 'announcement-message'
+								value: 'announcement_message'
 							}
 							// {
 							// 	name: 'Logs',

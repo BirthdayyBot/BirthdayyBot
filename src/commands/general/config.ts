@@ -4,9 +4,9 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
 import ConfigCMD from '../../lib/commands/config';
-import { ARROW_RIGHT, FAIL, PREMIUM_URL, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, DEBUG, FAIL, PLUS, PREMIUM_URL, SUCCESS } from '../../helpers/provide/environment';
 import generateConfigListEmbed from '../../helpers/generate/configListEmbed';
-import thinking from '../../helpers/send/thinking';
+import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import findOption from '../../helpers/utils/findOption';
 import {
@@ -15,6 +15,7 @@ import {
 	setANNOUNCEMENT_MESSAGE,
 	setBIRTHDAY_PING_ROLE,
 	setBIRTHDAY_ROLE,
+	setDefaultConfig,
 	setOVERVIEW_CHANNEL,
 	setTIMEZONE
 } from '../../helpers/provide/config';
@@ -53,8 +54,8 @@ import type { GuildConfigModel } from '../../lib/model';
 			chatInputRun: 'configAnnouncementMessage'
 		},
 		{
-			name: 'remove',
-			chatInputRun: 'configRemove'
+			name: 'reset',
+			chatInputRun: 'configReset'
 		}
 	]
 })
@@ -95,8 +96,67 @@ export class ConfigCommand extends Subcommand {
 	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementChannel Command');
-        //TODO: Check if Bot has write permissions in channel
+		//TODO: #14 Check if Bot has write permissions in channel
 		await this.setConfig(interaction, 'announcement_channel');
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		container.logger.info('Run configOverviewChannel Command');
+		//TODO: #14 Check if Bot has write permissions in channel
+		await this.setConfig(interaction, 'overview_channel');
+		await setDefaultConfig('overview_message', interaction.guildId!);
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		container.logger.info('Run configBirthdayRole Command');
+		//TODO: #15 Check if Bot has manage role permissions in guild
+		await this.setConfig(interaction, 'birthday_role');
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		container.logger.info('Run configPingRole Command');
+		//TODO: #15 Check if Bot has manage role permissions in guild
+		await this.setConfig(interaction, 'ping_role');
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		container.logger.info('Run configTimezone Command');
+		await this.setConfig(interaction, 'timezone');
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configAnnouncementMessage(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		await thinking(interaction);
+		container.logger.info('Run configAnnouncementMessage Command');
+		await this.setConfig(interaction, 'announcement_message');
+		const embed = await generateEmbed(this.embed);
+		await replyToInteraction(interaction, { embeds: [embed] });
+	}
+
+	public async configReset(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+		const config_name = findOption(interaction, 'config');
+		await thinking(interaction);
+		const result = await setDefaultConfig(config_name, interaction.guildId!);
+		if (result?.success) {
+			this.embed.title = `${SUCCESS} Success`;
+			this.embed.description = `You have reset \`${config_name}.\``;
+		} else {
+			this.embed.title = `${FAIL} Failure`;
+			this.embed.description = `${result?.message}`;
+		}
 		const embed = await generateEmbed(this.embed);
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
@@ -135,28 +195,37 @@ export class ConfigCommand extends Subcommand {
 					this.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to <@&${result.data.birthday_ping_role}>`;
 				break;
 			case 'timezone':
-				const timezone = findOption(interaction, 'string');
+				const timezone = findOption(interaction, 'timezone');
 				result = await setTIMEZONE(timezone, guild_id);
-				if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Timezone** to \`${result.data.timezone}\``;
+				const timezoneString = timezone < 0 ? `UTC${timezone}` : `UTC+${timezone}`;
+				if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Timezone** to \`${timezoneString}\``;
 				break;
 			// * PREMIUM ONLY
 			case 'announcement_message':
 				let config: GuildConfigModel = await getConfig(guild_id);
 				if (config.PREMIUM) {
-					const announcement_message = findOption(interaction, 'string');
+					const announcement_message = findOption(interaction, 'message');
+					console.log('announcement_message', announcement_message);
 					result = await setANNOUNCEMENT_MESSAGE(announcement_message, guild_id);
 					if (result.success)
 						this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n\`${result.data.announcement_message}\``;
 				} else {
-					this.embed.title = `${SUCCESS} Early access only`;
+					this.embed.title = `${PLUS} Early access only`;
 					this.embed.description = `${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**. 
                     If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`;
+					result.success = false;
+					result.message = 'premium';
 				}
 				break;
 		}
 		if (result.success) {
+			console.log(DEBUG ? 'config success' : '');
 			this.embed.title = `${SUCCESS} Success`;
 		} else if (!result.success) {
+			if (result.message === 'premium') {
+				return result;
+			}
+			console.log(DEBUG ? 'config failure' : '');
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `\`${result.message}\``;
 		}
