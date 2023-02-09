@@ -12,7 +12,8 @@ import { docsButton, discordButton, websiteButton } from '../../lib/components/b
 	name: 'help',
 	description: 'Need help with my Commands?',
 	enabled: true,
-	runIn: ['GUILD_TEXT'],
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages']
 })

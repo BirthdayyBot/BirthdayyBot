@@ -12,7 +12,8 @@ import { docsButton, discordButton } from '../../lib/components/button';
 	name: 'guide',
 	description: "Need a quick setup Guide! Don't worry, this will help you!",
 	enabled: true,
-	runIn: ['GUILD_TEXT'],
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages']
 })
