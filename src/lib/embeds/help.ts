@@ -1,6 +1,6 @@
 import { BOOK, BOT_NAME, SUPPORT, LINK, PLUS, SIGN, ARROW_RIGHT } from '../../helpers/provide/environment';
 
-export const helpEmbed = {
+export const HelpEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,
 	description: `
   ${SUPPORT} Confused what each command does?
