@@ -22,6 +22,7 @@ import {
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
+import { getConfigName } from '../../helpers/utils/string';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -147,12 +148,13 @@ export class ConfigCommand extends Subcommand {
 	}
 
 	public async configReset(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const config_name = findOption(interaction, 'config');
 		await thinking(interaction);
-		const result = await setDefaultConfig(config_name, interaction.guildId!);
+		const config: string = findOption(interaction, 'config');
+		const configName = getConfigName(config);
+		const result = await setDefaultConfig(config, interaction.guildId!);
 		if (result?.success) {
 			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `You have reset \`${config_name}.\``;
+			this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
 		} else {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${result?.message}`;
