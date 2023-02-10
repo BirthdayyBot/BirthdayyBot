@@ -22,7 +22,7 @@ export const VoteEmbed = {
 			value: `
             ${ARROW_RIGHT} [top.gg](https://birthdayy.xyz/topgg/vote)
             ${ARROW_RIGHT} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
-            ${ARROW_RIGHT} [discordlist.gg](https://birthdayy.xyz/discordlist/vot)
+            ${ARROW_RIGHT} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
 			inline: false
 		},
