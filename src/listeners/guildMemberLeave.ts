@@ -54,7 +54,7 @@ export class UserEvent extends Listener {
 			await leaveServerLog(guild_id);
 			//todo: add error log if removeConfig fails
 
-			let removeGuildRequest = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.remove({
+			return await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.remove({
 				guild_id: guild_id
 			});
 		}
