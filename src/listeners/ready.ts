@@ -1,6 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import checkBirthdayScheduler from '../lib/scheduler/checkBirthdayScheduler';
+// import testScheduler from '../lib/scheduler/testScheduler';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -8,9 +10,11 @@ const dev = process.env.NODE_ENV !== 'production';
 export class UserEvent extends Listener {
 	private readonly style = dev ? yellow : blue;
 
-	public run() {
+	public async run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
+		// await testScheduler();
+		await checkBirthdayScheduler();
 	}
 
 	private printBanner() {
