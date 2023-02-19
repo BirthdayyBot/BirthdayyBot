@@ -26,6 +26,7 @@
 		"dotenv-cra": "^3.0.2",
 		"lib": "^4.3.3",
 		"mysql2": "^3.0.1",
+		"node-cron": "^3.0.2",
 		"pm2": "^5.2.2",
 		"reflect-metadata": "^0.1.13",
 		"sequelize": "^6.28.0"
