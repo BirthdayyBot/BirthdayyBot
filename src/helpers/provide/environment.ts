@@ -1,7 +1,13 @@
+import { join } from 'path';
 /**
  * @file Environment Variables
  */
 
+//DIRECTORY
+export const ROOT_DIR = join(__dirname, '..', '..', '..');
+export const SRC_DIR = join(ROOT_DIR, 'src');
+
+//MAIN
 export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const ENV = process.env.ENV; //dev; release; premium
 export const DEBUG = process.env.DEBUG === 'TRUE' ? true : false;
