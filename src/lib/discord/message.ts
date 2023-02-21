@@ -14,12 +14,12 @@ export async function fetchMessage(channel_id: string, message_id: string) {
 	}
 }
 
-export async function sendMessage(channel_id: string, options: { content?: string; embeds: any[]; components?: any[] }) {
+export async function sendMessage(channel_id: string, options: { content?: string; embeds?: any[]; components?: any[] }) {
 	const channel = await getTextChannel(channel_id);
 	return await channel.send(options);
 }
 
-export async function editMessage(channel_id: string, message_id: string, options: { content?: string; embeds: any[]; components?: any[] }) {
+export async function editMessage(channel_id: string, message_id: string, options: { content?: string; embeds?: any[]; components?: any[] }) {
 	const message = await fetchMessage(channel_id, message_id);
 	return await message.edit(options);
 }
