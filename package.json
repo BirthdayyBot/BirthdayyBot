@@ -38,6 +38,8 @@
 		"@sapphire/ts-config": "^3.3.4",
 		"@types/node": "^18.11.18",
 		"@types/ws": "^8.5.4",
+		"@typescript-eslint/eslint-plugin": "^5.53.0",
+		"@typescript-eslint/parser": "^5.53.0",
 		"eslint": "^8.31.0",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.8.2",
@@ -50,7 +52,8 @@
 		"start": "node dist/index.js",
 		"dev": "run-p watch start",
 		"watch:start": "tsc-watch --onSuccess \"node ./dist/index.js\"",
-		"format": "prettier --write \"src/**/*.ts\""
+		"format": "prettier --write \"src/**/*.ts\"",
+		"lint": "eslint ."
 	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {
