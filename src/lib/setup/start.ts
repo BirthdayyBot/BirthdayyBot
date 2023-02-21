@@ -8,7 +8,6 @@ import '@sapphire/plugin-editable-commands/register';
 import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-i18next/register';
-import '@kaname-png/plugin-env/register';
 import * as colorette from 'colorette';
 import { config } from 'dotenv-cra';
 import { join } from 'path';
