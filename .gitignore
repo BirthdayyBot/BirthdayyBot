@@ -70,9 +70,7 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.test
-.env.production
-.env.development
+.env.*
 
 #configjson
 config.json
