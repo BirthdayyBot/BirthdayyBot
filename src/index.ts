@@ -1,8 +1,8 @@
 import './lib/setup/start';
+import getGuildCount from './helpers/provide/guildCount';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
-import getGuildCount from './helpers/provide/guildCount';
 
 container.client = new SapphireClient({
 	defaultPrefix: 'b!',

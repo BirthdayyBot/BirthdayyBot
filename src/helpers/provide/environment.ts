@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { UserIDEnum } from '../../lib/enum/UserID.enum';
 /**
  * @file Environment Variables
  */
@@ -10,10 +11,8 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 //MAIN
 export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const ENV = process.env.ENV; //dev; release; premium
-export const DEBUG = process.env.DEBUG === 'TRUE' ? true : false;
+export const DEBUG = process.env.DEBUG;
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
-export const BIRTHDAYY_HQ = '934467365389893704';
-export const BIRTHDAYY_ID = '916434908728164372';
 
 //GENERIC
 export const BOT_NAME = process.env.BOT_NAME;
@@ -24,8 +23,8 @@ export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
 export const BOT_COLOR = parseInt(process.env.BOT_COLOR!);
-export const BOT_OWNER = process.env.BOT_OWNER;
-export const BOT_ADMIN = '267614892821970945';
+export const BOT_OWNER = [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
+export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';

@@ -2,9 +2,10 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { Events } from '@sapphire/framework';
 import { Listener } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
-import { AUTOCODE_ENV, BIRTHDAYY_ID, BOT_ID } from '../helpers/provide/environment';
+import { AUTOCODE_ENV, BOT_ID } from '../helpers/provide/environment';
 import updateBirthdayOverview from '../helpers/update/overview';
 import leaveServerLog from '../helpers/send/leaveServerLog';
+import { UserIDEnum } from '../lib/enum/UserID.enum';
 export class UserEvent extends Listener {
 	public constructor(context: Listener.Context, options: Listener.Options) {
 		super(context, {
@@ -22,7 +23,7 @@ export class UserEvent extends Listener {
 		const user_id = member.user.id;
 		const guild_id = member.guild.id;
 
-		if (user_id === BIRTHDAYY_ID) {
+		if (user_id === UserIDEnum.BIRTHDAYY) {
 			//todo: add custom bot server check
 			// if (customBotServer.includes(guild_id)) {
 			// 	const serverHasCustomBot = 'Dont delete anything its a custom Bot server';
