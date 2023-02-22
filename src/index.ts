@@ -1,9 +1,9 @@
-import './lib/setup/initEnv';
 import './lib/setup/start';
 import getGuildCount from './helpers/provide/guildCount';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
+import { sendMessage } from './lib/discord/message';
 
 container.client = new SapphireClient({
 	defaultPrefix: 'b!',
@@ -57,4 +57,3 @@ const main = async () => {
 
 main();
 import './lib/setup/planetscale';
-import { sendMessage } from './lib/discord/message';

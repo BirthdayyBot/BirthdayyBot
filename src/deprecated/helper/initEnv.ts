@@ -1,8 +1,7 @@
 import { join } from 'path';
 import dotenv from 'dotenv';
 
-// Unless explicitly defined, set NODE_ENV as development:
-process.env.NODE_ENV ??= 'development';
+
 const ROOT_DIR = join(__dirname, '..', '..', '..');
 const SRC_DIR = join(ROOT_DIR, 'src');
 
