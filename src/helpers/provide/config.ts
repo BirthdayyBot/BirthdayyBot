@@ -248,12 +248,18 @@ export function logAll(config: any) {
 	return;
 }
 
-export async function getGuildLanguage(guild_id: string) {
-	// fetch the language from the database
+export async function getGuildLanguage(guild_id: string): Promise<string> {
 	const requestURL = new URL(`${process.env.API_URL}/guild/retrieve/language`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const data = await fetch<{ guild_id: string; language: string }>(requestURL, FetchResultTypes.JSON);
 	return data.language;
+}
+
+export async function getGuildPremium(guild_id: string): Promise<boolean> {
+	const requestURL = new URL(`${process.env.API_URL}/guild/retrieve/premium`);
+	requestURL.searchParams.append('guild_id', guild_id);
+	const data = await fetch<{ guild_id: string; premium: boolean }>(requestURL, FetchResultTypes.JSON);
+	return data.premium;
 }
 
 /**

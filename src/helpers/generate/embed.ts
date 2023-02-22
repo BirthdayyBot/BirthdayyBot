@@ -1,4 +1,4 @@
-import { BOT_AVATAR, BOT_COLOR, BOT_NAME, PREMIUM } from '../provide/environment';
+import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/environment';
 
 /**
  * Creates a RichEmbed object with the given information
@@ -34,7 +34,7 @@ export default async function generateEmbed(embed_information: {
 	const embedColor = !color ? BOT_COLOR : parseInt(color);
 
 	const author = !author_name && !author_avatar ? {} : { name: author_name, icon_url: author_avatar };
-	const footer = { text: `${BOT_NAME} ${PREMIUM ? '👑' : ''}`, icon_url: BOT_AVATAR };
+	const footer = { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR };
 	const thumbnail = !thumbnail_url ? {} : { url: thumbnail_url };
 	const image = !image_url ? {} : { url: image_url };
 	const embedFields = !fields ? [] : fields;
