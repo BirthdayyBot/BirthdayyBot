@@ -5,7 +5,7 @@ export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
-			route: 'config/retrieve/languageByGuild'
+			route: 'guild/retrieve/language'
 		});
 	}
 
