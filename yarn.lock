@@ -1148,6 +1148,13 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+dotenv-vault-core@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dotenv-vault-core/-/dotenv-vault-core-0.7.0.tgz#e28643881cc1d80a6ec2515557243382c3f94cce"
+  integrity sha512-C8qnftaiA8OZyCYI59Ex/e6/sEr1aIAUXLhp2bDoMsGgwNoBBfKakfG0hnZAxWKKJCCOflNZiO3M1B1oJRM0+A==
+  dependencies:
+    dotenv "^16.0.3"
+
 dotenv@^16.0.3:
   version "16.0.3"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"

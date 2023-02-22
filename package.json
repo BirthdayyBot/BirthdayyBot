@@ -24,6 +24,7 @@
 		"discord-api-types": "^0.37.28",
 		"discord.js": "^14.7.1",
 		"dotenv": "^16.0.3",
+		"dotenv-vault-core": "^0.7.0",
 		"lib": "^4.3.3",
 		"mysql2": "^3.0.1",
 		"node-cron": "^3.0.2",

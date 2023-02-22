@@ -1,3 +1,4 @@
+import './lib/setup/initEnv';
 import './lib/setup/start';
 import getGuildCount from './helpers/provide/guildCount';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
@@ -42,6 +43,7 @@ const main = async () => {
 		container.logger.info('Logging in');
 		container.logger.info(`ENV: ${process.env.NODE_ENV}`);
 		container.logger.info(`BOTNAME: ${process.env.BOT_NAME}`);
+		container.logger.info(`ENV CHECK: `, process.env);
 		await container.client.login();
 		container.logger.info('logged in');
 		container.logger.info(`Bot is in ${getGuildCount()} guilds`);

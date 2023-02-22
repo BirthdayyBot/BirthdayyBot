@@ -71,6 +71,9 @@ typings/
 # dotenv environment variables file
 .env
 .env.*
+.flaskenv*
+!.env.project
+!.env.vault
 
 #configjson
 config.json
@@ -115,3 +118,6 @@ dist
 
 #dist
 dist/
+
+# vscode
+settings.json
