@@ -2,7 +2,7 @@ declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
 			NODE_ENV: 'development' | 'production';
-			ENV: 'dev' | 'release' | 'premium';
+			APP_ENV: 'dev' | 'stg' | 'prd';
 			DEBUG: 'TRUE' | 'FALSE';
 			API_URL: string;
 			DISCORD_TOKEN: string;
@@ -15,7 +15,6 @@ declare global {
 			TOPGG_TOKEN: string;
 			DISCORDLIST_TOKEN: string;
 			DISCORDBOTLIST_TOKEN: string;
-			MEIRABA_TOKEN: string;
 			MAX_BIRTHDAYS_PER_SITE: string;
 			DB_NAME: string;
 			DB_USERNAME: string;

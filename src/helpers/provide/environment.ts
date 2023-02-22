@@ -10,7 +10,7 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 
 //MAIN
 export const NODE_ENV = process.env.NODE_ENV; //development; production
-export const ENV = process.env.ENV; //dev; release; premium
+export const APP_ENV = process.env.APP_ENV; //dev; stg; prd
 export const DEBUG = process.env.DEBUG?.toLowerCase() === 'true';
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 
@@ -28,6 +28,7 @@ export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
+export const PREMIUM = false;
 
 //EMOJIS
 export const SUCCESS = `<:checkmark_square:931267038272434198>`;

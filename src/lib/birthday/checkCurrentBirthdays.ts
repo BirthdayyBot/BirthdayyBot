@@ -1,4 +1,4 @@
-import { NODE_ENV } from '../../helpers/provide/environment';
+import { APP_ENV } from '../../helpers/provide/environment';
 import { getCurrentDate } from '../../helpers/utils/date';
 import birthdayEvent from './birthdayEvent';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
@@ -15,7 +15,7 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 	// Retrieve today's birthdays from the birthday-api
 	// ! For testing purposes only
 	let checkTodaysBirthdays =
-		NODE_ENV === 'development'
+		APP_ENV === 'dev'
 			? {
 					result: [
 						{
