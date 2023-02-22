@@ -23,7 +23,7 @@
 		"colorette": "^2.0.19",
 		"discord-api-types": "^0.37.28",
 		"discord.js": "^14.7.1",
-		"dotenv-cra": "^3.0.2",
+		"dotenv": "^16.0.3",
 		"lib": "^4.3.3",
 		"mysql2": "^3.0.1",
 		"node-cron": "^3.0.2",
@@ -49,11 +49,20 @@
 	"scripts": {
 		"build": "tsc",
 		"watch": "tsc -w",
+		"pm2-dev": "npm run production && npm run build && pm2 start dist/index.js --name BirthdayyBot --max-memory-restart=2G --watch && pm2 monit",
+		"pm2-stop": "pm2 stop BirthdayyBot",
+		"pm2-restart": "tsc && pm2 restart BirthdayyBot && pm2 monit",
+		"pm2-monit": "pm2 monit",
 		"start": "node dist/index.js",
 		"dev": "run-p watch start",
 		"watch:start": "tsc-watch --onSuccess \"node ./dist/index.js\"",
+		"build:start": "tsc && node ./dist/index.js set NODE_ENV=production",
 		"format": "prettier --write \"src/**/*.ts\"",
-		"lint": "eslint ."
+		"lint": "eslint .",
+		"develop": "set NODE_ENV=development",
+		"production": "set NODE_ENV=production",
+		"production-linux": "set NODE_ENV=production && pm2 start dist/index.js --name BirthdayyBot --watch --ignore-watch=\"node_modules\" --interpreter=\"node\" --max-memory-restart=500M --log-date-format=\"YYYY-MM-DD HH:mm Z\" --log /var/www/birthdayybot/logs/pm2.log --error /var/www/birthdayybot/logs/pm2.log --out /var/www/birthdayybot/logs/pm2.log --merge-logs --no-daemon",
+		"production-windows": "set NODE_ENV=production && tsc && pm2 start dist/index.js --name BirthdayyBotProduction && pm2 monit"
 	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {

@@ -9,7 +9,7 @@ import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-i18next/register';
 import * as colorette from 'colorette';
-import { config } from 'dotenv-cra';
+import { config } from 'dotenv';
 import { join } from 'path';
 import { inspect } from 'util';
 import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';

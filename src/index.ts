@@ -40,6 +40,8 @@ container.client = new SapphireClient({
 const main = async () => {
 	try {
 		container.logger.info('Logging in');
+		container.logger.info(`ENV: ${process.env.NODE_ENV}`);
+		container.logger.info(`BOTNAME: ${process.env.BOT_NAME}`);
 		await container.client.login();
 		container.logger.info('logged in');
 		container.logger.info(`Bot is in ${getGuildCount()} guilds`);
@@ -48,7 +50,9 @@ const main = async () => {
 		container.client.destroy();
 		process.exit(1);
 	}
+	await sendMessage('1077621363881300018', { content: 'online' });
 };
 
 main();
 import './lib/setup/planetscale';
+import { sendMessage } from './lib/discord/message';
