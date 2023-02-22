@@ -1,4 +1,4 @@
-import { join } from 'path';
+/* import { join } from 'path';
 import dotenv from 'dotenv';
 
 
@@ -14,3 +14,4 @@ if (process.env.NODE_ENV) {
 if (initEnv.error) {
 	throw initEnv.error;
 }
+ */
