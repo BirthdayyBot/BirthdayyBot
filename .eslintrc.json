@@ -1,5 +1,6 @@
 {
 	"extends": "eslint:recommended",
+	"ignorePatterns": ["dist/"],
 	"env": {
 		"node": true,
 		"es6": true,
