@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { getGuildPremium } from './config';
 /**
  * @file Environment Variables
  */
@@ -11,7 +12,7 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 //MAIN
 export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const APP_ENV = process.env.APP_ENV; //dev; stg; prd
-export const DEBUG = process.env.DEBUG?.toLowerCase() === 'true';
+export const DEBUG = parseBoolean(process.env.DEBUG);
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 
 //GENERIC
@@ -28,7 +29,10 @@ export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
-export const PREMIUM = false;
+export const IS_CUSTOM_BOT = parseBoolean(process.env.CUSTOM_BOT);
+export const IS_PREMIUM = async (guild_id: string) => {
+	return await getGuildPremium(guild_id);
+};
 
 //EMOJIS
 export const SUCCESS = `<:checkmark_square:931267038272434198>`;
@@ -72,11 +76,12 @@ export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
-//Testing
-export const PRIVATE_TESTING_GUILD = '766707453994729532';
-
 //Config
 export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80;
 
 //Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
+
+function parseBoolean(bool: string): boolean {
+	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
+}
