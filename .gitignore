@@ -121,3 +121,11 @@ dist/
 
 # vscode
 settings.json
+
+#ignore .yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
