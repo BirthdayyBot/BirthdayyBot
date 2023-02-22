@@ -7,7 +7,6 @@ const ROOT_DIR = join(__dirname, '..', '..', '..');
 const SRC_DIR = join(ROOT_DIR, 'src');
 
 let initEnv: any;
-// require('dotenv-vault-core').config(join(SRC_DIR, '.env.vault'));
 if (process.env.NODE_ENV) {
 	initEnv = dotenv.config({ path: join(SRC_DIR, `.env.${process.env.NODE_ENV}`), override: true });
 } else {
@@ -16,4 +15,3 @@ if (process.env.NODE_ENV) {
 if (initEnv.error) {
 	throw initEnv.error;
 }
-console.log('initEnv', initEnv);

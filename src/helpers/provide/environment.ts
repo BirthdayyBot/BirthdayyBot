@@ -1,12 +1,8 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
-// import '../../lib/setup/initEnv';
-console.log('CHECK: ', process.env.BOT_AVATAR);
 /**
  * @file Environment Variables
  */
-
-export const BOT_AVATAR = process.env.BOT_AVATAR;
 
 //DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
@@ -21,11 +17,7 @@ export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 //GENERIC
 export const BOT_NAME = process.env.BOT_NAME;
 export const BOT_ID = process.env.BOT_ID;
-// export const BOT_AVATAR = process.env.BOT_AVATAR;
-/* export const BOT_AVATAR = () => {
-	console.log('process.env.BOT_AVATAR ENV', process.env.BOT_AVATAR);
-	return process.env.BOT_AVATAR;
-}; */
+export const BOT_AVATAR = process.env.BOT_AVATAR;
 export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
 export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
