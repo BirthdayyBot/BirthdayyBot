@@ -1,0 +1,82 @@
+name: Continuous Delivery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - production
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - '.github/workflows/continuous-delivery.yml'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  # Uses docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  REPOSITORY_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  Publish:
+    name: Publish image to GHCR
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_tag: ${{ steps.save_tag.outputs.tag }}
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+        with:
+          persist-credentials: false
+          submodules: true
+
+      - name: Extract version from package.json
+        id: package_version
+        uses: saionaro/extract-package-version@de8268c348d3a9ed3514c86a9ad8d4568ab8b49e # tag=v1.1.1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker images
+        id: meta
+        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96 # v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=${{ steps.package_version.outputs.version }}
+            type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@37abcedcc1da61a57767b7588cb9d03eb57e28b3 # v3.3.0
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Save image tag for use in deploy job
+        id: save_tag
+        run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
+
+  Deploy:
+    name: Deploy using Docker
+    needs: [Publish]
+    uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@b7b081e8a642069b5ed3a243ce7b863a800a79e5
+    secrets:
+      DOCKER_TAG: 'production'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STAGING }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_PRIVATE_KEY: '${{ secrets.SSH_PK }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'

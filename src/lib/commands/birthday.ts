@@ -1,7 +1,7 @@
-import { getLocalizedString } from '../../../helpers/utils/translate';
+import { getLocalizedString } from '../../helpers/utils/translate';
 import { PermissionFlagsBits } from 'discord.js';
 
-export default async function BirthdayCommand() {
+export async function BirthdayCMD() {
 	return {
 		//https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandData
 		name: await getLocalizedString('en-US', 'commands/birthday:name'),
@@ -12,6 +12,7 @@ export default async function BirthdayCommand() {
 		descriptionLocalizations: {
 			de: await getLocalizedString('de-DE', 'commands/birthday:description')
 		},
+		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: false,
 		options: [
 			{

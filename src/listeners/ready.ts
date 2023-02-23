@@ -1,23 +1,27 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import checkBirthdayScheduler from '../lib/scheduler/checkBirthdayScheduler';
+// import testScheduler from '../lib/scheduler/testScheduler';
 
-const dev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserEvent extends Listener {
-	private readonly style = dev ? yellow : blue;
+	private readonly style = isDev ? yellow : blue;
 
-	public run() {
+	public async run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
+		// await testScheduler();
+		await checkBirthdayScheduler();
 	}
 
 	private printBanner() {
 		const success = green('+');
 
-		const llc = dev ? magentaBright : white;
-		const blc = dev ? magenta : blue;
+		const llc = isDev ? magentaBright : white;
+		const blc = isDev ? magenta : blue;
 
 		const line01 = llc('');
 		const line02 = llc('');
@@ -30,7 +34,7 @@ export class UserEvent extends Listener {
 			String.raw`
 ${line01} ${pad}${blc('1.0.0')}
 ${line02} ${pad}[${success}] Gateway
-${line03}${dev ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
+${line03}${isDev ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
 		`.trim()
 		);
 	}

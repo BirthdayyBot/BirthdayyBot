@@ -6,6 +6,8 @@ import { container } from '@sapphire/framework';
 import findOption from '../../helpers/utils/findOption';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { resolveKey } from '@sapphire/plugin-i18next';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
+import { UwUCMD } from '../../lib/commands/uwu';
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',
 	subcommands: [
@@ -30,12 +32,16 @@ import { resolveKey } from '@sapphire/plugin-i18next';
 export class UwuCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options,
-			description: 'send uwus'
+			...options
 		});
 	}
 	readonly uwuString = 'UwU';
 
+	public override async registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(await UwUCMD(), {
+			guildIds: getCommandGuilds('testing')
+		});
+	}
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const title = await resolveKey(interaction, 'commands/uwu:uwuss');
 		const embed = await generateEmbed({ title: title, description: 'Uwu' });
@@ -72,50 +78,5 @@ export class UwuCommand extends Subcommand {
 		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
 		const embed = await generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
 		return await interaction.reply({ embeds: [embed] });
-	}
-
-	public override registerApplicationCommands(registry: Subcommand.Registry) {
-
-		registry.registerChatInputCommand({
-			name: 'uwu',
-			description: 'UwU Command',
-			options: [
-				{
-					type: 1,
-					name: 'once',
-					description: 'Send one uwu'
-				},
-				{
-					type: 1,
-					name: 'times',
-					description: 'Send multiple uwus',
-					options: [
-						{
-							type: 4,
-							name: 'times',
-							description: 'How many UwUs to send'
-						}
-					]
-				},
-				{
-					type: 1,
-					name: 'random',
-					description: 'Random added fields',
-					options: [
-						{
-							type: 6,
-							name: 'user',
-							description: 'Send a UwU to a user',
-							required: true
-						}
-					]
-				},
-				{
-					type: 1,
-					name: 'fetch',
-					description: 'Fetch a user'
-				}
-			]
-		});
 	}
 }

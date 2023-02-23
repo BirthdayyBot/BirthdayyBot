@@ -5,7 +5,7 @@ export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
-			route: 'config/retrieve/languageByGuild'
+			route: 'guild/retrieve/premium'
 		});
 	}
 
@@ -19,7 +19,7 @@ export class UserRoute extends Route {
 			return response.json({ error: 'Missing Parameter - guild_id' });
 		}
 
-		const [results] = await container.sequelize.query(`SELECT guild_id, language FROM guild g WHERE guild_id = ? AND disabled = false`, {
+		const [results] = await container.sequelize.query(`SELECT guild_id, premium FROM guild g WHERE guild_id = ? AND disabled = false`, {
 			replacements: [guild_id]
 		});
 		response.statusCode = 200;

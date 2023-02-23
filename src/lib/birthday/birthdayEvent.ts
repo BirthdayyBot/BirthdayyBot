@@ -1,7 +1,9 @@
 import generateBirthdayMessage from '../../helpers/generate/birthdayMessage';
 import generateEmbed from '../../helpers/generate/embed';
 import { getConfig, logAll } from '../../helpers/provide/config';
-import { ARROW_RIGHT, GIFT, IMG_CAKE, NEWS } from '../../helpers/provide/environment';
+import { IMG_CAKE, NEWS } from '../../helpers/provide/environment';
+import { sendMessage } from '../discord/message';
+import { addRoleToUser } from '../discord/role';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 //TODO: Correct Types, cleanup code
@@ -11,7 +13,7 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
 	console.log('BIRTHDAYCHILD: ', birthday_child_id);
 
 	let config = await getConfig(guild_id);
-	const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE, PREMIUM } = config;
+	const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
 	await logAll(config);
 
 	if (BIRTHDAY_ROLE) {
@@ -19,18 +21,19 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
 	}
 
 	if (ANNOUNCEMENT_CHANNEL) {
-		let description;
-		if (PREMIUM) {
-			let m = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
-			description = m.message;
-		} else {
-			//default message
-			description = `${ARROW_RIGHT} Today is a Special Day!
-            ${GIFT} Please wish <@${birthday_child_id}> a Happy Birthday!`;
-		}
+		// let description;
+		// if (PREMIUM) {
+		// 	let m = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
+		// 	description = m.message;
+		// } else {
+		// 	//default message
+		// 	description = `${ARROW_RIGHT} Today is a Special Day!
+		//     ${GIFT} Please wish <@${birthday_child_id}> a Happy Birthday!`;
+		// }
+		let announcementMessage = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
 		let embed = {
 			title: `${NEWS} Birthday Announcement!`,
-			description: description,
+			description: announcementMessage.message,
 			thumbnail_url: IMG_CAKE
 		};
 		let content = BIRTHDAY_PING_ROLE !== null ? `<@&${BIRTHDAY_PING_ROLE}>` : ``;
@@ -52,13 +55,9 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
  */
 async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_id: string, isTest: boolean) {
 	try {
-		await lib.discord.guilds['@release'].members.roles.update({
-			role_id: role_id,
-			user_id: user_id,
-			guild_id: guild_id
-		});
+		await addRoleToUser(user_id, role_id, guild_id);
 		console.log(`BIRTHDAY ROLE ADDED TO BDAY CHILD`);
-		await scheduleRoleRemoval(user_id, role_id, guild_id, isTest);
+		await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); //TODO: #9 Implement own timer
 	} catch (error) {
 		console.warn(`COULND'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD`);
 		console.log('USERID: ', user_id);
@@ -74,6 +73,7 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
  * @param isTest - If true, the role will be removed after 1 minute. Otherwise, it will be removed after 1440 minutes (1 day).
  */
 async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: string, isTest: boolean = false) {
+	return;
 	try {
 		//https://docs.cronhooks.io/#introduction
 		let time = isTest ? 1 : 1440; //1 minute or 1440 minutes (1 day)
@@ -107,8 +107,8 @@ async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: stri
  */
 async function sendBirthdayAnnouncement(content: string, channel_id: string, birthdayEmbed: object) {
 	try {
-		let message = await lib.discord.channels[channel_id].messages.create({
-			content: `${content}`,
+		let message = await sendMessage(channel_id, {
+			content: content,
 			embeds: [birthdayEmbed]
 		});
 		console.log(`Sent Birthday Announcement`);

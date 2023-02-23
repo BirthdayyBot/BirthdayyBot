@@ -1,4 +1,4 @@
-import * as env from '../provide/environment';
+import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/environment';
 
 /**
  * Creates a RichEmbed object with the given information
@@ -13,7 +13,7 @@ import * as env from '../provide/environment';
  * @property {Array<Object>} [fields] - An array of fields to include in the embed
  * @property {string} [color] - The color of the embed
  *
- * @returns {Promise<object>} embed - A RichEmbed object with the given information
+ * @returns embed - A RichEmbed object with the given information
  */
 
 export default async function generateEmbed(embed_information: {
@@ -25,19 +25,19 @@ export default async function generateEmbed(embed_information: {
 	image_url?: string;
 	fields?: Array<Object>;
 	color?: string;
-}): Promise<object> {
+}): Promise<Object> {
 	const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
 
 	const currentDate = new Date();
 	const timestamp = currentDate.toISOString();
 
-	const embedColor = !color ? env.BOT_COLOR : parseInt(color);
+	const embedColor = !color ? BOT_COLOR : parseInt(color);
 
 	const author = !author_name && !author_avatar ? {} : { name: author_name, icon_url: author_avatar };
-	const footer = { text: `${env.BOT_NAME} ${env.ENV === 'premium' ? '👑' : ''}`, icon_url: env.BOT_AVATAR };
+	const footer = { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR };
 	const thumbnail = !thumbnail_url ? {} : { url: thumbnail_url };
 	const image = !image_url ? {} : { url: image_url };
-    const embedFields = !fields ? [] : fields;
+	const embedFields = !fields ? [] : fields;
 
 	const embed = {
 		title: title,

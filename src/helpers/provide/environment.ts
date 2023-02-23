@@ -1,26 +1,38 @@
+import { join } from 'path';
+import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { getGuildPremium } from './config';
 /**
  * @file Environment Variables
  */
 
-export const ENV = process.env.ENV; //dev; release; premium
-export const DEBUG = process.env.DEBUG === 'TRUE' ? true : false;
+//DIRECTORY
+export const ROOT_DIR = join(__dirname, '..', '..', '..');
+export const SRC_DIR = join(ROOT_DIR, 'src');
+
+//MAIN
+export const NODE_ENV = process.env.NODE_ENV; //development; production
+export const APP_ENV = process.env.APP_ENV; //dev; stg; prd
+export const DEBUG = parseBoolean(process.env.DEBUG);
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
-export const BIRTHDAYY_HQ = '934467365389893704';
-export const BIRTHDAYY_ID = '916434908728164372';
+
 //GENERIC
-export const BOT_AVATAR = process.env.BOT_AVATAR; //BOT_AVATAR instead of PFP
-export const IMG_CAKE = process.env.IMG_CAKE;
-export const IMG_BLOCK = process.env.IMG_BLOCK;
 export const BOT_NAME = process.env.BOT_NAME;
 export const BOT_ID = process.env.BOT_ID;
+export const BOT_AVATAR = process.env.BOT_AVATAR;
+export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
+export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = parseInt(process.env.BOT_COLOR!);
-export const BOT_OWNER = process.env.BOT_OWNER;
-export const BOT_ADMIN = '267614892821970945';
+export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
+export const BOT_OWNER = process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
+export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
+export const IS_CUSTOM_BOT = parseBoolean(process.env.CUSTOM_BOT);
+export const IS_PREMIUM = async (guild_id: string) => {
+	return await getGuildPremium(guild_id);
+};
 
 //EMOJIS
 export const SUCCESS = `<:checkmark_square:931267038272434198>`;
@@ -64,5 +76,12 @@ export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
-//Testing
-export const TEST_OVERVIEW_MESSAGE = '1034565132426149980';
+//Config
+export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80;
+
+//Autocode
+export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
+
+function parseBoolean(bool: string): boolean {
+	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
+}

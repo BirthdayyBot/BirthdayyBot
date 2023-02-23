@@ -1,3 +1,4 @@
+import { APP_ENV } from '../../helpers/provide/environment';
 import { getCurrentDate } from '../../helpers/utils/date';
 import birthdayEvent from './birthdayEvent';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
@@ -11,10 +12,23 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export default async function checkCurrentBirthdays(): Promise<void> {
 	const today = getCurrentDate();
 
-    // Retrieve today's birthdays from the birthday-api
-	let checkTodaysBirthdays = await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.todaysBirthdays({
-		birthday: today
-	});
+	// Retrieve today's birthdays from the birthday-api
+	// ! For testing purposes only
+	let checkTodaysBirthdays =
+		APP_ENV === 'dev'
+			? {
+					result: [
+						{
+							id: 1342,
+							user_id: '1063411719906529323',
+							birthday: '2001-05-21',
+							guild_id: '766707453994729532'
+						}
+					]
+			  }
+			: await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.todaysBirthdays({
+					birthday: today
+			  });
 
 	let todaysBirthdays = checkTodaysBirthdays.result;
 
@@ -22,7 +36,7 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 	console.log('birthdayCount', birthdayCount);
 	if (birthdayCount !== 0) {
 		console.time('BirthdayLoop Time');
-        // If there are birthdays today, loop through and send messages
+		// If there are birthdays today, loop through and send messages
 		for (let index = 0; index < birthdayCount; index++) {
 			let birthday = todaysBirthdays[index];
 			console.log('BIRTHDAYY LOOP: ', index + 1);

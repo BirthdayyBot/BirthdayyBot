@@ -3,7 +3,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export default async function generateBirthdayMessage(content: string, user_id: string, guild_id: string) {
 	let message = content;
 	let variables = [];
-    
+
 	if (message.match(/{USERNAME}/gi) || message.match(/{DISCRIMINATOR}/gi)) {
 		//TODO: Use discordjs implementation
 		let user = await lib.discord.users['@release'].retrieve({
