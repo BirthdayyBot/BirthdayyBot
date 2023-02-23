@@ -1,0 +1,17 @@
+{
+	"name": "cumpleaños",
+	"description": "Comandos para gestionar cumpleaños",
+	"subcommand": {
+		"register": {
+			"name": "registrar",
+			"description": "Registra un nuevo cumpleaños",
+			"options": {
+				"user": { "name": "usuario", "description": "Actualiza el cumpleaños de alguien - SOLO ADMINISTRADORES" },
+				"day": { "name": "día", "description": "Día del cumpleaños" },
+				"month": { "name": "mes", "description": "Mes del cumpleaños" },
+				"year": { "name": "año", "description": "Año del cumpleaños" }
+			}
+		},
+		"update": { "name": "actualizar", "description": "Actualiza un cumpleaños ya existente" }
+	}
+}
