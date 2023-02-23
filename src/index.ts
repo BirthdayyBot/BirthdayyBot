@@ -9,7 +9,7 @@ container.client = new SapphireClient({
 	defaultPrefix: 'b!',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 	logger: {
-		level: APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug
+		level: process.env.APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug
 	},
 	shards: 'auto',
 	partials: [Partials.Channel, Partials.GuildMember],
@@ -56,4 +56,3 @@ const main = async () => {
 
 main();
 import './lib/setup/planetscale';
-import { APP_ENV } from './helpers/provide/environment';
