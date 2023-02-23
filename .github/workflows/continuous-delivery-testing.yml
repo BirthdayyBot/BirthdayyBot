@@ -72,7 +72,7 @@ jobs:
   Deploy:
     name: Deploy using Docker
     needs: [Publish]
-    uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@b7b081e8a642069b5ed3a243ce7b863a800a79e5
+    uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@912ea6d4dcf9ca29c6a34e7ff16c55a8e768c643
     secrets:
       DOCKER_TAG: 'testing'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
