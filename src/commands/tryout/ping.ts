@@ -1,5 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 @ApplyOptions<Command.Options>({
 	description: 'ping pong'
@@ -7,10 +8,15 @@ import { Command } from '@sapphire/framework';
 export class PingCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		// Register slash command
-		registry.registerChatInputCommand({
-			name: this.name,
-			description: this.description
-		});
+		registry.registerChatInputCommand(
+			{
+				name: this.name,
+				description: this.description
+			},
+			{
+				guildIds: getCommandGuilds('testing')
+			}
+		);
 	}
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
