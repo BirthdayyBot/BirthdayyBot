@@ -9,7 +9,7 @@ container.client = new SapphireClient({
 	defaultPrefix: 'b!',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 	logger: {
-		level: LogLevel.Debug
+		level: process.env.APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug
 	},
 	shards: 'auto',
 	partials: [Partials.Channel, Partials.GuildMember],
@@ -41,7 +41,7 @@ container.client = new SapphireClient({
 const main = async () => {
 	try {
 		container.logger.info('Logging in');
-		container.logger.info(`ENV: ${process.env.NODE_ENV}`);
+		container.logger.info(`APP_ENV: ${process.env.APP_ENV}`);
 		container.logger.info(`BOTNAME: ${process.env.BOT_NAME}`);
 		await container.client.login();
 		container.logger.info('logged in');

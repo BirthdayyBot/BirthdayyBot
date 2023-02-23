@@ -1,8 +1,8 @@
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import { NODE_ENV } from '../provide/environment';
+import { APP_ENV } from '../provide/environment';
 
 export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin'): string[] {
-	if (NODE_ENV !== 'production') return [GuildIDEnum.CHILLI_HQ];
+	if (APP_ENV !== 'prd') return [GuildIDEnum.CHILLI_HQ];
 	switch (commandLevel) {
 		case 'global':
 			return [];

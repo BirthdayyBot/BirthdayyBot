@@ -129,3 +129,6 @@ settings.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# ignore changes in the doppler.yml
+doppler.yml
