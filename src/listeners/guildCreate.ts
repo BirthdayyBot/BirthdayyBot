@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, ListenerOptions } from '@sapphire/framework';
-import { AuditLogEvent, Guild } from 'discord.js';
-import { AUTOCODE_ENV, IS_CUSTOM_BOT } from '../helpers/provide/environment';
+import { Events, Listener, ListenerOptions, container } from '@sapphire/framework';
+import { AuditLogEvent, Guild, PermissionFlagsBits } from 'discord.js';
+import { AUTOCODE_ENV, DEBUG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendDMMessage } from '../lib/discord/message';
 import { GuideEmbed } from '../lib/embeds';
 import generateEmbed from '../helpers/generate/embed';
@@ -46,15 +46,16 @@ export class UserEvent extends Listener {
 		}
 
 		async function getBotInviter(guild: Guild): Promise<string | null> {
-			//TODO: Create a working version of this permission Check
-			// if (!guild.me.permissions.has('VIEW_AUDIT_LOG')) {
-			// 	return null;
-			// }
+			if (!guild.members.me!.permissions.has(PermissionFlagsBits.ViewAuditLog)) {
+				DEBUG ? container.logger.warn(`[DEBUG] ${guild.name} (${guild.id}) - No permission to view audit logs`) : null;
+				return null;
+			}
 
 			try {
 				const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
 				const entry = auditLogs.entries.first();
 				const inviter = entry!.executor!.id;
+				DEBUG ? container.logger.info(`[DEBUG] ${guild.name} (${guild.id}) - Inviter: ${inviter}`) : null;
 				return inviter;
 			} catch (error) {
 				return null;
