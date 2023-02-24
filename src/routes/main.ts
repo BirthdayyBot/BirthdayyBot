@@ -3,7 +3,8 @@ import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
 
 @ApplyOptions<Route.Options>({ route: `` })
 export class UserRoute extends Route {
-	public [methods.GET](_request: ApiRequest, response: ApiResponse) {
+    //TODO: #25 Create validation for the request when exposing the route publicly
+	public [methods.GET](_request: ApiRequest, response: ApiResponse): void {
 		response.json({ message: 'Landing Page!' });
 	}
 

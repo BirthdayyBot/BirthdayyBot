@@ -1,4 +1,3 @@
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { Events } from '@sapphire/framework';
 import { Listener } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
@@ -6,6 +5,7 @@ import { AUTOCODE_ENV, BOT_ID } from '../helpers/provide/environment';
 import updateBirthdayOverview from '../helpers/update/overview';
 import leaveServerLog from '../helpers/send/leaveServerLog';
 import { UserIDEnum } from '../lib/enum/UserID.enum';
+const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export class UserEvent extends Listener {
 	public constructor(context: Listener.Context, options: Listener.Options) {
 		super(context, {
@@ -38,7 +38,7 @@ export class UserEvent extends Listener {
 			await removeData(guild_id);
 		} else {
 			try {
-				let removeUserRequest = await lib.chillihero['birthday-api']['@release'].birthday.delete({
+				let removeUserRequest = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
 					user_id: user_id,
 					guild_id: guild_id
 				});
