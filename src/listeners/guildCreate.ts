@@ -4,6 +4,7 @@ import { AuditLogEvent, Guild } from 'discord.js';
 import { AUTOCODE_ENV, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendDMMessage } from '../lib/discord/message';
 import { GuideEmbed } from '../lib/embeds';
+import generateEmbed from '../helpers/generate/embed';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 @ApplyOptions<ListenerOptions>({})
@@ -17,6 +18,7 @@ export class UserEvent extends Listener {
 		});
 	}
 	public async run(guild: Guild) {
+		console.log(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
 		const guild_id = guild.id;
 		const inviter = await getBotInviter(guild);
 		if (IS_CUSTOM_BOT) {
@@ -37,8 +39,9 @@ export class UserEvent extends Listener {
 		}
 
 		async function sendGuide(user_id: string) {
+			const embed = await generateEmbed(GuideEmbed);
 			await sendDMMessage(user_id, {
-				embeds: [GuideEmbed]
+				embeds: [embed]
 			});
 		}
 
