@@ -4,7 +4,8 @@ import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import { sendMessage } from './lib/discord/message';
-
+import { APP_ENV, DEBUG } from './helpers/provide/environment';
+import { UserIDEnum } from './lib/enum/UserID.enum';
 container.client = new SapphireClient({
 	defaultPrefix: 'b!',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
@@ -70,5 +71,3 @@ const main = async () => {
 
 main();
 import './lib/setup/planetscale';
-import { UserIDEnum } from './lib/enum/UserID.enum';
-import { APP_ENV, DEBUG } from './helpers/provide/environment';
