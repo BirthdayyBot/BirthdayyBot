@@ -1,5 +1,5 @@
 import generateEmbed from '../generate/embed';
-import { ALARM, BOT_ID, BOT_SERVER_LOG } from '../provide/environment';
+import { ALARM, AUTOCODE_ENV, BOT_ID, BOT_SERVER_LOG } from '../provide/environment';
 
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
@@ -33,7 +33,7 @@ export default async function leaveServerLog(guild_id: string) {
 
 	let embed = await generateEmbed(obj);
 
-	await lib.discord.channels['@release'].messages.create({
+	await lib.discord.channels[AUTOCODE_ENV].messages.create({
 		channel_id: BOT_SERVER_LOG,
 		content: '',
 		embeds: [embed]
