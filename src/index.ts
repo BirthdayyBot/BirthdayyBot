@@ -15,6 +15,7 @@ container.client = new SapphireClient({
 	shards: 'auto',
 	partials: [Partials.Channel, Partials.GuildMember],
 	loadMessageCommandListeners: true,
+    loadDefaultErrorListeners: true,
 	hmr: {
 		enabled: process.env.NODE_ENV === 'development'
 	},

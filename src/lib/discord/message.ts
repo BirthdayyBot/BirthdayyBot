@@ -31,6 +31,7 @@ export async function sendDMMessage(user_id: string, options: { content?: string
 		return await user.send(options);
 	} catch (error) {
 		if (DEBUG) container.logger.error(error);
-		throw new Error('Cant send DM to user with id: ' + user_id);
+		container.logger.error("Couldn't send DM to user with id: " + user_id);
+		return;
 	}
 }
