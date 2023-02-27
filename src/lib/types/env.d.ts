@@ -5,6 +5,9 @@ declare global {
 			APP_ENV: 'dev' | 'tst' | 'prd';
 			DEBUG: 'TRUE' | 'FALSE';
 			API_URL: string;
+			API_SECRET: string;
+			API_EXTENSION: string;
+			API_PORT: string;
 			DISCORD_TOKEN: string;
 			CLIENT_ID: string;
 			BOT_OWNER: string;
@@ -16,6 +19,7 @@ declare global {
 			DISCORDLIST_TOKEN: string;
 			DISCORDBOTLIST_TOKEN: string;
 			MAX_BIRTHDAYS_PER_SITE: string;
+			WEBHOOK_SECRET: string;
 			DB_NAME: string;
 			DB_USERNAME: string;
 			DB_HOST: string;

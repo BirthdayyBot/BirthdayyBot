@@ -70,7 +70,7 @@ export const TRELLO_BUG_BOARD_NAME = '[Bugs] Birthdayy';
 export const TRELLO_BUG_LIST_NAME = 'Bugs';
 
 //Values
-export const BOT_SERVER_LOG = '950681688227340319';
+export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
 export const BOT_ADMIN_LOG = '966987605348589588';
 export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
 export const VOTE_CHANNEL_ID = '950683261540130816';
@@ -81,6 +81,14 @@ export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80
 
 //Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
+
+//API
+export const API_BASE_URL = process.env.API_BASE_URL;
+export const API_EXTENSION = process.env.API_EXTENSION;
+export const API_PORT = process.env.API_PORT;
+export const API_SECRET = process.env.API_SECRET;
+export const API_URL = `${API_BASE_URL}${API_EXTENSION}`;
+export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
 function parseBoolean(bool: string): boolean {
 	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());

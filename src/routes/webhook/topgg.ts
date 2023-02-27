@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
-import type { APIWebhookTopGGBody } from '../../lib/model/APIWebhookTopGGBody.model';
+import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import voteProcess from '../../lib/process/vote';
 
 @ApplyOptions<Route.Options>({ route: `webhook/topgg` })
@@ -12,8 +12,8 @@ export class UserRoute extends Route {
 		}
 		console.log(request.body);
 
-		const type = (request.body as APIWebhookTopGGBody).type;
-		const user_id = (request.body as APIWebhookTopGGBody).user;
+		const type = (request.body as APIWebhookTopGG).type;
+		const user_id = (request.body as APIWebhookTopGG).user;
 		switch (type) {
 			case 'test':
 				console.log('topgg webhook test');
