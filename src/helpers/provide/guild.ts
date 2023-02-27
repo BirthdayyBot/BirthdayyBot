@@ -4,14 +4,22 @@ import { fetch, FetchResultTypes } from '@sapphire/fetch';
 export async function leaveGuildRequest(guild_id: string) {
 	const requestURL = new URL(`${API_URL}guild/leave`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const leaveGuildRequest = await fetch<FetchResultTypes.JSON>(requestURL, FetchResultTypes.JSON);
+	const leaveGuildRequest = await fetch<FetchResultTypes.JSON>(
+		requestURL,
+		{ method: 'POST', headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON
+	);
 	console.log(leaveGuildRequest);
 }
 
 export async function isGuildDisabledRequest(guild_id: string): Promise<boolean> {
 	const requestURL = new URL(`${API_URL}guild/retrieve/is-disabled`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const isGuildDisabled = await fetch<FetchResultTypes.JSON>(requestURL, FetchResultTypes.JSON);
+	const isGuildDisabled = await fetch<FetchResultTypes.JSON>(
+		requestURL,
+		{ method: 'GET', headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON
+	);
 	console.log(isGuildDisabled);
 	const { is_disabled } = isGuildDisabled as unknown as { is_disabled: boolean };
 	return is_disabled!;
