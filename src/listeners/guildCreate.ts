@@ -1,12 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, ListenerOptions, container } from '@sapphire/framework';
 import { AuditLogEvent, Guild, PermissionFlagsBits } from 'discord.js';
-import { AUTOCODE_ENV, DEBUG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
+import { DEBUG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendDMMessage } from '../lib/discord/message';
 import { GuideEmbed } from '../lib/embeds';
 import generateEmbed from '../helpers/generate/embed';
-import { isGuildDisabled } from '../helpers/provide/guild';
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
+import { createGuildRequest, enableGuildRequest } from '../helpers/provide/guild';
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
@@ -25,25 +24,18 @@ export class UserEvent extends Listener {
 		if (IS_CUSTOM_BOT) {
 			//TODO: #26 Create a nice welcome message for custom bot servers
 		}
-		await createNewGuild();
+		await createNewGuild(guild_id, inviter);
 		if (inviter) {
 			await sendGuide(inviter);
 		}
 		return;
 
-		async function createNewGuild() {
-			const alreadyExists: boolean = await isGuildDisabled(guild_id);
-			if (alreadyExists) {
-				//set guild and birthdayy to enabled
-                
-			} else {
-				//create new guild
-                //TODO: Before releasing to production, publish the autocode api dev to release
-                return await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.create({
-                    guild_id: guild_id,
-                    inviter: inviter
-                });
+		async function createNewGuild(guild_id: string, inviter: string | null) {
+			const guildEnable: any = await enableGuildRequest(guild_id);
+			if (guildEnable.affectedRowsCountGuild === 0) {
+				return await createGuildRequest(guild_id, inviter);
 			}
+			return;
 		}
 
 		async function sendGuide(user_id: string) {
