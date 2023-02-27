@@ -26,6 +26,7 @@ import { getConfigName } from '../../helpers/utils/string';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
+	requiredUserPermissions: ['Administrator', ['ManageGuild', 'ManageRoles']],
 	subcommands: [
 		{
 			name: 'list',
@@ -64,8 +65,7 @@ import { getConfigName } from '../../helpers/utils/string';
 export class ConfigCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options,
-			description: 'Config Command'
+			...options
 		});
 	}
 
