@@ -24,7 +24,7 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 	};
 }
 
-export async function getConfig(guild_id: string) {
+export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
 	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const result = await fetch<GuildConfigRawModel>(requestURL, FetchResultTypes.JSON);

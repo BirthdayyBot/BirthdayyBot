@@ -37,6 +37,9 @@ export class UserRoute extends Route {
 				replacements: [guild_id]
 			}
 		);
-		response.status(200).json(results[0]);
+		if (results.length === 0) {
+			return response.status(404).json({ error: 'Guild not Found' });
+		}
+		return response.status(200).json(results[0]);
 	}
 }
