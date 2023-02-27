@@ -82,6 +82,11 @@ export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80
 //Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
 
+//API
+export const API_URL = process.env.API_URL;
+export const API_SECRET = process.env.API_SECRET;
+export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
 function parseBoolean(bool: string): boolean {
 	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
 }

@@ -16,6 +16,8 @@ declare global {
 			DISCORDLIST_TOKEN: string;
 			DISCORDBOTLIST_TOKEN: string;
 			MAX_BIRTHDAYS_PER_SITE: string;
+            WEBHOOK_SECRET: string;
+            API_SECRET: string;
 			DB_NAME: string;
 			DB_USERNAME: string;
 			DB_HOST: string;
