@@ -1,4 +1,4 @@
-export type APIWebhookTopGGBody = {
+export type APIWebhookTopGG = {
 	user: string;
 	type: 'test' | 'upvote';
 	query: string;
