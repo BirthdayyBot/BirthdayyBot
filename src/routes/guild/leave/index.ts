@@ -7,6 +7,7 @@ export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
+			name: 'guild/leave',
 			route: 'guild/leave'
 		});
 	}

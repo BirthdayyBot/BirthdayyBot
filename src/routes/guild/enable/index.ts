@@ -1,18 +1,24 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiVerification } from '../../../helpers/provide/api_verification';
 
 export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
-			route: 'guild/enable'
+			name: 'guild/enable',
+			route: 'guild/enable',
+			enabled: true
 		});
 	}
 
-	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
+	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		const { query } = request;
 		const { guild_id } = query;
-		console.log('guild_id', guild_id);
+
+		if (!(await ApiVerification(request))) {
+			return response.status(401).json({ error: 'Unauthorized' });
+		}
 		if (!guild_id) {
 			response.statusCode = 400;
 			response.statusMessage = 'Missing Parameter - guild_id';
@@ -26,10 +32,8 @@ export class UserRoute extends Route {
 			replacements: [guild_id]
 		});
 
-		console.log('updateGuildMeta', updateGuildMeta);
 		const affectedRowsCountGuild = (updateGuildMeta as any).affectedRows;
 		const affectedRowsCountBirthday = (updateBirthdayMeta as any).affectedRows;
-		return response.status(200);
 		return response.status(200).json({ affectedRowsCountGuild, affectedRowsCountBirthday });
 	}
 }
