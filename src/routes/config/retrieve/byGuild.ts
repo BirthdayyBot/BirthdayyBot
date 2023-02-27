@@ -37,8 +37,6 @@ export class UserRoute extends Route {
 				replacements: [guild_id]
 			}
 		);
-		response.statusCode = 200;
-		response.statusMessage = 'OK';
-		response.json(results[0]);
+		response.status(200).json(results[0]);
 	}
 }
