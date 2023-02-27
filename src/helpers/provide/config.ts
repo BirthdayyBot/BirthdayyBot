@@ -1,6 +1,6 @@
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { AUTOCODE_ENV } from './environment';
+import { API_URL, AUTOCODE_ENV } from './environment';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 
@@ -25,7 +25,7 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 }
 
 export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
-	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/byGuild`);
+	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const result = await fetch<GuildConfigRawModel>(requestURL, FetchResultTypes.JSON);
 	return {
@@ -248,14 +248,14 @@ export function logAll(config: any) {
 }
 
 export async function getGuildLanguage(guild_id: string): Promise<string> {
-	const requestURL = new URL(`${process.env.API_URL}/guild/retrieve/language`);
+	const requestURL = new URL(`${API_URL}guild/retrieve/language`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const data = await fetch<{ guild_id: string; language: string }>(requestURL, FetchResultTypes.JSON);
 	return data.language;
 }
 
 export async function getGuildPremium(guild_id: string): Promise<boolean> {
-	const requestURL = new URL(`${process.env.API_URL}/guild/retrieve/premium`);
+	const requestURL = new URL(`${API_URL}guild/retrieve/premium`);
 	requestURL.searchParams.append('guild_id', guild_id);
 	const data = await fetch<{ guild_id: string; premium: boolean }>(requestURL, FetchResultTypes.JSON);
 	return data.premium;

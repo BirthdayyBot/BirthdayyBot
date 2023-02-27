@@ -1,9 +1,10 @@
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { BirthdaWithUserModel } from '../../lib/model';
+import { API_URL } from './environment';
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
 	type BirthdayListResponse = Array<BirthdaWithUserModel>;
-	const getBirthdaysUrl = new URL(`${process.env.API_URL}/birthday/retrieve/entriesByGuild`);
+	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
 		const request = await fetch<BirthdayListResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
@@ -18,7 +19,7 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 
 export async function getBirthdayByGuildAndUser(guild_id: string, user_id: string): Promise<Array<BirthdaWithUserModel> | []> {
 	type BirthdayListResponse = Array<BirthdaWithUserModel>;
-	const getBirthdayUrl = new URL(`${process.env.API_URL}/birthday/retrieve/entryByUserAndGuild`);
+	const getBirthdayUrl = new URL(`${API_URL}birthday/retrieve/entryByUserAndGuild`);
 	getBirthdayUrl.searchParams.append('guild_id', guild_id);
 	getBirthdayUrl.searchParams.append('user_id', user_id);
 	try {
