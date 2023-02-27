@@ -83,7 +83,7 @@ export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
 
 //API
-export const API_BASE_URL = process.env.BASE_API_URL;
+export const API_BASE_URL = process.env.API_BASE_URL;
 export const API_EXTENSION = process.env.API_EXTENSION;
 export const API_PORT = process.env.API_PORT;
 export const API_SECRET = process.env.API_SECRET;
