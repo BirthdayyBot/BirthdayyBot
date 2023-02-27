@@ -2,8 +2,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { AUTOCODE_ENV } from './environment';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
-import type { GuildConfigModel } from '../../lib/model';
-import type { RawGuildConfigModel } from '../../lib/model/RawGuildConfig.model';
+import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 
 //  ! Autocode implementation, will be deprecated in favor of the fetch implementation
 export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
@@ -28,7 +27,7 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 export async function getConfig(guild_id: string) {
 	const requestURL = new URL(`${process.env.API_URL}/config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const result = await fetch<RawGuildConfigModel>(requestURL, FetchResultTypes.JSON);
+	const result = await fetch<GuildConfigRawModel>(requestURL, FetchResultTypes.JSON);
 	return {
 		GUILD_ID: result.guild_id,
 		ANNOUNCEMENT_CHANNEL: result.announcement_channel,
