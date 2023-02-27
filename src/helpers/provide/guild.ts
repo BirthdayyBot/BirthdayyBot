@@ -1,4 +1,4 @@
-import { API_SECRET, API_URL } from './environment';
+import { API_SECRET, API_URL, DEBUG } from './environment';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 
 export async function leaveGuildRequest(guild_id: string) {
@@ -9,7 +9,8 @@ export async function leaveGuildRequest(guild_id: string) {
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	console.log(leaveGuildRequest);
+	DEBUG ? console.log('leaveGuildRequest', leaveGuildRequest) : null;
+	return leaveGuildRequest;
 }
 
 export async function isGuildDisabledRequest(guild_id: string): Promise<boolean> {
@@ -20,7 +21,7 @@ export async function isGuildDisabledRequest(guild_id: string): Promise<boolean>
 		{ method: 'GET', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	console.log(isGuildDisabled);
+	DEBUG ? console.log('isGuildDisabled', isGuildDisabled) : null;
 	const { is_disabled } = isGuildDisabled as unknown as { is_disabled: boolean };
 	return is_disabled!;
 }
@@ -33,7 +34,7 @@ export async function enableGuildRequest(guild_id: string) {
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	console.log(enableGuildRequest);
+	DEBUG ? console.log('enableGuildRequest', enableGuildRequest) : null;
 	return enableGuildRequest;
 }
 
@@ -46,6 +47,17 @@ export async function createGuildRequest(guild_id: string, inviter: string | nul
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	console.log(createGuildRequest);
+	DEBUG ? console.log('createGuildRequest', createGuildRequest) : null;
 	return createGuildRequest;
+}
+
+export async function isGuildPremium(guild_id: string): Promise<boolean> {
+	const requestURL = new URL(`${API_URL}guild/retrieve/is-premium`);
+	requestURL.searchParams.append('guild_id', guild_id);
+	const isGuildPremium = await fetch<FetchResultTypes.JSON>(
+		requestURL,
+		{ method: 'GET', headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON
+	);
+	return isGuildPremium as unknown as boolean;
 }
