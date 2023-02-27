@@ -12,7 +12,7 @@ export class UserRoute extends Route {
 	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
 		const { query } = request;
 		const { guild_id } = query;
-
+		console.log('guild_id', guild_id);
 		if (!guild_id) {
 			response.statusCode = 400;
 			response.statusMessage = 'Missing Parameter - guild_id';

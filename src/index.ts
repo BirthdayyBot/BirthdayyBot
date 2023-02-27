@@ -15,15 +15,15 @@ container.client = new SapphireClient({
 	shards: 'auto',
 	partials: [Partials.Channel, Partials.GuildMember],
 	loadMessageCommandListeners: true,
-    loadDefaultErrorListeners: true,
+	loadDefaultErrorListeners: true,
 	hmr: {
 		enabled: process.env.NODE_ENV === 'development'
 	},
 	api: {
-		prefix: 'api/',
+		prefix: process.env.API_EXTENSION,
 		origin: '*',
 		listenOptions: {
-			port: 4000
+			port: parseInt(process.env.API_PORT)
 		}
 	},
 	i18n: {
