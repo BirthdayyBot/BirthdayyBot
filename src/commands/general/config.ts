@@ -23,6 +23,9 @@ import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { getConfigName } from '../../helpers/utils/string';
+import { GuildChannel, PermissionsBitField } from 'discord.js';
+import generateBirthdayList from '../../helpers/generate/birthdayList';
+import { sendMessage } from '../../lib/discord/message';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -106,11 +109,20 @@ export class ConfigCommand extends Subcommand {
 	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configOverviewChannel Command');
-		//TODO: #14 Check if Bot has write permissions in channel
-		await this.setConfig(interaction, 'overview_channel');
-		await setDefaultConfig('overview_message', interaction.guildId!);
-		const embed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [embed] });
+		const overview_channel = findOption(interaction, 'channel');
+		const hasPermission = await this.hasWritingPermissionsInChannel(interaction, overview_channel);
+		if (hasPermission) {
+			await this.setConfig(interaction, 'overview_channel');
+			await setDefaultConfig('overview_message', interaction.guildId!);
+
+			const birthdayList = await generateBirthdayList(1, interaction.guildId!);
+			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
+			const birthdayListComponents = birthdayList.components as any;
+			await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
+
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+		}
 	}
 
 	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -232,5 +244,20 @@ export class ConfigCommand extends Subcommand {
 			this.embed.description = `\`${result.message}\``;
 		}
 		return result;
+	}
+
+	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction, channel: string): Promise<boolean> {
+		const bot_user = await interaction.guild!.members.fetch(interaction.client.user.id);
+		const target_channel = (await container.client.channels.fetch(channel)) as GuildChannel;
+		const bot_permissions = target_channel.permissionsFor(bot_user);
+		console.log('bot_permissions.has(PermissionsBitField.Flags.SendMessages)', bot_permissions.has(PermissionsBitField.Flags.SendMessages));
+		if (!bot_permissions.has(PermissionsBitField.Flags.SendMessages)) {
+			this.embed.title = `${FAIL} Failure`;
+			this.embed.description = `${ARROW_RIGHT} I don't have the permission to send messages in <#${channel}>`;
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+			return false;
+		}
+		return true;
 	}
 }
