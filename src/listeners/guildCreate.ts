@@ -6,19 +6,20 @@ import { sendDMMessage } from '../lib/discord/message';
 import { GuideEmbed } from '../lib/embeds';
 import generateEmbed from '../helpers/generate/embed';
 import { createGuildRequest, enableGuildRequest } from '../helpers/provide/guild';
+import joinServerLog from '../helpers/send/joinServerLog';
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public constructor(context: Listener.Context, options: Listener.Options) {
 		super(context, {
 			...options,
-			once: true,
 			event: Events.GuildCreate,
 			enabled: true
 		});
 	}
 	public async run(guild: Guild) {
-		console.log(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
+		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
+		DEBUG ? container.logger.debug(`[GuildCreate] - ${guild}`) : null;
 		const guild_id = guild.id;
 		const inviter = await getBotInviter(guild);
 		if (IS_CUSTOM_BOT) {
@@ -28,6 +29,7 @@ export class UserEvent extends Listener {
 		if (inviter) {
 			await sendGuide(inviter);
 		}
+		await joinServerLog(guild);
 		return;
 
 		async function createNewGuild(guild_id: string, inviter: string | null) {

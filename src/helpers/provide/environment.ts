@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
 /**
  * @file Environment Variables
@@ -89,7 +90,3 @@ export const API_PORT = process.env.API_PORT;
 export const API_SECRET = process.env.API_SECRET;
 export const API_URL = `${API_BASE_URL}${API_EXTENSION}`;
 export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
-
-function parseBoolean(bool: string): boolean {
-	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
-}
