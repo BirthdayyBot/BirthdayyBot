@@ -29,7 +29,7 @@ export default async function joinServerLog(guild: Guild) {
 		description: `I am now in \`${server_count}\` guilds`,
 		fields: fields,
 		color: BotColorEnum.BIRTHDAYY,
-		image_url: guild.iconURL()
+		thumbnail_url: guild.iconURL()
 	};
 	let embed = await generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });

@@ -1,15 +1,15 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, ListenerOptions } from '@sapphire/framework';
+import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import type { Guild } from 'discord.js';
 import leaveServerLog from '../helpers/send/leaveServerLog';
 import { leaveGuildRequest } from '../helpers/provide/guild';
+import { DEBUG } from '../helpers/provide/environment';
 
 @ApplyOptions<ListenerOptions>({})
 export class UserEvent extends Listener {
 	public constructor(context: Listener.Context, options: Listener.Options) {
 		super(context, {
 			...options,
-			once: true,
 			event: Events.GuildDelete,
 			enabled: true
 		});
@@ -17,10 +17,12 @@ export class UserEvent extends Listener {
 	public async run(guild: Guild) {
 		const guild_id = guild.id;
 		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
+		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
+
 		await disableData(guild_id);
 
 		async function disableData(guild_id: string) {
-			await leaveServerLog(guild_id);
+			await leaveServerLog(guild);
 			await leaveGuildRequest(guild_id);
 		}
 	}
