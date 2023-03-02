@@ -1,6 +1,7 @@
 import { Guild, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
+import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import generateEmbed from '../generate/embed';
 import { BOT_NAME, BOT_SERVER_LOG, SUCCESS } from '../provide/environment';
 import getGuildCount from '../provide/guildCount';
@@ -23,11 +24,12 @@ export default async function joinServerLog(guild: Guild) {
 	if (ownerId) fields.push({ name: `GuildOwnerID`, value: `${ownerId}` });
 	if (rawJoinedTimestamp) fields.push({ name: `GuildJoinedTimestamp`, value: `${joinedTimestamp}` });
 
-	const embedObj = {
+	const embedObj: EmbedInformationModel = {
 		title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
 		description: `I am now in \`${server_count}\` guilds`,
 		fields: fields,
-		color: BotColorEnum.BIRTHDAYY
+		color: BotColorEnum.BIRTHDAYY,
+		image_url: guild.iconURL()
 	};
 	let embed = await generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
