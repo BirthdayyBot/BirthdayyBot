@@ -4,9 +4,9 @@ import generateEmbed from '../../helpers/generate/embed';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
-import { InviteCMD } from '../../lib/commands';
 import { InviteEmbed } from '../../lib/embeds';
 import { inviteButton } from '../../lib/components/button';
+import { ReminderCMD } from '../../lib/commands/reminder';
 
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
@@ -24,7 +24,7 @@ export class GuideCommand extends Command {
 	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await InviteCMD(), {
+		registry.registerChatInputCommand(await ReminderCMD(), {
 			guildIds: getCommandGuilds('testing')
 		});
 	}
