@@ -1,11 +1,11 @@
-import { BOOK, BOT_NAME, SUPPORT, LINK, PLUS, SIGN, ARROW_RIGHT } from '../../helpers/provide/environment';
+import { BOOK, BOT_NAME, SUPPORT, LINK, PLUS, SIGN, ARROW_RIGHT, PREMIUM_URL, DOCS_URL } from '../../helpers/provide/environment';
 
 export const HelpEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,
 	description: `
   ${SUPPORT} Confused what each command does?
-  ${LINK} Check out our docs: [https://docs.birthdayy.xyz](https://docs.birthdayy.xyz/commands)
-  ${PLUS} Unlock Beta / Premium Features: [Birthdayy Patreon](https://birthdayy.xyz/premium)\n
+  ${LINK} Check out our docs: [https://docs.birthdayy.xyz](${DOCS_URL})
+  ${PLUS} Unlock Beta / Premium Features: [Birthdayy Patreon](${PREMIUM_URL})\n
   ${SIGN} \`<>\` required
   ${SIGN} \`[]\` optional
     `,
@@ -18,8 +18,6 @@ export const HelpEmbed = {
   ${ARROW_RIGHT}/invite
   ${ARROW_RIGHT}/status
   ${ARROW_RIGHT}/vote
-  ${ARROW_RIGHT}/support
-  ${ARROW_RIGHT}/feedback
         `,
 			inline: true
 		},
@@ -39,13 +37,12 @@ export const HelpEmbed = {
 			name: '/config',
 			value: `
   ${ARROW_RIGHT}status
-  ${ARROW_RIGHT}announcement \`<channel>\`
-  ${ARROW_RIGHT}overview \`<channel>\`
+  ${ARROW_RIGHT}announcement-channel \`<channel>\`
+  ${ARROW_RIGHT}overview-channel \`<channel>\`
   ${ARROW_RIGHT}birthday-role \`<role>\`
   ${ARROW_RIGHT}ping-role \`<role>\`
   ${ARROW_RIGHT}timezone\`<zone>\`
   ${ARROW_RIGHT}announcement-message\`<message>\` ${PLUS}
-  ${ARROW_RIGHT}logs \`<channel>\`
       `,
 			inline: true
 		}
