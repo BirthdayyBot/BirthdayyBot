@@ -72,7 +72,7 @@ export const TRELLO_BUG_LIST_NAME = 'Bugs';
 
 //Values
 export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
-export const BOT_ADMIN_LOG = '966987605348589588';
+export const BOT_ADMIN_LOG = APP_ENV === 'prd' ? '966987605348589588' : '1077621363881300018';
 export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';

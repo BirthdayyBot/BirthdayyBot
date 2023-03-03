@@ -3,7 +3,6 @@ import getGuildCount from './helpers/provide/guildCount';
 import { LogLevel, SapphireClient, container } from '@sapphire/framework';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
-import { sendMessage } from './lib/discord/message';
 import { APP_ENV, DEBUG } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 container.client = new SapphireClient({
@@ -67,7 +66,6 @@ const main = async () => {
 		container.client.destroy();
 		process.exit(1);
 	}
-	await sendMessage('1077621363881300018', { content: 'online' });
 };
 
 main();

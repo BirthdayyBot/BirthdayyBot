@@ -21,8 +21,9 @@ export class UserRoute extends Route {
 		}
 
 		const [results] = await container.sequelize.query(`SELECT guild_id, premium FROM guild g WHERE guild_id = ? AND disabled = false`, {
-			replacements: [guild_id]
+            replacements: [guild_id]
 		});
+        console.log("results", results);
 
 		if (results.length === 0) {
 			response.statusMessage = 'Guild not found';
