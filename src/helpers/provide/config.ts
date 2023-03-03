@@ -153,7 +153,7 @@ export async function setDefaultConfig(config_name: string, guild_id: string) {
 		case 'birthday_role':
 			reset = await setBIRTHDAY_ROLE('null', guild_id);
 			break;
-		case 'birthday_ping_role':
+		case 'ping_role':
 			reset = await setBIRTHDAY_PING_ROLE('null', guild_id);
 			break;
 		default:

@@ -6,7 +6,7 @@ export function getConfigName(config: string): string {
 	switch (config) {
 		case 'birthday_role':
 			return 'Birthday Role';
-		case 'birthday_ping_role':
+		case 'ping_role':
 			return 'Birthday Ping Role';
 		case 'announcement_channel':
 			return 'Announcement Channel';

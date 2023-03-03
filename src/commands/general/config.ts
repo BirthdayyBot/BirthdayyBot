@@ -168,6 +168,7 @@ export class ConfigCommand extends Subcommand {
 		const config: string = findOption(interaction, 'config');
 		const configName = getConfigName(config);
 		const result = await setDefaultConfig(config, interaction.guildId!);
+		console.log("config reset result", result);
 		if (result?.success) {
 			this.embed.title = `${SUCCESS} Success`;
 			this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
