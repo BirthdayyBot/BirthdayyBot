@@ -46,7 +46,8 @@ export function getSuccessLoggerData(guild: Guild | null, user: User, command: C
 	return { shard, commandName, author, sentAt };
 }
 
-export function parseBoolean(bool: string): boolean {
+export function parseBoolean(bool: string | boolean): boolean {
+	if (typeof bool === 'boolean') return bool;
 	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
 }
 
