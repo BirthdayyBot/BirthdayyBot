@@ -23,10 +23,8 @@ async function generateFields(guild_id: string): Promise<any[]> {
 	let fields: any[] = [];
 
 	Object.entries(config).forEach(([name, value]) => {
-		if (name === 'GUILD_ID' || name === 'OVERVIEW_MESSAGE') {
-			return;
-		}
-
+        //TODO: #38 Implement guild logs
+		if (['GUILD_ID', 'OVERVIEW_MESSAGE', 'LOG_CHANNEL'].includes(name)) return;
 		let valueString = getValueString(name, value);
 		let nameString = getNameString(name);
 		fields.push({
