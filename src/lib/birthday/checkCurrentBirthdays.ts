@@ -1,5 +1,5 @@
+import { getCurrentOffset } from '../../helpers/provide/currentOffset';
 import { APP_ENV } from '../../helpers/provide/environment';
-import { getCurrentDate } from '../../helpers/utils/date';
 import birthdayEvent from './birthdayEvent';
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
@@ -10,13 +10,18 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
  * @returns {Promise<void>}
  */
 export default async function checkCurrentBirthdays(): Promise<void> {
-	const today = getCurrentDate();
-
+	const o = await getCurrentOffset();
+	const today = o.date;
+	console.log('today', today);
+	const offset = o.offsetString;
 	// Retrieve today's birthdays from the birthday-api
-	// ! For testing purposes only
 	let checkTodaysBirthdays =
-		APP_ENV === 'dev'
-			? {
+		APP_ENV === 'prd'
+			? await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.entriesByDateAndTimezone({
+					birthday: today,
+					timezone: offset
+			  })
+			: {
 					result: [
 						{
 							id: 1342,
@@ -25,10 +30,7 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 							guild_id: '766707453994729532'
 						}
 					]
-			  }
-			: await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.todaysBirthdays({
-					birthday: today
-			  });
+			  };
 
 	let todaysBirthdays = checkTodaysBirthdays.result;
 

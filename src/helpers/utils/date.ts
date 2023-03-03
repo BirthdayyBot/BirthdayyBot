@@ -1,5 +1,8 @@
 // import { DEBUG } from '../provide/environment';
 
+import { DEBUG } from '../provide/environment';
+import { checkIfLengthIsTwo } from './string';
+
 export function getCurrentDate(): string {
 	const d1 = new Date().toLocaleString('en-US', {
 		timeZone: 'Europe/Berlin'
@@ -9,13 +12,13 @@ export function getCurrentDate(): string {
 	const d = date.getDate();
 	const day = d <= 9 ? '0' + d : d;
 
-	const m = date.getMonth();
+	const m = date.getMonth() + 1;
 	const month = m <= 9 ? '0' + m : m;
 
 	const year = date.getFullYear();
 
 	const str = `${year}-${month}-${day}`;
-	console.log('today: ', str);
+	DEBUG ? console.log('today: ', str) : str;
 	return str;
 }
 
@@ -53,4 +56,14 @@ export function numberToMonthname(number: number) {
 	const months = getMonths();
 	number = number - 1;
 	return months[number];
+}
+
+export function getStringDate(date: Date) {
+	const d = date.getDate();
+	const m = date.getMonth() + 1;
+	const year = date.getFullYear();
+	const day = checkIfLengthIsTwo(`${d}`);
+	const month = checkIfLengthIsTwo(`${m}`);
+
+	return `${year}-${month}-${day}`;
 }
