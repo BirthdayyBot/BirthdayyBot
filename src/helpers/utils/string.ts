@@ -26,3 +26,16 @@ export function getConfigName(config: string): string {
 			return 'Unknown';
 	}
 }
+
+export function checkIfLengthIsTwo(number: string) {
+	return number.length < 2 ? `0${number}` : number;
+}
+
+export function logLimiter() {
+	console.log(`===============================`);
+	return;
+}
+
+export function checkLength(length: number, string: string) {
+	return string.toString().length === length;
+}
