@@ -23,9 +23,9 @@ import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { getConfigName } from '../../helpers/utils/string';
-import { GuildChannel, PermissionsBitField } from 'discord.js';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import { sendMessage } from '../../lib/discord/message';
+import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -249,16 +249,11 @@ export class ConfigCommand extends Subcommand {
 		return result;
 	}
 
-	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction, channel: string): Promise<boolean> {
-		const bot_user = await interaction.guild!.members.fetch(interaction.client.user.id);
-		const target_channel = (await container.client.channels.fetch(channel)) as GuildChannel;
-		const bot_permissions = target_channel.permissionsFor(bot_user);
-		console.log('bot_permissions.has(PermissionsBitField.Flags.SendMessages)', bot_permissions.has(PermissionsBitField.Flags.SendMessages));
-		const hasCorrectPermissions =
-			bot_permissions.has(PermissionsBitField.Flags.SendMessages) && bot_permissions.has(PermissionsBitField.Flags.ViewChannel);
+	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction, channel_id: string): Promise<boolean> {
+		const hasCorrectPermissions = await hasChannelPermissions(interaction, [`ViewChannel`, `SendMessages`], channel_id);
 		if (!hasCorrectPermissions) {
 			this.embed.title = `${FAIL} Failure`;
-			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in <#${target_channel.id}>.`;
+			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in <#${channel_id}>.`;
 			const embed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 			return false;
@@ -267,8 +262,8 @@ export class ConfigCommand extends Subcommand {
 	}
 
 	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction): Promise<boolean> {
-		const bot_user = await interaction.guild!.members.fetch(interaction.client.user.id);
-		if (!bot_user.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
+		const hasPermissions = await hasGuildPermissions(interaction, [`ManageRoles`]);
+		if (!hasPermissions) {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${ARROW_RIGHT} I don't have the permission to manage roles in this server.`;
 			const embed = await generateEmbed(this.embed);
