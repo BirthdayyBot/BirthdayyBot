@@ -9,7 +9,7 @@ import { InviteEmbed } from '../../lib/embeds';
 import { inviteButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
-	name: 'invite',
+	name: 'reminder',
 	description: 'premium tryout',
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
@@ -25,7 +25,7 @@ export class GuideCommand extends Command {
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await InviteCMD(), {
-			guildIds: getCommandGuilds('global')
+			guildIds: getCommandGuilds('testing')
 		});
 	}
 

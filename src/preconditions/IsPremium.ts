@@ -6,15 +6,15 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	#message = 'This command is a premium only command.'; //TODO: Adjust Premium Message
 
 	public override async chatInputRun(interaction: CommandInteraction) {
-		return this.premiumCheck(interaction.user.id);
+		return this.premiumCheck(interaction.guildId!);
 	}
 
 	public override async contextMenuRun(interaction: ContextMenuCommandInteraction) {
-		return this.premiumCheck(interaction.user.id);
+		return this.premiumCheck(interaction.guildId!);
 	}
 
 	public override async messageRun(message: Message) {
-		return await this.premiumCheck(message.author.id);
+		return await this.premiumCheck(message.guildId!);
 	}
 
 	private async premiumCheck(guild_id: string) {
