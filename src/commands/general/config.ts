@@ -17,6 +17,7 @@ import {
 	setBIRTHDAY_ROLE,
 	setDefaultConfig,
 	setOVERVIEW_CHANNEL,
+	setOVERVIEW_MESSAGE,
 	setTIMEZONE
 } from '../../helpers/provide/config';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
@@ -114,12 +115,12 @@ export class ConfigCommand extends Subcommand {
 		const overview_channel = findOption(interaction, 'channel');
 		if (await this.hasWritingPermissionsInChannel(interaction, overview_channel)) {
 			await this.setConfig(interaction, 'overview_channel');
-			await setDefaultConfig('overview_message', interaction.guildId!);
 
 			const birthdayList = await generateBirthdayList(1, interaction.guildId!);
 			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
 			const birthdayListComponents = birthdayList.components as any;
-			await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
+			const newBirthdayList = await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
+			await setOVERVIEW_MESSAGE(newBirthdayList.id, interaction.guildId!);
 
 			const embed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
