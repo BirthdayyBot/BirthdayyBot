@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
 /**
  * @file Environment Variables
@@ -11,7 +12,7 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 
 //MAIN
 export const NODE_ENV = process.env.NODE_ENV; //development; production
-export const APP_ENV = process.env.APP_ENV; //dev; stg; prd
+export const APP_ENV = process.env.APP_ENV; //dev; tst; prd
 export const DEBUG = parseBoolean(process.env.DEBUG);
 export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 
@@ -70,7 +71,7 @@ export const TRELLO_BUG_BOARD_NAME = '[Bugs] Birthdayy';
 export const TRELLO_BUG_LIST_NAME = 'Bugs';
 
 //Values
-export const BOT_SERVER_LOG = '950681688227340319';
+export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
 export const BOT_ADMIN_LOG = '966987605348589588';
 export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
 export const VOTE_CHANNEL_ID = '950683261540130816';
@@ -82,6 +83,10 @@ export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80
 //Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
 
-function parseBoolean(bool: string): boolean {
-	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
-}
+//API
+export const API_BASE_URL = process.env.API_BASE_URL;
+export const API_EXTENSION = process.env.API_EXTENSION;
+export const API_PORT = process.env.API_PORT;
+export const API_SECRET = process.env.API_SECRET;
+export const API_URL = `${API_BASE_URL}${API_EXTENSION}`;
+export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;

@@ -23,9 +23,13 @@ import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { getConfigName } from '../../helpers/utils/string';
+import generateBirthdayList from '../../helpers/generate/birthdayList';
+import { sendMessage } from '../../lib/discord/message';
+import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
+	requiredUserPermissions: ['Administrator', ['ManageGuild', 'ManageRoles']],
 	subcommands: [
 		{
 			name: 'list',
@@ -64,8 +68,7 @@ import { getConfigName } from '../../helpers/utils/string';
 export class ConfigCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options,
-			description: 'Config Command'
+			...options
 		});
 	}
 
@@ -97,38 +100,50 @@ export class ConfigCommand extends Subcommand {
 	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementChannel Command');
-		//TODO: #14 Check if Bot has write permissions in channel
-		await this.setConfig(interaction, 'announcement_channel');
-		const embed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [embed] });
+		const announcement_channel = findOption(interaction, 'channel');
+		if (await this.hasWritingPermissionsInChannel(interaction, announcement_channel)) {
+			await this.setConfig(interaction, 'announcement_channel');
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+		}
 	}
 
 	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configOverviewChannel Command');
-		//TODO: #14 Check if Bot has write permissions in channel
-		await this.setConfig(interaction, 'overview_channel');
-		await setDefaultConfig('overview_message', interaction.guildId!);
-		const embed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [embed] });
+		const overview_channel = findOption(interaction, 'channel');
+		if (await this.hasWritingPermissionsInChannel(interaction, overview_channel)) {
+			await this.setConfig(interaction, 'overview_channel');
+			await setDefaultConfig('overview_message', interaction.guildId!);
+
+			const birthdayList = await generateBirthdayList(1, interaction.guildId!);
+			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
+			const birthdayListComponents = birthdayList.components as any;
+			await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
+
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+		}
 	}
 
 	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configBirthdayRole Command');
-		//TODO: #15 Check if Bot has manage role permissions in guild
-		await this.setConfig(interaction, 'birthday_role');
-		const embed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [embed] });
+		if (await this.botHasManageRolesPermissions(interaction)) {
+			await this.setConfig(interaction, 'birthday_role');
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+		}
 	}
 
 	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configPingRole Command');
-		//TODO: #15 Check if Bot has manage role permissions in guild
-		await this.setConfig(interaction, 'ping_role');
-		const embed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [embed] });
+		if (await this.botHasManageRolesPermissions(interaction)) {
+			await this.setConfig(interaction, 'ping_role');
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+		}
 	}
 
 	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -232,5 +247,29 @@ export class ConfigCommand extends Subcommand {
 			this.embed.description = `\`${result.message}\``;
 		}
 		return result;
+	}
+
+	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction, channel_id: string): Promise<boolean> {
+		const hasCorrectPermissions = await hasChannelPermissions(interaction, [`ViewChannel`, `SendMessages`], channel_id);
+		if (!hasCorrectPermissions) {
+			this.embed.title = `${FAIL} Failure`;
+			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in <#${channel_id}>.`;
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+			return false;
+		}
+		return true;
+	}
+
+	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction): Promise<boolean> {
+		const hasPermissions = await hasGuildPermissions(interaction, [`ManageRoles`]);
+		if (!hasPermissions) {
+			this.embed.title = `${FAIL} Failure`;
+			this.embed.description = `${ARROW_RIGHT} I don't have the permission to manage roles in this server.`;
+			const embed = await generateEmbed(this.embed);
+			await replyToInteraction(interaction, { embeds: [embed] });
+			return false;
+		}
+		return true;
 	}
 }

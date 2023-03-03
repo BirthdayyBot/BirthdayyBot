@@ -1,3 +1,5 @@
+import { AUTOCODE_ENV } from "../provide/environment";
+
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 export default async function generateBirthdayMessage(content: string, user_id: string, guild_id: string) {
@@ -6,7 +8,7 @@ export default async function generateBirthdayMessage(content: string, user_id: 
 
 	if (message.match(/{USERNAME}/gi) || message.match(/{DISCRIMINATOR}/gi)) {
 		//TODO: Use discordjs implementation
-		let user = await lib.discord.users['@release'].retrieve({
+		let user = await lib.discord.users[AUTOCODE_ENV].retrieve({
 			user_id: `${user_id}`
 		});
 		if (message.match(/{USERNAME}/gi)) {
@@ -35,7 +37,7 @@ export default async function generateBirthdayMessage(content: string, user_id: 
 	}
 
 	if (message.match(/{SERVERNAME}/gi)) {
-		let guild = await lib.discord.guilds['@release'].retrieve({
+		let guild = await lib.discord.guilds[AUTOCODE_ENV].retrieve({
 			guild_id: `${guild_id}`,
 			with_counts: false
 		});

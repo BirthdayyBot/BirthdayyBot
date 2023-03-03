@@ -2,8 +2,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import replyToInteraction from '../../helpers/send/response';
-import { BOT_COLOR, BOT_AVATAR } from '../../helpers/provide/environment';
 import generateEmbed from '../../helpers/generate/embed';
+// import checkCurrentBirthdays from '../../lib/birthday/checkCurrentBirthdays';
+import { isGuildPremium } from '../../helpers/provide/guild';
 
 @ApplyOptions<Command.Options>({
 	description: 'test things'
@@ -24,24 +25,12 @@ export class TestCommand extends Command {
 
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		console.log('process.env.BOT_COLOR', process.env.BOT_COLOR);
-		console.log('process.env.BOT_AVATAR', process.env.BOT_AVATAR);
-		console.log('BOT_COLOR', BOT_COLOR);
-		console.log('BOT_AVATAR', BOT_AVATAR);
+		// await checkCurrentBirthdays();
+		// await enableGuildRequest(interaction.guildId!);
+		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
+		console.log('isGuildPremiuum: ', await isGuildPremium(interaction.guildId!));
 		const embed = await generateEmbed({ title: 'test' });
 		await replyToInteraction(interaction, { content: `\`\`\`TEST RUN\`\`\``, embeds: [embed] });
 		return;
-		// const content = JSON.stringify(process.env, null, 2);
-
-		// if (content.length <= 2000) {
-		// 	await replyToInteraction(interaction, { content: `\`\`\`${content}\`\`\`` });
-		// 	return;
-		// }
-
-		// const chunks = content.match(/[\s\S]{1,1900}/g) || [];
-
-		// for (const chunk of chunks) {
-		// 	await replyToInteraction(interaction, { content: `\`\`\`${chunk}\`\`\`` });
-		// }
 	}
 }

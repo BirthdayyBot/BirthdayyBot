@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import generateEmbed from '../../helpers/generate/embed';
+import generateEmbed from '../../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../discord/thinking';
-import replyToInteraction from '../../helpers/send/response';
-import { TemplateCMD } from '../commands';
+import { getCommandGuilds } from '../../../helpers/utils/guilds';
+import thinking from '../../discord/thinking';
+import replyToInteraction from '../../../helpers/send/response';
+import { TemplateCMD } from '../../commands';
 @ApplyOptions<Subcommand.Options>({
 	name: 'template',
 	description: 'Template Command',

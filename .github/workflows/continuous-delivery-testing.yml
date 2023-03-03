@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - testing
     paths:
       - 'src/**'
       - 'Dockerfile'
@@ -72,11 +72,11 @@ jobs:
   Deploy:
     name: Deploy using Docker
     needs: [Publish]
-    uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@b7b081e8a642069b5ed3a243ce7b863a800a79e5
+    uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@main
     secrets:
-      DOCKER_TAG: 'staging'
+      DOCKER_TAG: 'testing'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STAGING }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_TESTING }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
       SSH_PRIVATE_KEY: '${{ secrets.SSH_PK }}'
       SSH_USER: '${{ secrets.SSH_USER }}'

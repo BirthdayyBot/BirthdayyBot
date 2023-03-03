@@ -1,18 +1,20 @@
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import { NODE_ENV } from '../provide/environment';
+import { APP_ENV } from '../provide/environment';
 
 export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin'): string[] {
-	if (NODE_ENV !== 'production') return [GuildIDEnum.CHILLI_HQ];
+	const testingGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.CHILLI_ATTACK_V2];
+	const adminGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.BIRTHDAYY_HQ];
+	if (APP_ENV !== 'prd') return testingGuilds;
 	switch (commandLevel) {
 		case 'global':
 			return [];
 		case 'testing':
-			return [GuildIDEnum.CHILLI_HQ];
+			return testingGuilds;
 		case 'premium':
 			//todo: retrieve premium guilds from db
 			return [''];
 		case 'admin':
-			return [GuildIDEnum.CHILLI_HQ, GuildIDEnum.BIRTHDAYY_HQ];
+			return adminGuilds;
 		default:
 			return [];
 	}

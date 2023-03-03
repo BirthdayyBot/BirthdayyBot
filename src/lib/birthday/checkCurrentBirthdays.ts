@@ -45,6 +45,5 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 	} else {
 		console.log(`No Birthdays Today`);
 	}
-	console.timeEnd('BirthdayLoop Time');
 	console.log('end');
 }

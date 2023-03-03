@@ -46,6 +46,10 @@ export function getSuccessLoggerData(guild: Guild | null, user: User, command: C
 	return { shard, commandName, author, sentAt };
 }
 
+export function parseBoolean(bool: string): boolean {
+	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
+}
+
 function getShardInfo(id: number) {
 	return `[${cyan(id.toString())}]`;
 }

@@ -1,10 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import { APP_ENV } from '../helpers/provide/environment';
 import checkBirthdayScheduler from '../lib/scheduler/checkBirthdayScheduler';
 // import testScheduler from '../lib/scheduler/testScheduler';
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = APP_ENV !== 'prd';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserEvent extends Listener {
