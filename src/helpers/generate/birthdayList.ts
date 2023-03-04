@@ -146,7 +146,7 @@ function generateComponents(page_id: number, listAmount: number): any[] {
     max 5 buttons per row
     if listAmount is bigger then 5, create multiple rows
     */
-//TODO: #45 Create Logic that enables for more then 5 buttons
+	//TODO: #45 Create Logic that enables for more then 5 buttons
 	for (let i = 1; i <= listAmount; i++) {
 		if (i > 5) break;
 		let label = `${i}`;
@@ -175,7 +175,8 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 							type: 2,
 							style: 1,
 							label: 'To many birthdays to show all.',
-							disabled: true
+							disabled: true,
+							custom_id: 'birthday_list_to_many'
 					  }
 					: {}
 			]
