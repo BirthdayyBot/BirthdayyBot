@@ -23,7 +23,7 @@
 		"@sapphire/type": "^2.3.0",
 		"@sapphire/utilities": "^3.11.0",
 		"colorette": "^2.0.19",
-		"discord-api-types": "^0.37.28",
+		"discord-api-types": "^0.37.35",
 		"discord.js": "^14.7.1",
 		"lib": "^4.3.3",
 		"mysql2": "^3.0.1",
