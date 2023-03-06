@@ -1228,7 +1228,7 @@ __metadata:
     discord-api-types: ^0.37.35
     discord.js: ^14.7.1
     eslint: ^8.35.0
-    lib: ^4.3.3
+    lib: ^5.0.1
     mysql2: ^3.2.0
     node-cron: ^3.0.2
     npm-run-all: ^4.1.5
@@ -3163,10 +3163,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lib@npm:^4.3.3":
-  version: 4.3.3
-  resolution: "lib@npm:4.3.3"
-  checksum: 605019f24505070aa2ff0a3e85386807723775f91743fc05e849b485fe9721cef0d0d98559151d38f995180a146b229bc1f5edc95b177e9bd9e5b616eff21f95
+"lib@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "lib@npm:5.0.1"
+  checksum: 3f82974d7a015e0dab7051d955e46a5208fd112303833ea5fa1e1b0953f8162062222dc68cdce832d97888fab24fb48ef2a3094e2be766b4d6f9b69128020afc
   languageName: node
   linkType: hard
 
