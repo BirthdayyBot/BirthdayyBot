@@ -1,0 +1,21 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [production]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'yarn.lock'
+  pull_request:
+    branches: [develop, testing, production]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'yarn.lock'
+
+jobs:
+  build:
+    uses: nikolaischunk/utilities/.github/workflows/node.js.yml@27b5a6edb67187846c5afd6b72cb553951507bee
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
