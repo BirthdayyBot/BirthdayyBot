@@ -1235,7 +1235,7 @@ __metadata:
     pm2: ^5.2.2
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
-    sequelize: ^6.28.0
+    sequelize: ^6.29.0
     tsc-watch: ^6.0.0
     typescript: ^4.9.5
   languageName: unknown
@@ -3435,16 +3435,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment-timezone@npm:^0.5.34":
-  version: 0.5.40
-  resolution: "moment-timezone@npm:0.5.40"
+"moment-timezone@npm:^0.5.35":
+  version: 0.5.41
+  resolution: "moment-timezone@npm:0.5.41"
   dependencies:
-    moment: ">= 2.9.0"
-  checksum: 6f6be5412b37fd937bb143efe74bf65b2c3f115fd967a6dc13b717a126ed6dd198bff6db6e179d69a089e20ac03ce7622c6b5598dd585005195554487a91b528
+    moment: ^2.29.4
+  checksum: 30bf42265f749d4d17e78cf94f49d8354d9fbf2dea060a5b89895979642035734512a23cb7a90c0e93593bc11eb698b78b601b7dd5d9a708eb7c4f733a927a71
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:^2.29.1":
+"moment@npm:^2.29.1, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
@@ -4482,9 +4482,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sequelize@npm:^6.28.0":
-  version: 6.28.0
-  resolution: "sequelize@npm:6.28.0"
+"sequelize@npm:^6.29.0":
+  version: 6.29.0
+  resolution: "sequelize@npm:6.29.0"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/validator": ^13.7.1
@@ -4493,7 +4493,7 @@ __metadata:
     inflection: ^1.13.2
     lodash: ^4.17.21
     moment: ^2.29.1
-    moment-timezone: ^0.5.34
+    moment-timezone: ^0.5.35
     pg-connection-string: ^2.5.0
     retry-as-promised: ^7.0.3
     semver: ^7.3.5
@@ -4521,7 +4521,7 @@ __metadata:
       optional: true
     tedious:
       optional: true
-  checksum: 7e10ba4ebabab1ed54d6769fa73cac86dd3df88415ee32dd82f01ade6e1ebd9f6672288b601bd12507eae9eb2480ba905f74c93b1e380eb335430bf43ed757e9
+  checksum: 3b25ef91cdf828f987deca28d5b46a5771b225687485b2f34c7a0e85269952fb7bf26cf689d1e32c94908238d6968fbab4694350407f56820f879769339c62b6
   languageName: node
   linkType: hard
 
