@@ -1,5 +1,6 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import type { GuildConfigRawModel } from '../../../lib/model';
 
 export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
@@ -40,6 +41,7 @@ export class UserRoute extends Route {
 		if (results.length === 0) {
 			return response.status(404).json({ error: 'Guild not Found' });
 		}
-		return response.status(200).json(results[0]);
+		const config: GuildConfigRawModel = results[0] as GuildConfigRawModel;
+		return response.status(200).json({ config: config });
 	}
 }
