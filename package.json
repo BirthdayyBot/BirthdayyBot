@@ -5,6 +5,7 @@
 	"author": "@chillihero",
 	"dependencies": {
 		"@devtomio/plugin-botlist": "^1.3.0",
+		"@discordjs/builders": "^1.4.0",
 		"@sapphire/cron": "^1.0.0",
 		"@sapphire/decorators": "^6.0.0",
 		"@sapphire/discord-utilities": "^3.0.0",

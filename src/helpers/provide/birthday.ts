@@ -3,12 +3,12 @@ import type { BirthdaWithUserModel } from '../../lib/model';
 import { API_URL } from './environment';
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
-	type BirthdayListResponse = Array<BirthdaWithUserModel>;
+	type BirthdayListResponse = { amount: number; birthdays: Array<BirthdaWithUserModel> };
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
 		const request = await fetch<BirthdayListResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
-		return request;
+		return request.birthdays;
 	} catch (error: any) {
 		if (error.code === 404) {
 			return [];

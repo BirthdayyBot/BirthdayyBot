@@ -1,11 +1,12 @@
 // const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
+import { APP_ENV, ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
 import { getBirthdaysByGuild } from '../provide/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
 import type { BirthdaWithUserModel } from '../../lib/model';
+import { EmbedLimits } from '@sapphire/discord-utilities';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
@@ -81,8 +82,28 @@ async function createEmbed(guild_id: string, birthdays: Array<Array<BirthdaWithU
 			if (isNullOrUndefinedOrEmpty(embed.fields)) {
 				embed.fields = [];
 			}
+			// const descriptionLimit = EmbedLimits.MaximumFieldValueLength;
+			const descriptionLimit = EmbedLimits.MaximumFieldValueLength;
+			/* 
+            check how many times the description is longer then 1024 characters
+            split the fields into the amount of times fields it is longer then 1024 characters
+            push the fields into the embed.fields array
+            */
+			const splits = Math.ceil(description.length / descriptionLimit);
 
-			if (description.length > 1024) {
+			// Split the description into the number of times it's longer than 1024 characters
+			const splitDescriptions = [];
+			for (let i = 0; i < splits; i++) {
+				splitDescriptions.push(description.substring(i * descriptionLimit, (i + 1) * descriptionLimit));
+			}
+
+			// Push the fields into the embed.fields array with the name ${monthname} and value the split description part
+
+			for (let i = 0; i < splitDescriptions.length; i++) {
+				embed.fields.push({ name: `${monthname}${APP_ENV !== 'prd' ? `(part ${i + 1})` : ``}`, value: splitDescriptions[i], inline: false });
+			}
+			/* 
+			if (description.length > EmbedLimits.MaximumFieldValueLength) {
 				console.warn('More then 1024 characters in one field, splitting... Guild: ', guild_id);
 				let splitDescription = description.split('\n');
 				let firstHalf = splitDescription.slice(0, splitDescription.length / 2);
@@ -106,7 +127,7 @@ async function createEmbed(guild_id: string, birthdays: Array<Array<BirthdaWithU
 					value: description,
 					inline: false
 				});
-			}
+			} */
 		}
 	});
 	return embed;
@@ -121,7 +142,13 @@ async function createEmbed(guild_id: string, birthdays: Array<Array<BirthdaWithU
 function generateComponents(page_id: number, listAmount: number): any[] {
 	if (listAmount == 1) return []; //if only one page return empty
 	let innerComponents = [];
+	/* 
+    max 5 buttons per row
+    if listAmount is bigger then 5, create multiple rows
+    */
+	//TODO: #45 Create Logic that enables for more then 5 buttons
 	for (let i = 1; i <= listAmount; i++) {
+		if (i > 5) break;
 		let label = `${i}`;
 		let isActive = i == page_id ? true : false;
 		let disabled = isActive ? true : false;
@@ -139,6 +166,20 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 		{
 			type: 1,
 			components: innerComponents
+		},
+		{
+			type: 1,
+			components: [
+				listAmount > 5
+					? {
+							type: 2,
+							style: 1,
+							label: 'To many birthdays to show all.',
+							disabled: true,
+							custom_id: 'birthday_list_to_many'
+					  }
+					: {}
+			]
 		}
 	];
 }
