@@ -14,7 +14,7 @@ export class ExampleParseMethod extends InteractionHandler {
 		const birthdayList = await generateBirthdayList(page_number, interaction.guildId!);
 		const embed = birthdayList.embed;
 		const finalEmbed = await generateEmbed(embed);
-		const components = birthdayList.components as any;
+		const components = birthdayList.components || [];
 		if (isNormalMessage) {
 			interaction.message.edit({ embeds: [finalEmbed], components });
 		} else {
@@ -29,7 +29,6 @@ export class ExampleParseMethod extends InteractionHandler {
 		const { channel, message } = interaction;
 		const fetchedMessage = await channel!.messages.fetch(message.id);
 		const isNormalMessage = fetchedMessage!.interaction ? false : true;
-		console.log('isNormalMessage1', isNormalMessage);
 		return this.some({ isNormalMessage });
 	}
 }
