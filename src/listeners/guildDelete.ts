@@ -16,6 +16,9 @@ export class UserEvent extends Listener {
 	}
 	public async run(guild: Guild) {
 		const guild_id = guild.id;
+
+		if (!container.client.isReady()) return;
+
 		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
 		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
 

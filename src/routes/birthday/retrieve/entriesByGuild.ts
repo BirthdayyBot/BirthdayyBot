@@ -36,8 +36,7 @@ export class UserRoute extends Route {
 			return response.json({ error: 'Guild not Found' });
 		}
 
-		response.statusCode = 200;
-		response.statusMessage = 'OK';
-		response.json(results);
+		const birthdays = results as Array<any>;
+		return response.status(200).json({ amount: birthdays.length, birthdays: results });
 	}
 }

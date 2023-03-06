@@ -27,19 +27,20 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
 	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const result = await fetch<GuildConfigRawModel>(requestURL, FetchResultTypes.JSON);
+	const result = await fetch<{ config: GuildConfigRawModel }>(requestURL, FetchResultTypes.JSON);
+	const { config } = result;
 	return {
-		GUILD_ID: result.guild_id,
-		ANNOUNCEMENT_CHANNEL: result.announcement_channel,
-		ANNOUNCEMENT_MESSAGE: result.announcement_message,
-		OVERVIEW_CHANNEL: result.overview_channel,
-		OVERVIEW_MESSAGE: result.overview_message,
-		BIRTHDAY_ROLE: result.birthday_role,
-		BIRTHDAY_PING_ROLE: result.birthday_ping_role,
-		LOG_CHANNEL: result.log_channel,
-		TIMEZONE: result.timezone,
-		LANGUAGE: result.language,
-		PREMIUM: result.premium === 1 ? true : false
+		GUILD_ID: config.guild_id,
+		ANNOUNCEMENT_CHANNEL: config.announcement_channel,
+		ANNOUNCEMENT_MESSAGE: config.announcement_message,
+		OVERVIEW_CHANNEL: config.overview_channel,
+		OVERVIEW_MESSAGE: config.overview_message,
+		BIRTHDAY_ROLE: config.birthday_role,
+		BIRTHDAY_PING_ROLE: config.birthday_ping_role,
+		LOG_CHANNEL: config.log_channel,
+		TIMEZONE: config.timezone,
+		LANGUAGE: config.language,
+		PREMIUM: config.premium === 1 ? true : false
 	};
 }
 

@@ -3,7 +3,7 @@ import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import voteProcess from '../../lib/process/vote';
 
-@ApplyOptions<Route.Options>({ route: `webhook/topgg` })
+@ApplyOptions<Route.Options>({ name: `webhook/topgg`, route: `webhook/topgg` })
 export class UserRoute extends Route {
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		const { authorization } = request.headers;
