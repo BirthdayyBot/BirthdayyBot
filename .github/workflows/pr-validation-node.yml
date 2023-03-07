@@ -16,6 +16,6 @@ on:
 
 jobs:
   build:
-    uses: nikolaischunk/utilities/.github/workflows/node.js.yml@27b5a6edb67187846c5afd6b72cb553951507bee
+    uses: nikolaischunk/utilities/.github/workflows/node.js.yml@8d27ee0a9c5381380e0de3b76fc0c300886ff6e7
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
