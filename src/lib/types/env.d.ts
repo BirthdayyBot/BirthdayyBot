@@ -11,7 +11,6 @@ declare global {
 			DISCORD_TOKEN: string;
 			CLIENT_ID: string;
 			BOT_OWNER: string;
-			MAIN_DISCORD: string;
 			BOT_NAME: string;
 			BOT_AVATAR: string;
 			BOT_COLOR: string;

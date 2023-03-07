@@ -14,7 +14,6 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const APP_ENV = process.env.APP_ENV; //dev; tst; prd
 export const DEBUG = parseBoolean(process.env.DEBUG);
-export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 
 //GENERIC
 export const BOT_NAME = process.env.BOT_NAME;
