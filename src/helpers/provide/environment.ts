@@ -87,5 +87,5 @@ export const API_BASE_URL = process.env.API_BASE_URL;
 export const API_EXTENSION = process.env.API_EXTENSION;
 export const API_PORT = process.env.API_PORT;
 export const API_SECRET = process.env.API_SECRET;
-export const API_URL = `${API_BASE_URL}${API_EXTENSION}`;
+export const API_URL = process.env.API_URL;
 export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
