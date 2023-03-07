@@ -1,5 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { DEBUG } from '../../helpers/provide/environment';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import voteProcess from '../../lib/process/vote';
 
@@ -10,13 +12,13 @@ export class UserRoute extends Route {
 		if (!authorization || authorization !== process.env.WEBHOOK_SECRET) {
 			return response.status(401).json({ error: 'Unauthorized' });
 		}
-		console.log(request.body);
+		DEBUG ? container.logger.info(request.body) : null;
 
 		const type = (request.body as APIWebhookTopGG).type;
 		const user_id = (request.body as APIWebhookTopGG).user;
 		switch (type) {
 			case 'test':
-				console.log('topgg webhook test');
+				container.logger.info('topgg webhook test');
 				break;
 			case 'upvote':
 				await voteProcess('topgg', user_id);

@@ -1,5 +1,6 @@
 // import { DEBUG } from '../provide/environment';
 
+import { container } from '@sapphire/framework';
 import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 
@@ -18,7 +19,7 @@ export function getCurrentDate(): string {
 	const year = date.getFullYear();
 
 	const str = `${year}-${month}-${day}`;
-	DEBUG ? console.log('today: ', str) : str;
+	DEBUG ? container.logger.info('today: ', str) : str;
 	return str;
 }
 
@@ -35,7 +36,7 @@ export function getBeautifiedDate(date: string, fromHumanFormat = false) {
 		month = numberToMonthname(parseInt(month));
 		year = items[2];
 	} else {
-		// console.log(DEBUG ? 'date: ' + date : '');
+		// container.logger.info(DEBUG ? 'date: ' + date : '');
 		items = date.split('-');
 		day = items[2];
 		month = items[1];

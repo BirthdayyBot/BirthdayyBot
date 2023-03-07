@@ -1,5 +1,6 @@
 import { API_SECRET, API_URL, DEBUG } from './environment';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import { container } from '@sapphire/framework';
 
 export async function leaveGuildRequest(guild_id: string) {
 	const requestURL = new URL(`${API_URL}guild/leave`);
@@ -9,7 +10,7 @@ export async function leaveGuildRequest(guild_id: string) {
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	DEBUG ? console.log('leaveGuildRequest', leaveGuildRequest) : null;
+	DEBUG ? container.logger.info('leaveGuildRequest', leaveGuildRequest) : null;
 	return leaveGuildRequest;
 }
 
@@ -21,7 +22,7 @@ export async function isGuildDisabledRequest(guild_id: string): Promise<boolean>
 		{ method: 'GET', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	DEBUG ? console.log('isGuildDisabled', isGuildDisabled) : null;
+	DEBUG ? container.logger.info('isGuildDisabled', isGuildDisabled) : null;
 	const { is_disabled } = isGuildDisabled as unknown as { is_disabled: boolean };
 	return is_disabled!;
 }
@@ -34,7 +35,7 @@ export async function enableGuildRequest(guild_id: string) {
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	DEBUG ? console.log('enableGuildRequest', enableGuildRequest) : null;
+	DEBUG ? container.logger.info('enableGuildRequest', enableGuildRequest) : null;
 	return enableGuildRequest;
 }
 
@@ -47,7 +48,7 @@ export async function createGuildRequest(guild_id: string, inviter: string | nul
 		{ method: 'POST', headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON
 	);
-	DEBUG ? console.log('createGuildRequest', createGuildRequest) : null;
+	DEBUG ? container.logger.info('createGuildRequest', createGuildRequest) : null;
 	return createGuildRequest;
 }
 

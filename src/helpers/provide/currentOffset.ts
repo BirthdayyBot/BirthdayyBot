@@ -88,5 +88,3 @@ function getTimezone(hour: number) {
 	if (hour === -2) return 'BET';
 	return null;
 }
-
-console.log(getCurrentOffset());

@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { Guild, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
@@ -8,7 +9,7 @@ import { BOT_NAME, BOT_SERVER_LOG, FAIL } from '../provide/environment';
 import getGuildCount from '../provide/guildCount';
 
 export default async function leaveServerLog(guild: Guild) {
-	console.log('Removed from Guild');
+	container.logger.info('Removed from Guild');
 	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 	const joinedAgo = time(Math.floor(rawJoinedTimestamp / 1000), 'f');

@@ -9,7 +9,7 @@ import { VoteSites } from '../db/voteSites';
 	sites.map((site) => {
 		value += `${ARROW_RIGHT}[${site.name}](${site.url})\n`;
 	});
-	console.log('value', value);
+	container.logger.info('value', value);
 	return value;
 }; */
 

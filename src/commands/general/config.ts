@@ -168,7 +168,7 @@ export class ConfigCommand extends Subcommand {
 		const config: string = findOption(interaction, 'config');
 		const configName = getConfigName(config);
 		const result = await setDefaultConfig(config, interaction.guildId!);
-		console.log("config reset result", result);
+		container.logger.info("config reset result", result);
 		if (result?.success) {
 			this.embed.title = `${SUCCESS} Success`;
 			this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
@@ -224,7 +224,7 @@ export class ConfigCommand extends Subcommand {
 				let config: GuildConfigModel = await getConfig(guild_id);
 				if (config.PREMIUM) {
 					const announcement_message = findOption(interaction, 'message');
-					console.log('announcement_message', announcement_message);
+					container.logger.info('announcement_message', announcement_message);
 					result = await setANNOUNCEMENT_MESSAGE(announcement_message, guild_id);
 					if (result.success)
 						this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n\`${result.data.announcement_message}\``;
@@ -238,13 +238,13 @@ export class ConfigCommand extends Subcommand {
 				break;
 		}
 		if (result.success) {
-			console.log(DEBUG ? 'config success' : '');
+			container.logger.info(DEBUG ? 'config success' : '');
 			this.embed.title = `${SUCCESS} Success`;
 		} else if (!result.success) {
 			if (result.message === 'premium') {
 				return result;
 			}
-			console.log(DEBUG ? 'config failure' : '');
+			container.logger.info(DEBUG ? 'config failure' : '');
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `\`${result.message}\``;
 		}

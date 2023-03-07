@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import generateBirthdayMessage from '../../helpers/generate/birthdayMessage';
 import generateEmbed from '../../helpers/generate/embed';
 import { getConfig, logAll } from '../../helpers/provide/config';
@@ -9,8 +10,8 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 //TODO: Correct Types, cleanup code
 
 export default async function birthdayEvent(guild_id: string, birthday_child_id: string, isTest: boolean) {
-	console.log('BirthdayEvent starts');
-	console.log('BIRTHDAYCHILD: ', birthday_child_id);
+	container.logger.info('BirthdayEvent starts');
+	container.logger.info('BIRTHDAYCHILD: ', birthday_child_id);
 
 	let config = await getConfig(guild_id);
 	const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
@@ -41,7 +42,7 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
 
 		await sendBirthdayAnnouncement(content, ANNOUNCEMENT_CHANNEL, birthdayEmbed);
 	}
-	console.log('sends ends');
+	container.logger.info('sends ends');
 	return true;
 }
 
@@ -56,12 +57,12 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
 async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_id: string, isTest: boolean) {
 	try {
 		await addRoleToUser(user_id, role_id, guild_id);
-		console.log(`BIRTHDAY ROLE ADDED TO BDAY CHILD`);
+		container.logger.info(`BIRTHDAY ROLE ADDED TO BDAY CHILD`);
 		await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); //TODO: #9 Implement own timer
 	} catch (error) {
 		console.warn(`COULND'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD`);
-		console.log('USERID: ', user_id);
-		console.log('GUILDID: ', guild_id);
+		container.logger.info('USERID: ', user_id);
+		container.logger.info('GUILDID: ', guild_id);
 	}
 }
 
@@ -87,12 +88,12 @@ async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: stri
 				guild_id: guild_id
 			}
 		});
-		console.log(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
+		container.logger.info(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
 	} catch (error) {
 		console.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
-		console.log('USERID: ', user_id);
-		console.log('ROLEID: ', role_id);
-		console.log('GUILDID: ', guild_id);
+		container.logger.info('USERID: ', user_id);
+		container.logger.info('ROLEID: ', role_id);
+		container.logger.info('GUILDID: ', guild_id);
 		console.warn(error);
 	}
 	return;
@@ -111,7 +112,7 @@ async function sendBirthdayAnnouncement(content: string, channel_id: string, bir
 			content: content,
 			embeds: [birthdayEmbed]
 		});
-		console.log(`Sent Birthday Announcement`);
+		container.logger.info(`Sent Birthday Announcement`);
 		return message;
 	} catch (error: any) {
 		console.warn(`COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n`, error);

@@ -39,19 +39,19 @@ export class UserRoute extends Route {
 	public async isValidGuild(guild_id: string) {
 		try {
 			const guildExists = await container.client.guilds.fetch(guild_id);
-			console.log('guild exists', guildExists.id);
+			container.logger.info('guild exists', guildExists.id);
 		} catch (error: any) {
 			if (error.message === 'Unknown Guild') {
 				return false;
 			} else {
-				console.log('error', error.message);
+				container.logger.info('error', error.message);
 			}
 		}
 		return true;
 	}
 
 	public async cleanGuild(guild_id: string): Promise<{ guild_id: string; guild_disabled: number; birthdays_disabled: number }> {
-		console.log('guild does not exist', guild_id);
+		container.logger.info('guild does not exist', guild_id);
 		//disable guild
 		const [_disableguild, disableGuildMeta]: [any, any] = await container.sequelize.query(
 			`UPDATE guild SET disabled = true WHERE guild_id = '${guild_id}'`,

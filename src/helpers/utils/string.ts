@@ -1,3 +1,5 @@
+import { container } from '@sapphire/framework';
+
 export function useCorrectDayFormat(number: number | string): string {
 	return number.toString().length < 2 ? `0${number}` : `${number}`;
 }
@@ -32,7 +34,7 @@ export function checkIfLengthIsTwo(number: string) {
 }
 
 export function logLimiter() {
-	console.log(`===============================`);
+	container.logger.info(`===============================`);
 	return;
 }
 
