@@ -16,50 +16,61 @@ export class UserRoute extends Route {
 			return response.status(401).json({ error: 'Unauthorized' });
 		}
 		const [db_guilds] = await container.sequelize.query(
-			// `SELECT guild_id FROM guild
-			// WHERE  disabled = false`
-			`SELECT guild_id FROM guild`
+			`SELECT guild_id FROM guild
+			WHERE  disabled = false`
+			// `SELECT guild_id FROM guild`
 		);
-		console.log('db_guilds', db_guilds);
-		let affectedGuilds: any[] = [];
-		const guildPromises = db_guilds.map(async (guild: any) => {
-			//replace with for (const guild of db_guilds) {
-			//check if guild exists in discord
-			try {
-				const guildExists = await container.client.guilds.fetch(guild.guild_id);
-				console.log('guild exists', guildExists.id);
-			} catch (error: any) {
-				if (error.message === 'Unknown Guild') {
-					console.log('guild does not exist', guild.guild_id);
-					//disable guild
-					const [_disableguild, disableGuildMeta] = await container.sequelize.query(
-						`UPDATE guild SET disabled = true WHERE guild_id = '${guild.guild_id}'`,
-						{
-							type: 'UPDATE'
-						}
-					);
-					console.log('disableGuildMeta', disableGuildMeta);
-					//disable birthdays with guild_id
-					const [_disablebirthdays, disablebirthdaysMeta] = await container.sequelize.query(
-						`UPDATE birthday SET disabled = true WHERE guild_id = '${guild.guild_id}'`,
-						{
-							type: 'UPDATE'
-						}
-					);
-					console.log('disablebirthdaysMeta', disablebirthdaysMeta);
-					affectedGuilds = affectedGuilds.concat({
-						guild_id: guild.guild_id,
-						guild_disabled: disableGuildMeta,
-						birthdays_disabled: disablebirthdaysMeta
-					});
-				} else {
-					console.log('error', error.message);
-				}
-			}
-		});
-		console.log('guildPromises', guildPromises);
-		console.log('affectedGuilds', affectedGuilds);
+		const cleanedGuilds = await this.processGuilds(db_guilds);
+		return response.status(200).json({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+	}
 
-		return response.status(200).json({ db_guilds, affectedGuilds });
+	public async processGuilds(guilds: any[]) {
+		const results = [];
+
+		for (const guild of guilds) {
+			if (await this.isValidGuild(guild.guild_id)) continue;
+			const result = await this.cleanGuild(guild.guild_id);
+			results.push(result);
+		}
+
+		return results;
+	}
+
+	public async isValidGuild(guild_id: string) {
+		try {
+			const guildExists = await container.client.guilds.fetch(guild_id);
+			console.log('guild exists', guildExists.id);
+		} catch (error: any) {
+			if (error.message === 'Unknown Guild') {
+				return false;
+			} else {
+				console.log('error', error.message);
+			}
+		}
+		return true;
+	}
+
+	public async cleanGuild(guild_id: string): Promise<{ guild_id: string; guild_disabled: number; birthdays_disabled: number }> {
+		console.log('guild does not exist', guild_id);
+		//disable guild
+		const [_disableguild, disableGuildMeta]: [any, any] = await container.sequelize.query(
+			`UPDATE guild SET disabled = true WHERE guild_id = '${guild_id}'`,
+			{
+				type: 'UPDATE'
+			}
+		);
+		//disable birthdays with guild_id
+		const [_disablebirthdays, disablebirthdaysMeta]: [any, any] = await container.sequelize.query(
+			`UPDATE birthday SET disabled = true WHERE guild_id = '${guild_id}'`,
+			{
+				type: 'UPDATE'
+			}
+		);
+
+		return {
+			guild_id: `${guild_id}`,
+			guild_disabled: disableGuildMeta,
+			birthdays_disabled: disablebirthdaysMeta
+		};
 	}
 }
