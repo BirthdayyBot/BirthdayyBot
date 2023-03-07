@@ -5,6 +5,7 @@ declare global {
 			APP_ENV: 'dev' | 'tst' | 'prd';
 			DEBUG: 'TRUE' | 'FALSE';
 			API_URL: string;
+			API_BASE_URL: string;
 			API_SECRET: string;
 			API_EXTENSION: string;
 			API_PORT: string;
