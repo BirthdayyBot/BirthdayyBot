@@ -31,7 +31,7 @@
 		"node-cron": "^3.0.2",
 		"pm2": "^5.2.2",
 		"reflect-metadata": "^0.1.13",
-		"sequelize": "^6.29.0"
+		"sequelize": "^6.29.1"
 	},
 	"devDependencies": {
 		"@sapphire/eslint-config": "^4.3.8",
