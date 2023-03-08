@@ -1,7 +1,11 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiVerification } from '../../helpers/provide/api_verification';
 
-export class UserRoute extends Route {
+/**
+ * @description Disable Guilds & assosicated that are not present in the discord cache
+ */
+export class CleanUpGuildsRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
 			...options,
@@ -10,34 +14,65 @@ export class UserRoute extends Route {
 		});
 	}
 
-	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-		const { query } = _request;
-		const { guild_id } = query;
+	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
+		if (!(await ApiVerification(request))) {
+			return response.status(401).json({ error: 'Unauthorized' });
+		}
+		const [db_guilds] = await container.sequelize.query(
+			`SELECT guild_id FROM guild
+			WHERE  disabled = false`
+		);
+		const cleanedGuilds = await this.processGuilds(db_guilds);
+		return response.status(200).json({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+	}
 
-		if (!guild_id) {
-			response.statusCode = 400;
-			response.statusMessage = 'Missing Parameter - guild_id';
-			return response.json({ error: 'Missing Parameter - guild_id' });
+	public async processGuilds(guilds: any[]) {
+		const results = [];
+
+		for (const guild of guilds) {
+			if (await this.isValidGuild(guild.guild_id)) continue;
+			const result = await this.cleanGuild(guild.guild_id);
+			results.push(result);
 		}
 
-		const [results] = await container.sequelize.query(
-			`    SELECT id, b.user_id, birthday, username, discriminator, b.guild_id
-            FROM birthday b
-                     LEFT JOIN user u ON b.user_id = u.user_id
-            WHERE guild_id = ?
-              AND b.disabled = false`,
+		return results;
+	}
+
+	public async isValidGuild(guild_id: string) {
+		try {
+			const guildExists = await container.client.guilds.fetch(guild_id);
+			container.logger.info('guild exists', guildExists.id);
+		} catch (error: any) {
+			if (error.message === 'Unknown Guild') {
+				return false;
+			} else {
+				container.logger.info('error', error.message);
+			}
+		}
+		return true;
+	}
+
+	public async cleanGuild(guild_id: string): Promise<{ guild_id: string; guild_disabled: number; birthdays_disabled: number }> {
+		container.logger.info('guild does not exist', guild_id);
+		//disable guild
+		const [_disableguild, disableGuildMeta]: [any, any] = await container.sequelize.query(
+			`UPDATE guild SET disabled = true WHERE guild_id = '${guild_id}'`,
 			{
-				replacements: [guild_id]
+				type: 'UPDATE'
+			}
+		);
+		//disable birthdays with guild_id
+		const [_disablebirthdays, disablebirthdaysMeta]: [any, any] = await container.sequelize.query(
+			`UPDATE birthday SET disabled = true WHERE guild_id = '${guild_id}'`,
+			{
+				type: 'UPDATE'
 			}
 		);
 
-		if (results.length === 0) {
-			response.statusCode = 404;
-			response.statusMessage = 'Guild not found';
-			return response.json({ error: 'Guild not Found' });
-		}
-
-		const birthdays = results as Array<any>;
-		return response.status(200).json({ amount: birthdays.length, birthdays: results });
+		return {
+			guild_id: `${guild_id}`,
+			guild_disabled: disableGuildMeta,
+			birthdays_disabled: disablebirthdaysMeta
+		};
 	}
 }
