@@ -6,7 +6,7 @@ export async function getGuildInformation(guild_id: string): Promise<Guild | nul
         const guild: Guild | undefined = await container.client.guilds.fetch(guild_id);
         return guild;
     } catch (error) {
-        console.error(`Error fetching guild with id ${guild_id}: ${error}`);
+        container.logger.error(`Error fetching guild with id ${guild_id}: ${error}`);
         return null;
     }
 }

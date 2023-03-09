@@ -1,14 +1,13 @@
 import { container } from '@sapphire/framework';
+import cron from 'node-cron';
 
-const cron = require('node-cron');
-
-export default async function testScheduler(): Promise<void> {
+export default async function testScheduler(): Promise<Promise<cron.ScheduledTask>> {
     // run function xyz every minute
-    cron.schedule('0 * * * * *', async () => {
+    return cron.schedule('0 * * * * *', async () => {
         try {
             container.logger.info('testScheduler');
         } catch (error) {
-            console.error(`Error running async task: ${error}`);
+            container.logger.error(`Error running async task: ${error}`);
         }
     });
 }
