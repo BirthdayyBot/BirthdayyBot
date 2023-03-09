@@ -9,38 +9,38 @@ import { SupportEmbed } from '../../lib/embeds';
 import { discordButton, docsButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
-	name: 'support',
-	description: 'Need help? Join my Support Discord Server!',
-	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages']
+    name: 'support',
+    description: 'Need help? Join my Support Discord Server!',
+    enabled: true,
+    // runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+    preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
+    requiredUserPermissions: ['ViewChannel'],
+    requiredClientPermissions: ['SendMessages'],
 })
 export class SupportCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options
-		});
-	}
+    public constructor(context: Command.Context, options: Command.Options) {
+        super(context, {
+            ...options,
+        });
+    }
 
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await SupportCMD(), {
-			guildIds: getCommandGuilds('global')
-		});
-	}
+    public override async registerApplicationCommands(registry: Command.Registry) {
+        registry.registerChatInputCommand(await SupportCMD(), {
+            guildIds: getCommandGuilds('global'),
+        });
+    }
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = await generateEmbed(SupportEmbed);
-		await replyToInteraction(interaction, {
-			embeds: [embed],
-			components: [
-				{
-					type: 1,
-					components: [discordButton, docsButton]
-				}
-			]
-		});
-	}
+    public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+        await thinking(interaction);
+        const embed = await generateEmbed(SupportEmbed);
+        await replyToInteraction(interaction, {
+            embeds: [embed],
+            components: [
+                {
+                    type: 1,
+                    components: [discordButton, docsButton],
+                },
+            ],
+        });
+    }
 }
