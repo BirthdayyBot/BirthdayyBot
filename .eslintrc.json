@@ -7,7 +7,8 @@
 		"commonjs": true
 	},
 	"parserOptions": {
-		"ecmaVersion": 2021
+		"ecmaVersion": 2021,
+        "sourceType": "module"
 	},
 	"rules": {
 		"arrow-spacing": ["warn", { "before": true, "after": true }],
@@ -23,7 +24,7 @@
 		"max-nested-callbacks": ["error", { "max": 4 }],
 		"max-statements-per-line": ["error", { "max": 2 }],
 		"max-len": ["warn", { "code": 120 }],
-		"no-console": "off",
+		"no-console": "warn",
 		"no-empty-function": "error",
 		"no-floating-decimal": "error",
 		"no-inline-comments": "error",

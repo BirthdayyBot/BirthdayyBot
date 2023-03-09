@@ -5,13 +5,13 @@ declare global {
 			APP_ENV: 'dev' | 'tst' | 'prd';
 			DEBUG: 'TRUE' | 'FALSE';
 			API_URL: string;
+			API_BASE_URL: string;
 			API_SECRET: string;
 			API_EXTENSION: string;
 			API_PORT: string;
 			DISCORD_TOKEN: string;
 			CLIENT_ID: string;
 			BOT_OWNER: string;
-			MAIN_DISCORD: string;
 			BOT_NAME: string;
 			BOT_AVATAR: string;
 			BOT_COLOR: string;

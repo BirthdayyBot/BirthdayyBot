@@ -1,4 +1,4 @@
-import type { Command } from '@sapphire/framework';
+import { Command, container } from '@sapphire/framework';
 import type { InteractionReplyOptions } from 'discord.js';
 import { DEBUG } from '../provide/environment';
 
@@ -31,16 +31,16 @@ export default async function replyToInteraction(
 		ephemeral: ephemeral ?? false
 	};
 
-	console.log(DEBUG ? 'ephemeral: ' + response.ephemeral : '');
+	container.logger.info(DEBUG ? 'ephemeral: ' + response.ephemeral : '');
 
 	if (interaction?.replied || interaction?.deferred) {
 		interaction.editReply(response);
 		return;
 	}
 	try {
-		console.log('IsNotRepliedOrDeferred');
+		container.logger.info('IsNotRepliedOrDeferred');
 		interaction.reply(response);
-		console.log(DEBUG ? 'replied' : '');
+		container.logger.info(DEBUG ? 'replied' : '');
 		return;
 	} catch (error) {
 		console.warn(error);

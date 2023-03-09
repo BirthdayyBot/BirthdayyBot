@@ -95,12 +95,12 @@ async function scheduleRoleRemoval(user_id: string, role_id: string, guild_id: s
 				guild_id: guild_id
 			}
 		});
-		console.log(`Scheduled Vote Role removal: `, req);
+		container.logger.info(`Scheduled Vote Role removal: `, req);
 	} catch (e) {
 		console.warn(`something went wrong while trying to schedule a birtday removal!`);
-		console.log('USERID: ', user_id);
-		console.log('ROLEID: ', role_id);
-		console.log('GUILDID: ', guild_id);
+		container.logger.info('USERID: ', user_id);
+		container.logger.info('ROLEID: ', role_id);
+		container.logger.info('GUILDID: ', guild_id);
 		console.warn(e);
 	}
 	return;

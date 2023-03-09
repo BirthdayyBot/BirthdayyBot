@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { getCurrentOffset } from '../../helpers/provide/currentOffset';
 import { APP_ENV } from '../../helpers/provide/environment';
 import birthdayEvent from './birthdayEvent';
@@ -12,7 +13,7 @@ const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export default async function checkCurrentBirthdays(): Promise<void> {
 	const o = await getCurrentOffset();
 	const today = o.date;
-	console.log('today', today);
+	container.logger.info('today', today);
 	const offset = o.offsetString;
 	// Retrieve today's birthdays from the birthday-api
 	let checkTodaysBirthdays =
@@ -35,17 +36,17 @@ export default async function checkCurrentBirthdays(): Promise<void> {
 	let todaysBirthdays = checkTodaysBirthdays.result;
 
 	let birthdayCount = todaysBirthdays.length;
-	console.log('birthdayCount', birthdayCount);
+	container.logger.info('birthdayCount', birthdayCount);
 	if (birthdayCount !== 0) {
 		console.time('BirthdayLoop Time');
 		// If there are birthdays today, loop through and send messages
 		for (let index = 0; index < birthdayCount; index++) {
 			let birthday = todaysBirthdays[index];
-			console.log('BIRTHDAYY LOOP: ', index + 1);
+			container.logger.info('BIRTHDAYY LOOP: ', index + 1);
 			await birthdayEvent(birthday.guild_id, birthday.user_id, false);
 		}
 	} else {
-		console.log(`No Birthdays Today`);
+		container.logger.info(`No Birthdays Today`);
 	}
-	console.log('end');
+	container.logger.info('end');
 }

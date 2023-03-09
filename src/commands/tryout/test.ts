@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
+import { Command, container } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import replyToInteraction from '../../helpers/send/response';
 import generateEmbed from '../../helpers/generate/embed';
@@ -32,16 +32,16 @@ export class TestCommand extends Command {
 		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
 		const o = await getCurrentOffset();
 		const today = o.date;
-		console.log('today', today);
+		container.logger.info('today', today);
 		const offset = o.offsetString;
-		console.log(
+		container.logger.info(
 			await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.entriesByDateAndTimezone({
 				birthday: today,
 				timezone: offset
 			})
 		);
 
-		console.log('isGuildPremiuum: ', await isGuildPremium(interaction.guildId!));
+		container.logger.info('isGuildPremiuum: ', await isGuildPremium(interaction.guildId!));
 		const embed = await generateEmbed({ title: 'test' });
 		await replyToInteraction(interaction, { content: `\`\`\`TEST RUN\`\`\``, embeds: [embed] });
 		return;

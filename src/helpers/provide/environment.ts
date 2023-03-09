@@ -14,7 +14,6 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 export const NODE_ENV = process.env.NODE_ENV; //development; production
 export const APP_ENV = process.env.APP_ENV; //dev; tst; prd
 export const DEBUG = parseBoolean(process.env.DEBUG);
-export const MAIN_DISCORD = process.env.MAIN_DISCORD;
 
 //GENERIC
 export const BOT_NAME = process.env.BOT_NAME;
@@ -88,5 +87,5 @@ export const API_BASE_URL = process.env.API_BASE_URL;
 export const API_EXTENSION = process.env.API_EXTENSION;
 export const API_PORT = process.env.API_PORT;
 export const API_SECRET = process.env.API_SECRET;
-export const API_URL = `${API_BASE_URL}${API_EXTENSION}`;
+export const API_URL = process.env.API_URL;
 export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;

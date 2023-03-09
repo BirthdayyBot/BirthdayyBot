@@ -3,6 +3,7 @@ import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { API_URL, AUTOCODE_ENV } from './environment';
 import type { APIResponseModel } from '../../lib/model/APIResponse.model';
 import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
+import { container } from '@sapphire/framework';
 
 //  ! Autocode implementation, will be deprecated in favor of the fetch implementation
 export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
@@ -71,7 +72,7 @@ export async function setCompleteConfig(config: any, guild_id: string) {
 		await setOVERVIEW_CHANNEL(OVERVIEW_CHANNEL, guild_id);
 	}
 	if (LOG_CHANNEL !== 'null') {
-		console.log('logchannel not null');
+		container.logger.info('logchannel not null');
 		await setLOG_CHANNEL(LOG_CHANNEL, guild_id);
 	}
 	if (OVERVIEW_MESSAGE !== 'null') {
@@ -80,7 +81,7 @@ export async function setCompleteConfig(config: any, guild_id: string) {
 	if (TIMEZONE !== 'null') {
 		await setTIMEZONE(TIMEZONE, guild_id);
 	}
-	console.log('Set config for guild with id ', guild_id);
+	container.logger.info('Set config for guild with id ', guild_id);
 }
 
 export async function removeConfig(config_name: string, guild_id: string) {
@@ -110,7 +111,7 @@ export async function removeConfig(config_name: string, guild_id: string) {
 			await setANNOUNCEMENT_MESSAGE('null', guild_id);
 			break;
 		default:
-			console.log('config not defined: ', config_name);
+			container.logger.info('config not defined: ', config_name);
 			return false;
 	}
 	return true;
@@ -158,7 +159,7 @@ export async function setDefaultConfig(config_name: string, guild_id: string) {
 			reset = await setBIRTHDAY_PING_ROLE('null', guild_id);
 			break;
 		default:
-			console.log('config not defined: ', config_name);
+			container.logger.info('config not defined: ', config_name);
 			break;
 	}
 	return reset;
@@ -234,17 +235,17 @@ export async function setTIMEZONE(timezone: string, guild_id: string): Promise<A
 // }
 
 export function logAll(config: any) {
-	console.log('===============================');
-	if (config.GUILD_ID !== null) console.log('GUILD_ID: ', config.GUILD_ID);
-	if (config.BIRTHDAY_ROLE !== null) console.log('BIRTHDAY_ROLE: ', config.BIRTHDAY_ROLE);
-	if (config.BIRTHDAY_PING_ROLE !== null) console.log('BIRTHDAY_PING_ROLE: ', config.BIRTHDAY_PING_ROLE);
-	if (config.ANNOUNCEMENT_CHANNEL !== null) console.log('ANNOUNCEMENT_CHANNEL: ', config.ANNOUNCEMENT_CHANNEL);
-	if (config.OVERVIEW_CHANNEL !== null) console.log('OVERVIEW_CHANNEL: ', config.OVERVIEW_CHANNEL);
-	if (config.LOG_CHANNEL !== null) console.log('LOG_CHANNEL: ', config.LOG_CHANNEL);
-	if (config.OVERVIEW_MESSAGE !== null) console.log('OVERVIEW_MESSAGE: ', config.OVERVIEW_MESSAGE);
-	if (config.TIMEZONE !== null) console.log('TIMEZONE: ', config.TIMEZONE);
-	if (config.ANNOUNCEMENT_MESSAGE !== null) console.log('ANNOUNCEMENT_MESSAGE: ', config.ANNOUNCEMENT_MESSAGE);
-	console.log('===============================');
+	container.logger.info('===============================');
+	if (config.GUILD_ID !== null) container.logger.info('GUILD_ID: ', config.GUILD_ID);
+	if (config.BIRTHDAY_ROLE !== null) container.logger.info('BIRTHDAY_ROLE: ', config.BIRTHDAY_ROLE);
+	if (config.BIRTHDAY_PING_ROLE !== null) container.logger.info('BIRTHDAY_PING_ROLE: ', config.BIRTHDAY_PING_ROLE);
+	if (config.ANNOUNCEMENT_CHANNEL !== null) container.logger.info('ANNOUNCEMENT_CHANNEL: ', config.ANNOUNCEMENT_CHANNEL);
+	if (config.OVERVIEW_CHANNEL !== null) container.logger.info('OVERVIEW_CHANNEL: ', config.OVERVIEW_CHANNEL);
+	if (config.LOG_CHANNEL !== null) container.logger.info('LOG_CHANNEL: ', config.LOG_CHANNEL);
+	if (config.OVERVIEW_MESSAGE !== null) container.logger.info('OVERVIEW_MESSAGE: ', config.OVERVIEW_MESSAGE);
+	if (config.TIMEZONE !== null) container.logger.info('TIMEZONE: ', config.TIMEZONE);
+	if (config.ANNOUNCEMENT_MESSAGE !== null) container.logger.info('ANNOUNCEMENT_MESSAGE: ', config.ANNOUNCEMENT_MESSAGE);
+	container.logger.info('===============================');
 	return;
 }
 

@@ -7,6 +7,7 @@ import { getBirthdaysByGuild } from '../provide/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
 import type { BirthdaWithUserModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
+import { container } from '@sapphire/framework';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
@@ -24,7 +25,7 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
 		const components = generateComponents(page_id, splitBirthdayList.listAmount);
 		return { embed: embed, components: components };
 	} else {
-		console.log('no birthdays');
+		container.logger.info('no birthdays');
 		const embed = await createEmbed(guild_id, []);
 		return { embed: embed, components: [] };
 	}

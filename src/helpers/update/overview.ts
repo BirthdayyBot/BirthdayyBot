@@ -3,6 +3,7 @@ import generateEmbed from '../generate/embed';
 import { getConfig, logAll, setOVERVIEW_MESSAGE } from '../provide/config';
 import { getTextChannel } from '../../lib/discord/channel';
 import { editMessage } from '../../lib/discord/message';
+import { container } from '@sapphire/framework';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await getConfig(guild_id);
@@ -33,7 +34,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 						console.error('Message Not found, so generated new overview message');
 					}
 				}
-				console.log(`Updated Overview Message in guild: ${guild_id}`);
+				container.logger.info(`Updated Overview Message in guild: ${guild_id}`);
 			} else if (!OVERVIEW_MESSAGE) {
 				await generateNewOverviewMessage(OVERVIEW_CHANNEL, birthdayList);
 			}
@@ -45,6 +46,6 @@ async function generateNewOverviewMessage(channel_id: string, birthdayList: { em
 	//send a new overview message to the overview channel
 	const channel = await getTextChannel(channel_id);
 	const message = await channel.send({ embeds: [birthdayList.embed], components: birthdayList.components });
-	// console.log('message', message);
+	// container.logger.info('message', message);
 	await setOVERVIEW_MESSAGE(message.id, message.guildId!);
 }

@@ -20,7 +20,7 @@ export async function addRoleToUser(user_id: string, role_id: string, guild_id: 
 		// Add the role to the member
 		await member.roles.add(role);
 		//TODO: #10 Create a LogHandler that works with the DEBUG env variable
-		console.log(`Successfully added role ${role.name} to user ${member.user.id}`);
+		container.logger.info(`Successfully added role ${role.name} to user ${member.user.id}`);
 	} catch (error: any) {
 		if (error.message.includes('Missing Permissions')) {
 			console.error(`Failed to add role cause I am missing Permissions! Guild: ${guild_id} User: ${user_id} Role: ${role_id}`);

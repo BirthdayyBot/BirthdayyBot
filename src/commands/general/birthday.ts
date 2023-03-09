@@ -3,7 +3,7 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
 import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, DEBUG, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
-import type { Args } from '@sapphire/framework';
+import { Args, container } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
@@ -98,9 +98,9 @@ export class BirthdayCommand extends Subcommand {
 		async function birthdayRegisterProcess(embed: EmbedInformationModel): Promise<EmbedInformationModel> {
 			const birthday = getDateFromInteraction(interaction);
 			//TODO: #10
-			console.log(DEBUG ? 'USERID: ' + user_id : '');
-			console.log(DEBUG ? 'GUILDID: ' + guild_id : '');
-			console.log(DEBUG ? 'BIRTHDAY: ' + birthday.date : '');
+			container.logger.info(DEBUG ? 'USERID: ' + user_id : '');
+			container.logger.info(DEBUG ? 'GUILDID: ' + guild_id : '');
+			container.logger.info(DEBUG ? 'BIRTHDAY: ' + birthday.date : '');
 			if (!birthday.isValidDate) {
 				embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
 			}
@@ -112,7 +112,7 @@ export class BirthdayCommand extends Subcommand {
 				});
 				if (request.success) {
 					const beautifiedDate = getBeautifiedDate(birthday.date);
-					console.log('FINAL DATE', beautifiedDate);
+					container.logger.info('FINAL DATE', beautifiedDate);
 					embed.title = `${SUCCESS} Success`;
 					embed.description = `${ARROW_RIGHT} I added the Birthday from <@${user_id}> at the \`${beautifiedDate}\`. 🎂`;
 				} else {
@@ -177,13 +177,13 @@ export class BirthdayCommand extends Subcommand {
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const guild_id = interaction.guildId!;
 		const request = await getBirthdayByGuildAndUser(guild_id, user_id); //try catch request
-		// console.log("request", request);
+		// container.logger.info("request", request);
 		this.embed.title = `${BOOK} Show Birthday`;
 		if (isNullOrUndefinedOrEmpty(request)) {
-			// console.log("isEmpty");
+			// container.logger.info("isEmpty");
 			this.embed.description = `${ARROW_RIGHT} \`This user has no registered birthday.\``;
 		} else {
-			// console.log("isNotEmpty");
+			// container.logger.info("isNotEmpty");
 			const birthday = request[0];
 			const readableDate = getBeautifiedDate(birthday.birthday);
 			this.embed.thumbnail_url = IMG_CAKE;
@@ -244,7 +244,7 @@ export class BirthdayCommand extends Subcommand {
 		const guild_id = interaction.guildId!;
 		const user_id = interaction.user.id;
 		const hasPermissions = await hasUserGuildPermissions(interaction, user_id, [`ManageRoles`]);
-		console.log('hasPermissions', hasPermissions);
+		container.logger.info('hasPermissions', hasPermissions);
 		if (hasPermissions) {
 			await birthdayEvent(guild_id, user_id, true);
 			this.embed.title = `${SUCCESS} Success`;

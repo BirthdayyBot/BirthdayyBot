@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, Store } from '@sapphire/framework';
+import { container, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { APP_ENV, BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord/message';
@@ -33,7 +33,7 @@ export class UserEvent extends Listener {
 		// Offset Pad
 		const pad = ' '.repeat(7);
 
-		console.log(
+		container.logger.info(
 			String.raw`
 ${line01} ${pad}${blc('1.0.0')}
 ${line02} ${pad}[${success}] Gateway

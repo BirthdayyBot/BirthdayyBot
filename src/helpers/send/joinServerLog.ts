@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { Guild, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
@@ -7,7 +8,7 @@ import { BOT_NAME, BOT_SERVER_LOG, SUCCESS } from '../provide/environment';
 import getGuildCount from '../provide/guildCount';
 
 export default async function joinServerLog(guild: Guild) {
-	console.log('Joined Guild');
+	container.logger.info('Joined Guild');
 	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 	const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');

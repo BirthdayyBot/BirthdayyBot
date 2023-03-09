@@ -1,4 +1,4 @@
-import { InteractionHandler, InteractionHandlerTypes, PieceContext } from '@sapphire/framework';
+import { container, InteractionHandler, InteractionHandlerTypes, PieceContext } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';
 
 export class ExampleParseMethod extends InteractionHandler {
@@ -24,7 +24,7 @@ export class ExampleParseMethod extends InteractionHandler {
 	}
 
 	private async fetchDataThatMightTakeALongWhile(customId: string) {
-		console.log('customId', customId);
+		container.logger.info('customId', customId);
 		// ...
 	}
 }
