@@ -1,8 +1,9 @@
-import { Events } from '@sapphire/framework';
+import { container, Events } from '@sapphire/framework';
 import { Listener } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 import { AUTOCODE_ENV } from '../helpers/provide/environment';
 import updateBirthdayOverview from '../helpers/update/overview';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 export class UserEvent extends Listener {
     public constructor(context: Listener.Context, options: Listener.Options) {
@@ -26,8 +27,8 @@ export class UserEvent extends Listener {
                 await updateBirthdayOverview(guild_id);
             }
         } catch (e) {
-            console.warn('Couldn not remove birthday from left user');
-            console.warn(e);
+            container.logger.warn('Couldn not remove birthday from left user');
+            container.logger.warn(e);
         }
     }
 }

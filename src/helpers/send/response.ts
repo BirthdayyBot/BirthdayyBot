@@ -51,7 +51,7 @@ export default async function replyToInteraction(
         return;
     } catch (error) {
         // If the interaction has already been replied to or deferred, edit the reply instead
-        console.warn(error);
+        container.logger.warn(error);
         container.logger.info('editReply');
         await interaction.editReply(response);
         return;

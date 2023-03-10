@@ -119,8 +119,8 @@ export class BirthdayCommand extends Subcommand {
                     embed.description = `${ARROW_RIGHT} \`This user's birthday is already registerd.\n Use /birthday update!\``;
                 } else {
                     embed.description = `${ARROW_RIGHT} \`${request.message}\``;
-                    console.warn(request.code);
-                    console.warn(request.message);
+                    container.logger.warn(request.code);
+                    container.logger.warn(request.message);
                 }
             } else {
                 embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;

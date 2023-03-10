@@ -60,7 +60,7 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
         container.logger.info('BIRTHDAY ROLE ADDED TO BDAY CHILD');
         await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); // TODO: #9 Implement own timer
     } catch (error) {
-        console.warn('COULND\'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD');
+        container.logger.warn('COULND\'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD');
         container.logger.info('USERID: ', user_id);
         container.logger.info('GUILDID: ', guild_id);
     }
@@ -90,11 +90,11 @@ async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: stri
         });
         container.logger.info(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
     } catch (error) {
-        console.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
+        container.logger.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
         container.logger.info('USERID: ', user_id);
         container.logger.info('ROLEID: ', role_id);
         container.logger.info('GUILDID: ', guild_id);
-        console.warn(error);
+        container.logger.warn(error);
     }
     return;
 }
@@ -115,7 +115,7 @@ async function sendBirthdayAnnouncement(content: string, channel_id: string, bir
         container.logger.info('Sent Birthday Announcement');
         return message;
     } catch (error: any) {
-        console.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
+        container.logger.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
         // Send error message to log channel
         if (error.message.includes('Missing Access')) {
             // send Log to user
