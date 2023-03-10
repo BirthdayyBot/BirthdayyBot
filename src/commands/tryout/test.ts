@@ -6,6 +6,7 @@ import generateEmbed from '../../helpers/generate/embed';
 // import checkCurrentBirthdays from '../../lib/birthday/checkCurrentBirthdays';
 import { isGuildPremium } from '../../helpers/provide/guild';
 import { getCurrentOffset } from '../../helpers/provide/currentOffset';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Command.Options>({
     name: 'test',

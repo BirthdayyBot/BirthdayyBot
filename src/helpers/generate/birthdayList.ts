@@ -1,4 +1,3 @@
-// const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation } from '../../lib/discord/guild';
@@ -18,7 +17,6 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
         const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, MAX_BIRTHDAYS);
         // get the birthdays for the current page
         const birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
-        console.log('splitBirthdayList', splitBirthdayList);
         // TODO: Should only contain the birthdays for the current page (80 birthdays)
 
         const finalList = prepareBirthdays(birthdays);

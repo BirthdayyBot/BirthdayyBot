@@ -1,9 +1,10 @@
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 //  ! Autocode implementation, will be deprecated in favor of the fetch implementation
 export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
@@ -262,19 +263,3 @@ export async function getGuildPremium(guild_id: string): Promise<boolean> {
     const data = await fetch<{ guild_id: string; premium: boolean }>(requestURL, FetchResultTypes.JSON);
     return data.premium;
 }
-
-/**
-    const {
-      BIRTHDAY_ANNOUNCEMENT_CHANNEL,
-      BIRTHDAY_ROLE,
-      BIRTHDAY_OVERVIEW_CHANNEL,
-      BIRTHDAY_LOG_CHANNEL,
-      BIRTHDAY_PING_ROLE,
-      TIMEZONE,
-      ANNOUNCEMENT_MESSAGE
-    } = config;
- */
-/**
-     let size = Object.keys(config).length;
-    let names = Object.getOwnPropertyNames(config);
- */

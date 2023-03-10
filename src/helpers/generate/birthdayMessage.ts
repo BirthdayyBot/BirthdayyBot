@@ -1,5 +1,6 @@
 import { AUTOCODE_ENV } from '../provide/environment';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 export default async function generateBirthdayMessage(content: string, user_id: string, guild_id: string) {

@@ -5,6 +5,7 @@ import { sendDMMessage, sendMessage } from '../discord/message';
 import { GuildIDEnum } from '../enum/GuildID.enum';
 import type { VoteProvider } from '../types/VoteProvider.type';
 import type { User } from 'discord.js';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 export default async function voteProcess(provider: VoteProvider, user_id: string): Promise<any> {
