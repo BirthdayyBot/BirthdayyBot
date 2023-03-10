@@ -1,6 +1,18 @@
+import { API_URL, AUTOCODE_ENV } from '../../helpers/provide/environment';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { BirthdaWithUserModel } from '../../lib/model';
-import { API_URL } from './environment';
+import type { AutocodeAPIResponseModel } from '../model';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
+
+export async function removeBirthday(user_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
+    const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
+        user_id: user_id,
+        guild_id: guild_id,
+    });
+    return request;
+}
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
 	type BirthdayListResponse = { amount: number; birthdays: Array<BirthdaWithUserModel> };
@@ -10,9 +22,6 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 	    const request = await fetch<BirthdayListResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
 	    return request.birthdays;
 	} catch (error: any) {
-	    if (error.code === 404) {
-	        return [];
-	    }
 	    return [];
 	}
 }
