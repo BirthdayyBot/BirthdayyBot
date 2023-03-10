@@ -1263,7 +1263,7 @@ __metadata:
     pm2: ^5.2.2
     prettier: ^2.8.4
     reflect-metadata: ^0.1.13
-    sequelize: ^6.29.2
+    sequelize: ^6.29.3
     tsc-watch: ^6.0.0
     typescript: ^4.9.5
   languageName: unknown
@@ -4547,9 +4547,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sequelize@npm:^6.29.2":
-  version: 6.29.2
-  resolution: "sequelize@npm:6.29.2"
+"sequelize@npm:^6.29.3":
+  version: 6.29.3
+  resolution: "sequelize@npm:6.29.3"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/validator": ^13.7.1
@@ -4586,7 +4586,7 @@ __metadata:
       optional: true
     tedious:
       optional: true
-  checksum: 11c2bf5bfadcf6ef44466dd00d5abc8c551651fe3b226829badafdf3505389c64b13432be04473a53bb5ea318bc921735b8f39b4bdc38ba4df1d63e2f04b85c8
+  checksum: 38b39a1dc6690a974e8b70d406075b55dc14af116f3e13b2cadd2ac851980adf23f0e8fe4a7c14e89a89e1d652e9a0cbfc3121f927f739400504edd8cbf5eafb
   languageName: node
   linkType: hard
 
