@@ -3,7 +3,7 @@ import { Subcommand } from '@sapphire/plugin-subcommands';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
 import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, DEBUG, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
-import { Args, container } from '@sapphire/framework';
+import { container } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
@@ -75,7 +75,7 @@ export class BirthdayCommand extends Subcommand {
     };
     components = [];
 
-    public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction) {
         await thinking(interaction);
         const user_id = findOption(interaction, 'user', interaction.user.id);
         const author_id = interaction.user.id;
@@ -129,24 +129,18 @@ export class BirthdayCommand extends Subcommand {
         }
     }
 
-    public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction) {
         await thinking(interaction);
         const user_id = findOption(interaction, 'user', interaction.user.id);
         const author_id = interaction.user.id;
         const guild_id = interaction.guildId!;
-        const removeRequest = await removeBirthday(user_id, guild_id);
-        if (removeRequest.success) {
-            this.embed.title = `${SUCCESS} Success`;
-            this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
-        } else {
-            this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
-        }
+
         if (author_id === user_id) {
-            await removeBirthday(user_id, guild_id);
+            await this.removeBirthdayRequest(user_id, guild_id);
         } else {
-            const hasPermissions = await hasUserGuildPermissions(interaction, user_id, ['ManageRoles']);
+            const hasPermissions = await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']);
             if (hasPermissions) {
-                await removeBirthday(user_id, guild_id);
+                await this.removeBirthdayRequest(user_id, guild_id);
                 this.updateList = true;
             } else {
                 this.embed.description = `${ARROW_RIGHT} \`You don't have the permission to remove other users birthdays.\``;
@@ -158,7 +152,17 @@ export class BirthdayCommand extends Subcommand {
         this.updateList ? await updateBirthdayOverview(guild_id) : null;
     }
 
-    async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
+    private async removeBirthdayRequest(user_id: string, guild_id: string) {
+        const removeRequest = await removeBirthday(user_id, guild_id);
+        if (removeRequest.success) {
+            this.embed.title = `${SUCCESS} Success`;
+            this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
+        } else {
+            this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
+        }
+    }
+
+    public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
         const guild_id = interaction.guildId!;
 
         const { embed, components } = await generateBirthdayList(1, guild_id);
@@ -232,7 +236,7 @@ export class BirthdayCommand extends Subcommand {
         }
     }
 
-    public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction) {
         await thinking(interaction);
         const guild_id = interaction.guildId!;
         const user_id = interaction.user.id;
