@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
@@ -20,7 +21,7 @@ import {
     setOVERVIEW_MESSAGE,
     setTIMEZONE,
 } from '../../helpers/provide/config';
-import type { APIResponseModel } from '../../lib/model/APIResponse.model';
+import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { getConfigName } from '../../helpers/utils/string';
@@ -180,9 +181,9 @@ export class ConfigCommand extends Subcommand {
         await replyToInteraction(interaction, { embeds: [embed] });
     }
 
-    public async setConfig(interaction: Subcommand.ChatInputCommandInteraction, config: string): Promise<APIResponseModel> {
+    public async setConfig(interaction: Subcommand.ChatInputCommandInteraction, config: string): Promise<AutocodeAPIResponseModel> {
         const guild_id = interaction.guildId!;
-        let result: APIResponseModel = {
+        let result: AutocodeAPIResponseModel = {
             success: false,
             code: 404,
             message: 'Option not found',
@@ -194,8 +195,9 @@ export class ConfigCommand extends Subcommand {
         case 'announcement_channel':
             const announcement_channel = findOption(interaction, 'channel');
             result = await setANNOUNCEMENT_CHANNEL(announcement_channel, guild_id);
-            if (result.success)
-            {this.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to <#${result.data.announcement_channel}>`;}
+            if (result.success) {
+                this.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to <#${result.data.announcement_channel}>`;
+            }
             break;
         case 'overview_channel':
             const overview_channel = findOption(interaction, 'channel');
@@ -210,8 +212,9 @@ export class ConfigCommand extends Subcommand {
         case 'ping_role':
             const ping_role = findOption(interaction, 'role');
             result = await setBIRTHDAY_PING_ROLE(ping_role, guild_id);
-            if (result.success)
-            {this.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to <@&${result.data.birthday_ping_role}>`;}
+            if (result.success) {
+                this.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to <@&${result.data.birthday_ping_role}>`;
+            }
             break;
         case 'timezone':
             const timezone = findOption(interaction, 'timezone');
@@ -221,13 +224,14 @@ export class ConfigCommand extends Subcommand {
             break;
             // * PREMIUM ONLY
         case 'announcement_message':
-            const config: GuildConfigModel = await getConfig(guild_id);
-            if (config.PREMIUM) {
+            const guild_config: GuildConfigModel = await getConfig(guild_id);
+            if (guild_config.PREMIUM) {
                 const announcement_message = findOption(interaction, 'message');
                 container.logger.info('announcement_message', announcement_message);
                 result = await setANNOUNCEMENT_MESSAGE(announcement_message, guild_id);
-                if (result.success)
-                {this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n\`${result.data.announcement_message}\``;}
+                if (result.success) {
+                    this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n\`${result.data.announcement_message}\``;
+                }
             } else {
                 this.embed.title = `${PLUS} Early access only`;
                 this.embed.description = `${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**. 

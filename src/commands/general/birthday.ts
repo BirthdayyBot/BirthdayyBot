@@ -18,6 +18,7 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
     description: 'Birthday Command',

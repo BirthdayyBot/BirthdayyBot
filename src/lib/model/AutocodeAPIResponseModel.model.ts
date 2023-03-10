@@ -1,4 +1,4 @@
-export type APIResponseModel = {
+export type AutocodeAPIResponseModel = {
 	success: boolean;
 	code: number;
 	message: string;

@@ -1,7 +1,7 @@
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { API_URL, AUTOCODE_ENV } from './environment';
-import type { APIResponseModel } from '../../lib/model/APIResponse.model';
+import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
 
@@ -165,7 +165,7 @@ export async function setDefaultConfig(config_name: string, guild_id: string) {
     return reset;
 }
 
-export async function setBIRTHDAY_ROLE(role_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setBIRTHDAY_ROLE(role_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.birthday_role({
         guild_id: guild_id,
         birthday_role: role_id,
@@ -173,7 +173,7 @@ export async function setBIRTHDAY_ROLE(role_id: string, guild_id: string): Promi
     return result;
 }
 
-export async function setBIRTHDAY_PING_ROLE(role_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setBIRTHDAY_PING_ROLE(role_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.birthday_ping_role({
         guild_id: guild_id,
         birthday_ping_role: role_id,
@@ -181,7 +181,7 @@ export async function setBIRTHDAY_PING_ROLE(role_id: string, guild_id: string): 
     return result;
 }
 
-export async function setANNOUNCEMENT_CHANNEL(channel_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setANNOUNCEMENT_CHANNEL(channel_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.announcement_channel({
         guild_id: guild_id,
         announcement_channel: channel_id,
@@ -189,7 +189,7 @@ export async function setANNOUNCEMENT_CHANNEL(channel_id: string, guild_id: stri
     return result;
 }
 
-export async function setANNOUNCEMENT_MESSAGE(announcement_message: string, guild_id: string): Promise<APIResponseModel> {
+export async function setANNOUNCEMENT_MESSAGE(announcement_message: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.announcement_message({
         guild_id: guild_id,
         announcement_message: announcement_message,
@@ -197,7 +197,7 @@ export async function setANNOUNCEMENT_MESSAGE(announcement_message: string, guil
     return result;
 }
 
-export async function setOVERVIEW_CHANNEL(channel_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setOVERVIEW_CHANNEL(channel_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.overview_channel({
         guild_id: guild_id,
         overview_channel: channel_id,
@@ -205,7 +205,7 @@ export async function setOVERVIEW_CHANNEL(channel_id: string, guild_id: string):
     return result;
 }
 
-export async function setLOG_CHANNEL(channel_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setLOG_CHANNEL(channel_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.log_channel({
         guild_id: guild_id,
         log_channel: channel_id,
@@ -213,7 +213,7 @@ export async function setLOG_CHANNEL(channel_id: string, guild_id: string): Prom
     return result;
 }
 
-export async function setOVERVIEW_MESSAGE(message_id: string, guild_id: string): Promise<APIResponseModel> {
+export async function setOVERVIEW_MESSAGE(message_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.overview_message({
         guild_id: guild_id,
         overview_message: message_id,
@@ -221,7 +221,7 @@ export async function setOVERVIEW_MESSAGE(message_id: string, guild_id: string):
     return result;
 }
 
-export async function setTIMEZONE(timezone: string, guild_id: string): Promise<APIResponseModel> {
+export async function setTIMEZONE(timezone: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const tz = parseInt(timezone);
     const result = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.update.timezone({
         guild_id: guild_id,
