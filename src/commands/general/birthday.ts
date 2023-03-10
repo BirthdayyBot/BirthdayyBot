@@ -9,7 +9,7 @@ import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../lib/discord/thinking';
-import { getBirthdayByGuildAndUser } from '../../helpers/provide/birthday';
+import { getBirthdayByGuildAndUser } from '../../lib/birthday/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
 import updateBirthdayOverview from '../../helpers/update/overview';
@@ -17,6 +17,7 @@ import { BirthdayCMD } from '../../lib/commands/birthday';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
+import { removeBirthday } from '../../lib/birthday/birthday';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
@@ -133,16 +134,13 @@ export class BirthdayCommand extends Subcommand {
         const user_id = findOption(interaction, 'user', interaction.user.id);
         const author_id = interaction.user.id;
         const guild_id = interaction.guildId!;
-        const removeBirthday = async (user_id: string, guild_id: string) => {
-            const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
-                user_id: user_id,
-                guild_id: guild_id,
-            });
-            if (request.success) {
-                this.embed.title = `${SUCCESS} Success`;
-                this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
-            }
-        };
+        const removeRequest = await removeBirthday(user_id, guild_id);
+        if (removeRequest.success) {
+            this.embed.title = `${SUCCESS} Success`;
+            this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
+        } else {
+            this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
+        }
         if (author_id === user_id) {
             await removeBirthday(user_id, guild_id);
         } else {
@@ -160,7 +158,7 @@ export class BirthdayCommand extends Subcommand {
         this.updateList ? await updateBirthdayOverview(guild_id) : null;
     }
 
-    public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
         const guild_id = interaction.guildId!;
 
         const { embed, components } = await generateBirthdayList(1, guild_id);
@@ -169,11 +167,11 @@ export class BirthdayCommand extends Subcommand {
         await replyToInteraction(interaction, { embeds: [generatedEmbed], components: components });
     }
 
-    public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction) {
         await thinking(interaction);
         const user_id = findOption(interaction, 'user', interaction.user.id);
         const guild_id = interaction.guildId!;
-        const request = await getBirthdayByGuildAndUser(guild_id, user_id); // try catch request
+        const request = await getBirthdayByGuildAndUser(guild_id, user_id);
         // container.logger.info("request", request);
         this.embed.title = `${BOOK} Show Birthday`;
         if (isNullOrUndefinedOrEmpty(request)) {
@@ -190,7 +188,7 @@ export class BirthdayCommand extends Subcommand {
         await replyToInteraction(interaction, { embeds: [generatedEmbed] });
     }
 
-    public async birthdayUpdate(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+    public async birthdayUpdate(interaction: Subcommand.ChatInputCommandInteraction) {
         await thinking(interaction);
         const user_id = findOption(interaction, 'user', interaction.user.id);
         const author_id = interaction.user.id;

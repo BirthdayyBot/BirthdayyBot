@@ -3,7 +3,7 @@ import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
-import { getBirthdaysByGuild } from '../provide/birthday';
+import { getBirthdaysByGuild } from '../../lib/birthday/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
 import type { BirthdaWithUserModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
