@@ -18,7 +18,6 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { removeBirthday } from '../../lib/birthday/birthday';
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -61,7 +60,7 @@ export class BirthdayCommand extends Subcommand {
             guildIds: getCommandGuilds('global'),
         });
     }
-    // todo: check where updateList needs to be set to true
+
     updateList = false;
     adminLog = false;
     userLog = false;
@@ -152,19 +151,9 @@ export class BirthdayCommand extends Subcommand {
         this.updateList ? await updateBirthdayOverview(guild_id) : null;
     }
 
-    private async removeBirthdayRequest(user_id: string, guild_id: string) {
-        const removeRequest = await removeBirthday(user_id, guild_id);
-        if (removeRequest.success) {
-            this.embed.title = `${SUCCESS} Success`;
-            this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
-        } else {
-            this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
-        }
-    }
-
     public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
+        await thinking(interaction);
         const guild_id = interaction.guildId!;
-
         const { embed, components } = await generateBirthdayList(1, guild_id);
 
         const generatedEmbed = await generateEmbed(embed);
@@ -251,5 +240,16 @@ export class BirthdayCommand extends Subcommand {
         }
         const generatedEmbed = await generateEmbed(this.embed);
         await replyToInteraction(interaction, { embeds: [generatedEmbed] });
+    }
+
+    // Helper Functions
+    private async removeBirthdayRequest(user_id: string, guild_id: string) {
+        const removeRequest = await removeBirthday(user_id, guild_id);
+        if (removeRequest.success) {
+            this.embed.title = `${SUCCESS} Success`;
+            this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
+        } else {
+            this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
+        }
     }
 }

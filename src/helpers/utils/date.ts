@@ -68,3 +68,15 @@ export function getStringDate(date: Date) {
 
     return `${year}-${month}-${day}`;
 }
+
+export function extractDayAndMonth(inputDate: string) {
+    inputDate = inputDate.replace('XXXX', '2000');
+    const d = new Date(inputDate);
+    const day = d.getDate();
+    const dayString = day.toString().length === 1 ? '0'.concat(day.toString()) : day.toString();
+    let month = d.getMonth();
+    month = month + 1;
+    const monthString = month.toString().length === 1 ? '0'.concat(month.toString()) : month.toString();
+    const str = `-${monthString}-${dayString}`;
+    return str;
+}
