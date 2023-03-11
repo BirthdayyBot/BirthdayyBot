@@ -9,37 +9,37 @@ import { inviteButton } from '../../lib/components/button';
 import { ReminderCMD } from '../../lib/commands/reminder';
 
 @ApplyOptions<Command.Options>({
-	name: 'reminder',
-	description: 'premium tryout',
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages']
+    name: 'reminder',
+    description: 'premium tryout',
+    // runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+    preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
+    requiredUserPermissions: ['ViewChannel'],
+    requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options
-		});
-	}
+    public constructor(context: Command.Context, options: Command.Options) {
+        super(context, {
+            ...options,
+        });
+    }
 
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await ReminderCMD(), {
-			guildIds: getCommandGuilds('testing')
-		});
-	}
+    public override async registerApplicationCommands(registry: Command.Registry) {
+        registry.registerChatInputCommand(await ReminderCMD(), {
+            guildIds: getCommandGuilds('testing'),
+        });
+    }
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = await generateEmbed(InviteEmbed);
-		await replyToInteraction(interaction, {
-			embeds: [embed],
-			components: [
-				{
-					type: 1,
-					components: [inviteButton]
-				}
-			]
-		});
-	}
+    public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+        await thinking(interaction);
+        const embed = await generateEmbed(InviteEmbed);
+        await replyToInteraction(interaction, {
+            embeds: [embed],
+            components: [
+                {
+                    type: 1,
+                    components: [inviteButton],
+                },
+            ],
+        });
+    }
 }
