@@ -1,12 +1,13 @@
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
-import { getGuildInformation } from '../../lib/discord/guild';
+import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
-import { getBirthdaysByGuild } from '../../lib/birthday/birthday';
+import { getBirthdaysByGuild, removeBirthday } from '../../lib/birthday/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
 import type { BirthdaWithUserModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/framework';
+import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
     const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
@@ -52,12 +53,11 @@ function getBirthdaysAsLists(
 
 /**
  * Create the embed with the fields etc with the given values
- * @param {string} guild_id
- * @param {array} birthdays
- * @returns {object} embed
+ * @param guild_id - ID of the guild
+ * @param birthdays
+ * @returns embed - Embed with the given values
  */
 async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<BirthdaWithUserModel> }[]) {
-    console.log('allBirthdays', allBirthdays);
     const guild = await getGuildInformation(guild_id);
     const embed: CustomEmbedModel = {
         title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
@@ -70,14 +70,18 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
     if (isNullOrUndefinedOrEmpty(embed.fields)) embed.fields = [];
 
     let currentDescription = '';
-    // For each month
+
     for (const month of allBirthdays) {
-        console.log('current month ', month);
         const { monthname } = month;
         if (isNullOrUndefinedOrEmpty(month.birthdays)) continue;
         // For each birthday in current month
         for (const birthday of month.birthdays) {
             const { user_id, birthday: bday } = birthday;
+            const guild_member = await getGuildMember(guild_id, user_id);
+            if (isNullOrUndefinedOrEmpty(guild_member) && guild_id !== GuildIDEnum.CHILLI_ATTACK_V2) {
+                await removeBirthday(user_id, guild_id);
+                continue;
+            }
             const descriptionToAdd = `<@!${user_id}> ${getBeautifiedDate(bday)}\n`;
             if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
                 // If the current description is too long, add it to the embed
@@ -98,7 +102,6 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
             currentDescription = '';
         }
     }
-    console.log('embed.fields: ', embed.fields);
     return embed;
 }
 /**

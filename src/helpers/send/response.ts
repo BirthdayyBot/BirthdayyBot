@@ -24,7 +24,6 @@ export default async function replyToInteraction(
 	},
 ): Promise<void> {
     const { content, embeds, components, ephemeral } = args;
-    container.logger.debug(DEBUG ? `components: ${components}` : '');
 
     // Define the response object, which will be used to send the reply to the interaction
     const response: InteractionReplyOptions = {
@@ -33,8 +32,6 @@ export default async function replyToInteraction(
         components: components,
         ephemeral: ephemeral ?? false,
     };
-
-    container.logger.info(DEBUG ? 'ephemeral: ' + response.ephemeral : '');
 
     // If the interaction has already been replied to, or deferred, edit the reply instead
     if (interaction?.replied || interaction?.deferred) {
