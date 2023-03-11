@@ -1,6 +1,6 @@
 {
 	"name": "birthdayy-discord-bot",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"main": "dist/index.js",
 	"author": "@chillihero",
 	"dependencies": {
@@ -9,9 +9,9 @@
 		"@sapphire/cron": "^1.0.0",
 		"@sapphire/decorators": "^6.0.0",
 		"@sapphire/discord-utilities": "^3.0.0",
-		"@sapphire/discord.js-utilities": "^6.0.2",
+		"@sapphire/discord.js-utilities": "^6.0.3",
 		"@sapphire/fetch": "^2.4.1",
-		"@sapphire/framework": "^4.2.0",
+		"@sapphire/framework": "^4.2.1",
 		"@sapphire/plugin-api": "^5.0.1",
 		"@sapphire/plugin-editable-commands": "^3.0.0",
 		"@sapphire/plugin-hmr": "^2.0.0",
@@ -23,6 +23,7 @@
 		"@sapphire/time-utilities": "^1.7.8",
 		"@sapphire/type": "^2.3.0",
 		"@sapphire/utilities": "^3.11.0",
+		"@types/node-cron": "^3.0.7",
 		"colorette": "^2.0.19",
 		"discord-api-types": "^0.37.35",
 		"discord.js": "^14.7.1",
@@ -31,17 +32,18 @@
 		"node-cron": "^3.0.2",
 		"pm2": "^5.2.2",
 		"reflect-metadata": "^0.1.13",
-		"sequelize": "^6.29.0"
+		"sequelize": "^6.29.3"
 	},
 	"devDependencies": {
 		"@sapphire/eslint-config": "^4.3.8",
 		"@sapphire/prettier-config": "^1.4.5",
 		"@sapphire/ts-config": "^3.3.4",
-		"@types/node": "^18.14.6",
+		"@types/node": "^18.15.0",
 		"@types/ws": "^8.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.54.1",
 		"@typescript-eslint/parser": "^5.54.1",
-		"eslint": "^8.35.0",
+		"eslint": "^8.36.0",
+		"eslint-plugin-tsdoc": "^0.2.17",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^2.8.4",
 		"tsc-watch": "^6.0.0",
@@ -61,8 +63,6 @@
 		"build:start": "tsc && yarn start",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint src --ext .ts",
-		"production-linux": "pm2 start dist/index.js --name BirthdayyBot --watch --ignore-watch=\"node_modules\" --interpreter=\"node\" --max-memory-restart=500M --log-date-format=\"YYYY-MM-DD HH:mm Z\" --log /var/www/birthdayybot/logs/pm2.log --error /var/www/birthdayybot/logs/pm2.log --out /var/www/birthdayybot/logs/pm2.log --merge-logs --no-daemon",
-		"production-windows": "tsc && pm2 start dist/index.js --name BirthdayyBotProduction && pm2 monit"
 	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {

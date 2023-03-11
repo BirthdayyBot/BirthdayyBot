@@ -18,29 +18,29 @@ import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/envir
  */
 
 export default async function generateEmbed(embed_information: EmbedInformationModel): Promise<Object> {
-	const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
+    const { title, description, author_name, author_avatar, thumbnail_url, image_url, fields, color } = embed_information;
 
-	const currentDate = new Date();
-	const timestamp = currentDate.toISOString();
+    const currentDate = new Date();
+    const timestamp = currentDate.toISOString();
 
-	const embedColor: number = !color ? BOT_COLOR : parseInt(color as string);
+    const embedColor: number = !color ? BOT_COLOR : parseInt(color as string);
 
-	const author = !author_name && !author_avatar ? {} : { name: author_name, icon_url: author_avatar };
-	const footer = { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR };
-	const thumbnail = !thumbnail_url ? {} : { url: thumbnail_url };
-	const image = !image_url ? {} : { url: image_url };
-	const embedFields = !fields ? [] : fields;
+    const author = !author_name && !author_avatar ? {} : { name: author_name, icon_url: author_avatar };
+    const footer = { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR };
+    const thumbnail = !thumbnail_url ? {} : { url: thumbnail_url };
+    const image = !image_url ? {} : { url: image_url };
+    const embedFields = !fields ? [] : fields;
 
-	const embed = {
-		title: title,
-		color: embedColor,
-		description: description,
-		timestamp: timestamp,
-		author: author,
-		footer: footer,
-		fields: embedFields,
-		thumbnail: thumbnail,
-		image: image
-	};
-	return embed;
+    const embed = {
+        title: title,
+        color: embedColor,
+        description: description,
+        timestamp: timestamp,
+        author: author,
+        footer: footer,
+        fields: embedFields,
+        thumbnail: thumbnail,
+        image: image,
+    };
+    return embed;
 }

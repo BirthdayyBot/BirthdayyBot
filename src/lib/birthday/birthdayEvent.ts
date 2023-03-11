@@ -1,48 +1,50 @@
+import { container } from '@sapphire/framework';
 import generateBirthdayMessage from '../../helpers/generate/birthdayMessage';
 import generateEmbed from '../../helpers/generate/embed';
 import { getConfig, logAll } from '../../helpers/provide/config';
 import { IMG_CAKE, NEWS } from '../../helpers/provide/environment';
 import { sendMessage } from '../discord/message';
 import { addRoleToUser } from '../discord/role';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
-//TODO: Correct Types, cleanup code
+// TODO: Correct Types, cleanup code
 
 export default async function birthdayEvent(guild_id: string, birthday_child_id: string, isTest: boolean) {
-	console.log('BirthdayEvent starts');
-	console.log('BIRTHDAYCHILD: ', birthday_child_id);
+    container.logger.info('BirthdayEvent starts');
+    container.logger.info('BIRTHDAYCHILD: ', birthday_child_id);
 
-	let config = await getConfig(guild_id);
-	const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
-	await logAll(config);
+    const config = await getConfig(guild_id);
+    const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
+    await logAll(config);
 
-	if (BIRTHDAY_ROLE) {
-		await addCurrentBirthdayChildRole(birthday_child_id, BIRTHDAY_ROLE, guild_id, isTest);
-	}
+    if (BIRTHDAY_ROLE) {
+        await addCurrentBirthdayChildRole(birthday_child_id, BIRTHDAY_ROLE, guild_id, isTest);
+    }
 
-	if (ANNOUNCEMENT_CHANNEL) {
-		// let description;
-		// if (PREMIUM) {
-		// 	let m = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
-		// 	description = m.message;
-		// } else {
-		// 	//default message
-		// 	description = `${ARROW_RIGHT} Today is a Special Day!
-		//     ${GIFT} Please wish <@${birthday_child_id}> a Happy Birthday!`;
-		// }
-		let announcementMessage = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
-		let embed = {
-			title: `${NEWS} Birthday Announcement!`,
-			description: announcementMessage.message,
-			thumbnail_url: IMG_CAKE
-		};
-		let content = BIRTHDAY_PING_ROLE !== null ? `<@&${BIRTHDAY_PING_ROLE}>` : ``;
-		let birthdayEmbed = await generateEmbed(embed);
+    if (ANNOUNCEMENT_CHANNEL) {
+        // let description;
+        // if (PREMIUM) {
+        // 	let m = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
+        // 	description = m.message;
+        // } else {
+        // 	//default message
+        // 	description = `${ARROW_RIGHT} Today is a Special Day!
+        //     ${GIFT} Please wish <@${birthday_child_id}> a Happy Birthday!`;
+        // }
+        const announcementMessage = await generateBirthdayMessage(ANNOUNCEMENT_MESSAGE, birthday_child_id, guild_id);
+        const embed = {
+            title: `${NEWS} Birthday Announcement!`,
+            description: announcementMessage.message,
+            thumbnail_url: IMG_CAKE,
+        };
+        const content = BIRTHDAY_PING_ROLE !== null ? `<@&${BIRTHDAY_PING_ROLE}>` : '';
+        const birthdayEmbed = await generateEmbed(embed);
 
-		await sendBirthdayAnnouncement(content, ANNOUNCEMENT_CHANNEL, birthdayEmbed);
-	}
-	console.log('sends ends');
-	return true;
+        await sendBirthdayAnnouncement(content, ANNOUNCEMENT_CHANNEL, birthdayEmbed);
+    }
+    container.logger.info('sends ends');
+    return true;
 }
 
 /**
@@ -54,15 +56,15 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
  * @returns {Promise<void>}
  */
 async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_id: string, isTest: boolean) {
-	try {
-		await addRoleToUser(user_id, role_id, guild_id);
-		console.log(`BIRTHDAY ROLE ADDED TO BDAY CHILD`);
-		await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); //TODO: #9 Implement own timer
-	} catch (error) {
-		console.warn(`COULND'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD`);
-		console.log('USERID: ', user_id);
-		console.log('GUILDID: ', guild_id);
-	}
+    try {
+        await addRoleToUser(user_id, role_id, guild_id);
+        container.logger.info('BIRTHDAY ROLE ADDED TO BDAY CHILD');
+        await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); // TODO: #9 Implement own timer
+    } catch (error) {
+        container.logger.warn('COULND\'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD');
+        container.logger.info('USERID: ', user_id);
+        container.logger.info('GUILDID: ', guild_id);
+    }
 }
 
 /**
@@ -72,30 +74,30 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
  * @param guild_id - The id of the guild where the role removal should take place.
  * @param isTest - If true, the role will be removed after 1 minute. Otherwise, it will be removed after 1440 minutes (1 day).
  */
-async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: string, isTest: boolean = false) {
-	return;
-	try {
-		//https://docs.cronhooks.io/#introduction
-		let time = isTest ? 1 : 1440; //1 minute or 1440 minutes (1 day)
-		let req = await lib.meiraba.utils['@3.1.0'].timer.set({
-			token: `${process.env.MEIRABA_TOKEN}`,
-			time: time,
-			endpoint_url: `https://birthday-bot.chillihero.autocode.gg/automate/removeRole/`,
-			payload: {
-				user_id: user_id,
-				role_id: role_id,
-				guild_id: guild_id
-			}
-		});
-		console.log(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
-	} catch (error) {
-		console.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
-		console.log('USERID: ', user_id);
-		console.log('ROLEID: ', role_id);
-		console.log('GUILDID: ', guild_id);
-		console.warn(error);
-	}
-	return;
+async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: string, isTest = false) {
+    return;
+    try {
+        // https://docs.cronhooks.io/#introduction
+        const time = isTest ? 1 : 1440; // 1 minute or 1440 minutes (1 day)
+        const req = await lib.meiraba.utils['@3.1.0'].timer.set({
+            token: `${process.env.MEIRABA_TOKEN}`,
+            time: time,
+            endpoint_url: 'https://birthday-bot.chillihero.autocode.gg/automate/removeRole/',
+            payload: {
+                user_id: user_id,
+                role_id: role_id,
+                guild_id: guild_id,
+            },
+        });
+        container.logger.info(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
+    } catch (error) {
+        container.logger.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
+        container.logger.info('USERID: ', user_id);
+        container.logger.info('ROLEID: ', role_id);
+        container.logger.info('GUILDID: ', guild_id);
+        container.logger.warn(error);
+    }
+    return;
 }
 
 /**
@@ -106,19 +108,19 @@ async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: stri
  * @returns {Promise<Message>} Returns the sent message object, or undefined if an error occurs
  */
 async function sendBirthdayAnnouncement(content: string, channel_id: string, birthdayEmbed: object) {
-	try {
-		let message = await sendMessage(channel_id, {
-			content: content,
-			embeds: [birthdayEmbed]
-		});
-		console.log(`Sent Birthday Announcement`);
-		return message;
-	} catch (error: any) {
-		console.warn(`COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n`, error);
-		//Send error message to log channel
-		if (error.message.includes('Missing Access')) {
-			//send Log to user
-		}
-		return;
-	}
+    try {
+        const message = await sendMessage(channel_id, {
+            content: content,
+            embeds: [birthdayEmbed],
+        });
+        container.logger.info('Sent Birthday Announcement');
+        return message;
+    } catch (error: any) {
+        container.logger.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
+        // Send error message to log channel
+        if (error.message.includes('Missing Access')) {
+            // send Log to user
+        }
+        return;
+    }
 }
