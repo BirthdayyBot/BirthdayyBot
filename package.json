@@ -1,6 +1,6 @@
 {
 	"name": "birthdayy-discord-bot",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"main": "dist/index.js",
 	"author": "@chillihero",
 	"dependencies": {
@@ -63,8 +63,6 @@
 		"build:start": "tsc && yarn start",
 		"format": "prettier --write \"src/**/*.ts\"",
 		"lint": "eslint src --ext .ts",
-		"production-linux": "pm2 start dist/index.js --name BirthdayyBot --watch --ignore-watch=\"node_modules\" --interpreter=\"node\" --max-memory-restart=500M --log-date-format=\"YYYY-MM-DD HH:mm Z\" --log /var/www/birthdayybot/logs/pm2.log --error /var/www/birthdayybot/logs/pm2.log --out /var/www/birthdayybot/logs/pm2.log --merge-logs --no-daemon",
-		"production-windows": "tsc && pm2 start dist/index.js --name BirthdayyBotProduction && pm2 monit"
 	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {
