@@ -6,8 +6,9 @@ import generateEmbed from '../../helpers/generate/embed';
 // import checkCurrentBirthdays from '../../lib/birthday/checkCurrentBirthdays';
 import { isGuildPremium } from '../../helpers/provide/guild';
 import { getCurrentOffset } from '../../helpers/provide/currentOffset';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
+import { getBirthdaysByDateAndTimezone } from '../../lib/birthday/birthday';
+import thinking from '../../lib/discord/thinking';
+import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 @ApplyOptions<Command.Options>({
     name: 'test',
     description: 'test things',
@@ -28,6 +29,8 @@ export class TestCommand extends Command {
 
     // slash command
     public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+        await thinking(interaction);
+        const fields = [{ name: 'test', value: 'Test Test' }];
         // await checkCurrentBirthdays();
         // await enableGuildRequest(interaction.guildId!);
         // await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
@@ -35,15 +38,13 @@ export class TestCommand extends Command {
         const today = o.date;
         container.logger.info('today', today);
         const offset = o.offsetString;
-        container.logger.info(
-            await lib.chillihero['birthday-api'][`@${process.env.AUTOCODE_ENV}`].birthday.retrieve.entriesByDateAndTimezone({
-                birthday: today,
-                timezone: offset,
-            }),
-        );
-
+        const request = await getBirthdaysByDateAndTimezone(today, offset);
+        container.logger.info('request', request);
+        fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
         container.logger.info('isGuildPremiuum: ', await isGuildPremium(interaction.guildId!));
-        const embed = await generateEmbed({ title: 'test' });
+
+        const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
+        const embed = await generateEmbed(embedObj);
         await replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
         return;
     }

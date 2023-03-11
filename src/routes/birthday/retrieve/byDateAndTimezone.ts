@@ -61,9 +61,8 @@ export class UserRoute extends Route {
         );
 
         if (results.length === 0) {
-            response.statusCode = 404;
             response.statusMessage = 'No Birthdays found on that Date and Timezone';
-            return response.json({ error: 'No Birthdays found on that Date and Timezone' });
+            return response.status(200).json({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
         }
 
         const birthdays = results as Array<any>;

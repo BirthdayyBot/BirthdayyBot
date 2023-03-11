@@ -40,7 +40,7 @@ export async function getBirthdayByGuildAndUser(guild_id: string, user_id: strin
 	    const request = await fetch<BirthdayListResponse>(getBirthdayUrl, FetchResultTypes.JSON);
 	    return request;
 	} catch (error: any) {
-	    container.logger.error('[getBirthdayByGuildAndUser] ', error);
+	    container.logger.error('[getBirthdayByGuildAndUser] ', error.message);
 	    return [];
 	}
 }
@@ -57,7 +57,7 @@ export async function getBirthdaysByDateAndTimezone(
             return response;
         })
         .catch((error) => {
-            container.logger.error('[getBirthdaysByDateAndTimezone] ', error);
+            container.logger.error('[getBirthdaysByDateAndTimezone] ', error.message);
             return { amount: 0, birthdays: [] };
         });
 }
