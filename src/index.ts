@@ -31,5 +31,4 @@ const main = async () => {
 };
 
 main();
-import './lib/setup/planetscale';
 
