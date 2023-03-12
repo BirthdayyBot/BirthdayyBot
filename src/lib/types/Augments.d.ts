@@ -1,3 +1,5 @@
+import type { Sequelize } from 'sequelize';
+
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
@@ -31,4 +33,8 @@ declare global {
 	}
 }
 
-export {};
+declare module '@sapphire/pieces' {
+    interface Container {
+        db: Sequelize;
+    }
+}

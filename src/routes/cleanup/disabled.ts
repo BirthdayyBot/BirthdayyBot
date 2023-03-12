@@ -22,7 +22,7 @@ export class UserRoute extends Route {
         oneDayAgo.setDate(oneDayAgo.getDate() - 1);
         DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
 
-        const disabled_guilds = await container.sequelize.query(
+        const disabled_guilds = await container.db.query(
             `SELECT guild_id FROM guild
 			WHERE last_updated < '${oneDayAgo.toISOString()}' AND disabled = true`,
             { type: 'SELECT' },
@@ -42,10 +42,10 @@ export class UserRoute extends Route {
     public async deleteDisabledEntries(guild_ids: any[]): Promise<string[]> {
         const cleanIds = guild_ids.map((obj) => obj.guild_id);
         try {
-            await container.sequelize.query(`DELETE FROM guild WHERE guild_id IN (${cleanIds.join(', ')})`, {
+            await container.db.query(`DELETE FROM guild WHERE guild_id IN (${cleanIds.join(', ')})`, {
                 type: QueryTypes.DELETE,
             });
-            await container.sequelize.query(`DELETE FROM birthday WHERE guild_id IN (${cleanIds.join(', ')})`, {
+            await container.db.query(`DELETE FROM birthday WHERE guild_id IN (${cleanIds.join(', ')})`, {
                 type: QueryTypes.DELETE,
             });
         } catch (error) {

@@ -20,7 +20,7 @@ export class UserRoute extends Route {
             return response.json({ error: 'Missing Parameter - guild_id' });
         }
 
-        const [results] = await container.sequelize.query(
+        const [results] = await container.db.query(
             `
         SELECT guild_id,
             announcement_channel,

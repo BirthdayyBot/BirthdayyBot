@@ -42,14 +42,14 @@ export class UserRoute extends Route {
             return response.status(404).json({ is_available: false, data: { guild_id }, error: { message: error.message } });
         }
         async function disableGuild(guild: string) {
-            const guildDisabeld = await container.sequelize.query('UPDATE guild SET disabled = true WHERE guild_id = ?', {
+            const guildDisabeld = await container.db.query('UPDATE guild SET disabled = true WHERE guild_id = ?', {
                 replacements: [guild],
                 type: QueryTypes.UPDATE,
             });
             return guildDisabeld[1];
         }
         async function disableBirthday(guild: string) {
-            const birthdayDisabeld = await container.sequelize.query('UPDATE birthday SET disabled = true WHERE guild_id = ?', {
+            const birthdayDisabeld = await container.db.query('UPDATE birthday SET disabled = true WHERE guild_id = ?', {
                 replacements: [guild],
                 type: QueryTypes.UPDATE,
             });

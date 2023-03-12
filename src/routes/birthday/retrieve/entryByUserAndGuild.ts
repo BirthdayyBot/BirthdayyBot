@@ -27,13 +27,13 @@ export class UserRoute extends Route {
             return response.json({ error: 'Missing Parameter - user_id' });
         }
 
-        const [results] = await container.sequelize.query(
+        const [results] = await container.db.query(
             `SELECT id, u.user_id AS user_id, birthday, username, discriminator, guild_id AS guild_id
-            FROM birthday b
-                     INNER JOIN user u ON b.user_id = u.user_id
-            WHERE b.guild_id = ?
-              AND b.user_id = ?
-              AND b.disabled = false`,
+             FROM birthday b
+                      INNER JOIN user u ON b.user_id = u.user_id
+             WHERE b.guild_id = ?
+               AND b.user_id = ?
+               AND b.disabled = false`,
             {
                 replacements: [guild_id, user_id],
             },

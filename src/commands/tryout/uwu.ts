@@ -8,6 +8,7 @@ import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { UwUCMD } from '../../lib/commands/uwu';
+
 @ApplyOptions<Subcommand.Options>({
     description: 'send uwus',
     subcommands: [
@@ -35,6 +36,7 @@ export class UwuCommand extends Subcommand {
             ...options,
         });
     }
+
     readonly uwuString = 'UwU';
 
     public override async registerApplicationCommands(registry: Subcommand.Registry) {
@@ -42,6 +44,7 @@ export class UwuCommand extends Subcommand {
             guildIds: getCommandGuilds('testing'),
         });
     }
+
     public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
         const title = await resolveKey(interaction, 'commands/uwu:uwuss');
         const embed = await generateEmbed({ title: title, description: 'Uwu' });
@@ -67,16 +70,16 @@ export class UwuCommand extends Subcommand {
     }
 
     public async runFetch(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		interface JsonPlaceholderResponse {
-			userId: number;
-			id: number;
-			title: string;
-			completed: boolean;
-		}
+        interface JsonPlaceholderResponse {
+            userId: number;
+            id: number;
+            title: string;
+            completed: boolean;
+        }
 
-		// Fetch the data. No need to call `.json()` after making the request!
-		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
-		const embed = await generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
-		return await interaction.reply({ embeds: [embed] });
+        // Fetch the data. No need to call `.json()` after making the request!
+        const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
+        const embed = await generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
+        return await interaction.reply({ embeds: [embed] });
     }
 }

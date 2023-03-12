@@ -33,7 +33,7 @@ export class UserRoute extends Route {
         const inviter_id = inviter.toString().toLowerCase() === 'null' ? null : inviter;
 
         try {
-            const [_createGuild] = await container.sequelize.query('INSERT INTO guild (guild_id, inviter) VALUES (?,?)', {
+            const [_createGuild] = await container.db.query('INSERT INTO guild (guild_id, inviter) VALUES (?,?)', {
                 replacements: [guild_id, inviter_id],
             });
         } catch (error: any) {

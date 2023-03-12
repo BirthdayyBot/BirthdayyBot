@@ -23,7 +23,7 @@ export class UserRoute extends Route {
             return response.json({ error: 'Missing Parameter - guild_id' });
         }
 
-        const result: any = await container.sequelize.query('SELECT guild_id, premium FROM guild WHERE guild_id = ?', {
+        const result: any = await container.db.query('SELECT guild_id, premium FROM guild WHERE guild_id = ?', {
             replacements: [guild_id],
             type: 'SELECT',
         });
@@ -33,11 +33,11 @@ export class UserRoute extends Route {
             return response.status(404).json({ error: 'Guild not found' });
         }
 
-        const [_disableGuild] = await container.sequelize.query('UPDATE guild SET disabled = 1 WHERE guild_id = ?', {
+        const [_disableGuild] = await container.db.query('UPDATE guild SET disabled = 1 WHERE guild_id = ?', {
             replacements: [guild_id],
         });
 
-        const [_disableBirthdays] = await container.sequelize.query('UPDATE birthday SET disabled = 1 WHERE guild_id = ?', {
+        const [_disableBirthdays] = await container.db.query('UPDATE birthday SET disabled = 1 WHERE guild_id = ?', {
             replacements: [guild_id],
         });
 

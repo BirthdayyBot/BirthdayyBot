@@ -19,7 +19,7 @@ export class UserRoute extends Route {
             return response.json({ error: 'Missing Parameter - guild_id' });
         }
 
-        const [results] = await container.sequelize.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
+        const [results] = await container.db.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
             replacements: [guild_id],
         });
 

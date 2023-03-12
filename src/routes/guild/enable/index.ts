@@ -25,10 +25,10 @@ export class UserRoute extends Route {
             return response.json({ error: 'Missing Parameter - guild_id' });
         }
 
-        const [_updateGuild, updateGuildMeta] = await container.sequelize.query('UPDATE guild SET disabled = 0 WHERE guild_id = ?', {
+        const [_updateGuild, updateGuildMeta] = await container.db.query('UPDATE guild SET disabled = 0 WHERE guild_id = ?', {
             replacements: [guild_id],
         });
-        const [_updateBirthday, updateBirthdayMeta] = await container.sequelize.query('UPDATE birthday SET disabled = 0 WHERE guild_id = ?', {
+        const [_updateBirthday, updateBirthdayMeta] = await container.db.query('UPDATE birthday SET disabled = 0 WHERE guild_id = ?', {
             replacements: [guild_id],
         });
 

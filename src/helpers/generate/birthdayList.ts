@@ -104,6 +104,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
     }
     return embed;
 }
+
 /**
  *  Generate Components for the Birthday List according to the amount of pages
  * @param page_id - Current page id

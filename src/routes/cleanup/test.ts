@@ -14,7 +14,7 @@ export class UserRoute extends Route {
     public async [methods.POST](request: ApiRequest, response: ApiResponse) {
         if (!(await ApiVerification(request))) return response.status(401).json({ error: 'Unauthorized' });
 
-        const [db_guilds] = await container.sequelize.query(
+        const [db_guilds] = await container.db.query(
             `SELECT guild_id FROM guild
 			WHERE  disabled = false`,
             // `SELECT guild_id FROM guild`
@@ -40,8 +40,11 @@ export class UserRoute extends Route {
             const guildExists = await container.client.guilds.fetch(guild_id);
             container.logger.info('guild exists', guildExists.id);
         } catch (error: any) {
-            if (error.message === 'Unknown Guild') return false;
-            else container.logger.info('error', error.message);
+            if (error.message === 'Unknown Guild') {
+                return false;
+            } else {
+                container.logger.info('error', error.message);
+            }
         }
         return true;
     }
@@ -49,14 +52,14 @@ export class UserRoute extends Route {
     public async cleanGuild(guild_id: string): Promise<{ guild_id: string; guild_disabled: number; birthdays_disabled: number }> {
         container.logger.info('guild does not exist', guild_id);
         // disable guild
-        const [_disableguild, disableGuildMeta]: [any, any] = await container.sequelize.query(
+        const [_disableguild, disableGuildMeta]: [any, any] = await container.db.query(
             `UPDATE guild SET disabled = true WHERE guild_id = '${guild_id}'`,
             {
                 type: 'UPDATE',
             },
         );
         // disable birthdays with guild_id
-        const [_disablebirthdays, disablebirthdaysMeta]: [any, any] = await container.sequelize.query(
+        const [_disablebirthdays, disablebirthdaysMeta]: [any, any] = await container.db.query(
             `UPDATE birthday SET disabled = true WHERE guild_id = '${guild_id}'`,
             {
                 type: 'UPDATE',

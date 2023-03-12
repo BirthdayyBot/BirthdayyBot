@@ -2,6 +2,7 @@ import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
+
 /**
  * @file Environment Variables
  */
