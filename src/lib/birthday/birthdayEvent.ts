@@ -1,3 +1,4 @@
+import { Time } from '@sapphire/cron';
 import { container } from '@sapphire/framework';
 import generateBirthdayMessage from '../../helpers/generate/birthdayMessage';
 import generateEmbed from '../../helpers/generate/embed';
@@ -59,7 +60,9 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
     try {
         await addRoleToUser(user_id, role_id, guild_id);
         container.logger.info('BIRTHDAY ROLE ADDED TO BDAY CHILD');
-        await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); // TODO: #9 Implement own timer
+        const options = { user_id, role_id, guild_id, isTest };
+
+        return container.tasks.create('RoleRemove', options, { repeated: false, delay: isTest ? Time.Minute : Time.Day });
     } catch (error) {
         container.logger.warn('COULND\'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD');
         container.logger.info('USERID: ', user_id);
@@ -67,38 +70,6 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
     }
 }
 
-/**
- * Schedules the removal of a role for a user in a given guild.
- * @param user_id - The id of the user to remove the role from.
- * @param role_id - The id of the role to be removed.
- * @param guild_id - The id of the guild where the role removal should take place.
- * @param isTest - If true, the role will be removed after 1 minute. Otherwise, it will be removed after 1440 minutes (1 day).
- */
-async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: string, isTest = false) {
-    return;
-    try {
-        // https://docs.cronhooks.io/#introduction
-        const time = isTest ? 1 : 1440; // 1 minute or 1440 minutes (1 day)
-        const req = await lib.meiraba.utils['@3.1.0'].timer.set({
-            token: `${process.env.MEIRABA_TOKEN}`,
-            time: time,
-            endpoint_url: 'https://birthday-bot.chillihero.autocode.gg/automate/removeRole/',
-            payload: {
-                user_id: user_id,
-                role_id: role_id,
-                guild_id: guild_id,
-            },
-        });
-        container.logger.info(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
-    } catch (error) {
-        container.logger.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
-        container.logger.info('USERID: ', user_id);
-        container.logger.info('ROLEID: ', role_id);
-        container.logger.info('GUILDID: ', guild_id);
-        container.logger.warn(error);
-    }
-    return;
-}
 
 /**
  * Sends birthday announcement to the specified channel with the given content and embed

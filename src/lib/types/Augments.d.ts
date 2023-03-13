@@ -59,5 +59,6 @@ declare module '@sapphire/pieces' {
 declare module '@sapphire/plugin-scheduled-tasks' {
 	interface ScheduledTasks {
 		BirthdayChecker: never;
+		RoleRemove: never;
 	}
 }
