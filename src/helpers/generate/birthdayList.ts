@@ -4,7 +4,7 @@ import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
 import { getBirthdaysByGuild, removeBirthday } from '../../lib/birthday/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
-import type { BirthdaWithUserModel } from '../../lib/model';
+import type { BirthdayWithUserModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/framework';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
@@ -40,9 +40,9 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
 function getBirthdaysAsLists(
-    allBirthdays: Array<BirthdaWithUserModel>,
+    allBirthdays: Array<BirthdayWithUserModel>,
     maxBirthdaysPerList: number,
-): { birthdays: Array<Array<BirthdaWithUserModel>>; listAmount: number } {
+): { birthdays: Array<Array<BirthdayWithUserModel>>; listAmount: number } {
     const length = allBirthdays.length;
     // split birthdays into arrays with max length x entries
     const splitBirthdays = [];
@@ -57,7 +57,7 @@ function getBirthdaysAsLists(
  * @param birthdays
  * @returns embed - Embed with the given values
  */
-async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<BirthdaWithUserModel> }[]) {
+async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<BirthdayWithUserModel> }[]) {
     const guild = await getGuildInformation(guild_id);
     const embed: CustomEmbedModel = {
         title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
@@ -164,7 +164,7 @@ function prepareBirthdayList() {
     const monthArray = [];
     for (let i = 1; i <= 12; i++) {
         const monthname = numberToMonthname(i);
-        const emptyArray: BirthdaWithUserModel[] = [];
+        const emptyArray: BirthdayWithUserModel[] = [];
         monthArray.push({ monthname, birthdays: emptyArray });
     }
     return monthArray;
@@ -173,7 +173,7 @@ function prepareBirthdayList() {
 /**
  * sort all birthdays to the corresponding month object
  */
-function prepareBirthdays(birthdays: Array<BirthdaWithUserModel>): Array<{ monthname: string; birthdays: Array<BirthdaWithUserModel> }> {
+function prepareBirthdays(birthdays: Array<BirthdayWithUserModel>): Array<{ monthname: string; birthdays: Array<BirthdayWithUserModel> }> {
     const list = prepareBirthdayList();
     birthdays.forEach(function(singleBirthday) {
         const d = new Date(singleBirthday.birthday);

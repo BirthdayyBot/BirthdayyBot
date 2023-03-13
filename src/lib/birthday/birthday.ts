@@ -1,6 +1,6 @@
 import { API_SECRET, API_URL, AUTOCODE_ENV, DEBUG } from '../../helpers/provide/environment';
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
-import type { BirthdaWithUserModel } from '../../lib/model';
+import type { BirthdayWithUserModel } from '../../lib/model';
 import type { AutocodeAPIResponseModel } from '../model';
 import { container } from '@sapphire/framework';
 
@@ -39,8 +39,8 @@ export async function removeBirthday(user_id: string, guild_id: string): Promise
     return request;
 }
 
-export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
-	type BirthdaysByGuildResponse = { amount: number; birthdays: Array<BirthdaWithUserModel> };
+export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdayWithUserModel> | []> {
+	type BirthdaysByGuildResponse = { amount: number; birthdays: Array<BirthdayWithUserModel> };
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
@@ -54,8 +54,8 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 	}
 }
 
-export async function getBirthdayByGuildAndUser(guild_id: string, user_id: string): Promise<Array<BirthdaWithUserModel> | []> {
-	type BirthdaysByGuildResponse = Array<BirthdaWithUserModel>;
+export async function getBirthdayByGuildAndUser(guild_id: string, user_id: string): Promise<Array<BirthdayWithUserModel> | []> {
+	type BirthdaysByGuildResponse = Array<BirthdayWithUserModel>;
 	const getBirthdayUrl = new URL(`${API_URL}birthday/retrieve/entryByUserAndGuild`);
 	getBirthdayUrl.searchParams.append('guild_id', guild_id);
 	getBirthdayUrl.searchParams.append('user_id', user_id);
@@ -71,11 +71,11 @@ export async function getBirthdayByGuildAndUser(guild_id: string, user_id: strin
 export async function getBirthdaysByDateAndTimezone(
     date: string,
     timezone: string,
-): Promise<{ amount: number; birthdays: Array<BirthdaWithUserModel> | [] }> {
+): Promise<{ amount: number; birthdays: Array<BirthdayWithUserModel> | [] }> {
     const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/byDateAndTimezone`);
     getBirthdaysUrl.searchParams.append('date', date);
     getBirthdaysUrl.searchParams.append('timezone', timezone);
-    return fetch<{ amount: number; birthdays: Array<BirthdaWithUserModel> }>(getBirthdaysUrl, FetchResultTypes.JSON)
+    return fetch<{ amount: number; birthdays: Array<BirthdayWithUserModel> }>(getBirthdaysUrl, FetchResultTypes.JSON)
         .then((response) => {
             return response;
         })
