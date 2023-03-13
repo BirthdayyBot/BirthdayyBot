@@ -80,3 +80,10 @@ export function extractDayAndMonth(inputDate: string) {
     const str = `-${monthString}-${dayString}`;
     return str;
 }
+
+export function isDateString(date: string): boolean {
+    // ESLint compains so - /^(\d{4}|X{4})\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(date)
+    const isDate = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(date);
+    if (DEBUG) container.logger.debug(`isDate [${date}]`, isDate);
+    return isDate;
+}

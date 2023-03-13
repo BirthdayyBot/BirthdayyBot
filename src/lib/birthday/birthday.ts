@@ -1,11 +1,34 @@
-import { API_URL, AUTOCODE_ENV, DEBUG } from '../../helpers/provide/environment';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import { API_SECRET, API_URL, AUTOCODE_ENV, DEBUG } from '../../helpers/provide/environment';
+import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import type { BirthdaWithUserModel } from '../../lib/model';
 import type { AutocodeAPIResponseModel } from '../model';
 import { container } from '@sapphire/framework';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
+
+export async function registerBirthday(date: string, guild_id: string, user: { user_id: string; username?: string; discriminator?: string }) {
+	type BirthdayRegisterResponse = {
+		success: boolean;
+		error?: {
+			code: string;
+			message: string;
+		};
+	};
+	const registerBirthdayUrl = new URL(`${API_URL}birthday/create`);
+	registerBirthdayUrl.searchParams.append('guild_id', guild_id);
+	registerBirthdayUrl.searchParams.append('user_id', user.user_id);
+	registerBirthdayUrl.searchParams.append('date', date);
+	if (user.username) registerBirthdayUrl.searchParams.append('username', user.username);
+	if (user.discriminator) registerBirthdayUrl.searchParams.append('discriminator', user.discriminator);
+	const request = await fetch<BirthdayRegisterResponse>(
+	    registerBirthdayUrl,
+	    { method: FetchMethods.Post, headers: { Authorization: API_SECRET } },
+	    FetchResultTypes.JSON,
+	);
+	if (DEBUG && request.success) container.logger.debug(`Registered birthday for user ${user.user_id} in guild ${guild_id}`);
+	return request;
+}
 
 export async function removeBirthday(user_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
     const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
@@ -17,11 +40,11 @@ export async function removeBirthday(user_id: string, guild_id: string): Promise
 }
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdaWithUserModel> | []> {
-	type BirthdayListResponse = { amount: number; birthdays: Array<BirthdaWithUserModel> };
+	type BirthdaysByGuildResponse = { amount: number; birthdays: Array<BirthdaWithUserModel> };
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
-	    const request = await fetch<BirthdayListResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
+	    const request = await fetch<BirthdaysByGuildResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
 	    return request.birthdays;
 	} catch (error: any) {
 	    if (error.code === 404) {
@@ -32,12 +55,12 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 }
 
 export async function getBirthdayByGuildAndUser(guild_id: string, user_id: string): Promise<Array<BirthdaWithUserModel> | []> {
-	type BirthdayListResponse = Array<BirthdaWithUserModel>;
+	type BirthdaysByGuildResponse = Array<BirthdaWithUserModel>;
 	const getBirthdayUrl = new URL(`${API_URL}birthday/retrieve/entryByUserAndGuild`);
 	getBirthdayUrl.searchParams.append('guild_id', guild_id);
 	getBirthdayUrl.searchParams.append('user_id', user_id);
 	try {
-	    const request = await fetch<BirthdayListResponse>(getBirthdayUrl, FetchResultTypes.JSON);
+	    const request = await fetch<BirthdaysByGuildResponse>(getBirthdayUrl, FetchResultTypes.JSON);
 	    return request;
 	} catch (error: any) {
 	    container.logger.error('[getBirthdayByGuildAndUser] ', error.message);

@@ -2,14 +2,14 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, DEBUG, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
 import { container } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../lib/discord/thinking';
-import { getBirthdayByGuildAndUser } from '../../lib/birthday/birthday';
+import { getBirthdayByGuildAndUser, registerBirthday } from '../../lib/birthday/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import birthdayEvent from '../../lib/birthday/birthdayEvent';
 import updateBirthdayOverview from '../../helpers/update/overview';
@@ -18,33 +18,34 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { removeBirthday } from '../../lib/birthday/birthday';
+import { APIErrorCode } from '../../lib/enum/APIErrorCode.enum';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
     description: 'Birthday Command',
     subcommands: [
         {
-            name: 'register', // DONE
+            name: 'register',
             chatInputRun: 'birthdayRegister',
         },
         {
-            name: 'remove', // TODO
+            name: 'remove',
             chatInputRun: 'birthdayRemove',
         },
         {
-            name: 'list', // DONE
+            name: 'list',
             chatInputRun: 'birthdayList',
         },
         {
-            name: 'update', // Done
+            name: 'update',
             chatInputRun: 'birthdayUpdate',
         },
         {
-            name: 'show', // DONE
+            name: 'show',
             chatInputRun: 'birthdayShow',
         },
         {
-            name: 'test', // TODO
+            name: 'test',
             chatInputRun: 'birthdayTest',
         },
     ],
@@ -92,34 +93,29 @@ export class BirthdayCommand extends Subcommand {
 
         const generatedEmbed = await generateEmbed(this.embed);
         await replyToInteraction(interaction, { embeds: [generatedEmbed], ephemeral: false });
-        this.updateList ? await updateBirthdayOverview(guild_id) : null;
+        if (this.updateList) await updateBirthdayOverview(guild_id);
 
         async function birthdayRegisterProcess(embed: EmbedInformationModel): Promise<EmbedInformationModel> {
             const birthday = getDateFromInteraction(interaction);
-            // TODO: #10
-            container.logger.info(DEBUG ? 'USERID: ' + user_id : '');
-            container.logger.info(DEBUG ? 'GUILDID: ' + guild_id : '');
-            container.logger.info(DEBUG ? 'BIRTHDAY: ' + birthday.date : '');
+            container.logger.debug(`Registering birthday for user ${user_id} in guild ${guild_id} with date ${birthday.date}`);
+
             if (!birthday.isValidDate) {
                 embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
             }
             if (birthday.isValidDate) {
-                const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.create({
-                    user_id: user_id,
-                    birthday: birthday.date,
-                    guild_id: guild_id,
-                });
+                // TODO: Add username(nick) and discriminator to the request
+                const request = await registerBirthday(birthday.date, guild_id, { user_id: user_id });
                 if (request.success) {
-                    const beautifiedDate = getBeautifiedDate(birthday.date);
-                    container.logger.info('FINAL DATE', beautifiedDate);
                     embed.title = `${SUCCESS} Success`;
-                    embed.description = `${ARROW_RIGHT} I added the Birthday from <@${user_id}> at the \`${beautifiedDate}\`. 🎂`;
-                } else if (request.code === 409) {
-                    embed.description = `${ARROW_RIGHT} \`This user's birthday is already registerd.\n Use /birthday update!\``;
-                } else {
-                    embed.description = `${ARROW_RIGHT} \`${request.message}\``;
-                    container.logger.warn(request.code);
-                    container.logger.warn(request.message);
+                    embed.description = `${ARROW_RIGHT} I added the Birthday from <@${user_id}> at the \`${getBeautifiedDate(birthday.date)}\`. 🎂`;
+                } else if (request.error) {
+                    if (request.error.code === APIErrorCode.DUPLICATE_ENTRY) {
+                        embed.description = `${ARROW_RIGHT} \`This user's birthday is already registered.\n Use /birthday update!\``;
+                    } else {
+                        embed.description = `${ARROW_RIGHT} \`${request.error.message}\``;
+                        container.logger.error(request.error.code);
+                        container.logger.error(request.error.message);
+                    }
                 }
             } else {
                 embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
@@ -148,7 +144,7 @@ export class BirthdayCommand extends Subcommand {
 
         const generatedEmbed = await generateEmbed(this.embed);
         await replyToInteraction(interaction, { embeds: [generatedEmbed] });
-        this.updateList ? await updateBirthdayOverview(guild_id) : null;
+        if (this.updateList) await updateBirthdayOverview(guild_id);
     }
 
     public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
@@ -199,7 +195,7 @@ export class BirthdayCommand extends Subcommand {
 
         const generatedEmbed = await generateEmbed(this.embed);
         await replyToInteraction(interaction, { embeds: [generatedEmbed] });
-        this.updateList ? await updateBirthdayOverview(guild_id) : null;
+        if (this.updateList) await updateBirthdayOverview(guild_id);
 
         async function birthdayUpdateProcess(embed: EmbedInformationModel): Promise<EmbedInformationModel> {
             const birthday = getDateFromInteraction(interaction);
