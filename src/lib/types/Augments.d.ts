@@ -54,3 +54,10 @@ declare module '@sapphire/pieces' {
 		db: Sequelize;
 	}
 }
+
+
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface ScheduledTasks {
+		BirthdayChecker: never;
+	}
+}
