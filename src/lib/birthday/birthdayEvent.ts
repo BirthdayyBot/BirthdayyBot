@@ -6,8 +6,6 @@ import { getConfig, logAll } from '../../helpers/provide/config';
 import { IMG_CAKE, NEWS } from '../../helpers/provide/environment';
 import { sendMessage } from '../discord/message';
 import { addRoleToUser } from '../discord/role';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 // TODO: Correct Types, cleanup code
 
