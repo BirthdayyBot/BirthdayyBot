@@ -34,6 +34,12 @@ declare global {
 			DB_HOST: string;
 			DB_PASSWORD: string;
 
+			// REDIS
+			REDIS_PORT: number;
+			REDIS_HOST: string;
+			REDIS_PASSWORD: string;
+			REDIS_DB: number;
+
 			// Other
 			STDLIB_SECRET_TOKEN: string;
 			AUTOCODE_ENV: 'dev' | 'release';

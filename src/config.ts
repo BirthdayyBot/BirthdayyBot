@@ -8,6 +8,9 @@ import { APP_ENV, DEBUG } from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { Options } from 'sequelize';
+import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
+import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
+import type { QueueOptions } from 'bullmq';
 
 function parseApi(): ServerOptions {
     return {
@@ -49,6 +52,25 @@ function parseBotListOptions(): BotList.Options {
     };
 }
 
+function parseScheduledTasksOptions(): ScheduledTasksOptions {
+    return {
+        strategy: new ScheduledTaskRedisStrategy({
+            bull: parseBullOptions(),
+        }),
+    };
+}
+
+function parseBullOptions(): QueueOptions {
+    return {
+        connection: {
+            port: process.env.REDIS_PORT,
+            password: process.env.REDIS_PASSWORD,
+            host: process.env.REDIS_HOST,
+            db: process.env.REDIS_DB,
+        },
+    };
+}
+
 export const DB_OPTIONS: Options = {
     database: process.env.DB_NAME,
     username: process.env.DB_USERNAME,
@@ -77,4 +99,5 @@ export const CLIENT_OPTIONS: ClientOptions = {
     logger: {
         level: process.env.APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug,
     },
+    tasks: parseScheduledTasksOptions(),
 };
