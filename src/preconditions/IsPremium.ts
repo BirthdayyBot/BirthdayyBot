@@ -22,9 +22,3 @@ export class UserPrecondition extends AllFlowsPrecondition {
         return is_premium ? this.ok() : this.error({ message: this.#message });
     }
 }
-
-declare module '@sapphire/framework' {
-	interface Preconditions {
-		IsPremium: never;
-	}
-}
