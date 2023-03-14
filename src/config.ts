@@ -49,7 +49,7 @@ function parseBotListOptions(): BotList.Options {
     };
 }
 
-export const BD_OPTIONS: Options = {
+export const DB_OPTIONS: Options = {
     database: process.env.DB_NAME,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,

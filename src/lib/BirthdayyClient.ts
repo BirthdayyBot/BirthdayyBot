@@ -1,12 +1,12 @@
 import { container, SapphireClient } from '@sapphire/framework';
 import { Sequelize } from 'sequelize';
-import { BD_OPTIONS, CLIENT_OPTIONS } from '../config';
+import { DB_OPTIONS, CLIENT_OPTIONS } from '../config';
 
 export class BirthdayyClient extends SapphireClient {
     public constructor() {
         super(CLIENT_OPTIONS);
 
-        container.sequelize = new Sequelize(BD_OPTIONS);
+        container.sequelize = new Sequelize(DB_OPTIONS);
     }
 
     public async login(token?: string): Promise<string> {
