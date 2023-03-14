@@ -35,10 +35,10 @@ declare global {
 			DB_PASSWORD: string;
 
 			// REDIS
-			REDIS_PORT: number;
+			REDIS_PORT: string;
 			REDIS_HOST: string;
 			REDIS_PASSWORD: string;
-			REDIS_DB: number;
+			REDIS_DB: string;
 
 			// Other
 			STDLIB_SECRET_TOKEN: string;

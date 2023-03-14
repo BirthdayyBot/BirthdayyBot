@@ -63,10 +63,10 @@ function parseScheduledTasksOptions(): ScheduledTasksOptions {
 function parseBullOptions(): QueueOptions {
     return {
         connection: {
-            port: process.env.REDIS_PORT,
+            port: parseInt(process.env.REDIS_PORT),
             password: process.env.REDIS_PASSWORD,
             host: process.env.REDIS_HOST,
-            db: process.env.REDIS_DB,
+            db: parseInt(process.env.REDIS_DB),
         },
     };
 }
