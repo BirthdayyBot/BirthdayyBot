@@ -68,3 +68,28 @@ async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_
         container.logger.info('GUILDID: ', guild_id);
     }
 }
+
+/**
+ * Sends birthday announcement to the specified channel with the given content and embed
+ * @param {string} content - The message content for the birthday announcement
+ * @param {string} channel_id - The id of the channel to send the announcement to
+ * @param {Object} birthdayEmbed - The embed object to include in the message
+ * @returns {Promise<Message>} Returns the sent message object, or undefined if an error occurs
+ */
+async function sendBirthdayAnnouncement(content: string, channel_id: string, birthdayEmbed: object) {
+    try {
+        const message = await sendMessage(channel_id, {
+            content: content,
+            embeds: [birthdayEmbed],
+        });
+        container.logger.info('Sent Birthday Announcement');
+        return message;
+    } catch (error: any) {
+        container.logger.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
+        // Send error message to log channel
+        if (error.message.includes('Missing Access')) {
+            // send Log to user
+        }
+        return;
+    }
+}
