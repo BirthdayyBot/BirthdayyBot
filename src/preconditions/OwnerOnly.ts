@@ -21,9 +21,3 @@ export class UserPrecondition extends AllFlowsPrecondition {
         return BOT_OWNER.includes(userId) ? this.ok() : this.error({ message: this.#message });
     }
 }
-
-declare module '@sapphire/framework' {
-	interface Preconditions {
-		OwnerOnly: never;
-	}
-}

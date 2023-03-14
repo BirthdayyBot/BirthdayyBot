@@ -30,9 +30,3 @@ export class BirthdayyClient extends SapphireClient {
         }
     }
 }
-
-declare module '@sapphire/pieces' {
-    interface Container {
-        sequelize: Sequelize;
-    }
-}
