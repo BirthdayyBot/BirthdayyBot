@@ -2,17 +2,14 @@ import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
-/**
- * @file Environment Variables
- */
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
 export const SRC_DIR = join(ROOT_DIR, 'src');
 
 // MAIN
-export const NODE_ENV = process.env.NODE_ENV; // development; production
-export const APP_ENV = process.env.APP_ENV; // dev; tst; prd
+export const NODE_ENV = process.env.NODE_ENV;
+export const APP_ENV = process.env.APP_ENV;
 export const DEBUG = parseBoolean(process.env.DEBUG);
 
 // GENERIC
@@ -77,7 +74,7 @@ export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
 // Config
-export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE!) || 80;
+export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE) || 80;
 
 // Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
@@ -89,3 +86,10 @@ export const API_PORT = process.env.API_PORT;
 export const API_SECRET = process.env.API_SECRET;
 export const API_URL = process.env.API_URL;
 export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+// REDIS
+export const REDIS_HOST = process.env.REDIS_HOST;
+export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
+export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+export const REDIS_DB = parseInt(process.env.REDIS_DB);
+export const REDIS_USERNAME = process.env.REDIS_USERNAME;

@@ -4,7 +4,7 @@ import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import { type ClientOptions, GatewayIntentBits } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
-import { APP_ENV, DEBUG } from './helpers/provide/environment';
+import { APP_ENV, DEBUG, REDIS_DB, REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_USERNAME } from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { Options } from 'sequelize';
@@ -63,10 +63,11 @@ function parseScheduledTasksOptions(): ScheduledTasksOptions {
 function parseBullOptions(): QueueOptions {
     return {
         connection: {
-            port: parseInt(process.env.REDIS_PORT),
-            password: process.env.REDIS_PASSWORD,
-            host: process.env.REDIS_HOST,
-            db: parseInt(process.env.REDIS_DB),
+            port: REDIS_PORT,
+            password: REDIS_PASSWORD,
+            host: REDIS_HOST,
+            db: REDIS_DB,
+            username: REDIS_USERNAME,
         },
     };
 }
