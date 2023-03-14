@@ -97,7 +97,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
     loadMessageCommandListeners: true,
     loadDefaultErrorListeners: true,
     logger: {
-        level: process.env.APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug,
+        level: DEBUG ? LogLevel.Debug : LogLevel.Info,
     },
     tasks: parseScheduledTasksOptions(),
 };
