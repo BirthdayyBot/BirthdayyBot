@@ -1,23 +1,15 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { QueryTypes } from 'sequelize';
-import { ApiVerification } from '../../helpers/provide/api_verification';
 import { DEBUG } from '../../helpers/provide/environment';
+import { authenticated } from '../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'cleanup/disabled' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'cleanup/disabled',
-            route: 'cleanup/disabled',
-        });
-    }
 
-    public async [methods.DELETE](request: ApiRequest, response: ApiResponse) {
-        if (!(await ApiVerification(request))) {
-            return response.status(401).json({ error: 'Unauthorized' });
-        }
-
+    @authenticated()
+    public async [methods.DELETE](_request: ApiRequest, response: ApiResponse) {
         const oneDayAgo = new Date();
         oneDayAgo.setDate(oneDayAgo.getDate() - 1);
         DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
@@ -30,7 +22,7 @@ export class UserRoute extends Route {
 
         const deleteRequest = await this.deleteDisabledEntries(disabled_guilds);
         // const deleteRequest = await this.deleteDisabledEntries([{ guild_id: '123' }, { guild_id: '555' }]);
-        return response.status(200).json({
+        return response.ok({
             count: {
                 disabled_guilds: disabled_guilds ? disabled_guilds.length : 0,
                 deleteRequest: deleteRequest ? deleteRequest.length : 0,

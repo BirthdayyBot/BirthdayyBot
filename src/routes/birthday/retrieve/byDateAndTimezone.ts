@@ -1,38 +1,24 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { extractDayAndMonth } from '../../../helpers/utils/date';
+import type { ApiRequest } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+type Query = {
+    date: string;
+    timezone: string;
+}
+
+@ApplyOptions<Route.Options>({ route: 'birthday/retrieve/byDateAndTimezone' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'birthday/retrieve/byDateAndTimezone',
-        });
-    }
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-        const { query } = _request;
-        const { date, timezone } = query;
-
-        if (!date) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - date';
-            return response.json({ error: 'Missing Parameter - date' });
-        }
-
-        if (!timezone) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - timezone';
-            return response.json({ error: 'Missing Parameter - timezone' });
-        }
-
-        if (typeof date !== 'string') {
-            response.statusCode = 400;
-            response.statusMessage = 'Invalid Parameter - date';
-            return response.json({ error: 'Invalid Parameter - date' });
-        }
-
+    @authenticated()
+    @validateParams<Query>()
+    public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
+        const { date, timezone } = request.query;
         const dateAndMonth = extractDayAndMonth(date);
+
         const [results] = await container.sequelize.query(
             `SELECT id,
             u.user_id AS user_id,
@@ -61,11 +47,9 @@ export class UserRoute extends Route {
         );
 
         if (results.length === 0) {
-            response.statusMessage = 'No Birthdays found on that Date and Timezone';
-            return response.status(200).json({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
+            return response.ok({ amount: 0, birthdays: [], message: 'No Birthdays found on that Date and Timezone' });
         }
 
-        const birthdays = results as Array<any>;
-        return response.status(200).json({ amount: birthdays.length, birthdays: results });
+        return response.ok({ amount: results.length, birthdays: results });
     }
 }

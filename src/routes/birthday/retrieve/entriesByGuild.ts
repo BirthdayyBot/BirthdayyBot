@@ -1,23 +1,16 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'birthday/retrieve/entriesByGuild' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'birthday/retrieve/entriesByGuild',
-        });
-    }
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-        const { query } = _request;
-        const { guild_id } = query;
-
-        if (!guild_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response.json({ error: 'Missing Parameter - guild_id' });
-        }
+    @authenticated()
+    @validateParams<GuildQuery>()
+    public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
+        const { guild_id } = _request.query;
 
         const [results] = await container.sequelize.query(
             `    SELECT id, b.user_id, birthday, username, discriminator, b.guild_id
@@ -30,13 +23,8 @@ export class UserRoute extends Route {
             },
         );
 
-        if (results.length === 0) {
-            response.statusCode = 404;
-            response.statusMessage = 'Guild not found';
-            return response.json({ error: 'Guild not Found' });
-        }
+        if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
 
-        const birthdays = results as Array<any>;
-        return response.status(200).json({ amount: birthdays.length, birthdays: results });
+        return response.ok({ amount: results.length, birthdays: results });
     }
 }

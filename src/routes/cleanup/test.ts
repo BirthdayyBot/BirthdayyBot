@@ -1,26 +1,20 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { ApiVerification } from '../../helpers/provide/api_verification';
+import { authenticated } from '../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'cleanup/test' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'cleanup/test',
-            route: 'cleanup/test',
-        });
-    }
 
-    public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-        if (!(await ApiVerification(request))) return response.status(401).json({ error: 'Unauthorized' });
-
+    @authenticated()
+    public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
         const [db_guilds] = await container.sequelize.query(
             `SELECT guild_id FROM guild
 			WHERE  disabled = false`,
             // `SELECT guild_id FROM guild`
         );
         const cleanedGuilds = await this.processGuilds(db_guilds);
-        return response.status(200).json({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+        return response.ok({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
     }
 
     public async processGuilds(guilds: any[]) {
