@@ -21,7 +21,11 @@ export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
 export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
-export const BOT_OWNER = process.env.BOT_OWNER ? process.env.BOT_OWNER.split(',') : [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
+export const BOT_OWNER = process.env.BOT_OWNER
+    ? process.env.BOT_OWNER.includes(',')
+        ? process.env.BOT_OWNER.split(',')
+        : process.env.BOT_OWNER
+    : [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
 export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
@@ -57,6 +61,7 @@ export const ONLINE = '<:online:931267038662508585>';
 export const OFFLINE = '<:offline:976766832662937620>';
 export const WARNING = '<:warning:976767964110020628>';
 export const COMPASS = '<:compass:931267039576871052>';
+
 // COMMAND
 export const CONFIG_STATUS = '</config status:935174203882217483>';
 export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
@@ -64,7 +69,7 @@ export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 // Values
 export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
 export const BOT_ADMIN_LOG = APP_ENV === 'prd' ? '966987605348589588' : '1077621363881300018';
-export const DISCORD_INVITE = 'https://discord.gg/VNknfPRHg4';
+export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
@@ -88,3 +93,15 @@ export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
 export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 export const REDIS_DB = parseInt(process.env.REDIS_DB);
 export const REDIS_USERNAME = process.env.REDIS_USERNAME;
+
+// DATABASE
+export const DB_HOST = process.env.DB_HOST;
+export const DB_NAME = process.env.DB_NAME;
+export const DB_USERNAME = process.env.DB_USERNAME;
+export const DB_PASSWORD = process.env.DB_PASSWORD;
+
+// BOT WEBSITES
+// TODO: Change env name
+export const TOKEN_TOPGG = process.env.TOPGG_TOKEN;
+export const TOKEN_DISCORDLIST = process.env.DISCORDLIST_TOKEN;
+export const TOKEN_DISCORDBOTLIST = process.env.DISCORDBOTLIST_TOKEN;
