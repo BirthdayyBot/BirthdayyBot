@@ -44,7 +44,11 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
-		const request = await fetch<BirthdaysByGuildResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
+		const request = await fetch<BirthdaysByGuildResponse>(
+			getBirthdaysUrl,
+			{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+			FetchResultTypes.JSON,
+		);
 		return request.birthdays;
 	} catch (error: any) {
 		if (error.code === 404) {
@@ -60,7 +64,11 @@ export async function getBirthdayByGuildAndUser(guild_id: string, user_id: strin
 	getBirthdayUrl.searchParams.append('guild_id', guild_id);
 	getBirthdayUrl.searchParams.append('user_id', user_id);
 	try {
-		const request = await fetch<BirthdaysByGuildResponse>(getBirthdayUrl, FetchResultTypes.JSON);
+		const request = await fetch<BirthdaysByGuildResponse>(
+			getBirthdayUrl,
+			{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+			FetchResultTypes.JSON,
+		);
 		return request;
 	} catch (error: any) {
 		container.logger.error('[getBirthdayByGuildAndUser] ', error.message);
@@ -75,7 +83,11 @@ export async function getBirthdaysByDateAndTimezone(
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/byDateAndTimezone`);
 	getBirthdaysUrl.searchParams.append('date', date);
 	getBirthdaysUrl.searchParams.append('timezone', timezone);
-	return fetch<{ amount: number; birthdays: Array<BirthdayWithUserModel> }>(getBirthdaysUrl, FetchResultTypes.JSON)
+	return fetch<{ amount: number; birthdays: Array<BirthdayWithUserModel> }>(
+		getBirthdaysUrl,
+		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON,
+	)
 		.then((response) => {
 			return response;
 		})

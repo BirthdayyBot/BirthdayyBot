@@ -1,5 +1,5 @@
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { API_URL, AUTOCODE_ENV } from './environment';
+import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
+import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
@@ -29,7 +29,11 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
 	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const result = await fetch<{ config: GuildConfigRawModel }>(requestURL, FetchResultTypes.JSON);
+	const result = await fetch<{ config: GuildConfigRawModel }>(
+		requestURL,
+		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON,
+	);
 	const { config } = result;
 	return {
 		GUILD_ID: config.guild_id,
@@ -253,13 +257,21 @@ export function logAll(config: any) {
 export async function getGuildLanguage(guild_id: string): Promise<string> {
 	const requestURL = new URL(`${API_URL}guild/retrieve/language`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const data = await fetch<{ guild_id: string; language: string }>(requestURL, FetchResultTypes.JSON);
+	const data = await fetch<{ guild_id: string; language: string }>(
+		requestURL,
+		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON,
+	);
 	return data.language;
 }
 
 export async function getGuildPremium(guild_id: string): Promise<boolean> {
 	const requestURL = new URL(`${API_URL}guild/retrieve/premium`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const data = await fetch<{ guild_id: string; premium: boolean }>(requestURL, FetchResultTypes.JSON);
+	const data = await fetch<{ guild_id: string; premium: boolean }>(
+		requestURL,
+		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON,
+	);
 	return data.premium;
 }
