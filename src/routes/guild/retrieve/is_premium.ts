@@ -7,20 +7,19 @@ import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-premium' })
 export class UserRoute extends Route {
+	@authenticated()
+	@validateParams<GuildQuery>()
+	public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
+		const { guild_id } = request.query;
 
-    @authenticated()
-    @validateParams<GuildQuery>()
-    public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
-        const { guild_id } = request.query;
+		const [results] = await container.sequelize.query('SELECT guild_id, premium FROM guild g WHERE guild_id = ? AND disabled = false', {
+			replacements: [guild_id],
+		});
+		container.logger.info('results', results);
 
-        const [results] = await container.sequelize.query('SELECT guild_id, premium FROM guild g WHERE guild_id = ? AND disabled = false', {
-            replacements: [guild_id],
-        });
-        container.logger.info('results', results);
+		if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
 
-        if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
-
-        const is_premium = parseBoolean(`${(results[0] as { premium: string | boolean}).premium}`);
-        return response.ok(is_premium);
-    }
+		const is_premium = parseBoolean(`${(results[0] as { premium: string | boolean }).premium}`);
+		return response.ok(is_premium);
+	}
 }

@@ -22,17 +22,17 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
 export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
 export const BOT_OWNER = process.env.BOT_OWNER
-    ? process.env.BOT_OWNER.includes(',')
-        ? process.env.BOT_OWNER.split(',')
-        : process.env.BOT_OWNER
-    : [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
+	? process.env.BOT_OWNER.includes(',')
+		? process.env.BOT_OWNER.split(',')
+		: process.env.BOT_OWNER
+	: [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
 export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = parseBoolean(process.env.CUSTOM_BOT);
 export const IS_PREMIUM = async (guild_id: string) => {
-    return await getGuildPremium(guild_id);
+	return await getGuildPremium(guild_id);
 };
 
 // EMOJIS

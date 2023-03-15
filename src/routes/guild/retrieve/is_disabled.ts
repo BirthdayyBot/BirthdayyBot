@@ -6,16 +6,15 @@ import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Route.Options>({ route: 'guild/retrieve/is_disabled' })
 export class UserRoute extends Route {
+	@authenticated()
+	@validateParams<GuildQuery>()
+	public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
+		const { guild_id } = request.query;
 
-    @authenticated()
-    @validateParams<GuildQuery>()
-    public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
-        const { guild_id } = request.query;
+		const [results] = await container.sequelize.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
+			replacements: [guild_id],
+		});
 
-        const [results] = await container.sequelize.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
-            replacements: [guild_id],
-        });
-
-        return response.ok({ is_disabled: results.length > 0 });
-    }
+		return response.ok({ is_disabled: results.length > 0 });
+	}
 }

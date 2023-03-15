@@ -6,21 +6,20 @@ import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 
 type Query = {
-    date: string;
-    timezone: string;
-}
+	date: string;
+	timezone: string;
+};
 
 @ApplyOptions<Route.Options>({ route: 'birthday/retrieve/byDateAndTimezone' })
 export class UserRoute extends Route {
+	@authenticated()
+	@validateParams<Query>()
+	public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
+		const { date, timezone } = request.query;
+		const dateAndMonth = extractDayAndMonth(date);
 
-    @authenticated()
-    @validateParams<Query>()
-    public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
-        const { date, timezone } = request.query;
-        const dateAndMonth = extractDayAndMonth(date);
-
-        const [results] = await container.sequelize.query(
-            `SELECT id,
+		const [results] = await container.sequelize.query(
+			`SELECT id,
             u.user_id AS user_id,
             b.birthday AS birthday,
             u.username AS username,
@@ -41,15 +40,15 @@ export class UserRoute extends Route {
      WHERE b.birthday LIKE '%${dateAndMonth}%'
        AND g.timezone = ?
        AND g.disabled = false`,
-            {
-                replacements: [timezone],
-            },
-        );
+			{
+				replacements: [timezone],
+			},
+		);
 
-        if (results.length === 0) {
-            return response.ok({ amount: 0, birthdays: [], message: 'No Birthdays found on that Date and Timezone' });
-        }
+		if (results.length === 0) {
+			return response.ok({ amount: 0, birthdays: [], message: 'No Birthdays found on that Date and Timezone' });
+		}
 
-        return response.ok({ amount: results.length, birthdays: results });
-    }
+		return response.ok({ amount: results.length, birthdays: results });
+	}
 }

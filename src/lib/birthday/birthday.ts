@@ -22,21 +22,21 @@ export async function registerBirthday(date: string, guild_id: string, user: { u
 	if (user.username) registerBirthdayUrl.searchParams.append('username', user.username);
 	if (user.discriminator) registerBirthdayUrl.searchParams.append('discriminator', user.discriminator);
 	const request = await fetch<BirthdayRegisterResponse>(
-	    registerBirthdayUrl,
-	    { method: FetchMethods.Post, headers: { Authorization: API_SECRET } },
-	    FetchResultTypes.JSON,
+		registerBirthdayUrl,
+		{ method: FetchMethods.Post, headers: { Authorization: API_SECRET } },
+		FetchResultTypes.JSON,
 	);
 	if (DEBUG && request.success) container.logger.debug(`Registered birthday for user ${user.user_id} in guild ${guild_id}`);
 	return request;
 }
 
 export async function removeBirthday(user_id: string, guild_id: string): Promise<AutocodeAPIResponseModel> {
-    const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
-        user_id: user_id,
-        guild_id: guild_id,
-    });
-    container.logger.debug(DEBUG ? `Removed birthday for user ${user_id} in guild ${guild_id}` : '');
-    return request;
+	const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.delete({
+		user_id: user_id,
+		guild_id: guild_id,
+	});
+	container.logger.debug(DEBUG ? `Removed birthday for user ${user_id} in guild ${guild_id}` : '');
+	return request;
 }
 
 export async function getBirthdaysByGuild(guild_id: string): Promise<Array<BirthdayWithUserModel> | []> {
@@ -44,13 +44,13 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
 	try {
-	    const request = await fetch<BirthdaysByGuildResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
-	    return request.birthdays;
+		const request = await fetch<BirthdaysByGuildResponse>(getBirthdaysUrl, FetchResultTypes.JSON);
+		return request.birthdays;
 	} catch (error: any) {
-	    if (error.code === 404) {
-	        return [];
-	    }
-	    return [];
+		if (error.code === 404) {
+			return [];
+		}
+		return [];
 	}
 }
 
@@ -60,27 +60,27 @@ export async function getBirthdayByGuildAndUser(guild_id: string, user_id: strin
 	getBirthdayUrl.searchParams.append('guild_id', guild_id);
 	getBirthdayUrl.searchParams.append('user_id', user_id);
 	try {
-	    const request = await fetch<BirthdaysByGuildResponse>(getBirthdayUrl, FetchResultTypes.JSON);
-	    return request;
+		const request = await fetch<BirthdaysByGuildResponse>(getBirthdayUrl, FetchResultTypes.JSON);
+		return request;
 	} catch (error: any) {
-	    container.logger.error('[getBirthdayByGuildAndUser] ', error.message);
-	    return [];
+		container.logger.error('[getBirthdayByGuildAndUser] ', error.message);
+		return [];
 	}
 }
 
 export async function getBirthdaysByDateAndTimezone(
-    date: string,
-    timezone: string,
+	date: string,
+	timezone: string,
 ): Promise<{ amount: number; birthdays: Array<BirthdayWithUserModel> | [] }> {
-    const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/byDateAndTimezone`);
-    getBirthdaysUrl.searchParams.append('date', date);
-    getBirthdaysUrl.searchParams.append('timezone', timezone);
-    return fetch<{ amount: number; birthdays: Array<BirthdayWithUserModel> }>(getBirthdaysUrl, FetchResultTypes.JSON)
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => {
-            container.logger.error('[getBirthdaysByDateAndTimezone] ', error.message);
-            return { amount: 0, birthdays: [] };
-        });
+	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/byDateAndTimezone`);
+	getBirthdaysUrl.searchParams.append('date', date);
+	getBirthdaysUrl.searchParams.append('timezone', timezone);
+	return fetch<{ amount: number; birthdays: Array<BirthdayWithUserModel> }>(getBirthdaysUrl, FetchResultTypes.JSON)
+		.then((response) => {
+			return response;
+		})
+		.catch((error) => {
+			container.logger.error('[getBirthdaysByDateAndTimezone] ', error.message);
+			return { amount: 0, birthdays: [] };
+		});
 }
