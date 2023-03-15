@@ -3,8 +3,6 @@ import { container, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { APP_ENV, BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord/message';
-import checkBirthdayScheduler from '../lib/scheduler/checkBirthdayScheduler';
-// import testScheduler from '../lib/scheduler/testScheduler';
 
 const isDev = APP_ENV !== 'prd';
 
@@ -16,8 +14,6 @@ export class UserEvent extends Listener {
         this.printBanner();
         this.printStoreDebugInformation();
         await sendMessage(BOT_ADMIN_LOG, { content: 'online' });
-        // await testScheduler();
-        await checkBirthdayScheduler();
     }
 
     private printBanner() {

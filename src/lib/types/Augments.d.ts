@@ -34,6 +34,12 @@ declare global {
 			DB_HOST: string;
 			DB_PASSWORD: string;
 
+			// REDIS
+			REDIS_PORT: string;
+			REDIS_HOST: string;
+			REDIS_PASSWORD: string;
+			REDIS_DB: string;
+
 			// Other
 			STDLIB_SECRET_TOKEN: string;
 			AUTOCODE_ENV: 'dev' | 'release';
@@ -55,3 +61,9 @@ declare module '@sapphire/framework' {
 	}
 }
 
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface ScheduledTasks {
+		BirthdayReminderTask: never;
+		BirthdayRoleRemoverTask: never;
+	}
+}

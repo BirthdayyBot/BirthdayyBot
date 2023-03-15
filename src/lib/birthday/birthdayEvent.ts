@@ -1,3 +1,4 @@
+import { Time } from '@sapphire/cron';
 import { container } from '@sapphire/framework';
 import generateBirthdayMessage from '../../helpers/generate/birthdayMessage';
 import generateEmbed from '../../helpers/generate/embed';
@@ -5,8 +6,6 @@ import { getConfig, logAll } from '../../helpers/provide/config';
 import { IMG_CAKE, NEWS } from '../../helpers/provide/environment';
 import { sendMessage } from '../discord/message';
 import { addRoleToUser } from '../discord/role';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
 // TODO: Correct Types, cleanup code
 
@@ -51,53 +50,21 @@ export default async function birthdayEvent(guild_id: string, birthday_child_id:
  * Add the  specified birthday role to the user specified, in the specified guild
  * @param {string} user_id - The id of the user to add the role to
  * @param {string} role_id - The id of the role to add to the user
- * @param {string} guild_id - The id of the guild the user and role belong to
- * @param {boolean} isTest - Whether or not the role is being added for testing purposes
- * @returns {Promise<void>}
+ * @param string guild_id - The id of the guild the user and role belong to
+ * @param boolean isTest - Whether or not the role is being added for testing purposes
+ * @returns Promise<void>
  */
 async function addCurrentBirthdayChildRole(user_id: string, role_id: any, guild_id: string, isTest: boolean) {
     try {
         await addRoleToUser(user_id, role_id, guild_id);
         container.logger.info('BIRTHDAY ROLE ADDED TO BDAY CHILD');
-        await scheduleRoleRemoval(user_id, role_id, guild_id, isTest); // TODO: #9 Implement own timer
+        const options = { user_id, role_id, guild_id, isTest };
+        await container.tasks.create('BirthdayRoleRemoverTask', options, { repeated: false, delay: isTest ? Time.Minute : Time.Day });
     } catch (error) {
         container.logger.warn('COULND\'T ADD THE BIRTHDAY ROLE TO THE BIRTHDAY CHILD');
         container.logger.info('USERID: ', user_id);
         container.logger.info('GUILDID: ', guild_id);
     }
-}
-
-/**
- * Schedules the removal of a role for a user in a given guild.
- * @param user_id - The id of the user to remove the role from.
- * @param role_id - The id of the role to be removed.
- * @param guild_id - The id of the guild where the role removal should take place.
- * @param isTest - If true, the role will be removed after 1 minute. Otherwise, it will be removed after 1440 minutes (1 day).
- */
-async function scheduleRoleRemoval(user_id: string, role_id: any, guild_id: string, isTest = false) {
-    return;
-    try {
-        // https://docs.cronhooks.io/#introduction
-        const time = isTest ? 1 : 1440; // 1 minute or 1440 minutes (1 day)
-        const req = await lib.meiraba.utils['@3.1.0'].timer.set({
-            token: `${process.env.MEIRABA_TOKEN}`,
-            time: time,
-            endpoint_url: 'https://birthday-bot.chillihero.autocode.gg/automate/removeRole/',
-            payload: {
-                user_id: user_id,
-                role_id: role_id,
-                guild_id: guild_id,
-            },
-        });
-        container.logger.info(`Scheduled ${isTest ? 'Test ' : ''}Birthday Role removal: `, req);
-    } catch (error) {
-        container.logger.warn(`something went wrong while trying to schedule a ${isTest ? 'test ' : ''}birtday removal!`);
-        container.logger.info('USERID: ', user_id);
-        container.logger.info('ROLEID: ', role_id);
-        container.logger.info('GUILDID: ', guild_id);
-        container.logger.warn(error);
-    }
-    return;
 }
 
 /**

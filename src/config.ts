@@ -4,16 +4,36 @@ import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import { type ClientOptions, GatewayIntentBits } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
-import { APP_ENV, DEBUG } from './helpers/provide/environment';
+import {
+    API_EXTENSION,
+    API_PORT,
+    APP_ENV,
+    DB_HOST,
+    DB_NAME,
+    DB_PASSWORD,
+    DB_USERNAME,
+    DEBUG,
+    REDIS_DB,
+    REDIS_HOST,
+    REDIS_PASSWORD,
+    REDIS_PORT,
+    REDIS_USERNAME,
+    TOKEN_DISCORDBOTLIST,
+    TOKEN_DISCORDLIST,
+    TOKEN_TOPGG,
+} from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { Options } from 'sequelize';
+import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
+import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
+import type { QueueOptions } from 'bullmq';
 
 function parseApi(): ServerOptions {
     return {
-        prefix: process.env.API_EXTENSION,
+        prefix: API_EXTENSION,
         origin: '*',
-        listenOptions: { port: parseInt(process.env.API_PORT) },
+        listenOptions: { port: parseInt(API_PORT) },
     };
 }
 
@@ -42,18 +62,38 @@ function parseBotListOptions(): BotList.Options {
             interval: 3 * Time.Hour,
         },
         keys: {
-            topGG: process.env.TOPGG_TOKEN,
-            discordListGG: process.env.DISCORDLIST_TOKEN,
-            discordBotList: process.env.DISCORDBOTLIST_TOKEN,
+            topGG: TOKEN_TOPGG,
+            discordListGG: TOKEN_DISCORDLIST,
+            discordBotList: TOKEN_DISCORDBOTLIST,
+        },
+    };
+}
+
+function parseScheduledTasksOptions(): ScheduledTasksOptions {
+    return {
+        strategy: new ScheduledTaskRedisStrategy({
+            bull: parseBullOptions(),
+        }),
+    };
+}
+
+function parseBullOptions(): QueueOptions {
+    return {
+        connection: {
+            port: REDIS_PORT,
+            password: REDIS_PASSWORD,
+            host: REDIS_HOST,
+            db: REDIS_DB,
+            username: REDIS_USERNAME,
         },
     };
 }
 
 export const DB_OPTIONS: Options = {
-    database: process.env.DB_NAME,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
+    database: DB_NAME,
+    username: DB_USERNAME,
+    password: DB_PASSWORD,
+    host: DB_HOST,
     logging: false,
     dialect: 'mysql',
     dialectOptions: {
@@ -75,6 +115,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
     loadMessageCommandListeners: true,
     loadDefaultErrorListeners: true,
     logger: {
-        level: process.env.APP_ENV === 'prd' ? LogLevel.Info : LogLevel.Debug,
+        level: DEBUG ? LogLevel.Debug : LogLevel.Info,
     },
+    tasks: parseScheduledTasksOptions(),
 };
