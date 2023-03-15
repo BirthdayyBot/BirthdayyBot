@@ -1,6 +1,7 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { ApiVerification } from '../../../helpers/provide/api_verification';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
 import type { GuildConfigRawModel } from '../../../lib/model';
 
 export class UserRoute extends Route {
@@ -11,17 +12,12 @@ export class UserRoute extends Route {
             route: 'guild/leave',
         });
     }
-    public async [methods.POST](request: ApiRequest, response: ApiResponse) {
+
+    @authenticated()
+    @validateParams<GuildQuery>()
+    public async [methods.POST](request: ApiRequest<GuildQuery>, response: ApiResponse) {
         const { query } = request;
         const { guild_id } = query;
-        if (!(await ApiVerification(request))) {
-            return response.status(401).json({ error: 'Unauthorized' });
-        }
-        if (!guild_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response.json({ error: 'Missing Parameter - guild_id' });
-        }
 
         const result: any = await container.sequelize.query('SELECT guild_id, premium FROM guild WHERE guild_id = ?', {
             replacements: [guild_id],

@@ -1,7 +1,14 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { extractDayAndMonth } from '../../../helpers/utils/date';
+import type { ApiRequest } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
 
+
+type Query = {
+    date: string;
+    timezone: string;
+}
 export class UserRoute extends Route {
     public constructor(context: Route.Context, options: Route.Options) {
         super(context, {
@@ -10,27 +17,11 @@ export class UserRoute extends Route {
         });
     }
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
+    @authenticated()
+    @validateParams<Query>()
+    public async [methods.GET](_request: ApiRequest<Query>, response: ApiResponse) {
         const { query } = _request;
         const { date, timezone } = query;
-
-        if (!date) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - date';
-            return response.json({ error: 'Missing Parameter - date' });
-        }
-
-        if (!timezone) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - timezone';
-            return response.json({ error: 'Missing Parameter - timezone' });
-        }
-
-        if (typeof date !== 'string') {
-            response.statusCode = 400;
-            response.statusMessage = 'Invalid Parameter - date';
-            return response.json({ error: 'Invalid Parameter - date' });
-        }
 
         const dateAndMonth = extractDayAndMonth(date);
         const [results] = await container.sequelize.query(

@@ -1,8 +1,8 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { QueryTypes } from 'sequelize';
-import { ApiVerification } from '../../helpers/provide/api_verification';
 import { DEBUG } from '../../helpers/provide/environment';
+import { authenticated } from '../../lib/api/utils';
 
 export class UserRoute extends Route {
     public constructor(context: Route.Context, options: Route.Options) {
@@ -13,11 +13,8 @@ export class UserRoute extends Route {
         });
     }
 
-    public async [methods.DELETE](request: ApiRequest, response: ApiResponse) {
-        if (!(await ApiVerification(request))) {
-            return response.status(401).json({ error: 'Unauthorized' });
-        }
-
+    @authenticated()
+    public async [methods.DELETE](_request: ApiRequest, response: ApiResponse) {
         const oneDayAgo = new Date();
         oneDayAgo.setDate(oneDayAgo.getDate() - 1);
         DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;

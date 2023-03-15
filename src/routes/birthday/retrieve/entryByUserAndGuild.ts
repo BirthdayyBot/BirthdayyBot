@@ -1,5 +1,7 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import type { ApiRequest, GuildAndUserQuery } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
 
 export class UserRoute extends Route {
     public constructor(context: Route.Context, options: Route.Options) {
@@ -9,23 +11,11 @@ export class UserRoute extends Route {
         });
     }
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
+    @authenticated()
+    @validateParams<GuildAndUserQuery>()
+    public async [methods.GET](_request: ApiRequest<GuildAndUserQuery>, response: ApiResponse) {
         const { query } = _request;
         const { guild_id, user_id } = query;
-
-        if (!guild_id && !user_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id and user_id';
-            return response.json({ error: 'Missing Parameter - guild_id and user_id' });
-        } else if (!guild_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response.json({ error: 'Missing Parameter - guild_id' });
-        } else if (!user_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - user_id';
-            return response.json({ error: 'Missing Parameter - user_id' });
-        }
 
         const [results] = await container.sequelize.query(
             `SELECT id, u.user_id AS user_id, birthday, username, discriminator, guild_id AS guild_id

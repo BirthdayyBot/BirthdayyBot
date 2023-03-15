@@ -1,6 +1,6 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { ApiVerification } from '../../helpers/provide/api_verification';
+import { authenticated } from '../../lib/api/utils';
 
 /**
  * @description Disable Guilds & assosicated that are not present in the discord cache
@@ -14,10 +14,8 @@ export class CleanUpGuildsRoute extends Route {
         });
     }
 
-    public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-        if (!(await ApiVerification(request))) {
-            return response.status(401).json({ error: 'Unauthorized' });
-        }
+    @authenticated()
+    public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
         const [db_guilds] = await container.sequelize.query(
             `SELECT guild_id FROM guild
 			WHERE  disabled = false`,

@@ -1,5 +1,7 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
 import type { GuildConfigRawModel } from '../../../lib/model';
 
 export class UserRoute extends Route {
@@ -10,15 +12,11 @@ export class UserRoute extends Route {
         });
     }
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-        const { query } = _request;
-        const { guild_id } = query;
 
-        if (!guild_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response.json({ error: 'Missing Parameter - guild_id' });
-        }
+    @authenticated()
+    @validateParams<GuildQuery>()
+    public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
+        const { guild_id } = _request.query;
 
         const [results] = await container.sequelize.query(
             `

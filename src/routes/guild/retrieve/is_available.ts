@@ -1,8 +1,13 @@
 import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { QueryTypes } from 'sequelize';
 import { parseBoolean } from '../../../helpers/utils/utils';
+import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
 
+type GuildRetrieveQuery = GuildQuery & {
+    disable?: string;
+}
 export class UserRoute extends Route {
     public constructor(context: Route.Context, options: Route.Options) {
         super(context, {
@@ -11,16 +16,13 @@ export class UserRoute extends Route {
         });
     }
 
-    public async [methods.GET](request: ApiRequest, response: ApiResponse) {
+    @authenticated()
+    @validateParams<GuildRetrieveQuery>(['guild_id'])
+    public async [methods.GET](request: ApiRequest<GuildRetrieveQuery>, response: ApiResponse) {
         const { query } = request;
-        let guild_id = query.guild_id;
+        const guild_id = query.guild_id;
         const disable = parseBoolean(query.disable ? query.disable.toString() : 'false');
-        if (!guild_id) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response.json({ error: 'Missing Parameter - guild_id' });
-        }
-        guild_id = guild_id.toString();
+
         try {
             const guild = await container.client.guilds.fetch({
                 guild: guild_id,
