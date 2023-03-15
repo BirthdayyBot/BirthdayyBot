@@ -5,15 +5,10 @@ import { isDateString } from '../../../helpers/utils/date';
 import type { ApiRequest, BirthdayQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { APIErrorCode } from '../../../lib/enum/APIErrorCode.enum';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'birthday/create' })
 export class BirthdayCreateRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'birthday/create',
-            route: 'birthday/create',
-        });
-    }
 
     @authenticated()
     @validateParams<BirthdayQuery>(['guild_id', 'user_id', 'date'])

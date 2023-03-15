@@ -3,19 +3,14 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { DEBUG } from '../../../helpers/provide/environment';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
 type GuildCreateQuery = GuildQuery & {
     inviter: string;
 }
+
+@ApplyOptions<Route.Options>({ route: 'guild/create' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'guild/create',
-            route: 'guild/create',
-            enabled: true,
-        });
-    }
 
     @authenticated()
     @validateParams(['guild_id', 'inviter'])

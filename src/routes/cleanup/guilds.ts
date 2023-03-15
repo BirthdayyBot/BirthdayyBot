@@ -2,18 +2,13 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import { ApiVerification } from '../../helpers/provide/api_verification';
 import { authenticated } from '../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
 /**
  * @description Disable Guilds & assosicated that are not present in the discord cache
  */
+@ApplyOptions<Route.Options>({ route: 'cleanup/guilds' })
 export class CleanUpGuildsRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'cleanup/guilds',
-            route: 'cleanup/guilds',
-        });
-    }
 
     @authenticated()
     public async [methods.POST](_request: ApiRequest, response: ApiResponse) {

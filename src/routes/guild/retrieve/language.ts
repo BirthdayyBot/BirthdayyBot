@@ -2,15 +2,10 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import type { GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'guild/retrieve/language' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'guild/retrieve/language',
-        });
-    }
-
 
     @authenticated()
     @validateParams<GuildQuery>()

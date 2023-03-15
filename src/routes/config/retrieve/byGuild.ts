@@ -3,15 +3,10 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import type { GuildConfigRawModel } from '../../../lib/model';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'config/retrieve/byGuild' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'config/retrieve/byGuild',
-        });
-    }
-
 
     @authenticated()
     @validateParams<GuildQuery>()

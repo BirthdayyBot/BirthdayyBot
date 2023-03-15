@@ -4,17 +4,14 @@ import { QueryTypes } from 'sequelize';
 import { parseBoolean } from '../../../helpers/utils/utils';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
 type GuildRetrieveQuery = GuildQuery & {
     disable?: string;
 }
+
+@ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-available' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'guild/retrieve/is-available',
-        });
-    }
 
     @authenticated()
     @validateParams<GuildRetrieveQuery>(['guild_id'])

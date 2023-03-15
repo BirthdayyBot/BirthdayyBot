@@ -3,15 +3,10 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { parseBoolean } from '../../../helpers/utils/utils';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-premium' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'guild/retrieve/is-premium',
-        });
-    }
-
 
     @authenticated()
     @validateParams<GuildQuery>()

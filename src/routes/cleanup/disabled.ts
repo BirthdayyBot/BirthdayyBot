@@ -3,15 +3,10 @@ import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-a
 import { QueryTypes } from 'sequelize';
 import { DEBUG } from '../../helpers/provide/environment';
 import { authenticated } from '../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'cleanup/disabled' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'cleanup/disabled',
-            route: 'cleanup/disabled',
-        });
-    }
 
     @authenticated()
     public async [methods.DELETE](_request: ApiRequest, response: ApiResponse) {

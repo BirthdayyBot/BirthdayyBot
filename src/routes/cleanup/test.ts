@@ -1,15 +1,10 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import { authenticated } from '../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'cleanup/test' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            name: 'cleanup/test',
-            route: 'cleanup/test',
-        });
-    }
 
     @authenticated()
     public async [methods.POST](_request: ApiRequest, response: ApiResponse) {

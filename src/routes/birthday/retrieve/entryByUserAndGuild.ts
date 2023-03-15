@@ -2,14 +2,10 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildAndUserQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
 
+@ApplyOptions<Route.Options>({ route: 'birthday/retrieve/entryByUserAndGuild' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'birthday/retrieve/entryByUserAndGuild',
-        });
-    }
 
     @authenticated()
     @validateParams<GuildAndUserQuery>()

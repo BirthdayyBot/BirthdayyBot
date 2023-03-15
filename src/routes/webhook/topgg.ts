@@ -6,7 +6,7 @@ import { authenticated } from '../../lib/api/utils';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import voteProcess from '../../lib/process/vote';
 
-@ApplyOptions<Route.Options>({ name: 'webhook/topgg', route: 'webhook/topgg' })
+@ApplyOptions<Route.Options>({ route: 'webhook/topgg' })
 export class UserRoute extends Route {
 
     @authenticated(WEBHOOK_SECRET)
