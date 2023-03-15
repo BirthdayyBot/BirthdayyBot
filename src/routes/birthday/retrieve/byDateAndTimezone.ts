@@ -5,7 +5,6 @@ import type { ApiRequest } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 
-
 type Query = {
     date: string;
     timezone: string;
@@ -48,7 +47,7 @@ export class UserRoute extends Route {
         );
 
         if (results.length === 0) {
-            return response.badRequest({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
+            return response.ok({ amount: 0, birthdays: [], message: 'No Birthdays found on that Date and Timezone' });
         }
 
         return response.ok({ amount: results.length, birthdays: results });
