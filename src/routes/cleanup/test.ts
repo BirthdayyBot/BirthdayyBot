@@ -19,7 +19,7 @@ export class UserRoute extends Route {
             // `SELECT guild_id FROM guild`
         );
         const cleanedGuilds = await this.processGuilds(db_guilds);
-        return response.status(200).json({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+        return response.ok({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
     }
 
     public async processGuilds(guilds: any[]) {

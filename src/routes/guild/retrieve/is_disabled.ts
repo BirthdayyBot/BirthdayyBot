@@ -14,13 +14,12 @@ export class UserRoute extends Route {
     @authenticated()
     @validateParams<GuildQuery>()
     public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
-        const { query } = request;
-        const { guild_id } = query;
+        const { guild_id } = request.query;
 
         const [results] = await container.sequelize.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
             replacements: [guild_id],
         });
 
-        return response.status(200).json({ is_disabled: results.length > 0 });
+        return response.ok({ is_disabled: results.length > 0 });
     }
 }

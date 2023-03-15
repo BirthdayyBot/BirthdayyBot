@@ -37,9 +37,9 @@ export class UserRoute extends Route {
             },
         );
         if (results.length === 0) {
-            return response.status(404).json({ error: 'Guild not Found' });
+            return response.badRequest({ error: 'Guild not Found' });
         }
         const config: GuildConfigRawModel = results[0] as GuildConfigRawModel;
-        return response.status(200).json({ config: config });
+        return response.ok({ config: config });
     }
 }

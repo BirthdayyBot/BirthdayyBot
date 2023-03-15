@@ -28,6 +28,6 @@ export class UserRoute extends Route {
 
         const affectedRowsCountGuild = (updateGuildMeta as any).affectedRows;
         const affectedRowsCountBirthday = (updateBirthdayMeta as any).affectedRows;
-        return response.status(200).json({ affectedRowsCountGuild, affectedRowsCountBirthday });
+        return response.ok({ affectedRowsCountGuild, affectedRowsCountBirthday });
     }
 }

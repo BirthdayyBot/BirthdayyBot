@@ -23,12 +23,9 @@ export class UserRoute extends Route {
         });
         container.logger.info('results', results);
 
-        if (results.length === 0) {
-            response.statusMessage = 'Guild not found';
-            return response.status(404).json({ error: 'Guild not Found' });
-        }
+        if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
 
-        const is_premium: boolean = parseBoolean(`${(results[0] as any).premium}`);
-        response.status(200).json(is_premium);
+        const is_premium = parseBoolean(`${(results[0] as { premium: string | boolean}).premium}`);
+        return response.ok(is_premium);
     }
 }

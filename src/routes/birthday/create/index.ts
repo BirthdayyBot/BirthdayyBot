@@ -18,44 +18,12 @@ export class BirthdayCreateRoute extends Route {
     @authenticated()
     @validateParams<BirthdayQuery>(['guild_id', 'user_id', 'date'])
     public async [methods.POST](request: ApiRequest<BirthdayQuery>, response: ApiResponse) {
-
         const { date, user_id, guild_id, username = null, discriminator = null } = request.query;
-        if (!date) {
-            response.statusMessage = 'Missing Parameter - date';
-            return response
-                .status(400)
-                .json({ success: false, error: { code: APIErrorCode.MISSING_PARAMETER, message: 'Missing Parameter - date' } });
-        }
-
-        if (!user_id) {
-            response.statusMessage = 'Missing Parameter - timezone';
-            return response
-                .status(400)
-                .json({ success: false, error: { code: APIErrorCode.MISSING_PARAMETER, message: 'Missing Parameter - user_id' } });
-        }
-
-        if (!guild_id) {
-            response.statusMessage = 'Missing Parameter - guild_id';
-            return response
-                .status(400)
-                .json({ success: false, error: { code: APIErrorCode.MISSING_PARAMETER, message: 'Missing Parameter - guild_id' } });
-        }
-
-        if (typeof date !== 'string') {
-            return response.status(400).json({ error: { code: APIErrorCode.INVALID_PARAMETER, message: 'Parameter date is not a string' } });
-        }
-        if (typeof user_id !== 'string') {
-            return response.status(400).json({ error: { code: APIErrorCode.INVALID_PARAMETER, message: 'Parameter user_id is not a string' } });
-        }
-        if (typeof guild_id !== 'string') {
-            return response.status(400).json({ error: { code: APIErrorCode.INVALID_PARAMETER, message: 'Parameter guild_id is not a string' } });
-        }
 
         const isDate = isDateString(date);
 
         if (!isDate) {
-            response.statusMessage = 'Wrong Date Format use YYYY-MM-DD or XXXX-MM-DD';
-            return response.status(400).json({
+            return response.badRequest({
                 success: false,
                 error: { code: APIErrorCode.INVALID_DATE_FORMAT, message: 'Wrong Date Format use YYYY-MM-DD or XXXX-MM-DD' },
             });
@@ -75,17 +43,16 @@ export class BirthdayCreateRoute extends Route {
             });
         } catch (error: any) {
             if (error.name === 'SequelizeUniqueConstraintError') {
-                response.statusMessage = 'User already has a birthday registered';
-                return response
-                    .status(200)
-                    .json({ success: false, error: { code: APIErrorCode.DUPLICATE_ENTRY, message: 'User already has a birthday registered' } });
+                return response.badRequest({
+                    success: false,
+                    error: {
+                        code: APIErrorCode.DUPLICATE_ENTRY, message: 'User already has a birthday registered',
+                    },
+                });
             }
 
-            response.statusMessage = 'Something went wrong';
-            return response
-                .status(500)
-                .json({ error: { code: APIErrorCode.UNKNOWN_ERROR, message: error.message ?? error.name ?? 'Something went wrong' } });
+            return response.error(error);
         }
-        return response.status(201).json({ success: true });
+        return response.created({ success: true });
     }
 }

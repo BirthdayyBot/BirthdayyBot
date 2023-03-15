@@ -37,6 +37,6 @@ export class UserRoute extends Route {
             replacements: [guild_id],
         });
 
-        response.status(200).json({ message: `Guild ${guild_id} left` });
+        return response.ok({ message: `Guild ${guild_id} left` });
     }
 }

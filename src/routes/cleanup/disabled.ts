@@ -27,7 +27,7 @@ export class UserRoute extends Route {
 
         const deleteRequest = await this.deleteDisabledEntries(disabled_guilds);
         // const deleteRequest = await this.deleteDisabledEntries([{ guild_id: '123' }, { guild_id: '555' }]);
-        return response.status(200).json({
+        return response.ok({
             count: {
                 disabled_guilds: disabled_guilds ? disabled_guilds.length : 0,
                 deleteRequest: deleteRequest ? deleteRequest.length : 0,

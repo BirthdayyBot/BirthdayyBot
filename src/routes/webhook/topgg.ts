@@ -23,8 +23,8 @@ export class UserRoute extends Route {
             await voteProcess('topgg', user_id);
             break;
         default:
-            return response.status(400).json({ error: 'Bad Request' });
+            return response.badRequest({ error: 'Bad Request' });
         }
-        return response.status(200).json({ message: 'TOPGG VERIFIED' });
+        return response.ok({ message: 'TOPGG VERIFIED' });
     }
 }

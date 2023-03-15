@@ -19,11 +19,10 @@ export class UserRoute extends Route {
 
     @authenticated()
     @validateParams<Query>()
-    public async [methods.GET](_request: ApiRequest<Query>, response: ApiResponse) {
-        const { query } = _request;
-        const { date, timezone } = query;
-
+    public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
+        const { date, timezone } = request.query;
         const dateAndMonth = extractDayAndMonth(date);
+
         const [results] = await container.sequelize.query(
             `SELECT id,
             u.user_id AS user_id,
@@ -52,11 +51,9 @@ export class UserRoute extends Route {
         );
 
         if (results.length === 0) {
-            response.statusMessage = 'No Birthdays found on that Date and Timezone';
-            return response.status(200).json({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
+            return response.badRequest({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
         }
 
-        const birthdays = results as Array<any>;
-        return response.status(200).json({ amount: birthdays.length, birthdays: results });
+        return response.ok({ amount: results.length, birthdays: results });
     }
 }

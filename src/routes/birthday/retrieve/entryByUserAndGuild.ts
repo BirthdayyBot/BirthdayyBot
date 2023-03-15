@@ -14,8 +14,7 @@ export class UserRoute extends Route {
     @authenticated()
     @validateParams<GuildAndUserQuery>()
     public async [methods.GET](_request: ApiRequest<GuildAndUserQuery>, response: ApiResponse) {
-        const { query } = _request;
-        const { guild_id, user_id } = query;
+        const { guild_id, user_id } = _request.query;
 
         const [results] = await container.sequelize.query(
             `SELECT id, u.user_id AS user_id, birthday, username, discriminator, guild_id AS guild_id
@@ -28,8 +27,7 @@ export class UserRoute extends Route {
                 replacements: [guild_id, user_id],
             },
         );
-        response.statusCode = 200;
-        response.statusMessage = 'OK';
-        response.json(results);
+
+        return response.ok(results);
     }
 }

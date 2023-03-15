@@ -1,5 +1,6 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiVerification } from '../../helpers/provide/api_verification';
 import { authenticated } from '../../lib/api/utils';
 
 /**
@@ -21,7 +22,7 @@ export class CleanUpGuildsRoute extends Route {
 			WHERE  disabled = false`,
         );
         const cleanedGuilds = await this.processGuilds(db_guilds);
-        return response.status(200).json({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+        return response.ok({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
     }
 
     public async processGuilds(guilds: any[]) {

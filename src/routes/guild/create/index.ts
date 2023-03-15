@@ -20,8 +20,7 @@ export class UserRoute extends Route {
     @authenticated()
     @validateParams(['guild_id', 'inviter'])
     public async [methods.POST](request: ApiRequest<GuildCreateQuery>, response: ApiResponse) {
-        const { query } = request;
-        const { guild_id, inviter } = query;
+        const { guild_id, inviter } = request.query;
 
         try {
             const [_createGuild] = await container.sequelize.query('INSERT INTO guild (guild_id, inviter) VALUES (?,?)', {
@@ -29,11 +28,11 @@ export class UserRoute extends Route {
             });
         } catch (error: any) {
             if (error.name === 'SequelizeUniqueConstraintError') {
-                return response.status(200).json({ message: 'Guild already exists', guild_id, inviter: inviter });
+                return response.badRequest({ message: 'Guild already exists', guild_id, inviter: inviter });
             }
             DEBUG ? container.logger.error(error) : null;
-            return response.status(500).json({ error: error.message });
+            return response.error(error);
         }
-        return response.status(200).json({ message: `Guild ${guild_id} created` });
+        return response.ok({ message: `Guild ${guild_id} created` });
     }
 }

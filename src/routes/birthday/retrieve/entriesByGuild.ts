@@ -14,8 +14,7 @@ export class UserRoute extends Route {
     @authenticated()
     @validateParams<GuildQuery>()
     public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
-        const { query } = _request;
-        const { guild_id } = query;
+        const { guild_id } = _request.query;
 
         const [results] = await container.sequelize.query(
             `    SELECT id, b.user_id, birthday, username, discriminator, b.guild_id
@@ -28,13 +27,8 @@ export class UserRoute extends Route {
             },
         );
 
-        if (results.length === 0) {
-            response.statusCode = 404;
-            response.statusMessage = 'Guild not found';
-            return response.json({ error: 'Guild not Found' });
-        }
+        if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
 
-        const birthdays = results as Array<any>;
-        return response.status(200).json({ amount: birthdays.length, birthdays: results });
+        return response.ok({ amount: results.length, birthdays: results });
     }
 }
