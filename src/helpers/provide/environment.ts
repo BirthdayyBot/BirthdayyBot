@@ -60,11 +60,6 @@ export const COMPASS = '<:compass:931267039576871052>';
 // COMMAND
 export const CONFIG_STATUS = '</config status:935174203882217483>';
 export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
-// Trello
-export const TRELLO_SUGGESTION_BOARD_NAME = '[Ideas] Birthdayy';
-export const TRELLO_SUGGESTION_LIST_NAME = 'Ideas';
-export const TRELLO_BUG_BOARD_NAME = '[Bugs] Birthdayy';
-export const TRELLO_BUG_LIST_NAME = 'Bugs';
 
 // Values
 export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
