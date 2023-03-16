@@ -11,7 +11,6 @@ import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../lib/discord/thinking';
 import { getBirthdayByGuildAndUser, registerBirthday } from '../../lib/birthday/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import birthdayEvent from '../../lib/birthday/birthdayEvent';
 import updateBirthdayOverview from '../../helpers/update/overview';
 import { BirthdayCMD } from '../../lib/commands/birthday';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
@@ -19,6 +18,7 @@ import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { removeBirthday } from '../../lib/birthday/birthday';
 import { APIErrorCode } from '../../lib/enum/APIErrorCode.enum';
+import { BirthdayReminderTask } from '../../tasks/BirthdayReminderTask';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -228,7 +228,7 @@ export class BirthdayCommand extends Subcommand {
 		const hasPermissions = await hasUserGuildPermissions(interaction, user_id, ['ManageRoles']);
 		container.logger.info('hasPermissions', hasPermissions);
 		if (hasPermissions) {
-			await birthdayEvent(guild_id, user_id, true);
+			await BirthdayReminderTask.prototype.birthdayEvent(guild_id, user_id, true);
 			this.embed.title = `${SUCCESS} Success`;
 			this.embed.description = `${ARROW_RIGHT} Birthday Test run!`;
 		} else {

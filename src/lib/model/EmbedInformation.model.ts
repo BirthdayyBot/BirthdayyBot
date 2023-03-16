@@ -1,10 +1,12 @@
+import type { APIEmbedField } from "discord.js";
+
 export type EmbedInformationModel = {
-	title?: string | unknown;
-	description?: string | unknown;
-	author_name?: string | unknown;
-	author_avatar?: string | unknown;
-	thumbnail_url?: string | unknown;
-	image_url?: string | unknown;
-	fields?: Array<Object> | unknown;
-	color?: string | unknown;
+	title?: string;
+	description?: string;
+	author_name?: string;
+	author_avatar?: string;
+	thumbnail_url?: string;
+	image_url?: string;
+	fields?: APIEmbedField[];
+	color?: string;
 };
