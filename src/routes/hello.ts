@@ -1,5 +1,5 @@
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { send } from '../lib/discord';
+import { sendText } from '../lib/discord';
 export class UserRoute extends Route {
 	public constructor(context: Route.Context, options: Route.Options) {
 		super(context, {
@@ -10,7 +10,7 @@ export class UserRoute extends Route {
 
 	public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
 		try {
-			send.sendMessage('1063771496436207658', 'Hello World');
+			sendText('1063771496436207658', 'Hello World');
 			response.json({ message: 'Sent Discord Message' });
 		} catch (error) {
 			response.statusCode = 500;
