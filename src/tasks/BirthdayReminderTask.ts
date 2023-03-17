@@ -51,14 +51,19 @@ export class BirthdayReminderTask extends ScheduledTask {
 		await logAll(config);
 
 		if (BIRTHDAY_ROLE) {
-			const role = guild.roles.cache.get(BIRTHDAY_ROLE) && (await guild.roles.fetch(BIRTHDAY_ROLE));
-			if (!role) return { error: true, message: 'Birthday role not found' };
+			const role = await guild.roles.fetch(BIRTHDAY_ROLE);
+			if (!role) {
+				if (DEBUG) this.container.logger.warn(`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`);
+				return { error: true, message: 'Birthday role not found' };
+			}
 			await this.addCurrentBirthdayChildRole({ member, guild, role, isTest });
 		}
 
+		if (!ANNOUNCEMENT_CHANNEL) {
+			if (DEBUG) this.container.logger.warn(`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`);
+			return { error: true, message: 'No announcement channel set' };
+		}
 		const announcementMessage = await this.formatBirthdayMessage(ANNOUNCEMENT_MESSAGE, member, guild);
-
-		if (!ANNOUNCEMENT_CHANNEL) return { error: true, message: 'No announcement channel set' };
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,
