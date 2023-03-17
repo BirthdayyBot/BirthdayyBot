@@ -11,10 +11,10 @@ import { getBirthdaysByDateAndTimezone } from '../lib/birthday/birthday';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayWithUserModel } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
+import { getGuildInformation, getGuildMember } from '../lib/discord';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
-
 	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
 		const { date: today, offsetString: offset } = await getCurrentOffset();
 		let todaysBirthdays: BirthdayWithUserModel[] = [];
@@ -29,9 +29,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			todaysBirthdays = birthdays;
 		}
 
-		if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${today}, offset: ${offset}`);
+		if (!todaysBirthdays.length) return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${today}, offset: ${offset}`);
 
-		if (!todaysBirthdays.length) return this.container.logger.info(`[Task] No Birthdays Today. Date: ${today}, offset: ${offset}`);
+		if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${today}, offset: ${offset}`);
 
 		for (const birthday of todaysBirthdays) {
 			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);
@@ -40,8 +40,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 	}
 
 	private async birthdayEvent(userID: string, guildID: string, isTest: boolean) {
-		const guild = this.container.client.guilds.cache.get(guildID) ?? await this.container.client.guilds.fetch(guildID);
-		const member = guild.members.cache.get(userID) ?? await guild.members.fetch(userID);
+		const guild = await getGuildInformation(guildID);
+		const member = await getGuildMember(guildID, userID);
+
+		if (!member || !guild) return;
 
 		const config = await getConfig(guild.id);
 		const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
@@ -49,7 +51,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		await logAll(config);
 
 		if (BIRTHDAY_ROLE) {
-			const role = guild.roles.cache.get(BIRTHDAY_ROLE) && await guild.roles.fetch(BIRTHDAY_ROLE);
+			const role = guild.roles.cache.get(BIRTHDAY_ROLE) && (await guild.roles.fetch(BIRTHDAY_ROLE));
 			if (!role) return { error: true, message: 'Birthday role not found' };
 			await this.addCurrentBirthdayChildRole({ member, guild, role, isTest });
 		}
@@ -91,6 +93,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		} catch (error: any) {
 			container.logger.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
 			// Send error message to log channel
+			// TODO: Changed error message
 			if (error.message.includes('Missing Access')) {
 				// send Log to user
 			}
@@ -116,5 +119,4 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		return formattedMessage;
 	}
-
 }

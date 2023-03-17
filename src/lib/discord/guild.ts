@@ -16,7 +16,7 @@ export async function getGuildMember(guild_id: string, user_id: string): Promise
 	try {
 		const guild = await getGuildInformation(guild_id);
 		if (isNullOrUndefinedOrEmpty(guild)) return null;
-		const guild_member = (await guild.members.fetch(user_id)) || null;
+		const guild_member = await guild.members.fetch(user_id);
 		return guild_member;
 	} catch (error) {
 		container.logger.error(`Error fetching guild member with id ${user_id}: ${error}`);
