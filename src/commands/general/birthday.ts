@@ -18,7 +18,7 @@ import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { removeBirthday } from '../../lib/birthday/birthday';
 import { APIErrorCode } from '../../lib/enum/APIErrorCode.enum';
-import { BirthdayReminderTask } from '../../tasks/BirthdayReminderTask';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
@@ -223,12 +223,12 @@ export class BirthdayCommand extends Subcommand {
 
 	public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const guild_id = interaction.guildId!;
-		const user_id = interaction.user.id;
-		const hasPermissions = await hasUserGuildPermissions(interaction, user_id, ['ManageRoles']);
+		const guildID = interaction.guildId!;
+		const userID = interaction.user.id;
+		const hasPermissions = await hasUserGuildPermissions(interaction, userID, ['ManageRoles']);
 		container.logger.info('hasPermissions', hasPermissions);
 		if (hasPermissions) {
-			await BirthdayReminderTask.prototype.birthdayEvent(guild_id, user_id, true);
+			await container.tasks.run('BirthdayReminderTask', { userID, guildID, isTest: true });
 			this.embed.title = `${SUCCESS} Success`;
 			this.embed.description = `${ARROW_RIGHT} Birthday Test run!`;
 		} else {
