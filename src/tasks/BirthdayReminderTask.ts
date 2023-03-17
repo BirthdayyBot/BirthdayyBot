@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
-import { APIEmbed, EmbedData, Guild, GuildMember, Role, roleMention, userMention } from 'discord.js';
+import { APIEmbed, Guild, GuildMember, Role, roleMention, userMention } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
 import { getConfig, logAll } from '../helpers/provide/config';
 import { getCurrentOffset } from '../helpers/provide/currentOffset';
@@ -16,7 +16,7 @@ import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model'
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run() {
 		const { date: today, offsetString: offset } = await getCurrentOffset();
-		let todaysBirthdays: BirthdayWithUserModel[] = []
+		let todaysBirthdays: BirthdayWithUserModel[] = [];
 		if (APP_ENV === 'prd') {
 			const { birthdays } = await getBirthdaysByDateAndTimezone(today, offset);
 			todaysBirthdays = birthdays;
@@ -49,7 +49,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const announcementMessage = await this.formatBirthdayMessage(ANNOUNCEMENT_MESSAGE, member, guild);
 
-		if (!ANNOUNCEMENT_CHANNEL) return { error: true, message: 'No announcement channel set' }
+		if (!ANNOUNCEMENT_CHANNEL) return { error: true, message: 'No announcement channel set' };
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,

@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import type { Guild, GuildMember, Role, User } from 'discord.js';
+import type { Guild, GuildMember, Role } from 'discord.js';
 
 interface RoleRemovePayload {
 	member: GuildMember;
