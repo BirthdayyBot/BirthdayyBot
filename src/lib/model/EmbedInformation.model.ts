@@ -1,4 +1,4 @@
-import type { APIEmbedField } from "discord.js";
+import type { APIEmbedField } from 'discord.js';
 
 export type EmbedInformationModel = {
 	title?: string;
