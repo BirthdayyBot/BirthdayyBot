@@ -15,12 +15,12 @@ import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model'
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 
-	public async run(testBirthday?: { userID: string; guildID: string; isTest: boolean }) {
+	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
 		const { date: today, offsetString: offset } = await getCurrentOffset();
 		let todaysBirthdays: BirthdayWithUserModel[] = [];
 
-		if (testBirthday) {
-			const { userID, guildID, isTest } = testBirthday;
+		if (birthdayEvent) {
+			const { userID, guildID, isTest } = birthdayEvent;
 			return this.birthdayEvent(userID, guildID, isTest);
 		}
 
