@@ -1,5 +1,14 @@
 import { container } from '@sapphire/framework';
-import type { APIEmbed, Message, Channel } from 'discord.js';
+import type {
+	APIEmbed,
+	Message,
+	Channel,
+	APIActionRowComponent,
+	MessageActionRowComponentData,
+	APIMessageActionRowComponent,
+	JSONEncodable,
+	ActionRowData,
+} from 'discord.js';
 import { DEBUG } from '../../helpers/provide/environment';
 import { getTextChannel } from './channel';
 
@@ -31,9 +40,20 @@ export async function sendDMMessage(user_id: string, options: { content?: string
 	}
 }
 
-export async function sendMessage(channel_id: string, content: string, embeds: APIEmbed[] = [], components: [] = []): Promise<Message> {
+export async function sendMessage(
+	channel_id: string,
+	options: {
+		content?: string;
+		embeds?: APIEmbed[];
+		components?: (
+			| JSONEncodable<APIActionRowComponent<APIMessageActionRowComponent>>
+			| ActionRowData<MessageActionRowComponentData>
+			| APIActionRowComponent<APIMessageActionRowComponent>
+		)[];
+	},
+): Promise<Message> {
 	const channel = await getTextChannel(channel_id);
-	return await channel.send({ content, embeds: embeds, components: components });
+	return await channel.send({ content: options.content, embeds: options.embeds, components: options.components });
 }
 
 export async function sendText(channel_id: string, content: string): Promise<Message> {
