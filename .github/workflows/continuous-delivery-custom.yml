@@ -75,7 +75,7 @@ jobs:
     needs: [Publish]
     uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@main
     secrets:
-      DOCKER_TAG: '${{ env.IMAGE_NAME }}'
+      DOCKER_TAG: ${{ env.IMAGE_NAME }}
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ env.DOPPLER_TOKEN }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
