@@ -1,10 +1,11 @@
+import type { APIEmbed, APIEmbedField } from 'discord.js';
 import { getGuildInformation } from '../../lib/discord/guild';
 import type { GuildConfigModel } from '../../lib/model';
 import { getConfig } from '../provide/config';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
 
-export default async function generateConfigListEmbed(guild_id: string): Promise<Object> {
+export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {
 	const guild = await getGuildInformation(guild_id);
 	const embedFields = await generateFields(guild_id);
 	const embed = {
@@ -13,14 +14,13 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 		fields: embedFields,
 	};
 
-	const finalEmbed = await generateEmbed(embed);
-	return finalEmbed;
+	return generateEmbed(embed);
 }
 
-async function generateFields(guild_id: string): Promise<any[]> {
+async function generateFields(guild_id: string) {
 	const config: GuildConfigModel = await getConfig(guild_id);
 
-	const fields: any[] = [];
+	const fields: APIEmbedField[] = [];
 
 	Object.entries(config).forEach(([name, value]) => {
 		// TODO: #38 Implement guild logs
@@ -36,6 +36,7 @@ async function generateFields(guild_id: string): Promise<any[]> {
 	return fields;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getValueString(name: string, value: any) {
 	let str: string;
 	if (value === null) {

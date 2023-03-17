@@ -10,7 +10,7 @@ export class UserRoute extends Route {
 
 	public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
 		try {
-			send.message('1063771496436207658', 'Hello World');
+			send.sendMessage('1063771496436207658', 'Hello World');
 			response.json({ message: 'Sent Discord Message' });
 		} catch (error) {
 			response.statusCode = 500;

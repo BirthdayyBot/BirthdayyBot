@@ -22,11 +22,7 @@ export class UserEvent extends Listener {
 		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
 		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
 
-		await disableData(guild_id);
-
-		async function disableData(guild_id: string) {
-			await leaveServerLog(guild);
-			await leaveGuildRequest(guild_id);
-		}
+		await leaveServerLog(guild);
+		await leaveGuildRequest(guild_id);
 	}
 }
