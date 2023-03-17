@@ -240,17 +240,17 @@ export async function setTIMEZONE(timezone: string, guild_id: string): Promise<A
 // }
 
 export function logAll(config: any) {
-	container.logger.info('===============================');
-	if (config.GUILD_ID !== null) container.logger.info('GUILD_ID: ', config.GUILD_ID);
-	if (config.BIRTHDAY_ROLE !== null) container.logger.info('BIRTHDAY_ROLE: ', config.BIRTHDAY_ROLE);
-	if (config.BIRTHDAY_PING_ROLE !== null) container.logger.info('BIRTHDAY_PING_ROLE: ', config.BIRTHDAY_PING_ROLE);
-	if (config.ANNOUNCEMENT_CHANNEL !== null) container.logger.info('ANNOUNCEMENT_CHANNEL: ', config.ANNOUNCEMENT_CHANNEL);
-	if (config.OVERVIEW_CHANNEL !== null) container.logger.info('OVERVIEW_CHANNEL: ', config.OVERVIEW_CHANNEL);
-	if (config.LOG_CHANNEL !== null) container.logger.info('LOG_CHANNEL: ', config.LOG_CHANNEL);
-	if (config.OVERVIEW_MESSAGE !== null) container.logger.info('OVERVIEW_MESSAGE: ', config.OVERVIEW_MESSAGE);
-	if (config.TIMEZONE !== null) container.logger.info('TIMEZONE: ', config.TIMEZONE);
-	if (config.ANNOUNCEMENT_MESSAGE !== null) container.logger.info('ANNOUNCEMENT_MESSAGE: ', config.ANNOUNCEMENT_MESSAGE);
-	container.logger.info('===============================');
+	container.logger.debug('⩱⁼===============================⩱');
+	if (config.GUILD_ID !== null) container.logger.debug('GUILD_ID: ', config.GUILD_ID);
+	if (config.BIRTHDAY_ROLE !== null) container.logger.debug('BIRTHDAY_ROLE: ', config.BIRTHDAY_ROLE);
+	if (config.BIRTHDAY_PING_ROLE !== null) container.logger.debug('BIRTHDAY_PING_ROLE: ', config.BIRTHDAY_PING_ROLE);
+	if (config.ANNOUNCEMENT_CHANNEL !== null) container.logger.debug('ANNOUNCEMENT_CHANNEL: ', config.ANNOUNCEMENT_CHANNEL);
+	if (config.OVERVIEW_CHANNEL !== null) container.logger.debug('OVERVIEW_CHANNEL: ', config.OVERVIEW_CHANNEL);
+	if (config.LOG_CHANNEL !== null) container.logger.debug('LOG_CHANNEL: ', config.LOG_CHANNEL);
+	if (config.OVERVIEW_MESSAGE !== null) container.logger.debug('OVERVIEW_MESSAGE: ', config.OVERVIEW_MESSAGE);
+	if (config.TIMEZONE !== null) container.logger.debug('TIMEZONE: ', config.TIMEZONE);
+	if (config.ANNOUNCEMENT_MESSAGE !== null) container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.ANNOUNCEMENT_MESSAGE);
+	container.logger.debug('⩲===============================⩲');
 	return;
 }
 

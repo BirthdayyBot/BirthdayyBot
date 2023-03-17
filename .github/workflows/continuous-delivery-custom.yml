@@ -1,14 +1,14 @@
-name: Continuous Delivery Testing
+name: Continuous Delivery Custom
 
 on:
   workflow_dispatch:
   push:
     branches:
-      - testing
+      - production
     paths:
       - 'src/**'
       - 'Dockerfile'
-      - '.github/workflows/continuous-delivery.yml'
+      - '.github/workflows/continuous-delivery-custom.yml'
 
 permissions:
   contents: read
@@ -18,8 +18,9 @@ env:
   # Uses docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: birthdayy_custom
   REPOSITORY_NAME: ${{ github.event.repository.name }}
+  DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM}}
 
 jobs:
   Publish:
@@ -74,9 +75,9 @@ jobs:
     needs: [Publish]
     uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@main
     secrets:
-      DOCKER_TAG: 'testing'
+      DOCKER_TAG: '${{ env.IMAGE_NAME }}'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_TESTING }}'
+      DOPPLER_TOKEN: '${{ env.DOPPLER_TOKEN }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
       SSH_PRIVATE_KEY: '${{ secrets.SSH_PK }}'
       SSH_USER: '${{ secrets.SSH_USER }}'
