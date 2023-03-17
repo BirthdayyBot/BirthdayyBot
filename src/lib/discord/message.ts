@@ -1,7 +1,7 @@
 import { container } from '@sapphire/framework';
-import type { Channel } from 'discord.js';
-import { getTextChannel } from './channel';
+import type { APIEmbed, Message, Channel } from 'discord.js';
 import { DEBUG } from '../../helpers/provide/environment';
+import { getTextChannel } from './channel';
 
 export async function fetchMessage(channel_id: string, message_id: string) {
 	const channel: Channel | null = await container.client.channels.fetch(channel_id);
@@ -13,11 +13,6 @@ export async function fetchMessage(channel_id: string, message_id: string) {
 	} catch (error) {
 		throw new Error('Message not found');
 	}
-}
-
-export async function sendMessage(channel_id: string, options: { content?: string; embeds?: any[]; components?: any[] }) {
-	const channel = await getTextChannel(channel_id);
-	return await channel.send(options);
 }
 
 export async function editMessage(channel_id: string, message_id: string, options: { content?: string; embeds?: any[]; components?: any[] }) {
@@ -34,4 +29,30 @@ export async function sendDMMessage(user_id: string, options: { content?: string
 		container.logger.error('Couldn\'t send DM to user with id: ' + user_id);
 		return;
 	}
+}
+
+export async function sendMessage(channel_id: string, content: string, embeds: APIEmbed[] = [], components: [] = []): Promise<Message> {
+	const channel = await getTextChannel(channel_id);
+	return await channel.send({ content, embeds: embeds, components: components });
+}
+
+export async function sendText(channel_id: string, content: string): Promise<Message> {
+	const channel = await getTextChannel(channel_id);
+	return await channel.send(content);
+}
+
+export async function sendEmbed(channel_id: string, embed: APIEmbed): Promise<Message> {
+	const channel = await getTextChannel(channel_id);
+	return await channel.send({
+		content: '',
+		embeds: [embed],
+	});
+}
+
+export async function sendEmbeds(channel_id: string, embeds: APIEmbed[]): Promise<Message> {
+	const channel = await getTextChannel(channel_id);
+	return await channel.send({
+		content: '',
+		embeds: embeds,
+	});
 }
