@@ -11,7 +11,7 @@ const client = new BirthdayyClient();
 async function main() {
 	try {
 		// Initialize Sentry
-		SENTRY_DSN ?? Sentry.init(SENTRY_OPTIONS);
+		if (SENTRY_DSN) Sentry.init(SENTRY_OPTIONS);
 		// Connect to the Database
 		container.sequelize.authenticate();
 		// Login to the Discord gateway
