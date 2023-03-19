@@ -37,7 +37,8 @@ function parseApi(): ServerOptions {
 	return {
 		prefix: API_EXTENSION,
 		origin: '*',
-		listenOptions: { port: parseInt(API_PORT) },
+		listenOptions: { port: API_PORT },
+		automaticallyConnect: false,
 	};
 }
 
