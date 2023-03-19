@@ -32,7 +32,8 @@ declare global {
 			DB_NAME: string;
 			DB_USERNAME: string;
 			DB_HOST: string;
-			DB_PASSWORD: string;
+			DB_PORT: string;
+			DB_URL: string;
 
 			// REDIS
 			REDIS_PORT: string;
