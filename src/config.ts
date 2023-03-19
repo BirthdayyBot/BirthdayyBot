@@ -19,6 +19,7 @@ import {
 	REDIS_PORT,
 	REDIS_USERNAME,
 	ROOT_DIR,
+	SENTRY_DSN,
 	TOKEN_DISCORDBOTLIST,
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
@@ -108,7 +109,7 @@ export const DB_OPTIONS: Options = {
 };
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
-	dsn: process.env.SENTRY_DSN,
+	dsn: SENTRY_DSN,
 	debug: DEBUG,
 	integrations: [
 		new Sentry.Integrations.Modules(),
