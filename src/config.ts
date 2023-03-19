@@ -18,6 +18,8 @@ import {
 	REDIS_PASSWORD,
 	REDIS_PORT,
 	REDIS_USERNAME,
+	ROOT_DIR,
+	SENTRY_DSN,
 	TOKEN_DISCORDBOTLIST,
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
@@ -28,6 +30,8 @@ import type { Options } from 'sequelize';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import type { QueueOptions } from 'bullmq';
+import * as Sentry from '@sentry/node';
+import { RewriteFrames } from '@sentry/integrations';
 
 function parseApi(): ServerOptions {
 	return {
@@ -102,6 +106,19 @@ export const DB_OPTIONS: Options = {
 			rejectUnauthorized: false,
 		},
 	},
+};
+
+export const SENTRY_OPTIONS: Sentry.NodeOptions = {
+	dsn: SENTRY_DSN,
+	debug: DEBUG,
+	integrations: [
+		new Sentry.Integrations.Modules(),
+		new Sentry.Integrations.FunctionToString(),
+		new Sentry.Integrations.LinkedErrors(),
+		new Sentry.Integrations.Console(),
+		new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
+		new RewriteFrames({ root: ROOT_DIR }),
+	],
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {

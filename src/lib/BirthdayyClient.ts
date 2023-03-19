@@ -16,25 +16,4 @@ export class BirthdayyClient extends SapphireClient {
 	private registerPaths() {
 		this.stores.get('scheduled-tasks').registerPath(join(getRootData().root, 'tasks'));
 	}
-
-	public async login(token?: string): Promise<string> {
-		try {
-			await container.sequelize.authenticate();
-			return super.login(token);
-		} catch (error) {
-			container.logger.error(error);
-			await this.destroy();
-			process.exit(1);
-		}
-	}
-
-	public async destroy() {
-		try {
-			await Promise.all([container.sequelize.close(), super.destroy()]);
-			process.exit(1);
-		} catch (error) {
-			container.logger.error(error);
-			process.exit(1);
-		}
-	}
 }

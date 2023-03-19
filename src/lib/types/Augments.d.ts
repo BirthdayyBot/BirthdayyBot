@@ -42,6 +42,7 @@ declare global {
 			REDIS_DB: string;
 
 			// Other
+			SENTRY_URL: string;
 			STDLIB_SECRET_TOKEN: string;
 			AUTOCODE_ENV: 'dev' | 'release';
 			CUSTOM_BOT: 'TRUE' | 'FALSE' | 'true' | 'false' | '1' | '0' | 'yes' | 'no' | 'y' | 'n';
