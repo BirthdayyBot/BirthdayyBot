@@ -79,6 +79,9 @@ export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE) || 80;
 // Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
 
+// Sentry
+export const SENTRY_DSN = process.env.SENTRY_DSN;
+
 // API
 export const API_BASE_URL = process.env.API_BASE_URL;
 export const API_EXTENSION = process.env.API_EXTENSION;
