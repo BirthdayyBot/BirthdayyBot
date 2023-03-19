@@ -6,6 +6,7 @@
 	"dependencies": {
 		"@devtomio/plugin-botlist": "^1.3.0",
 		"@discordjs/builders": "^1.5.0",
+		"@prisma/client": "^4.11.0",
 		"@sapphire/cron": "^1.1.0",
 		"@sapphire/decorators": "^6.0.0",
 		"@sapphire/discord.js-utilities": "^6.0.4",
