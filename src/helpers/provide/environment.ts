@@ -68,7 +68,7 @@ export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 
 // Values
 export const BOT_SERVER_LOG = process.env.LOG_CHANNEL_SERVER ?? '1077621363881300018';
-export const BOT_ADMIN_LOG = APP_ENV === process.env.LOG_CHANNEL_ADMIN ?? '1077621363881300018';
+export const BOT_ADMIN_LOG = process.env.LOG_CHANNEL_ADMIN ?? '1077621363881300018';
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
