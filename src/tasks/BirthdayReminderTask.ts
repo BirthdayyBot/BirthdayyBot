@@ -9,7 +9,7 @@ import { getCurrentOffset } from '../helpers/provide/currentOffset';
 import { APP_ENV, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
 import { getBirthdaysByDateAndTimezone } from '../lib/birthday/birthday';
 import { sendMessage } from '../lib/discord/message';
-import type { BirthdayWithUserModel } from '../lib/model';
+import type { BirthdayWithUserModel } from '../lib/db';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 

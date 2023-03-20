@@ -1,8 +1,11 @@
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
-import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
+import type { GuildConfigModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
+import type { GuildConfig, selectGuild, selectGuildConfig } from '../../lib/db';
+import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import type { Prisma } from '@prisma/client';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
@@ -26,66 +29,24 @@ export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
 	};
 }
 
-export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
+export async function getConfig(guild_id: string) {
 	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
 	requestURL.searchParams.append('guild_id', guild_id);
-	const result = await fetch<{ config: GuildConfigRawModel }>(
+	return fetch<selectGuildConfig>(
 		requestURL,
 		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
 		FetchResultTypes.JSON,
 	);
-	const { config } = result;
-	return {
-		GUILD_ID: config.guild_id,
-		ANNOUNCEMENT_CHANNEL: config.announcement_channel,
-		ANNOUNCEMENT_MESSAGE: config.announcement_message,
-		OVERVIEW_CHANNEL: config.overview_channel,
-		OVERVIEW_MESSAGE: config.overview_message,
-		BIRTHDAY_ROLE: config.birthday_role,
-		BIRTHDAY_PING_ROLE: config.birthday_ping_role,
-		LOG_CHANNEL: config.log_channel,
-		TIMEZONE: config.timezone,
-		LANGUAGE: config.language,
-		PREMIUM: config.premium === 1 ? true : false,
-	};
 }
 
-export async function setCompleteConfig(config: any, guild_id: string) {
-	const {
-		BIRTHDAY_ROLE,
-		BIRTHDAY_PING_ROLE,
-		ANNOUNCEMENT_CHANNEL,
-		ANNOUNCEMENT_MESSAGE,
-		OVERVIEW_CHANNEL,
-		LOG_CHANNEL,
-		OVERVIEW_MESSAGE,
-		TIMEZONE,
-	} = config;
-	if (BIRTHDAY_ROLE !== 'null') {
-		await setBIRTHDAY_ROLE(BIRTHDAY_ROLE, guild_id);
-	}
-	if (BIRTHDAY_PING_ROLE !== 'null') {
-		await setBIRTHDAY_PING_ROLE(BIRTHDAY_PING_ROLE, guild_id);
-	}
-	if (ANNOUNCEMENT_CHANNEL !== 'null') {
-		await setANNOUNCEMENT_CHANNEL(ANNOUNCEMENT_CHANNEL, guild_id);
-	}
-	if (ANNOUNCEMENT_MESSAGE !== 'null') {
-		await setANNOUNCEMENT_MESSAGE(ANNOUNCEMENT_MESSAGE, guild_id);
-	}
-	if (OVERVIEW_CHANNEL !== 'null') {
-		await setOVERVIEW_CHANNEL(OVERVIEW_CHANNEL, guild_id);
-	}
-	if (LOG_CHANNEL !== 'null') {
-		container.logger.info('logchannel not null');
-		await setLOG_CHANNEL(LOG_CHANNEL, guild_id);
-	}
-	if (OVERVIEW_MESSAGE !== 'null') {
-		await setOVERVIEW_MESSAGE(OVERVIEW_MESSAGE, guild_id);
-	}
-	if (TIMEZONE !== 'null') {
-		await setTIMEZONE(TIMEZONE, guild_id);
-	}
+export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guild_id: string) {
+
+	await container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data,
+	});
 	container.logger.info('Set config for guild with id ', guild_id);
 }
 
@@ -123,17 +84,21 @@ export async function removeConfig(config_name: string, guild_id: string) {
 }
 
 export async function setDefaultConfigs(guild_id: string) {
-	// TODO #12 Adjust default configs
-	const config = {
-		BIRTHDAY_ROLE: 'null',
-		BIRTHDAY_PING_ROLE: 'null',
-		ANNOUNCEMENT_CHANNEL: 'null',
-		OVERVIEW_CHANNEL: 'null',
-		LOG_CHANNEL: 'null',
-		OVERVIEW_MESSAGE: 'null',
-		TIMEZONE: 'UTC',
-	};
-	await setCompleteConfig(config, guild_id);
+	await container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data: {
+			birthday_role: 'null',
+			birthday_ping_role: 'null',
+			announcement_channel: 'null',
+			overview_channel: 'null',
+			log_channel: 'null',
+			overview_message: 'null',
+			timezone: parseInt('UTC'),
+			announcement_message: '',
+		},
+	});
 }
 
 export async function setDefaultConfig(config_name: string, guild_id: string) {

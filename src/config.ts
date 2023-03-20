@@ -8,10 +8,6 @@ import {
 	API_EXTENSION,
 	API_PORT,
 	APP_ENV,
-	DB_HOST,
-	DB_NAME,
-	DB_PASSWORD,
-	DB_USERNAME,
 	DEBUG,
 	REDIS_DB,
 	REDIS_HOST,
@@ -26,7 +22,6 @@ import {
 } from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
-import type { Options } from 'sequelize';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import type { QueueOptions } from 'bullmq';
@@ -93,21 +88,6 @@ function parseBullOptions(): QueueOptions {
 		},
 	};
 }
-
-export const DB_OPTIONS: Options = {
-	database: DB_NAME,
-	username: DB_USERNAME,
-	password: DB_PASSWORD,
-	host: DB_HOST,
-	logging: false,
-	dialect: 'mysql',
-	dialectOptions: {
-		ssl: {
-			require: true,
-			rejectUnauthorized: false,
-		},
-	},
-};
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,

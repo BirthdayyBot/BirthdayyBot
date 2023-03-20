@@ -1,6 +1,6 @@
 import { API_SECRET, API_URL, AUTOCODE_ENV, DEBUG } from '../../helpers/provide/environment';
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
-import type { BirthdayWithUserModel } from '../../lib/model';
+import type { BirthdayWithUserModel } from '../../lib/db';
 import type { AutocodeAPIResponseModel } from '../model';
 import { container } from '@sapphire/framework';
 
@@ -43,6 +43,7 @@ export async function getBirthdaysByGuild(guild_id: string): Promise<Array<Birth
 	type BirthdaysByGuildResponse = { amount: number; birthdays: Array<BirthdayWithUserModel> };
 	const getBirthdaysUrl = new URL(`${API_URL}birthday/retrieve/entriesByGuild`);
 	getBirthdaysUrl.searchParams.append('guild_id', guild_id);
+
 	try {
 		const request = await fetch<BirthdaysByGuildResponse>(
 			getBirthdaysUrl,

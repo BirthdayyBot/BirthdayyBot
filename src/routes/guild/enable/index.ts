@@ -3,6 +3,7 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
+import { updateGuildsNotInAndBirthdays } from '../../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'guild/enable' })
 export class UserRoute extends Route {
@@ -12,15 +13,13 @@ export class UserRoute extends Route {
 		const { query } = request;
 		const { guild_id } = query;
 
-		const [_updateGuild, updateGuildMeta] = await container.sequelize.query('UPDATE guild SET disabled = 0 WHERE guild_id = ?', {
-			replacements: [guild_id],
-		});
-		const [_updateBirthday, updateBirthdayMeta] = await container.sequelize.query('UPDATE birthday SET disabled = 0 WHERE guild_id = ?', {
-			replacements: [guild_id],
+
+		const guild = await container.prisma.guild.update({
+			...updateGuildsNotInAndBirthdays(guild_id, false),
 		});
 
-		const affectedRowsCountGuild = (updateGuildMeta as any).affectedRows;
-		const affectedRowsCountBirthday = (updateBirthdayMeta as any).affectedRows;
-		return response.ok({ affectedRowsCountGuild, affectedRowsCountBirthday });
+		if (!guild) return response.badRequest({ error: 'Guild not found' });
+
+		return response.ok({ message: `Guild ${guild_id} enabled`, guild });
 	}
 }

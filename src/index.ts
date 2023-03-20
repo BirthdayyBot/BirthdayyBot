@@ -13,12 +13,12 @@ async function main() {
 		// Initialize Sentry
 		if (SENTRY_DSN) Sentry.init(SENTRY_OPTIONS);
 		// Connect to the Database
-		container.sequelize.authenticate();
+		container.prisma.$connect();
 		// Login to the Discord gateway
 		await client.login();
 	} catch (error) {
 		container.logger.error(error);
-		container.sequelize.close();
+		container.prisma.$disconnect();
 		client.destroy();
 		process.exit(1);
 	}

@@ -1,4 +1,4 @@
-import type { Sequelize } from 'sequelize';
+import type { PrismaClient } from '@prisma/client';
 
 declare global {
 	namespace NodeJS {
@@ -29,10 +29,6 @@ declare global {
 			WEBHOOK_SECRET: string;
 
 			// Database
-			DB_NAME: string;
-			DB_USERNAME: string;
-			DB_HOST: string;
-			DB_PORT: string;
 			DB_URL: string;
 
 			// REDIS
@@ -52,7 +48,7 @@ declare global {
 
 declare module '@sapphire/pieces' {
 	interface Container {
-		sequelize: Sequelize;
+		prisma: PrismaClient;
 	}
 }
 

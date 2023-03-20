@@ -4,10 +4,10 @@ import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
 import { getBeautifiedDate, numberToMonthname } from '../utils/date';
 import { getBirthdaysByGuild, removeBirthday } from '../../lib/birthday/birthday';
 import type { CustomEmbedModel } from '../../lib/model';
-import type { BirthdayWithUserModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/framework';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
+import type { BirthdayWithUserModel } from '../../lib/db';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);

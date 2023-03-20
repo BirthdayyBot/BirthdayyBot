@@ -1,6 +1,5 @@
 import { container } from '@sapphire/framework';
 import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
-import { QueryTypes } from 'sequelize';
 import { isDateString } from '../../../helpers/utils/date';
 import type { ApiRequest, BirthdayQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
@@ -23,31 +22,20 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		// Create User if not exists
-		await container.sequelize.query('INSERT IGNORE INTO user (user_id, username, discriminator) VALUES (?,?,?)', {
-			replacements: [user_id, username, discriminator],
-			type: QueryTypes.INSERT,
+		await container.prisma.user.create({
+			data: {
+				user_id: user_id,
+				username: username,
+				discriminator: discriminator,
+				birthday: {
+					create: {
+						birthday: date,
+						guild_id: guild_id,
+					},
+				},
+			},
 		});
 
-		try {
-			// Create Birthday
-			await container.sequelize.query('INSERT INTO birthday (user_id, birthday, guild_id) VALUES (?,?,?)', {
-				replacements: [user_id, date, guild_id],
-				type: QueryTypes.INSERT,
-			});
-		} catch (error: any) {
-			if (error.name === 'SequelizeUniqueConstraintError') {
-				return response.badRequest({
-					success: false,
-					error: {
-						code: APIErrorCode.DUPLICATE_ENTRY,
-						message: 'User already has a birthday registered',
-					},
-				});
-			}
-
-			return response.error(error);
-		}
 		return response.created({ success: true });
 	}
 }
