@@ -46,6 +46,10 @@ declare global {
 			STDLIB_SECRET_TOKEN: string;
 			AUTOCODE_ENV: 'dev' | 'release';
 			CUSTOM_BOT: 'TRUE' | 'FALSE' | 'true' | 'false' | '1' | '0' | 'yes' | 'no' | 'y' | 'n';
+
+            // Logging
+            LOG_CHANNEL_ADMIN: string;
+            LOG_CHANNEL_SERVER: string;
 		}
 	}
 }
