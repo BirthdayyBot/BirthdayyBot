@@ -2,24 +2,20 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import { authenticated } from '../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { selectGuild, selectGuildAndBirthdays, updateGuildInAndBirthdays, whereGuildsIn } from '../../lib/db';
+import type { Guild } from '@prisma/client';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/test' })
 export class UserRoute extends Route {
 	@authenticated()
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-		const enableGuild = await container.prisma.guild.findMany({
-			where: {
-				disabled: false,
-			},
-			...selectGuild,
-		});
+
+		const enableGuild = await container.utilities.guild.get.GuildsEnableds();
 
 		const cleanedGuilds = await this.processGuilds(enableGuild);
 		return response.ok({ enableGuild, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
 	}
 
-	public async processGuilds(guilds: selectGuild[]) {
+	public async processGuilds(guilds: Guild[]) {
 		const results = [];
 
 		for (const guild of guilds) {
@@ -45,11 +41,7 @@ export class UserRoute extends Route {
 	public async cleanGuild(guild_id: string) {
 		container.logger.info('guild does not exist', guild_id);
 
-		const disableGuildMeta = await container.prisma.guild.update({
-			...whereGuildsIn(guild_id),
-			...updateGuildInAndBirthdays(guild_id, true),
-			...selectGuildAndBirthdays,
-		});
+		const disableGuildMeta = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
 
 		return {
 			guild_id: `${guild_id}`,

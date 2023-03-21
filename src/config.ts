@@ -102,6 +102,8 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	],
 };
 
+import '@sapphire/plugin-utilities-store/register';
+
 export const CLIENT_OPTIONS: ClientOptions = {
 	api: parseApi(),
 	botList: parseBotListOptions(),

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { extractDayAndMonth } from '../../helpers/utils/date';
+import { extractDayAndMonth } from '../../../helpers/utils/date';
 
 
 export const findUser = (guild_id: string) => Prisma.validator<Prisma.BirthdayWhereInput>()({

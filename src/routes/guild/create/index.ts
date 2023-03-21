@@ -15,12 +15,7 @@ export class UserRoute extends Route {
 	public async [methods.POST](request: ApiRequest<GuildCreateQuery>, response: ApiResponse) {
 		const { guild_id, inviter } = request.query;
 
-		const guild = await container.prisma.guild.create({
-			data: {
-				guild_id: guild_id,
-				inviter: inviter,
-			},
-		});
+		const guild = await container.utilities.guild.create({ guild_id, inviter });
 
 		if (!guild) return response.badRequest({ error: 'Guild not found' });
 

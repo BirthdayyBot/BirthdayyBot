@@ -11,7 +11,7 @@ export class BirthdayCreateRoute extends Route {
 	@authenticated()
 	@validateParams<BirthdayQuery>(['guild_id', 'user_id', 'date'])
 	public async [methods.POST](request: ApiRequest<BirthdayQuery>, response: ApiResponse) {
-		const { date, user_id, guild_id, username = null, discriminator = null } = request.query;
+		const { date, user_id, guild_id } = request.query;
 
 		const isDate = isDateString(date);
 
@@ -22,19 +22,7 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		await container.prisma.user.create({
-			data: {
-				user_id: user_id,
-				username: username,
-				discriminator: discriminator,
-				birthday: {
-					create: {
-						birthday: date,
-						guild_id: guild_id,
-					},
-				},
-			},
-		});
+		await container.utilities.birthday.create(user_id, guild_id, date);
 
 		return response.created({ success: true });
 	}

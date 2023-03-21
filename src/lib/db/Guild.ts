@@ -1,14 +1,5 @@
 import { Prisma, Guild } from '@prisma/client';
 
-
-export type GuildConfig = Omit<Guild, 'disabled' | 'inviter' | 'last_updated'>
-
-export type GuildDisabled = Pick<Guild, 'disabled' | 'guild_id'>;
-
-export type GuildPremium = Pick<Guild, 'premium' | 'guild_id'>;
-
-export type guildLanguage = Pick<Guild, 'language' | 'guild_id'>;
-
 export const updateGuildsNotInAndBirthdays = (guildID: string|string[], disabled: boolean) => Prisma.validator<Prisma.GuildUpdateArgs>()({
 	where: {},
 	data: {
@@ -53,6 +44,7 @@ export const selectGuildAndBirthdays = Prisma.validator<Prisma.GuildFindManyArgs
 		},
 	},
 });
+
 export type selectGuildAndBirthdays = Prisma.GuildGetPayload<typeof selectGuildAndBirthdays>;
 
 export const selectGuildPremium = Prisma.validator<Prisma.GuildFindManyArgs>()({

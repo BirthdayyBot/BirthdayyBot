@@ -3,7 +3,6 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { updateGuildsNotInAndBirthdays } from '../../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'guild/enable' })
 export class UserRoute extends Route {
@@ -13,10 +12,7 @@ export class UserRoute extends Route {
 		const { query } = request;
 		const { guild_id } = query;
 
-
-		const guild = await container.prisma.guild.update({
-			...updateGuildsNotInAndBirthdays(guild_id, false),
-		});
+		const guild = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, false);
 
 		if (!guild) return response.badRequest({ error: 'Guild not found' });
 

@@ -1,16 +1,14 @@
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
-import { getBeautifiedDate, numberToMonthname } from '../utils/date';
-import { getBirthdaysByGuild, removeBirthday } from '../../lib/birthday/birthday';
-import type { CustomEmbedModel } from '../../lib/model';
+import { getBeautifiedDate, numberToMonthname } from '../utils/date';import type { CustomEmbedModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/framework';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { BirthdayWithUserModel } from '../../lib/db';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
-	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
+	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildID(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
@@ -79,7 +77,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 			const { user_id, birthday: bday } = birthday;
 			const guild_member = await getGuildMember(guild_id, user_id);
 			if (isNullOrUndefinedOrEmpty(guild_member) && guild_id !== GuildIDEnum.CHILLI_ATTACK_V2) {
-				await removeBirthday(user_id, guild_id);
+				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, user_id);
 				continue;
 			}
 			const descriptionToAdd = `<@!${user_id}> ${getBeautifiedDate(bday)}\n`;

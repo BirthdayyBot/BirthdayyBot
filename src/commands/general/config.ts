@@ -22,12 +22,12 @@ import {
 	setTIMEZONE,
 } from '../../helpers/provide/config';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
-import type { GuildConfigModel } from '../../lib/model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { getConfigName } from '../../helpers/utils/string';
+import { ConfigName, configNameExtended, getConfigName } from '../../helpers/utils/string';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import { sendMessage } from '../../lib/discord/message';
 import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
+import type { Prisma } from '@prisma/client';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -89,17 +89,17 @@ export class ConfigCommand extends Subcommand {
 	};
 	components = [];
 
-	public async configList(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configList(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		// TODO: Implement configList Command
 		await thinking(interaction);
 		container.logger.info('Run configList Command');
-		const guild_id = interaction.guildId!;
+		const guild_id = interaction.guildId;
 		const configListEmbed = await generateConfigListEmbed(guild_id);
 		await replyToInteraction(interaction, { embeds: [configListEmbed] });
 		return;
 	}
 
-	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementChannel Command');
 		const announcement_channel = findOption(interaction, 'channel');
@@ -110,25 +110,25 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configOverviewChannel Command');
 		const overview_channel = findOption(interaction, 'channel');
 		if (await this.hasWritingPermissionsInChannel(interaction, overview_channel)) {
 			await this.setConfig(interaction, 'overview_channel');
 
-			const birthdayList = await generateBirthdayList(1, interaction.guildId!);
+			const birthdayList = await generateBirthdayList(1, interaction.guildId);
 			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
 			const birthdayListComponents = birthdayList.components as any;
 			const newBirthdayList = await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
-			await setOVERVIEW_MESSAGE(newBirthdayList.id, interaction.guildId!);
+			await setOVERVIEW_MESSAGE(newBirthdayList.id, interaction.guildId);
 
 			const embed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 		}
 	}
 
-	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configBirthdayRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
@@ -138,7 +138,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configPingRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
@@ -148,7 +148,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configTimezone Command');
 		await this.setConfig(interaction, 'timezone');
@@ -156,7 +156,7 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async configAnnouncementMessage(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configAnnouncementMessage(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementMessage Command');
 		await this.setConfig(interaction, 'announcement_message');
@@ -164,15 +164,15 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async configReset(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
+	public async configReset(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
-		const config: string = findOption(interaction, 'config');
-		const configName = getConfigName(config);
-		const result = await setDefaultConfig(config, interaction.guildId!);
+		const config = interaction.options.getString('config', true) as keyof typeof configNameExtended;
+		const configName = configNameExtended[config];
+		const result = await setDefaultConfig(config, interaction.guildId);
 		container.logger.info('config reset result', result);
 		if (result?.success) {
 			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
+			this.embed.description = `${ARROW_RIGHT} You have reset the \`${config.name}\` config.`;
 		} else {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${result?.message}`;
@@ -181,8 +181,8 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async setConfig(interaction: Subcommand.ChatInputCommandInteraction, config: string): Promise<AutocodeAPIResponseModel> {
-		const guild_id = interaction.guildId!;
+	public async setConfig(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, config: string): Promise<AutocodeAPIResponseModel> {
+		const guild_id = interaction.guildId;
 		let result: AutocodeAPIResponseModel = {
 			success: false,
 			code: 404,
@@ -224,8 +224,8 @@ export class ConfigCommand extends Subcommand {
 			break;
 			// * PREMIUM ONLY
 		case 'announcement_message':
-			const guild_config: GuildConfigModel = await getConfig(guild_id);
-			if (guild_config.PREMIUM) {
+			const guild_config = await getConfig(guild_id);
+			if (guild_config.premium) {
 				const announcement_message = findOption(interaction, 'message');
 				container.logger.info('announcement_message', announcement_message);
 				result = await setANNOUNCEMENT_MESSAGE(announcement_message, guild_id);
@@ -255,7 +255,7 @@ export class ConfigCommand extends Subcommand {
 		return result;
 	}
 
-	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction, channel_id: string): Promise<boolean> {
+	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, channel_id: string): Promise<boolean> {
 		const hasCorrectPermissions = await hasChannelPermissions(interaction, ['ViewChannel', 'SendMessages'], channel_id);
 		if (!hasCorrectPermissions) {
 			this.embed.title = `${FAIL} Failure`;
@@ -267,7 +267,7 @@ export class ConfigCommand extends Subcommand {
 		return true;
 	}
 
-	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction): Promise<boolean> {
+	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction<'cached'>): Promise<boolean> {
 		const hasPermissions = await hasGuildPermissions(interaction, ['ManageRoles']);
 		if (!hasPermissions) {
 			this.embed.title = `${FAIL} Failure`;

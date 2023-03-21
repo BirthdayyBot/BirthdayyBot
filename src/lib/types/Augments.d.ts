@@ -1,4 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
+import type { Guild } from '../../utilities/db/Guild';
+import type { Birthday } from '../../utilities/db/Birthday';
 
 declare global {
 	namespace NodeJS {
@@ -63,5 +65,12 @@ declare module '@sapphire/plugin-scheduled-tasks' {
 	interface ScheduledTasks {
 		BirthdayReminderTask: never;
 		BirthdayRoleRemoverTask: never;
+	}
+}
+
+declare module '@sapphire/plugin-utilities-store' {
+	export interface Utilities {
+		guild: Guild;
+		birthday: Birthday;
 	}
 }

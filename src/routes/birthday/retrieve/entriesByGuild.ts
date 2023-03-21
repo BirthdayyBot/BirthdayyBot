@@ -3,7 +3,6 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { selectBirthdayWithUser, whereDisableGuild } from '../../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'birthday/retrieve/entriesByGuild' })
 export class UserRoute extends Route {
@@ -12,10 +11,7 @@ export class UserRoute extends Route {
 	public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
 		const { guild_id } = _request.query;
 
-		const results = await container.prisma.birthday.findMany({
-			...whereDisableGuild(guild_id, false),
-			...selectBirthdayWithUser,
-		});
+		const results = await container.utilities.birthday.get.BirthdaysNotDisabled(guild_id);
 
 		if (!results) return response.badRequest({ error: 'Guild not Found' });
 

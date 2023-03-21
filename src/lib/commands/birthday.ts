@@ -1,7 +1,7 @@
+import { ApplicationCommandOptionType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 import { getLocalizedString } from '../../helpers/utils/translate';
-import { PermissionFlagsBits } from 'discord.js';
 
-export async function BirthdayCMD() {
+export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 	return {
 		// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandData
 		name: await getLocalizedString('en-US', 'commands/birthday:name'),
@@ -16,7 +16,7 @@ export async function BirthdayCMD() {
 		dmPermission: false,
 		options: [
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
 				nameLocalizations: {
 					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
@@ -28,13 +28,15 @@ export async function BirthdayCMD() {
 				options: [
 					// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandOptionData
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
+						min_value: 1,
+						max_value: 31,
 					},
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -90,12 +92,12 @@ export async function BirthdayCMD() {
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 					},
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Set a birthday for another Person - MANAGER ONLY',
 					},
@@ -108,19 +110,19 @@ export async function BirthdayCMD() {
 				defaultMemberPermissions: [PermissionFlagsBits.ManageRoles], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
 				options: [
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Update a Birthday for a Person - MANAGER ONLY',
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
 					},
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -176,7 +178,7 @@ export async function BirthdayCMD() {
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 					},

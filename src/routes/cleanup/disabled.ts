@@ -14,8 +14,8 @@ export class UserRoute extends Route {
 		DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
 
 		const [guilds, birthdays] = await container.prisma.$transaction([
-			container.prisma.guild.deleteMany({ ...whereGuildLastUpdated(oneDayAgo) }),
-			container.prisma.birthday.deleteMany({ ...whereGuildLastUpdated(oneDayAgo) }),
+			container.utilities.guild.delete.ByLastUpdateDisable(oneDayAgo),
+			container.utilities.birthday.delete.ByLastUpdateDisable(oneDayAgo),
 		]);
 
 		return response.ok({

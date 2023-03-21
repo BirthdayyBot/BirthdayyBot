@@ -13,10 +13,7 @@ export class UserRoute extends Route {
 		const { query } = request;
 		const { guild_id } = query;
 
-		const guild = await container.prisma.guild.update({
-			...updateGuildsNotInAndBirthdays(guild_id, true),
-			...selectGuildPremium,
-		});
+		const guild = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
 
 		if (!guild) {
 			return response.status(404).json({ error: 'Guild not found' });

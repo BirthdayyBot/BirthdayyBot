@@ -4,7 +4,6 @@ import { parseBoolean } from '../../../helpers/utils/utils';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { selectGuildPremium, whereGuild } from '../../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-premium' })
 export class UserRoute extends Route {
@@ -13,10 +12,7 @@ export class UserRoute extends Route {
 	public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
 		const { guild_id } = request.query;
 
-		const results = await container.prisma.guild.findUnique({
-			...whereGuild(guild_id),
-			...selectGuildPremium,
-		});
+		const results = await container.utilities.guild.get.GuildPremium(guild_id);
 
 		container.logger.info('results', results);
 

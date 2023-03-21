@@ -6,6 +6,7 @@ import { container } from '@sapphire/framework';
 import type { GuildConfig, selectGuild, selectGuildConfig } from '../../lib/db';
 import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import type { Prisma } from '@prisma/client';
+import type { ConfigName } from '../utils/string';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
@@ -50,41 +51,19 @@ export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guild_id:
 	container.logger.info('Set config for guild with id ', guild_id);
 }
 
-export async function removeConfig(config_name: string, guild_id: string) {
-	switch (config_name) {
-	case 'birthday_role':
-		await setBIRTHDAY_ROLE('null', guild_id);
-		break;
-	case 'birthday_ping_role':
-		await setBIRTHDAY_PING_ROLE('null', guild_id);
-		break;
-	case 'announcement_channel':
-		await setANNOUNCEMENT_CHANNEL('null', guild_id);
-		break;
-	case 'overview_channel':
-		await setOVERVIEW_CHANNEL('null', guild_id);
-		break;
-	case 'log_channel':
-		await setLOG_CHANNEL('null', guild_id);
-		break;
-	case 'overview_message':
-		await setOVERVIEW_MESSAGE('null', guild_id);
-		break;
-	case 'timezone':
-		await setTIMEZONE('null', guild_id);
-		break;
-	case 'announcement_message':
-		await setANNOUNCEMENT_MESSAGE('null', guild_id);
-		break;
-	default:
-		container.logger.info('config not defined: ', config_name);
-		return false;
-	}
-	return true;
+export async function removeConfig(config_name: keyof Prisma.GuildScalarFieldEnum, guild_id: string) {
+	return container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data: {
+			[config_name]: null,
+		},
+	});
 }
 
 export async function setDefaultConfigs(guild_id: string) {
-	await container.prisma.guild.update({
+	return container.prisma.guild.update({
 		where: {
 			guild_id: guild_id,
 		},
@@ -101,7 +80,7 @@ export async function setDefaultConfigs(guild_id: string) {
 	});
 }
 
-export async function setDefaultConfig(config_name: string, guild_id: string) {
+export async function setDefaultConfig(config_name: ConfigName, guild_id: string) {
 	let reset;
 	switch (config_name) {
 	case 'announcement_channel':
@@ -125,7 +104,7 @@ export async function setDefaultConfig(config_name: string, guild_id: string) {
 	case 'birthday_role':
 		reset = await setBIRTHDAY_ROLE('null', guild_id);
 		break;
-	case 'ping_role':
+	case 'birthday_ping_role':
 		reset = await setBIRTHDAY_PING_ROLE('null', guild_id);
 		break;
 	default:

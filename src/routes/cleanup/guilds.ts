@@ -2,7 +2,6 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import { authenticated } from '../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { updateGuildsNotInAndBirthdays, whereGuildsNotIn } from '../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/guilds' })
 export class CleanUpGuildsRoute extends Route {
@@ -12,14 +11,13 @@ export class CleanUpGuildsRoute extends Route {
 		const guildIds = (await container.client.guilds.fetch()).map((guild) => guild.id);
 
 
-		const guilds = await container.prisma.guild.updateMany({
-			...whereGuildsNotIn(guildIds),
-			...updateGuildsNotInAndBirthdays(guildIds, true),
-		});
+		const [guilds, bithdays] = await container.utilities.guild.update.ByNotInAndBirthdays(guildIds, true);
 
 		return response.ok({
 			cleaned_guilds_count: guilds.count,
 			cleaned_guilds: guilds,
+			cleaned_birthdays_count: bithdays.count,
+			cleaned_birthdays: bithdays,
 		});
 	}
 }

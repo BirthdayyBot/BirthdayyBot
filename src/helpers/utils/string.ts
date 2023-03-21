@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 
 export function useCorrectDayFormat(number: number | string): string {
@@ -28,6 +29,20 @@ export function getConfigName(config: string): string {
 		return 'Unknown';
 	}
 }
+
+export type ConfigName = Exclude<Prisma.GuildScalarFieldEnum, 'disabled' | 'guild_id' | 'inviter' | 'last_updated' | 'premium'>
+
+export const configNameExtended: Record<ConfigName, string> = {
+	birthday_role: 'Birthday Role',
+	birthday_ping_role: 'Birthday Ping Role',
+	announcement_channel: 'Announcement Channel',
+	announcement_message: 'Announcement Message',
+	overview_channel: 'Overview Channel',
+	overview_message: 'Overview Message',
+	timezone: 'Timezone',
+	log_channel: 'Log Channel',
+	language: 'Language',
+};
 
 export function checkIfLengthIsTwo(number: string) {
 	return number.length < 2 ? `0${number}` : number;
