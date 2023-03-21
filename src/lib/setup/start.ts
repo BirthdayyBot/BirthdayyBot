@@ -2,13 +2,16 @@
 process.env.NODE_ENV ??= 'development';
 
 import 'reflect-metadata';
+import '@sentry/tracing';
 import '@sapphire/plugin-hmr/register';
 import '@sapphire/plugin-api/register';
 import '@sapphire/plugin-editable-commands/register';
 import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-i18next/register';
+import '@sapphire/plugin-scheduled-tasks/register-redis';
 import '@devtomio/plugin-botlist/register';
+
 import * as colorette from 'colorette';
 import { inspect } from 'util';
 import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';

@@ -15,42 +15,42 @@ import { DEBUG } from '../provide/environment';
  *
  */
 export default async function replyToInteraction(
-    interaction: Command.ChatInputCommandInteraction | Command.ContextMenuCommandInteraction,
-    args: {
+	interaction: Command.ChatInputCommandInteraction | Command.ContextMenuCommandInteraction,
+	args: {
 		content?: string;
 		embeds?: (JSONEncodable<APIEmbed> | APIEmbed)[];
 		components?: ActionRowData<MessageActionRowComponentData>[];
 		ephemeral?: boolean;
 	},
 ): Promise<void> {
-    const { content, embeds, components, ephemeral } = args;
+	const { content, embeds, components, ephemeral } = args;
 
-    // Define the response object, which will be used to send the reply to the interaction
-    const response: InteractionReplyOptions = {
-        content: content ?? '',
-        embeds: embeds,
-        components: components,
-        ephemeral: ephemeral ?? false,
-    };
+	// Define the response object, which will be used to send the reply to the interaction
+	const response: InteractionReplyOptions = {
+		content: content ?? '',
+		embeds: embeds,
+		components: components,
+		ephemeral: ephemeral ?? false,
+	};
 
-    // If the interaction has already been replied to, or deferred, edit the reply instead
-    if (interaction?.replied || interaction?.deferred) {
-        container.logger.info('repliedOrDeferred');
-        interaction.editReply(response);
-        return;
-    }
+	// If the interaction has already been replied to, or deferred, edit the reply instead
+	if (interaction?.replied || interaction?.deferred) {
+		container.logger.info('repliedOrDeferred');
+		interaction.editReply(response);
+		return;
+	}
 
-    // If the interaction has not been replied to or deferred, reply to the interaction
-    try {
-        container.logger.info('IsNotRepliedOrDeferred');
-        await interaction.reply(response);
-        container.logger.info(DEBUG ? 'replied' : '');
-        return;
-    } catch (error) {
-        // If the interaction has already been replied to or deferred, edit the reply instead
-        container.logger.warn(error);
-        container.logger.info('editReply');
-        await interaction.editReply(response);
-        return;
-    }
+	// If the interaction has not been replied to or deferred, reply to the interaction
+	try {
+		container.logger.info('IsNotRepliedOrDeferred');
+		await interaction.reply(response);
+		container.logger.info(DEBUG ? 'replied' : '');
+		return;
+	} catch (error) {
+		// If the interaction has already been replied to or deferred, edit the reply instead
+		container.logger.warn(error);
+		container.logger.info('editReply');
+		await interaction.editReply(response);
+		return;
+	}
 }
