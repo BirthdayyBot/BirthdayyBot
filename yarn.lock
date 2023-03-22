@@ -405,6 +405,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/engines@npm:4.11.0":
+  version: 4.11.0
+  resolution: "@prisma/engines@npm:4.11.0"
+  checksum: 98030cead39e5009b7a91fd2463433ccdb16cbeb6c7345ed7950c25dbe0731a425fc888458a1423b594d659972e081ca3d63d301ef647f05a634209c75769db2
+  languageName: node
+  linkType: hard
+
 "@sapphire/async-queue@npm:^1.5.0":
   version: 1.5.0
   resolution: "@sapphire/async-queue@npm:1.5.0"
@@ -1316,6 +1323,7 @@ __metadata:
     npm-run-all: ^4.1.5
     pm2: ^5.3.0
     prettier: ^2.8.6
+    prisma: ^4.11.0
     reflect-metadata: ^0.1.13
     sentry: ^0.1.2
     sequelize: ^6.29.3
@@ -4291,6 +4299,18 @@ __metadata:
   bin:
     prettier: bin-prettier.js
   checksum: 8ac94fa67aec0e65743ea15ebf954ef2f1e52638abd129dc04e8b49e8bb3224c0233c98df6b5c98efd31bd2a43866590486559438ee4ead09dc81be389068572
+  languageName: node
+  linkType: hard
+
+"prisma@npm:^4.11.0":
+  version: 4.11.0
+  resolution: "prisma@npm:4.11.0"
+  dependencies:
+    "@prisma/engines": 4.11.0
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: 760d80766ae16ad2d25cfc20d75433b020dff0937eab864b94b95beadd89e481508e4d3c6370a5df90749d5ac5c7af77c9c2f293b74bfdee0e548b04a905c2e7
   languageName: node
   linkType: hard
 
