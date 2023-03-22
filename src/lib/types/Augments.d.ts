@@ -38,6 +38,7 @@ declare global {
 			REDIS_HOST: string;
 			REDIS_PASSWORD: string;
 			REDIS_DB: number;
+			REDIS_USERNAME: string;
 
 			// Other
 			SENTRY_DSN: string;
