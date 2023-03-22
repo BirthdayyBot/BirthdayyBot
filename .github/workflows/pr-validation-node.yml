@@ -39,7 +39,7 @@ jobs:
         run: yarn add 
 
       - name: Prisma
-        run: prisma generate
+        run: npx prisma generate
 
       - name: Build
         run: yarn build
