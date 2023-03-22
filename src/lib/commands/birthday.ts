@@ -1,7 +1,7 @@
-import { ApplicationCommandOptionType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import { PermissionFlagsBits } from 'discord.js';
 import { getLocalizedString } from '../../helpers/utils/translate';
 
-export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
+export async function BirthdayCMD() {
 	return {
 		// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandData
 		name: await getLocalizedString('en-US', 'commands/birthday:name'),
@@ -16,7 +16,7 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 		dmPermission: false,
 		options: [
 			{
-				type: ApplicationCommandOptionType.Subcommand,
+				type: 1,
 				name: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
 				nameLocalizations: {
 					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
@@ -28,15 +28,15 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 				options: [
 					// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandOptionData
 					{
-						type: ApplicationCommandOptionType.Integer,
+						type: 4,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
-						min_value: 1,
-						max_value: 31,
+						minValue: 1,
+						maxValue: 31,
 					},
 					{
-						type: ApplicationCommandOptionType.String,
+						type: 3,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -92,12 +92,14 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						required: true,
 					},
 					{
-						type: ApplicationCommandOptionType.Integer,
+						type: 4,
 						name: 'year',
 						description: 'Year of birthday',
+						minValue: 1950,
+						maxValue: 2025,
 					},
 					{
-						type: ApplicationCommandOptionType.User,
+						type: 6,
 						name: 'user',
 						description: 'Set a birthday for another Person - MANAGER ONLY',
 					},
@@ -110,19 +112,21 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 				defaultMemberPermissions: [PermissionFlagsBits.ManageRoles], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
 				options: [
 					{
-						type: ApplicationCommandOptionType.User,
+						type: 6,
 						name: 'user',
 						description: 'Update a Birthday for a Person - MANAGER ONLY',
 						required: true,
 					},
 					{
-						type: ApplicationCommandOptionType.Integer,
+						type: 4,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
+						minValue: 1,
+						maxValue: 31,
 					},
 					{
-						type: ApplicationCommandOptionType.String,
+						type: 3,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -178,9 +182,11 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						required: true,
 					},
 					{
-						type: ApplicationCommandOptionType.Integer,
+						type: 4,
 						name: 'year',
 						description: 'Year of birthday',
+						minValue: 1950,
+						maxValue: 2025,
 					},
 				],
 			},

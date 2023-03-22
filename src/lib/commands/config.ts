@@ -1,4 +1,3 @@
-import type { Command } from '@sapphire/framework';
 import { ApplicationCommandOptionType, PermissionFlagsBits } from 'discord.js';
 
 export async function ConfigCMD() {

@@ -3,7 +3,6 @@ import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-a
 import { DEBUG } from '../../helpers/provide/environment';
 import { authenticated } from '../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { whereGuildLastUpdated } from '../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/disabled' })
 export class UserRoute extends Route {

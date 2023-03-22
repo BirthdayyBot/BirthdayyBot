@@ -4,9 +4,7 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import replyToInteraction from '../../helpers/send/response';
 import generateEmbed from '../../helpers/generate/embed';
 // import checkCurrentBirthdays from '../../lib/birthday/checkCurrentBirthdays';
-import { isGuildPremium } from '../../helpers/provide/guild';
 import { getCurrentOffset } from '../../helpers/provide/currentOffset';
-import { getBirthdaysByDateAndTimezone } from '../../lib/birthday/birthday';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 @ApplyOptions<Command.Options>({
@@ -38,10 +36,10 @@ export class TestCommand extends Command {
 		const today = o.date;
 		container.logger.info('today', today);
 		const offset = o.offsetString;
-		const request = await getBirthdaysByDateAndTimezone(today, offset);
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(today, offset as unknown as number);
 		container.logger.info('request', request);
 		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
-		container.logger.info('isGuildPremiuum: ', await isGuildPremium(interaction.guildId!));
+		container.logger.info('isGuildPremiuum: ', (await this.container.utilities.guild.get.GuildPremium(interaction.guildId!).then((r) => r?.premium)));
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
 		const embed = await generateEmbed(embedObj);

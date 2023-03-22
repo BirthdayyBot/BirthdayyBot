@@ -9,11 +9,6 @@ import {
 	API_PORT,
 	APP_ENV,
 	DEBUG,
-	REDIS_DB,
-	REDIS_HOST,
-	REDIS_PASSWORD,
-	REDIS_PORT,
-	REDIS_USERNAME,
 	ROOT_DIR,
 	SENTRY_DSN,
 	TOKEN_DISCORDBOTLIST,
@@ -80,11 +75,11 @@ function parseScheduledTasksOptions(): ScheduledTasksOptions {
 function parseBullOptions(): QueueOptions {
 	return {
 		connection: {
-			port: REDIS_PORT,
-			password: REDIS_PASSWORD,
-			host: REDIS_HOST,
-			db: REDIS_DB,
-			username: REDIS_USERNAME,
+			port: 32768,
+			password: 'redispw',
+			host: 'localhost',
+			db: 0,
+			username: 'default',
 		},
 	};
 }

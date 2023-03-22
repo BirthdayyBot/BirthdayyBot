@@ -22,7 +22,26 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		await container.utilities.birthday.create(user_id, guild_id, date);
+		const guild = await container.client.guilds.fetch(guild_id);
+
+		if (!guild) {
+			return response.badRequest({
+				success: false,
+				error: { message: 'Guild not found' },
+			});
+		}
+
+		const member = await guild.members.fetch(user_id);
+
+		if (!member) {
+			return response.badRequest({
+				success: false,
+				error: { message: 'User not found' },
+			});
+		}
+
+
+		await container.utilities.birthday.create(user_id, guild, member.user);
 
 		return response.created({ success: true });
 	}

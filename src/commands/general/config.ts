@@ -11,7 +11,6 @@ import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import findOption from '../../helpers/utils/findOption';
 import {
-	getConfig,
 	setANNOUNCEMENT_CHANNEL,
 	setANNOUNCEMENT_MESSAGE,
 	setBIRTHDAY_PING_ROLE,
@@ -23,11 +22,10 @@ import {
 } from '../../helpers/provide/config';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { ConfigName, configNameExtended, getConfigName } from '../../helpers/utils/string';
+import { configNameExtended } from '../../helpers/utils/string';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import { sendMessage } from '../../lib/discord/message';
 import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
-import type { Prisma } from '@prisma/client';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -172,7 +170,7 @@ export class ConfigCommand extends Subcommand {
 		container.logger.info('config reset result', result);
 		if (result?.success) {
 			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `${ARROW_RIGHT} You have reset the \`${config.name}\` config.`;
+			this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
 		} else {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${result?.message}`;
@@ -224,7 +222,8 @@ export class ConfigCommand extends Subcommand {
 			break;
 			// * PREMIUM ONLY
 		case 'announcement_message':
-			const guild_config = await getConfig(guild_id);
+			const guild_config = await this.container.utilities.guild.get.GuildConfig(guild_id);
+			if (!guild_config) return Promise.reject('GuildConfig not found');
 			if (guild_config.premium) {
 				const announcement_message = findOption(interaction, 'message');
 				container.logger.info('announcement_message', announcement_message);

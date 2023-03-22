@@ -1,44 +1,11 @@
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
-import type { GuildConfigModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
-import type { GuildConfig, selectGuild, selectGuildConfig } from '../../lib/db';
-import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import type { Prisma } from '@prisma/client';
 import type { ConfigName } from '../utils/string';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
-
-//  ! Autocode implementation, will be deprecated in favor of the fetch implementation
-export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
-	const req = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.retrieve.byGuild({
-		guild_id: guild_id,
-	});
-	return {
-		GUILD_ID: req.result.guild_id,
-		BIRTHDAY_ROLE: req.result.birthday_role,
-		BIRTHDAY_PING_ROLE: req.result.birthday_ping_role,
-		ANNOUNCEMENT_CHANNEL: req.result.announcement_channel,
-		ANNOUNCEMENT_MESSAGE: req.result.birthday_message,
-		OVERVIEW_CHANNEL: req.result.overview_channel,
-		LOG_CHANNEL: req.result.log_channel,
-		OVERVIEW_MESSAGE: req.result.overview_message,
-		TIMEZONE: req.result.timezone,
-		LANGUAGE: req.result.language,
-		PREMIUM: req.result.premium === 1 ? true : false,
-	};
-}
-
-export async function getConfig(guild_id: string) {
-	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
-	requestURL.searchParams.append('guild_id', guild_id);
-	return fetch<selectGuildConfig>(
-		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
-		FetchResultTypes.JSON,
-	);
-}
 
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guild_id: string) {
 

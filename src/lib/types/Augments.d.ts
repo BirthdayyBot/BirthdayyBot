@@ -34,10 +34,10 @@ declare global {
 			DB_URL: string;
 
 			// REDIS
-			REDIS_PORT: string;
+			REDIS_PORT: number;
 			REDIS_HOST: string;
 			REDIS_PASSWORD: string;
-			REDIS_DB: string;
+			REDIS_DB: number;
 
 			// Other
 			SENTRY_URL: string;

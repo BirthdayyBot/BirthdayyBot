@@ -1,4 +1,4 @@
-import { Prisma, Guild } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export const updateGuildsNotInAndBirthdays = (guildID: string|string[], disabled: boolean) => Prisma.validator<Prisma.GuildUpdateArgs>()({
 	where: {},

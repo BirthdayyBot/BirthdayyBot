@@ -3,7 +3,6 @@ import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { selectGuildPremium, updateGuildsNotInAndBirthdays } from '../../../lib/db';
 
 @ApplyOptions<Route.Options>({ route: 'guild/leave' })
 export class UserRoute extends Route {

@@ -1,9 +1,8 @@
 import type { APIEmbed, APIEmbedField } from 'discord.js';
 import { getGuildInformation } from '../../lib/discord/guild';
-import type { GuildConfigModel } from '../../lib/model';
-import { getConfig } from '../provide/config';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
+import { container } from '@sapphire/framework';
 
 export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {
 	const guild = await getGuildInformation(guild_id);
@@ -18,7 +17,9 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 }
 
 async function generateFields(guild_id: string) {
-	const config: GuildConfigModel = await getConfig(guild_id);
+	let config = await container.utilities.guild.get.GuildConfig(guild_id);
+
+	if (!config) config = await container.utilities.guild.create({ guild_id });
 
 	const fields: APIEmbedField[] = [];
 

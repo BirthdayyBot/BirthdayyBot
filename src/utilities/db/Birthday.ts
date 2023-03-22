@@ -1,5 +1,6 @@
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { extractDayAndMonth } from '../../helpers/utils/date';
+import type { Guild, User } from 'discord.js';
 
 export class Birthday extends Utility {
 	private prisma = this.container.prisma;
@@ -12,6 +13,7 @@ export class Birthday extends Utility {
 	}
 	public get = {
 		BirthdaysByDate: (date: string) => this.prisma.birthday.findMany({ where: { birthday: { contains: extractDayAndMonth(date) } } }),
+		BirthdayByDateAndTimezone: (date: string, timezone: number) => this.prisma.birthday.findMany({ where: { birthday: { contains: extractDayAndMonth(date) }, guild: { timezone } } }),
 		BirthdaysByGuildID: (guildID: string) => this.prisma.birthday.findMany({ where: { guild_id: guildID } }),
 		BirthdayByUserAndGuild: (guildID: string, userID: string) => this.prisma.birthday.findUnique({
 			where: { user_id_guild_id: { guild_id: guildID, user_id: userID } },
@@ -35,9 +37,29 @@ export class Birthday extends Utility {
 		ByGuildAndUser: (guildID: string, userID: string) => this.prisma.birthday.delete({ where: { user_id_guild_id: { guild_id: guildID, user_id: userID } } }),
 	};
 
-	public create = (birthday:string, guild_id:string, user_id: string) => this.prisma.birthday.create({ data: {
-		birthday,
-		guild_id,
-		user_id,
+	public create = (birthday:string, guild:Guild, user: User) => this.prisma.birthday.create({ data: {
+		birthday: birthday,
+		guild: {
+			connectOrCreate: {
+				create: {
+					guild_id: guild.id,
+				},
+				where: {
+					guild_id: guild.id,
+				},
+			},
+		},
+		user: {
+			connectOrCreate: {
+				create: {
+					user_id: user.id,
+					discriminator: user.discriminator,
+					username: user.username,
+				},
+				where: {
+					user_id: user.id,
+				},
+			},
+		},
 	} });
 }

@@ -92,9 +92,9 @@ export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
 // REDIS
 export const REDIS_HOST = process.env.REDIS_HOST;
-export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
+export const REDIS_PORT = process.env.REDIS_PORT;
 export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
-export const REDIS_DB = parseInt(process.env.REDIS_DB);
+export const REDIS_DB = process.env.REDIS_DB;
 export const REDIS_USERNAME = process.env.REDIS_USERNAME;
 
 // DATABASE

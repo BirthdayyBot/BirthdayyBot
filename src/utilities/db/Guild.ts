@@ -1,6 +1,5 @@
 import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
-import { where } from 'sequelize';
 
 export class Guild extends Utility {
 	private prisma = this.container.prisma;
@@ -21,19 +20,7 @@ export class Guild extends Utility {
 		GuildLanguage: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, language: true } }),
 		GuildPremium: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, premium: true } }),
 		GuildDisabled: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, disabled: true } }),
-		GuildConfig: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: {
-			guild_id: true,
-			birthday_role: true,
-			birthday_ping_role: true,
-			announcement_channel: true,
-			announcement_message: true,
-			overview_channel: true,
-			log_channel: true,
-			overview_message: true,
-			timezone: true,
-			language: true,
-			premium: true,
-		} }),
+		GuildConfig: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID } }),
 	};
 
 	public update = {
