@@ -34,10 +34,10 @@ declare global {
 			DB_URL: string;
 
 			// REDIS
-			REDIS_PORT: number;
+			REDIS_PORT: string;
 			REDIS_HOST: string;
 			REDIS_PASSWORD: string;
-			REDIS_DB: number;
+			REDIS_DB: string;
 			REDIS_USERNAME: string;
 
 			// Other
