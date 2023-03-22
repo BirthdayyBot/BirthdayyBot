@@ -63,12 +63,12 @@ export const WARNING = '<:warning:976767964110020628>';
 export const COMPASS = '<:compass:931267039576871052>';
 
 // COMMAND
-export const CONFIG_STATUS = '</config status:935174203882217483>';
+export const CONFIG_LIST = '</config list:935174203882217483>';
 export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 
 // Values
-export const BOT_SERVER_LOG = APP_ENV === 'prd' ? '950681688227340319' : '1077621363881300018';
-export const BOT_ADMIN_LOG = APP_ENV === 'prd' ? '966987605348589588' : '1077621363881300018';
+export const BOT_SERVER_LOG = process.env.LOG_CHANNEL_SERVER ?? '1077621363881300018';
+export const BOT_ADMIN_LOG = process.env.LOG_CHANNEL_ADMIN ?? '1077621363881300018';
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
