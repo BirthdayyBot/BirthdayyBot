@@ -22,10 +22,10 @@ import {
 } from '../../helpers/provide/config';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { configNameExtended } from '../../helpers/utils/string';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import { sendMessage } from '../../lib/discord/message';
 import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
+import { ConfigName, configNameExtended } from '../../lib/database';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -164,7 +164,7 @@ export class ConfigCommand extends Subcommand {
 
 	public async configReset(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
 		await thinking(interaction);
-		const config = interaction.options.getString('config', true) as keyof typeof configNameExtended;
+		const config = interaction.options.getString('config', true) as ConfigName;
 		const configName = configNameExtended[config];
 		const result = await setDefaultConfig(config, interaction.guildId);
 		container.logger.info('config reset result', result);
