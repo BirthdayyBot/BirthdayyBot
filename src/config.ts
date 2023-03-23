@@ -2,7 +2,7 @@ import { Time } from '@sapphire/time-utilities';
 import { container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import { type ClientOptions, GatewayIntentBits } from 'discord.js';
+import { type ClientOptions, GatewayIntentBits, ActivityType, PresenceData, PresenceUpdateStatus } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import {
 	API_EXTENSION,
@@ -94,6 +94,18 @@ function parseBullOptions(): QueueOptions {
 	};
 }
 
+function parsePresenceOptions(): PresenceData {
+	return {
+		status: PresenceUpdateStatus.Online,
+		activities: [
+			{
+				name: '/birthday register 🎂',
+				type: ActivityType.Watching,
+			},
+		],
+	};
+}
+
 export const DB_OPTIONS: Options = {
 	database: DB_NAME,
 	username: DB_USERNAME,
@@ -123,17 +135,18 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
-	api: parseApi(),
-	botList: parseBotListOptions(),
 	caseInsensitiveCommands: true,
 	caseInsensitivePrefixes: true,
 	defaultPrefix: 'b!',
-	i18n: parseInternationalizationOptions(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 	loadMessageCommandListeners: true,
 	loadDefaultErrorListeners: true,
 	logger: {
 		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
 	},
+	api: parseApi(),
+	botList: parseBotListOptions(),
+	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
+	presence: parsePresenceOptions(),
 };
