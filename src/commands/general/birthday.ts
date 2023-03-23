@@ -87,18 +87,6 @@ export class BirthdayCommand extends Subcommand {
 
 		const user = await container.client.users.fetch(user_id);
 
-		if (user.bot) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					await generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`You can't register a bot's birthday.\``,
-					}),
-				],
-				ephemeral: true,
-			});
-		}
-
 		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
 
 		if (!isNullOrUndefinedOrEmpty(birthday)) {
