@@ -28,7 +28,7 @@
 		"@sentry/node": "^7.43.0",
 		"@sentry/tracing": "^7.43.0",
 		"@types/node-cron": "^3.0.7",
-		"bullmq": "^3.10.1",
+		"bullmq": "^3.10.2",
 		"colorette": "^2.0.19",
 		"discord-api-types": "^0.37.36",
 		"discord.js": "^14.8.0",

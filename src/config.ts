@@ -2,7 +2,7 @@ import { Time } from '@sapphire/time-utilities';
 import { container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import { type ClientOptions, GatewayIntentBits } from 'discord.js';
+import { type ClientOptions, GatewayIntentBits, ActivityType, PresenceData, PresenceUpdateStatus } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import {
 	API_EXTENSION,
@@ -37,20 +37,6 @@ function parseApi(): ServerOptions {
 	};
 }
 
-function parseInternationalizationOptions(): InternationalizationOptions {
-	return {
-		defaultMissingKey: 'generic:key_not_found',
-		fetchLanguage: async (context) => {
-			if (!context.guild) {
-				return 'en-US';
-			}
-
-			const guildLanguage: string = await getGuildLanguage(context.guild.id);
-			container.logger.info(guildLanguage);
-			return guildLanguage || 'en-US';
-		},
-	};
-}
 
 function parseBotListOptions(): BotList.Options {
 	return {
@@ -69,13 +55,21 @@ function parseBotListOptions(): BotList.Options {
 	};
 }
 
-function parseScheduledTasksOptions(): ScheduledTasksOptions {
+function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
-		strategy: new ScheduledTaskRedisStrategy({
-			bull: parseBullOptions(),
-		}),
+		defaultMissingKey: 'generic:key_not_found',
+		fetchLanguage: async (context) => {
+			if (!context.guild) {
+				return 'en-US';
+			}
+
+			const guildLanguage: string = await getGuildLanguage(context.guild.id);
+			container.logger.info(guildLanguage);
+			return guildLanguage || 'en-US';
+		},
 	};
 }
+
 
 function parseBullOptions(): QueueOptions {
 	return {
@@ -88,6 +82,27 @@ function parseBullOptions(): QueueOptions {
 		},
 	};
 }
+
+function parseScheduledTasksOptions(): ScheduledTasksOptions {
+	return {
+		strategy: new ScheduledTaskRedisStrategy({
+			bull: parseBullOptions(),
+		}),
+	};
+}
+
+function parsePresenceOptions(): PresenceData {
+	return {
+		status: PresenceUpdateStatus.Online,
+		activities: [
+			{
+				name: '/birthday register 🎂',
+				type: ActivityType.Watching,
+			},
+		],
+	};
+}
+
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,
@@ -102,20 +117,19 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	],
 };
 
-import '@sapphire/plugin-utilities-store/register';
-
 export const CLIENT_OPTIONS: ClientOptions = {
-	api: parseApi(),
-	botList: parseBotListOptions(),
 	caseInsensitiveCommands: true,
 	caseInsensitivePrefixes: true,
 	defaultPrefix: 'b!',
-	i18n: parseInternationalizationOptions(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 	loadMessageCommandListeners: true,
 	loadDefaultErrorListeners: true,
 	logger: {
 		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
 	},
+	api: parseApi(),
+	botList: parseBotListOptions(),
+	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
+	presence: parsePresenceOptions(),
 };
