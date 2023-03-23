@@ -28,7 +28,7 @@
 		"@types/node-cron": "^3.0.7",
 		"bullmq": "^3.10.2",
 		"colorette": "^2.0.19",
-		"discord-api-types": "^0.37.36",
+		"discord-api-types": "^0.37.37",
 		"discord.js": "^14.8.0",
 		"lib": "^5.0.1",
 		"mysql2": "^3.2.0",
