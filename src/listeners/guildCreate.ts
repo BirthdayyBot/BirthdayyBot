@@ -26,9 +26,8 @@ export class UserEvent extends Listener {
 		}
 		const _guild = await this.container.utilities.guild.get.GuildByID(guild_id);
 
-		if (!_guild) {
-			await this.container.utilities.guild.create({ guild_id, inviter });
-		}
+		if (!_guild) await this.container.utilities.guild.create({ guild_id, inviter });
+		else await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, false);
 
 		if (inviter) {
 			await sendGuide(inviter);
