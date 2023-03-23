@@ -20,7 +20,19 @@ export class Guild extends Utility {
 		GuildLanguage: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, language: true } }),
 		GuildPremium: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, premium: true } }),
 		GuildDisabled: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: { guild_id: true, disabled: true } }),
-		GuildConfig: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID } }),
+		GuildConfig: (guildID: string) => this.prisma.guild.findUnique({ where: { guild_id: guildID }, select: {
+			guild_id: true,
+			birthday_role: true,
+			birthday_ping_role: true,
+			announcement_channel: true,
+			announcement_message: true, // TODO: #13 change to announcement_message once DP is deployed
+			overview_channel: true,
+			log_channel: true,
+			overview_message: true,
+			timezone: true,
+			language: true,
+			premium: true,
+		  } }),
 	};
 
 	public update = {

@@ -3,6 +3,7 @@ import { getGuildInformation } from '../../lib/discord/guild';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
 import { container } from '@sapphire/framework';
+import type { Guild } from '.prisma/client';
 
 export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {
 	const guild = await getGuildInformation(guild_id);
@@ -16,6 +17,7 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 	return generateEmbed(embed);
 }
 
+
 async function generateFields(guild_id: string) {
 	let config = await container.utilities.guild.get.GuildConfig(guild_id);
 
@@ -23,9 +25,11 @@ async function generateFields(guild_id: string) {
 
 	const fields: APIEmbedField[] = [];
 
-	Object.entries(config).forEach(([name, value]) => {
-		// TODO: #38 Implement guild logs
-		if (['GUILD_ID', 'OVERVIEW_MESSAGE', 'LOG_CHANNEL'].includes(name)) return;
+	Object.entries(config).forEach((_config) => {
+		const [name, value] = _config as [keyof Guild, string | number | null];
+
+		const exclude: (keyof Guild)[] = ['guild_id', 'overview_message', 'log_channel'];
+		if (exclude.includes(name)) return;
 		const valueString = getValueString(name, value);
 		const nameString = getNameString(name);
 		fields.push({
@@ -38,11 +42,11 @@ async function generateFields(guild_id: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getValueString(name: string, value: any) {
+function getValueString(name: keyof Guild, value: any) {
 	let str: string;
 	if (value === null) {
 		str = `${ARROW_RIGHT} not set`;
-	} else if (name === 'TIMEZONE') {
+	} else if (name === 'timezone') {
 		str = value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
 	} else if (name.includes('CHANNEL')) {
 		str = `${ARROW_RIGHT} <#${value}>`;
@@ -57,23 +61,23 @@ function getValueString(name: string, value: any) {
 	return str;
 }
 
-function getNameString(name: string): string {
+function getNameString(name: keyof Guild): string {
 	switch (name) {
-	case 'ANNOUNCEMENT_CHANNEL':
+	case 'announcement_channel':
 		return 'Announcement Channel';
-	case 'OVERVIEW_CHANNEL':
+	case 'overview_channel':
 		return 'Overview Channel';
-	case 'BIRTHDAY_ROLE':
+	case 'birthday_role':
 		return 'Birthday Role';
-	case 'BIRTHDAY_PING_ROLE':
+	case 'birthday_ping_role':
 		return 'Birthday Ping Role';
-	case 'LOG_CHANNEL':
+	case 'log_channel':
 		return 'Log Channel';
-	case 'TIMEZONE':
+	case 'timezone':
 		return 'Timezone';
-	case 'ANNOUNCEMENT_MESSAGE':
+	case 'announcement_message':
 		return `${PLUS} Birthday Message`;
-	case 'PREMIUM':
+	case 'premium':
 		return 'Premium';
 	default:
 		return name;
