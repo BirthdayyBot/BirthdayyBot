@@ -16,33 +16,4 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.x"
-          cache: "yarn"
-      - name: Install yarn
-        run: npm i -g yarn
-
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Install prisma
-        run: yarn add 
-
-      - name: Prisma
-        run: npx prisma generate
-
-      - name: Build
-        run: yarn build
-
-      - name: Lint
-        run: yarn lint
+    uses: nikolaischunk/utilities/.github/workflows/node.js.yml@8d27ee0a9c5381380e0de3b76fc0c300886ff6e7

@@ -43,8 +43,6 @@ COPY --chown=node:node tsconfig.json tsconfig.json
 
 RUN yarn install --immutable
 
-RUN prisma generate
-
 COPY --chown=node:node src/ src/
 RUN yarn build
 
@@ -60,8 +58,6 @@ COPY --chown=node:node --from=builder /home/node/app/dist dist
 
 RUN yarn workspaces focus --all --production
 RUN chown node:node /home/node/app
-
-RUN prisma generate
 
 USER node
 
