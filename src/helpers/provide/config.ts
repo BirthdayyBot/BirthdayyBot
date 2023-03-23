@@ -3,7 +3,7 @@ import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
 import { container } from '@sapphire/framework';
 import type { Prisma } from '@prisma/client';
-import type { ConfigName } from '../utils/string';
+import type { ConfigName } from '../../lib/database';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
