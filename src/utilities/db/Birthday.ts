@@ -33,7 +33,7 @@ export class Birthday extends Utility {
 	public delete = {
 		GuildByID: (guildID: string) => this.prisma.guild.delete({ where: { guild_id: guildID } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdateDisable: (date: Date) => this.prisma.guild.deleteMany({ where: { last_updated: date.toISOString(), disabled: true } }),
+		ByLastUpdateDisable: (date: Date) => this.prisma.guild.deleteMany({ where: { last_updated: { lt: date.toISOString() }, disabled: true } }),
 		ByGuildAndUser: (guildID: string, userID: string) => this.prisma.birthday.delete({ where: { user_id_guild_id: { guild_id: guildID, user_id: userID } } }),
 	};
 

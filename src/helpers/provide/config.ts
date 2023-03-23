@@ -41,7 +41,7 @@ export async function setDefaultConfigs(guild_id: string) {
 			overview_channel: 'null',
 			log_channel: 'null',
 			overview_message: 'null',
-			timezone: parseInt('UTC'),
+			timezone: 0,
 			announcement_message: '',
 		},
 	});
