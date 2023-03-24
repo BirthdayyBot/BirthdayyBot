@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 import { ApplyOptions } from '@sapphire/decorators';
-import type { Args } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import { container } from '@sapphire/framework';
@@ -26,6 +25,7 @@ import generateBirthdayList from '../../helpers/generate/birthdayList';
 import { sendMessage } from '../../lib/discord/message';
 import { hasChannelPermissions, hasGuildPermissions } from '../../helpers/provide/permission';
 import { ConfigName, configNameExtended } from '../../lib/database';
+import { channelMention, inlineCode, roleMention } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Config Command',
@@ -87,7 +87,7 @@ export class ConfigCommand extends Subcommand {
 	};
 	components = [];
 
-	public async configList(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configList(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		// TODO: Implement configList Command
 		await thinking(interaction);
 		container.logger.info('Run configList Command');
@@ -97,7 +97,7 @@ export class ConfigCommand extends Subcommand {
 		return;
 	}
 
-	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configAnnouncementChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementChannel Command');
 		const announcement_channel = findOption(interaction, 'channel');
@@ -108,7 +108,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configOverviewChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configOverviewChannel Command');
 		const overview_channel = findOption(interaction, 'channel');
@@ -126,7 +126,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configBirthdayRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configBirthdayRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
@@ -136,7 +136,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configPingRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configPingRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
@@ -146,7 +146,7 @@ export class ConfigCommand extends Subcommand {
 		}
 	}
 
-	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configTimezone(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configTimezone Command');
 		await this.setConfig(interaction, 'timezone');
@@ -154,7 +154,7 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async configAnnouncementMessage(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configAnnouncementMessage(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementMessage Command');
 		await this.setConfig(interaction, 'announcement_message');
@@ -162,7 +162,7 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async configReset(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, _args: Args) {
+	public async configReset(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const config = interaction.options.getString('config', true) as ConfigName;
 		const configName = configNameExtended[config];
@@ -194,31 +194,37 @@ export class ConfigCommand extends Subcommand {
 			const announcement_channel = findOption(interaction, 'channel');
 			result = await setANNOUNCEMENT_CHANNEL(announcement_channel, guild_id);
 			if (result.success) {
-				this.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to <#${result.data.announcement_channel}>`;
+				this.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to ${channelMention(
+					result.data.announcement_channel,
+				)}`;
 			}
 			break;
 		case 'overview_channel':
 			const overview_channel = findOption(interaction, 'channel');
 			result = await setOVERVIEW_CHANNEL(overview_channel, guild_id);
-			if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to <#${result.data.overview_channel}>`;
+			if (result.success) {
+				this.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to ${channelMention(result.data.overview_channel)}`;
+			}
 			break;
 		case 'birthday_role':
 			const birthday_role = findOption(interaction, 'role');
 			result = await setBIRTHDAY_ROLE(birthday_role, guild_id);
-			if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to <@&${result.data.birthday_role}>`;
+			if (result.success) {
+				this.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to ${roleMention(result.data.birthday_role)}`;
+			}
 			break;
 		case 'ping_role':
 			const ping_role = findOption(interaction, 'role');
 			result = await setBIRTHDAY_PING_ROLE(ping_role, guild_id);
 			if (result.success) {
-				this.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to <@&${result.data.birthday_ping_role}>`;
+				this.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(result.data.birthday_ping_role)}`;
 			}
 			break;
 		case 'timezone':
 			const timezone = findOption(interaction, 'timezone');
 			result = await setTIMEZONE(timezone, guild_id);
 			const timezoneString = timezone < 0 ? `UTC${timezone}` : `UTC+${timezone}`;
-			if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Timezone** to \`${timezoneString}\``;
+			if (result.success) this.embed.description = `${ARROW_RIGHT} You set the **Timezone** to ${inlineCode(timezoneString)}`;
 			break;
 			// * PREMIUM ONLY
 		case 'announcement_message':
@@ -229,7 +235,9 @@ export class ConfigCommand extends Subcommand {
 				container.logger.info('announcement_message', announcement_message);
 				result = await setANNOUNCEMENT_MESSAGE(announcement_message, guild_id);
 				if (result.success) {
-					this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n\`${result.data.announcement_message}\``;
+					this.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n${inlineCode(
+						result.data.announcement_message,
+					)}`;
 				}
 			} else {
 				this.embed.title = `${PLUS} Early access only`;
@@ -254,11 +262,14 @@ export class ConfigCommand extends Subcommand {
 		return result;
 	}
 
-	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, channel_id: string): Promise<boolean> {
+	private async hasWritingPermissionsInChannel(
+		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
+		channel_id: string,
+	): Promise<boolean> {
 		const hasCorrectPermissions = await hasChannelPermissions(interaction, ['ViewChannel', 'SendMessages'], channel_id);
 		if (!hasCorrectPermissions) {
 			this.embed.title = `${FAIL} Failure`;
-			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in <#${channel_id}>.`;
+			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(channel_id)}.`;
 			const embed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 			return false;
