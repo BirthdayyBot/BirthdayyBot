@@ -35,14 +35,12 @@ export default async function replyToInteraction(
 
 	// If the interaction has already been replied to, or deferred, edit the reply instead
 	if (interaction?.replied || interaction?.deferred) {
-		container.logger.info('repliedOrDeferred');
 		interaction.editReply(response);
 		return;
 	}
 
 	// If the interaction has not been replied to or deferred, reply to the interaction
 	try {
-		container.logger.info('IsNotRepliedOrDeferred');
 		await interaction.reply(response);
 		container.logger.info(DEBUG ? 'replied' : '');
 		return;
