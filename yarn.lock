@@ -1145,7 +1145,7 @@ __metadata:
     prisma: ^4.11.0
     reflect-metadata: ^0.1.13
     sentry: ^0.1.2
-    sequelize: ^6.29.3
+    sequelize: ^6.30.0
     tsc-watch: ^6.0.0
     typescript: ^4.9.5
   languageName: unknown
@@ -3833,9 +3833,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sequelize@npm:^6.29.3":
-  version: 6.29.3
-  resolution: "sequelize@npm:6.29.3"
+"sequelize@npm:^6.30.0":
+  version: 6.30.0
+  resolution: "sequelize@npm:6.30.0"
   dependencies:
     "@types/debug": ^4.1.7
     "@types/validator": ^13.7.1
@@ -3872,7 +3872,7 @@ __metadata:
       optional: true
     tedious:
       optional: true
-  checksum: 38b39a1dc6690a974e8b70d406075b55dc14af116f3e13b2cadd2ac851980adf23f0e8fe4a7c14e89a89e1d652e9a0cbfc3121f927f739400504edd8cbf5eafb
+  checksum: a99ae86eb48ec0704e8f5173265c17578b69bd9659e21789e0f0f551c69e597d3efe7d365c417542a7cc5023b9ceaf75948650aeab6b7321c09295f17342f6d1
   languageName: node
   linkType: hard
 
