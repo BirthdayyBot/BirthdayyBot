@@ -10,6 +10,7 @@ import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-i18next/register';
 import '@sapphire/plugin-scheduled-tasks/register-redis';
+import '@sapphire/plugin-utilities-store/register';
 import '@devtomio/plugin-botlist/register';
 
 import * as colorette from 'colorette';

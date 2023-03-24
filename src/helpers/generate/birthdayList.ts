@@ -1,16 +1,14 @@
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
-import { getBeautifiedDate, numberToMonthname } from '../utils/date';
-import { getBirthdaysByGuild, removeBirthday } from '../../lib/birthday/birthday';
-import type { CustomEmbedModel } from '../../lib/model';
-import type { BirthdayWithUserModel } from '../../lib/model';
+import { getBeautifiedDate, numberToMonthname } from '../utils/date';import type { CustomEmbedModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/framework';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
+import type { Birthday } from '.prisma/client';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
-	const allBirthdaysByGuild = await getBirthdaysByGuild(guild_id);
+	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildID(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
@@ -40,9 +38,9 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
 function getBirthdaysAsLists(
-	allBirthdays: Array<BirthdayWithUserModel>,
+	allBirthdays: Array<Birthday>,
 	maxBirthdaysPerList: number,
-): { birthdays: Array<Array<BirthdayWithUserModel>>; listAmount: number } {
+): { birthdays: Array<Array<Birthday>>; listAmount: number } {
 	const length = allBirthdays.length;
 	// split birthdays into arrays with max length x entries
 	const splitBirthdays = [];
@@ -57,7 +55,7 @@ function getBirthdaysAsLists(
  * @param birthdays
  * @returns embed - Embed with the given values
  */
-async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<BirthdayWithUserModel> }[]) {
+async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<Birthday> }[]) {
 	const guild = await getGuildInformation(guild_id);
 	const embed: CustomEmbedModel = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
@@ -79,7 +77,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 			const { user_id, birthday: bday } = birthday;
 			const guild_member = await getGuildMember(guild_id, user_id);
 			if (isNullOrUndefinedOrEmpty(guild_member) && guild_id !== GuildIDEnum.CHILLI_ATTACK_V2) {
-				await removeBirthday(user_id, guild_id);
+				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, user_id);
 				continue;
 			}
 			const descriptionToAdd = `<@!${user_id}> ${getBeautifiedDate(bday)}\n`;
@@ -164,7 +162,7 @@ function prepareBirthdayList() {
 	const monthArray = [];
 	for (let i = 1; i <= 12; i++) {
 		const monthname = numberToMonthname(i);
-		const emptyArray: BirthdayWithUserModel[] = [];
+		const emptyArray: Birthday[] = [];
 		monthArray.push({ monthname, birthdays: emptyArray });
 	}
 	return monthArray;
@@ -173,7 +171,7 @@ function prepareBirthdayList() {
 /**
  * sort all birthdays to the corresponding month object
  */
-function prepareBirthdays(birthdays: Array<BirthdayWithUserModel>): Array<{ monthname: string; birthdays: Array<BirthdayWithUserModel> }> {
+function prepareBirthdays(birthdays: Array<Birthday>): Array<{ monthname: string; birthdays: Array<Birthday> }> {
 	const list = prepareBirthdayList();
 	birthdays.forEach(function(singleBirthday) {
 		const d = new Date(singleBirthday.birthday);

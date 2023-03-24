@@ -9,12 +9,10 @@ export class UserRoute extends Route {
 	@authenticated()
 	@validateParams<GuildQuery>()
 	public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-		const { guild_id } = _request.query;
+		const guildID = _request.query.guild_id as string;
 
-		const [results] = await container.sequelize.query('SELECT guild_id, language FROM guild g WHERE guild_id = ? AND disabled = false', {
-			replacements: [guild_id],
-		});
+		const results = await container.utilities.guild.get.GuildLanguage(guildID);
 
-		return response.ok(results[0]);
+		return response.ok(results);
 	}
 }

@@ -2,25 +2,19 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import findOption from '../../helpers/utils/findOption';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, AUTOCODE_ENV, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
+import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
 import { container } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import replyToInteraction from '../../helpers/send/response';
 import thinking from '../../lib/discord/thinking';
-import { getBirthdayByGuildAndUser, registerBirthday } from '../../lib/birthday/birthday';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import updateBirthdayOverview from '../../helpers/update/overview';
 import { BirthdayCMD } from '../../lib/commands/birthday';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
-import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import { removeBirthday } from '../../lib/birthday/birthday';
-import { APIErrorCode } from '../../lib/enum/APIErrorCode.enum';
+import { inlineCode } from 'discord.js';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
 	subcommands: [
@@ -56,196 +50,271 @@ export class BirthdayCommand extends Subcommand {
 			...options,
 		});
 	}
+
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(await BirthdayCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}
 
-	updateList = false;
-	adminLog = false;
-	userLog = false;
-
-	content = '';
-	embed: EmbedInformationModel = {
-		title: `${FAIL} Failure`,
-		description: 'Something went wrong',
-		fields: [],
-		thumbnail_url: '',
-	};
-	components = [];
-
-	public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction) {
+	public async birthdayRegister(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const author_id = interaction.user.id;
-		const guild_id = interaction.guildId!;
+		const guild_id = interaction.guildId;
 
-		if (author_id === user_id) {
-			this.embed = await birthdayRegisterProcess(this.embed);
-			this.updateList = this.embed.title === `${SUCCESS} Success` ? true : false;
-		} else if (await hasUserGuildPermissions(interaction, author_id, ['ManageRoles'])) {
-			await birthdayRegisterProcess(this.embed);
-			this.updateList = this.embed.title === `${SUCCESS} Success` ? true : false;
-		} else {
-			this.embed.description = `${ARROW_RIGHT} \`You don't have the permissions to register another user's birthday.\``;
+		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
+			return replyToInteraction(interaction, { embeds: [
+				await generateEmbed({
+					title: `${FAIL} Failed`,
+					description: `${ARROW_RIGHT} \`You don't have the permission to register other users birthdays.\``,
+				}),
+			], ephemeral: true });
 		}
 
-		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed], ephemeral: false });
-		if (this.updateList) await updateBirthdayOverview(guild_id);
+		const date = getDateFromInteraction(interaction);
+		if (isNullOrUndefinedOrEmpty(date) || date.isValidDate === false) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`The date you entered is not valid.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
 
-		async function birthdayRegisterProcess(embed: EmbedInformationModel): Promise<EmbedInformationModel> {
-			const birthday = getDateFromInteraction(interaction);
-			container.logger.debug(`Registering birthday for user ${user_id} in guild ${guild_id} with date ${birthday.date}`);
+		const user = await container.client.users.fetch(user_id);
 
-			if (!birthday.isValidDate) {
-				embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
-			}
-			if (birthday.isValidDate) {
-				// TODO: Add username(nick) and discriminator to the request
-				const request = await registerBirthday(birthday.date, guild_id, { user_id: user_id });
-				if (request.success) {
-					embed.title = `${SUCCESS} Success`;
-					embed.description = `${ARROW_RIGHT} I added the Birthday from <@${user_id}> at the \`${getBeautifiedDate(birthday.date)}\`. 🎂`;
-				} else if (request.error) {
-					if (request.error.code === APIErrorCode.DUPLICATE_ENTRY) {
-						embed.description = `${ARROW_RIGHT} \`This user's birthday is already registered.\n Use /birthday update!\``;
-					} else {
-						embed.description = `${ARROW_RIGHT} \`${request.error.message}\``;
-						container.logger.error(request.error.code);
-						container.logger.error(request.error.message);
-					}
-				}
-			} else {
-				embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
-			}
-			return embed;
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
+
+		if (!isNullOrUndefinedOrEmpty(birthday)) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: ARROW_RIGHT + ` This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
+
+		try {
+
+			await container.utilities.birthday.create(date.date, interaction.guild, user);
+
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${BOOK} Birthday Registered`,
+						description: `${ARROW_RIGHT} \`The birthday of ${user.username} was successfully registered.\``,
+						fields: [
+							{
+								name: 'Date',
+								value: getBeautifiedDate(date.date),
+								inline: true,
+							},
+						],
+						thumbnail_url: IMG_CAKE,
+					}),
+				],
+				ephemeral: true,
+			});
+
+		} catch (error: any) {
+			container.logger.error(error);
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`An error occurred while registering the birthday.\``,
+					}),
+				],
+				ephemeral: true,
+			});
 		}
 	}
 
-	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction) {
+	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const author_id = interaction.user.id;
-		const guild_id = interaction.guildId!;
+		const guild_id = interaction.guildId;
 
-		if (author_id === user_id) {
-			await this.removeBirthdayRequest(user_id, guild_id);
-		} else {
-			const hasPermissions = await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']);
-			if (hasPermissions) {
-				await this.removeBirthdayRequest(user_id, guild_id);
-				this.updateList = true;
-			} else {
-				this.embed.description = `${ARROW_RIGHT} \`You don't have the permission to remove other users birthdays.\``;
-			}
+		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
+			return replyToInteraction(interaction, { embeds: [
+				await generateEmbed({
+					title: `${FAIL} Failed`,
+					description: `${ARROW_RIGHT} \`You don't have the permission to remove other users birthdays.\``,
+				}),
+			], ephemeral: true });
 		}
 
-		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
-		if (this.updateList) await updateBirthdayOverview(guild_id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
+
+		if (isNullOrUndefinedOrEmpty(birthday)) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
+
+		try {
+
+			await container.utilities.birthday.delete.ByGuildAndUser(guild_id, author_id);
+
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${BOOK} Birthday Removed`,
+						description: `${ARROW_RIGHT} \`The birthday of <@${user_id}> was successfully removed.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
+		catch (error: any) {
+			container.logger.error(error);
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`An error occurred while removing the birthday.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
 	}
 
-	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction) {
+	public async birthdayList(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
-		const guild_id = interaction.guildId!;
+		const guild_id = interaction.guildId;
 		const { embed, components } = await generateBirthdayList(1, guild_id);
 
 		const generatedEmbed = await generateEmbed(embed);
 		await replyToInteraction(interaction, { embeds: [generatedEmbed], components: components });
 	}
 
-	public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction) {
+	public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
-		const guild_id = interaction.guildId!;
-		const request = await getBirthdayByGuildAndUser(guild_id, user_id);
-		// container.logger.info("request", request);
-		this.embed.title = `${BOOK} Show Birthday`;
-		if (isNullOrUndefinedOrEmpty(request)) {
-			// container.logger.info("isEmpty");
-			this.embed.description = `${ARROW_RIGHT} \`This user has no registered birthday.\``;
-		} else {
-			// container.logger.info("isNotEmpty");
-			const birthday = request[0];
-			const readableDate = getBeautifiedDate(birthday.birthday);
-			this.embed.thumbnail_url = IMG_CAKE;
-			this.embed.description = `${ARROW_RIGHT} <@${birthday.user_id}>'s birthday is at the \`${readableDate}\``;
-		}
-		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
+		const guild_id = interaction.guildId;
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
+
+		if (isNullOrUndefinedOrEmpty(birthday)) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		};
+
+		const embed = await generateEmbed({
+			title: `${BOOK} Birthday`,
+			description: `${ARROW_RIGHT} <@${birthday.user_id}>'s birthday is at the \`${getBeautifiedDate(birthday.birthday)}.\``,
+			thumbnail_url: IMG_CAKE,
+		});
+
+		return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
 	}
 
-	public async birthdayUpdate(interaction: Subcommand.ChatInputCommandInteraction) {
+	public async birthdayUpdate(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const user_id = findOption(interaction, 'user', interaction.user.id);
 		const author_id = interaction.user.id;
-		const guild_id = interaction.guildId!;
+		const guild_id = interaction.guildId;
 
-		if (author_id === user_id) {
-			this.embed = await birthdayUpdateProcess(this.embed);
-			this.updateList = this.embed.title === `${SUCCESS} Success` ? true : false;
-		} else if (await hasUserGuildPermissions(interaction, author_id, ['ManageRoles'])) {
-			await birthdayUpdateProcess(this.embed);
-			this.updateList = this.embed.title === `${SUCCESS} Success` ? true : false;
-		} else {
-			this.embed.description = `${ARROW_RIGHT} \`You don't have the permissions to update another user's birthday.\``;
+		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
+			return replyToInteraction(interaction, { embeds: [
+				await generateEmbed({
+					title: `${FAIL} Failed`,
+					description: `${ARROW_RIGHT} \`You don't have the permission to update other users birthdays.\``,
+				}),
+			], ephemeral: true });
 		}
 
-		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
-		if (this.updateList) await updateBirthdayOverview(guild_id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
 
-		async function birthdayUpdateProcess(embed: EmbedInformationModel): Promise<EmbedInformationModel> {
-			const birthday = getDateFromInteraction(interaction);
-			if (!birthday.isValidDate) {
-				embed.description = `${ARROW_RIGHT} \`${birthday.message}\``;
-			}
-
-			if (birthday.isValidDate) {
-				const request = await lib.chillihero['birthday-api'][AUTOCODE_ENV].birthday.update({
-					user_id: user_id,
-					birthday: birthday.date,
-					guild_id: guild_id,
-				});
-				if (request.success) {
-					const beautifiedDate = getBeautifiedDate(birthday.date);
-					embed.title = `${SUCCESS} Success`;
-					embed.description = `${ARROW_RIGHT} I updated the Birthday from <@${user_id}> to the \`${beautifiedDate}\`. 🎂`;
-				} else {
-					embed.description = `${ARROW_RIGHT} \`${request.message}\``;
-				}
-			}
-			return embed;
+		if (isNullOrUndefinedOrEmpty(birthday)) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+					}),
+				],
+				ephemeral: true,
+			});
 		}
-	}
 
-	public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction) {
+		const date = getDateFromInteraction(interaction);
+
+		if (isNullOrUndefinedOrEmpty(date.date)) {
+
+			const embed = await generateEmbed({
+				title: `${FAIL}} Failed`,
+				description: `${ARROW_RIGHT} \`Please provide a valid date.\``,
+			});
+
+			return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
+		}
+
+		try {
+
+			await container.utilities.birthday.update.BirthdayByUserAndGuild(guild_id, user_id, date.date);
+
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${SUCCESS} Success`,
+						description: `${ARROW_RIGHT} I updated the Birthday from <@${birthday.user_id}> to the ${inlineCode(date.date)}. 🎂`,
+					}),
+				],
+			});
+		} catch (error: any) {
+			container.logger.error(error);
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} \`An error occurred while updating the birthday.\``,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
+	};
+
+	public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
-		const guildID = interaction.guildId!;
+		const guildID = interaction.guildId;
 		const userID = interaction.user.id;
-		const hasPermissions = await hasUserGuildPermissions(interaction, userID, ['ManageRoles']);
-		container.logger.info('hasPermissions', hasPermissions);
-		if (hasPermissions) {
-			await container.tasks.run('BirthdayReminderTask', { userID, guildID, isTest: true });
-			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `${ARROW_RIGHT} Birthday Test run!`;
-		} else {
-			this.embed.description = `${ARROW_RIGHT} \`You don't have the permission to run this command.\``;
-		}
-		const generatedEmbed = await generateEmbed(this.embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed] });
-	}
 
-	// Helper Functions
-	private async removeBirthdayRequest(user_id: string, guild_id: string) {
-		const removeRequest = await removeBirthday(user_id, guild_id);
-		if (removeRequest.success) {
-			this.embed.title = `${SUCCESS} Success`;
-			this.embed.description = `${ARROW_RIGHT} I removed the Birthday from <@${user_id}>. 🎂`;
-		} else {
-			this.embed.description = `${ARROW_RIGHT} \`${removeRequest.message}\``;
+		if (!(await hasUserGuildPermissions(interaction, userID, ['ManageRoles']))) {
+			const embed = await generateEmbed({
+				title: `${FAIL} Failed`,
+				description: `${ARROW_RIGHT} \`You don't have the permission to run this command.\``,
+			});
+			return replyToInteraction(interaction, { embeds: [embed] });
 		}
+
+		await container.tasks.run('BirthdayReminderTask', { userID, guildID, isTest: true });
+		const embed = await generateEmbed({
+			title: `${SUCCESS} Success`,
+			description: `${ARROW_RIGHT} \`Birthday Test Run!`,
+		});
+		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

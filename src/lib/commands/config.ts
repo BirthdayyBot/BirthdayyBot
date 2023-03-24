@@ -1,4 +1,4 @@
-import { PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandOptionType, PermissionFlagsBits } from 'discord.js';
 
 export async function ConfigCMD() {
 	return {
@@ -186,7 +186,7 @@ export async function ConfigCMD() {
 				description: 'Reset settings from your server config',
 				options: [
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'config',
 						description: 'Config that you want to remove',
 						choices: [

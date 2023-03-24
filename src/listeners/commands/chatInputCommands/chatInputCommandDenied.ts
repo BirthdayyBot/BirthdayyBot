@@ -1,6 +1,8 @@
-import type { ChatInputCommandDeniedPayload, Events } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { ChatInputCommandDeniedPayload, Events } from '@sapphire/framework';
 import { Listener, UserError } from '@sapphire/framework';
 
+@ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandDenied })
 export class UserEvent extends Listener<typeof Events.ChatInputCommandDenied> {
 	public async run({ context, message: content }: UserError, { interaction }: ChatInputCommandDeniedPayload) {
 		// `context: { silent: true }` should make UserError silent:

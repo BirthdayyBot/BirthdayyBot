@@ -2,21 +2,20 @@ import { container } from '@sapphire/framework';
 import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 import { authenticated } from '../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
+import type { Guild } from '@prisma/client';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/test' })
 export class UserRoute extends Route {
 	@authenticated()
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-		const [db_guilds] = await container.sequelize.query(
-			`SELECT guild_id FROM guild
-			WHERE  disabled = false`,
-			// `SELECT guild_id FROM guild`
-		);
-		const cleanedGuilds = await this.processGuilds(db_guilds);
-		return response.ok({ db_guilds, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+
+		const enableGuild = await container.utilities.guild.get.GuildsEnableds();
+
+		const cleanedGuilds = await this.processGuilds(enableGuild);
+		return response.ok({ enableGuild, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
 	}
 
-	public async processGuilds(guilds: any[]) {
+	public async processGuilds(guilds: Guild[]) {
 		const results = [];
 
 		for (const guild of guilds) {
@@ -39,27 +38,15 @@ export class UserRoute extends Route {
 		return true;
 	}
 
-	public async cleanGuild(guild_id: string): Promise<{ guild_id: string; guild_disabled: number; birthdays_disabled: number }> {
+	public async cleanGuild(guild_id: string) {
 		container.logger.info('guild does not exist', guild_id);
-		// disable guild
-		const [_disableguild, disableGuildMeta]: [any, any] = await container.sequelize.query(
-			`UPDATE guild SET disabled = true WHERE guild_id = '${guild_id}'`,
-			{
-				type: 'UPDATE',
-			},
-		);
-		// disable birthdays with guild_id
-		const [_disablebirthdays, disablebirthdaysMeta]: [any, any] = await container.sequelize.query(
-			`UPDATE birthday SET disabled = true WHERE guild_id = '${guild_id}'`,
-			{
-				type: 'UPDATE',
-			},
-		);
+
+		const disableGuildMeta = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
 
 		return {
 			guild_id: `${guild_id}`,
 			guild_disabled: disableGuildMeta,
-			birthdays_disabled: disablebirthdaysMeta,
+			birthdays_disabled: disableGuildMeta.birthday,
 		};
 	}
 }

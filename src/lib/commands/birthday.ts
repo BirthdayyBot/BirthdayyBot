@@ -1,5 +1,5 @@
-import { getLocalizedString } from '../../helpers/utils/translate';
 import { PermissionFlagsBits } from 'discord.js';
+import { getLocalizedString } from '../../helpers/utils/translate';
 
 export async function BirthdayCMD() {
 	return {
@@ -32,6 +32,8 @@ export async function BirthdayCMD() {
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
+						minValue: 1,
+						maxValue: 31,
 					},
 					{
 						type: 3,
@@ -93,6 +95,8 @@ export async function BirthdayCMD() {
 						type: 4,
 						name: 'year',
 						description: 'Year of birthday',
+						minValue: 1950,
+						maxValue: 2025,
 					},
 					{
 						type: 6,
@@ -118,6 +122,8 @@ export async function BirthdayCMD() {
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
+						minValue: 1,
+						maxValue: 31,
 					},
 					{
 						type: 3,
@@ -179,6 +185,8 @@ export async function BirthdayCMD() {
 						type: 4,
 						name: 'year',
 						description: 'Year of birthday',
+						minValue: 1950,
+						maxValue: 2025,
 					},
 				],
 			},

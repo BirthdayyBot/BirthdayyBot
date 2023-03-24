@@ -8,10 +8,6 @@ import {
 	API_EXTENSION,
 	API_PORT,
 	APP_ENV,
-	DB_HOST,
-	DB_NAME,
-	DB_PASSWORD,
-	DB_USERNAME,
 	DEBUG,
 	REDIS_DB,
 	REDIS_HOST,
@@ -26,7 +22,6 @@ import {
 } from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
-import type { Options } from 'sequelize';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import type { QueueOptions } from 'bullmq';
@@ -42,20 +37,6 @@ function parseApi(): ServerOptions {
 	};
 }
 
-function parseInternationalizationOptions(): InternationalizationOptions {
-	return {
-		defaultMissingKey: 'generic:key_not_found',
-		fetchLanguage: async (context) => {
-			if (!context.guild) {
-				return 'en-US';
-			}
-
-			const guildLanguage: string = await getGuildLanguage(context.guild.id);
-			container.logger.info(guildLanguage);
-			return guildLanguage || 'en-US';
-		},
-	};
-}
 
 function parseBotListOptions(): BotList.Options {
 	return {
@@ -74,13 +55,21 @@ function parseBotListOptions(): BotList.Options {
 	};
 }
 
-function parseScheduledTasksOptions(): ScheduledTasksOptions {
+function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
-		strategy: new ScheduledTaskRedisStrategy({
-			bull: parseBullOptions(),
-		}),
+		defaultMissingKey: 'generic:key_not_found',
+		fetchLanguage: async (context) => {
+			if (!context.guild) {
+				return 'en-US';
+			}
+
+			const guildLanguage: string = await getGuildLanguage(context.guild.id);
+			container.logger.info(guildLanguage);
+			return guildLanguage || 'en-US';
+		},
 	};
 }
+
 
 function parseBullOptions(): QueueOptions {
 	return {
@@ -91,6 +80,14 @@ function parseBullOptions(): QueueOptions {
 			db: REDIS_DB,
 			username: REDIS_USERNAME,
 		},
+	};
+}
+
+function parseScheduledTasksOptions(): ScheduledTasksOptions {
+	return {
+		strategy: new ScheduledTaskRedisStrategy({
+			bull: parseBullOptions(),
+		}),
 	};
 }
 
@@ -106,20 +103,6 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
-export const DB_OPTIONS: Options = {
-	database: DB_NAME,
-	username: DB_USERNAME,
-	password: DB_PASSWORD,
-	host: DB_HOST,
-	logging: false,
-	dialect: 'mysql',
-	dialectOptions: {
-		ssl: {
-			require: true,
-			rejectUnauthorized: false,
-		},
-	},
-};
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,

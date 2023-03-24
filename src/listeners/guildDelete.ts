@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import type { Guild } from 'discord.js';
 import leaveServerLog from '../helpers/send/leaveServerLog';
-import { leaveGuildRequest } from '../helpers/provide/guild';
 import { DEBUG } from '../helpers/provide/environment';
 
 @ApplyOptions<ListenerOptions>({})
@@ -23,6 +22,6 @@ export class UserEvent extends Listener {
 		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
 
 		await leaveServerLog(guild);
-		await leaveGuildRequest(guild_id);
+		await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
 	}
 }

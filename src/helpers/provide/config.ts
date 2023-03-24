@@ -1,142 +1,53 @@
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
-import type { GuildConfigModel, GuildConfigRawModel } from '../../lib/model';
 import { container } from '@sapphire/framework';
+import type { Prisma } from '@prisma/client';
+import type { ConfigName } from '../../lib/database';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
-//  ! Autocode implementation, will be deprecated in favor of the fetch implementation
-export async function getACConfig(guild_id: string): Promise<GuildConfigModel> {
-	const req = await lib.chillihero['birthday-api'][AUTOCODE_ENV].guild.config.retrieve.byGuild({
-		guild_id: guild_id,
+export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guild_id: string) {
+
+	await container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data,
 	});
-	return {
-		GUILD_ID: req.result.guild_id,
-		BIRTHDAY_ROLE: req.result.birthday_role,
-		BIRTHDAY_PING_ROLE: req.result.birthday_ping_role,
-		ANNOUNCEMENT_CHANNEL: req.result.announcement_channel,
-		ANNOUNCEMENT_MESSAGE: req.result.birthday_message,
-		OVERVIEW_CHANNEL: req.result.overview_channel,
-		LOG_CHANNEL: req.result.log_channel,
-		OVERVIEW_MESSAGE: req.result.overview_message,
-		TIMEZONE: req.result.timezone,
-		LANGUAGE: req.result.language,
-		PREMIUM: req.result.premium === 1 ? true : false,
-	};
-}
-
-export async function getConfig(guild_id: string): Promise<GuildConfigModel> {
-	const requestURL = new URL(`${API_URL}config/retrieve/byGuild`);
-	requestURL.searchParams.append('guild_id', guild_id);
-	const result = await fetch<{ config: GuildConfigRawModel }>(
-		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
-		FetchResultTypes.JSON,
-	);
-	const { config } = result;
-	return {
-		GUILD_ID: config.guild_id,
-		ANNOUNCEMENT_CHANNEL: config.announcement_channel,
-		ANNOUNCEMENT_MESSAGE: config.announcement_message,
-		OVERVIEW_CHANNEL: config.overview_channel,
-		OVERVIEW_MESSAGE: config.overview_message,
-		BIRTHDAY_ROLE: config.birthday_role,
-		BIRTHDAY_PING_ROLE: config.birthday_ping_role,
-		LOG_CHANNEL: config.log_channel,
-		TIMEZONE: config.timezone,
-		LANGUAGE: config.language,
-		PREMIUM: config.premium === 1 ? true : false,
-	};
-}
-
-export async function setCompleteConfig(config: any, guild_id: string) {
-	const {
-		BIRTHDAY_ROLE,
-		BIRTHDAY_PING_ROLE,
-		ANNOUNCEMENT_CHANNEL,
-		ANNOUNCEMENT_MESSAGE,
-		OVERVIEW_CHANNEL,
-		LOG_CHANNEL,
-		OVERVIEW_MESSAGE,
-		TIMEZONE,
-	} = config;
-	if (BIRTHDAY_ROLE !== 'null') {
-		await setBIRTHDAY_ROLE(BIRTHDAY_ROLE, guild_id);
-	}
-	if (BIRTHDAY_PING_ROLE !== 'null') {
-		await setBIRTHDAY_PING_ROLE(BIRTHDAY_PING_ROLE, guild_id);
-	}
-	if (ANNOUNCEMENT_CHANNEL !== 'null') {
-		await setANNOUNCEMENT_CHANNEL(ANNOUNCEMENT_CHANNEL, guild_id);
-	}
-	if (ANNOUNCEMENT_MESSAGE !== 'null') {
-		await setANNOUNCEMENT_MESSAGE(ANNOUNCEMENT_MESSAGE, guild_id);
-	}
-	if (OVERVIEW_CHANNEL !== 'null') {
-		await setOVERVIEW_CHANNEL(OVERVIEW_CHANNEL, guild_id);
-	}
-	if (LOG_CHANNEL !== 'null') {
-		container.logger.info('logchannel not null');
-		await setLOG_CHANNEL(LOG_CHANNEL, guild_id);
-	}
-	if (OVERVIEW_MESSAGE !== 'null') {
-		await setOVERVIEW_MESSAGE(OVERVIEW_MESSAGE, guild_id);
-	}
-	if (TIMEZONE !== 'null') {
-		await setTIMEZONE(TIMEZONE, guild_id);
-	}
 	container.logger.info('Set config for guild with id ', guild_id);
 }
 
-export async function removeConfig(config_name: string, guild_id: string) {
-	switch (config_name) {
-	case 'birthday_role':
-		await setBIRTHDAY_ROLE('null', guild_id);
-		break;
-	case 'birthday_ping_role':
-		await setBIRTHDAY_PING_ROLE('null', guild_id);
-		break;
-	case 'announcement_channel':
-		await setANNOUNCEMENT_CHANNEL('null', guild_id);
-		break;
-	case 'overview_channel':
-		await setOVERVIEW_CHANNEL('null', guild_id);
-		break;
-	case 'log_channel':
-		await setLOG_CHANNEL('null', guild_id);
-		break;
-	case 'overview_message':
-		await setOVERVIEW_MESSAGE('null', guild_id);
-		break;
-	case 'timezone':
-		await setTIMEZONE('null', guild_id);
-		break;
-	case 'announcement_message':
-		await setANNOUNCEMENT_MESSAGE('null', guild_id);
-		break;
-	default:
-		container.logger.info('config not defined: ', config_name);
-		return false;
-	}
-	return true;
+export async function removeConfig(config_name: keyof Prisma.GuildScalarFieldEnum, guild_id: string) {
+	return container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data: {
+			[config_name]: null,
+		},
+	});
 }
 
 export async function setDefaultConfigs(guild_id: string) {
-	// TODO #12 Adjust default configs
-	const config = {
-		BIRTHDAY_ROLE: 'null',
-		BIRTHDAY_PING_ROLE: 'null',
-		ANNOUNCEMENT_CHANNEL: 'null',
-		OVERVIEW_CHANNEL: 'null',
-		LOG_CHANNEL: 'null',
-		OVERVIEW_MESSAGE: 'null',
-		TIMEZONE: 'UTC',
-	};
-	await setCompleteConfig(config, guild_id);
+	return container.prisma.guild.update({
+		where: {
+			guild_id: guild_id,
+		},
+		data: {
+			birthday_role: 'null',
+			birthday_ping_role: 'null',
+			announcement_channel: 'null',
+			overview_channel: 'null',
+			log_channel: 'null',
+			overview_message: 'null',
+			timezone: 0,
+			announcement_message: '',
+		},
+	});
 }
 
-export async function setDefaultConfig(config_name: string, guild_id: string) {
+export async function setDefaultConfig(config_name: ConfigName, guild_id: string) {
 	let reset;
 	switch (config_name) {
 	case 'announcement_channel':
@@ -160,7 +71,7 @@ export async function setDefaultConfig(config_name: string, guild_id: string) {
 	case 'birthday_role':
 		reset = await setBIRTHDAY_ROLE('null', guild_id);
 		break;
-	case 'ping_role':
+	case 'birthday_ping_role':
 		reset = await setBIRTHDAY_PING_ROLE('null', guild_id);
 		break;
 	default:
