@@ -13,7 +13,7 @@ import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { BirthdayCMD } from '../../lib/commands/birthday';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
-import { inlineCode } from 'discord.js';
+import { inlineCode, roleMention } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
@@ -64,12 +64,15 @@ export class BirthdayCommand extends Subcommand {
 		const guild_id = interaction.guildId;
 
 		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
-			return replyToInteraction(interaction, { embeds: [
-				await generateEmbed({
-					title: `${FAIL} Failed`,
-					description: `${ARROW_RIGHT} \`You don't have the permission to register other users birthdays.\``,
-				}),
-			], ephemeral: true });
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to register other users birthdays.')}`,
+					}),
+				],
+				ephemeral: true,
+			});
 		}
 
 		const date = getDateFromInteraction(interaction);
@@ -78,7 +81,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`The date you entered is not valid.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('The date you entered is not valid.')}`,
 					}),
 				],
 				ephemeral: true,
@@ -102,14 +105,13 @@ export class BirthdayCommand extends Subcommand {
 		}
 
 		try {
-
 			await container.utilities.birthday.create(date.date, interaction.guild, user);
 
 			return replyToInteraction(interaction, {
 				embeds: [
 					await generateEmbed({
 						title: `${BOOK} Birthday Registered`,
-						description: `${ARROW_RIGHT} \`The birthday of ${user.username} was successfully registered.\``,
+						description: `${ARROW_RIGHT} ${inlineCode(`The birthday of ${user.username} was successfully registered.`)}`,
 						fields: [
 							{
 								name: 'Date',
@@ -122,14 +124,13 @@ export class BirthdayCommand extends Subcommand {
 				],
 				ephemeral: true,
 			});
-
 		} catch (error: any) {
 			container.logger.error(error);
 			return replyToInteraction(interaction, {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`An error occurred while registering the birthday.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('An error occured while registering the birthday.')}`,
 					}),
 				],
 				ephemeral: true,
@@ -144,12 +145,15 @@ export class BirthdayCommand extends Subcommand {
 		const guild_id = interaction.guildId;
 
 		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
-			return replyToInteraction(interaction, { embeds: [
-				await generateEmbed({
-					title: `${FAIL} Failed`,
-					description: `${ARROW_RIGHT} \`You don't have the permission to remove other users birthdays.\``,
-				}),
-			], ephemeral: true });
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to remove other users birthdays.')}`,
+					}),
+				],
+				ephemeral: true,
+			});
 		}
 
 		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
@@ -159,7 +163,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('This user has no birthday registered.')}`,
 					}),
 				],
 				ephemeral: true,
@@ -167,26 +171,24 @@ export class BirthdayCommand extends Subcommand {
 		}
 
 		try {
-
 			await container.utilities.birthday.delete.ByGuildAndUser(guild_id, author_id);
 
 			return replyToInteraction(interaction, {
 				embeds: [
 					await generateEmbed({
 						title: `${BOOK} Birthday Removed`,
-						description: `${ARROW_RIGHT} \`The birthday of <@${user_id}> was successfully removed.\``,
+						description: `${ARROW_RIGHT} The birthday of ${roleMention(user_id)} was successfully removed.`,
 					}),
 				],
 				ephemeral: true,
 			});
-		}
-		catch (error: any) {
+		} catch (error: any) {
 			container.logger.error(error);
 			return replyToInteraction(interaction, {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`An error occurred while removing the birthday.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('An error occured while removing the birthday.')}`,
 					}),
 				],
 				ephemeral: true,
@@ -214,16 +216,16 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('This user doesn\'t have a birthday registered.')}`,
 					}),
 				],
 				ephemeral: true,
 			});
-		};
+		}
 
 		const embed = await generateEmbed({
 			title: `${BOOK} Birthday`,
-			description: `${ARROW_RIGHT} <@${birthday.user_id}>'s birthday is at the \`${getBeautifiedDate(birthday.birthday)}.\``,
+			description: `${ARROW_RIGHT} ${roleMention(birthday.user_id)}'s birthday is at the ${getBeautifiedDate(birthday.birthday)}.`,
 			thumbnail_url: IMG_CAKE,
 		});
 
@@ -237,12 +239,15 @@ export class BirthdayCommand extends Subcommand {
 		const guild_id = interaction.guildId;
 
 		if (author_id != user_id && !(await hasUserGuildPermissions(interaction, author_id, ['ManageRoles']))) {
-			return replyToInteraction(interaction, { embeds: [
-				await generateEmbed({
-					title: `${FAIL} Failed`,
-					description: `${ARROW_RIGHT} \`You don't have the permission to update other users birthdays.\``,
-				}),
-			], ephemeral: true });
+			return replyToInteraction(interaction, {
+				embeds: [
+					await generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to update other users birthdays.')}`,
+					}),
+				],
+				ephemeral: true,
+			});
 		}
 
 		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guild_id, user_id);
@@ -252,7 +257,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`This user doesn't have a birthday registered.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('This user doesn\'t have a birthday registered.')}`,
 					}),
 				],
 				ephemeral: true,
@@ -262,24 +267,24 @@ export class BirthdayCommand extends Subcommand {
 		const date = getDateFromInteraction(interaction);
 
 		if (isNullOrUndefinedOrEmpty(date.date)) {
-
 			const embed = await generateEmbed({
-				title: `${FAIL}} Failed`,
-				description: `${ARROW_RIGHT} \`Please provide a valid date.\``,
+				title: `${FAIL} Failed`,
+				description: `${ARROW_RIGHT} ${inlineCode('Please provide a valid date')}`,
 			});
 
 			return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
 		}
 
 		try {
-
 			await container.utilities.birthday.update.BirthdayByUserAndGuild(guild_id, user_id, date.date);
 
 			return replyToInteraction(interaction, {
 				embeds: [
 					await generateEmbed({
 						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} I updated the Birthday from <@${birthday.user_id}> to the ${inlineCode(date.date)}. 🎂`,
+						description: `${ARROW_RIGHT} I updated the Birthday from ${roleMention(birthday.user_id)} to the ${getBeautifiedDate(
+							date.date,
+						)}. 🎂`,
 					}),
 				],
 			});
@@ -289,13 +294,13 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					await generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} \`An error occurred while updating the birthday.\``,
+						description: `${ARROW_RIGHT} ${inlineCode('An error occurred while updating the birthday.')}`,
 					}),
 				],
 				ephemeral: true,
 			});
 		}
-	};
+	}
 
 	public async birthdayTest(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
@@ -305,7 +310,7 @@ export class BirthdayCommand extends Subcommand {
 		if (!(await hasUserGuildPermissions(interaction, userID, ['ManageRoles']))) {
 			const embed = await generateEmbed({
 				title: `${FAIL} Failed`,
-				description: `${ARROW_RIGHT} \`You don't have the permission to run this command.\``,
+				description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to run this command.')}`,
 			});
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
@@ -313,7 +318,7 @@ export class BirthdayCommand extends Subcommand {
 		await container.tasks.run('BirthdayReminderTask', { userID, guildID, isTest: true });
 		const embed = await generateEmbed({
 			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} \`Birthday Test Run!`,
+			description: `${ARROW_RIGHT} ${inlineCode('Birthday Test Run!')}`,
 		});
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
