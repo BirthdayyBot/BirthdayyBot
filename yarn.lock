@@ -859,10 +859,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.15.5":
-  version: 18.15.5
-  resolution: "@types/node@npm:18.15.5"
-  checksum: 5fbf3453bd5ce1402bb2964e55d928fc8a8a7de5451b1b0fe66587fecb8a3eb86854ca9cefa5076a5971e2cff00e1773ceeb5d872a54f6c6ddfbbc1064b4e91a
+"@types/node@npm:*":
+  version: 18.11.18
+  resolution: "@types/node@npm:18.11.18"
+  checksum: 03f17f9480f8d775c8a72da5ea7e9383db5f6d85aa5fefde90dd953a1449bd5e4ffde376f139da4f3744b4c83942166d2a7603969a6f8ea826edfb16e6e3b49d
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.15.6":
+  version: 18.15.6
+  resolution: "@types/node@npm:18.15.6"
+  checksum: 46a1b04553a03574fb845bb4414292d47338d29c40fa25861d3c9e8a957455dfb23ff6385428da1613b02ddc3b5b5fe91c9227c55db80a46a655799ea2add285
   languageName: node
   linkType: hard
 
@@ -1304,14 +1311,14 @@ __metadata:
     "@sentry/integrations": ^7.43.0
     "@sentry/node": ^7.43.0
     "@sentry/tracing": ^7.43.0
-    "@types/node": ^18.15.5
+    "@types/node": ^18.15.6
     "@types/node-cron": ^3.0.7
     "@types/ws": ^8.5.4
     "@typescript-eslint/eslint-plugin": ^5.56.0
     "@typescript-eslint/parser": ^5.56.0
     bullmq: ^3.10.2
     colorette: ^2.0.19
-    discord-api-types: ^0.37.36
+    discord-api-types: ^0.37.37
     discord.js: ^14.8.0
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -1816,6 +1823,13 @@ __metadata:
   version: 0.37.36
   resolution: "discord-api-types@npm:0.37.36"
   checksum: ba3de3640270738c6fcef515a5d3a22069c89973e7d95984a7ddf1633a6e01fef2b99d4524f4535771694f87e4d779aa7511f21e06abd1c25707b4791c29d386
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.37.37":
+  version: 0.37.37
+  resolution: "discord-api-types@npm:0.37.37"
+  checksum: 6b680f52c19aebf0dd1a714ef109a55bfe6786d10fd410f7bf1ee9244041f8b10ba81a988799a832382b34b2ae5ef3027ee31f6d1cf4555f1647252635c6eaaa
   languageName: node
   linkType: hard
 
