@@ -41,6 +41,26 @@ export class Guild extends Utility {
 			}),
 	};
 
+	public set = {
+		AnnouncementChannel: (guildID: string, channelID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { announcement_channel: channelID } }),
+		AnnouncementMessage: (guildID: string, message: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { announcement_message: message } }),
+		OverviewChannel: (guildID: string, channelID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { overview_channel: channelID } }),
+		OverviewMessage: (guildID: string, messageID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { overview_message: messageID } }),
+		LogChannel: (guildID: string, channelID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { log_channel: channelID } }),
+		Timezone: (guildID: string, timezone: number) => this.prisma.guild.update({ where: { guild_id: guildID }, data: { timezone } }),
+		Language: (guildID: string, language: string) => this.prisma.guild.update({ where: { guild_id: guildID }, data: { language } }),
+		BirthdayRole: (guildID: string, roleID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { birthday_role: roleID } }),
+		BirthdayPingRole: (guildID: string, roleID: string) =>
+			this.prisma.guild.update({ where: { guild_id: guildID }, data: { birthday_ping_role: roleID } }),
+		Premium: (guildID: string, premium: boolean) => this.prisma.guild.update({ where: { guild_id: guildID }, data: { premium } }),
+	};
+
 	public update = {
 		DisableGuildAndBirthdays: (guildID: string, disabled: boolean) =>
 			this.prisma.guild.update({
