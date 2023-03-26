@@ -1,4 +1,4 @@
-import type { APIEmbed, APIEmbedField } from 'discord.js';
+import { APIEmbed, APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
 import { getGuildInformation } from '../../lib/discord/guild';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
@@ -16,7 +16,6 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 
 	return generateEmbed(embed);
 }
-
 
 async function generateFields(guild_id: string) {
 	let config = await container.utilities.guild.get.GuildConfig(guild_id);
@@ -43,22 +42,19 @@ async function generateFields(guild_id: string) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getValueString(name: keyof Guild, value: any) {
-	let str: string;
 	if (value === null) {
-		str = `${ARROW_RIGHT} not set`;
+		return `${ARROW_RIGHT} not set`;
 	} else if (name === 'timezone') {
-		str = value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
-	} else if (name.includes('CHANNEL')) {
-		str = `${ARROW_RIGHT} <#${value}>`;
-	} else if (name.includes('ROLE')) {
-		str = `${ARROW_RIGHT} <@&${value}>`;
-	} else if (name.includes('USER')) {
-		str = `${ARROW_RIGHT} <@${value}>`;
+		return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
+	} else if (name.includes('channel')) {
+		return `${ARROW_RIGHT} ${channelMention(value)}`;
+	} else if (name.includes('role')) {
+		return `${ARROW_RIGHT} ${roleMention(value)}`;
+	} else if (name.includes('user')) {
+		return `${ARROW_RIGHT} ${userMention(value)}`;
 	} else {
-		str = `${ARROW_RIGHT} ${value}`;
+		return `${ARROW_RIGHT} ${value}`;
 	}
-
-	return str;
 }
 
 function getNameString(name: keyof Guild): string {
