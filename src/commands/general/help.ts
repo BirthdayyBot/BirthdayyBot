@@ -18,11 +18,6 @@ import { docsButton, discordButton, websiteButton } from '../../lib/components/b
 	requiredClientPermissions: ['SendMessages'],
 })
 export class HelpCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-		});
-	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await HelpCMD(), {

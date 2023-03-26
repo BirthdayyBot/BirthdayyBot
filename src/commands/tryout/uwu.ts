@@ -30,11 +30,6 @@ import { UwUCMD } from '../../lib/commands/uwu';
 	],
 })
 export class UwuCommand extends Subcommand {
-	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
-		super(context, {
-			...options,
-		});
-	}
 	readonly uwuString = 'UwU';
 
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
