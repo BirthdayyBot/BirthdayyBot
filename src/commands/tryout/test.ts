@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command, container } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import replyToInteraction from '../../helpers/send/response';
 import generateEmbed from '../../helpers/generate/embed';
@@ -32,9 +32,12 @@ export class TestCommand extends Command {
 		// await checkCurrentBirthdays();
 		// await enableGuildRequest(interaction.guildId!);
 		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
-		const { dateString, timezone } = getCurrentOffset();
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(dateString, timezone);
-		container.logger.info('request', request);
+		const current = getCurrentOffset();
+		if (!current) {
+			const embed = await generateEmbed({ title: 'test', description: 'No current time' });
+			return replyToInteraction(interaction, { embeds: [embed] });
+		};
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.dateString, current.timezone);
 		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
