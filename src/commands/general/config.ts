@@ -204,21 +204,27 @@ export class ConfigCommand extends Subcommand {
 			const overview_channel = findOption(interaction, 'channel');
 			result = await setOVERVIEW_CHANNEL(overview_channel, guild_id);
 			if (result.success) {
-				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to ${channelMention(result.data.overview_channel)}`;
+				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to ${channelMention(
+					result.data.overview_channel,
+				)}`;
 			}
 			break;
 		case 'birthday_role':
 			const birthday_role = findOption(interaction, 'role');
 			result = await setBIRTHDAY_ROLE(birthday_role, guild_id);
 			if (result.success) {
-				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to ${roleMention(result.data.birthday_role)}`;
+				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to ${roleMention(
+					result.data.birthday_role,
+				)}`;
 			}
 			break;
 		case 'ping_role':
 			const ping_role = findOption(interaction, 'role');
 			result = await setBIRTHDAY_PING_ROLE(ping_role, guild_id);
 			if (result.success) {
-				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(result.data.birthday_ping_role)}`;
+				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(
+					result.data.birthday_ping_role,
+				)}`;
 			}
 			break;
 		case 'timezone':
@@ -267,11 +273,12 @@ export class ConfigCommand extends Subcommand {
 		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
 		channel_id: string,
 	): Promise<boolean> {
-		const hasCorrectPermissions = await hasChannelPermissions(interaction, ['ViewChannel', 'SendMessages'], channel_id);
+		const hasCorrectPermissions = await hasChannelPermissions({ interaction, permissions: ['ViewChannel', 'SendMessages'], channel: channel_id });
 		if (!hasCorrectPermissions) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;
-			this.messageOptions.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(channel_id)}.`;
-			const embed = await generateEmbed(this.embed);
+			this.messageOptions.embed.description =
+				`${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(channel_id)}.`;
+			const embed = await generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 			return false;
 		}
