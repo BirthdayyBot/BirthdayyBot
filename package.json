@@ -37,13 +37,13 @@
 		"node-cron": "^3.0.2",
 		"reflect-metadata": "^0.1.13",
 		"sentry": "^0.1.2",
-		"sequelize": "^6.29.3"
+		"sequelize": "^6.30.0"
 	},
 	"devDependencies": {
 		"@sapphire/eslint-config": "^4.3.8",
 		"@sapphire/prettier-config": "^1.4.5",
 		"@sapphire/ts-config": "^3.3.4",
-		"@types/node": "^18.15.7",
+		"@types/node": "^18.15.10",
 		"@types/ws": "^8.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.56.0",
 		"@typescript-eslint/parser": "^5.56.0",
