@@ -41,7 +41,7 @@ export class BirthdayCreateRoute extends Route {
 		}
 
 
-		await container.utilities.birthday.create(user_id, guild, member.user);
+		await container.utilities.birthday.create(user_id, guild.id, member.user);
 
 		return response.created({ success: true });
 	}
