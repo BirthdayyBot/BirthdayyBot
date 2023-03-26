@@ -11,7 +11,7 @@ export class ExampleParseMethod extends InteractionHandler {
 		await interaction.deferUpdate();
 		if (!interaction.channel || !interaction.message) return this.none();
 		const message = await interaction.channel.messages.fetch(interaction.message.id);
-		return this.some({ isNormalMessage: message?.interaction ? true : false });
+		return this.some({ isNormalMessage: message?.interaction ? false : true });
 	}
 
 	public async run(interaction: ButtonInteraction<'cached'>, result: { isNormalMessage: boolean }) {
