@@ -117,9 +117,14 @@ export class ConfigCommand extends Subcommand {
 
 			const birthdayList = await generateBirthdayList(1, interaction.guildId);
 			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
-			const birthdayListComponents = birthdayList.components as any;
+			const birthdayListComponents = birthdayList.components;
 			const newBirthdayList = await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
-			await setOVERVIEW_MESSAGE(newBirthdayList.id, interaction.guildId);
+			if (!newBirthdayList) {
+				const embed = await generateEmbed(this.embed);
+				await replyToInteraction(interaction, { embeds: [embed] });
+				return;
+			}
+ 			await setOVERVIEW_MESSAGE(newBirthdayList.id, interaction.guildId);
 
 			const embed = await generateEmbed(this.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
