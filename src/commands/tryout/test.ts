@@ -32,18 +32,13 @@ export class TestCommand extends Command {
 		// await checkCurrentBirthdays();
 		// await enableGuildRequest(interaction.guildId!);
 		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
-		const o = await getCurrentOffset();
-		const today = o.date;
-		container.logger.info('today', today);
-		const offset = o.offsetString;
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(today, offset as unknown as number);
+		const { dateString, timezone } = getCurrentOffset();
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(dateString, timezone);
 		container.logger.info('request', request);
 		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
-		container.logger.info('isGuildPremiuum: ', (await this.container.utilities.guild.get.GuildPremium(interaction.guildId!).then((r) => r?.premium)));
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
 		const embed = await generateEmbed(embedObj);
-		await replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
-		return;
+		return replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
 	}
 }
