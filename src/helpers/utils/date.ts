@@ -23,7 +23,7 @@ export function getCurrentDate(): string {
 	return str;
 }
 
-export function getBeautifiedDate(date: string, fromHumanFormat = false) {
+export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	// DD.MM.YYY
 	let items;
 	let day: string;
