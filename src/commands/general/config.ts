@@ -254,8 +254,10 @@ export class ConfigCommand extends Subcommand {
 		return result;
 	}
 
-	private async hasWritingPermissionsInChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, channel_id: string): Promise<boolean> {
-		const hasCorrectPermissions = await hasChannelPermissions(interaction, ['ViewChannel', 'SendMessages'], channel_id);
+	private async hasWritingPermissionsInChannel(
+		interaction: Subcommand.ChatInputCommandInteraction<'cached'>, channel_id: string,
+	): Promise<boolean> {
+		const hasCorrectPermissions = await hasChannelPermissions({ interaction, channel: channel_id, permissions: ['SendMessages', 'ViewChannel'] });
 		if (!hasCorrectPermissions) {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in <#${channel_id}>.`;
@@ -267,7 +269,7 @@ export class ConfigCommand extends Subcommand {
 	}
 
 	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction<'cached'>): Promise<boolean> {
-		const hasPermissions = await hasGuildPermissions(interaction, ['ManageRoles']);
+		const hasPermissions = await hasGuildPermissions({ interaction, permissions: ['ManageRoles'] });
 		if (!hasPermissions) {
 			this.embed.title = `${FAIL} Failure`;
 			this.embed.description = `${ARROW_RIGHT} I don't have the permission to manage roles in this server.`;
