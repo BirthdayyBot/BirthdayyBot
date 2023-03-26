@@ -43,7 +43,7 @@ export class Birthday extends Utility {
 		ByGuildAndUser: (guildID: string, userID: string) =>
 			this.prisma.birthday.delete({ where: { user_id_guild_id: { guild_id: guildID, user_id: userID } } }),
 	};
-
+  
 	public create = (birthday: string, guildID: string, user: User) =>
 		this.prisma.birthday.create({
 			data: {
