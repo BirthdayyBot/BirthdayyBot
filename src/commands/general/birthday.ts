@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
 import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import generateEmbed from '../../helpers/generate/embed';
 import { getBeautifiedDate } from '../../helpers/utils/date';
 import generateBirthdayList from '../../helpers/generate/birthdayList';

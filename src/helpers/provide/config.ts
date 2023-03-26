@@ -1,7 +1,7 @@
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { API_SECRET, API_URL, AUTOCODE_ENV } from './environment';
 import type { AutocodeAPIResponseModel } from '../../lib/model/AutocodeAPIResponseModel.model';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { Prisma } from '@prisma/client';
 import type { ConfigName } from '../../lib/database';
 // eslint-disable-next-line @typescript-eslint/no-var-requires

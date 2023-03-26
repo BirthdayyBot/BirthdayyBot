@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Args } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
-import { container } from '@sapphire/framework';
 import { ConfigCMD } from '../../lib/commands/config';
 import { ARROW_RIGHT, DEBUG, FAIL, PLUS, PREMIUM_URL, SUCCESS } from '../../helpers/provide/environment';
 import generateConfigListEmbed from '../../helpers/generate/configListEmbed';

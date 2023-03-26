@@ -1,4 +1,4 @@
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { sendMessage } from '../lib/discord';
 import { ApplyOptions } from '@sapphire/decorators';
 

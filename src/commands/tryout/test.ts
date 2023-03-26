@@ -7,6 +7,7 @@ import generateEmbed from '../../helpers/generate/embed';
 import { getCurrentOffset } from '../../helpers/provide/currentOffset';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
+
 @ApplyOptions<Command.Options>({
 	name: 'test',
 	description: 'test things',

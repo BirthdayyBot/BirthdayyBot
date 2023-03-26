@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { parseBoolean } from '../../../helpers/utils/utils';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';

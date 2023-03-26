@@ -1,6 +1,6 @@
 // import { DEBUG } from '../provide/environment';
 
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 

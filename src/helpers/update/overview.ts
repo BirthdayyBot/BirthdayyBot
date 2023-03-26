@@ -2,7 +2,7 @@ import generateBirthdayList from '../generate/birthdayList';
 import generateEmbed from '../generate/embed';
 import { logAll, setOVERVIEW_MESSAGE } from '../provide/config';
 import { editMessage, sendMessage } from '../../lib/discord/message';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { MessageCreateOptions } from 'discord.js';
 
 export default async function updateBirthdayOverview(guild_id: string) {

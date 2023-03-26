@@ -6,7 +6,7 @@ import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import { HelpCMD } from '../../lib/commands';
 import { HelpEmbed } from '../../lib/embeds';
-import { docsButton, discordButton, websiteButton } from '../../lib/components/button';
+import { discordButton, docsButton, websiteButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
 	name: 'help',

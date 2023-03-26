@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events } from '@sapphire/framework';
-import { Listener } from '@sapphire/framework';
+import { container, Events, Listener } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 import { AUTOCODE_ENV } from '../helpers/provide/environment';
 import updateBirthdayOverview from '../helpers/update/overview';

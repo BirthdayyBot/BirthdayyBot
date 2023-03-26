@@ -6,7 +6,7 @@ import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import { GuideCMD } from '../../lib/commands';
 import { GuideEmbed } from '../../lib/embeds';
-import { docsButton, discordButton } from '../../lib/components/button';
+import { discordButton, docsButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
 	name: 'guide',

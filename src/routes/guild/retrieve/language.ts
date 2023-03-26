@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';

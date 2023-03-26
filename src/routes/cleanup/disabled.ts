@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { DEBUG } from '../../helpers/provide/environment';
 import { authenticated } from '../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';

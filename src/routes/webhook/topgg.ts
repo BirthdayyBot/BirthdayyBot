@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { DEBUG, WEBHOOK_SECRET } from '../../helpers/provide/environment';
 import { authenticated } from '../../lib/api/utils';

@@ -1,4 +1,4 @@
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { ApiRequest } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';

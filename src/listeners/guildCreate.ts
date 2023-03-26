@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, ListenerOptions, container } from '@sapphire/framework';
+import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import { DEBUG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendDMMessage } from '../lib/discord/message';
 import { GuideEmbed } from '../lib/embeds';
