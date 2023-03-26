@@ -316,5 +316,4 @@ export class BirthdayCommand extends Subcommand {
 		});
 		return replyToInteraction(interaction, { embeds: [embed] });
 	}
-	}
 }
