@@ -1,13 +1,11 @@
-import generateBirthdayList from '../generate/birthdayList';
-import generateEmbed from '../generate/embed';
-import { logAll, setOVERVIEW_MESSAGE } from '../provide/config';
+import { container } from '@sapphire/framework';
 import { getTextChannel } from '../../lib/discord/channel';
 import { editMessage } from '../../lib/discord/message';
-import { container } from '@sapphire/framework';
+import generateBirthdayList from '../generate/birthdayList';
+import generateEmbed from '../generate/embed';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
-	logAll(config);
 	if (!config) return;
 	const { overview_channel, overview_message } = config;
 
@@ -50,5 +48,5 @@ async function generateNewOverviewMessage(channel_id: string, birthdayList: { em
 	const channel = await getTextChannel(channel_id);
 	const message = await channel.send({ embeds: [birthdayList.embed], components: birthdayList.components });
 	// container.logger.info('message', message);
-	await setOVERVIEW_MESSAGE(message.id, message.guildId!);
+	await container.utilities.guild.set.OverviewMessage(message.guildId!, message.id);
 }
