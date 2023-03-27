@@ -1,8 +1,8 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ApiRequest, methods, Route, type ApiResponse } from '@sapphire/plugin-api';
 import { DEBUG } from '../../helpers/provide/environment';
 import { authenticated } from '../../lib/api/utils';
-import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/disabled' })
 export class UserRoute extends Route {
@@ -12,16 +12,17 @@ export class UserRoute extends Route {
 		oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 		DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
 
-		const [guilds, birthdays] = await container.prisma.$transaction([
-			container.utilities.guild.delete.ByLastUpdateDisable(oneDayAgo),
-			container.utilities.birthday.delete.ByLastUpdateDisable(oneDayAgo),
-		]);
+		// ! TODO: #140 Issue with the async transaction
+		// const [guilds, birthdays] = await container.prisma.$transaction([
+		// 	container.utilities.guild.delete.ByLastUpdateDisable(oneDayAgo),
+		// 	container.utilities.birthday.delete.ByLastUpdateDisable(oneDayAgo),
+		// ]);
 
 		return response.ok({
-			count: {
-				delete_guilds: guilds.count,
-				delete_birthdays: birthdays.count,
-			},
+			// count: {
+			// 	delete_guilds: guilds.count,
+			// 	delete_birthdays: birthdays.count,
+			// },
 		});
 	}
 }

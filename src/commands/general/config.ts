@@ -157,8 +157,7 @@ export class ConfigCommand extends Subcommand {
 		await thinking(interaction);
 		const config = interaction.options.getString('config', true) as ConfigName;
 		const configName = configNameExtended[config];
-		const result = await setDefaultConfig(config, interaction.guildId);
-		container.logger.info('config reset result', result);
+		await setDefaultConfig(config, interaction.guildId);
 		this.embed.title = `${SUCCESS} Success`;
 		this.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
 		const embed = await generateEmbed(this.embed);
