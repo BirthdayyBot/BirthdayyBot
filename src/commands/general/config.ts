@@ -2,7 +2,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { inlineCodeBlock } from '@sapphire/utilities';
+import { codeBlock } from '@sapphire/utilities';
 import { channelMention, inlineCode, roleMention } from 'discord.js';
 import generateBirthdayList from '../../helpers/generate/birthdayList';
 import generateConfigListEmbed from '../../helpers/generate/configListEmbed';
@@ -64,14 +64,14 @@ export class ConfigCommand extends Subcommand {
 	}
 
 	messageOptions = {
-		content :'',
-		embed : {
+		content: '',
+		embed: {
 			title: `${FAIL} Failure`,
 			description: 'Something went wrong',
 			fields: [],
 			thumbnail_url: '',
 		},
-		components :[],
+		components: [],
 	};
 
 	public async configList(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
@@ -168,8 +168,9 @@ export class ConfigCommand extends Subcommand {
 			case 'announcement_channel':
 				const announcement_channel = findOption(interaction, 'channel');
 				await container.utilities.guild.set.AnnouncementChannel(guild_id, announcement_channel);
-				this.messageOptions.embed.description =
-					`${ARROW_RIGHT} You set the **Announcement Channel** to ${channelMention(announcement_channel)}`;
+				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to ${channelMention(
+					announcement_channel,
+				)}`;
 				break;
 			case 'overview_channel':
 				const overview_channel = findOption(interaction, 'channel');
@@ -189,7 +190,7 @@ export class ConfigCommand extends Subcommand {
 			case 'timezone':
 				const timezone = findOption(interaction, 'timezone');
 				const timezoneString = timezone < 0 ? `UTC${timezone}` : `UTC+${timezone}`;
-				await container.utilities.guild.set.Timezone(guild_id, timezone);
+				await container.utilities.guild.set.Timezone(guild_id, parseInt(timezone));
 				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Timezone** to ${inlineCode(timezoneString)}`;
 				break;
 				// * PREMIUM ONLY
@@ -200,8 +201,7 @@ export class ConfigCommand extends Subcommand {
 				const isBirthdayMessageValid = await isValidBirthdayMessage(announcement_message);
 				if (!isPremium) {
 					this.messageOptions.embed.title = `${PLUS} Early access only`;
-					this.messageOptions.embed.description =
-						`${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
+					this.messageOptions.embed.description = `${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
                         If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`;
 					break;
 				}
@@ -209,14 +209,10 @@ export class ConfigCommand extends Subcommand {
 					this.messageOptions.embed.title = `${FAIL} Failure`;
 					switch (isBirthdayMessageValid.error) {
 					case 'MESSAGE_TOO_LONG':
-						this.messageOptions.embed.description =
-							`${ARROW_RIGHT} The **Announcement Message** is too long. The maximum allowed length is **3500** characters.`;
+						this.messageOptions.embed.description = `${ARROW_RIGHT} The **Announcement Message** is too long. The maximum allowed length is **3500** characters.`;
 						break;
 					case 'NO_CUSTOM_EMOJIS':
-						this.messageOptions.embed.description =
-							`${ARROW_RIGHT} The **Announcement Message** contains custom emojis, which are a **Premium Feature**. [Patreon](${
-								PREMIUM_URL
-							})`;
+						this.messageOptions.embed.description = `${ARROW_RIGHT} The **Announcement Message** contains custom emojis, which are a **Premium Feature**. [Patreon](${PREMIUM_URL})`;
 						break;
 					default:
 						this.messageOptions.embed.description = `${ARROW_RIGHT} The **Announcement Message** is invalid. Please try again.`;
@@ -225,14 +221,16 @@ export class ConfigCommand extends Subcommand {
 				}
 				await container.utilities.guild.set.AnnouncementMessage(guild_id, announcement_message);
 				container.logger.debug('announcement_message', announcement_message);
-				this.messageOptions.embed.description =
-					`${ARROW_RIGHT} You set the **Announcement Message** to \n${inlineCode(announcement_message)}`;
+				this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n${inlineCode(
+					announcement_message,
+				)}`;
 				break;
 			}
 			this.messageOptions.embed.title = `${SUCCESS} Success`;
-		} catch (error) {
+		} catch (error: any) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;
-			this.messageOptions.embed.description = `${inlineCodeBlock(`${JSON.stringify(error, null, 2)}`)}`;
+			container.logger.error('[setConfig] ', error);
+			this.messageOptions.embed.description = `${codeBlock('js', `${error.message}`)}`;
 		}
 	}
 
@@ -243,8 +241,9 @@ export class ConfigCommand extends Subcommand {
 		const hasCorrectPermissions = await hasChannelPermissions({ interaction, permissions: ['ViewChannel', 'SendMessages'], channel: channel_id });
 		if (!hasCorrectPermissions) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;
-			this.messageOptions.embed.description =
-				`${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(channel_id)}.`;
+			this.messageOptions.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
+				channel_id,
+			)}.`;
 			const embed = await generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 			return false;
