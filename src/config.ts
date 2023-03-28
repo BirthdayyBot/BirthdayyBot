@@ -2,7 +2,7 @@ import { Time } from '@sapphire/time-utilities';
 import { container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import { type ClientOptions, GatewayIntentBits, ActivityType, PresenceData, PresenceUpdateStatus } from 'discord.js';
+import { ActivityType, type ClientOptions, GatewayIntentBits, PresenceData, PresenceUpdateStatus } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import {
 	API_EXTENSION,

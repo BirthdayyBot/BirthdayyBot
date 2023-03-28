@@ -1,7 +1,7 @@
 import './lib/setup/start';
 
 import { BirthdayyClient } from './lib/BirthdayyClient';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import * as Sentry from '@sentry/node';
 import { SENTRY_OPTIONS } from './config';
 import { SENTRY_DSN } from './helpers/provide/environment';

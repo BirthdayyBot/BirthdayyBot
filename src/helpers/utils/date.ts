@@ -1,6 +1,7 @@
 // import { DEBUG } from '../provide/environment';
 
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
+import type { Dayjs } from 'dayjs';
 import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 
@@ -23,7 +24,7 @@ export function getCurrentDate(): string {
 	return str;
 }
 
-export function getBeautifiedDate(date: string, fromHumanFormat = false) {
+export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	// DD.MM.YYY
 	let items;
 	let day: string;
@@ -59,10 +60,10 @@ export function numberToMonthname(number: number) {
 	return months[number];
 }
 
-export function getStringDate(date: Date) {
-	const d = date.getDate();
-	const m = date.getMonth() + 1;
-	const year = date.getFullYear();
+export function getStringDate(date: Dayjs) {
+	const d = date.day();
+	const m = date.month() + 1;
+	const year = date.year();
 	const day = checkIfLengthIsTwo(`${d}`);
 	const month = checkIfLengthIsTwo(`${m}`);
 

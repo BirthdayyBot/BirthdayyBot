@@ -6,7 +6,7 @@ import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import { HelpCMD } from '../../lib/commands';
 import { HelpEmbed } from '../../lib/embeds';
-import { docsButton, discordButton, websiteButton } from '../../lib/components/button';
+import { discordButton, docsButton, websiteButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
 	name: 'help',
@@ -18,11 +18,6 @@ import { docsButton, discordButton, websiteButton } from '../../lib/components/b
 	requiredClientPermissions: ['SendMessages'],
 })
 export class HelpCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-		});
-	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await HelpCMD(), {

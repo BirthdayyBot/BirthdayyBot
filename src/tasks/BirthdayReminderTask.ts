@@ -15,7 +15,12 @@ import type { Birthday } from '@prisma/client';
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
-		const { date: today, offsetString: offset } = await getCurrentOffset();
+		const current = getCurrentOffset();
+
+		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
+
+		const dateFormated = current.date.format('YYYY-MM-DD');
+
 		let todaysBirthdays: Birthday[] = [];
 
 		if (birthdayEvent) {
@@ -24,13 +29,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (APP_ENV === 'prd') {
-			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(today, offset as unknown as number);
+			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 			todaysBirthdays = birthdays;
 		}
 
-		if (!todaysBirthdays.length) return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${today}, offset: ${offset}`);
+		if (!todaysBirthdays.length) {
+			return this.container.logger.info(
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormated}, offset: ${current.timezone}`,
+			);
+		}
 
-		if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${today}, offset: ${offset}`);
+		if (DEBUG) {
+			this.container.logger.info(
+				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormated}, offset: ${current.timezone}`,
+			);
+		}
 
 		for (const birthday of todaysBirthdays) {
 			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);

@@ -4,15 +4,9 @@ import type { Guild } from 'discord.js';
 import leaveServerLog from '../helpers/send/leaveServerLog';
 import { DEBUG } from '../helpers/provide/environment';
 
-@ApplyOptions<ListenerOptions>({})
-export class UserEvent extends Listener {
-	public constructor(context: Listener.Context, options: Listener.Options) {
-		super(context, {
-			...options,
-			event: Events.GuildDelete,
-			enabled: true,
-		});
-	}
+@ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
+export class UserEvent extends Listener<typeof Events.GuildDelete> {
+
 	public async run(guild: Guild) {
 		const guild_id = guild.id;
 
@@ -24,4 +18,5 @@ export class UserEvent extends Listener {
 		await leaveServerLog(guild);
 		await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
 	}
+
 }

@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Guild, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';

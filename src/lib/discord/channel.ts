@@ -1,13 +1,6 @@
-import { container } from '@sapphire/framework';
-import type { TextBasedChannel } from 'discord.js';
+import { container } from '@sapphire/pieces';
 
-export async function getTextChannel(channel_id: string): Promise<TextBasedChannel> {
+export async function getTextChannel(channel_id: string) {
 	const channel = await container.client.channels.fetch(channel_id);
-	if (!channel) {
-		throw new Error('Channel not found');
-	}
-	if (!channel.isTextBased()) {
-		throw new Error('Channel is not text based');
-	}
-	return channel;
+	return channel?.isTextBased() ? channel : null;
 }

@@ -1,9 +1,10 @@
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
-import { getBeautifiedDate, numberToMonthname } from '../utils/date';import type { CustomEmbedModel } from '../../lib/model';
+import { formatDateForDisplay, numberToMonthname } from '../utils/date';
+import type { CustomEmbedModel } from '../../lib/model';
 import { EmbedLimits } from '@sapphire/discord-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { Birthday } from '.prisma/client';
 
@@ -80,7 +81,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, user_id);
 				continue;
 			}
-			const descriptionToAdd = `<@!${user_id}> ${getBeautifiedDate(bday)}\n`;
+			const descriptionToAdd = `<@!${user_id}> ${formatDateForDisplay(bday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
 				embed.fields.push({

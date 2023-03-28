@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ChatInputCommandDeniedPayload, Events } from '@sapphire/framework';
-import { Listener, UserError } from '@sapphire/framework';
+import { ChatInputCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandDenied })
 export class UserEvent extends Listener<typeof Events.ChatInputCommandDenied> {

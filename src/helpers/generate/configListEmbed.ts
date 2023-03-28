@@ -2,7 +2,7 @@ import { APIEmbed, APIEmbedField, channelMention, roleMention, userMention } fro
 import { getGuildInformation } from '../../lib/discord/guild';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { Guild } from '.prisma/client';
 
 export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {

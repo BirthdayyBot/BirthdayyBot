@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { isDateString } from '../../../helpers/utils/date';
 import type { ApiRequest, BirthdayQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
@@ -41,7 +41,7 @@ export class BirthdayCreateRoute extends Route {
 		}
 
 
-		await container.utilities.birthday.create(user_id, guild, member.user);
+		await container.utilities.birthday.create(user_id, guild.id, member.user);
 
 		return response.created({ success: true });
 	}

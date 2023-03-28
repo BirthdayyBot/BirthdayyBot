@@ -1,6 +1,6 @@
 import { container } from '@sapphire/framework';
-import { getTextChannel } from '../../lib/discord/channel';
-import { editMessage } from '../../lib/discord/message';
+import type { MessageCreateOptions } from 'discord.js';
+import { editMessage, sendMessage } from '../../lib/discord/message';
 import generateBirthdayList from '../generate/birthdayList';
 import generateEmbed from '../generate/embed';
 
@@ -43,10 +43,10 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	}
 }
 
-async function generateNewOverviewMessage(channel_id: string, birthdayList: { embed: any; components: any[] }) {
+async function generateNewOverviewMessage(channel_id: string, birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>) {
 	// send a new overview message to the overview channel
-	const channel = await getTextChannel(channel_id);
-	const message = await channel.send({ embeds: [birthdayList.embed], components: birthdayList.components });
+	const message = await sendMessage(channel_id, { ...birthdayList });
+	if (!message?.inGuild()) return;
 	// container.logger.info('message', message);
-	await container.utilities.guild.set.OverviewMessage(message.guildId!, message.id);
+	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
 }

@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import generateEmbed from '../../helpers/generate/embed';
 import { APP_ENV, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers/provide/environment';
 import { sendDMMessage, sendMessage } from '../discord/message';
