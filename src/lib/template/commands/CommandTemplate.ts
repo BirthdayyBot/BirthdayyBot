@@ -1,7 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
+import { Command, container } from '@sapphire/framework';
 import generateEmbed from '../../../helpers/generate/embed';
-import { container } from '@sapphire/framework';
 import { getCommandGuilds } from '../../../helpers/utils/guilds';
 import thinking from '../../discord/thinking';
 import replyToInteraction from '../../../helpers/send/response';

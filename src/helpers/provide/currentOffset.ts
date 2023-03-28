@@ -1,90 +1,62 @@
-import { getStringDate } from '../utils/date';
+import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import dayjstimezone from 'dayjs/plugin/timezone';
+
+// Extend dayjs with the required plugins
+dayjs.extend(utc);
+dayjs.extend(dayjstimezone);
+
+
+// Define an object for mapping timezone values to their string representations.
+const TIMEZONE_VALUES: Record<number, string> = {
+	0: 'Europe/Dublin',
+	1: 'Europe/Paris',
+	2: 'Europe/Helsinki',
+	3: 'Europe/Moscow',
+	4: 'Asia/Dubai',
+	5: 'Asia/Karachi',
+	6: 'Asia/Dhaka',
+	7: 'Asia/Bangkok',
+	8: 'Asia/Shanghai',
+	9: 'Asia/Tokyo',
+	10: 'Australia/Sydney',
+	11: 'Pacific/Guadalcanal',
+	12: 'Pacific/Auckland',
+	'-11': 'Pacific/Midway',
+	'-10': 'Pacific/Honolulu',
+	'-9': 'America/Anchorage',
+	'-8': 'America/Los_Angeles',
+	'-7': 'America/Denver',
+	'-6': 'America/Mexico_City',
+	'-5': 'America/New_York',
+	'-4': 'America/Caracas',
+	'-3': 'America/Sao_Paulo',
+	'-2': 'Atlantic/South_Georgia',
+	'-1': 'Atlantic/Azores',
+};
+
+type TimezoneObject = {
+	date: Dayjs;
+	timezone: keyof typeof TIMEZONE_VALUES;
+};
 
 /**
- * @returns {object} date
+ * It creates an array of timezone objects, then finds the one where the hour is 0
+ * @returns The timezone offset of the current timezone.
  */
-export async function getCurrentOffset() {
-	const allZones = createTimezones();
-	const date = {
-		current_offset: null,
-		date: 'null',
-		offsetString: '',
-	};
-	allZones.forEach((zone) => {
-		if (zone.time.getHours() === 0) {
-			date.offsetString = zone.offsetString;
-			date.date = getStringDate(zone.time);
-		}
+export function getCurrentOffset() {
+	const allZones = createTimezoneObjects();
+	return allZones.find(({ date }) => date.hour() === 0) ?? null;
+}
+/**
+ * It creates an array of objects, each of which contains a date and a timezone
+ * @returns An array of objects with the timezone and date.
+ */
+
+export function createTimezoneObjects(): TimezoneObject[] {
+	const allZones = Object.entries(TIMEZONE_VALUES).map(([timezone, zone]) => {
+		const date = dayjs().tz(zone);
+		return { date, timezone: Number(timezone) };
 	});
-	return date;
-}
-
-function createTimezones(): any[] {
-	const zones = [];
-	const d = new Date();
-
-	for (let i = -11; i <= 12; i++) {
-		let offset = i;
-		let offsetString;
-
-		// if minus add a + if its a positive number add a -
-		if (i < 0) {
-			offset = i * -1;
-			offsetString = `Etc/GMT+${offset}`;
-		} else {
-			offsetString = 'Etc/GMT-' + offset;
-		}
-
-		const date = createDate(d, offsetString);
-		const data = {
-			time: date,
-			offsetString: i,
-			tz: getTimezone(i),
-			l: offsetString,
-		};
-		zones.push(data);
-	}
-	return zones;
-}
-
-function createDate(date: string | Date, timeZone: string) {
-	if (typeof date === 'string') {
-		return new Date(
-			new Date(date).toLocaleString('en-US', {
-				timeZone: timeZone,
-			}),
-		);
-	}
-	return new Date(
-		date.toLocaleString('en-US', {
-			timeZone,
-		}),
-	);
-}
-
-// check the hour and return the according timezone short name
-function getTimezone(hour: number) {
-	if (hour === 0) return 'GMT';
-	if (hour === 1) return 'CET';
-	if (hour === 2) return 'EET';
-	if (hour === 3) return 'EAT';
-	if (hour === 4) return 'NET';
-	if (hour === 5) return 'PLT';
-	if (hour === 6) return 'BST';
-	if (hour === 7) return 'VST';
-	if (hour === 8) return 'CTT';
-	if (hour === 9) return 'JST';
-	if (hour === 10) return 'AET';
-	if (hour === 11) return 'SST';
-	if (hour === 12) return 'NST';
-	if (hour === -11) return 'MIT';
-	if (hour === -10) return 'HST';
-	if (hour === -9) return 'AST';
-	if (hour === -8) return 'PST';
-	if (hour === -7) return 'PNT';
-	if (hour === -6) return 'CST';
-	if (hour === -5) return 'EST';
-	if (hour === -4) return 'PRT';
-	if (hour === -2) return 'BET';
-	return null;
+	return allZones;
 }

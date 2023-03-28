@@ -1,4 +1,6 @@
-import type { Sequelize } from 'sequelize';
+import type { PrismaClient } from '@prisma/client';
+import type { Guild } from '../../utilities/db/Guild';
+import type { Birthday } from '../../utilities/db/Birthday';
 
 declare global {
 	namespace NodeJS {
@@ -30,7 +32,8 @@ declare global {
 
 			// Database
 			DB_NAME: string;
-			DB_USERNAME: string;
+			DB_USER: string;
+			DB_PASSWORD: string;
 			DB_HOST: string;
 			DB_PORT: string;
 			DB_URL: string;
@@ -40,6 +43,7 @@ declare global {
 			REDIS_HOST: string;
 			REDIS_PASSWORD: string;
 			REDIS_DB: string;
+			REDIS_USERNAME: string;
 
 			// Other
 			SENTRY_DSN: string;
@@ -56,7 +60,7 @@ declare global {
 
 declare module '@sapphire/pieces' {
 	interface Container {
-		sequelize: Sequelize;
+		prisma: PrismaClient;
 	}
 }
 
@@ -71,5 +75,12 @@ declare module '@sapphire/plugin-scheduled-tasks' {
 	interface ScheduledTasks {
 		BirthdayReminderTask: never;
 		BirthdayRoleRemoverTask: never;
+	}
+}
+
+declare module '@sapphire/plugin-utilities-store' {
+	export interface Utilities {
+		guild: Guild;
+		birthday: Birthday;
 	}
 }

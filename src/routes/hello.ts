@@ -1,5 +1,5 @@
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { sendText } from '../lib/discord';
+import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { sendMessage } from '../lib/discord';
 import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Route.Options>({ name: 'hello', route: 'hello' })
@@ -10,7 +10,7 @@ export class UserRoute extends Route {
 
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
 		try {
-			sendText('1063771496436207658', 'Hello World');
+			sendMessage('1063771496436207658', 'Hello World');
 			response.json({ message: 'Sent Discord Message' });
 		} catch (error) {
 			response.statusCode = 500;

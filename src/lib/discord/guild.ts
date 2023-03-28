@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import type { Guild, GuildMember } from 'discord.js';
 

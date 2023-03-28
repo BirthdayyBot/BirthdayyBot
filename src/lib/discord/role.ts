@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 
 /**
     Add a role to a user in a Discord guild.

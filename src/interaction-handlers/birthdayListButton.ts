@@ -1,34 +1,25 @@
-import { InteractionHandler, InteractionHandlerTypes, PieceContext } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';
 import generateBirthdayList from '../helpers/generate/birthdayList';
 import generateEmbed from '../helpers/generate/embed';
 
+@ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class ExampleParseMethod extends InteractionHandler {
-	public constructor(ctx: PieceContext) {
-		super(ctx, { interactionHandlerType: InteractionHandlerTypes.Button });
-	}
-
-	public async run(interaction: ButtonInteraction, result: { isNormalMessage: boolean }) {
-		const { isNormalMessage } = result;
-		const page_number = parseInt(interaction.customId.split('_')[3]);
-		const birthdayList = await generateBirthdayList(page_number, interaction.guildId!);
-		const embed = birthdayList.embed;
-		const finalEmbed = await generateEmbed(embed);
-		const components = birthdayList.components || [];
-		if (isNormalMessage) {
-			interaction.message.edit({ embeds: [finalEmbed], components });
-		} else {
-			interaction.editReply({ embeds: [finalEmbed], components });
-		}
-		return;
-	}
-
-	public async parse(interaction: ButtonInteraction) {
+	public override async parse(interaction: ButtonInteraction<'cached'>) {
 		if (!interaction.customId.startsWith('birthday_list_page_')) return this.none();
 		await interaction.deferUpdate();
-		const { channel, message } = interaction;
-		const fetchedMessage = await channel!.messages.fetch(message.id);
-		const isNormalMessage = fetchedMessage!.interaction ? false : true;
-		return this.some({ isNormalMessage });
+		if (!interaction.channel || !interaction.message) return this.none();
+		const message = await interaction.channel.messages.fetch(interaction.message.id);
+		return this.some({ isNormalMessage: message?.interaction ? false : true });
+	}
+
+	public async run(interaction: ButtonInteraction<'cached'>, result: { isNormalMessage: boolean }) {
+		const { isNormalMessage } = result;
+		const page_number = parseInt(interaction.customId.split('_')[3]);
+		const { embed, components } = await generateBirthdayList(page_number, interaction.guildId);
+		const finalEmbed = await generateEmbed(embed);
+		if (isNormalMessage) return interaction.message.edit({ embeds: [finalEmbed], components });
+		return interaction.editReply({ embeds: [finalEmbed], components });
 	}
 }

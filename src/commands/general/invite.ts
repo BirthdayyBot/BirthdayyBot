@@ -18,11 +18,6 @@ import { inviteButton } from '../../lib/components/button';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-		});
-	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await InviteCMD(), {

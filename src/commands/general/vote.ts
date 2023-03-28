@@ -17,11 +17,6 @@ import { VoteCMD } from '../../lib/commands/vote';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class VoteCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-		});
-	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await VoteCMD(), {

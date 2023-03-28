@@ -1,10 +1,11 @@
-import { PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function VoteCMD() {
+export async function VoteCMD(): Promise<ChatInputApplicationCommandData> {
 	return {
 		name: 'vote',
 		description: 'Vote for Birthdayy <3',
-		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
+		type: ApplicationCommandType.ChatInput,
+		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: true,
 		options: [],
 	};

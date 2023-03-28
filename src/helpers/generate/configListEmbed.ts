@@ -1,9 +1,9 @@
-import type { APIEmbed, APIEmbedField } from 'discord.js';
+import { APIEmbed, APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
 import { getGuildInformation } from '../../lib/discord/guild';
-import type { GuildConfigModel } from '../../lib/model';
-import { getConfig } from '../provide/config';
 import { ARROW_RIGHT, PLUS } from '../provide/environment';
 import generateEmbed from './embed';
+import { container } from '@sapphire/pieces';
+import type { Guild } from '.prisma/client';
 
 export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {
 	const guild = await getGuildInformation(guild_id);
@@ -18,13 +18,17 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 }
 
 async function generateFields(guild_id: string) {
-	const config: GuildConfigModel = await getConfig(guild_id);
+	let config = await container.utilities.guild.get.GuildConfig(guild_id);
+
+	if (!config) config = await container.utilities.guild.create({ guild_id });
 
 	const fields: APIEmbedField[] = [];
 
-	Object.entries(config).forEach(([name, value]) => {
-		// TODO: #38 Implement guild logs
-		if (['GUILD_ID', 'OVERVIEW_MESSAGE', 'LOG_CHANNEL'].includes(name)) return;
+	Object.entries(config).forEach((_config) => {
+		const [name, value] = _config as [keyof Guild, string | number | null];
+
+		const exclude: (keyof Guild)[] = ['guild_id', 'overview_message', 'log_channel'];
+		if (exclude.includes(name)) return;
 		const valueString = getValueString(name, value);
 		const nameString = getNameString(name);
 		fields.push({
@@ -37,42 +41,39 @@ async function generateFields(guild_id: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getValueString(name: string, value: any) {
-	let str: string;
+function getValueString(name: keyof Guild, value: any) {
 	if (value === null) {
-		str = `${ARROW_RIGHT} not set`;
-	} else if (name === 'TIMEZONE') {
-		str = value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
-	} else if (name.includes('CHANNEL')) {
-		str = `${ARROW_RIGHT} <#${value}>`;
-	} else if (name.includes('ROLE')) {
-		str = `${ARROW_RIGHT} <@&${value}>`;
-	} else if (name.includes('USER')) {
-		str = `${ARROW_RIGHT} <@${value}>`;
+		return `${ARROW_RIGHT} not set`;
+	} else if (name === 'timezone') {
+		return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
+	} else if (name.includes('channel')) {
+		return `${ARROW_RIGHT} ${channelMention(value)}`;
+	} else if (name.includes('role')) {
+		return `${ARROW_RIGHT} ${roleMention(value)}`;
+	} else if (name.includes('user')) {
+		return `${ARROW_RIGHT} ${userMention(value)}`;
 	} else {
-		str = `${ARROW_RIGHT} ${value}`;
+		return `${ARROW_RIGHT} ${value}`;
 	}
-
-	return str;
 }
 
-function getNameString(name: string): string {
+function getNameString(name: keyof Guild): string {
 	switch (name) {
-	case 'ANNOUNCEMENT_CHANNEL':
+	case 'announcement_channel':
 		return 'Announcement Channel';
-	case 'OVERVIEW_CHANNEL':
+	case 'overview_channel':
 		return 'Overview Channel';
-	case 'BIRTHDAY_ROLE':
+	case 'birthday_role':
 		return 'Birthday Role';
-	case 'BIRTHDAY_PING_ROLE':
+	case 'birthday_ping_role':
 		return 'Birthday Ping Role';
-	case 'LOG_CHANNEL':
+	case 'log_channel':
 		return 'Log Channel';
-	case 'TIMEZONE':
+	case 'timezone':
 		return 'Timezone';
-	case 'ANNOUNCEMENT_MESSAGE':
+	case 'announcement_message':
 		return `${PLUS} Birthday Message`;
-	case 'PREMIUM':
+	case 'premium':
 		return 'Premium';
 	default:
 		return name;

@@ -1,6 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
-import { QueryTypes } from 'sequelize';
+import { container } from '@sapphire/pieces';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { isDateString } from '../../../helpers/utils/date';
 import type { ApiRequest, BirthdayQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
@@ -12,7 +11,7 @@ export class BirthdayCreateRoute extends Route {
 	@authenticated()
 	@validateParams<BirthdayQuery>(['guild_id', 'user_id', 'date'])
 	public async [methods.POST](request: ApiRequest<BirthdayQuery>, response: ApiResponse) {
-		const { date, user_id, guild_id, username = null, discriminator = null } = request.query;
+		const { date, user_id, guild_id } = request.query;
 
 		const isDate = isDateString(date);
 
@@ -23,31 +22,27 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		// Create User if not exists
-		await container.sequelize.query('INSERT IGNORE INTO user (user_id, username, discriminator) VALUES (?,?,?)', {
-			replacements: [user_id, username, discriminator],
-			type: QueryTypes.INSERT,
-		});
+		const guild = await container.client.guilds.fetch(guild_id);
 
-		try {
-			// Create Birthday
-			await container.sequelize.query('INSERT INTO birthday (user_id, birthday, guild_id) VALUES (?,?,?)', {
-				replacements: [user_id, date, guild_id],
-				type: QueryTypes.INSERT,
+		if (!guild) {
+			return response.badRequest({
+				success: false,
+				error: { message: 'Guild not found' },
 			});
-		} catch (error: any) {
-			if (error.name === 'SequelizeUniqueConstraintError') {
-				return response.badRequest({
-					success: false,
-					error: {
-						code: APIErrorCode.DUPLICATE_ENTRY,
-						message: 'User already has a birthday registered',
-					},
-				});
-			}
-
-			return response.error(error);
 		}
+
+		const member = await guild.members.fetch(user_id);
+
+		if (!member) {
+			return response.badRequest({
+				success: false,
+				error: { message: 'User not found' },
+			});
+		}
+
+
+		await container.utilities.birthday.create(user_id, guild.id, member.user);
+
 		return response.created({ success: true });
 	}
 }

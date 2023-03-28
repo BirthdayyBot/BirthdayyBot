@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -11,18 +11,9 @@ export class UserRoute extends Route {
 	public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
 		const { guild_id } = _request.query;
 
-		const [results] = await container.sequelize.query(
-			`    SELECT id, b.user_id, birthday, username, discriminator, b.guild_id
-            FROM birthday b
-                     LEFT JOIN user u ON b.user_id = u.user_id
-            WHERE guild_id = ?
-              AND b.disabled = false`,
-			{
-				replacements: [guild_id],
-			},
-		);
+		const results = await container.utilities.birthday.get.BirthdaysNotDisabled(guild_id);
 
-		if (results.length === 0) return response.badRequest({ error: 'Guild not Found' });
+		if (!results) return response.badRequest({ error: 'Guild not Found' });
 
 		return response.ok({ amount: results.length, birthdays: results });
 	}

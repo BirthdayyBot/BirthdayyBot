@@ -6,7 +6,7 @@ import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
 import { GuideCMD } from '../../lib/commands';
 import { GuideEmbed } from '../../lib/embeds';
-import { docsButton, discordButton } from '../../lib/components/button';
+import { discordButton, docsButton } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
 	name: 'guide',
@@ -18,11 +18,6 @@ import { docsButton, discordButton } from '../../lib/components/button';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public constructor(context: Command.Context, options: Command.Options) {
-		super(context, {
-			...options,
-		});
-	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await GuideCMD(), {

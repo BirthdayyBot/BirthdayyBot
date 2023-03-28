@@ -1,6 +1,5 @@
 import { AllFlowsPrecondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';
-import { isGuildPremium } from '../helpers/provide/guild';
 
 export class UserPrecondition extends AllFlowsPrecondition {
 	#message = 'This command is a premium only command.'; // TODO: Adjust Premium Message
@@ -18,7 +17,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	}
 
 	private async premiumCheck(guild_id: string) {
-		const is_premium: boolean = await isGuildPremium(guild_id);
+		const is_premium: boolean = (await this.container.utilities.guild.get.GuildByID(guild_id))?.premium ?? false;
 		return is_premium ? this.ok() : this.error({ message: this.#message });
 	}
 }

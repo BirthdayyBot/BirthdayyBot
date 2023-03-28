@@ -5,15 +5,7 @@ import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/envir
 /**
  * Creates a RichEmbed object with the given information
  *
- * @param embed_information
- * @property title - The title of the embed
- * @property description - The description of the embed
- * @property author_name - The name of the author of the embed
- * @property author_avatar - The avatar of the author of the embed
- * @property thumbnail_url - The URL of the thumbnail to include in the embed
- * @property image_url - The URL of the image to include in the embed
- * @property fields - An array of fields to include in the embed
- * @property color - The color of the embed
+ * @param embed_information - Information to the embed
  *
  * @returns embed - A RichEmbed object with the given information
  */

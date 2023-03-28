@@ -4,20 +4,24 @@ import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
 import { APIEmbed, Guild, GuildMember, Role, roleMention, userMention } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
-import { getConfig, logAll } from '../helpers/provide/config';
+import { logAll } from '../helpers/provide/config';
 import { getCurrentOffset } from '../helpers/provide/currentOffset';
 import { APP_ENV, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
-import { getBirthdaysByDateAndTimezone } from '../lib/birthday/birthday';
 import { sendMessage } from '../lib/discord/message';
-import type { BirthdayWithUserModel } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
+import type { Birthday } from '@prisma/client';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
-		const { date: today, offsetString: offset } = await getCurrentOffset();
-		let todaysBirthdays: BirthdayWithUserModel[] = [];
+		const current = getCurrentOffset();
+
+		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
+
+		const dateFormated = current.date.format('YYYY-MM-DD');
+
+		let todaysBirthdays: Birthday[] = [];
 
 		if (birthdayEvent) {
 			const { userID, guildID, isTest } = birthdayEvent;
@@ -25,13 +29,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (APP_ENV === 'prd') {
-			const { birthdays } = await getBirthdaysByDateAndTimezone(today, offset);
+			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 			todaysBirthdays = birthdays;
 		}
 
-		if (!todaysBirthdays.length) return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${today}, offset: ${offset}`);
+		if (!todaysBirthdays.length) {
+			return this.container.logger.info(
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormated}, offset: ${current.timezone}`,
+			);
+		}
 
-		if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${today}, offset: ${offset}`);
+		if (DEBUG) {
+			this.container.logger.info(
+				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormated}, offset: ${current.timezone}`,
+			);
+		}
 
 		for (const birthday of todaysBirthdays) {
 			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);
@@ -45,13 +57,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (!member || !guild) return;
 
-		const config = await getConfig(guild.id);
-		const { ANNOUNCEMENT_CHANNEL, BIRTHDAY_ROLE, BIRTHDAY_PING_ROLE, ANNOUNCEMENT_MESSAGE } = config;
+		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
+		if (!config) return;
+		const { announcement_channel, birthday_role, birthday_ping_role, announcement_message } = config;
 
 		await logAll(config);
 
-		if (BIRTHDAY_ROLE) {
-			const role = await guild.roles.fetch(BIRTHDAY_ROLE);
+		if (birthday_role) {
+			const role = await guild.roles.fetch(birthday_role);
 			if (!role) {
 				if (DEBUG) this.container.logger.warn(`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`);
 				return { error: true, message: 'Birthday role not found' };
@@ -59,21 +72,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 			await this.addCurrentBirthdayChildRole({ member, guild, role, isTest });
 		}
 
-		if (!ANNOUNCEMENT_CHANNEL) {
+		if (!announcement_channel) {
 			if (DEBUG) this.container.logger.warn(`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`);
 			return { error: true, message: 'No announcement channel set' };
 		}
-		const announcementMessage = await this.formatBirthdayMessage(ANNOUNCEMENT_MESSAGE, member, guild);
+		const announcementMessage = await this.formatBirthdayMessage(announcement_message, member, guild);
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,
 			description: announcementMessage,
 			thumbnail_url: IMG_CAKE,
 		};
-		const content = BIRTHDAY_PING_ROLE ? roleMention(BIRTHDAY_PING_ROLE) : '';
+		const content = birthday_ping_role ? roleMention(birthday_ping_role) : '';
 		const birthdayEmbed = await generateEmbed(embed);
 
-		return this.sendBirthdayAnnouncement(content, ANNOUNCEMENT_CHANNEL, birthdayEmbed);
+		return this.sendBirthdayAnnouncement(content, announcement_channel, birthdayEmbed);
 	}
 
 	private async addCurrentBirthdayChildRole(payload: { member: GuildMember; guild: Guild; role: Role; isTest: boolean }) {

@@ -1,5 +1,5 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/pieces';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -11,10 +11,8 @@ export class UserRoute extends Route {
 	public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
 		const { guild_id } = request.query;
 
-		const [results] = await container.sequelize.query('SELECT guild_id FROM guild WHERE guild_id = ? AND disabled = 1', {
-			replacements: [guild_id],
-		});
+		const results = await container.utilities.guild.get.GuildDisabled(guild_id);
 
-		return response.ok({ is_disabled: results.length > 0 });
+		return response.ok({ is_disabled: results?.disabled });
 	}
 }

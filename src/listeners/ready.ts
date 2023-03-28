@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Listener, Store } from '@sapphire/framework';
+import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { APP_ENV, BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord/message';
 
 const isDev = APP_ENV !== 'prd';
 
-@ApplyOptions<Listener.Options>({ once: true })
+@ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {
 	private readonly style = isDev ? yellow : blue;
 
