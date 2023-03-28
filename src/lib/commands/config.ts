@@ -204,7 +204,7 @@ export async function ConfigCMD() {
 							},
 							{
 								name: 'Ping Role',
-								value: 'ping_role',
+								value: 'birthday_ping_role',
 							},
 							{
 								name: 'Announcement Message',
