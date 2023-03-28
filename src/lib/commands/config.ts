@@ -1,24 +1,25 @@
-import { ApplicationCommandOptionType, PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function ConfigCMD() {
+export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 	return {
 		name: 'config',
+		type: ApplicationCommandType.ChatInput,
 		description: 'Configure your Server configurations. - MANAGER ONLY',
-		defaultMemberPermissions: [PermissionFlagsBits.ManageRoles], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
+		defaultMemberPermissions: [PermissionFlagsBits.ManageRoles],
 		dmPermission: false,
 		options: [
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'list',
 				description: 'Get a overview over your current server configurations',
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'announcement-channel',
 				description: 'Announce if its somebody\'s birthday today',
 				options: [
 					{
-						type: 7,
+						type: ApplicationCommandOptionType.Channel,
 						name: 'channel',
 						description: 'Channel where the announcement should get sent',
 						required: true,
@@ -26,12 +27,12 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'overview-channel',
 				description: 'List all Birthdays on the Server in that channel and updates it on changes',
 				options: [
 					{
-						type: 7,
+						type: ApplicationCommandOptionType.Channel,
 						name: 'channel',
 						description: 'Channel where the overview should get sent and updated in',
 						required: true,
@@ -39,12 +40,12 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'birthday-role',
 				description: 'Give the birthday child a special role for one day. Gets assigned and removed automatically',
 				options: [
 					{
-						type: 8,
+						type: ApplicationCommandOptionType.Role,
 						name: 'role',
 						description: 'Role that should get assigned on a birthday',
 						required: true,
@@ -52,12 +53,12 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'ping-role',
 				description: 'Ping a role on someones birthday',
 				options: [
 					{
-						type: 8,
+						type: ApplicationCommandOptionType.Role,
 						name: 'role',
 						description: 'Role that should get pinged on someones birthday',
 						required: true,
@@ -65,12 +66,12 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'timezone',
 				description: 'Change the Timezone when Birthdayy wishes Happy Birthday.',
 				options: [
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'timezone',
 						description: 'The Timezone of your Discord server',
 						choices: [
@@ -168,12 +169,12 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'announcement-message',
 				description: 'Add a custom birthday announcement message.',
 				options: [
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'message',
 						description: '{MENTION}, {USERNAME}, {DISCRIMINATOR}, {LINE_BREAK}, {SERVERNAME}',
 						required: true,
@@ -181,7 +182,7 @@ export async function ConfigCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'reset',
 				description: 'Reset settings from your server config',
 				options: [
@@ -220,12 +221,12 @@ export async function ConfigCMD() {
 				],
 			},
 			// {
-			// 	type: 1,
+			// 	type: ApplicationCommandOptionType.Subcommand,
 			// 	name: 'logs',
 			// 	description: 'Log all birthday events (adding, updating, removal etc.) in a Channel. (recommended)',
 			// 	options: [
 			// 		{
-			// 			type: 7,
+			// 			type: ApplicationCommandOptionType.Channel,
 			// 			name: 'channel',
 			// 			description: 'Channel where the logs shold get sent',
 			// 			required: true

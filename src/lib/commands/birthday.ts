@@ -1,9 +1,8 @@
-import { PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 import { getLocalizedString } from '../../helpers/utils/translate';
 
-export async function BirthdayCMD() {
+export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 	return {
-		// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandData
 		name: await getLocalizedString('en-US', 'commands/birthday:name'),
 		nameLocalizations: {
 			de: await getLocalizedString('de-DE', 'commands/birthday:name'),
@@ -12,11 +11,12 @@ export async function BirthdayCMD() {
 		descriptionLocalizations: {
 			de: await getLocalizedString('de-DE', 'commands/birthday:description'),
 		},
+		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: false,
 		options: [
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
 				nameLocalizations: {
 					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
@@ -26,9 +26,8 @@ export async function BirthdayCMD() {
 					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.descriptionde'),
 				},
 				options: [
-					// https://discord.js.org/#/docs/discord.js/v13/typedef/ApplicationCommandOptionData
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
@@ -36,7 +35,7 @@ export async function BirthdayCMD() {
 						maxValue: 31,
 					},
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -92,33 +91,32 @@ export async function BirthdayCMD() {
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 						minValue: 1950,
 						maxValue: 2025,
 					},
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Set a birthday for another Person - MANAGER ONLY',
 					},
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'update',
 				description: 'Update your birthday - MANAGER ONLY',
-				defaultMemberPermissions: [PermissionFlagsBits.ManageRoles], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
 				options: [
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Update a Birthday for a Person - MANAGER ONLY',
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'day',
 						description: 'Day of birthday',
 						required: true,
@@ -126,7 +124,7 @@ export async function BirthdayCMD() {
 						maxValue: 31,
 					},
 					{
-						type: 3,
+						type: ApplicationCommandOptionType.String,
 						name: 'month',
 						description: 'Month of birthday',
 						choices: [
@@ -182,7 +180,7 @@ export async function BirthdayCMD() {
 						required: true,
 					},
 					{
-						type: 4,
+						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 						minValue: 1950,
@@ -191,17 +189,17 @@ export async function BirthdayCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'list',
 				description: 'List all Birthdays in this Discord server',
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'remove',
 				description: 'Remove a birthday - MANAGER ONLY',
 				options: [
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'The user you want to remove the birthday from',
 						required: true,
@@ -209,19 +207,19 @@ export async function BirthdayCMD() {
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'show',
 				description: 'Show the Birthday of you or a other person',
 				options: [
 					{
-						type: 6,
+						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Show the birthday of a specific User',
 					},
 				],
 			},
 			{
-				type: 1,
+				type: ApplicationCommandOptionType.Subcommand,
 				name: 'test',
 				description: 'Test your current birthday configurations',
 			},
