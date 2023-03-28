@@ -1,5 +1,5 @@
 import { Time } from '@sapphire/time-utilities';
-import { container, LogLevel } from '@sapphire/framework';
+import { ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import { ActivityType, type ClientOptions, GatewayIntentBits, PresenceData, PresenceUpdateStatus } from 'discord.js';
@@ -27,6 +27,7 @@ import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import type { QueueOptions } from 'bullmq';
 import * as Sentry from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
+import { LoggerStyleBackground, LoggerStyleEffect, LoggerStyleText } from '@sapphire/plugin-logger';
 
 function parseApi(): ServerOptions {
 	return {
@@ -103,6 +104,80 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
+function parseDefaultFormat(): ClientLoggerOptions['defaultFormat'] {
+	return {
+		message: {
+			text: APP_ENV ? LoggerStyleText.Cyan : LoggerStyleText.Magenta,
+		},
+		timestamp: {
+			color: {
+				text: LoggerStyleText.White,
+			},
+			utc: true,
+			pattern: 'YYYY-MM-DD HH:mm:ss',
+		},
+	};
+}
+
+function parseFormat(): ClientLoggerOptions['format'] {
+	return {
+		debug: {
+			...parseDefaultFormat(),
+		},
+		info: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.White,
+			},
+		},
+		error: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.Red,
+			},
+		},
+		warn: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.Yellow,
+			},
+		},
+		fatal: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.Red,
+				background: LoggerStyleBackground.Red,
+				effects: [LoggerStyleEffect.Bold],
+			},
+		},
+		trace: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.White,
+				background: LoggerStyleBackground.Blue,
+				effects: [LoggerStyleEffect.Bold],
+			},
+		},
+		none: {
+			...parseDefaultFormat(),
+			message: {
+				text: LoggerStyleText.White,
+				background: LoggerStyleBackground.Black,
+				effects: [LoggerStyleEffect.Bold],
+			},
+		},
+	};
+}
+
+function parseLoggerOptions(): ClientLoggerOptions {
+	return {
+		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
+		instance: container.logger,
+		defaultFormat: parseDefaultFormat(),
+		format: parseFormat(),
+	};
+}
+
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,
@@ -118,18 +193,13 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
-	caseInsensitiveCommands: true,
-	caseInsensitivePrefixes: true,
-	defaultPrefix: 'b!',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-	loadMessageCommandListeners: true,
 	loadDefaultErrorListeners: true,
-	logger: {
-		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
-	},
+	logger: parseLoggerOptions(),
 	api: parseApi(),
 	botList: parseBotListOptions(),
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
 };
+
