@@ -19,6 +19,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
 
+		const dateFormated = current.date.format('YYYY-MM-DD');
+
 		let todaysBirthdays: Birthday[] = [];
 
 		if (birthdayEvent) {
@@ -27,19 +29,19 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (APP_ENV === 'prd') {
-			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.dateString, current.timezone);
+			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 			todaysBirthdays = birthdays;
 		}
 
 		if (!todaysBirthdays.length) {
 			return this.container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${current.dateString}, offset: ${current.timezone}`,
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormated}, offset: ${current.timezone}`,
 			);
 		}
 
 		if (DEBUG) {
 			this.container.logger.info(
-				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${current.dateString}, offset: ${current.timezone}`,
+				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormated}, offset: ${current.timezone}`,
 			);
 		}
 

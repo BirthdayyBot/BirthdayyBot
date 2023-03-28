@@ -3,6 +3,7 @@ import type { ApiRequest } from '../../../lib/api/types';
 import { authenticated, validateParams } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Birthday, Guild } from '@prisma/client';
+import dayjs from 'dayjs';
 
 type Query = {
 	date: string;
@@ -16,7 +17,7 @@ export class UserRoute extends Route {
 	public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
 		const { date, timezone } = request.query;
 
-		const birthdays = await this.container.utilities.birthday.get.BirthdaysByDate(date);
+		const birthdays = await this.container.utilities.birthday.get.BirthdaysByDate(dayjs(date));
 		const guildIds = birthdays.map((birthday) => birthday.guild_id);
 		const guilds = await this.container.utilities.guild.get.GuildsByTimezone(guildIds, parseInt(timezone));
 		const filteredBirthdays = this.filterBirthdaysByTimezone(birthdays, guilds, timezone);

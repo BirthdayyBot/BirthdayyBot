@@ -38,7 +38,7 @@ export class TestCommand extends Command {
 			const embed = await generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		};
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.dateString, current.timezone);
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };

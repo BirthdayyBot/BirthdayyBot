@@ -1,6 +1,6 @@
 import { Utility } from '@sapphire/plugin-utilities-store';
-import { extractDayAndMonth } from '../../helpers/utils/date';
 import type { User } from 'discord.js';
+import type { Dayjs } from 'dayjs';
 
 export class Birthday extends Utility {
 	private prisma = this.container.prisma;
@@ -12,9 +12,9 @@ export class Birthday extends Utility {
 		});
 	}
 	public get = {
-		BirthdaysByDate: (date: string) => this.prisma.birthday.findMany({ where: { birthday: { contains: extractDayAndMonth(date) } } }),
-		BirthdayByDateAndTimezone: (date: string, timezone: number) =>
-			this.prisma.birthday.findMany({ where: { birthday: { contains: extractDayAndMonth(date) }, guild: { timezone } } }),
+		BirthdaysByDate: (date: Dayjs) => this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
+		BirthdayByDateAndTimezone: (date: Dayjs, timezone: number) =>
+			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } } }),
 		BirthdaysByGuildID: (guildID: string) => this.prisma.birthday.findMany({ where: { guild_id: guildID } }),
 		BirthdayByUserAndGuild: (guildID: string, userID: string) =>
 			this.prisma.birthday.findUnique({
