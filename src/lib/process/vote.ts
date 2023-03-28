@@ -1,3 +1,4 @@
+import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import type { User } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
@@ -5,10 +6,8 @@ import { APP_ENV, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } f
 import { sendDMMessage, sendMessage } from '../discord/message';
 import { GuildIDEnum } from '../enum/GuildID.enum';
 import type { VoteProvider } from '../types/VoteProvider.type';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
-export default async function voteProcess(provider: VoteProvider, user_id: string): Promise<any> {
+export default async function voteProcess(provider: VoteProvider, user_id: string) {
 	const providerInfo = getProviderInfo(provider);
 	const member = await container.client.users.fetch(user_id);
 	// 1. Send DM
@@ -16,9 +15,9 @@ export default async function voteProcess(provider: VoteProvider, user_id: strin
 	// 2. Message To Server
 	await sendVoteAnnouncement(providerInfo, member);
 	// 3. Update role
-	await addVoteRole(user_id);
+	const addRole = await addVoteRole(user_id);
 	// 4. Schedule role removal
-	await scheduleRoleRemoval(VOTE_ROLE_ID, user_id, GuildIDEnum.BIRTHDAYY_HQ);
+	if (addRole) await scheduleRoleRemoval(VOTE_ROLE_ID, user_id, GuildIDEnum.BIRTHDAYY_HQ);
 	return;
 }
 
@@ -74,34 +73,8 @@ async function addVoteRole(user_id: string): Promise<boolean> {
 }
 
 async function scheduleRoleRemoval(user_id: string, role_id: string, guild_id: string) {
-	// TODO: #28 Implement a scheduler to remove the role after 12hrs
-	return;
-	lib.chillihero['birthday-bot']['@dev'].automate.scheduleRoleRemoval({
-		time: 720,
-		user_id: user_id,
-		role_id: role_id,
-		guild_id: guild_id,
-	});
-	return;
-	try {
-		const req = await lib.meiraba.utils['@3.1.0'].timer.set({
-			token: `${process.env.MEIRABA_TOKEN}`,
-			time: 720,
-			endpoint_url: 'https://birthday-bot.chillihero.autocode.gg/automate/removeRole/',
-			payload: {
-				user_id: user_id,
-				role_id: role_id,
-				guild_id: guild_id,
-			},
-		});
-		container.logger.info('Scheduled Vote Role removal: ', req);
-	} catch (e) {
-		container.logger.warn('something went wrong while trying to schedule a birtday removal!');
-		container.logger.info('USERID: ', user_id);
-		container.logger.info('ROLEID: ', role_id);
-		container.logger.info('GUILDID: ', guild_id);
-		container.logger.warn(e);
-	}
+	const options = { user_id, role_id, guild_id };
+	await container.tasks.create('BirthdayRoleRemoverTask', options, { repeated: false, delay: Time.Hour * 12 });
 	return;
 }
 
@@ -110,19 +83,19 @@ function getProviderInfo(provider: VoteProvider) {
 	case 'topgg':
 		return {
 			name: 'TopGG',
-			url: 'https://top.gg/bot/916434908728164372/vote',
+			url: 'https://birthdayy.xyz/topgg/vote',
 		};
 
 	case 'discordbotlist':
 		return {
 			name: 'Discord Bot List',
-			url: 'https://discord-botlist.eu/vote/916434908728164372',
+			url: 'https://birthdayy.xyz/discord-botlist/vote',
 		};
 
 	case 'discordlist':
 		return {
 			name: 'Discord List',
-			url: 'https://discordlist.space/bot/916434908728164372/upvote',
+			url: 'https://birthdayy.xyz/discordlist/vote',
 		};
 	}
 }
