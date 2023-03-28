@@ -38,10 +38,7 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
  * @returns obj - Object
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
-function getBirthdaysAsLists(
-	allBirthdays: Array<Birthday>,
-	maxBirthdaysPerList: number,
-): { birthdays: Array<Array<Birthday>>; listAmount: number } {
+function getBirthdaysAsLists(allBirthdays: Array<Birthday>, maxBirthdaysPerList: number): { birthdays: Array<Array<Birthday>>; listAmount: number } {
 	const length = allBirthdays.length;
 	// split birthdays into arrays with max length x entries
 	const splitBirthdays = [];
@@ -53,7 +50,7 @@ function getBirthdaysAsLists(
 /**
  * Create the embed with the fields etc with the given values
  * @param guild_id - ID of the guild
- * @param birthdays
+ * @param birthdays - Array with all birthdays
  * @returns embed - Embed with the given values
  */
 async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<Birthday> }[]) {
@@ -107,7 +104,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
  *  Generate Components for the Birthday List according to the amount of pages
  * @param page_id - Current page id
  * @param listAmount - Amount of pages
- * @returns {array} components
+ * @returns Array with all components
  */
 function generateComponents(page_id: number, listAmount: number): any[] {
 	if (listAmount == 1) return [];
@@ -174,11 +171,17 @@ function prepareBirthdayList() {
  */
 function prepareBirthdays(birthdays: Array<Birthday>): Array<{ monthname: string; birthdays: Array<Birthday> }> {
 	const list = prepareBirthdayList();
+
 	birthdays.forEach(function(singleBirthday) {
 		const d = new Date(singleBirthday.birthday);
+		if (d.toString() === 'Invalid Date') {
+			return;
+		}
+
 		const month = d.getMonth();
 		list[month].birthdays.push(singleBirthday);
 	});
+
 	return list;
 }
 

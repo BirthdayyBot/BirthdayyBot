@@ -9,13 +9,6 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	if (!config) return;
 	const { overview_channel, overview_message } = config;
 
-	/**
-    Check if there is a overview channel set.
-  if yes -> check if messageID is set
-  if yes -> update message
-  if no -> create a new message and save as messageID
-   */
-
 	if (overview_channel) {
 		const birthdayList = await generateBirthdayList(1, guild_id);
 		const birthdayEmbedObj = await generateEmbed(birthdayList.embed);
@@ -44,9 +37,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 }
 
 async function generateNewOverviewMessage(channel_id: string, birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>) {
-	// send a new overview message to the overview channel
 	const message = await sendMessage(channel_id, { ...birthdayList });
 	if (!message?.inGuild()) return;
-	// container.logger.info('message', message);
 	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
 }

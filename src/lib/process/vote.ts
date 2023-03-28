@@ -1,10 +1,10 @@
 import { container } from '@sapphire/pieces';
+import type { User } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
 import { APP_ENV, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers/provide/environment';
 import { sendDMMessage, sendMessage } from '../discord/message';
 import { GuildIDEnum } from '../enum/GuildID.enum';
 import type { VoteProvider } from '../types/VoteProvider.type';
-import type { User } from 'discord.js';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const lib = require('lib')({ token: process.env.STDLIB_SECRET_TOKEN });
 
@@ -76,19 +76,17 @@ async function addVoteRole(user_id: string): Promise<boolean> {
 async function scheduleRoleRemoval(user_id: string, role_id: string, guild_id: string) {
 	// TODO: #28 Implement a scheduler to remove the role after 12hrs
 	return;
-	console.time('scheduleRemoval');
 	lib.chillihero['birthday-bot']['@dev'].automate.scheduleRoleRemoval({
 		time: 720,
 		user_id: user_id,
 		role_id: role_id,
 		guild_id: guild_id,
 	});
-	console.timeEnd('scheduleRemoval');
 	return;
 	try {
 		const req = await lib.meiraba.utils['@3.1.0'].timer.set({
 			token: `${process.env.MEIRABA_TOKEN}`,
-			time: 720, // 1440 are one day
+			time: 720,
 			endpoint_url: 'https://birthday-bot.chillihero.autocode.gg/automate/removeRole/',
 			payload: {
 				user_id: user_id,
