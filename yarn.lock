@@ -1228,6 +1228,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.57.0
     bullmq: ^3.10.2
     colorette: ^2.0.19
+    dayjs: ^1.11.7
     discord-api-types: ^0.37.37
     discord.js: ^14.8.0
     eslint: ^8.36.0
@@ -1511,6 +1512,13 @@ __metadata:
     shebang-command: ^2.0.0
     which: ^2.0.1
   checksum: 671cc7c7288c3a8406f3c69a3ae2fc85555c04169e9d611def9a675635472614f1c0ed0ef80955d5b6d4e724f6ced67f0ad1bb006c2ea643488fcfef994d7f52
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.7":
+  version: 1.11.7
+  resolution: "dayjs@npm:1.11.7"
+  checksum: 5003a7c1dd9ed51385beb658231c3548700b82d3548c0cfbe549d85f2d08e90e972510282b7506941452c58d32136d6362f009c77ca55381a09c704e9f177ebb
   languageName: node
   linkType: hard
 
