@@ -30,7 +30,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		return;
 
 		async function sendGuide(user_id: string) {
-			const embed = await generateEmbed(GuideEmbed);
+			const embed = generateEmbed(GuideEmbed);
 			await sendDMMessage(user_id, {
 				embeds: [embed],
 			});

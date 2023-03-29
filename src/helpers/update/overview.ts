@@ -11,7 +11,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 
 	if (overview_channel) {
 		const birthdayList = await generateBirthdayList(1, guild_id);
-		const birthdayEmbedObj = await generateEmbed(birthdayList.embed);
+		const birthdayEmbedObj = generateEmbed(birthdayList.embed);
 		try {
 			if (overview_message) {
 				try {

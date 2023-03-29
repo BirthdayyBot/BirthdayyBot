@@ -26,7 +26,7 @@ export class VoteCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = await generateEmbed(VoteEmbed);
+		const embed = generateEmbed(VoteEmbed);
 		await replyToInteraction(interaction, {
 			embeds: [embed],
 		});
