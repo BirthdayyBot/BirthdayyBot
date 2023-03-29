@@ -2,7 +2,7 @@ import { Time } from '@sapphire/time-utilities';
 import { ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import { ActivityType, type ClientOptions, GatewayIntentBits, PresenceData, PresenceUpdateStatus } from 'discord.js';
+import { ActivityType, type ClientOptions, GatewayIntentBits, PresenceData, PresenceUpdateStatus, WebhookClientOptions, WebhookClientData } from 'discord.js';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import {
 	API_EXTENSION,
@@ -19,6 +19,8 @@ import {
 	TOKEN_DISCORDBOTLIST,
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
+	WEBHOOK_ID,
+	WEBHOOK_TOKEN,
 } from './helpers/provide/environment';
 import { getGuildLanguage } from './helpers/provide/config';
 import type { BotList } from '@devtomio/plugin-botlist';
@@ -191,6 +193,12 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 		new RewriteFrames({ root: ROOT_DIR }),
 	],
 };
+
+export const WEBHOOK_OPTIONS: WebhookClientData = {
+	id: WEBHOOK_ID,
+	token: WEBHOOK_TOKEN,
+};
+
 
 export const CLIENT_OPTIONS: ClientOptions = {
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],

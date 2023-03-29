@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client';
 import type { Guild } from '../../utilities/db/Guild';
 import type { Birthday } from '../../utilities/db/Birthday';
+import type { WebhookClient } from 'discord.js';
 
 declare global {
 	namespace NodeJS {
@@ -54,6 +55,10 @@ declare global {
             // Logging
             LOG_CHANNEL_ADMIN: string;
             LOG_CHANNEL_SERVER: string;
+
+			// Webhooks
+			WEBHOOK_ID: string;
+			WEBHOOK_TOKEN: string;
 		}
 	}
 }
@@ -61,6 +66,7 @@ declare global {
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
+		webhook: WebhookClient | null;
 	}
 }
 

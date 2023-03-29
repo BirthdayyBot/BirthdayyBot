@@ -14,6 +14,7 @@ interface ErrorHandlingOptions {
 }
 
 class CustomError extends Error {
+	public id: string = Math.random().toString(36).substr(2, 9);
 	public name: string;
 	public message: string;
 	public stack?: string;
@@ -41,6 +42,7 @@ function logErrorToContainer(error: CustomError, severity: ErrorHandlingOptions[
 function captureErrorToSentry(error: CustomError, severity: ErrorHandlingOptions['sentrySeverity']): void {
 	Sentry.withScope((scope) => {
 		scope.setExtra('error', {
+			id: error.id,
 			name: error.name,
 			message: error.message,
 			stack: error.stack,
@@ -55,11 +57,11 @@ function captureErrorToSentry(error: CustomError, severity: ErrorHandlingOptions
 	});
 }
 
-function sendErrorMessageToUser(interaction: ErrorHandlingOptions['interaction'], error: ErrorHandlingOptions['error']): void {
+function sendErrorMessageToUser(interaction: ErrorHandlingOptions['interaction'], error: CustomError): void {
 	const errorMessageEmbed = generateEmbed({
-		title: 'Une erreur est survenue',
-		description: codeBlock('shell', `Commande : ${
-			interaction.isChatInputCommand() ? (interaction as CommandInteraction).commandName : 'Inconnue'}\nErreur : ${error.message}`),
+		title: 'An error has occured',
+		description: codeBlock('shell', `ID: ${error.id}\nCommande : ${
+			interaction.isChatInputCommand() ? interaction.commandName : 'Unknown'}\nErreur : ${error.message}`),
 		color: '#ff0000',
 	});
 
@@ -72,6 +74,8 @@ function sendErrorMessageToUser(interaction: ErrorHandlingOptions['interaction']
 			() => interaction.user.send({ embeds: [errorMessageEmbed] }),
 		);
 	}
+
+	container.webhook ? container.webhook.send({ embeds: [errorMessageEmbed] }) : null;
 }
 
 export function handleErrorAndSendToUser({ interaction, error, loggerSeverity, sentrySeverity }: ErrorHandlingOptions): void {
