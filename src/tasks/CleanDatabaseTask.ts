@@ -11,8 +11,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
 			// Delete all guilds and birthdays that are disabled and haven't been updated in the last 24 hours
-			const deletedGuilds = await this.container.utilities.guild.delete.ByLastUpdateDisable(oneDayAgo);
-			const deletedBirthdays = await this.container.utilities.birthday.delete.ByLastUpdateDisable(oneDayAgo);
+			const deletedGuilds = await this.container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
+			const deletedBirthdays = await this.container.utilities.birthday.delete.ByLastUpdatedDisabled(oneDayAgo);
 			this.container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
 		}
 
