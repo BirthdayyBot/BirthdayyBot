@@ -1,92 +1,92 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-  relationMode = "prisma"
+    provider     = "mysql"
+    url          = env("DB_URL")
+    relationMode = "prisma"
 }
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 generator studio-client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native"]
+    provider      = "prisma-client-js"
+    binaryTargets = ["native"]
 }
 
 model Birthday {
-  id       BigInt  @id @default(autoincrement())
-  user_id  String  @db.VarChar(32)
-  user     User    @relation(fields: [user_id], references: [user_id])
-  guild    Guild   @relation(fields: [guild_id], references: [guild_id])
-  guild_id String  @db.VarChar(32)
-  birthday String  @db.VarChar(10)
-  disabled Boolean @default(false)
+    id       BigInt  @id @default(autoincrement())
+    user_id  String  @db.VarChar(32)
+    user     User    @relation(fields: [user_id], references: [user_id])
+    guild    Guild   @relation(fields: [guild_id], references: [guild_id])
+    guild_id String  @db.VarChar(32)
+    birthday String  @db.VarChar(10)
+    disabled Boolean @default(false)
 
-  @@unique([user_id, guild_id], map: "unique_user_guild")
-  @@index([birthday], map: "index_birthday_birthday")
-  @@index([guild_id], map: "index_guild_id_birthday")
-  @@index([user_id], map: "index_user_id_birthday")
-  @@map("birthday")
+    @@unique([user_id, guild_id], map: "unique_user_guild")
+    @@index([birthday], map: "index_birthday_birthday")
+    @@index([guild_id], map: "index_guild_id_birthday")
+    @@index([user_id], map: "index_user_id_birthday")
+    @@map("birthday")
 }
 
 model Blocklist {
-  id       BigInt   @id @default(autoincrement())
-  guild_id String   @db.VarChar(32)
-  user_id  String   @db.VarChar(32)
-  added_at DateTime @default(now()) @db.Timestamp(0)
-  disabled Boolean  @default(false)
+    id       BigInt   @id @default(autoincrement())
+    guild_id String   @db.VarChar(32)
+    user_id  String   @db.VarChar(32)
+    added_at DateTime @default(now()) @db.Timestamp(0)
+    disabled Boolean  @default(false)
 
-  @@index([guild_id], map: "index_guild_id_blocklist")
-  @@index([user_id], map: "index_user_id_blocklist")
-  @@map("blocklist")
+    @@index([guild_id], map: "index_guild_id_blocklist")
+    @@index([user_id], map: "index_user_id_blocklist")
+    @@map("blocklist")
 }
 
 model Guild {
-  guild_id             String     @id @db.VarChar(32)
-  inviter              String?    @db.VarChar(20)
-  announcement_channel String?    @db.VarChar(20)
-  announcement_message String     @default("<:arrwright:931267038746390578> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3") @db.VarChar(512)
-  overview_channel     String?    @db.VarChar(20)
-  overview_message     String?    @db.VarChar(20)
-  birthday_role        String?    @db.VarChar(20)
-  birthday_ping_role   String?    @db.VarChar(20)
-  log_channel          String?    @db.VarChar(20)
-  timezone             Int        @default(0)
-  premium              Boolean    @default(false)
-  language             String     @default("en-US") @db.VarChar(5)
-  last_updated         DateTime?  @default(now()) @db.Timestamp(0)
-  disabled             Boolean    @default(false)
-  birthday             Birthday[]
+    guild_id             String     @id @db.VarChar(32)
+    inviter              String?    @db.VarChar(20)
+    announcement_channel String?    @db.VarChar(20)
+    announcement_message String     @default("<:arrwright:931267038746390578> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3") @db.VarChar(512)
+    overview_channel     String?    @db.VarChar(20)
+    overview_message     String?    @db.VarChar(20)
+    birthday_role        String?    @db.VarChar(20)
+    birthday_ping_role   String?    @db.VarChar(20)
+    log_channel          String?    @db.VarChar(20)
+    timezone             Int        @default(0)
+    premium              Boolean    @default(false)
+    language             String     @default("en-US") @db.VarChar(5)
+    last_updated         DateTime?  @default(now()) @db.Timestamp(0)
+    disabled             Boolean    @default(false)
+    birthday             Birthday[]
 
-  @@index([last_updated], map: "index_last_updated_guild")
-  @@map("guild")
+    @@index([last_updated], map: "index_last_updated_guild")
+    @@map("guild")
 }
 
 model Premium {
-  id       Int     @id @default(autoincrement())
-  user_id  String  @db.VarChar(32)
-  guild_id String? @db.VarChar(32)
-  tier     Boolean @default(true)
+    id       Int     @id @default(autoincrement())
+    user_id  String  @db.VarChar(32)
+    guild_id String? @db.VarChar(32)
+    tier     Boolean @default(true)
 
-  @@map("premium")
+    @@map("premium")
 }
 
 model Tiers {
-  id           Int      @id @default(autoincrement())
-  name         String?  @db.VarChar(512)
-  last_updated DateTime @default(now()) @db.Timestamp(0)
+    id           Int      @id @default(autoincrement())
+    name         String?  @db.VarChar(512)
+    last_updated DateTime @default(now()) @db.Timestamp(0)
 
-  @@map("tiers")
+    @@map("tiers")
 }
 
 model User {
-  user_id       String     @id @db.VarChar(32)
-  username      String?    @db.VarChar(32)
-  discriminator String?    @db.VarChar(4)
-  premium       Boolean    @default(false)
-  last_updated  DateTime   @default(now()) @db.Timestamp(0)
-  birthday      Birthday[]
+    user_id       String     @id @db.VarChar(32)
+    username      String?    @db.VarChar(32)
+    discriminator String?    @db.VarChar(4)
+    premium       Boolean    @default(false)
+    last_updated  DateTime   @default(now()) @db.Timestamp(0)
+    birthday      Birthday[]
 
-  @@index([username], map: "index_user_birthday")
-  @@map("user")
+    @@index([username], map: "index_user_birthday")
+    @@map("user")
 }

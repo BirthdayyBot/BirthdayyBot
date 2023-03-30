@@ -109,7 +109,7 @@ export class Guild extends Utility {
 	public delete = {
 		GuildByID: async (guildID: string) => this.prisma.guild.delete({ where: { guild_id: guildID } }),
 		ByDisabledGuilds: async () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdateDisable: async (date: Date) => this.prisma.guild.deleteMany({ where: { last_updated: date.toISOString(), disabled: true } }),
+		ByLastUpdatedDisabled: async (date: Date) => this.prisma.guild.deleteMany({ where: { last_updated: date.toISOString(), disabled: true } }),
 	};
 
 	public create = (data: Prisma.GuildCreateInput) => this.prisma.guild.create({ data });
