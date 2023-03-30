@@ -29,7 +29,6 @@ import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import type { QueueOptions } from 'bullmq';
 import * as Sentry from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
-import { LoggerStyleBackground, LoggerStyleEffect, LoggerStyleText } from '@sapphire/plugin-logger';
 
 function parseApi(): ServerOptions {
 	return {
@@ -106,77 +105,11 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
-function parseDefaultFormat(): ClientLoggerOptions['defaultFormat'] {
-	return {
-		message: {
-			text: APP_ENV ? LoggerStyleText.Cyan : LoggerStyleText.Magenta,
-		},
-		timestamp: {
-			color: {
-				text: LoggerStyleText.White,
-			},
-			utc: true,
-			pattern: 'YYYY-MM-DD HH:mm:ss',
-		},
-	};
-}
-
-function parseFormat(): ClientLoggerOptions['format'] {
-	return {
-		debug: {
-			...parseDefaultFormat(),
-		},
-		info: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.White,
-			},
-		},
-		error: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.Red,
-			},
-		},
-		warn: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.Yellow,
-			},
-		},
-		fatal: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.Red,
-				background: LoggerStyleBackground.Red,
-				effects: [LoggerStyleEffect.Bold],
-			},
-		},
-		trace: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.White,
-				background: LoggerStyleBackground.Blue,
-				effects: [LoggerStyleEffect.Bold],
-			},
-		},
-		none: {
-			...parseDefaultFormat(),
-			message: {
-				text: LoggerStyleText.White,
-				background: LoggerStyleBackground.Black,
-				effects: [LoggerStyleEffect.Bold],
-			},
-		},
-	};
-}
 
 function parseLoggerOptions(): ClientLoggerOptions {
 	return {
 		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
 		instance: container.logger,
-		defaultFormat: parseDefaultFormat(),
-		format: parseFormat(),
 	};
 }
 
