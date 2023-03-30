@@ -8,6 +8,7 @@ on:
     paths:
       - 'src/**'
       - 'Dockerfile'
+      - 'prisma/**'
       - '.github/workflows/continuous-delivery-custom.yml'
 
 permissions:
