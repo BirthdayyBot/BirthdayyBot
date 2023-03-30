@@ -14,8 +14,8 @@ export class UserRoute extends Route {
 
 		// ! TODO: #140 Issue with the async transaction
 		// const [guilds, birthdays] = await container.prisma.$transaction([
-		// 	container.utilities.guild.delete.ByLastUpdateDisable(oneDayAgo),
-		// 	container.utilities.birthday.delete.ByLastUpdateDisable(oneDayAgo),
+		// 	container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo),
+		// 	container.utilities.birthday.delete.ByLastUpdatedDisabled(oneDayAgo),
 		// ]);
 
 		return response.ok({
