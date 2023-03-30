@@ -1,68 +1,47 @@
 import * as Sentry from '@sentry/node';
 import { container } from '@sapphire/framework';
-import type { AnySelectMenuInteraction, ButtonInteraction, CommandInteraction } from 'discord.js';
+import type { APIEmbed } from 'discord.js';
 import { codeBlock } from '@sapphire/utilities';
 import generateEmbed from '../../helpers/generate/embed';
+import { DEBUG, SENTRY_DSN } from '../../helpers/provide/environment';
+import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
 
-type LoggerWithoutLogLevelAndWrite = Omit<typeof container.logger, 'LogLevel' | 'write' | 'has'>;
 
-interface ErrorHandlingOptions {
-    interaction: ButtonInteraction | AnySelectMenuInteraction | CommandInteraction;
-    error: Error;
-    loggerSeverity: keyof LoggerWithoutLogLevelAndWrite;
-    sentrySeverity: Sentry.SeverityLevel;
+export function logErrorToContainer({ error, loggerSeverityLevel }: Pick<ErrorHandlerOptions, 'error' | 'loggerSeverityLevel'>): void {
+	container.logger[loggerSeverityLevel](error);
 }
 
-class CustomError extends Error {
-	public id: string = Math.random().toString(36).substr(2, 9);
-	public name: string;
-	public message: string;
-	public stack?: string;
-	public cause?: unknown;
-	public source?: string;
-	public guildId?: string;
-	public userId?: string;
-
-	constructor(error: Error, source?: string, guildId?: string, userId?: string) {
-		super(error.message);
-		this.name = error.name;
-		this.message = error.message;
-		this.stack = error.stack;
-		this.cause = error.cause;
-		this.source = source;
-		this.guildId = guildId;
-		this.userId = userId;
-	}
+export function defaultScope({ scope, error, sentrySeverityLevel }: ErrorDefaultSentryScope) {
+	scope.setFingerprint([error.name, error.message]),
+	scope.setTransactionName(error.name),
+	scope.setLevel(sentrySeverityLevel);
+	return Sentry.captureException(error);
 }
 
-function logErrorToContainer(error: CustomError, severity: ErrorHandlingOptions['loggerSeverity']): void {
-	container.logger[severity](error);
-}
-
-function captureErrorToSentry(error: CustomError, severity: ErrorHandlingOptions['sentrySeverity']): void {
-	Sentry.withScope((scope) => {
-		scope.setExtra('error', {
-			id: error.id,
-			name: error.name,
-			message: error.message,
-			stack: error.stack,
-			cause: error.cause,
-			source: error.source,
-			guildId: error.guildId,
-			userId: error.userId,
-			interaction: error.stack ? error.stack.split('\n')[1].trim() : undefined,
+export function captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel }: Omit<ErrorHandlerOptions, 'loggerSeverityLevel'>): void {
+	return Sentry.withScope((scope) => {
+		scope.setTags({
+			guildId: interaction.guildId,
+			channelId: interaction.channelId,
+			userId: interaction.member?.user.id ?? interaction.user.id,
 		});
-		scope.setLevel(severity);
-		Sentry.captureException(error);
+		return defaultScope({ scope, error, sentrySeverityLevel });
 	});
 }
 
-function sendErrorMessageToUser(interaction: ErrorHandlingOptions['interaction'], error: CustomError): void {
+export function captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel }: Omit<RouteApiErrorHandler, 'response' | 'loggerSeverityLevel'>): void {
+	return Sentry.withScope((scope) => {
+		scope.setTag('method', request.method);
+		return defaultScope({ scope, error, sentrySeverityLevel });
+	});
+}
+
+function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions, 'interaction' | 'error' >): void {
 	const errorMessageEmbed = generateEmbed({
 		title: 'An error has occured',
-		description: codeBlock('shell', `ID: ${error.id}\nCommande : ${
+		description: codeBlock('shell', `Commande : ${
 			interaction.isChatInputCommand() ? interaction.commandName : 'Unknown'}\nErreur : ${error.message}`),
-		color: '#ff0000',
+		color: 'RED',
 	});
 
 	if (interaction.replied || interaction.deferred) {
@@ -75,12 +54,23 @@ function sendErrorMessageToUser(interaction: ErrorHandlingOptions['interaction']
 		);
 	}
 
-	container.webhook ? container.webhook.send({ embeds: [errorMessageEmbed] }) : null;
+	sendErrorMessageToAdmin(errorMessageEmbed);
 }
 
-export function handleErrorAndSendToUser({ interaction, error, loggerSeverity, sentrySeverity }: ErrorHandlingOptions): void {
-	const customError = new CustomError(error, interaction.guildId ?? '', interaction.user.id);
-	logErrorToContainer(customError, loggerSeverity);
-	captureErrorToSentry(customError, sentrySeverity);
-	sendErrorMessageToUser(interaction, customError);
+function sendErrorMessageToAdmin(embed: APIEmbed): void {
+	const webhook = container.webhook;
+	if (webhook === null) return;
+	webhook.send({ embeds: [embed] });
+}
+
+export function handleCommandErrorAndSendToUser({ interaction, error, loggerSeverityLevel, sentrySeverityLevel }: ErrorHandlerOptions): void {
+	if (SENTRY_DSN) captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel });
+	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
+	return sendErrorMessageToUser({ interaction, error });
+}
+
+export function handleRouteApiError({ request, response, error, loggerSeverityLevel, sentrySeverityLevel }: RouteApiErrorHandler): void {
+	if (SENTRY_DSN) captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel });
+	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
+	return response.status(500).json({ error: error.message });
 }

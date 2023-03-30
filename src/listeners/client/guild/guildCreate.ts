@@ -1,12 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
-import { DEBUG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
-import { sendDMMessage } from '../lib/discord/message';
-import { GuideEmbed } from '../lib/embeds';
-import generateEmbed from '../helpers/generate/embed';
-import joinServerLog from '../helpers/send/joinServerLog';
 import type { Guild } from 'discord.js';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
+import { DEBUG, IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
+import { GuideEmbed } from '../../../lib/embeds';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
@@ -57,3 +54,15 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		}
 	}
 }
+function joinServerLog(_guild: Guild) {
+	throw new Error('Function not implemented.');
+}
+
+function generateEmbed(_GuideEmbed: any) {
+	throw new Error('Function not implemented.');
+}
+
+function sendDMMessage(_user_id: string, _arg1: { embeds: any[]; }) {
+	throw new Error('Function not implemented.');
+}
+

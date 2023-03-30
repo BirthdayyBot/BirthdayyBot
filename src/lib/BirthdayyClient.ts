@@ -1,7 +1,7 @@
 import { container, SapphireClient } from '@sapphire/framework';
 import { getRootData } from '@sapphire/pieces';
 import { join } from 'path';
-import { CLIENT_OPTIONS, WEBHOOK_OPTIONS } from '../config';
+import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '../config';
 import { PrismaClient } from '@prisma/client';
 import { WebhookClient } from 'discord.js';
 
@@ -10,8 +10,7 @@ export class BirthdayyClient extends SapphireClient {
 		super(CLIENT_OPTIONS);
 
 		container.prisma = new PrismaClient();
-		container.webhook = new WebhookClient(WEBHOOK_OPTIONS) ?? null;
-
+		container.webhook = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
 		this.registerPaths();
 	}
 

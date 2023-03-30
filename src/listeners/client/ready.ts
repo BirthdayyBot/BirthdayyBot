@@ -1,8 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { APP_ENV, BOT_ADMIN_LOG } from '../helpers/provide/environment';
-import { sendMessage } from '../lib/discord/message';
+import { APP_ENV, BOT_ADMIN_LOG } from '../../helpers/provide/environment';
+import { sendMessage } from '../../lib/discord/message';
 
 const isDev = APP_ENV !== 'prd';
 

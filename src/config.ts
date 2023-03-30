@@ -194,12 +194,6 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	],
 };
 
-export const WEBHOOK_OPTIONS: WebhookClientData = {
-	id: WEBHOOK_ID,
-	token: WEBHOOK_TOKEN,
-};
-
-
 export const CLIENT_OPTIONS: ClientOptions = {
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 	loadDefaultErrorListeners: true,
@@ -211,3 +205,14 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	presence: parsePresenceOptions(),
 };
 
+function parseWebhookError(): WebhookClientData | null {
+	if (!WEBHOOK_TOKEN || !WEBHOOK_ID) return null;
+
+	return {
+		id: WEBHOOK_ID,
+		token: WEBHOOK_TOKEN,
+
+	};
+}
+
+export const WEBHOOK_ERROR = parseWebhookError();

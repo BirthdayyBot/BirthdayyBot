@@ -57,8 +57,8 @@ declare global {
             LOG_CHANNEL_SERVER: string;
 
 			// Webhooks
-			WEBHOOK_ID: string;
-			WEBHOOK_TOKEN: string;
+			WEBHOOK_ID?: string;
+			WEBHOOK_TOKEN?: string;
 		}
 	}
 }
