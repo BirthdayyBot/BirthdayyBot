@@ -44,6 +44,8 @@ COPY --chown=node:node tsconfig.json tsconfig.json
 
 RUN yarn install --immutable
 
+RUN npx prisma generate
+
 COPY --chown=node:node src/ src/
 RUN yarn build
 
