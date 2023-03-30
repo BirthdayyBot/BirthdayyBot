@@ -1,11 +1,12 @@
-import { PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function SupportCMD() {
-    return {
-        name: 'support',
-        description: 'Need help? Join my Support Discord Server!',
-        defaultMemberPermissions: [PermissionFlagsBits.ViewChannel], // https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
-        dmPermission: true,
-        options: [],
-    };
+export async function SupportCMD(): Promise<ChatInputApplicationCommandData> {
+	return {
+		name: 'support',
+		description: 'Need help? Join my Support Discord Server!',
+		type: ApplicationCommandType.ChatInput,
+		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
+		dmPermission: true,
+		options: [],
+	};
 }

@@ -2,31 +2,21 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import type { Guild } from 'discord.js';
 import leaveServerLog from '../helpers/send/leaveServerLog';
-import { leaveGuildRequest } from '../helpers/provide/guild';
 import { DEBUG } from '../helpers/provide/environment';
 
-@ApplyOptions<ListenerOptions>({})
-export class UserEvent extends Listener {
-    public constructor(context: Listener.Context, options: Listener.Options) {
-        super(context, {
-            ...options,
-            event: Events.GuildDelete,
-            enabled: true,
-        });
-    }
-    public async run(guild: Guild) {
-        const guild_id = guild.id;
+@ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
+export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
-        if (!container.client.isReady()) return;
+	public async run(guild: Guild) {
+		const guild_id = guild.id;
 
-        this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
-        DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
+		if (!container.client.isReady()) return;
 
-        await disableData(guild_id);
+		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
+		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild}`) : null;
 
-        async function disableData(guild_id: string) {
-            await leaveServerLog(guild);
-            await leaveGuildRequest(guild_id);
-        }
-    }
+		await leaveServerLog(guild);
+		await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
+	}
+
 }

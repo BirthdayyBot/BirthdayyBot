@@ -3,52 +3,26 @@
 	"extends": [
 		":dependencyDashboard",
 		":semanticCommitTypeAll(chore)",
-		":ignoreModulesAndTests",
 		":autodetectPinVersions",
 		":prHourlyLimitNone",
 		":prConcurrentLimitNone",
-		"group:monorepos",
-		"group:recommended",
-		"workarounds:all"
+		"group:recommended"
 	],
-	"labels": [ "dependencies" ],
+	"labels": ["dependencies"],
 	"packageRules": [
 		{
 			"automerge": true,
-			"matchUpdateTypes": [
-				"minor",
-				"patch",
-				"pin",
-				"digest"
-			]
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"]
 		},
 		{
 			"automerge": true,
-			"matchDepTypes": [ "devDependencies" ]
-		},
-		{
-			"automerge": true,
-			"allowedVersions": "^5",
-			"matchPackagePatterns": [ "ansi-regex" ]
-		},
-		{
-			"automerge": true,
-			"allowedVersions": "^2",
-			"matchPackagePatterns": [
-				"@types/node-fetch",
-				"node-fetch"
-			]
+			"matchDepTypes": ["devDependencies"]
 		},
 		{
 			"automerge": true,
 			"groupName": "Sapphire Dependencies",
 			"matchPackagePatterns": ["@sapphire"],
-			"matchUpdateTypes": [
-				"minor",
-				"patch",
-				"pin",
-				"digest"
-			]
+			"matchUpdateTypes": ["minor", "patch", "pin", "digest"]
 		}
 	],
 	"rangeStrategy": "bump"

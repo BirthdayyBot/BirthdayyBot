@@ -1,71 +1,38 @@
-import { container } from '@sapphire/framework';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
-import { extractDayAndMonth } from '../../../helpers/utils/date';
+import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import type { ApiRequest } from '../../../lib/api/types';
+import { authenticated, validateParams } from '../../../lib/api/utils';
+import { ApplyOptions } from '@sapphire/decorators';
+import type { Birthday, Guild } from '@prisma/client';
+import dayjs from 'dayjs';
 
+type Query = {
+	date: string;
+	timezone: string;
+};
+
+@ApplyOptions<Route.Options>({ route: 'birthday/retrieve/byDateAndTimezone' })
 export class UserRoute extends Route {
-    public constructor(context: Route.Context, options: Route.Options) {
-        super(context, {
-            ...options,
-            route: 'birthday/retrieve/byDateAndTimezone',
-        });
-    }
+	@authenticated()
+	@validateParams<Query>()
+	public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
+		const { date, timezone } = request.query;
 
-    public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-        const { query } = _request;
-        const { date, timezone } = query;
+		const birthdays = await this.container.utilities.birthday.get.BirthdaysByDate(dayjs(date));
+		const guildIds = birthdays.map((birthday) => birthday.guild_id);
+		const guilds = await this.container.utilities.guild.get.GuildsByTimezone(guildIds, parseInt(timezone));
+		const filteredBirthdays = this.filterBirthdaysByTimezone(birthdays, guilds, timezone);
 
-        if (!date) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - date';
-            return response.json({ error: 'Missing Parameter - date' });
-        }
+		if (filteredBirthdays.length === 0) {
+			return response.ok({ amount: 0, birthdays: [], message: 'No Birthdays found on that Date and Timezone' });
+		}
 
-        if (!timezone) {
-            response.statusCode = 400;
-            response.statusMessage = 'Missing Parameter - timezone';
-            return response.json({ error: 'Missing Parameter - timezone' });
-        }
+		return response.ok({ amount: filteredBirthdays.length, birthdays: filteredBirthdays });
+	}
 
-        if (typeof date !== 'string') {
-            response.statusCode = 400;
-            response.statusMessage = 'Invalid Parameter - date';
-            return response.json({ error: 'Invalid Parameter - date' });
-        }
-
-        const dateAndMonth = extractDayAndMonth(date);
-        const [results] = await container.sequelize.query(
-            `SELECT id,
-            u.user_id AS user_id,
-            b.birthday AS birthday,
-            u.username AS username,
-            u.discriminator AS discriminator,
-            b.guild_id AS guild_id,
-            g.announcement_channel  AS announcement_channel,
-            g.overview_channel AS overview_channel,
-            g.birthday_role AS birthday_role,
-            g.birthday_ping_role AS birthday_ping_role,
-            g.overview_message  AS overview_message,
-            g.log_channel AS log_channel,
-            g.timezone AS timezone,
-            g.announcement_message AS announcement_message,
-            g.premium AS premium
-     FROM birthday b
-              LEFT JOIN user u ON b.user_id = u.user_id
-              LEFT JOIN guild g on b.guild_id = g.guild_id
-     WHERE b.birthday LIKE '%${dateAndMonth}%'
-       AND g.timezone = ?
-       AND g.disabled = false`,
-            {
-                replacements: [timezone],
-            },
-        );
-
-        if (results.length === 0) {
-            response.statusMessage = 'No Birthdays found on that Date and Timezone';
-            return response.status(200).json({ amount: 0, birthdays: [], error: 'No Birthdays found on that Date and Timezone' });
-        }
-
-        const birthdays = results as Array<any>;
-        return response.status(200).json({ amount: birthdays.length, birthdays: results });
-    }
+	private filterBirthdaysByTimezone(birthdays: Birthday[], guilds: Guild[], timezone: string) {
+		return birthdays.filter((birthday) => {
+			const guild = guilds.find((g) => g.guild_id === birthday.guild_id);
+			return guild?.timezone === parseInt(timezone);
+		});
+	}
 }

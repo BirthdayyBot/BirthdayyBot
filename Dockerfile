@@ -29,6 +29,7 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
 COPY --chown=node:node .yarn/ .yarn/
 COPY --chown=node:node .yarnrc.yml .
+COPY --chown=node:node prisma/ prisma/
 
 ENTRYPOINT [ "dumb-init", "--" ]
 
@@ -42,6 +43,8 @@ ENV NODE_ENV="development"
 COPY --chown=node:node tsconfig.json tsconfig.json
 
 RUN yarn install --immutable
+
+RUN npx prisma generate
 
 COPY --chown=node:node src/ src/
 RUN yarn build

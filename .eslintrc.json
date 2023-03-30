@@ -1,9 +1,10 @@
 {
     "plugins": [
         "@typescript-eslint/eslint-plugin",
-        "eslint-plugin-tsdoc"
+        "eslint-plugin-tsdoc",
+        "prettier"
     ],
-	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+	"extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
 	"ignorePatterns": ["dist/"],
 	"env": {
 		"node": true,
@@ -23,7 +24,7 @@
 		"curly": ["error", "multi-line", "consistent"],
 		"dot-location": ["error", "property"],
 		"handle-callback-err": "off",
-		"indent": ["error", 4],
+		"indent": ["error", "tab"],
 		"keyword-spacing": "error",
 		"max-nested-callbacks": ["error", { "max": 4 }],
 		"max-statements-per-line": ["error", { "max": 2 }],
