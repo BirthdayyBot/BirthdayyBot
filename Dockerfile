@@ -29,6 +29,7 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
 COPY --chown=node:node .yarn/ .yarn/
 COPY --chown=node:node .yarnrc.yml .
+COPY --chown=node:node prisma/ prisma/
 
 ENTRYPOINT [ "dumb-init", "--" ]
 
