@@ -1,9 +1,15 @@
-import { Time } from '@sapphire/time-utilities';
+import type { BotList } from '@devtomio/plugin-botlist';
 import { container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import { ActivityType, type ClientOptions, GatewayIntentBits, PresenceData, PresenceUpdateStatus } from 'discord.js';
-import { UserIDEnum } from './lib/enum/UserID.enum';
+import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
+import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
+import { Time } from '@sapphire/time-utilities';
+import { RewriteFrames } from '@sentry/integrations';
+import * as Sentry from '@sentry/node';
+import type { QueueOptions } from 'bullmq';
+import { ActivityType, GatewayIntentBits, PresenceData, PresenceUpdateStatus, type ClientOptions } from 'discord.js';
+import { getGuildLanguage } from './helpers/provide/config';
 import {
 	API_EXTENSION,
 	API_PORT,
@@ -20,13 +26,7 @@ import {
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
 } from './helpers/provide/environment';
-import { getGuildLanguage } from './helpers/provide/config';
-import type { BotList } from '@devtomio/plugin-botlist';
-import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
-import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
-import type { QueueOptions } from 'bullmq';
-import * as Sentry from '@sentry/node';
-import { RewriteFrames } from '@sentry/integrations';
+import { UserIDEnum } from './lib/enum/UserID.enum';
 
 function parseApi(): ServerOptions {
 	return {
@@ -36,7 +36,6 @@ function parseApi(): ServerOptions {
 		automaticallyConnect: false,
 	};
 }
-
 
 function parseBotListOptions(): BotList.Options {
 	return {
@@ -70,7 +69,6 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 	};
 }
 
-
 function parseBullOptions(): QueueOptions {
 	return {
 		connection: {
@@ -103,7 +101,6 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
-
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,
 	debug: DEBUG,
@@ -127,6 +124,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	logger: {
 		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
 	},
+	shards: 'auto',
 	api: parseApi(),
 	botList: parseBotListOptions(),
 	i18n: parseInternationalizationOptions(),
