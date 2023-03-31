@@ -16,7 +16,6 @@ dayjs.extend(dayjstimezone);
 export function getCurrentDate(timezone = 'UTC'): Dayjs {
 	const today = dayjs();
 	const date = dayjs.tz(today, timezone);
-	container.logger.debug(`[getCurrentDate][${timezone}] ${date}`);
 	return date;
 }
 
@@ -29,7 +28,6 @@ export function getCurrentDateFormated(timezone = 'UTC'): string {
 	const today = dayjs();
 	const todayUTC = dayjs.tz(today, timezone);
 	const formattedDate = todayUTC.format('YYYY-MM-DD');
-	container.logger.debug(`[getCurrentDateFormated][${timezone}] ${formattedDate}`);
 	return formattedDate;
 }
 
