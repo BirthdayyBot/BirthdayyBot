@@ -133,7 +133,7 @@ export class BirthdayCommand extends Subcommand {
 	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-		const guildID = interaction.guildId;
+		const guildId = interaction.guildId;
 
 		if (
 			interaction.user.id != targetUser.id &&
@@ -150,7 +150,7 @@ export class BirthdayCommand extends Subcommand {
 			});
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildID, targetUser.id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
@@ -165,7 +165,7 @@ export class BirthdayCommand extends Subcommand {
 		}
 
 		try {
-			await container.utilities.birthday.delete.ByGuildAndUser(guildID, targetUser.id);
+			await container.utilities.birthday.delete.ByGuildAndUser(guildId, targetUser.id);
 
 			return replyToInteraction(interaction, {
 				embeds: [
@@ -309,7 +309,7 @@ export class BirthdayCommand extends Subcommand {
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
 
-		await container.tasks.run('BirthdayReminderTask', { userID: targetUser.id, guildID: interaction.guildId, isTest: true });
+		await container.tasks.run('BirthdayReminderTask', { userId: targetUser.id, guildId: interaction.guildId, isTest: true });
 		const embed = generateEmbed({
 			title: `${SUCCESS} Success`,
 			description: `${ARROW_RIGHT} ${inlineCode('Birthday Test Run!')}`,

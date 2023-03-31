@@ -3,26 +3,25 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
-import { APIEmbed, Guild, GuildMember, Role, roleMention, userMention } from 'discord.js';
+import { APIEmbed, Guild, GuildMember, Role, roleMention, Snowflake, userMention } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
 import { logAll } from '../helpers/provide/config';
-import { getCurrentOffset } from '../helpers/provide/currentOffset';
 import { DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
+import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
-	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
+	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
 		if (birthdayEvent) {
-			const { userID, guildID, isTest } = birthdayEvent;
-			if (isTest) container.logger.info('[BirthdayTask] Test Birthday Event run');
-			return this.birthdayEvent(userID, guildID, isTest);
+			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
+			return await this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
 		}
 		const current = getCurrentOffset();
-		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
-		const dateFormatted = current.date.format('YYYY-MM-DD');
+		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not found');
+		const dateFormatted = current.dateFormatted;
 
 		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 
@@ -30,23 +29,22 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.timezone}`);
 		}
 
-		if (DEBUG) {
-			this.container.logger.info(
-				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`,
-			);
-		}
+		this.container.logger.debug(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`);
 
 		for (const birthday of todaysBirthdays) {
 			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);
 			await this.birthdayEvent(birthday.user_id, birthday.guild_id, false);
 		}
+		container.logger.info(
+			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`,
+		);
 	}
 
-	private async birthdayEvent(userID: string, guildID: string, isTest: boolean) {
-		const guild = await getGuildInformation(guildID);
-		const member = await getGuildMember(guildID, userID);
+	private async birthdayEvent(userId: string, guildId: string, isTest: boolean) {
+		const guild = await getGuildInformation(guildId);
+		const member = await getGuildMember(guildId, userId);
 
-		if (!member || !guild) return this.container.logger.info(`[BirthdayTask] Member or Guild not found for ${userID} in ${guildID}`);
+		if (!member || !guild) return this.container.logger.info(`[BirthdayTask] Member or Guild not found for ${userId} in ${guildId}`);
 
 		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
 		if (!config) return;
@@ -60,7 +58,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				if (DEBUG) this.container.logger.warn(`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`);
 				return { error: true, message: 'Birthday role not found' };
 			}
-			await this.addCurrentBirthdayChildRole({ member, guild, role, isTest });
+			await this.addCurrentBirthdayChildRole(member, guildId, role, isTest);
 		}
 
 		if (!announcement_channel) {
@@ -80,14 +78,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		return this.sendBirthdayAnnouncement(content, announcement_channel, birthdayEmbed);
 	}
 
-	private async addCurrentBirthdayChildRole(payload: { member: GuildMember; guild: Guild; role: Role; isTest: boolean }) {
-		const { member, role } = payload;
+	private async addCurrentBirthdayChildRole(member: GuildMember, guildId: Snowflake, role: Role, isTest: boolean) {
+		const payload = { memberId: member.id, guildId, roleId: role.id };
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 
 			return await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: payload.isTest ? Time.Minute : Time.Day,
+				delay: isTest ? Time.Minute * 3 : Time.Day,
 			});
 		} catch (error) {
 			return this.container.logger.error('COULDN\'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n', error);
