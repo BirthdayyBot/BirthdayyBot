@@ -12,7 +12,7 @@ import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '5 * * * *' })
+@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
 		container.logger.debug('[BirthdayTask] Task run');
