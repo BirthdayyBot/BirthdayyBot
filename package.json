@@ -24,7 +24,7 @@
 		"@sapphire/type": "^2.3.0",
 		"@sapphire/utilities": "^3.11.0",
 		"@sentry/integrations": "^7.43.0",
-		"@sentry/node": "^7.43.0",
+		"@sentry/node": "^7.46.0",
 		"@sentry/tracing": "^7.43.0",
 		"@types/node-cron": "^3.0.7",
 		"bullmq": "^3.10.3",
