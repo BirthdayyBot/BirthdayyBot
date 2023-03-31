@@ -29,7 +29,9 @@ export function captureCommandErrorToSentry({ interaction, error, sentrySeverity
 	});
 }
 
-export function captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel }: Omit<RouteApiErrorHandler, 'response' | 'loggerSeverityLevel'>): void {
+export function captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel }:
+	Omit<RouteApiErrorHandler, 'response' | 'loggerSeverityLevel'>,
+): void {
 	return Sentry.withScope((scope) => {
 		scope.setTag('method', request.method);
 		return defaultScope({ scope, error, sentrySeverityLevel });
@@ -39,7 +41,7 @@ export function captureRouteApiErrorToSentry({ request, error, sentrySeverityLev
 function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions, 'interaction' | 'error' >): void {
 	const errorMessageEmbed = generateEmbed({
 		title: 'An error has occured',
-		description: codeBlock('shell', `Commande : ${
+		description: codeBlock('shell', `Command : ${
 			interaction.isChatInputCommand() ? interaction.commandName : 'Unknown'}\nErreur : ${error.message}`),
 		color: 'RED',
 	});
