@@ -12,7 +12,7 @@ import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { BirthdayCMD } from '../../lib/commands/birthday';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { hasUserGuildPermissions } from '../../helpers/provide/permission';
-import { inlineCode, roleMention } from '@discordjs/formatters';
+import { inlineCode, userMention } from '@discordjs/formatters';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
@@ -167,7 +167,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					generateEmbed({
 						title: `${BOOK} Birthday Removed`,
-						description: `${ARROW_RIGHT} The birthday of ${roleMention(targetUser.id)} was successfully removed.`,
+						description: `${ARROW_RIGHT} The birthday of ${userMention(targetUser.id)} was successfully removed.`,
 					}),
 				],
 				ephemeral: true,
@@ -215,7 +215,7 @@ export class BirthdayCommand extends Subcommand {
 
 		const embed = generateEmbed({
 			title: `${BOOK} Birthday`,
-			description: `${ARROW_RIGHT} ${roleMention(birthday.user_id)}'s birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
+			description: `${ARROW_RIGHT} ${userMention(birthday.user_id)}'s birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
 			thumbnail_url: IMG_CAKE,
 		});
 
@@ -271,7 +271,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					generateEmbed({
 						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} I updated the Birthday from ${roleMention(birthday.user_id)} to the ${formatDateForDisplay(
+						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(birthday.user_id)} to the ${formatDateForDisplay(
 							date.date,
 						)}. 🎂`,
 					}),
