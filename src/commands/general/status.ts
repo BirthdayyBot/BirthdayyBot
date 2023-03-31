@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
 import generateEmbed from '../../helpers/generate/embed';
-import { PING } from '../../helpers/provide/environment';
+import { APP_ENV, PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
 import { getCurrentDate, getCurrentOffset } from '../../helpers/utils/date';
@@ -14,6 +14,8 @@ import type { EmbedInformationModel } from '../../lib/model';
 @ApplyOptions<Command.Options>({
 	name: 'status',
 	description: 'Status Command',
+	// TODO: Enable this when #71 is done
+	enabled: APP_ENV !== 'prd',
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
