@@ -12,13 +12,15 @@ import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
+@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '5 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
+		container.logger.debug('[BirthdayTask] Task run');
 		if (birthdayEvent) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
 			return await this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
 		}
+
 		const current = getCurrentOffset();
 		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not found');
 		const dateFormatted = current.dateFormatted;
@@ -32,7 +34,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		this.container.logger.debug(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`);
 
 		for (const birthday of todaysBirthdays) {
-			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);
+			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${todaysBirthdays.indexOf(birthday) + 1}/${todaysBirthdays.length}`);
 			await this.birthdayEvent(birthday.user_id, birthday.guild_id, false);
 		}
 		container.logger.info(
