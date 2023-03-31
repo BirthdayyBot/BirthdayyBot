@@ -1,6 +1,8 @@
-import type { ContextMenuCommandDeniedPayload, Events } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { ContextMenuCommandDeniedPayload, Events } from '@sapphire/framework';
 import { Listener, UserError } from '@sapphire/framework';
 
+@ApplyOptions<Listener.Options>({ event: Events.ContextMenuCommandDenied })
 export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> {
 	public async run({ context, message: content }: UserError, { interaction }: ContextMenuCommandDeniedPayload) {
 		// `context: { silent: true }` should make UserError silent:

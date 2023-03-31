@@ -18,7 +18,7 @@ export class ExampleParseMethod extends InteractionHandler {
 		const { isNormalMessage } = result;
 		const page_number = parseInt(interaction.customId.split('_')[3]);
 		const { embed, components } = await generateBirthdayList(page_number, interaction.guildId);
-		const finalEmbed = await generateEmbed(embed);
+		const finalEmbed = generateEmbed(embed);
 		if (isNormalMessage) return interaction.message.edit({ embeds: [finalEmbed], components });
 		return interaction.editReply({ embeds: [finalEmbed], components });
 	}
