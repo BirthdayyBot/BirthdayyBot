@@ -1,8 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import type { Guild } from 'discord.js';
-import leaveServerLog from '../helpers/send/leaveServerLog';
-import { DEBUG } from '../helpers/provide/environment';
+import { DEBUG } from '../../../helpers/provide/environment';
+import leaveServerLog from '../../../helpers/send/leaveServerLog';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
