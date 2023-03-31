@@ -90,7 +90,7 @@ export class ConfigCommand extends Subcommand {
 		const announcement_channel = findOption(interaction, 'channel');
 		if (await this.hasWritingPermissionsInChannel(interaction, announcement_channel)) {
 			await this.setConfig(interaction, 'announcement_channel');
-			const embed = await generateEmbed(this.messageOptions.embed);
+			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 		}
 	}
@@ -103,13 +103,13 @@ export class ConfigCommand extends Subcommand {
 			await this.setConfig(interaction, 'overview_channel');
 
 			const birthdayList = await generateBirthdayList(1, interaction.guildId);
-			const birthdayListEmbed = await generateEmbed(birthdayList.embed);
+			const birthdayListEmbed = generateEmbed(birthdayList.embed);
 			const birthdayListComponents = birthdayList.components;
 			const newBirthdayList = await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
 			if (!newBirthdayList) return;
 			await container.utilities.guild.set.OverviewMessage(interaction.guildId, newBirthdayList.id);
 
-			const embed = await generateEmbed(this.messageOptions.embed);
+			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 		}
 	}
@@ -119,7 +119,7 @@ export class ConfigCommand extends Subcommand {
 		container.logger.info('Run configBirthdayRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
 			await this.setConfig(interaction, 'birthday_role');
-			const embed = await generateEmbed(this.messageOptions.embed);
+			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 		}
 	}
@@ -129,7 +129,7 @@ export class ConfigCommand extends Subcommand {
 		container.logger.info('Run configPingRole Command');
 		if (await this.botHasManageRolesPermissions(interaction)) {
 			await this.setConfig(interaction, 'ping_role');
-			const embed = await generateEmbed(this.messageOptions.embed);
+			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 		}
 	}
@@ -138,7 +138,7 @@ export class ConfigCommand extends Subcommand {
 		await thinking(interaction);
 		container.logger.info('Run configTimezone Command');
 		await this.setConfig(interaction, 'timezone');
-		const embed = await generateEmbed(this.messageOptions.embed);
+		const embed = generateEmbed(this.messageOptions.embed);
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
@@ -146,7 +146,7 @@ export class ConfigCommand extends Subcommand {
 		await thinking(interaction);
 		container.logger.info('Run configAnnouncementMessage Command');
 		await this.setConfig(interaction, 'announcement_message');
-		const embed = await generateEmbed(this.messageOptions.embed);
+		const embed = generateEmbed(this.messageOptions.embed);
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
@@ -157,7 +157,7 @@ export class ConfigCommand extends Subcommand {
 		await setDefaultConfig(config, interaction.guildId);
 		this.messageOptions.embed.title = `${SUCCESS} Success`;
 		this.messageOptions.embed.description = `${ARROW_RIGHT} You have reset the \`${configName}\` config.`;
-		const embed = await generateEmbed(this.messageOptions.embed);
+		const embed = generateEmbed(this.messageOptions.embed);
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
@@ -198,7 +198,7 @@ export class ConfigCommand extends Subcommand {
 				const announcement_message = findOption(interaction, 'message');
 				const isPremium = await this.container.utilities.guild.check.isGuildPremium(guild_id);
 				container.logger.info('isPremium: ', isPremium);
-				const isBirthdayMessageValid = await isValidBirthdayMessage(announcement_message);
+				const isBirthdayMessageValid = isValidBirthdayMessage(announcement_message);
 				if (!isPremium) {
 					this.messageOptions.embed.title = `${PLUS} Early access only`;
 					this.messageOptions.embed.description = `${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
@@ -256,7 +256,7 @@ export class ConfigCommand extends Subcommand {
 		if (!hasPermissions) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;
 			this.messageOptions.embed.description = `${ARROW_RIGHT} I don't have the permission to manage roles in this server.`;
-			const embed = await generateEmbed(this.messageOptions.embed);
+			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
 			return false;
 		}

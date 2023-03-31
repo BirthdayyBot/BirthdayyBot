@@ -1,3 +1,4 @@
+import type { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -6,42 +7,32 @@ import { APIEmbed, Guild, GuildMember, Role, roleMention, userMention } from 'di
 import generateEmbed from '../helpers/generate/embed';
 import { logAll } from '../helpers/provide/config';
 import { getCurrentOffset } from '../helpers/provide/currentOffset';
-import { APP_ENV, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
+import { DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
+import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
-import { getGuildInformation, getGuildMember } from '../lib/discord';
-import type { Birthday } from '@prisma/client';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userID: string; guildID: string; isTest: boolean }) {
-		const current = getCurrentOffset();
-
-		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
-
-		const dateFormated = current.date.format('YYYY-MM-DD');
-
-		let todaysBirthdays: Birthday[] = [];
-
 		if (birthdayEvent) {
 			const { userID, guildID, isTest } = birthdayEvent;
+			if (isTest) container.logger.info('[BirthdayTask] Test Birthday Event run');
 			return this.birthdayEvent(userID, guildID, isTest);
 		}
+		const current = getCurrentOffset();
+		if (!current) return this.container.logger.info('[BirthdayTask] No Timezone Found');
+		const dateFormatted = current.date.format('YYYY-MM-DD');
 
-		if (APP_ENV === 'prd') {
-			const birthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
-			todaysBirthdays = birthdays;
-		}
+		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 
 		if (!todaysBirthdays.length) {
-			return this.container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${dateFormated}, offset: ${current.timezone}`,
-			);
+			return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.timezone}`);
 		}
 
 		if (DEBUG) {
 			this.container.logger.info(
-				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormated}, offset: ${current.timezone}`,
+				`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`,
 			);
 		}
 
@@ -55,13 +46,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const guild = await getGuildInformation(guildID);
 		const member = await getGuildMember(guildID, userID);
 
-		if (!member || !guild) return;
+		if (!member || !guild) return this.container.logger.info(`[BirthdayTask] Member or Guild not found for ${userID} in ${guildID}`);
 
 		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
 		if (!config) return;
 		const { announcement_channel, birthday_role, birthday_ping_role, announcement_message } = config;
 
-		await logAll(config);
+		logAll(config);
 
 		if (birthday_role) {
 			const role = await guild.roles.fetch(birthday_role);
@@ -84,7 +75,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			thumbnail_url: IMG_CAKE,
 		};
 		const content = birthday_ping_role ? roleMention(birthday_ping_role) : '';
-		const birthdayEmbed = await generateEmbed(embed);
+		const birthdayEmbed = generateEmbed(embed);
 
 		return this.sendBirthdayAnnouncement(content, announcement_channel, birthdayEmbed);
 	}
@@ -94,7 +85,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 
-			return container.tasks.create('BirthdayRoleRemoverTask', payload, { repeated: false, delay: payload.isTest ? Time.Minute : Time.Day });
+			return await container.tasks.create('BirthdayRoleRemoverTask', payload, {
+				repeated: false,
+				delay: payload.isTest ? Time.Minute : Time.Day,
+			});
 		} catch (error) {
 			return this.container.logger.error('COULDN\'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n', error);
 		}
