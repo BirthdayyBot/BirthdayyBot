@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { InviteCMD } from '../../lib/commands';
-import { InviteEmbed } from '../../lib/embeds';
 import { inviteButton } from '../../lib/components/button';
+import thinking from '../../lib/discord/thinking';
+import { InviteEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'invite',
@@ -18,7 +18,6 @@ import { inviteButton } from '../../lib/components/button';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await InviteCMD(), {
 			guildIds: getCommandGuilds('global'),

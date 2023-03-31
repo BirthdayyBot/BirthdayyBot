@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { SupportCMD } from '../../lib/commands';
-import { SupportEmbed } from '../../lib/embeds';
 import { discordButton, docsButton } from '../../lib/components/button';
+import thinking from '../../lib/discord/thinking';
+import { SupportEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'support',
@@ -18,7 +18,6 @@ import { discordButton, docsButton } from '../../lib/components/button';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class SupportCommand extends Command {
-
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await SupportCMD(), {
 			guildIds: getCommandGuilds('global'),

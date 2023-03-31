@@ -1,18 +1,18 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Subcommand } from '@sapphire/plugin-subcommands';
-import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
-import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
-import { container } from '@sapphire/pieces';
-import generateEmbed from '../../helpers/generate/embed';
-import { formatDateForDisplay } from '../../helpers/utils/date';
-import generateBirthdayList from '../../helpers/generate/birthdayList';
-import replyToInteraction from '../../helpers/send/response';
-import thinking from '../../lib/discord/thinking';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { BirthdayCMD } from '../../lib/commands/birthday';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { hasUserGuildPermissions } from '../../helpers/provide/permission';
 import { inlineCode, userMention } from '@discordjs/formatters';
+import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/pieces';
+import { Subcommand } from '@sapphire/plugin-subcommands';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import generateBirthdayList from '../../helpers/generate/birthdayList';
+import generateEmbed from '../../helpers/generate/embed';
+import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE, SUCCESS } from '../../helpers/provide/environment';
+import { hasUserGuildPermissions } from '../../helpers/provide/permission';
+import replyToInteraction from '../../helpers/send/response';
+import { formatDateForDisplay } from '../../helpers/utils/date';
+import getDateFromInteraction from '../../helpers/utils/getDateFromInteraction';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
+import { BirthdayCMD } from '../../lib/commands/birthday';
+import thinking from '../../lib/discord/thinking';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'Birthday Command',
@@ -54,8 +54,10 @@ export class BirthdayCommand extends Subcommand {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
-		if (interaction.user.id != targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))) {
+		if (
+			interaction.user.id != targetUser.id &&
+			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
+		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
@@ -133,8 +135,10 @@ export class BirthdayCommand extends Subcommand {
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 		const guildID = interaction.guildId;
 
-		if (interaction.user.id != targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: targetUser, permissions: ['ManageRoles'] }))) {
+		if (
+			interaction.user.id != targetUser.id &&
+			!(await hasUserGuildPermissions({ interaction, user: targetUser, permissions: ['ManageRoles'] }))
+		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
@@ -226,8 +230,10 @@ export class BirthdayCommand extends Subcommand {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
-		if (interaction.user.id != targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))) {
+		if (
+			interaction.user.id != targetUser.id &&
+			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))
+		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({

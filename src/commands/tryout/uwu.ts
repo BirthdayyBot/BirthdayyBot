@@ -1,11 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Args } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
+import { resolveKey } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
 import findOption from '../../helpers/utils/findOption';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { resolveKey } from '@sapphire/plugin-i18next';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { UwUCMD } from '../../lib/commands/uwu';
 
