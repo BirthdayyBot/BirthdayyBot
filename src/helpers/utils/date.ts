@@ -1,4 +1,3 @@
-// import { DEBUG } from '../provide/environment';
 import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
@@ -6,16 +5,32 @@ import utc from 'dayjs/plugin/utc';
 import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 
-// Extend dayjs with the required plugins
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
 
-export function getCurrentDate(formatted = true): string | Dayjs {
+/**
+ * Get the current date in the specified timezone.
+ * @param timezone - The timezone to use.
+ * @returns  The date.
+ */
+export function getCurrentDate(timezone = 'UTC'): Dayjs {
 	const today = dayjs();
-	const todayUTC = dayjs.tz(today, 'UTC');
+	const date = dayjs.tz(today, timezone);
+	container.logger.debug(`[getCurrentDate][${timezone}] ${date}`);
+	return date;
+}
+
+/**
+ * Get the current formatted date in the specified timezone.
+ * @param timezone - The timezone to use.
+ * @returns  The formatted date.
+ */
+export function getCurrentDateFormated(timezone = 'UTC'): string {
+	const today = dayjs();
+	const todayUTC = dayjs.tz(today, timezone);
 	const formattedDate = todayUTC.format('YYYY-MM-DD');
-	container.logger.debug('today: ', formattedDate);
-	return formatted ? formattedDate : todayUTC;
+	container.logger.debug(`[getCurrentDateFormated][${timezone}] ${formattedDate}`);
+	return formattedDate;
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -112,6 +127,7 @@ const TIMEZONE_VALUES: Record<number, string> = {
 
 type TimezoneObject = {
 	date: Dayjs;
+	dateFormatted: string;
 	timezone: keyof typeof TIMEZONE_VALUES;
 };
 
@@ -121,7 +137,6 @@ type TimezoneObject = {
  */
 export function getCurrentOffset() {
 	const allZones = createTimezoneObjects();
-	console.log('All zones: ', allZones);
 	return allZones.find(({ date }) => date.hour() === 0) ?? null;
 }
 /**
@@ -131,9 +146,9 @@ export function getCurrentOffset() {
 
 export function createTimezoneObjects(): TimezoneObject[] {
 	const allZones = Object.entries(TIMEZONE_VALUES).map(([timezone, zone]) => {
-		const date = dayjs().tz(zone);
-		console.log('Date: ', date);
-		return { date, timezone: Number(timezone) };
+		const date = getCurrentDate(zone);
+		const dateFormatted = getCurrentDateFormated(zone);
+		return { date, dateFormatted, timezone: Number(timezone) };
 	});
 	return allZones;
 }
