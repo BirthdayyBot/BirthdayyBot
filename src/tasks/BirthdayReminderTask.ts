@@ -52,7 +52,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!config) return;
 		const { announcement_channel, birthday_role, birthday_ping_role, announcement_message } = config;
 
-		await logAll(config);
+		logAll(config);
 
 		if (birthday_role) {
 			const role = await guild.roles.fetch(birthday_role);
@@ -75,7 +75,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			thumbnail_url: IMG_CAKE,
 		};
 		const content = birthday_ping_role ? roleMention(birthday_ping_role) : '';
-		const birthdayEmbed = await generateEmbed(embed);
+		const birthdayEmbed = generateEmbed(embed);
 
 		return this.sendBirthdayAnnouncement(content, announcement_channel, birthdayEmbed);
 	}

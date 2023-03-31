@@ -35,7 +35,7 @@ export default async function leaveServerLog(guild: Guild) {
 		color: BotColorEnum.BIRTHDAYY_DEV,
 	};
 
-	const embed = await generateEmbed(embedObj);
+	const embed = generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 
 	return;

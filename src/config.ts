@@ -1,5 +1,5 @@
 import type { BotList } from '@devtomio/plugin-botlist';
-import { container, LogLevel } from '@sapphire/framework';
+import { ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
@@ -8,7 +8,7 @@ import { Time } from '@sapphire/time-utilities';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import type { QueueOptions } from 'bullmq';
-import { ActivityType, GatewayIntentBits, PresenceData, PresenceUpdateStatus, type ClientOptions } from 'discord.js';
+import { ActivityType, GatewayIntentBits, PresenceData, PresenceUpdateStatus, WebhookClientData, type ClientOptions } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import {
 	API_EXTENSION,
@@ -25,6 +25,8 @@ import {
 	TOKEN_DISCORDBOTLIST,
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
+	WEBHOOK_ID,
+	WEBHOOK_TOKEN,
 } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 
@@ -101,6 +103,13 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
+function parseLoggerOptions(): ClientLoggerOptions {
+	return {
+		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
+		instance: container.logger,
+	};
+}
+
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: SENTRY_DSN,
 	debug: DEBUG,
@@ -115,15 +124,9 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
-	caseInsensitiveCommands: true,
-	caseInsensitivePrefixes: true,
-	defaultPrefix: 'b!',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-	loadMessageCommandListeners: true,
 	loadDefaultErrorListeners: true,
-	logger: {
-		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
-	},
+	logger: parseLoggerOptions(),
 	shards: 'auto',
 	api: parseApi(),
 	botList: parseBotListOptions(),
@@ -131,3 +134,15 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
 };
+
+function parseWebhookError(): WebhookClientData | null {
+	if (!WEBHOOK_TOKEN || !WEBHOOK_ID) return null;
+
+	return {
+		id: WEBHOOK_ID,
+		token: WEBHOOK_TOKEN,
+
+	};
+}
+
+export const WEBHOOK_ERROR = parseWebhookError();

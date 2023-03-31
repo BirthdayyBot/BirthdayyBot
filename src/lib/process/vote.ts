@@ -26,7 +26,7 @@ async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: 
 		title: `${SUCCESS} You voted for Birthdayy on ${providerInfo.name}`,
 		description: `Thank you so much for supporting me, you're the best ${HEART}`,
 	};
-	const dmEmbedObj = await generateEmbed(dmEmbed);
+	const dmEmbedObj = generateEmbed(dmEmbed);
 	const component = {
 		type: 1,
 		components: [
@@ -52,7 +52,7 @@ async function sendVoteAnnouncement(providerInfo: { name: string; url: string },
       Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
 		thumbnail_url: avatar_url,
 	};
-	const embedObj = await generateEmbed(embed);
+	const embedObj = generateEmbed(embed);
 	sendMessage(APP_ENV === 'prd' ? VOTE_CHANNEL_ID : '1077621363881300018', { embeds: [embedObj] });
 }
 

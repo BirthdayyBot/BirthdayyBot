@@ -35,14 +35,14 @@ export class TestCommand extends Command {
 		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
 		const current = getCurrentOffset();
 		if (!current) {
-			const embed = await generateEmbed({ title: 'test', description: 'No current time' });
+			const embed = generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		};
 		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
-		const embed = await generateEmbed(embedObj);
+		const embed = generateEmbed(embedObj);
 		return replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
 	}
 }

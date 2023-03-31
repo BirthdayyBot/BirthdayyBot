@@ -30,7 +30,7 @@ export class TemplateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		container.logger.info('testCommand Command');
 		await thinking(interaction);
-		const embed = await generateEmbed({ title: 'Test', description: 'A Test Command' });
+		const embed = generateEmbed({ title: 'Test', description: 'A Test Command' });
 		return await replyToInteraction(interaction, { embeds: [embed] });
 	}
 }
