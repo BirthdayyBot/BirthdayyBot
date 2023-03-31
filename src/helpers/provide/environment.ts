@@ -105,3 +105,8 @@ export const DB_URL = process.env.DB_URL;
 export const TOKEN_TOPGG = process.env.TOPGG_TOKEN;
 export const TOKEN_DISCORDLIST = process.env.DISCORDLIST_TOKEN;
 export const TOKEN_DISCORDBOTLIST = process.env.DISCORDBOTLIST_TOKEN;
+
+// WEBHOOKS
+export const WEBHOOK_ID = process.env.WEBHOOK_ID;
+export const WEBHOOK_TOKEN = process.env.WEBHOOK_TOKEN;
+

@@ -32,7 +32,7 @@ export default async function joinServerLog(guild: Guild) {
 		color: BotColorEnum.BIRTHDAYY,
 		thumbnail_url: guild.iconURL() ?? undefined,
 	};
-	const embed = await generateEmbed(embedObj);
+	const embed = generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 
 	return;

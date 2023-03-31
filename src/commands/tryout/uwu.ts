@@ -40,7 +40,7 @@ export class UwuCommand extends Subcommand {
 	}
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const title = await resolveKey(interaction, 'commands/uwu:uwuss');
-		const embed = await generateEmbed({ title: title, description: 'Uwu' });
+		const embed = generateEmbed({ title: title, description: 'Uwu' });
 		return await interaction.reply({ embeds: [embed] });
 	}
 
@@ -52,13 +52,13 @@ export class UwuCommand extends Subcommand {
 		for (let i = 0; i < times!; i++) {
 			uwu += 'UwU ';
 		}
-		const embed = await generateEmbed({ title: 'UwU', description: uwu });
+		const embed = generateEmbed({ title: 'UwU', description: uwu });
 		return await interaction.reply({ embeds: [embed] });
 	}
 
 	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const user = findOption(interaction, 'user', interaction.user.id);
-		const embed = await generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
+		const embed = generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
 		return await interaction.reply({ embeds: [embed] });
 	}
 
@@ -72,7 +72,7 @@ export class UwuCommand extends Subcommand {
 
 		// Fetch the data. No need to call `.json()` after making the request!
 		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
-		const embed = await generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
+		const embed = generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
 		return await interaction.reply({ embeds: [embed] });
 	}
 }

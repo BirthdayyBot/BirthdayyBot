@@ -27,7 +27,7 @@ export class GuideCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = await generateEmbed(GuideEmbed);
+		const embed = generateEmbed(GuideEmbed);
 		await replyToInteraction(interaction, {
 			embeds: [embed],
 			components: [
