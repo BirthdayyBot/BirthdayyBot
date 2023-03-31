@@ -1,11 +1,10 @@
 import dayjs, { Dayjs } from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import dayjstimezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 // Extend dayjs with the required plugins
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
-
 
 // Define an object for mapping timezone values to their string representations.
 const TIMEZONE_VALUES: Record<number, string> = {

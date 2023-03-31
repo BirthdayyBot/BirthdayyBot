@@ -1,27 +1,21 @@
 // import { DEBUG } from '../provide/environment';
-
 import { container } from '@sapphire/pieces';
-import type { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import dayjstimezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 
-export function getCurrentDate(): string {
-	const d1 = new Date().toLocaleString('en-US', {
-		timeZone: 'Europe/Berlin',
-	});
-	const date = new Date(d1);
+// Extend dayjs with the required plugins
+dayjs.extend(utc);
+dayjs.extend(dayjstimezone);
 
-	const d = date.getDate();
-	const day = d <= 9 ? '0' + d : d;
-
-	const m = date.getMonth() + 1;
-	const month = m <= 9 ? '0' + m : m;
-
-	const year = date.getFullYear();
-
-	const str = `${year}-${month}-${day}`;
-	DEBUG ? container.logger.info('today: ', str) : str;
-	return str;
+export function getCurrentDate(formatted = true): string | Dayjs {
+	const today = dayjs();
+	const todayUTC = dayjs.tz(today, 'UTC');
+	const formattedDate = todayUTC.format('YYYY-MM-DD');
+	container.logger.debug('today: ', formattedDate);
+	return formatted ? formattedDate : todayUTC;
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -87,4 +81,59 @@ export function isDateString(date: string): boolean {
 	const isDate = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(date);
 	if (DEBUG) container.logger.debug(`isDate [${date}]`, isDate);
 	return isDate;
+}
+
+const TIMEZONE_VALUES: Record<number, string> = {
+	0: 'Europe/Dublin',
+	1: 'Europe/Paris',
+	2: 'Europe/Helsinki',
+	3: 'Europe/Moscow',
+	4: 'Asia/Dubai',
+	5: 'Asia/Karachi',
+	6: 'Asia/Dhaka',
+	7: 'Asia/Bangkok',
+	8: 'Asia/Shanghai',
+	9: 'Asia/Tokyo',
+	10: 'Australia/Sydney',
+	11: 'Pacific/Guadalcanal',
+	12: 'Pacific/Auckland',
+	'-11': 'Pacific/Midway',
+	'-10': 'Pacific/Honolulu',
+	'-9': 'America/Anchorage',
+	'-8': 'America/Los_Angeles',
+	'-7': 'America/Denver',
+	'-6': 'America/Mexico_City',
+	'-5': 'America/New_York',
+	'-4': 'America/Caracas',
+	'-3': 'America/Sao_Paulo',
+	'-2': 'Atlantic/South_Georgia',
+	'-1': 'Atlantic/Azores',
+};
+
+type TimezoneObject = {
+	date: Dayjs;
+	timezone: keyof typeof TIMEZONE_VALUES;
+};
+
+/**
+ * It creates an array of timezone objects, then finds the one where the hour is 0
+ * @returns The timezone offset of the current timezone.
+ */
+export function getCurrentOffset() {
+	const allZones = createTimezoneObjects();
+	console.log('All zones: ', allZones);
+	return allZones.find(({ date }) => date.hour() === 0) ?? null;
+}
+/**
+ * It creates an array of objects, each of which contains a date and a timezone
+ * @returns An array of objects with the timezone and date.
+ */
+
+export function createTimezoneObjects(): TimezoneObject[] {
+	const allZones = Object.entries(TIMEZONE_VALUES).map(([timezone, zone]) => {
+		const date = dayjs().tz(zone);
+		console.log('Date: ', date);
+		return { date, timezone: Number(timezone) };
+	});
+	return allZones;
 }

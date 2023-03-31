@@ -6,6 +6,7 @@ import { getCurrentOffset } from '../../helpers/provide/currentOffset';
 import { PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
+import { getCurrentDate } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatusCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
@@ -29,9 +30,10 @@ export class StatusCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const dateObject = getCurrentOffset();
+		const todayUTC = getCurrentDate();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
 		const status = {
-			date: dateObject?.date,
+			date: todayUTC,
 			offset: dateObject?.timezone,
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
@@ -45,7 +47,7 @@ export class StatusCommand extends Command {
 			fields: [
 				{
 					name: 'Date',
-					value: `${status.date?.format('YYYY-MM-DD')}`,
+					value: `${status.date}`,
 					inline: true,
 				},
 				{
