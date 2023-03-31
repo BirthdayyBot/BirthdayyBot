@@ -1,29 +1,31 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
-import type { Guild } from 'discord.js';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
-import { DEBUG, IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
+import type { Guild, Snowflake } from 'discord.js';
+import generateEmbed from '../../../helpers/generate/embed';
+import { IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
+import joinServerLog from '../../../helpers/send/joinServerLog';
+import { sendDMMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
-
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
 	public async run(guild: Guild) {
 		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
-		DEBUG ? container.logger.debug(`[GuildCreate] - ${guild}`) : null;
+		container.logger.debug(`[GuildCreate] - ${guild.id} ${guild.name}`);
 		const guild_id = guild.id;
-		const inviter = await getBotInviter(guild);
+		const inviterId = await getBotInviter(guild);
 		if (IS_CUSTOM_BOT) {
 			// TODO: #26 Create a nice welcome message for custom bot servers
 		}
-		const _guild = await this.container.utilities.guild.get.GuildByID(guild_id);
+		const guildData = await this.container.utilities.guild.get.GuildByID(guild_id);
 
-		if (!_guild) await this.container.utilities.guild.create({ guild_id, inviter });
+		if (!guildData) await this.container.utilities.guild.create({ guild_id, inviter: inviterId });
 		else await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, false);
 
-		if (inviter) {
-			await sendGuide(inviter);
+		if (inviterId) {
+			await sendGuide(inviterId);
 		}
-		await joinServerLog(guild);
+		await joinServerLog(guild, inviterId);
 		return;
 
 		async function sendGuide(user_id: string) {
@@ -33,36 +35,22 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			});
 		}
 
-		async function getBotInviter(guildInformation: Guild): Promise<string | null> {
-			if (!(await guild.members.fetchMe()).permissions.has(PermissionFlagsBits.ViewAuditLog)) {
-				container.logger.debug(
-					DEBUG ? `[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs` : '',
-				);
-
-				return null;
+		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
+			if (!(await guild.members.fetchMe()).permissions.has(PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator)) {
+				container.logger.debug(`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`);
+				return undefined;
 			}
 
 			try {
 				const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
 				const entry = auditLogs.entries.first();
-				const inviterID = entry!.executor!.id;
-				DEBUG ? container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${inviterID}`) : null;
-				return inviter;
+				const userId = entry!.executor!.id;
+				container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
+				return userId;
 			} catch (error) {
-				return null;
+				container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error}`);
+				return undefined;
 			}
 		}
 	}
 }
-function joinServerLog(_guild: Guild) {
-	throw new Error('Function not implemented.');
-}
-
-function generateEmbed(_GuideEmbed: any) {
-	throw new Error('Function not implemented.');
-}
-
-function sendDMMessage(_user_id: string, _arg1: { embeds: any[]; }) {
-	throw new Error('Function not implemented.');
-}
-
