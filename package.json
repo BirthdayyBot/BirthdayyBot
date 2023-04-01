@@ -67,6 +67,9 @@
 		"lint": "eslint src --ext .ts",
 		"prepare": "npx husky install"
 	},
+	"lint-staged": {
+		"*.{ts}": "eslint"
+	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {
 		"type": "git",
