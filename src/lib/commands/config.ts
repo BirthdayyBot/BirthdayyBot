@@ -193,23 +193,23 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'Announcement Channel',
-								value: 'announcement_channel',
+								value: 'announcementChannel',
 							},
 							{
 								name: 'Overview Channel',
-								value: 'overview_channel',
+								value: 'overviewChannel',
 							},
 							{
 								name: 'Birthday Role',
-								value: 'birthday_role',
+								value: 'birthdayRole',
 							},
 							{
 								name: 'Ping Role',
-								value: 'birthday_ping_role',
+								value: 'birthdayPingRole',
 							},
 							{
 								name: 'Announcement Message',
-								value: 'announcement_message',
+								value: 'announcementMessage',
 							},
 							// {
 							// 	name: 'Logs',
