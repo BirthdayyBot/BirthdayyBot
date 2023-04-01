@@ -13,12 +13,12 @@ export class UserRoute extends Route {
 	@authenticated()
 	@validateParams(['guild_id', 'inviter'])
 	public async [methods.POST](request: ApiRequest<GuildCreateQuery>, response: ApiResponse) {
-		const { guild_id, inviter } = request.query;
+		const { guildId, inviter } = request.query;
 
-		const guild = await container.utilities.guild.create({ guild_id, inviter });
+		const guild = await container.utilities.guild.create({ guildId, inviter });
 
-		if (!guild) return response.badRequest({ message: 'Guild already exists', guild_id, inviter: inviter });
+		if (!guild) return response.badRequest({ message: 'Guild already exists', guildId, inviter: inviter });
 
-		return response.ok({ message: `Guild ${guild_id} created`, guild });
+		return response.ok({ message: `Guild ${guildId} created`, guild });
 	}
 }

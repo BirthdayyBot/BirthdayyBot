@@ -47,7 +47,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		for (const birthday of todaysBirthdays) {
 			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${birthday.id}`);
-			await this.birthdayEvent(birthday.user_id, birthday.guild_id, false);
+			await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 		}
 	}
 
@@ -59,12 +59,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
 		if (!config) return;
-		const { announcement_channel, birthday_role, birthday_ping_role, announcement_message } = config;
+		const { announcementChannel, birthdayRole, birthdayPingRole, announcementMessage } = config;
 
 		await logAll(config);
 
-		if (birthday_role) {
-			const role = await guild.roles.fetch(birthday_role);
+		if (birthdayRole) {
+			const role = await guild.roles.fetch(birthdayRole);
 			if (!role) {
 				if (DEBUG) this.container.logger.warn(`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`);
 				return { error: true, message: 'Birthday role not found' };
@@ -72,21 +72,20 @@ export class BirthdayReminderTask extends ScheduledTask {
 			await this.addCurrentBirthdayChildRole({ member, guild, role, isTest });
 		}
 
-		if (!announcement_channel) {
+		if (!announcementChannel) {
 			if (DEBUG) this.container.logger.warn(`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`);
 			return { error: true, message: 'No announcement channel set' };
 		}
-		const announcementMessage = await this.formatBirthdayMessage(announcement_message, member, guild);
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,
-			description: announcementMessage,
+			description: await this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail_url: IMG_CAKE,
 		};
-		const content = birthday_ping_role ? roleMention(birthday_ping_role) : '';
+		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
 		const birthdayEmbed = await generateEmbed(embed);
 
-		return this.sendBirthdayAnnouncement(content, announcement_channel, birthdayEmbed);
+		return this.sendBirthdayAnnouncement(content, announcementChannel, birthdayEmbed);
 	}
 
 	private async addCurrentBirthdayChildRole(payload: { member: GuildMember; guild: Guild; role: Role; isTest: boolean }) {

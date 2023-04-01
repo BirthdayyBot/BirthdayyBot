@@ -9,15 +9,15 @@ export declare class ApiRequest<T extends RecordsQuery = never, U extends Record
 }
 
 export type GuildQuery = {
-	guild_id: string;
+	guildId: string;
 };
 
 export type GuildAndUserQuery = GuildQuery & {
-	user_id: string;
+	userId: string;
 };
 
 export type BirthdayQuery = GuildQuery & {
-	user_id: string;
+	userId: string;
 	username: string;
 	discriminator: string;
 	date: string;

@@ -5,9 +5,9 @@ import generateEmbed from './embed';
 import { container } from '@sapphire/pieces';
 import type { Guild } from '.prisma/client';
 
-export default async function generateConfigListEmbed(guild_id: string): Promise<APIEmbed> {
-	const guild = await getGuildInformation(guild_id);
-	const embedFields = await generateFields(guild_id);
+export default async function generateConfigListEmbed(guildId: string): Promise<APIEmbed> {
+	const guild = await getGuildInformation(guildId);
+	const embedFields = await generateFields(guildId);
 	const embed = {
 		title: `Config List - ${guild!.name || 'Unknown Guild'}`,
 		description: 'Use /config `<setting>` `<value>` to change any setting',
@@ -17,17 +17,17 @@ export default async function generateConfigListEmbed(guild_id: string): Promise
 	return generateEmbed(embed);
 }
 
-async function generateFields(guild_id: string) {
-	let config = await container.utilities.guild.get.GuildConfig(guild_id);
+async function generateFields(guildId: string) {
+	let config = await container.utilities.guild.get.GuildConfig(guildId);
 
-	if (!config) config = await container.utilities.guild.create({ guild_id });
+	if (!config) config = await container.utilities.guild.create({ guildId });
 
 	const fields: APIEmbedField[] = [];
 
 	Object.entries(config).forEach((_config) => {
 		const [name, value] = _config as [keyof Guild, string | number | null];
 
-		const exclude: (keyof Guild)[] = ['guild_id', 'overview_message', 'log_channel'];
+		const exclude: (keyof Guild)[] = ['guildId', 'overviewMessage', 'logChannel'];
 		if (exclude.includes(name)) return;
 		const valueString = getValueString(name, value);
 		const nameString = getNameString(name);
@@ -59,19 +59,19 @@ function getValueString(name: keyof Guild, value: any) {
 
 function getNameString(name: keyof Guild): string {
 	switch (name) {
-	case 'announcement_channel':
+	case 'announcementChannel':
 		return 'Announcement Channel';
-	case 'overview_channel':
+	case 'overviewChannel':
 		return 'Overview Channel';
-	case 'birthday_role':
+	case 'birthdayRole':
 		return 'Birthday Role';
-	case 'birthday_ping_role':
+	case 'birthdayPingRole':
 		return 'Birthday Ping Role';
-	case 'log_channel':
+	case 'logChannel':
 		return 'Log Channel';
 	case 'timezone':
 		return 'Timezone';
-	case 'announcement_message':
+	case 'announcementMessage':
 		return `${PLUS} Birthday Message`;
 	case 'premium':
 		return 'Premium';

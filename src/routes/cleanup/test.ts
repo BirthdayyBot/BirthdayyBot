@@ -12,15 +12,15 @@ export class UserRoute extends Route {
 		const enableGuild = await container.utilities.guild.get.GuildsEnableds();
 
 		const cleanedGuilds = await this.processGuilds(enableGuild);
-		return response.ok({ enableGuild, cleaned_guilds: cleanedGuilds.length, cleanedGuilds });
+		return response.ok({ enableGuild, countCleanedGuilds: cleanedGuilds.length, cleanedGuilds });
 	}
 
 	public async processGuilds(guilds: Guild[]) {
 		const results = [];
 
 		for (const guild of guilds) {
-			if (await this.isValidGuild(guild.guild_id)) continue;
-			const result = await this.cleanGuild(guild.guild_id);
+			if (await this.isValidGuild(guild.guildId)) continue;
+			const result = await this.cleanGuild(guild.guildId);
 			results.push(result);
 		}
 

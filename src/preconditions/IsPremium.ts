@@ -17,7 +17,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	}
 
 	private async premiumCheck(guild_id: string) {
-		const is_premium: boolean = (await this.container.utilities.guild.get.GuildByID(guild_id))?.premium ?? false;
+		const is_premium: boolean = (await this.container.utilities.guild.get.GuildById(guild_id))?.premium ?? false;
 		return is_premium ? this.ok() : this.error({ message: this.#message });
 	}
 }

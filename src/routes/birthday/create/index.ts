@@ -9,9 +9,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 @ApplyOptions<Route.Options>({ route: 'birthday/create' })
 export class BirthdayCreateRoute extends Route {
 	@authenticated()
-	@validateParams<BirthdayQuery>(['guild_id', 'user_id', 'date'])
+	@validateParams<BirthdayQuery>(['guildId', 'userId', 'date'])
 	public async [methods.POST](request: ApiRequest<BirthdayQuery>, response: ApiResponse) {
-		const { date, user_id, guild_id } = request.query;
+		const { date, userId, guildId } = request.query;
 
 		const isDate = isDateString(date);
 
@@ -22,7 +22,7 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		const guild = await container.client.guilds.fetch(guild_id);
+		const guild = await container.client.guilds.fetch(guildId);
 
 		if (!guild) {
 			return response.badRequest({
@@ -31,7 +31,7 @@ export class BirthdayCreateRoute extends Route {
 			});
 		}
 
-		const member = await guild.members.fetch(user_id);
+		const member = await guild.members.fetch(userId);
 
 		if (!member) {
 			return response.badRequest({
@@ -41,7 +41,7 @@ export class BirthdayCreateRoute extends Route {
 		}
 
 
-		await container.utilities.birthday.create(user_id, guild.id, member.user);
+		await container.utilities.birthday.create(userId, guild.id, member.user);
 
 		return response.created({ success: true });
 	}

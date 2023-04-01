@@ -13,15 +13,15 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 	public async run(guild: Guild) {
 		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
 		DEBUG ? container.logger.debug(`[GuildCreate] - ${guild}`) : null;
-		const guild_id = guild.id;
+		const guildId = guild.id;
 		const inviter = await getBotInviter(guild);
 		if (IS_CUSTOM_BOT) {
 			// TODO: #26 Create a nice welcome message for custom bot servers
 		}
-		const _guild = await this.container.utilities.guild.get.GuildByID(guild_id);
+		const _guild = await this.container.utilities.guild.get.GuildById(guildId);
 
-		if (!_guild) await this.container.utilities.guild.create({ guild_id, inviter });
-		else await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, false);
+		if (!_guild) await this.container.utilities.guild.create({ guildId, inviter });
+		else await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
 
 		if (inviter) {
 			await sendGuide(inviter);

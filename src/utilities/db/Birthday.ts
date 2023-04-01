@@ -15,58 +15,54 @@ export class Birthday extends Utility {
 		BirthdaysByDate: (date: Dayjs) => this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
 		BirthdayByDateAndTimezone: (date: Dayjs, timezone: number) =>
 			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } } }),
-		BirthdaysByGuildID: (guildID: string) => this.prisma.birthday.findMany({ where: { guild_id: guildID } }),
-		BirthdayByUserAndGuild: (guildID: string, userID: string) =>
+		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
+		BirthdayByUserAndGuild: (guildId: string, userId: string) =>
 			this.prisma.birthday.findUnique({
-				where: { user_id_guild_id: { guild_id: guildID, user_id: userID } },
+				where: { userId_guildId: { guildId, userId } },
 			}),
-		BirthdaysNotDisabled: (guildID: string) => this.prisma.birthday.findMany({ where: { guild_id: guildID, disabled: false } }),
+		BirthdaysNotDisabled: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
 	};
 
 	public update = {
-		BirthdayDisabled: (guildID: string, userID: string, disabled: boolean) =>
+		BirthdayDisabled: (guildId: string, userId: string, disabled: boolean) =>
 			this.prisma.birthday.update({
-				where: { user_id_guild_id: { guild_id: guildID, user_id: userID } },
+				where: { userId_guildId: { guildId, userId } },
 				data: { disabled },
 			}),
-		BirthdayByUserAndGuild: (guildID: string, userID: string, birthday: string) =>
+		BirthdayByUserAndGuild: (guildId: string, userId: string, birthday: string) =>
 			this.prisma.birthday.update({
-				where: { user_id_guild_id: { guild_id: guildID, user_id: userID } },
+				where: { userId_guildId: { guildId, userId } },
 				data: { birthday },
 			}),
 	};
 
 	public delete = {
-		GuildByID: (guildID: string) => this.prisma.guild.delete({ where: { guild_id: guildID } }),
+		GuildById: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdatedDisabled: (date: Date) => this.prisma.guild.deleteMany({ where: { last_updated: { lt: date.toISOString() }, disabled: true } }),
-		ByGuildAndUser: (guildID: string, userID: string) =>
-			this.prisma.birthday.delete({ where: { user_id_guild_id: { guild_id: guildID, user_id: userID } } }),
+		ByLastUpdatedDisabled: (date: Date) => this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() }, disabled: true } }),
+		ByGuildAndUser: (guildId: string, userId: string) =>
+			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } }),
 	};
 
-	public create = (birthday: string, guildID: string, user: User) =>
+	public create = (birthday: string, guildId: string, user: User) =>
 		this.prisma.birthday.create({
 			data: {
 				birthday: birthday,
 				guild: {
 					connectOrCreate: {
-						create: {
-							guild_id: guildID,
-						},
-						where: {
-							guild_id: guildID,
-						},
+						create: { guildId },
+						where: { guildId },
 					},
 				},
 				user: {
 					connectOrCreate: {
 						create: {
-							user_id: user.id,
+							userId: user.id,
 							discriminator: user.discriminator,
 							username: user.username,
 						},
 						where: {
-							user_id: user.id,
+							userId: user.id,
 						},
 					},
 				},
