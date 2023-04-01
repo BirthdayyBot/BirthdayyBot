@@ -41,7 +41,7 @@ async function generateFields(guildId: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getValueString(name: keyof Guild, value: string | number) {
+function getValueString(name: keyof Guild, value: string | number | null) {
 	if (value === null) {
 		return `${ARROW_RIGHT} not set`;
 	} else if (name === 'timezone' && typeof value === 'number') {

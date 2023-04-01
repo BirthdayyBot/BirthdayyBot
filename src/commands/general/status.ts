@@ -5,7 +5,7 @@ import generateEmbed from '../../helpers/generate/embed';
 import { APP_ENV, PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
-import { getCurrentDate, getCurrentDateFormated, getCurrentOffset } from '../../helpers/utils/date';
+import { getCurrentDateFormated, getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatusCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';

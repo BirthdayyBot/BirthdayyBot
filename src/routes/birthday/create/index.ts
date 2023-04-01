@@ -1,16 +1,15 @@
 import { container } from '@sapphire/pieces';
 import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { isDateString } from '../../../helpers/utils/date';
-import type { ApiRequest, BirthdayQuery } from '../../../lib/api/types';
-import { authenticated, validateParams } from '../../../lib/api/utils';
+import type { ApiRequest } from '../../../lib/api/types';
+import { authenticated } from '../../../lib/api/utils';
 import { APIErrorCode } from '../../../lib/enum/APIErrorCode.enum';
 import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Route.Options>({ route: 'birthday/create' })
 export class BirthdayCreateRoute extends Route {
 	@authenticated()
-	@validateParams<BirthdayQuery>(['guildId', 'userId', 'date'])
-	public async [methods.POST](request: ApiRequest<BirthdayQuery>, response: ApiResponse) {
+	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		const { date, userId, guildId } = request.query;
 
 		const isDate = isDateString(date);

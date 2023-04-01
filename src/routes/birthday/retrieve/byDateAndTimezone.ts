@@ -1,20 +1,14 @@
 import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import type { ApiRequest } from '../../../lib/api/types';
-import { authenticated, validateParams } from '../../../lib/api/utils';
+import { authenticated } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Birthday, Guild } from '@prisma/client';
 import dayjs from 'dayjs';
 
-interface Query {
-	date: string;
-	timezone: string;
-}
-
 @ApplyOptions<Route.Options>({ route: 'birthday/retrieve/byDateAndTimezone' })
 export class UserRoute extends Route {
 	@authenticated()
-	@validateParams<Query>()
-	public async [methods.GET](request: ApiRequest<Query>, response: ApiResponse) {
+	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
 		const { date, timezone } = request.query;
 
 		const birthdays = await this.container.utilities.birthday.get.BirthdaysByDate(dayjs(date));

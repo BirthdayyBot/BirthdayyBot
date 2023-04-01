@@ -31,7 +31,7 @@ import { UwUCMD } from '../../lib/commands/uwu';
 	]
 })
 export class UwuCommand extends Subcommand {
-	private readonly uwuString = 'UwU';
+	// private readonly _uwuString = 'UwU';
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(UwUCMD(), {

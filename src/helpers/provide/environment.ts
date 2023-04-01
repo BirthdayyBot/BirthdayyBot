@@ -2,7 +2,6 @@ import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
-import { roleMention } from 'discord.js';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
