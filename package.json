@@ -65,11 +65,11 @@
 		"watch:start": "tsc-watch --onSuccess \"yarn start\"",
 		"build:start": "tsc && yarn start",
 		"format": "prettier --write \"src/**/*.ts\"",
-		"lint": "eslint src --ext .ts",
+		"lint": "eslint --fix --ext ts src",
 		"prepare": "npx husky install"
 	},
 	"lint-staged": {
-		"*.{ts}": "eslint"
+		"*.{ts}": "eslint --fix --ext ts"
 	},
 	"prettier": "@sapphire/prettier-config",
 	"repository": {
