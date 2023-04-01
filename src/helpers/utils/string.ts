@@ -10,7 +10,6 @@ export function checkIfLengthIsTwo(number: string) {
 
 export function logLimiter() {
 	container.logger.info('===============================');
-	return;
 }
 
 export function checkLength(length: number, string: string) {

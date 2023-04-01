@@ -22,10 +22,13 @@ export async function addRoleToUser(user_id: string, role_id: string, guild_id: 
 		// TODO: #10 Create a LogHandler that works with the DEBUG env variable
 		container.logger.info(`Successfully added role ${role.name} to user ${member.user.id}`);
 	} catch (error: any) {
-		if (error.message.includes('Missing Permissions')) {
-			container.logger.error(`Failed to add role cause I am missing Permissions! Guild: ${guild_id} User: ${user_id} Role: ${role_id}`);
-			return;
+		if (error instanceof Error) {
+			if (error.message.includes('Missing Permissions')) {
+				container.logger.error(`Failed to add role cause I am missing Permissions! Guild: ${guild_id} User: ${user_id} Role: ${role_id}`);
+				return;
+			}
+			container.logger.error(`Failed to add role: ${error.message}`);
 		}
-		container.logger.error(`Failed to add role: ${error}`);
+		container.logger.error(error);
 	}
 }

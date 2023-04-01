@@ -24,12 +24,11 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
 		const embed = await createEmbed(guild_id, finalList);
 
 		const components = generateComponents(page_id, splitBirthdayList.listAmount);
-		return { embed: embed, components: components };
-	} else {
-		container.logger.info('no birthdays');
-		const embed = await createEmbed(guild_id, []);
-		return { embed: embed, components: [] };
+		return { embed, components };
 	}
+	container.logger.info('no birthdays');
+	const embed = await createEmbed(guild_id, []);
+	return { embed, components: [] };
 }
 
 /**
@@ -40,7 +39,7 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
 function getBirthdaysAsLists(allBirthdays: Array<Birthday>, maxBirthdaysPerList: number): { birthdays: Array<Array<Birthday>>; listAmount: number } {
-	const length = allBirthdays.length;
+	const { length } = allBirthdays;
 	// split birthdays into arrays with max length x entries
 	const splitBirthdays = [];
 	for (let i = 0; i < length; i += maxBirthdaysPerList) splitBirthdays.push(allBirthdays.slice(i, i + maxBirthdaysPerList));
@@ -59,7 +58,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 	const embed: CustomEmbedModel = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${ARROW_RIGHT}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
-		thumbnail_url: IMG_CAKE,
+		thumbnail_url: IMG_CAKE
 	};
 
 	if (!allBirthdays.length) return embed;
@@ -84,7 +83,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 				// If the current description is too long, add it to the embed
 				embed.fields.push({
 					name: monthname,
-					value: currentDescription,
+					value: currentDescription
 				});
 				currentDescription = '';
 			}
@@ -94,7 +93,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 			// If the current description is not empty, add it to the embed
 			embed.fields.push({
 				name: monthname,
-				value: currentDescription,
+				value: currentDescription
 			});
 			currentDescription = '';
 		}
@@ -108,7 +107,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
  * @returns Array with all components
  */
 function generateComponents(page_id: number, listAmount: number): any[] {
-	if (listAmount == 1) return [];
+	if (listAmount === 1) return [];
 	const innerComponents = [];
 	/*
     max 5 buttons per row
@@ -118,22 +117,22 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 	for (let i = 1; i <= listAmount; i++) {
 		if (i > 5) break;
 		const label = `${i}`;
-		const isActive = i == page_id ? true : false;
+		const isActive = i === page_id ? true : false;
 		const disabled = isActive ? true : false;
 		const style = isActive ? 1 : 2;
 		innerComponents.push({
-			style: style,
-			label: label,
+			style,
+			label,
 			custom_id: `birthday_list_page_${i}`,
-			disabled: disabled,
-			type: 2,
+			disabled,
+			type: 2
 		});
 	}
 	const components = [
 		{
 			type: 1,
-			components: innerComponents,
-		},
+			components: innerComponents
+		}
 	];
 	if (listAmount > 5) {
 		components.push({
@@ -144,9 +143,9 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 					style: 1,
 					label: 'To many birthdays to show all.',
 					disabled: true,
-					custom_id: 'birthday_list_to_many',
-				},
-			],
+					custom_id: 'birthday_list_to_many'
+				}
+			]
 		});
 	}
 
@@ -173,7 +172,7 @@ function prepareBirthdayList() {
 function prepareBirthdays(birthdays: Array<Birthday>): { monthname: string; birthdays: Birthday[] }[] {
 	const list = prepareBirthdayList();
 
-	birthdays.forEach(function(singleBirthday) {
+	birthdays.forEach((singleBirthday) => {
 		const d = new Date(singleBirthday.birthday);
 		if (d.toString() === 'Invalid Date') {
 			return;
@@ -186,7 +185,7 @@ function prepareBirthdays(birthdays: Array<Birthday>): { monthname: string; birt
 	return list;
 }
 
-function sortByDayAndMonth(arr: any[]) {
+function sortByDayAndMonth(arr: Birthday[]) {
 	arr.sort((a: { birthday: string }, b: { birthday: string }) => {
 		const now = new Date();
 		const dateA: Date = new Date(a.birthday);

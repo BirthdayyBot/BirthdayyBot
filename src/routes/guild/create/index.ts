@@ -17,7 +17,7 @@ export class UserRoute extends Route {
 
 		const guild = await container.utilities.guild.create({ guildId, inviter });
 
-		if (!guild) return response.badRequest({ message: 'Guild already exists', guildId, inviter: inviter });
+		if (!guild) return response.badRequest({ message: 'Guild already exists', guildId, inviter });
 
 		return response.ok({ message: `Guild ${guildId} created`, guild });
 	}

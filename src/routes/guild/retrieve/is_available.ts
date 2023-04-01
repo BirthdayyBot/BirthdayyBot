@@ -19,7 +19,7 @@ export class UserRoute extends Route {
 
 		const guild = await container.client.guilds.fetch({
 			guild: guildId,
-			withCounts: false,
+			withCounts: false
 		});
 
 		if (!guild) {
@@ -27,12 +27,12 @@ export class UserRoute extends Route {
 				const disabledGuild = await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true);
 				return response.badRequest({
 					is_available: false,
-					data: { guild, disabledGuild },
+					data: { guild, disabledGuild }
 				});
 			}
 			return response.badRequest({ is_available: false, data: { guildId } });
 		}
 
-		return response.ok({ is_available: !!guild, data: guild ? guild : null });
+		return response.ok({ is_available: Boolean(guild), data: guild ? guild : null });
 	}
 }

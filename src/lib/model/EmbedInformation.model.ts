@@ -1,6 +1,6 @@
 import type { APIEmbedField } from 'discord.js';
 
-export type EmbedInformationModel = {
+export interface EmbedInformationModel {
 	title?: string;
 	description?: string;
 	author_name?: string;
@@ -9,4 +9,4 @@ export type EmbedInformationModel = {
 	image_url?: string;
 	fields?: APIEmbedField[];
 	color?: string;
-};
+}

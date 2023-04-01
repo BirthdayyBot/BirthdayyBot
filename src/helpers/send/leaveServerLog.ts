@@ -19,8 +19,8 @@ export default async function leaveServerLog(guild: Guild) {
 		{ name: 'GuildName', value: `${name}` },
 		{
 			name: 'GuildID',
-			value: `${guild_id}`,
-		},
+			value: `${guild_id}`
+		}
 	];
 
 	if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
@@ -31,12 +31,10 @@ export default async function leaveServerLog(guild: Guild) {
 	const embedObj: EmbedInformationModel = {
 		title: `${FAIL} ${BOT_NAME} got removed from a Guild`,
 		description: `I am now in \`${server_count}\` guilds`,
-		fields: fields,
-		color: BotColorEnum.BIRTHDAYY_DEV,
+		fields,
+		color: BotColorEnum.BIRTHDAYY_DEV
 	};
 
 	const embed = generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
-
-	return;
 }

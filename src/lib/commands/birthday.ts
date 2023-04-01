@@ -1,15 +1,15 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 import { getLocalizedString } from '../../helpers/utils/translate';
 
-export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
+export function BirthdayCMD(): ChatInputApplicationCommandData {
 	return {
-		name: await getLocalizedString('en-US', 'commands/birthday:name'),
+		name: getLocalizedString('en-US', 'commands/birthday:name'),
 		nameLocalizations: {
-			de: await getLocalizedString('de-DE', 'commands/birthday:name'),
+			de: getLocalizedString('de-DE', 'commands/birthday:name')
 		},
-		description: await getLocalizedString('en-US', 'commands/birthday:description'),
+		description: getLocalizedString('en-US', 'commands/birthday:description'),
 		descriptionLocalizations: {
-			de: await getLocalizedString('de-DE', 'commands/birthday:description'),
+			de: getLocalizedString('de-DE', 'commands/birthday:description')
 		},
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
@@ -17,13 +17,13 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 		options: [
 			{
 				type: ApplicationCommandOptionType.Subcommand,
-				name: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
+				name: getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
 				nameLocalizations: {
-					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
+					de: getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name')
 				},
-				description: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.description'),
+				description: getLocalizedString('en-US', 'commands/birthday:subcommand.register.description'),
 				descriptionLocalizations: {
-					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.descriptionde'),
+					de: getLocalizedString('de-DE', 'commands/birthday:subcommand.register.descriptionde')
 				},
 				options: [
 					{
@@ -32,7 +32,7 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						description: 'Day of birthday',
 						required: true,
 						minValue: 1,
-						maxValue: 31,
+						maxValue: 31
 					},
 					{
 						type: ApplicationCommandOptionType.String,
@@ -41,68 +41,68 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'January',
-								value: '01',
+								value: '01'
 							},
 							{
 								name: 'February',
-								value: '02',
+								value: '02'
 							},
 							{
 								name: 'March',
-								value: '03',
+								value: '03'
 							},
 							{
 								name: 'April',
-								value: '04',
+								value: '04'
 							},
 							{
 								name: 'May',
-								value: '05',
+								value: '05'
 							},
 							{
 								name: 'June',
-								value: '06',
+								value: '06'
 							},
 							{
 								name: 'July',
-								value: '07',
+								value: '07'
 							},
 							{
 								name: 'August',
-								value: '08',
+								value: '08'
 							},
 							{
 								name: 'September',
-								value: '09',
+								value: '09'
 							},
 							{
 								name: 'October',
-								value: '10',
+								value: '10'
 							},
 							{
 								name: 'November',
-								value: '11',
+								value: '11'
 							},
 							{
 								name: 'December',
-								value: '12',
-							},
+								value: '12'
+							}
 						],
-						required: true,
+						required: true
 					},
 					{
 						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 						minValue: 1950,
-						maxValue: 2025,
+						maxValue: 2025
 					},
 					{
 						type: ApplicationCommandOptionType.User,
 						name: 'user',
-						description: 'Set a birthday for another Person - MANAGER ONLY',
-					},
-				],
+						description: 'Set a birthday for another Person - MANAGER ONLY'
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -113,7 +113,7 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Update a Birthday for a Person - MANAGER ONLY',
-						required: true,
+						required: true
 					},
 					{
 						type: ApplicationCommandOptionType.Integer,
@@ -121,7 +121,7 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						description: 'Day of birthday',
 						required: true,
 						minValue: 1,
-						maxValue: 31,
+						maxValue: 31
 					},
 					{
 						type: ApplicationCommandOptionType.String,
@@ -130,68 +130,68 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'January',
-								value: '01',
+								value: '01'
 							},
 							{
 								name: 'February',
-								value: '02',
+								value: '02'
 							},
 							{
 								name: 'March',
-								value: '03',
+								value: '03'
 							},
 							{
 								name: 'April',
-								value: '04',
+								value: '04'
 							},
 							{
 								name: 'May',
-								value: '05',
+								value: '05'
 							},
 							{
 								name: 'June',
-								value: '06',
+								value: '06'
 							},
 							{
 								name: 'July',
-								value: '07',
+								value: '07'
 							},
 							{
 								name: 'August',
-								value: '08',
+								value: '08'
 							},
 							{
 								name: 'September',
-								value: '09',
+								value: '09'
 							},
 							{
 								name: 'October',
-								value: '10',
+								value: '10'
 							},
 							{
 								name: 'November',
-								value: '11',
+								value: '11'
 							},
 							{
 								name: 'December',
-								value: '12',
-							},
+								value: '12'
+							}
 						],
-						required: true,
+						required: true
 					},
 					{
 						type: ApplicationCommandOptionType.Integer,
 						name: 'year',
 						description: 'Year of birthday',
 						minValue: 1950,
-						maxValue: 2025,
-					},
-				],
+						maxValue: 2025
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'list',
-				description: 'List all Birthdays in this Discord server',
+				description: 'List all Birthdays in this Discord server'
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -202,9 +202,9 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'The user you want to remove the birthday from',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -214,15 +214,15 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 					{
 						type: ApplicationCommandOptionType.User,
 						name: 'user',
-						description: 'Show the birthday of a specific User',
-					},
-				],
+						description: 'Show the birthday of a specific User'
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'test',
-				description: 'Test your current birthday configurations',
-			},
-		],
+				description: 'Test your current birthday configurations'
+			}
+		]
 	};
 }

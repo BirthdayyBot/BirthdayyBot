@@ -14,12 +14,12 @@ import { InviteEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuideCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await ReminderCMD(), {
-			guildIds: getCommandGuilds('testing'),
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(ReminderCMD(), {
+			guildIds: getCommandGuilds('testing')
 		});
 	}
 
@@ -31,9 +31,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [inviteButton],
-				},
-			],
+					components: [inviteButton]
+				}
+			]
 		});
 	}
 }

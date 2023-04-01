@@ -16,7 +16,7 @@ export class ExampleParseMethod extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction<'cached'>, result: { isNormalMessage: boolean }) {
 		const { isNormalMessage } = result;
-		const page_number = parseInt(interaction.customId.split('_')[3]);
+		const page_number = parseInt(interaction.customId.split('_')[3], 10);
 		const { embed, components } = await generateBirthdayList(page_number, interaction.guildId);
 		const finalEmbed = generateEmbed(embed);
 		if (isNormalMessage) return interaction.message.edit({ embeds: [finalEmbed], components });

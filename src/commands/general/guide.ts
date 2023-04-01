@@ -10,17 +10,17 @@ import { GuideEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'guide',
-	description: 'Need a quick setup Guide! Don\'t worry, this will help you!',
+	description: "Need a quick setup Guide! Don't worry, this will help you!",
 	enabled: true,
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuideCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await GuideCMD(), {
-			guildIds: getCommandGuilds('global'),
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(GuideCMD(), {
+			guildIds: getCommandGuilds('global')
 		});
 	}
 
@@ -32,9 +32,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [docsButton, discordButton],
-				},
-			],
+					components: [docsButton, discordButton]
+				}
+			]
 		});
 	}
 }

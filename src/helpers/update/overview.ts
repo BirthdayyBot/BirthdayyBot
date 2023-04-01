@@ -17,13 +17,15 @@ export default async function updateBirthdayOverview(guild_id: string) {
 				try {
 					await editMessage(overviewChannel, overviewMessage, { embeds: [birthdayEmbedObj], components: birthdayList.components });
 				} catch (error: any) {
-					if (
-						error.message === 'Unknown Message' ||
-						error.message.includes('authored by another user') ||
-						error.message.includes('Message not found')
-					) {
-						await generateNewOverviewMessage(overviewChannel, birthdayList);
-						container.logger.error('Message Not found, so generated new overview message');
+					if (error instanceof Error) {
+						if (
+							error.message === 'Unknown Message' ||
+							error.message.includes('authored by another user') ||
+							error.message.includes('Message not found')
+						) {
+							await generateNewOverviewMessage(overviewChannel, birthdayList);
+							container.logger.error('Message Not found, so generated new overview message');
+						}
 					}
 				}
 				container.logger.info(`Updated Overview Message in guild: ${guild_id}`);

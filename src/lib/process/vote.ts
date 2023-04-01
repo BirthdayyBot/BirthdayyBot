@@ -18,13 +18,12 @@ export default async function voteProcess(provider: VoteProvider, user_id: strin
 	const addRole = await addVoteRole(user_id);
 	// 4. Schedule role removal
 	if (addRole) await scheduleRoleRemoval(VOTE_ROLE_ID, user_id, GuildIDEnum.BIRTHDAYY_HQ);
-	return;
 }
 
 async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
 	const dmEmbed = {
 		title: `${SUCCESS} You voted for Birthdayy on ${providerInfo.name}`,
-		description: `Thank you so much for supporting me, you're the best ${HEART}`,
+		description: `Thank you so much for supporting me, you're the best ${HEART}`
 	};
 	const dmEmbedObj = generateEmbed(dmEmbed);
 	const component = {
@@ -35,12 +34,12 @@ async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: 
 				label: '⏰ Remind Me in 12hrs',
 				custom_id: 'remind-me-to-vote',
 				disabled: false,
-				type: 2,
-			},
-		],
+				type: 2
+			}
+		]
 	};
 
-	sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
+	return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
 }
 
 async function sendVoteAnnouncement(providerInfo: { name: string; url: string }, member: User) {
@@ -50,10 +49,10 @@ async function sendVoteAnnouncement(providerInfo: { name: string; url: string },
 		title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
 		description: `\`${username}#${discriminator}\` has **voted** for Birthdayy!
       Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-		thumbnail_url: avatar_url,
+		thumbnail_url: avatar_url
 	};
 	const embedObj = generateEmbed(embed);
-	sendMessage(APP_ENV === 'prd' ? VOTE_CHANNEL_ID : '1077621363881300018', { embeds: [embedObj] });
+	return sendMessage(APP_ENV === 'prd' ? VOTE_CHANNEL_ID : '1077621363881300018', { embeds: [embedObj] });
 }
 
 /**
@@ -75,27 +74,26 @@ async function addVoteRole(user_id: string): Promise<boolean> {
 async function scheduleRoleRemoval(user_id: string, role_id: string, guild_id: string) {
 	const options = { user_id, role_id, guild_id };
 	await container.tasks.create('BirthdayRoleRemoverTask', options, { repeated: false, delay: Time.Hour * 12 });
-	return;
 }
 
 function getProviderInfo(provider: VoteProvider) {
 	switch (provider) {
-	case 'topgg':
-		return {
-			name: 'TopGG',
-			url: 'https://birthdayy.xyz/topgg/vote',
-		};
+		case 'topgg':
+			return {
+				name: 'TopGG',
+				url: 'https://birthdayy.xyz/topgg/vote'
+			};
 
-	case 'discordbotlist':
-		return {
-			name: 'Discord Bot List',
-			url: 'https://birthdayy.xyz/discord-botlist/vote',
-		};
+		case 'discordbotlist':
+			return {
+				name: 'Discord Bot List',
+				url: 'https://birthdayy.xyz/discord-botlist/vote'
+			};
 
-	case 'discordlist':
-		return {
-			name: 'Discord List',
-			url: 'https://birthdayy.xyz/discordlist/vote',
-		};
+		case 'discordlist':
+			return {
+				name: 'Discord List',
+				url: 'https://birthdayy.xyz/discordlist/vote'
+			};
 	}
 }

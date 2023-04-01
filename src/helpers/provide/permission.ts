@@ -31,4 +31,3 @@ export async function hasUserChannelPermissions({ interaction, user, channel: ch
 	if (!target_channel || !target_channel.isTextBased() || target_channel.isDMBased()) return false;
 	return target_channel.permissionsFor(member).has(permissions);
 }
-

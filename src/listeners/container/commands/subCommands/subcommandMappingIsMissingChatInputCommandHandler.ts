@@ -10,7 +10,9 @@ export class ChatInputSubcommandErrorEvent extends Listener<typeof SubcommandPlu
 	public run(_message: Interaction<CacheType>, subcommand: SubcommandMappingMethod, payload: ChatInputSubcommandAcceptedPayload) {
 		return handleCommandErrorAndSendToUser({
 			error: new Error(`Subcommand mapping is missing chat input command handler for ${subcommand.name}`),
-			interaction: payload.interaction, loggerSeverityLevel: 'error', sentrySeverityLevel: 'error',
+			interaction: payload.interaction,
+			loggerSeverityLevel: 'error',
+			sentrySeverityLevel: 'error'
 		});
 	}
 }

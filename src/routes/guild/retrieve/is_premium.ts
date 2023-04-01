@@ -18,7 +18,6 @@ export class UserRoute extends Route {
 
 		if (!results) return response.badRequest({ error: 'Guild not Found' });
 
-		const is_premium = parseBoolean(`${results.premium}`);
-		return response.ok(is_premium);
+		return response.ok(results.premium);
 	}
 }

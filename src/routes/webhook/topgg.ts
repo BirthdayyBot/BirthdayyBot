@@ -12,17 +12,17 @@ export class UserRoute extends Route {
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		DEBUG ? container.logger.info(request.body) : null;
 
-		const type = (request.body as APIWebhookTopGG).type;
+		const { type } = request.body as APIWebhookTopGG;
 		const user_id = (request.body as APIWebhookTopGG).user;
 		switch (type) {
-		case 'test':
-			container.logger.info('topgg webhook test');
-			break;
-		case 'upvote':
-			await voteProcess('topgg', user_id);
-			break;
-		default:
-			return response.badRequest({ error: 'Bad Request' });
+			case 'test':
+				container.logger.info('topgg webhook test');
+				break;
+			case 'upvote':
+				await voteProcess('topgg', user_id);
+				break;
+			default:
+				return response.badRequest({ error: 'Bad Request' });
 		}
 		return response.ok({ message: 'TOPGG VERIFIED' });
 	}

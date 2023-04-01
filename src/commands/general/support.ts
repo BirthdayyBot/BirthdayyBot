@@ -15,12 +15,12 @@ import { SupportEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class SupportCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await SupportCMD(), {
-			guildIds: getCommandGuilds('global'),
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(SupportCMD(), {
+			guildIds: getCommandGuilds('global')
 		});
 	}
 
@@ -32,9 +32,9 @@ export class SupportCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [discordButton, docsButton],
-				},
-			],
+					components: [discordButton, docsButton]
+				}
+			]
 		});
 	}
 }

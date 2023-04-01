@@ -5,7 +5,7 @@ import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicat
     ApplicationCommandOptionType Documentation: https://discord-api-types.dev/api/discord-api-types-v10/enum/ApplicationCommandOptionType
     ApplicationCommandType Documentation: https://discord-api-types.dev/api/discord-api-types-v10/enum/ApplicationCommandType
     */
-export async function TemplateCMD(): Promise<ChatInputApplicationCommandData> {
+export function TemplateCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'template',
 		description: 'Template Command',
@@ -16,8 +16,8 @@ export async function TemplateCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'template',
-				description: 'its a template',
-			},
-		],
+				description: 'its a template'
+			}
+		]
 	};
 }

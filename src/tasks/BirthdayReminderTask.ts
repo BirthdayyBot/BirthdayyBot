@@ -18,12 +18,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		container.logger.debug('[BirthdayTask] Task run');
 		if (birthdayEvent) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
-			return await this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
+			return this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
 		}
 
 		const current = getCurrentOffset();
 		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not found');
-		const dateFormatted = current.dateFormatted;
+		const { dateFormatted } = current;
 
 		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
 
@@ -38,7 +38,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 		}
 		container.logger.info(
-			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`,
+			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`
 		);
 	}
 
@@ -70,8 +70,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,
-			description: await this.formatBirthdayMessage(announcementMessage, member, guild),
-			thumbnail_url: IMG_CAKE,
+			description: this.formatBirthdayMessage(announcementMessage, member, guild),
+			thumbnail_url: IMG_CAKE
 		};
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
@@ -87,33 +87,36 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 			return await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: isTest ? Time.Minute * 3 : Time.Day,
+				delay: isTest ? Time.Minute * 3 : Time.Day
 			});
 		} catch (error) {
-			return this.container.logger.error('COULDN\'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n', error);
+			return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error);
 		}
 	}
 
 	private async sendBirthdayAnnouncement(content: string, channel_id: string, birthdayEmbed: APIEmbed) {
 		try {
 			const message = await sendMessage(channel_id, {
-				content: content,
-				embeds: [birthdayEmbed],
+				content,
+				embeds: [birthdayEmbed]
 			});
 			container.logger.info('Sent Birthday Announcement');
 			return message;
 		} catch (error: any) {
-			container.logger.warn('COULND\'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n', error);
-			// Send error message to log channel
-			// TODO: Changed error message
-			if (error.message.includes('Missing Access')) {
-				// send Log to user
+			if (error instanceof Error) {
+				container.logger.warn("COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n", error);
+				// Send error message to log channel
+				// TODO: Changed error message
+				if (error.message.includes('Missing Access')) {
+					// send Log to user
+				}
 			}
-			return;
+
+			return null;
 		}
 	}
 
-	private async formatBirthdayMessage(message: string, member: GuildMember, guild: Guild) {
+	private formatBirthdayMessage(message: string, member: GuildMember, guild: Guild) {
 		const placeholders = {
 			'{USERNAME}': member.user.username,
 			'{DISCRIMINATOR}': member.user.discriminator,
@@ -121,7 +124,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			'{GUILD_NAME}': guild.name,
 			'{GUILD_ID}': guild.id,
 			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name,
+			'{SERVERNAME}': guild.name
 		};
 
 		let formattedMessage = message;

@@ -11,12 +11,12 @@ export async function fetchMessage(channel_id: string, message_id: string) {
 export async function sendMessage(channel_id: string, options: string | MessagePayload | MessageCreateOptions) {
 	const channel = await getTextChannel(channel_id);
 	if (!channel?.isTextBased() || channel.isDMBased()) return null;
-	return await channel.send(options);
+	return channel.send(options);
 }
 
 export async function editMessage(channel_id: string, message_id: string, options: string | MessageEditOptions | MessagePayload) {
 	const message = await fetchMessage(channel_id, message_id);
-	return await message?.edit(options);
+	return message?.edit(options);
 }
 
 export async function sendDMMessage(user_id: string, options: string | MessagePayload | MessageCreateOptions) {

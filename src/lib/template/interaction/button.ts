@@ -8,7 +8,7 @@ export class ExampleParseMethod extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction, result: { success: boolean }) {
 		await interaction.editReply({
-			content: `The long running task ${result.success ? 'succeeded' : 'failed'}!`,
+			content: `The long running task ${result.success ? 'succeeded' : 'failed'}!`
 		});
 	}
 
@@ -18,12 +18,12 @@ export class ExampleParseMethod extends InteractionHandler {
 		// Defer the interaction here as what we will do might take some time
 		await interaction.deferReply();
 
-		const result = await this.fetchDataThatMightTakeALongWhile(interaction.customId);
+		const result = this.fetchDataThatMightTakeALongWhile(interaction.customId);
 
 		return this.some(result);
 	}
 
-	private async fetchDataThatMightTakeALongWhile(customId: string) {
+	private fetchDataThatMightTakeALongWhile(customId: string) {
 		container.logger.info('customId', customId);
 		// ...
 	}

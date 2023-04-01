@@ -8,7 +8,7 @@ import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Intera
  */
 export default async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
-	options: string | MessagePayload | InteractionReplyOptions,
+	options: string | MessagePayload | InteractionReplyOptions
 ) {
-	return await interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }

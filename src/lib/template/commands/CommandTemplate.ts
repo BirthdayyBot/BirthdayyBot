@@ -12,18 +12,18 @@ import { TemplateCMD } from '../../commands';
 	enabled: true,
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class TemplateCommand extends Command {
 	public constructor(context: Command.Context, options: Command.Options) {
 		super(context, {
-			...options,
+			...options
 		});
 	}
 
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await TemplateCMD(), {
-			guildIds: getCommandGuilds('testing'),
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(TemplateCMD(), {
+			guildIds: getCommandGuilds('testing')
 		});
 	}
 
@@ -31,6 +31,6 @@ export class TemplateCommand extends Command {
 		container.logger.info('testCommand Command');
 		await thinking(interaction);
 		const embed = generateEmbed({ title: 'Test', description: 'A Test Command' });
-		return await replyToInteraction(interaction, { embeds: [embed] });
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

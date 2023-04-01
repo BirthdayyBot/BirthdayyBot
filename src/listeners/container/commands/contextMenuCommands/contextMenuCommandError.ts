@@ -6,7 +6,10 @@ import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHand
 export class ContextMenuCommandErrorEvent extends Listener<typeof Events.ContextMenuCommandError> {
 	public run(error: Error, payload: ContextMenuCommandErrorPayload) {
 		return handleCommandErrorAndSendToUser({
-			error, interaction: payload.interaction, loggerSeverityLevel: 'error', sentrySeverityLevel: 'error',
+			error,
+			interaction: payload.interaction,
+			loggerSeverityLevel: 'error',
+			sentrySeverityLevel: 'error'
 		});
 	}
 }

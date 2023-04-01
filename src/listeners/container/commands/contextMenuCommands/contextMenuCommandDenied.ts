@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ContextMenuCommandDeniedPayload, Events } from '@sapphire/framework';
-import { Listener, UserError } from '@sapphire/framework';
+import { ContextMenuCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({ event: Events.ContextMenuCommandDenied })
 export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> {
@@ -12,7 +11,7 @@ export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> 
 		return interaction.reply({
 			content,
 			allowedMentions: { users: [interaction.user.id], roles: [] },
-			ephemeral: true,
+			ephemeral: true
 		});
 	}
 }

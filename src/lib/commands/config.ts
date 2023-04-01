@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
+export function ConfigCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'config',
 		type: ApplicationCommandType.ChatInput,
@@ -11,20 +11,20 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'list',
-				description: 'Get a overview over your current server configurations',
+				description: 'Get a overview over your current server configurations'
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'announcement-channel',
-				description: 'Announce if its somebody\'s birthday today',
+				description: "Announce if its somebody's birthday today",
 				options: [
 					{
 						type: ApplicationCommandOptionType.Channel,
 						name: 'channel',
 						description: 'Channel where the announcement should get sent',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -35,9 +35,9 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.Channel,
 						name: 'channel',
 						description: 'Channel where the overview should get sent and updated in',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -48,9 +48,9 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.Role,
 						name: 'role',
 						description: 'Role that should get assigned on a birthday',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -61,9 +61,9 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.Role,
 						name: 'role',
 						description: 'Role that should get pinged on someones birthday',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -77,96 +77,96 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'Greenwich Mean Time | GMT | UTC',
-								value: '0',
+								value: '0'
 							},
 							{
 								name: 'European Central Time | ECT | UTC+1:00',
-								value: '1',
+								value: '1'
 							},
 							{
 								name: 'Eastern European Time | EET | UTC+2:00',
-								value: '2',
+								value: '2'
 							},
 							{
 								name: 'Eastern African Time | EAT | UTC+3:00',
-								value: '3',
+								value: '3'
 							},
 							{
 								name: 'Near East Time | NET | UTC+4:00',
-								value: '4',
+								value: '4'
 							},
 							{
 								name: 'Pakistan Lahore Time | PLT | UTC+5:00',
-								value: '5',
+								value: '5'
 							},
 							{
 								name: 'Bangladesh Standard Time | BST | UTC+6:00',
-								value: '6',
+								value: '6'
 							},
 							{
 								name: 'Vietnam Standard Time | VST | UTC+7:00',
-								value: '7',
+								value: '7'
 							},
 							{
 								name: 'China Taiwan Time | CTT | UTC+8:00',
-								value: '8',
+								value: '8'
 							},
 							{
 								name: 'Japan Standard Time | JST | UTC+9:00',
-								value: '9',
+								value: '9'
 							},
 							{
 								name: 'Australia Eastern Time | AET | UTC+10:00',
-								value: '10',
+								value: '10'
 							},
 							{
 								name: 'Solomon Standard Time | SST | UTC+11:00',
-								value: '11',
+								value: '11'
 							},
 							{
 								name: 'New Zealand Standard Time | NST | UTC+12:00',
-								value: '12',
+								value: '12'
 							},
 							{
 								name: 'Midway Islands Time | MIT | UTC-11:00',
-								value: '-11',
+								value: '-11'
 							},
 							{
 								name: 'Hawaii Standard Time | HST | UTC-10:00',
-								value: '-10',
+								value: '-10'
 							},
 							{
 								name: 'Alaska Standard Time | AST | UTC-9:00',
-								value: '-9',
+								value: '-9'
 							},
 							{
 								name: 'Pacific Standard Time | PST | UTC-8:00',
-								value: '-8',
+								value: '-8'
 							},
 							{
 								name: 'Phoenix Standard Time | PNT | UTC-7:00',
-								value: '-7',
+								value: '-7'
 							},
 							{
 								name: 'Central Standard Time | CST | UTC-6:00',
-								value: '-6',
+								value: '-6'
 							},
 							{
 								name: 'Eastern Standard Time | EST | UTC-5:00',
-								value: '-5',
+								value: '-5'
 							},
 							{
 								name: 'Puerto Rico and US Virgin Islands Time | PRT | UTC-4:00',
-								value: '-4',
+								value: '-4'
 							},
 							{
 								name: 'Brazil Eastern Time | BET | UTC-2:00',
-								value: '-2',
-							},
+								value: '-2'
+							}
 						],
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -177,9 +177,9 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.String,
 						name: 'message',
 						description: '{MENTION}, {USERNAME}, {DISCRIMINATOR}, {LINE_BREAK}, {SERVERNAME}',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -193,33 +193,33 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'Announcement Channel',
-								value: 'announcementChannel',
+								value: 'announcementChannel'
 							},
 							{
 								name: 'Overview Channel',
-								value: 'overviewChannel',
+								value: 'overviewChannel'
 							},
 							{
 								name: 'Birthday Role',
-								value: 'birthdayRole',
+								value: 'birthdayRole'
 							},
 							{
 								name: 'Ping Role',
-								value: 'birthdayPingRole',
+								value: 'birthdayPingRole'
 							},
 							{
 								name: 'Announcement Message',
-								value: 'announcementMessage',
-							},
+								value: 'announcementMessage'
+							}
 							// {
 							// 	name: 'Logs',
 							// 	value: 'logs'
 							// }
 						],
-						required: true,
-					},
-				],
-			},
+						required: true
+					}
+				]
+			}
 			// {
 			// 	type: ApplicationCommandOptionType.Subcommand,
 			// 	name: 'logs',
@@ -233,6 +233,6 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			// 		}
 			// 	]
 			// }
-		],
+		]
 	};
 }

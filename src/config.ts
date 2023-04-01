@@ -26,7 +26,7 @@ import {
 	TOKEN_DISCORDLIST,
 	TOKEN_TOPGG,
 	WEBHOOK_ID,
-	WEBHOOK_TOKEN,
+	WEBHOOK_TOKEN
 } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 
@@ -35,7 +35,7 @@ function parseApi(): ServerOptions {
 		prefix: API_EXTENSION,
 		origin: '*',
 		listenOptions: { port: API_PORT },
-		automaticallyConnect: false,
+		automaticallyConnect: false
 	};
 }
 
@@ -46,13 +46,13 @@ function parseBotListOptions(): BotList.Options {
 		shard: true,
 		autoPost: {
 			enabled: APP_ENV === 'prd',
-			interval: 3 * Time.Hour,
+			interval: 3 * Time.Hour
 		},
 		keys: {
 			topGG: TOKEN_TOPGG,
 			discordListGG: TOKEN_DISCORDLIST,
-			discordBotList: TOKEN_DISCORDBOTLIST,
-		},
+			discordBotList: TOKEN_DISCORDBOTLIST
+		}
 	};
 }
 
@@ -67,7 +67,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			const guildLanguage: string = await getGuildLanguage(context.guild.id);
 			container.logger.info(guildLanguage);
 			return guildLanguage || 'en-US';
-		},
+		}
 	};
 }
 
@@ -78,16 +78,16 @@ function parseBullOptions(): QueueOptions {
 			password: REDIS_PASSWORD,
 			host: REDIS_HOST,
 			db: REDIS_DB,
-			username: REDIS_USERNAME,
-		},
+			username: REDIS_USERNAME
+		}
 	};
 }
 
 function parseScheduledTasksOptions(): ScheduledTasksOptions {
 	return {
 		strategy: new ScheduledTaskRedisStrategy({
-			bull: parseBullOptions(),
-		}),
+			bull: parseBullOptions()
+		})
 	};
 }
 
@@ -97,16 +97,16 @@ function parsePresenceOptions(): PresenceData {
 		activities: [
 			{
 				name: '/birthday register 🎂',
-				type: ActivityType.Watching,
-			},
-		],
+				type: ActivityType.Watching
+			}
+		]
 	};
 }
 
 function parseLoggerOptions(): ClientLoggerOptions {
 	return {
 		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
-		instance: container.logger,
+		instance: container.logger
 	};
 }
 
@@ -119,8 +119,8 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 		new Sentry.Integrations.LinkedErrors(),
 		new Sentry.Integrations.Console(),
 		new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
-		new RewriteFrames({ root: ROOT_DIR }),
-	],
+		new RewriteFrames({ root: ROOT_DIR })
+	]
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
@@ -132,7 +132,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	botList: parseBotListOptions(),
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
-	presence: parsePresenceOptions(),
+	presence: parsePresenceOptions()
 };
 
 function parseWebhookError(): WebhookClientData | null {
@@ -140,8 +140,7 @@ function parseWebhookError(): WebhookClientData | null {
 
 	return {
 		id: WEBHOOK_ID,
-		token: WEBHOOK_TOKEN,
-
+		token: WEBHOOK_TOKEN
 	};
 }
 

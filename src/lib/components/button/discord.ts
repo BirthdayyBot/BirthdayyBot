@@ -9,6 +9,6 @@ export const discordButton = {
 	emoji: {
 		id: '931267038574432308',
 		name: 'people',
-		animated: false,
-	},
+		animated: false
+	}
 };

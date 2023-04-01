@@ -11,7 +11,7 @@ import type { ApiRequest } from './types';
 export function authenticated(token = API_SECRET) {
 	return createFunctionPrecondition(
 		(req: ApiRequest) => req.headers.authorization === token,
-		(_req: ApiRequest, res: ApiResponse) => res.unauthorized(),
+		(_req: ApiRequest, res: ApiResponse) => res.unauthorized()
 	);
 }
 
@@ -41,7 +41,7 @@ export function validateParams<QueryParams extends Record<string, string | strin
 					invalidParams.push({
 						key: param as string,
 						receivedType: typeof req.query[param],
-						expectedType: typeof {} as QueryParams[typeof param],
+						expectedType: typeof {} as QueryParams[typeof param]
 					});
 				}
 			}
@@ -50,7 +50,7 @@ export function validateParams<QueryParams extends Record<string, string | strin
 		(_req: ApiRequest<QueryParams>, res: ApiResponse) =>
 			res.badRequest({
 				missing: missingParams.length > 0 ? `Missing Parameter(s) - ${missingParams.join(', ')}` : undefined,
-				invalid: invalidParams.length > 0 ? `Invalid Parameter(s) - ${invalidParams.join(', ')}` : undefined,
-			}),
+				invalid: invalidParams.length > 0 ? `Invalid Parameter(s) - ${invalidParams.join(', ')}` : undefined
+			})
 	);
 }

@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function UwUCMD(): Promise<ChatInputApplicationCommandData> {
+export function UwUCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'uwu',
 		description: 'UwU Command',
@@ -11,7 +11,7 @@ export async function UwUCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'once',
-				description: 'Send one uwu',
+				description: 'Send one uwu'
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -21,9 +21,9 @@ export async function UwUCMD(): Promise<ChatInputApplicationCommandData> {
 					{
 						type: ApplicationCommandOptionType.Integer,
 						name: 'times',
-						description: 'How many UwUs to send',
-					},
-				],
+						description: 'How many UwUs to send'
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
@@ -34,15 +34,15 @@ export async function UwUCMD(): Promise<ChatInputApplicationCommandData> {
 						type: ApplicationCommandOptionType.User,
 						name: 'user',
 						description: 'Send a UwU to a user',
-						required: true,
-					},
-				],
+						required: true
+					}
+				]
 			},
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'fetch',
-				description: 'Fetch a user',
-			},
-		],
+				description: 'Fetch a user'
+			}
+		]
 	};
 }

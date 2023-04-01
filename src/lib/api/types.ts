@@ -4,13 +4,13 @@ type RecordsQuery = Record<string, string | string[]>;
 type RecordsParams = Record<string, string>;
 
 export declare class ApiRequest<T extends RecordsQuery = never, U extends RecordsParams = never> extends ApiRequestSapphire {
-	override query: T;
-	override params: U;
+	public override query: T;
+	public override params: U;
 }
 
-export type GuildQuery = {
+export interface GuildQuery {
 	guildId: string;
-};
+}
 
 export type GuildAndUserQuery = GuildQuery & {
 	userId: string;

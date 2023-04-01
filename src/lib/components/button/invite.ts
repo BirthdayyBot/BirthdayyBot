@@ -9,6 +9,6 @@ export const inviteButton = {
 	emoji: {
 		id: '931267039094534175',
 		name: 'gift',
-		animated: false,
-	},
+		animated: false
+	}
 };

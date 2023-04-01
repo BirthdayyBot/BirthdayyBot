@@ -19,7 +19,7 @@ export const HelpEmbed = {
   ${ARROW_RIGHT}/status
   ${ARROW_RIGHT}/vote
         `,
-			inline: true,
+			inline: true
 		},
 
 		{
@@ -31,7 +31,7 @@ export const HelpEmbed = {
   ${ARROW_RIGHT}remove \`<user>\`
   ${ARROW_RIGHT}show \`[user]\`
       `,
-			inline: true,
+			inline: true
 		},
 		{
 			name: '/config',
@@ -44,7 +44,7 @@ export const HelpEmbed = {
   ${ARROW_RIGHT}timezone\`<zone>\`
   ${ARROW_RIGHT}announcement-message\`<message>\` ${PLUS}
       `,
-			inline: true,
-		},
-	],
+			inline: true
+		}
+	]
 };

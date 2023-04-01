@@ -3,7 +3,7 @@ import { Command } from '@sapphire/framework';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 @ApplyOptions<Command.Options>({
-	description: 'ping pong',
+	description: 'ping pong'
 })
 export class PingCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -11,13 +11,14 @@ export class PingCommand extends Command {
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
-				description: this.description,
+				description: this.description
 			},
 			{
-				guildIds: getCommandGuilds('testing'),
-			},
+				guildIds: getCommandGuilds('testing')
+			}
 		);
 	}
+
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({ content: 'Ping?', fetchReply: true });
@@ -25,8 +26,8 @@ export class PingCommand extends Command {
 			msg.createdTimestamp - interaction.createdTimestamp
 		}ms.`;
 
-		return await interaction.editReply({
-			content: content,
+		return interaction.editReply({
+			content
 		});
 	}
 }

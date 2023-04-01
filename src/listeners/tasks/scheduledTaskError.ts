@@ -9,7 +9,7 @@ import { logErrorToContainer } from '../../lib/utils/errorHandling';
 export class ScheduledTaskErrorEvent extends Listener<typeof ScheduledTaskEvents.ScheduledTaskError> {
 	public run(error: Error, task: string, _duration: number, _payload: any) {
 		if (SENTRY_DSN) {
-			Sentry.withScope(scope => {
+			Sentry.withScope((scope) => {
 				scope.setLevel('error');
 				scope.setTags({ task });
 				scope.setFingerprint([error.name]);

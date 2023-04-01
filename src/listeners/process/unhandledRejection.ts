@@ -6,9 +6,9 @@ import { logErrorToContainer } from '../../lib/utils/errorHandling';
 
 @ApplyOptions<Listener.Options>({ emitter: process, event: 'unhandledRejection' })
 export class unhandledRejectionEvent extends Listener {
-	public async run(error: Error) {
+	public run(error: Error) {
 		if (SENTRY_DSN) {
-			Sentry.withScope(scope => {
+			Sentry.withScope((scope) => {
 				scope.setLevel('error');
 				scope.setFingerprint([error.name]);
 				scope.setTransactionName('unhandledRejectionEvent');

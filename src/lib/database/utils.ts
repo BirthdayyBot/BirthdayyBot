@@ -9,5 +9,5 @@ export const configNameExtended: Record<ConfigName, string> = {
 	overviewMessage: 'Overview Message',
 	timezone: 'Timezone',
 	logChannel: 'Log Channel',
-	language: 'Language',
+	language: 'Language'
 };
