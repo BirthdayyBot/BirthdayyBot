@@ -219,7 +219,7 @@ export class BirthdayCommand extends Subcommand {
 
 		const embed = generateEmbed({
 			title: `${BOOK} Birthday`,
-			description: `${ARROW_RIGHT} ${userMention(birthday.user_id)}'s birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
+			description: `${ARROW_RIGHT} ${userMention(birthday.userId)}'s birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
 			thumbnail_url: IMG_CAKE,
 		});
 
@@ -277,7 +277,7 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					generateEmbed({
 						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(birthday.user_id)} to the ${formatDateForDisplay(
+						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(birthday.userId)} to the ${formatDateForDisplay(
 							date.date,
 						)}. 🎂`,
 					}),

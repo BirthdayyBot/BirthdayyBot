@@ -12,28 +12,27 @@ type GuildRetrieveQuery = GuildQuery & {
 @ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-available' })
 export class UserRoute extends Route {
 	@authenticated()
-	@validateParams<GuildRetrieveQuery>(['guild_id'])
+	@validateParams<GuildRetrieveQuery>(['guildId'])
 	public async [methods.GET](request: ApiRequest<GuildRetrieveQuery>, response: ApiResponse) {
-		const { query } = request;
-		const guild_id = query.guild_id;
-		const disable = parseBoolean(query.disable ? query.disable.toString() : 'false');
+		const { guildId, disable } = request.query;
+		const toDisable = parseBoolean(disable ? disable.toString() : 'false');
 
 		const guild = await container.client.guilds.fetch({
-			guild: guild_id,
+			guild: guildId,
 			withCounts: false,
 		});
 
 		if (!guild) {
-			if (disable) {
-				const guildDisabled = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
+			if (toDisable) {
+				const disabledGuild = await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true);
 				return response.badRequest({
 					is_available: false,
-					data: { guild_id, disabledGuild: guildDisabled },
+					data: { guild, disabledGuild },
 				});
 			}
-			return response.badRequest({ is_available: false, data: { guild_id } });
+			return response.badRequest({ is_available: false, data: { guildId } });
 		}
 
-		return response.ok({ is_available: guild ? true : false, data: guild ? guild : null });
+		return response.ok({ is_available: !!guild, data: guild ? guild : null });
 	}
 }

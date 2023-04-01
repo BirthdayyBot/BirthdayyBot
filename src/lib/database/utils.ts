@@ -1,13 +1,13 @@
 import type { ConfigName } from './types';
 
 export const configNameExtended: Record<ConfigName, string> = {
-	birthday_role: 'Birthday Role',
-	birthday_ping_role: 'Birthday Ping Role',
-	announcement_channel: 'Announcement Channel',
-	announcement_message: 'Announcement Message',
-	overview_channel: 'Overview Channel',
-	overview_message: 'Overview Message',
+	birthdayRole: 'Birthday Role',
+	birthdayPingRole: 'Birthday Ping Role',
+	announcementChannel: 'Announcement Channel',
+	announcementMessage: 'Announcement Message',
+	overviewChannel: 'Overview Channel',
+	overviewMessage: 'Overview Message',
 	timezone: 'Timezone',
-	log_channel: 'Log Channel',
+	logChannel: 'Log Channel',
 	language: 'Language',
 };

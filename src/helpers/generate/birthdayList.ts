@@ -3,14 +3,14 @@ import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { userMention } from 'discord.js';
-import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
+import { getGuildInformation, getGuildMember } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthname } from '../utils/date';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
-	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildID(guild_id);
+	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
@@ -73,13 +73,13 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 		if (isNullOrUndefinedOrEmpty(month.birthdays)) continue;
 		// For each birthday in current month
 		for (const birthday of month.birthdays) {
-			const { user_id, birthday: bday } = birthday;
-			const guild_member = guild_id === GuildIDEnum.CHILLI_ATTACK_V2 ? true : await getGuildMember(guild_id, user_id);
+			const { userId, birthday: bday } = birthday;
+			const guild_member = guild_id === GuildIDEnum.CHILLI_ATTACK_V2 ? true : await getGuildMember(guild_id, userId);
 			if (isNullOrUndefinedOrEmpty(guild_member)) {
-				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, user_id);
+				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, userId);
 				continue;
 			}
-			const descriptionToAdd = `${userMention(user_id)} ${formatDateForDisplay(bday)}\n`;
+			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(bday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
 				embed.fields.push({
@@ -170,7 +170,7 @@ function prepareBirthdayList() {
 /**
  * sort all birthdays to the corresponding month object
  */
-function prepareBirthdays(birthdays: Array<Birthday>): Array<{ monthname: string; birthdays: Array<Birthday> }> {
+function prepareBirthdays(birthdays: Array<Birthday>): { monthname: string; birthdays: Birthday[] }[] {
 	const list = prepareBirthdayList();
 
 	birthdays.forEach(function(singleBirthday) {

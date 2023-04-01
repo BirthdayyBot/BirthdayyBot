@@ -18,7 +18,7 @@ export class UserRoute extends Route {
 		const { date, timezone } = request.query;
 
 		const birthdays = await this.container.utilities.birthday.get.BirthdaysByDate(dayjs(date));
-		const guildIds = birthdays.map((birthday) => birthday.guild_id);
+		const guildIds = birthdays.map((birthday) => birthday.guildId);
 		const guilds = await this.container.utilities.guild.get.GuildsByTimezone(guildIds, parseInt(timezone));
 		const filteredBirthdays = this.filterBirthdaysByTimezone(birthdays, guilds, timezone);
 
@@ -31,7 +31,7 @@ export class UserRoute extends Route {
 
 	private filterBirthdaysByTimezone(birthdays: Birthday[], guilds: Guild[], timezone: string) {
 		return birthdays.filter((birthday) => {
-			const guild = guilds.find((g) => g.guild_id === birthday.guild_id);
+			const guild = guilds.find((g) => g.guildId === birthday.guildId);
 			return guild?.timezone === parseInt(timezone);
 		});
 	}

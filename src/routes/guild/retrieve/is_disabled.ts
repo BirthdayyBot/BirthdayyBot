@@ -9,9 +9,9 @@ export class UserRoute extends Route {
 	@authenticated()
 	@validateParams<GuildQuery>()
 	public async [methods.GET](request: ApiRequest<GuildQuery>, response: ApiResponse) {
-		const { guild_id } = request.query;
+		const { guildId } = request.query;
 
-		const results = await container.utilities.guild.get.GuildDisabled(guild_id);
+		const results = await container.utilities.guild.get.GuildDisabled(guildId);
 
 		return response.ok({ is_disabled: results?.disabled });
 	}

@@ -9,9 +9,9 @@ export class UserRoute extends Route {
 	@authenticated()
 	@validateParams<GuildQuery>()
 	public async [methods.GET](_request: ApiRequest<GuildQuery>, response: ApiResponse) {
-		const { guild_id } = _request.query;
+		const { guildId } = _request.query;
 
-		const guild = await container.utilities.guild.get.GuildConfig(guild_id);
+		const guild = await container.utilities.guild.get.GuildConfig(guildId);
 
 		return response.ok({ ...guild });
 	}
