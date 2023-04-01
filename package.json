@@ -60,6 +60,7 @@
 		"build": "tsc",
 		"watch": "tsc -w",
 		"start": "doppler run -- yarn node --enable-source-maps dist/index.js",
+		"clean": "node scripts/clean.mjs",
 		"dev": "doppler run run-p watch start",
 		"watch:start": "tsc-watch --onSuccess \"yarn start\"",
 		"build:start": "tsc && yarn start",
