@@ -18,6 +18,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (IS_CUSTOM_BOT) {
 			// TODO: #26 Create a nice welcome message for custom bot servers
 		}
+
 		const guildData = await this.container.utilities.guild.get.GuildById(guildId);
 
 		if (!guildData) await this.container.utilities.guild.create({ guildId, inviter: inviterId });
@@ -26,6 +27,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (inviterId) {
 			await sendGuide(inviterId);
 		}
+
 		await joinServerLog(guild, inviterId);
 		return;
 
