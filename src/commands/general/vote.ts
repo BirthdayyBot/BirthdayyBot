@@ -1,11 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../../lib/discord/thinking';
 import replyToInteraction from '../../helpers/send/response';
-import { VoteEmbed } from '../../lib/embeds';
+import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { VoteCMD } from '../../lib/commands/vote';
+import thinking from '../../lib/discord/thinking';
+import { VoteEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'vote',
@@ -17,7 +17,6 @@ import { VoteCMD } from '../../lib/commands/vote';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class VoteCommand extends Command {
-
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(await VoteCMD(), {
 			guildIds: getCommandGuilds('global'),
@@ -26,7 +25,7 @@ export class VoteCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = await generateEmbed(VoteEmbed);
+		const embed = generateEmbed(VoteEmbed);
 		await replyToInteraction(interaction, {
 			embeds: [embed],
 		});
