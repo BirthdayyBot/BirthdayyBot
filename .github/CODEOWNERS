@@ -1,0 +1,18 @@
+# Chillihero & Swiizyy
+/src/ @nikolaischunk @swiizyy
+/tsconfig.base.json @nikolaischunk @swiizyy
+/tsconfig.eslint.json @nikolaischunk @swiizyy
+
+# Just Swiizyy
+/scripts/ @swiizyy
+/.husky/ @swiizyy
+/prisma/ @swiizyy
+
+# Just Chillihero
+/LICENSE @nikolaischunk
+/Dockerfile @nikolaischunk
+/.github/ @nikolaischunk
+/.gitignore @nikolaischunk
+/.prettierrc @nikolaischunk
+/.eslintrc.json @nikolaischunk
+/.editorconfig.json @nikolaischunk
