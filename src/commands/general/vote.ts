@@ -14,12 +14,12 @@ import { VoteEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages']
+	requiredClientPermissions: ['SendMessages'],
 })
 export class VoteCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(VoteCMD(), {
-			guildIds: getCommandGuilds('global')
+			guildIds: getCommandGuilds('global'),
 		});
 	}
 
@@ -27,7 +27,7 @@ export class VoteCommand extends Command {
 		await thinking(interaction);
 		const embed = generateEmbed(VoteEmbed);
 		await replyToInteraction(interaction, {
-			embeds: [embed]
+			embeds: [embed],
 		});
 	}
 }

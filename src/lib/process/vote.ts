@@ -23,7 +23,7 @@ export default async function voteProcess(provider: VoteProvider, user_id: strin
 async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
 	const dmEmbed = {
 		title: `${SUCCESS} You voted for Birthdayy on ${providerInfo.name}`,
-		description: `Thank you so much for supporting me, you're the best ${HEART}`
+		description: `Thank you so much for supporting me, you're the best ${HEART}`,
 	};
 	const dmEmbedObj = generateEmbed(dmEmbed);
 	const component = {
@@ -34,9 +34,9 @@ async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: 
 				label: '⏰ Remind Me in 12hrs',
 				custom_id: 'remind-me-to-vote',
 				disabled: false,
-				type: 2
-			}
-		]
+				type: 2,
+			},
+		],
 	};
 
 	return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
@@ -49,7 +49,7 @@ async function sendVoteAnnouncement(providerInfo: { name: string; url: string },
 		title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
 		description: `\`${username}#${discriminator}\` has **voted** for Birthdayy!
       Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-		thumbnail_url: avatar_url
+		thumbnail_url: avatar_url,
 	};
 	const embedObj = generateEmbed(embed);
 	return sendMessage(APP_ENV === 'prd' ? VOTE_CHANNEL_ID : '1077621363881300018', { embeds: [embedObj] });
@@ -81,19 +81,19 @@ function getProviderInfo(provider: VoteProvider) {
 		case 'topgg':
 			return {
 				name: 'TopGG',
-				url: 'https://birthdayy.xyz/topgg/vote'
+				url: 'https://birthdayy.xyz/topgg/vote',
 			};
 
 		case 'discordbotlist':
 			return {
 				name: 'Discord Bot List',
-				url: 'https://birthdayy.xyz/discord-botlist/vote'
+				url: 'https://birthdayy.xyz/discord-botlist/vote',
 			};
 
 		case 'discordlist':
 			return {
 				name: 'Discord List',
-				url: 'https://birthdayy.xyz/discordlist/vote'
+				url: 'https://birthdayy.xyz/discordlist/vote',
 			};
 	}
 }

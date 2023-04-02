@@ -25,20 +25,30 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not found');
 		const { dateFormatted } = current;
 
-		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
+		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
+			current.date,
+			current.timezone,
+		);
 
 		if (!todaysBirthdays.length) {
-			return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.timezone}`);
+			return this.container.logger.info(
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.timezone}`,
+			);
 		}
 
-		this.container.logger.debug(`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`);
+		this.container.logger.debug(
+			`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`,
+		);
 
 		for (const birthday of todaysBirthdays) {
-			if (DEBUG) this.container.logger.info(`[BirthdayTask] Birthday loop: ${todaysBirthdays.indexOf(birthday) + 1}/${todaysBirthdays.length}`);
+			if (DEBUG)
+				this.container.logger.info(
+					`[BirthdayTask] Birthday loop: ${todaysBirthdays.indexOf(birthday) + 1}/${todaysBirthdays.length}`,
+				);
 			await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 		}
 		container.logger.info(
-			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`
+			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`,
 		);
 	}
 
@@ -46,7 +56,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const guild = await getGuildInformation(guildId);
 		const member = await getGuildMember(guildId, userId);
 
-		if (!member || !guild) return this.container.logger.info(`[BirthdayTask] Member or Guild not found for ${userId} in ${guildId}`);
+		if (!member || !guild)
+			return this.container.logger.info(`[BirthdayTask] Member or Guild not found for ${userId} in ${guildId}`);
 
 		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
 		if (!config) return;
@@ -57,21 +68,27 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (birthdayRole) {
 			const role = await guild.roles.fetch(birthdayRole);
 			if (!role) {
-				if (DEBUG) this.container.logger.warn(`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`);
+				if (DEBUG)
+					this.container.logger.warn(
+						`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`,
+					);
 				return { error: true, message: 'Birthday role not found' };
 			}
 			await this.addCurrentBirthdayChildRole(member, guildId, role, isTest);
 		}
 
 		if (!announcementChannel) {
-			if (DEBUG) this.container.logger.warn(`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`);
+			if (DEBUG)
+				this.container.logger.warn(
+					`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
+				);
 			return { error: true, message: 'No announcement channel set' };
 		}
 
 		const embed: EmbedInformationModel = {
 			title: `${NEWS} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
-			thumbnail_url: IMG_CAKE
+			thumbnail_url: IMG_CAKE,
 		};
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
@@ -87,7 +104,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 			return await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: isTest ? Time.Minute * 3 : Time.Day
+				delay: isTest ? Time.Minute * 3 : Time.Day,
 			});
 		} catch (error) {
 			return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error);
@@ -98,7 +115,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		try {
 			const message = await sendMessage(channel_id, {
 				content,
-				embeds: [birthdayEmbed]
+				embeds: [birthdayEmbed],
 			});
 			container.logger.info('Sent Birthday Announcement');
 			return message;
@@ -124,7 +141,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			'{GUILD_NAME}': guild.name,
 			'{GUILD_ID}': guild.id,
 			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name
+			'{SERVERNAME}': guild.name,
 		};
 
 		let formattedMessage = message;

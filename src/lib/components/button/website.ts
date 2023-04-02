@@ -9,6 +9,6 @@ export const websiteButton = {
 	emoji: {
 		id: '931267039019020340',
 		name: 'link',
-		animated: false
-	}
+		animated: false,
+	},
 };

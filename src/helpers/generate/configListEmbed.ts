@@ -11,7 +11,7 @@ export default async function generateConfigListEmbed(guildId: string): Promise<
 	const embed = {
 		title: `Config List - ${guild!.name || 'Unknown Guild'}`,
 		description: 'Use /config `<setting>` `<value>` to change any setting',
-		fields: embedFields
+		fields: embedFields,
 	};
 
 	return generateEmbed(embed);
@@ -34,7 +34,7 @@ async function generateFields(guildId: string) {
 		fields.push({
 			name: nameString,
 			value: valueString,
-			inline: false
+			inline: false,
 		});
 	});
 	return fields;

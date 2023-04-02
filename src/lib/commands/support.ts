@@ -7,6 +7,6 @@ export function SupportCMD(): ChatInputApplicationCommandData {
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: true,
-		options: []
+		options: [],
 	};
 }

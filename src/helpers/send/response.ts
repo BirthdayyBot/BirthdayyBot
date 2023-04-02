@@ -1,4 +1,9 @@
-import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, InteractionReplyOptions, MessagePayload } from 'discord.js';
+import type {
+	ChatInputCommandInteraction,
+	ContextMenuCommandInteraction,
+	InteractionReplyOptions,
+	MessagePayload,
+} from 'discord.js';
 
 /**
  * It replies to an interaction, and if the interaction has already been replied to, it edits the reply instead
@@ -8,7 +13,7 @@ import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Intera
  */
 export default async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
-	options: string | MessagePayload | InteractionReplyOptions
+	options: string | MessagePayload | InteractionReplyOptions,
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }

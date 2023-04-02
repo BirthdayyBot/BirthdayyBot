@@ -8,9 +8,9 @@ import { API_SECRET, API_URL } from './environment';
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: string) {
 	await container.prisma.guild.update({
 		where: {
-			guildId
+			guildId,
 		},
-		data
+		data,
 	});
 	container.logger.info('Set config for guild with id ', guildId);
 }
@@ -18,18 +18,18 @@ export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: 
 export async function removeConfig(config_name: keyof Prisma.GuildScalarFieldEnum, guildId: string) {
 	return container.prisma.guild.update({
 		where: {
-			guildId
+			guildId,
 		},
 		data: {
-			[config_name]: undefined
-		}
+			[config_name]: undefined,
+		},
 	});
 }
 
 export async function setDefaultConfigs(guildId: string) {
 	return container.prisma.guild.update({
 		where: {
-			guildId
+			guildId,
 		},
 		data: {
 			birthdayRole: null,
@@ -39,8 +39,8 @@ export async function setDefaultConfigs(guildId: string) {
 			logChannel: null,
 			overviewMessage: null,
 			timezone: undefined,
-			announcementMessage: undefined
-		}
+			announcementMessage: undefined,
+		},
 	});
 }
 
@@ -85,12 +85,14 @@ export function logAll(config: Prisma.GuildUpdateInput) {
 	if (config.guildId !== null) container.logger.debug('GUILD_ID: ', config.guildId);
 	if (config.birthdayRole !== null) container.logger.debug('BIRTHDAY_ROLE: ', config.birthdayRole);
 	if (config.birthdayPingRole !== null) container.logger.debug('BIRTHDAY_PING_ROLE: ', config.birthdayPingRole);
-	if (config.announcementChannel !== null) container.logger.debug('ANNOUNCEMENT_CHANNEL: ', config.announcementChannel);
+	if (config.announcementChannel !== null)
+		container.logger.debug('ANNOUNCEMENT_CHANNEL: ', config.announcementChannel);
 	if (config.overviewChannel !== null) container.logger.debug('OVERVIEW_CHANNEL: ', config.overviewChannel);
 	if (config.logChannel !== null) container.logger.debug('LOG_CHANNEL: ', config.logChannel);
 	if (config.overviewMessage !== null) container.logger.debug('OVERVIEW_MESSAGE: ', config.overviewMessage);
 	if (config.timezone !== null) container.logger.debug('TIMEZONE: ', config.timezone);
-	if (config.announcementMessage !== null) container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.announcementMessage);
+	if (config.announcementMessage !== null)
+		container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.announcementMessage);
 	container.logger.debug('⩲===============================⩲');
 }
 
@@ -100,7 +102,7 @@ export async function getGuildLanguage(guildId: string): Promise<string> {
 	const data = await fetch<{ guildId: string; language: string }>(
 		requestURL,
 		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
-		FetchResultTypes.JSON
+		FetchResultTypes.JSON,
 	);
 	return data.language;
 }
@@ -111,7 +113,7 @@ export async function getGuildPremium(guildId: string): Promise<boolean> {
 	const data = await fetch<{ guildId: string; premium: boolean }>(
 		requestURL,
 		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
-		FetchResultTypes.JSON
+		FetchResultTypes.JSON,
 	);
 	return data.premium;
 }
@@ -133,7 +135,7 @@ export function isValidBirthdayMessage(message: string): { valid: boolean; error
 	if (message.length > EmbedLimits.MaximumDescriptionLength - 500) {
 		return {
 			valid: false,
-			error: 'MESSAGE_TOO_LONG'
+			error: 'MESSAGE_TOO_LONG',
 		};
 	}
 

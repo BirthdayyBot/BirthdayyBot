@@ -11,7 +11,7 @@ export class ChatInputSubcommandErrorEvent extends Listener<typeof SubcommandPlu
 			error,
 			interaction: payload.interaction,
 			loggerSeverityLevel: 'error',
-			sentrySeverityLevel: 'error'
+			sentrySeverityLevel: 'error',
 		});
 	}
 }

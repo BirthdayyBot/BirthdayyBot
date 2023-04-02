@@ -17,7 +17,10 @@ export class BirthdayCreateRoute extends Route {
 		if (!isDate) {
 			return response.badRequest({
 				success: false,
-				error: { code: APIErrorCode.INVALID_DATE_FORMAT, message: 'Wrong Date Format use YYYY-MM-DD or XXXX-MM-DD' }
+				error: {
+					code: APIErrorCode.INVALID_DATE_FORMAT,
+					message: 'Wrong Date Format use YYYY-MM-DD or XXXX-MM-DD',
+				},
 			});
 		}
 
@@ -26,7 +29,7 @@ export class BirthdayCreateRoute extends Route {
 		if (!guild) {
 			return response.badRequest({
 				success: false,
-				error: { message: 'Guild not found' }
+				error: { message: 'Guild not found' },
 			});
 		}
 
@@ -35,7 +38,7 @@ export class BirthdayCreateRoute extends Route {
 		if (!member) {
 			return response.badRequest({
 				success: false,
-				error: { message: 'User not found' }
+				error: { message: 'User not found' },
 			});
 		}
 

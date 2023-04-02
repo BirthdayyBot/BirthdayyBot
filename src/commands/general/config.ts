@@ -24,37 +24,37 @@ import thinking from '../../lib/discord/thinking';
 	subcommands: [
 		{
 			name: 'list',
-			chatInputRun: 'configList'
+			chatInputRun: 'configList',
 		},
 		{
 			name: 'announcement-channel',
-			chatInputRun: 'configAnnouncementChannel'
+			chatInputRun: 'configAnnouncementChannel',
 		},
 		{
 			name: 'overview-channel',
-			chatInputRun: 'configOverviewChannel'
+			chatInputRun: 'configOverviewChannel',
 		},
 		{
 			name: 'birthday-role',
-			chatInputRun: 'configBirthdayRole'
+			chatInputRun: 'configBirthdayRole',
 		},
 		{
 			name: 'ping-role',
-			chatInputRun: 'configPingRole'
+			chatInputRun: 'configPingRole',
 		},
 		{
 			name: 'timezone',
-			chatInputRun: 'configTimezone'
+			chatInputRun: 'configTimezone',
 		},
 		{
 			name: 'announcement-message',
-			chatInputRun: 'configAnnouncementMessage'
+			chatInputRun: 'configAnnouncementMessage',
 		},
 		{
 			name: 'reset',
-			chatInputRun: 'configReset'
-		}
-	]
+			chatInputRun: 'configReset',
+		},
+	],
 })
 export class ConfigCommand extends Subcommand {
 	private messageOptions = {
@@ -63,14 +63,14 @@ export class ConfigCommand extends Subcommand {
 			title: `${FAIL} Failure`,
 			description: 'Something went wrong',
 			fields: [],
-			thumbnail_url: ''
+			thumbnail_url: '',
 		},
-		components: []
+		components: [],
 	};
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(ConfigCMD(), {
-			guildIds: getCommandGuilds('global')
+			guildIds: getCommandGuilds('global'),
 		});
 	}
 
@@ -104,7 +104,10 @@ export class ConfigCommand extends Subcommand {
 			const birthdayList = await generateBirthdayList(1, interaction.guildId);
 			const birthdayListEmbed = generateEmbed(birthdayList.embed);
 			const birthdayListComponents = birthdayList.components;
-			const newBirthdayList = await sendMessage(overview_channel, { embeds: [birthdayListEmbed], components: birthdayListComponents });
+			const newBirthdayList = await sendMessage(overview_channel, {
+				embeds: [birthdayListEmbed],
+				components: birthdayListComponents,
+			});
 			if (!newBirthdayList) return;
 			await container.utilities.guild.set.OverviewMessage(interaction.guildId, newBirthdayList.id);
 
@@ -160,7 +163,10 @@ export class ConfigCommand extends Subcommand {
 		await replyToInteraction(interaction, { embeds: [embed] });
 	}
 
-	public async setConfig(interaction: Subcommand.ChatInputCommandInteraction<'cached'>, config: string): Promise<void> {
+	public async setConfig(
+		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
+		config: string,
+	): Promise<void> {
 		const guild_id = interaction.guildId;
 		try {
 			switch (config) {
@@ -168,29 +174,37 @@ export class ConfigCommand extends Subcommand {
 					const announcement_channel = interaction.options.getChannel('channel', true).id;
 					await container.utilities.guild.set.AnnouncementChannel(guild_id, announcement_channel);
 					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Announcement Channel** to ${channelMention(
-						announcement_channel
+						announcement_channel,
 					)}`;
 					break;
 				case 'overview_channel':
 					const overview_channel = interaction.options.getChannel('channel', true).id;
 					await container.utilities.guild.set.OverviewChannel(guild_id, overview_channel);
-					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to ${channelMention(overview_channel)}`;
+					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Overview Channel** to ${channelMention(
+						overview_channel,
+					)}`;
 					break;
 				case 'birthday_role':
 					const birthday_role = interaction.options.getRole('role', true).id;
 					await container.utilities.guild.set.BirthdayRole(guild_id, birthday_role);
-					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to ${roleMention(birthday_role)}`;
+					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Role** to ${roleMention(
+						birthday_role,
+					)}`;
 					break;
 				case 'ping_role':
 					const ping_role = interaction.options.getRole('role', true).id;
 					await container.utilities.guild.set.BirthdayPingRole(guild_id, ping_role);
-					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(ping_role)}`;
+					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(
+						ping_role,
+					)}`;
 					break;
 				case 'timezone':
 					const timezone = interaction.options.getInteger('timezone', true);
 					const timezoneString = timezone < 0 ? `UTC${timezone}` : `UTC+${timezone}`;
 					await container.utilities.guild.set.Timezone(guild_id, timezone);
-					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Timezone** to ${inlineCode(timezoneString)}`;
+					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Timezone** to ${inlineCode(
+						timezoneString,
+					)}`;
 					break;
 				// * PREMIUM ONLY
 				case 'announcement_message':
@@ -221,7 +235,7 @@ export class ConfigCommand extends Subcommand {
 					await container.utilities.guild.set.AnnouncementMessage(guild_id, announcement_message);
 					container.logger.debug('announcement_message', announcement_message);
 					this.messageOptions.embed.description = `${ARROW_RIGHT} You set the **Announcement Message** to \n${inlineCode(
-						announcement_message
+						announcement_message,
 					)}`;
 					break;
 			}
@@ -237,13 +251,17 @@ export class ConfigCommand extends Subcommand {
 
 	private async hasWritingPermissionsInChannel(
 		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
-		channel_id: string
+		channel_id: string,
 	): Promise<boolean> {
-		const hasCorrectPermissions = await hasChannelPermissions({ interaction, permissions: ['ViewChannel', 'SendMessages'], channel: channel_id });
+		const hasCorrectPermissions = await hasChannelPermissions({
+			interaction,
+			permissions: ['ViewChannel', 'SendMessages'],
+			channel: channel_id,
+		});
 		if (!hasCorrectPermissions) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;
 			this.messageOptions.embed.description = `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
-				channel_id
+				channel_id,
 			)}.`;
 			const embed = generateEmbed(this.messageOptions.embed);
 			await replyToInteraction(interaction, { embeds: [embed] });
@@ -252,7 +270,9 @@ export class ConfigCommand extends Subcommand {
 		return true;
 	}
 
-	private async botHasManageRolesPermissions(interaction: Subcommand.ChatInputCommandInteraction<'cached'>): Promise<boolean> {
+	private async botHasManageRolesPermissions(
+		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
+	): Promise<boolean> {
 		const hasPermissions = await hasGuildPermissions({ interaction, permissions: ['ManageRoles'] });
 		if (!hasPermissions) {
 			this.messageOptions.embed.title = `${FAIL} Failure`;

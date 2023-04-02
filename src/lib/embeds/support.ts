@@ -5,5 +5,5 @@ export const SupportEmbed = {
 	description: `
     ${ARROW_RIGHT} Join my [Support Discord Server](${DISCORD_INVITE})
     ${LINK} Check out the Docs [https://docs.birthdayy.xyz](${DOCS_URL})\n
-    `
+    `,
 };

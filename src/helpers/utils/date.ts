@@ -51,7 +51,20 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 
 function getMonths() {
 	// TODO: Add Translation
-	return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	return [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	];
 }
 
 export function numberToMonthname(number: number) {
@@ -113,7 +126,7 @@ const TIMEZONE_VALUES: Record<number, string> = {
 	'-4': 'America/Caracas',
 	'-3': 'America/Sao_Paulo',
 	'-2': 'Atlantic/South_Georgia',
-	'-1': 'Atlantic/Azores'
+	'-1': 'Atlantic/Azores',
 };
 
 interface TimezoneObject {

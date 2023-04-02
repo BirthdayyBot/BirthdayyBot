@@ -9,7 +9,7 @@ export class ChatInputCommandErrorEvent extends Listener<typeof Events.ChatInput
 			error,
 			interaction: payload.interaction,
 			loggerSeverityLevel: 'error',
-			sentrySeverityLevel: 'error'
+			sentrySeverityLevel: 'error',
 		});
 	}
 }

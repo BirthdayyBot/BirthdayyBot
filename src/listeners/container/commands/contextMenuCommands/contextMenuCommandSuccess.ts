@@ -5,7 +5,7 @@ import { logSuccessCommand } from '../../../../helpers/utils/utils';
 
 @ApplyOptions<Listener.Options>({
 	enabled: (container.logger as Logger).level <= LogLevel.Debug,
-	event: Events.ContextMenuCommandSuccess
+	event: Events.ContextMenuCommandSuccess,
 })
 export class UserListener extends Listener {
 	public run(payload: ContextMenuCommandSuccessPayload) {

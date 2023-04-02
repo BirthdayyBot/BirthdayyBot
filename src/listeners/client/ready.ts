@@ -34,7 +34,7 @@ export class UserEvent extends Listener {
 ${line01} ${pad}${blc('1.0.0')}
 ${line02} ${pad}[${success}] Gateway
 ${line03}${isDev ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
-		`.trim()
+		`.trim(),
 		);
 	}
 

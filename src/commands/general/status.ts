@@ -18,13 +18,13 @@ import type { EmbedInformationModel } from '../../lib/model';
 	enabled: APP_ENV !== 'prd',
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages']
+	requiredClientPermissions: ['SendMessages'],
 })
 export class StatusCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(StatusCMD(), {
 			guildIds: getCommandGuilds('global'),
-			registerCommandIfMissing: true
+			registerCommandIfMissing: true,
 		});
 	}
 
@@ -39,7 +39,7 @@ export class StatusCommand extends Command {
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
-			memory: memoryUsageInPercent
+			memory: memoryUsageInPercent,
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
@@ -49,50 +49,50 @@ export class StatusCommand extends Command {
 				{
 					name: 'Date',
 					value: `${status.date}`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'Offset',
 					value: `${status.offset ?? 'Unknown'}`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'Next Offset',
 					value: `${status.offset === -11 ? 12 : status.offset! - 1}`,
-					inline: true
+					inline: true,
 				},
 
 				{
 					name: 'Servercount',
 					value: `${status.servercount}`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'Uptime',
 					value: `${process.uptime().toFixed(2)}s`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'Bot Ping',
 					value: `${status.ping}ms`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'API Ping',
 					value: `${date - interaction.createdTimestamp}ms`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'CPU Usage',
 					value: `${status.cpu.system.toFixed(2)}%`,
-					inline: true
+					inline: true,
 				},
 				{
 					name: 'RAM Usage',
 					value: `${status.memory}%`,
-					inline: true
-				}
-			]
+					inline: true,
+				},
+			],
 		};
 		const embed = generateEmbed(embedRaw);
 		return replyToInteraction(interaction, { embeds: [embed] });

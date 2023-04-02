@@ -4,5 +4,5 @@ export const APIErrorCode = {
 	INVALID_DATE_FORMAT: 'invalid_date_format',
 	INVALID_PARAMETER: 'invalid_parameter',
 	MISSING_PARAMETER: 'missing_parameter',
-	UNAUTHORIZED: 'unauthorized'
+	UNAUTHORIZED: 'unauthorized',
 };

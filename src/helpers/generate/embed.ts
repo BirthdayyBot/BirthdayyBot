@@ -18,7 +18,7 @@ export default function generateEmbed({
 	thumbnail_url,
 	image_url,
 	fields,
-	color
+	color,
 }: EmbedInformationModel): APIEmbed {
 	return {
 		title: title ?? '',
@@ -27,15 +27,15 @@ export default function generateEmbed({
 		timestamp: new Date().toISOString(),
 		author: {
 			name: author_name ?? '',
-			icon_url: author_avatar ?? ''
+			icon_url: author_avatar ?? '',
 		},
 		footer: { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR },
 		fields,
 		thumbnail: {
-			url: thumbnail_url ?? ''
+			url: thumbnail_url ?? '',
 		},
 		image: {
-			url: image_url ?? ''
-		}
+			url: image_url ?? '',
+		},
 	};
 }

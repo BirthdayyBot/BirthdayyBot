@@ -7,6 +7,6 @@ export function VoteCMD(): ChatInputApplicationCommandData {
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: true,
-		options: []
+		options: [],
 	};
 }

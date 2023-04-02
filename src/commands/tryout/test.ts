@@ -9,7 +9,7 @@ import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.mod
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
-	description: 'test things'
+	description: 'test things',
 })
 export class TestCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -17,11 +17,11 @@ export class TestCommand extends Command {
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
-				description: this.description
+				description: this.description,
 			},
 			{
-				guildIds: getCommandGuilds('testing')
-			}
+				guildIds: getCommandGuilds('testing'),
+			},
 		);
 	}
 
@@ -36,8 +36,14 @@ export class TestCommand extends Command {
 			const embed = generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
-		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
+			current.date,
+			current.timezone,
+		);
+		fields.push({
+			name: 'getBirthdaysByDateAndTimezone',
+			value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\``,
+		});
 
 		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateEmbed(embedObj);

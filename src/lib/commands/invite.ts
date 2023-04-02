@@ -7,6 +7,6 @@ export function InviteCMD(): ChatInputApplicationCommandData {
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: true,
-		options: []
+		options: [],
 	};
 }

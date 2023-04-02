@@ -36,13 +36,19 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		async function sendGuide(userId: string) {
 			const embed = generateEmbed(GuideEmbed);
 			await sendDMMessage(userId, {
-				embeds: [embed]
+				embeds: [embed],
 			});
 		}
 
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
-			if (!(await guild.members.fetchMe()).permissions.has(PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator)) {
-				container.logger.debug(`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`);
+			if (
+				!(await guild.members.fetchMe()).permissions.has(
+					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator,
+				)
+			) {
+				container.logger.debug(
+					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`,
+				);
 				return undefined;
 			}
 

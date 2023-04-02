@@ -18,20 +18,20 @@ import { TemplateCMD } from '../../commands';
 	subcommands: [
 		{
 			name: 'test',
-			chatInputRun: 'testCommand'
-		}
-	]
+			chatInputRun: 'testCommand',
+		},
+	],
 })
 export class TemplateCommand extends Subcommand {
 	public constructor(context: Subcommand.Context, options: Subcommand.Options) {
 		super(context, {
-			...options
+			...options,
 		});
 	}
 
 	public override registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(TemplateCMD(), {
-			guildIds: getCommandGuilds('testing')
+			guildIds: getCommandGuilds('testing'),
 		});
 	}
 

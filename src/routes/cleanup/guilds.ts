@@ -15,7 +15,7 @@ export class CleanUpGuildsRoute extends Route {
 			cleaned_guilds_count: guilds.count,
 			cleaned_guilds: guilds,
 			cleaned_birthdays_count: bithdays.count,
-			cleaned_birthdays: bithdays
+			cleaned_birthdays: bithdays,
 		});
 	}
 }

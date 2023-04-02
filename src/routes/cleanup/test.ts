@@ -48,7 +48,7 @@ export class UserRoute extends Route {
 		return {
 			guild_id: `${guild_id}`,
 			guild_disabled: disableGuildMeta,
-			birthdays_disabled: disableGuildMeta.birthday
+			birthdays_disabled: disableGuildMeta.birthday,
 		};
 	}
 }

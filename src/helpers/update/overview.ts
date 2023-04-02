@@ -15,7 +15,10 @@ export default async function updateBirthdayOverview(guild_id: string) {
 		try {
 			if (overviewMessage) {
 				try {
-					await editMessage(overviewChannel, overviewMessage, { embeds: [birthdayEmbedObj], components: birthdayList.components });
+					await editMessage(overviewChannel, overviewMessage, {
+						embeds: [birthdayEmbedObj],
+						components: birthdayList.components,
+					});
 				} catch (error: any) {
 					if (error instanceof Error) {
 						if (
@@ -38,7 +41,10 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	}
 }
 
-async function generateNewOverviewMessage(channel_id: string, birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>) {
+async function generateNewOverviewMessage(
+	channel_id: string,
+	birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>,
+) {
 	const message = await sendMessage(channel_id, { ...birthdayList });
 	if (!message?.inGuild()) return;
 	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);

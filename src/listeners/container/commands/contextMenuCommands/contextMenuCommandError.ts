@@ -9,7 +9,7 @@ export class ContextMenuCommandErrorEvent extends Listener<typeof Events.Context
 			error,
 			interaction: payload.interaction,
 			loggerSeverityLevel: 'error',
-			sentrySeverityLevel: 'error'
+			sentrySeverityLevel: 'error',
 		});
 	}
 }

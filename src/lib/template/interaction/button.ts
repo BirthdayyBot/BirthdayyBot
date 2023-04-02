@@ -8,7 +8,7 @@ export class ExampleParseMethod extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction, result: { success: boolean }) {
 		await interaction.editReply({
-			content: `The long running task ${result.success ? 'succeeded' : 'failed'}!`
+			content: `The long running task ${result.success ? 'succeeded' : 'failed'}!`,
 		});
 	}
 

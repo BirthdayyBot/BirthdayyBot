@@ -24,12 +24,12 @@ export const VoteEmbed = {
             ${ARROW_RIGHT} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
             ${ARROW_RIGHT} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
-			inline: false
+			inline: false,
 		},
 		{
 			name: 'Birthdayy Premium',
 			value: `${ARROW_RIGHT} Support the Project and get access to beta features\n${PLUS} [Birthdayy Patreon](${PREMIUM_URL})`,
-			inline: false
-		}
-	]
+			inline: false,
+		},
+	],
 };

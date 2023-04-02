@@ -15,12 +15,12 @@ import { InviteEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages']
+	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(InviteCMD(), {
-			guildIds: getCommandGuilds('global')
+			guildIds: getCommandGuilds('global'),
 		});
 	}
 
@@ -32,9 +32,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [inviteButton]
-				}
-			]
+					components: [inviteButton],
+				},
+			],
 		});
 	}
 }

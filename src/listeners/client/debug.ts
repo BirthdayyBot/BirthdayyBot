@@ -8,7 +8,7 @@ export class ErrorEvent extends Listener<typeof Events.Debug> {
 		const logs = [
 			'[HeartbeatTimer] Sending a heartbeat.',
 			'[HeartbeatTimer] Heartbeat acknowledged, latency of ',
-			'Heartbeat acknowledged, latency of'
+			'Heartbeat acknowledged, latency of',
 		];
 
 		if (logs.some((log) => message.includes(log))) return;

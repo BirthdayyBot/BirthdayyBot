@@ -9,6 +9,6 @@ export const docsButton = {
 	emoji: {
 		id: '931267038662504508',
 		name: 'book',
-		animated: false
-	}
+		animated: false,
+	},
 };

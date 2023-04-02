@@ -6,6 +6,6 @@ export function HelpCMD(): ChatInputApplicationCommandData {
 		description: 'Need help with my Commands?',
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
-		dmPermission: true
+		dmPermission: true,
 	};
 }
