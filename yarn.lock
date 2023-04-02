@@ -484,26 +484,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@sapphire/plugin-api@npm:5.0.1"
+"@sapphire/plugin-api@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@sapphire/plugin-api@npm:5.0.2"
   dependencies:
     "@types/psl": ^1.1.0
     "@types/ws": ^8.5.4
     psl: ^1.9.0
     tslib: ^2.5.0
-    undici: ^5.20.0
-  checksum: 82c6fd9d48f07c7912e47992c5d46cf1b461fc1ac4348f6c5a3d08395274a74619c769fe5c244fbdb36d7def4a03bca71f9c066bd83d54d55e202bf11e5991a7
+    undici: ^5.21.0
+  checksum: 50e81a35dbfbadb70d37253ee5f0587a8e1c4fca4c88d35b6f1c2112e663a1e8d0197f655e8ee8dc0f2a0870481829e1929567f6481ca44a00d447aa8953f482
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-editable-commands@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@sapphire/plugin-editable-commands@npm:3.0.0"
+"@sapphire/plugin-editable-commands@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@sapphire/plugin-editable-commands@npm:3.0.1"
   dependencies:
-    "@skyra/editable-commands": ^3.0.0
-    tslib: ^2.4.1
-  checksum: 89673f5dfab85b84dcfeeaafcea6b082f853e7de0d2299b14bd0b7dc4b122b4c231055b869d4b20b1a984591ada90cf55ecf6b0d9b200395535cba709f133612
+    "@skyra/editable-commands": ^3.0.1
+    tslib: ^2.5.0
+  checksum: fc7dd88d56e41a12199260292ee348d27264bfc49e1e11d7fd18c96da00ff24b089206de669f1bb822ef1242adc51ea64d109bf0f7d5ed585ea1a0a5df3aac63
   languageName: node
   linkType: hard
 
@@ -517,27 +517,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-i18next@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@sapphire/plugin-i18next@npm:5.0.1"
+"@sapphire/plugin-i18next@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@sapphire/plugin-i18next@npm:5.0.2"
   dependencies:
     "@sapphire/utilities": ^3.11.0
-    "@skyra/i18next-backend": ^2.0.1
+    "@skyra/i18next-backend": ^2.0.2
     chokidar: ^3.5.3
-    i18next: ^22.4.10
+    i18next: ^22.4.14
     tslib: ^2.5.0
-  checksum: 72d32776c2964f6826e00df81f47f40fe2e5efe864194f96710accced3b4e13c43252bba61ba7ee8420e6d5fecfaaba1de14674a690bf5e62cd5a5b7ad88ffca
+  checksum: 4f5c9ddaf68d5c9265459bc813c59c193d62a4f1d23da31ba6b58223256b3fdf45e1a96060cfb532fb7fad779858543fd44d161bf73d43d4d30c41bf69215d7a
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-logger@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@sapphire/plugin-logger@npm:3.0.1"
+"@sapphire/plugin-logger@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@sapphire/plugin-logger@npm:3.0.2"
   dependencies:
-    "@sapphire/timestamp": ^1.0.0
+    "@sapphire/timestamp": ^1.0.1
     colorette: ^2.0.19
-    tslib: ^2.4.0
-  checksum: ed95258441b958e1618489c5e5ad336bf5a304a2d3efbfc15104c99133d92938bade2ed5eaf2739eba14d7e153db87af1d77891e15ad2b2414f4f3ecab6d3a27
+    tslib: ^2.5.0
+  checksum: 70b049c5e9bc954c69bf91d1c455e6c909bf1383e3c85f3185a1abed0657367fddf8095a5fff4db8e31f74944ac048ef28a7df5c8beb20b58c2753d9ea68dd7b
   languageName: node
   linkType: hard
 
@@ -630,7 +630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/timestamp@npm:^1.0.0, @sapphire/timestamp@npm:^1.0.1":
+"@sapphire/timestamp@npm:^1.0.1":
   version: 1.0.1
   resolution: "@sapphire/timestamp@npm:1.0.1"
   checksum: 40320946cb8fcbbb610b94019882eb39c900b9af87e4a2d173299efaa062921662d950780c273fd44f4ec9877983d725d28f0b999314f338f3bfc0ab3c45a8cb
@@ -742,19 +742,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/editable-commands@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@skyra/editable-commands@npm:3.0.0"
-  checksum: f3d21d36b59551d29438ec4ae206b15202973188995e427745829b888a9490de5c5824fc3ad532694778737b516c16922094a73e9989f0d2fa8a5f0949ebf1ae
+"@skyra/editable-commands@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@skyra/editable-commands@npm:3.0.1"
+  checksum: a945fa47d6f5df20396edc268ede830a79fcedb3f3fe57e91cca94e4d0a26af5e4e6f3c673e2eb3b2d182ae6c6acefcd3074df8e072dc647981d1dccda10ade8
   languageName: node
   linkType: hard
 
-"@skyra/i18next-backend@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@skyra/i18next-backend@npm:2.0.1"
+"@skyra/i18next-backend@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@skyra/i18next-backend@npm:2.0.2"
   dependencies:
-    tslib: ^2.4.1
-  checksum: d9bb3500d0cdb908ecee0cf710a6f320c64248251dd52a0a4e2eafea3654cd4dcc84a1b69635be8cac4c1a62626d7e1485c15005e169c32e5c759275106543b0
+    tslib: ^2.5.0
+  checksum: cae046575a6da70dad4f93177fe8793d64ff1b3d0c6aed576a2fde98dfae71355ffe138076fc9e1e1049eff511a3d30dc6c886cc261764d7be9fdb65f550ac2c
   languageName: node
   linkType: hard
 
@@ -1255,11 +1255,11 @@ __metadata:
     "@sapphire/eslint-config": ^4.3.8
     "@sapphire/fetch": ^2.4.1
     "@sapphire/framework": ^4.2.2
-    "@sapphire/plugin-api": ^5.0.1
-    "@sapphire/plugin-editable-commands": ^3.0.0
+    "@sapphire/plugin-api": ^5.0.2
+    "@sapphire/plugin-editable-commands": ^3.0.1
     "@sapphire/plugin-hmr": ^2.0.0
-    "@sapphire/plugin-i18next": ^5.0.1
-    "@sapphire/plugin-logger": ^3.0.1
+    "@sapphire/plugin-i18next": ^5.0.2
+    "@sapphire/plugin-logger": ^3.0.2
     "@sapphire/plugin-scheduled-tasks": ^6.0.0
     "@sapphire/plugin-subcommands": ^4.0.0
     "@sapphire/plugin-utilities-store": ^1.0.0
@@ -2348,12 +2348,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^22.4.10":
-  version: 22.4.13
-  resolution: "i18next@npm:22.4.13"
+"i18next@npm:^22.4.14":
+  version: 22.4.14
+  resolution: "i18next@npm:22.4.14"
   dependencies:
     "@babel/runtime": ^7.20.6
-  checksum: a40ca4ce749854a806a01e3e60ee492f2911b1f7acb6ed338bb023211259ef8c39e914734d10197d3279941459767897ceb1989c8e24cd73730fdf211e079037
+  checksum: 963b70c7e1fee9666ef4d9ea87a63d0c9483007e2a0ea9520356e43a2cd550f3eb1cab24c57a102f3e84fd737fdff41bafc953dafc3bd6589dc9ea52ddb49905
   languageName: node
   linkType: hard
 
@@ -4022,7 +4022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.16.0, undici@npm:^5.20.0, undici@npm:^5.21.0":
+"undici@npm:^5.16.0, undici@npm:^5.21.0":
   version: 5.21.0
   resolution: "undici@npm:5.21.0"
   dependencies:
