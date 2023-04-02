@@ -1,6 +1,11 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	ChatInputApplicationCommandData,
+	PermissionFlagsBits,
+} from 'discord.js';
 
-export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
+export function ConfigCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'config',
 		type: ApplicationCommandType.ChatInput,
@@ -16,7 +21,7 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'announcement-channel',
-				description: 'Announce if its somebody\'s birthday today',
+				description: "Announce if its somebody's birthday today",
 				options: [
 					{
 						type: ApplicationCommandOptionType.Channel,
@@ -42,7 +47,8 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'birthday-role',
-				description: 'Give the birthday child a special role for one day. Gets assigned and removed automatically',
+				description:
+					'Give the birthday child a special role for one day. Gets assigned and removed automatically',
 				options: [
 					{
 						type: ApplicationCommandOptionType.Role,

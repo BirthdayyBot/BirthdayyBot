@@ -1,4 +1,9 @@
-import type { ChatInputCommandSuccessPayload, Command, ContextMenuCommandSuccessPayload, MessageCommandSuccessPayload } from '@sapphire/framework';
+import type {
+	ChatInputCommandSuccessPayload,
+	Command,
+	ContextMenuCommandSuccessPayload,
+	MessageCommandSuccessPayload,
+} from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { send } from '@sapphire/plugin-editable-commands';
 import { cyan } from 'colorette';
@@ -22,10 +27,14 @@ export function pickRandom<T>(array: readonly T[]): T {
  */
 export function sendLoadingMessage(message: Message): Promise<typeof message> {
 	const RandomLoadingMessage = ['Loading...', 'Please wait...', 'Fetching...', 'Processing...'];
-	return send(message, { embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')] });
+	return send(message, {
+		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')],
+	});
 }
 
-export function logSuccessCommand(payload: ContextMenuCommandSuccessPayload | ChatInputCommandSuccessPayload | MessageCommandSuccessPayload): void {
+export function logSuccessCommand(
+	payload: ContextMenuCommandSuccessPayload | ChatInputCommandSuccessPayload | MessageCommandSuccessPayload,
+): void {
 	let successLoggerData: ReturnType<typeof getSuccessLoggerData>;
 
 	if ('interaction' in payload) {
@@ -34,7 +43,9 @@ export function logSuccessCommand(payload: ContextMenuCommandSuccessPayload | Ch
 		successLoggerData = getSuccessLoggerData(payload.message.guild, payload.message.author, payload.command);
 	}
 
-	container.logger.debug(`${successLoggerData.shard} - ${successLoggerData.commandName} ${successLoggerData.author} ${successLoggerData.sentAt}`);
+	container.logger.debug(
+		`${successLoggerData.shard} - ${successLoggerData.commandName} ${successLoggerData.author} ${successLoggerData.sentAt}`,
+	);
 }
 
 export function getSuccessLoggerData(guild: Guild | null, user: User, command: Command) {

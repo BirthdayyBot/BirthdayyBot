@@ -10,7 +10,7 @@ import { GuideEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'guide',
-	description: 'Need a quick setup Guide! Don\'t worry, this will help you!',
+	description: "Need a quick setup Guide! Don't worry, this will help you!",
 	enabled: true,
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
@@ -18,8 +18,8 @@ import { GuideEmbed } from '../../lib/embeds';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await GuideCMD(), {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(GuideCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}

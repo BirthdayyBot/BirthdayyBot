@@ -31,14 +31,12 @@ export default async function joinServerLog(guild: Guild, inviterId?: Snowflake)
 	const embedObj: EmbedInformationModel = {
 		title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
 		description: `I am now in \`${server_count}\` guilds`,
-		fields: fields,
+		fields,
 		color: BotColorEnum.BIRTHDAYY,
 		thumbnail_url: guild.iconURL() ?? undefined,
 	};
 	const embed = generateEmbed(embedObj);
 	await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
-
-	return;
 }
 
 function generateInfoString(id: string | undefined, name: string | undefined): string {

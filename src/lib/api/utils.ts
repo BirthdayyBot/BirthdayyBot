@@ -25,7 +25,9 @@ type ValidQueryParams<T = string | string[]> = Array<keyof T> | undefined;
  * parameters are required.
  * @returns A function that takes a request and a response and returns a boolean.
  */
-export function validateParams<QueryParams extends Record<string, string | string[]>>(requiredParams?: ValidQueryParams<QueryParams>) {
+export function validateParams<QueryParams extends Record<string, string | string[]>>(
+	requiredParams?: ValidQueryParams<QueryParams>,
+) {
 	const paramsToValidate = requiredParams ?? Object.keys({} as QueryParams);
 	const missingParams: string[] = [];
 	const invalidParams: Array<{ key: string; receivedType: unknown; expectedType: unknown }> = [];

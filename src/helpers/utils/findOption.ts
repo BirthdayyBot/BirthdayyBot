@@ -7,8 +7,10 @@ Find an option in an interaction object
     @param defaultValue - default value - null by default
     @returns the value of the option or the default value
     */
-export default function findOption(interaction: Command.ChatInputCommandInteraction, option: string, defaultValue: any = null) {
-	if (Object.entries(interaction.options).length === 0) return defaultValue;
-	const o = interaction.options.get(option);
-	return o ? o.value : defaultValue;
+export default function findOption<t>(
+	interaction: Command.ChatInputCommandInteraction,
+	option: string,
+	defaultValue: t,
+) {
+	return (interaction.options.get(option)?.value as t) ?? defaultValue;
 }

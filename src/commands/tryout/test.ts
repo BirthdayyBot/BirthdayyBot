@@ -36,10 +36,16 @@ export class TestCommand extends Command {
 			const embed = generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(current.date, current.timezone);
-		fields.push({ name: 'getBirthdaysByDateAndTimezone', value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\`` });
+		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
+			current.date,
+			current.timezone,
+		);
+		fields.push({
+			name: 'getBirthdaysByDateAndTimezone',
+			value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\``,
+		});
 
-		const embedObj: EmbedInformationModel = { title: 'test', fields: fields };
+		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateEmbed(embedObj);
 		return replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
 	}

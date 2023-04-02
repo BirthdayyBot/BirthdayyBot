@@ -41,41 +41,40 @@ async function generateFields(guildId: string) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getValueString(name: keyof Guild, value: any) {
+function getValueString(name: keyof Guild, value: string | number | null) {
 	if (value === null) {
 		return `${ARROW_RIGHT} not set`;
-	} else if (name === 'timezone') {
+	} else if (name === 'timezone' && typeof value === 'number') {
 		return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
-	} else if (name.includes('channel')) {
+	} else if (name.includes('channel') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${channelMention(value)}`;
-	} else if (name.includes('role')) {
+	} else if (name.includes('role') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${roleMention(value)}`;
-	} else if (name.includes('user')) {
+	} else if (name.includes('user') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${userMention(value)}`;
-	} else {
-		return `${ARROW_RIGHT} ${value}`;
 	}
+	return `${ARROW_RIGHT} ${value}`;
 }
 
 function getNameString(name: keyof Guild): string {
 	switch (name) {
-	case 'announcementChannel':
-		return 'Announcement Channel';
-	case 'overviewChannel':
-		return 'Overview Channel';
-	case 'birthdayRole':
-		return 'Birthday Role';
-	case 'birthdayPingRole':
-		return 'Birthday Ping Role';
-	case 'logChannel':
-		return 'Log Channel';
-	case 'timezone':
-		return 'Timezone';
-	case 'announcementMessage':
-		return `${PLUS} Birthday Message`;
-	case 'premium':
-		return 'Premium';
-	default:
-		return name;
+		case 'announcementChannel':
+			return 'Announcement Channel';
+		case 'overviewChannel':
+			return 'Overview Channel';
+		case 'birthdayRole':
+			return 'Birthday Role';
+		case 'birthdayPingRole':
+			return 'Birthday Ping Role';
+		case 'logChannel':
+			return 'Log Channel';
+		case 'timezone':
+			return 'Timezone';
+		case 'announcementMessage':
+			return `${PLUS} Birthday Message`;
+		case 'premium':
+			return 'Premium';
+		default:
+			return name;
 	}
 }

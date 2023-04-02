@@ -31,17 +31,18 @@ import { UwUCMD } from '../../lib/commands/uwu';
 	],
 })
 export class UwuCommand extends Subcommand {
-	readonly uwuString = 'UwU';
+	// private readonly _uwuString = 'UwU';
 
-	public override async registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(await UwUCMD(), {
+	public override registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(UwUCMD(), {
 			guildIds: getCommandGuilds('testing'),
 		});
 	}
+
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const title = await resolveKey(interaction, 'commands/uwu:uwuss');
-		const embed = generateEmbed({ title: title, description: 'Uwu' });
-		return await interaction.reply({ embeds: [embed] });
+		const embed = generateEmbed({ title, description: 'Uwu' });
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runTimes(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -49,17 +50,17 @@ export class UwuCommand extends Subcommand {
 		container.logger.info('times', times);
 
 		let uwu = '';
-		for (let i = 0; i < times!; i++) {
+		for (let i = 0; i < times; i++) {
 			uwu += 'UwU ';
 		}
 		const embed = generateEmbed({ title: 'UwU', description: uwu });
-		return await interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const user = findOption(interaction, 'user', interaction.user.id);
 		const embed = generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
-		return await interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runFetch(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
@@ -71,8 +72,14 @@ export class UwuCommand extends Subcommand {
 		}
 
 		// Fetch the data. No need to call `.json()` after making the request!
-		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
-		const embed = generateEmbed({ title: 'UwU Fetch', description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\`` });
-		return await interaction.reply({ embeds: [embed] });
+		const data = await fetch<JsonPlaceholderResponse>(
+			'https://jsonplaceholder.typicode.com/todos/1',
+			FetchResultTypes.JSON,
+		);
+		const embed = generateEmbed({
+			title: 'UwU Fetch',
+			description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\``,
+		});
+		return interaction.reply({ embeds: [embed] });
 	}
 }

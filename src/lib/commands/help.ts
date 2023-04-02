@@ -1,6 +1,6 @@
 import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function HelpCMD(): Promise<ChatInputApplicationCommandData> {
+export function HelpCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'help',
 		description: 'Need help with my Commands?',

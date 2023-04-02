@@ -1,29 +1,41 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": [
-		":dependencyDashboard",
-		":semanticCommitTypeAll(chore)",
-		":autodetectPinVersions",
-		":prHourlyLimitNone",
-		":prConcurrentLimitNone",
-		"group:recommended"
-	],
+	"extends": [":dependencyDashboard", ":semanticCommitTypeAll(chore)", ":autodetectPinVersions", ":prHourlyLimitNone", ":prConcurrentLimitNone", "group:recommended"],
+	"baseBranches": ["develop"],
+	"rangeStrategy": "bump",
 	"labels": ["dependencies"],
 	"packageRules": [
 		{
-			"automerge": true,
-			"matchUpdateTypes": ["minor", "patch", "pin", "digest"]
+			"matchUpdateTypes": ["minor", "patch"],
+			"matchCurrentVersion": "!/^0/",
+			"automerge": true
 		},
 		{
-			"automerge": true,
-			"matchDepTypes": ["devDependencies"]
+			"groupName": "Devtools Dependencies",
+			"matchPackagePatterns": ["eslint", "prettier", "commitlint", "lint-staged", "husky"]
 		},
 		{
-			"automerge": true,
+			"groupName": "Prisma Dependencies",
+			"matchPackagePatterns": ["prisma", "@prisma/client"]
+		},
+		{
+			"groupName": "Discord Dependencies",
+			"matchPackagePatterns": ["discord.js", "discord-api-types"]
+		},
+		{
+			"groupName": "TypeScript Dependencies",
+			"matchPackagePatterns": ["typescript", "@types/node"]
+		},
+		{
 			"groupName": "Sapphire Dependencies",
-			"matchPackagePatterns": ["@sapphire"],
-			"matchUpdateTypes": ["minor", "patch", "pin", "digest"]
+			"matchPackagePrefixes": ["@sapphire/"]
+		},
+		{
+			"groupName": "Sentry Dependencies",
+			"matchPackagePatterns": ["@sentry/"]
 		}
 	],
-	"rangeStrategy": "bump"
+	"lockFileMaintenance": {
+		"enabled": true
+	}
 }

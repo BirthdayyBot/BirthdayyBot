@@ -51,32 +51,32 @@ export async function setDefaultConfigs(guildId: string) {
  */
 export async function setDefaultConfig(config_name: ConfigName, guildId: string) {
 	switch (config_name) {
-	case 'announcementChannel':
-		await container.utilities.guild.set.AnnouncementChannel(guildId, null);
-		break;
-	case 'overviewChannel':
-		await container.utilities.guild.set.OverviewChannel(guildId, null);
-		break;
-	case 'logChannel':
-		await container.utilities.guild.set.LogChannel(guildId, null);
-		break;
-	case 'announcementMessage':
-		await container.utilities.guild.set.AnnouncementMessage(guildId, undefined);
-		break;
-	case 'overviewMessage':
-		await container.utilities.guild.set.OverviewMessage(guildId, null);
-		break;
-	case 'timezone':
-		await container.utilities.guild.set.Timezone(guildId, undefined);
-		break;
-	case 'birthdayRole':
-		await container.utilities.guild.set.BirthdayRole(guildId, null);
-		break;
-	case 'birthdayPingRole':
-		await container.utilities.guild.set.BirthdayPingRole(guildId, null);
-		break;
-	default:
-		throw new Error(`Unknown config ${config_name}`);
+		case 'announcementChannel':
+			await container.utilities.guild.set.AnnouncementChannel(guildId, null);
+			break;
+		case 'overviewChannel':
+			await container.utilities.guild.set.OverviewChannel(guildId, null);
+			break;
+		case 'logChannel':
+			await container.utilities.guild.set.LogChannel(guildId, null);
+			break;
+		case 'announcementMessage':
+			await container.utilities.guild.set.AnnouncementMessage(guildId, undefined);
+			break;
+		case 'overviewMessage':
+			await container.utilities.guild.set.OverviewMessage(guildId, null);
+			break;
+		case 'timezone':
+			await container.utilities.guild.set.Timezone(guildId, undefined);
+			break;
+		case 'birthdayRole':
+			await container.utilities.guild.set.BirthdayRole(guildId, null);
+			break;
+		case 'birthdayPingRole':
+			await container.utilities.guild.set.BirthdayPingRole(guildId, null);
+			break;
+		default:
+			throw new Error(`Unknown config ${config_name}`);
 	}
 }
 
@@ -85,14 +85,15 @@ export function logAll(config: Prisma.GuildUpdateInput) {
 	if (config.guildId !== null) container.logger.debug('GUILD_ID: ', config.guildId);
 	if (config.birthdayRole !== null) container.logger.debug('BIRTHDAY_ROLE: ', config.birthdayRole);
 	if (config.birthdayPingRole !== null) container.logger.debug('BIRTHDAY_PING_ROLE: ', config.birthdayPingRole);
-	if (config.announcementChannel !== null) container.logger.debug('ANNOUNCEMENT_CHANNEL: ', config.announcementChannel);
+	if (config.announcementChannel !== null)
+		container.logger.debug('ANNOUNCEMENT_CHANNEL: ', config.announcementChannel);
 	if (config.overviewChannel !== null) container.logger.debug('OVERVIEW_CHANNEL: ', config.overviewChannel);
 	if (config.logChannel !== null) container.logger.debug('LOG_CHANNEL: ', config.logChannel);
 	if (config.overviewMessage !== null) container.logger.debug('OVERVIEW_MESSAGE: ', config.overviewMessage);
 	if (config.timezone !== null) container.logger.debug('TIMEZONE: ', config.timezone);
-	if (config.announcementMessage !== null) container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.announcementMessage);
+	if (config.announcementMessage !== null)
+		container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.announcementMessage);
 	container.logger.debug('⩲===============================⩲');
-	return;
 }
 
 export async function getGuildLanguage(guildId: string): Promise<string> {

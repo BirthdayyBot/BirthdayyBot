@@ -15,15 +15,20 @@ export default async function updateBirthdayOverview(guild_id: string) {
 		try {
 			if (overviewMessage) {
 				try {
-					await editMessage(overviewChannel, overviewMessage, { embeds: [birthdayEmbedObj], components: birthdayList.components });
+					await editMessage(overviewChannel, overviewMessage, {
+						embeds: [birthdayEmbedObj],
+						components: birthdayList.components,
+					});
 				} catch (error: any) {
-					if (
-						error.message === 'Unknown Message' ||
-						error.message.includes('authored by another user') ||
-						error.message.includes('Message not found')
-					) {
-						await generateNewOverviewMessage(overviewChannel, birthdayList);
-						container.logger.error('Message Not found, so generated new overview message');
+					if (error instanceof Error) {
+						if (
+							error.message === 'Unknown Message' ||
+							error.message.includes('authored by another user') ||
+							error.message.includes('Message not found')
+						) {
+							await generateNewOverviewMessage(overviewChannel, birthdayList);
+							container.logger.error('Message Not found, so generated new overview message');
+						}
 					}
 				}
 				container.logger.info(`Updated Overview Message in guild: ${guild_id}`);
@@ -36,7 +41,10 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	}
 }
 
-async function generateNewOverviewMessage(channel_id: string, birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>) {
+async function generateNewOverviewMessage(
+	channel_id: string,
+	birthdayList: Pick<MessageCreateOptions, 'embeds' | 'components'>,
+) {
 	const message = await sendMessage(channel_id, { ...birthdayList });
 	if (!message?.inGuild()) return;
 	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);

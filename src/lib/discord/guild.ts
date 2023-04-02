@@ -4,10 +4,9 @@ import type { Guild, GuildMember, Role, Snowflake } from 'discord.js';
 
 export async function getGuildInformation(guildId: string): Promise<Guild | null> {
 	try {
-		const guild: Guild = await container.client.guilds.fetch(guildId);
-		return guild;
+		return container.client.guilds.fetch(guildId);
 	} catch (error) {
-		container.logger.error(`Error fetching guild with id ${guildId}: ${error}`);
+		container.logger.error(`Error fetching guild with id ${guildId}:`, error);
 		return null;
 	}
 }
@@ -16,10 +15,9 @@ export async function getGuildMember(guildId: string, userId: string): Promise<G
 	try {
 		const guild = await getGuildInformation(guildId);
 		if (isNullOrUndefinedOrEmpty(guild)) return null;
-		const guild_member = await guild.members.fetch(userId);
-		return guild_member;
+		return await guild.members.fetch(userId);
 	} catch (error) {
-		container.logger.error(`Error fetching guild member with id ${userId}: ${error}`);
+		container.logger.error(`Error fetching guild member with id ${userId}:`, error);
 		return null;
 	}
 }
@@ -28,10 +26,9 @@ export async function getGuildRole(guildId: Snowflake, roleId: Snowflake): Promi
 	try {
 		const guild = await getGuildInformation(guildId);
 		if (isNullOrUndefinedOrEmpty(guild)) return null;
-		const role = await guild.roles.fetch(roleId);
-		return role;
+		return guild.roles.fetch(roleId);
 	} catch (error) {
-		container.logger.error(`Error fetching guild role with id ${roleId}: ${error}`);
+		container.logger.error(`Error fetching guild role with id ${roleId}:`, error);
 		return null;
 	}
 }

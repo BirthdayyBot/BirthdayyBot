@@ -1,0 +1,20 @@
+{
+	"editor.formatOnSave": true,
+	"[javascript]": {
+		"editor.formatOnSave": false
+	},
+	"editor.formatOnSaveMode": "file",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	},
+	"[json]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll": false,
+			"source.fixAll.eslint": true
+		}
+	},
+	"files.eol": "\n",
+	"editor.detectIndentation": false,
+	"conventionalCommits.emojiFormat": "emoji",
+	"conventionalCommits.scopes": ["bot", "api"]
+}

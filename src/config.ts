@@ -8,7 +8,14 @@ import { Time } from '@sapphire/time-utilities';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import type { QueueOptions } from 'bullmq';
-import { ActivityType, GatewayIntentBits, PresenceData, PresenceUpdateStatus, WebhookClientData, type ClientOptions } from 'discord.js';
+import {
+	ActivityType,
+	GatewayIntentBits,
+	PresenceData,
+	PresenceUpdateStatus,
+	WebhookClientData,
+	type ClientOptions,
+} from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import {
 	API_EXTENSION,
@@ -141,7 +148,6 @@ function parseWebhookError(): WebhookClientData | null {
 	return {
 		id: WEBHOOK_ID,
 		token: WEBHOOK_TOKEN,
-
 	};
 }
 

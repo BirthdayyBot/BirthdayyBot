@@ -21,15 +21,17 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		const guildData = await this.container.utilities.guild.get.GuildById(guildId);
 
-		if (!guildData) await this.container.utilities.guild.create({ guildId, inviter: inviterId });
-		else await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
+		if (!guildData) {
+			await this.container.utilities.guild.create({ guildId, inviter: inviterId });
+		}
+
+		await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
 
 		if (inviterId) {
 			await sendGuide(inviterId);
 		}
 
 		await joinServerLog(guild, inviterId);
-		return;
 
 		async function sendGuide(userId: string) {
 			const embed = generateEmbed(GuideEmbed);
@@ -39,8 +41,14 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		}
 
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
-			if (!(await guild.members.fetchMe()).permissions.has(PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator)) {
-				container.logger.debug(`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`);
+			if (
+				!(await guild.members.fetchMe()).permissions.has(
+					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator,
+				)
+			) {
+				container.logger.debug(
+					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`,
+				);
 				return undefined;
 			}
 
@@ -51,7 +59,10 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 				container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
 				return userId;
 			} catch (error) {
-				container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error}`);
+				if (error instanceof Error) {
+					container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error.message}`);
+					return undefined;
+				}
 				return undefined;
 			}
 		}

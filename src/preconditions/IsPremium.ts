@@ -13,7 +13,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	}
 
 	public override async messageRun(message: Message) {
-		return await this.premiumCheck(message.guildId!);
+		return this.premiumCheck(message.guildId!);
 	}
 
 	private async premiumCheck(guild_id: string) {

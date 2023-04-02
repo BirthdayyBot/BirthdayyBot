@@ -8,19 +8,24 @@ export const ROOT_DIR = join(__dirname, '..', '..', '..');
 export const SRC_DIR = join(ROOT_DIR, 'src');
 
 // MAIN
-export const NODE_ENV = process.env.NODE_ENV;
-export const APP_ENV = process.env.APP_ENV;
+export const { NODE_ENV } = process.env;
+export const { APP_ENV } = process.env;
 export const DEBUG = parseBoolean(process.env.DEBUG);
 
 // GENERIC
-export const BOT_NAME = process.env.BOT_NAME;
-export const BOT_ID = process.env.BOT_ID;
-export const BOT_AVATAR = process.env.BOT_AVATAR;
-export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
-export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
-export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID}&permissions=8&scope=bot`;
-export const BIRTHDAYY_INVITE = 'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
+export const { BOT_NAME } = process.env;
+export const { BOT_ID } = process.env;
+export const { BOT_AVATAR } = process.env;
+export const IMG_CAKE =
+	process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
+export const IMG_BLOCK =
+	process.env.IMG_BLOCK ??
+	'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
+export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env
+	.BOT_ID!}&permissions=8&scope=bot`;
+export const BIRTHDAYY_INVITE =
+	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
+export const BOT_COLOR = parseInt(process.env.BOT_COLOR, 10);
 export const BOT_OWNER = process.env.BOT_OWNER
 	? process.env.BOT_OWNER.includes(',')
 		? process.env.BOT_OWNER.split(',')
@@ -32,7 +37,7 @@ export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = parseBoolean(process.env.CUSTOM_BOT);
 export const IS_PREMIUM = async (guild_id: string) => {
-	return await getGuildPremium(guild_id);
+	return getGuildPremium(guild_id);
 };
 
 // EMOJIS
@@ -74,31 +79,31 @@ export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
 // Config
-export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE) || 80;
+export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE, 10) || 80;
 
 // Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
 
 // Sentry
-export const SENTRY_DSN = process.env.SENTRY_DSN;
+export const { SENTRY_DSN } = process.env;
 
 // API
-export const API_BASE_URL = process.env.API_BASE_URL;
-export const API_EXTENSION = process.env.API_EXTENSION;
-export const API_PORT = parseInt(process.env.API_PORT);
-export const API_SECRET = process.env.API_SECRET;
-export const API_URL = process.env.API_URL;
-export const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+export const { API_BASE_URL } = process.env;
+export const { API_EXTENSION } = process.env;
+export const API_PORT = parseInt(process.env.API_PORT, 10);
+export const { API_SECRET } = process.env;
+export const { API_URL } = process.env;
+export const { WEBHOOK_SECRET } = process.env;
 
 // REDIS
-export const REDIS_HOST = process.env.REDIS_HOST;
-export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
-export const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
-export const REDIS_DB = parseInt(process.env.REDIS_DB);
-export const REDIS_USERNAME = process.env.REDIS_USERNAME;
+export const { REDIS_HOST } = process.env;
+export const REDIS_PORT = parseInt(process.env.REDIS_PORT, 10);
+export const { REDIS_PASSWORD } = process.env;
+export const REDIS_DB = parseInt(process.env.REDIS_DB, 10);
+export const { REDIS_USERNAME } = process.env;
 
 // DATABASE
-export const DB_URL = process.env.DB_URL;
+export const { DB_URL } = process.env;
 
 // BOT WEBSITES
 // TODO: Change env name
@@ -107,6 +112,5 @@ export const TOKEN_DISCORDLIST = process.env.DISCORDLIST_TOKEN;
 export const TOKEN_DISCORDBOTLIST = process.env.DISCORDBOTLIST_TOKEN;
 
 // WEBHOOKS
-export const WEBHOOK_ID = process.env.WEBHOOK_ID;
-export const WEBHOOK_TOKEN = process.env.WEBHOOK_TOKEN;
-
+export const { WEBHOOK_ID } = process.env;
+export const { WEBHOOK_TOKEN } = process.env;

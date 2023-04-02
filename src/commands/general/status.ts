@@ -5,7 +5,7 @@ import generateEmbed from '../../helpers/generate/embed';
 import { APP_ENV, PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
-import { getCurrentDate, getCurrentOffset } from '../../helpers/utils/date';
+import { getCurrentDateFormated, getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatusCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
@@ -21,8 +21,8 @@ import type { EmbedInformationModel } from '../../lib/model';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class StatusCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await StatusCMD(), {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(StatusCMD(), {
 			guildIds: getCommandGuilds('global'),
 			registerCommandIfMissing: true,
 		});
@@ -31,7 +31,7 @@ export class StatusCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const dateObject = getCurrentOffset();
-		const todayUTC = getCurrentDate();
+		const todayUTC = getCurrentDateFormated();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
 		const status = {
 			date: todayUTC,
@@ -44,7 +44,7 @@ export class StatusCommand extends Command {
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
 			title: `${PING} Current Status`,
-			description: 'This is the overview of the bot\'s current stats.',
+			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{
 					name: 'Date',
@@ -53,7 +53,7 @@ export class StatusCommand extends Command {
 				},
 				{
 					name: 'Offset',
-					value: `${status.offset}`,
+					value: `${status.offset ?? 'Unknown'}`,
 					inline: true,
 				},
 				{
@@ -94,7 +94,7 @@ export class StatusCommand extends Command {
 				},
 			],
 		};
-		const embed = await generateEmbed(embedRaw);
-		return await replyToInteraction(interaction, { embeds: [embed] });
+		const embed = generateEmbed(embedRaw);
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

@@ -1,4 +1,14 @@
-import { ARROW_RIGHT, BOT_INVITE, BOT_NAME, CAKE, DISCORD_INVITE, EXCLAMATION, HEART, PLUS, PREMIUM_URL } from '../../helpers/provide/environment';
+import {
+	ARROW_RIGHT,
+	BOT_INVITE,
+	BOT_NAME,
+	CAKE,
+	DISCORD_INVITE,
+	EXCLAMATION,
+	HEART,
+	PLUS,
+	PREMIUM_URL,
+} from '../../helpers/provide/environment';
 
 export const GuideEmbed = {
 	title: `${HEART} ${BOT_NAME} Guide!`,

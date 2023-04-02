@@ -119,9 +119,6 @@ dist
 #dist
 dist/
 
-# vscode
-settings.json
-
 #ignore .yarn
 .yarn/*
 !.yarn/patches

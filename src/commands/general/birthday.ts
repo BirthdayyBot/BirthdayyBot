@@ -44,8 +44,8 @@ import thinking from '../../lib/discord/thinking';
 	],
 })
 export class BirthdayCommand extends Subcommand {
-	public override async registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(await BirthdayCMD(), {
+	public override registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(BirthdayCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}
@@ -55,14 +55,16 @@ export class BirthdayCommand extends Subcommand {
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
 		if (
-			interaction.user.id != targetUser.id &&
+			interaction.user.id !== targetUser.id &&
 			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
 		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to register other users birthdays.')}`,
+						description: `${ARROW_RIGHT} ${inlineCode(
+							"You don't have the permission to register other users birthdays.",
+						)}`,
 					}),
 				],
 				ephemeral: true,
@@ -70,7 +72,7 @@ export class BirthdayCommand extends Subcommand {
 		}
 
 		const date = getDateFromInteraction(interaction);
-		if (isNullOrUndefinedOrEmpty(date) || date.isValidDate === false) {
+		if (isNullOrUndefinedOrEmpty(date) || !date.isValidDate) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
@@ -82,14 +84,17 @@ export class BirthdayCommand extends Subcommand {
 			});
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(interaction.guildId, targetUser.id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
+			interaction.guildId,
+			targetUser.id,
+		);
 
 		if (!isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: ARROW_RIGHT + ` This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
+						description: `${ARROW_RIGHT} This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
 					}),
 				],
 				ephemeral: true,
@@ -103,7 +108,9 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					generateEmbed({
 						title: `${BOOK} Birthday Registered`,
-						description: `${ARROW_RIGHT} ${inlineCode(`The birthday of ${targetUser.username} was successfully registered.`)}`,
+						description: `${ARROW_RIGHT} ${inlineCode(
+							`The birthday of ${targetUser.username} was successfully registered.`,
+						)}`,
 						fields: [
 							{
 								name: 'Date',
@@ -133,17 +140,19 @@ export class BirthdayCommand extends Subcommand {
 	public async birthdayRemove(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-		const guildId = interaction.guildId;
+		const { guildId } = interaction;
 
 		if (
-			interaction.user.id != targetUser.id &&
+			interaction.user.id !== targetUser.id &&
 			!(await hasUserGuildPermissions({ interaction, user: targetUser, permissions: ['ManageRoles'] }))
 		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to remove other users birthdays.')}`,
+						description: `${ARROW_RIGHT} ${inlineCode(
+							"You don't have the permission to remove other users birthdays.",
+						)}`,
 					}),
 				],
 				ephemeral: true,
@@ -171,7 +180,9 @@ export class BirthdayCommand extends Subcommand {
 				embeds: [
 					generateEmbed({
 						title: `${BOOK} Birthday Removed`,
-						description: `${ARROW_RIGHT} The birthday of ${userMention(targetUser.id)} was successfully removed.`,
+						description: `${ARROW_RIGHT} The birthday of ${userMention(
+							targetUser.id,
+						)} was successfully removed.`,
 					}),
 				],
 				ephemeral: true,
@@ -196,21 +207,24 @@ export class BirthdayCommand extends Subcommand {
 		const { embed, components } = await generateBirthdayList(1, interaction.guildId);
 
 		const generatedEmbed = generateEmbed(embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed], components: components });
+		await replyToInteraction(interaction, { embeds: [generatedEmbed], components });
 	}
 
 	public async birthdayShow(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(interaction.guildId, targetUser.id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
+			interaction.guildId,
+			targetUser.id,
+		);
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('This user doesn\'t have a birthday registered.')}`,
+						description: `${ARROW_RIGHT} ${inlineCode("This user doesn't have a birthday registered.")}`,
 					}),
 				],
 				ephemeral: true,
@@ -219,7 +233,9 @@ export class BirthdayCommand extends Subcommand {
 
 		const embed = generateEmbed({
 			title: `${BOOK} Birthday`,
-			description: `${ARROW_RIGHT} ${userMention(birthday.userId)}'s birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
+			description: `${ARROW_RIGHT} ${userMention(birthday.userId)}'s birthday is at the ${formatDateForDisplay(
+				birthday.birthday,
+			)}.`,
 			thumbnail_url: IMG_CAKE,
 		});
 
@@ -231,28 +247,33 @@ export class BirthdayCommand extends Subcommand {
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
 		if (
-			interaction.user.id != targetUser.id &&
+			interaction.user.id !== targetUser.id &&
 			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))
 		) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to update other users birthdays.')}`,
+						description: `${ARROW_RIGHT} ${inlineCode(
+							"You don't have the permission to update other users birthdays.",
+						)}`,
 					}),
 				],
 				ephemeral: true,
 			});
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(interaction.guildId, targetUser.id);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
+			interaction.guildId,
+			targetUser.id,
+		);
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('This user doesn\'t have a birthday registered.')}`,
+						description: `${ARROW_RIGHT} ${inlineCode("This user doesn't have a birthday registered.")}`,
 					}),
 				],
 				ephemeral: true,
@@ -271,15 +292,19 @@ export class BirthdayCommand extends Subcommand {
 		}
 
 		try {
-			await container.utilities.birthday.update.BirthdayByUserAndGuild(interaction.guildId, targetUser.id, date.date);
+			await container.utilities.birthday.update.BirthdayByUserAndGuild(
+				interaction.guildId,
+				targetUser.id,
+				date.date,
+			);
 
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(birthday.userId)} to the ${formatDateForDisplay(
-							date.date,
-						)}. 🎂`,
+						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(
+							birthday.userId,
+						)} to the ${formatDateForDisplay(date.date)}. 🎂`,
 					}),
 				],
 			});
@@ -304,12 +329,16 @@ export class BirthdayCommand extends Subcommand {
 		if (!(await hasUserGuildPermissions({ interaction, user: targetUser, permissions: ['ManageRoles'] }))) {
 			const embed = generateEmbed({
 				title: `${FAIL} Failed`,
-				description: `${ARROW_RIGHT} ${inlineCode('You don\'t have the permission to run this command.')}`,
+				description: `${ARROW_RIGHT} ${inlineCode("You don't have the permission to run this command.")}`,
 			});
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
 
-		await container.tasks.run('BirthdayReminderTask', { userId: targetUser.id, guildId: interaction.guildId, isTest: true });
+		await container.tasks.run('BirthdayReminderTask', {
+			userId: targetUser.id,
+			guildId: interaction.guildId,
+			isTest: true,
+		});
 		const embed = generateEmbed({
 			title: `${SUCCESS} Success`,
 			description: `${ARROW_RIGHT} ${inlineCode('Birthday Test Run!')}`,

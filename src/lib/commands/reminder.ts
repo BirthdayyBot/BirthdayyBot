@@ -1,6 +1,11 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	ChatInputApplicationCommandData,
+	PermissionFlagsBits,
+} from 'discord.js';
 
-export async function ReminderCMD(): Promise<ChatInputApplicationCommandData> {
+export function ReminderCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'reminder',
 		description: 'Reminder Command',

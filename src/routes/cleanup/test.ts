@@ -8,7 +8,6 @@ import type { Guild } from '@prisma/client';
 export class UserRoute extends Route {
 	@authenticated()
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-
 		const enableGuild = await container.utilities.guild.get.GuildsEnableds();
 
 		const cleanedGuilds = await this.processGuilds(enableGuild);
@@ -32,8 +31,11 @@ export class UserRoute extends Route {
 			const guildExists = await container.client.guilds.fetch(guild_id);
 			container.logger.info('guild exists', guildExists.id);
 		} catch (error: any) {
-			if (error.message === 'Unknown Guild') return false;
-			else container.logger.info('error', error.message);
+			if (error instanceof Error) {
+				if (error.message === 'Unknown Guild') return false;
+				container.logger.info('error', error.message);
+			}
+			container.logger.info('error', error);
 		}
 		return true;
 	}

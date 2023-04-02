@@ -3,24 +3,20 @@ import type { Dayjs } from 'dayjs';
 import type { User } from 'discord.js';
 
 export class Birthday extends Utility {
-	private prisma = this.container.prisma;
-
-	public constructor(context: Utility.Context, options: Utility.Options) {
-		super(context, {
-			...options,
-			name: 'birthday',
-		});
-	}
 	public get = {
-		BirthdaysByDate: (date: Dayjs) => this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
+		BirthdaysByDate: (date: Dayjs) =>
+			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
 		BirthdayByDateAndTimezone: (date: Dayjs, timezone: number) =>
-			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } } }),
+			this.prisma.birthday.findMany({
+				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } },
+			}),
 		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
 		BirthdayByUserAndGuild: (guildId: string, userId: string) =>
 			this.prisma.birthday.findUnique({
 				where: { userId_guildId: { guildId, userId } },
 			}),
-		BirthdaysNotDisabled: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
+		BirthdaysNotDisabled: (guildId: string) =>
+			this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
 	};
 
 	public update = {
@@ -39,15 +35,25 @@ export class Birthday extends Utility {
 	public delete = {
 		GuildById: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdatedDisabled: (date: Date) => this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() }, disabled: true } }),
+		ByLastUpdatedDisabled: (date: Date) =>
+			this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() }, disabled: true } }),
 		ByGuildAndUser: (guildId: string, userId: string) =>
 			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } }),
 	};
 
+	private prisma = this.container.prisma;
+
+	public constructor(context: Utility.Context, options: Utility.Options) {
+		super(context, {
+			...options,
+			name: 'birthday',
+		});
+	}
+
 	public create = (birthday: string, guildId: string, user: User) =>
 		this.prisma.birthday.create({
 			data: {
-				birthday: birthday,
+				birthday,
 				guild: {
 					connectOrCreate: {
 						create: { guildId },

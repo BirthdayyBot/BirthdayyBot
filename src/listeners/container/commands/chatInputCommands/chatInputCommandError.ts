@@ -6,7 +6,10 @@ import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHand
 export class ChatInputCommandErrorEvent extends Listener<typeof Events.ChatInputCommandError> {
 	public run(error: Error, payload: ChatInputCommandErrorPayload) {
 		return handleCommandErrorAndSendToUser({
-			error, interaction: payload.interaction, loggerSeverityLevel: 'error', sentrySeverityLevel: 'error',
+			error,
+			interaction: payload.interaction,
+			loggerSeverityLevel: 'error',
+			sentrySeverityLevel: 'error',
 		});
 	}
 }

@@ -2,18 +2,11 @@ import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
 
 export class Guild extends Utility {
-	private prisma = this.container.prisma;
-
-	public constructor(context: Utility.Context, options: Utility.Options) {
-		super(context, {
-			...options,
-			name: 'guild',
-		});
-	}
 	public get = {
 		GuildById: async (guildId: string) => this.prisma.guild.findUnique({ where: { guildId } }),
 		GuildsByIds: async (guildIds: string[]) => this.prisma.guild.findMany({ where: { guildId: { in: guildIds } } }),
-		GuildsNotInIds: async (guildIds: string[]) => this.prisma.guild.findMany({ where: { guildId: { notIn: guildIds } } }),
+		GuildsNotInIds: async (guildIds: string[]) =>
+			this.prisma.guild.findMany({ where: { guildId: { notIn: guildIds } } }),
 		GuildsByTimezone: async (guildIds: string[], timezone: number) =>
 			this.prisma.guild.findMany({ where: { guildId: { in: guildIds }, timezone } }),
 		GuildsEnableds: async () => this.prisma.guild.findMany({ where: { disabled: false } }),
@@ -76,7 +69,7 @@ export class Guild extends Utility {
 					disabled,
 					birthday: {
 						updateMany: {
-							where: { guildId: guildId },
+							where: { guildId },
 							data: {
 								disabled,
 							},
@@ -109,10 +102,9 @@ export class Guild extends Utility {
 	public delete = {
 		GuildByID: async (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
 		ByDisabledGuilds: async () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdatedDisabled: async (date: Date) => this.prisma.guild.deleteMany({ where: { lastUpdated: date.toISOString(), disabled: true } }),
+		ByLastUpdatedDisabled: async (date: Date) =>
+			this.prisma.guild.deleteMany({ where: { lastUpdated: date.toISOString(), disabled: true } }),
 	};
-
-	public create = (data: Prisma.GuildCreateInput) => this.prisma.guild.create({ data });
 
 	public check = {
 		isGuildPremium: async (guildId: string) => {
@@ -123,4 +115,15 @@ export class Guild extends Utility {
 			return result.premium;
 		},
 	};
+
+	private prisma = this.container.prisma;
+
+	public constructor(context: Utility.Context, options: Utility.Options) {
+		super(context, {
+			...options,
+			name: 'guild',
+		});
+	}
+
+	public create = (data: Prisma.GuildCreateInput) => this.prisma.guild.create({ data });
 }
