@@ -138,7 +138,7 @@ export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: true,
 	logger: parseLoggerOptions(),
 	shards: 'auto',
