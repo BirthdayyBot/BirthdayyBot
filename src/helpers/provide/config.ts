@@ -1,5 +1,4 @@
 import type { Prisma } from '@prisma/client';
-import { EmbedLimits } from '@sapphire/discord.js-utilities';
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { container } from '@sapphire/framework';
 import type { ConfigName } from '../../lib/database';
@@ -116,28 +115,4 @@ export async function getGuildPremium(guildId: string): Promise<boolean> {
 		FetchResultTypes.JSON,
 	);
 	return data.premium;
-}
-
-/**
- * Checks if the given message is a valid birthday message.
- * @param message - The message to check.
- * @returns The validity of the message.
- */
-export function isValidBirthdayMessage(message: string): { valid: boolean; error?: string } {
-	// * If this feature is not premium only, enable the following line
-	// if (message.match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g)) {
-	// 	return {
-	// 		valid: false,
-	// 		error: 'NO_CUSTOM_EMOJIS',
-	// 	};
-	// }
-
-	if (message.length > EmbedLimits.MaximumDescriptionLength - 500) {
-		return {
-			valid: false,
-			error: 'MESSAGE_TOO_LONG',
-		};
-	}
-
-	return { valid: true };
 }

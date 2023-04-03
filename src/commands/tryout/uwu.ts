@@ -5,7 +5,6 @@ import { container } from '@sapphire/pieces';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import generateEmbed from '../../helpers/generate/embed';
-import findOption from '../../helpers/utils/findOption';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { UwUCMD } from '../../lib/commands/uwu';
 
@@ -46,7 +45,7 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public async runTimes(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const times = findOption(interaction, 'times', 1);
+		const times = interaction.options.getInteger('times') ?? 1;
 		container.logger.info('times', times);
 
 		let uwu = '';
@@ -58,8 +57,8 @@ export class UwuCommand extends Subcommand {
 	}
 
 	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
-		const user = findOption(interaction, 'user', interaction.user.id);
-		const embed = generateEmbed({ title: 'UwU', description: `UwU <@${user}>` });
+		const user = interaction.options.getUser('user') ?? interaction.user;
+		const embed = generateEmbed({ title: 'UwU', description: `UwU <@${user.id}>` });
 		return interaction.reply({ embeds: [embed] });
 	}
 
