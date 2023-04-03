@@ -22,7 +22,7 @@ export default function generateEmbed({
 }: EmbedInformationModel): APIEmbed {
 	return {
 		title: title ?? '',
-		color: parseInt(color as string, 10) || BOT_COLOR,
+		color: parseInt(color as string) || BOT_COLOR,
 		description,
 		timestamp: new Date().toISOString(),
 		author: {

@@ -18,7 +18,7 @@ export default function getDateFromInteraction(
 	};
 
 	const day = useCorrectDayFormat(interaction.options.getInteger('day', true));
-	const month = parseInt(interaction.options.getString('month', true), 10);
+	const month = parseInt(interaction.options.getString('month', true));
 	const year = interaction.options.getInteger('year', false) ?? 'XXXX';
 
 	result.isValidDate = true;

@@ -25,7 +25,7 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 	.BOT_ID!}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE =
 	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = parseInt(process.env.BOT_COLOR, 10);
+export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
 export const BOT_OWNER = process.env.BOT_OWNER
 	? process.env.BOT_OWNER.includes(',')
 		? process.env.BOT_OWNER.split(',')
@@ -79,7 +79,7 @@ export const VOTE_CHANNEL_ID = '950683261540130816';
 export const VOTE_ROLE_ID = '1039089174948626473';
 
 // Config
-export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE, 10) || 80;
+export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE) || 80;
 
 // Autocode
 export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
@@ -90,16 +90,16 @@ export const { SENTRY_DSN } = process.env;
 // API
 export const { API_BASE_URL } = process.env;
 export const { API_EXTENSION } = process.env;
-export const API_PORT = parseInt(process.env.API_PORT, 10);
+export const API_PORT = parseInt(process.env.API_PORT);
 export const { API_SECRET } = process.env;
 export const { API_URL } = process.env;
 export const { WEBHOOK_SECRET } = process.env;
 
 // REDIS
 export const { REDIS_HOST } = process.env;
-export const REDIS_PORT = parseInt(process.env.REDIS_PORT, 10);
+export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
 export const { REDIS_PASSWORD } = process.env;
-export const REDIS_DB = parseInt(process.env.REDIS_DB, 10);
+export const REDIS_DB = parseInt(process.env.REDIS_DB);
 export const { REDIS_USERNAME } = process.env;
 
 // DATABASE

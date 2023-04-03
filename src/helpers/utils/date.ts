@@ -38,11 +38,11 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	let year: string;
 	if (fromHumanFormat) {
 		[day, month, year] = date.split('.');
-		month = numberToMonthname(parseInt(month, 10));
+		month = numberToMonthname(parseInt(month));
 	} else {
 		// container.logger.info(DEBUG ? 'date: ' + date : '');
 		[year, month, day] = date.split('-');
-		month = numberToMonthname(parseInt(month, 10));
+		month = numberToMonthname(parseInt(month));
 	}
 	let finalString = `${day}. ${month}`;
 	year.includes('XXXX') ? (finalString = String(finalString)) : (finalString += ` ${year}`);
