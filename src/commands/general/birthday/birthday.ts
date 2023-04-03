@@ -12,12 +12,13 @@ export class BirthdayCommand extends Subcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => {
 			// It is necessary to call this hook and pass the builder context to register the subcommands stored in the subcommand register in the parent command.
-			this.hooks.subcommands(this, builder);
 
 			// Calling both hooks is only necessary if required, it is not mandatory.
-			return applyLocalizedBuilder(builder, 'commands/birthday:name', 'commands/birthday:description')
+			applyLocalizedBuilder(builder, 'commands/birthday:name', 'commands/birthday:description')
 				.setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel)
 				.setDMPermission(false);
+
+			this.hooks.subcommands(this, builder);
 		});
 	}
 }

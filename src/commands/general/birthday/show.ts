@@ -12,7 +12,9 @@ import thinking from '../../../lib/discord/thinking';
 	builder
 		.setName('show')
 		.setDescription('Show the Birthday of you or a other person')
-		.addUserOption((option) => option.setName('user').setDescription('Show the birthday of a specific User')),
+		.addUserOption((option) =>
+			option.setName('user').setDescription('Show the birthday of a specific User').setRequired(false),
+		),
 )
 export class ShowCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {

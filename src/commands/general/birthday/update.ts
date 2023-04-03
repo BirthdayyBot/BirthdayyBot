@@ -15,56 +15,60 @@ import thinking from '../../../lib/discord/thinking';
 			option.setName('day').setDescription('Day of birthday').setRequired(true).setMinValue(1).setMaxValue(31),
 		)
 		.addStringOption((option) =>
-			option.addChoices(
-				{
-					name: 'January',
-					value: '01',
-				},
-				{
-					name: 'February',
-					value: '02',
-				},
-				{
-					name: 'March',
-					value: '03',
-				},
-				{
-					name: 'April',
-					value: '04',
-				},
-				{
-					name: 'May',
-					value: '05',
-				},
-				{
-					name: 'June',
-					value: '06',
-				},
-				{
-					name: 'July',
-					value: '07',
-				},
-				{
-					name: 'August',
-					value: '08',
-				},
-				{
-					name: 'September',
-					value: '09',
-				},
-				{
-					name: 'October',
-					value: '10',
-				},
-				{
-					name: 'November',
-					value: '11',
-				},
-				{
-					name: 'December',
-					value: '12',
-				},
-			),
+			option
+				.setName('month')
+				.setDescription('Month of birthday')
+				.addChoices(
+					{
+						name: 'January',
+						value: '01',
+					},
+					{
+						name: 'February',
+						value: '02',
+					},
+					{
+						name: 'March',
+						value: '03',
+					},
+					{
+						name: 'April',
+						value: '04',
+					},
+					{
+						name: 'May',
+						value: '05',
+					},
+					{
+						name: 'June',
+						value: '06',
+					},
+					{
+						name: 'July',
+						value: '07',
+					},
+					{
+						name: 'August',
+						value: '08',
+					},
+					{
+						name: 'September',
+						value: '09',
+					},
+					{
+						name: 'October',
+						value: '10',
+					},
+					{
+						name: 'November',
+						value: '11',
+					},
+					{
+						name: 'December',
+						value: '12',
+					},
+				)
+				.setRequired(true),
 		)
 		.addIntegerOption((option) =>
 			option

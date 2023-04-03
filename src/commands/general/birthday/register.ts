@@ -1,5 +1,6 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
@@ -9,84 +10,95 @@ import replyToInteraction from '../../../helpers/send/response';
 import { formatDateForDisplay } from '../../../helpers/utils/date';
 import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
-import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 
-@RegisterSubCommand('birthday', (builder) =>
-	applyLocalizedBuilder(
-		builder,
-		'commands/birthday:subcommand.register.name',
-		'commands/birthday:subcommand.register.description',
-	)
+@RegisterSubCommand('birthday', (builder) => {
+	return applyLocalizedBuilder(builder, 'commands/birthday:register.name', 'commands/birthday:register.description')
 		.addIntegerOption((option) =>
-			option.setName('day').setDescription('Day of birthday').setRequired(true).setMinValue(1).setMaxValue(31),
+			applyLocalizedBuilder(
+				option,
+				'commands/birthday:register.options.day.name',
+				'commands/birthday:register.options.day.description',
+			)
+				.setRequired(true)
+				.setMinValue(1)
+				.setMaxValue(31),
 		)
 		.addStringOption((option) =>
-			option.setName('month').setDescription('Month of birthday').setRequired(true).addChoices(
-				{
-					name: 'January',
-					value: '01',
-				},
-				{
-					name: 'February',
-					value: '02',
-				},
-				{
-					name: 'March',
-					value: '03',
-				},
-				{
-					name: 'April',
-					value: '04',
-				},
-				{
-					name: 'May',
-					value: '05',
-				},
-				{
-					name: 'June',
-					value: '06',
-				},
-				{
-					name: 'July',
-					value: '07',
-				},
-				{
-					name: 'August',
-					value: '08',
-				},
-				{
-					name: 'September',
-					value: '09',
-				},
-				{
-					name: 'October',
-					value: '10',
-				},
-				{
-					name: 'November',
-					value: '11',
-				},
-				{
-					name: 'December',
-					value: '12',
-				},
-			),
+			applyLocalizedBuilder(
+				option,
+				'commands/birthday:register.options.month.name',
+				'commands/birthday:register.options.month.description',
+			)
+				.setRequired(true)
+				.addChoices(
+					{
+						name: 'January',
+						value: '01',
+					},
+					{
+						name: 'February',
+						value: '02',
+					},
+					{
+						name: 'March',
+						value: '03',
+					},
+					{
+						name: 'April',
+						value: '04',
+					},
+					{
+						name: 'May',
+						value: '05',
+					},
+					{
+						name: 'June',
+						value: '06',
+					},
+					{
+						name: 'July',
+						value: '07',
+					},
+					{
+						name: 'August',
+						value: '08',
+					},
+					{
+						name: 'September',
+						value: '09',
+					},
+					{
+						name: 'October',
+						value: '10',
+					},
+					{
+						name: 'November',
+						value: '11',
+					},
+					{
+						name: 'December',
+						value: '12',
+					},
+				),
 		)
 		.addIntegerOption((option) =>
-			option
-				.setName('year')
-				.setDescription('Year of birthday')
+			applyLocalizedBuilder(
+				option,
+				'commands/birthday:register.options.year.name',
+				'commands/birthday:register.options.year.description',
+			)
 				.setRequired(true)
 				.setMinValue(1900)
 				.setMaxValue(new Date().getFullYear()),
 		)
 		.addUserOption((option) =>
-			option
-				.setName('user')
-				.setDescription('Set a birthday for another Person - MANAGER ONLY')
-				.setRequired(false),
-		),
-)
+			applyLocalizedBuilder(
+				option,
+				'commands/birthday:register.options.user.name',
+				'commands/birthday:register.options.user.description',
+			).setRequired(false),
+		);
+})
 export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
