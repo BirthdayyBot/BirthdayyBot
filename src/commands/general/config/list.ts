@@ -61,11 +61,11 @@ function getValueString(name: keyof Guild, value: string | number | boolean | nu
 		return `${ARROW_RIGHT} not set`;
 	} else if (name === 'timezone' && typeof value === 'number') {
 		return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
-	} else if (name.includes('channel') && typeof value === 'string') {
+	} else if (name.includes('Channel') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${channelMention(value)}`;
-	} else if (name.includes('role') && typeof value === 'string') {
+	} else if (name.includes('Role') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${roleMention(value)}`;
-	} else if (name.includes('user') && typeof value === 'string') {
+	} else if (name.includes('User') && typeof value === 'string') {
 		return `${ARROW_RIGHT} ${userMention(value)}`;
 	}
 	return `${ARROW_RIGHT} ${value.toString()}`;
