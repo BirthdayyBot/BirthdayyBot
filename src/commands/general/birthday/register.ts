@@ -12,12 +12,16 @@ import getDateFromInteraction from '../../../helpers/utils/getDateFromInteractio
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('birthday', (builder) => {
-	return applyLocalizedBuilder(builder, 'commands/birthday:register.name', 'commands/birthday:register.description')
+	return applyLocalizedBuilder(
+		builder,
+		'commands/birthday:subcommand.register.name',
+		'commands/birthday:subcommand.register.description',
+	)
 		.addIntegerOption((option) =>
 			applyLocalizedBuilder(
 				option,
-				'commands/birthday:register.options.day.name',
-				'commands/birthday:register.options.day.description',
+				'commands/birthday:subcommand.register.options.day.name',
+				'commands/birthday:subcommand.register.options.day.description',
 			)
 				.setRequired(true)
 				.setMinValue(1)
@@ -26,8 +30,8 @@ import thinking from '../../../lib/discord/thinking';
 		.addStringOption((option) =>
 			applyLocalizedBuilder(
 				option,
-				'commands/birthday:register.options.month.name',
-				'commands/birthday:register.options.month.description',
+				'commands/birthday:subcommand.register.options.month.name',
+				'commands/birthday:subcommand.register.options.month.description',
 			)
 				.setRequired(true)
 				.addChoices(
@@ -84,8 +88,8 @@ import thinking from '../../../lib/discord/thinking';
 		.addIntegerOption((option) =>
 			applyLocalizedBuilder(
 				option,
-				'commands/birthday:register.options.year.name',
-				'commands/birthday:register.options.year.description',
+				'commands/birthday:subcommand.register.options.year.name',
+				'commands/birthday:subcommand.register.options.year.description',
 			)
 				.setRequired(true)
 				.setMinValue(1900)
@@ -94,8 +98,8 @@ import thinking from '../../../lib/discord/thinking';
 		.addUserOption((option) =>
 			applyLocalizedBuilder(
 				option,
-				'commands/birthday:register.options.user.name',
-				'commands/birthday:register.options.user.description',
+				'commands/birthday:subcommand.register.options.user.name',
+				'commands/birthday:subcommand.register.options.user.description',
 			).setRequired(false),
 		);
 })
