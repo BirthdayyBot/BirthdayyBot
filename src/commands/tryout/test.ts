@@ -6,6 +6,7 @@ import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
+import { isNotPrd } from '../../lib/utils/config';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -34,7 +35,7 @@ export class TestCommand extends Command {
 			const embed = generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
-		await this.container.tasks.run('BirthdayReminderTask', {});
+		if (isNotPrd) await this.container.tasks.run('BirthdayReminderTask', {});
 		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateEmbed(embedObj);
 		return replyToInteraction(interaction, { embeds: [embed] });
