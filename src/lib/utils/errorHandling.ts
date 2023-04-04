@@ -1,10 +1,12 @@
-import * as Sentry from '@sentry/node';
 import { container } from '@sapphire/framework';
-import type { APIEmbed } from 'discord.js';
 import { codeBlock } from '@sapphire/utilities';
+import * as Sentry from '@sentry/node';
+import type { APIEmbed } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
 import { DEBUG, SENTRY_DSN } from '../../helpers/provide/environment';
+import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
+import { isPrd } from './config';
 
 export function logErrorToContainer({
 	error,
@@ -47,15 +49,15 @@ export function captureRouteApiErrorToSentry({
 }
 
 function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions, 'interaction' | 'error'>): void {
+	let errorString = `Command: ${interaction.commandName}\n`;
+	if (error.message) errorString += `Error: ${error.message}\n`;
+	if (error.cause) errorString += `Cause: ${JSON.stringify(error.cause)}\n`;
+	if (error.stack && !isPrd) errorString += `Stack: ${JSON.stringify(error.stack)}`;
+
 	const errorMessageEmbed = generateEmbed({
 		title: 'An error has occured',
-		description: codeBlock(
-			'shell',
-			`Command : ${interaction.isChatInputCommand() ? interaction.commandName : 'Unknown'}\nErreur : ${
-				error.message
-			}`,
-		),
-		color: 'RED',
+		description: `${codeBlock(`js`, errorString)}`,
+		color: BotColorEnum.BIRTHDAYY_DEV,
 	});
 
 	if (interaction.replied || interaction.deferred) {
