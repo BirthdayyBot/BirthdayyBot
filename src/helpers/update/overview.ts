@@ -6,38 +6,38 @@ import generateEmbed from '../generate/embed';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
-	if (!config) return;
+	console.log('config', config);
+	if (!config || !config.overviewChannel) return;
 	const { overviewChannel, overviewMessage } = config;
 
-	if (overviewChannel) {
-		const birthdayList = await generateBirthdayList(1, guild_id);
-		const birthdayEmbedObj = generateEmbed(birthdayList.embed);
-		try {
-			if (overviewMessage) {
-				try {
-					await editMessage(overviewChannel, overviewMessage, {
-						embeds: [birthdayEmbedObj],
-						components: birthdayList.components,
-					});
-				} catch (error: any) {
-					if (error instanceof Error) {
-						if (
-							error.message === 'Unknown Message' ||
-							error.message.includes('authored by another user') ||
-							error.message.includes('Message not found')
-						) {
-							await generateNewOverviewMessage(overviewChannel, birthdayList);
-							container.logger.error('Message Not found, so generated new overview message');
-						}
+	const birthdayList = await generateBirthdayList(1, guild_id);
+	const birthdayEmbedObj = generateEmbed(birthdayList.embed);
+	try {
+		if (overviewMessage) {
+			try {
+				await editMessage(overviewChannel, overviewMessage, {
+					embeds: [birthdayEmbedObj],
+					components: birthdayList.components,
+				});
+			} catch (error: any) {
+				if (error instanceof Error) {
+					if (
+						error.message === 'Unknown Message' ||
+						error.message.includes('authored by another user') ||
+						error.message.includes('Message not found')
+					) {
+						await generateNewOverviewMessage(overviewChannel, birthdayList);
+						container.logger.error('Message Not found, so generated new overview message');
 					}
+					container.logger.error('[OVERVIEW CHANNEL] ', error);
 				}
-				container.logger.info(`Updated Overview Message in guild: ${guild_id}`);
-			} else if (!overviewMessage) {
-				await generateNewOverviewMessage(overviewChannel, birthdayList);
 			}
-		} catch (error) {
-			container.logger.error('[OVERVIEW CHANNEL] ', error);
+			container.logger.info(`Updated Overview Message in guild: ${guild_id}`);
+		} else if (!overviewMessage) {
+			await generateNewOverviewMessage(overviewChannel, birthdayList);
 		}
+	} catch (error) {
+		container.logger.error('[OVERVIEW CHANNEL] ', error);
 	}
 }
 

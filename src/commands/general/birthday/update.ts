@@ -6,6 +6,7 @@ import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
 import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
+import updateBirthdayOverview from '../../../helpers/update/overview';
 import { formatDateForDisplay } from '../../../helpers/utils/date';
 import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
@@ -89,7 +90,7 @@ export class UpdateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-
+		const { guildId } = interaction;
 		if (
 			interaction.user.id !== targetUser.id &&
 			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))
@@ -107,10 +108,7 @@ export class UpdateCommand extends Command {
 			});
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
-			interaction.guildId,
-			targetUser.id,
-		);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
@@ -127,21 +125,21 @@ export class UpdateCommand extends Command {
 		const date = getDateFromInteraction(interaction);
 
 		if (isNullOrUndefinedOrEmpty(date.date)) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failed`,
-				description: `${ARROW_RIGHT} ${inlineCode('Please provide a valid date')}`,
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode('Please provide a valid date')}`,
+					}),
+				],
+				ephemeral: true,
 			});
-
-			return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
 		}
 
 		try {
-			await container.utilities.birthday.update.BirthdayByUserAndGuild(
-				interaction.guildId,
-				targetUser.id,
-				date.date,
-			);
+			await container.utilities.birthday.update.BirthdayByUserAndGuild(guildId, targetUser.id, date.date);
 
+			await updateBirthdayOverview(guildId);
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({

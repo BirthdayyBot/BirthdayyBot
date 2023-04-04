@@ -63,7 +63,7 @@ export class OverviewChannelCommand extends Command {
 
 		const embed = generateEmbed({
 			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} The overview message has been sent to ${channelMention(channel.id)}.`,
+			description: `${ARROW_RIGHT} The birthday overview channel has been set to ${channelMention(channel.id)}.`,
 		});
 
 		return replyToInteraction(interaction, { embeds: [embed] });

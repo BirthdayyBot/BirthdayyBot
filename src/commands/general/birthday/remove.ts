@@ -6,6 +6,7 @@ import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, BOOK, FAIL } from '../../../helpers/provide/environment';
 import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
+import updateBirthdayOverview from '../../../helpers/update/overview';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('birthday', (builder) =>
@@ -55,7 +56,7 @@ export class ListCommand extends Command {
 
 		try {
 			await container.utilities.birthday.delete.ByGuildAndUser(guildId, targetUser.id);
-
+			await updateBirthdayOverview(guildId);
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
