@@ -8,23 +8,23 @@ interface Options {
 	user: string | User;
 }
 
-export async function hasGuildPermissions({
+export async function hasBotGuildPermissions({
 	interaction,
 	permissions,
 }: Omit<Options, 'channel' | 'user'>): Promise<boolean> {
-	const client = await interaction.guild.members.fetch(interaction.client.user.id);
-	return client.permissions.has(permissions);
+	const bot = await interaction.guild.members.fetchMe();
+	return bot.permissions.has(permissions);
 }
 
-export async function hasChannelPermissions({
+export async function hasBotChannelPermissions({
 	interaction,
-	channel: _channel,
+	channel,
 	permissions,
 }: Omit<Options, 'user'>): Promise<boolean> {
-	const member = await interaction.guild.members.fetch(interaction.client.user.id);
-	const channel = await container.client.channels.fetch(typeof _channel === 'string' ? _channel : _channel.id);
-	if (!channel || !channel.isTextBased() || channel.isDMBased()) return false;
-	return channel.permissionsFor(member).has(permissions);
+	const bot = await interaction.guild.members.fetchMe();
+	const channelData = await container.client.channels.fetch(typeof channel === 'string' ? channel : channel.id);
+	if (!channelData || !channelData.isTextBased() || channelData.isDMBased()) return false;
+	return channelData.permissionsFor(bot).has(permissions);
 }
 
 export async function hasUserGuildPermissions({
@@ -39,13 +39,11 @@ export async function hasUserGuildPermissions({
 export async function hasUserChannelPermissions({
 	interaction,
 	user,
-	channel: channelID,
+	channel,
 	permissions,
 }: Options): Promise<boolean> {
 	const member = await interaction.guild.members.fetch(user);
-	const target_channel = await container.client.channels.fetch(
-		typeof channelID === 'string' ? channelID : channelID.id,
-	);
-	if (!target_channel || !target_channel.isTextBased() || target_channel.isDMBased()) return false;
-	return target_channel.permissionsFor(member).has(permissions);
+	const channelData = await container.client.channels.fetch(typeof channel === 'string' ? channel : channel.id);
+	if (!channelData || !channelData.isTextBased() || channelData.isDMBased()) return false;
+	return channelData.permissionsFor(member).has(permissions);
 }
