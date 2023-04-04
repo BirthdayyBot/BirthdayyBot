@@ -4,6 +4,7 @@ import { channelMention, ChannelType } from 'discord.js';
 import generateBirthdayList from '../../../helpers/generate/birthdayList';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
+import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
@@ -22,11 +23,12 @@ import thinking from '../../../lib/discord/thinking';
 export class OverviewChannelCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
-
 		const channel = interaction.options.getChannel<ChannelType.GuildText>('channel', true);
-		const hasWritingPermissionsInChannel = channel
-			.permissionsFor(await interaction.guild.members.fetchMe())
-			.has(['ViewChannel', 'SendMessages']);
+		const hasWritingPermissionsInChannel = await hasBotChannelPermissions({
+			interaction,
+			channel,
+			permissions: ['ViewChannel', 'SendMessages'],
+		});
 
 		if (!hasWritingPermissionsInChannel) {
 			const embed = generateEmbed({

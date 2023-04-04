@@ -4,7 +4,7 @@ import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE } from '../../../helpers/provide/environment';
+import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
 import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
 import updateBirthdayOverview from '../../../helpers/update/overview';
@@ -158,10 +158,8 @@ export class ListCommand extends Command {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
-						title: `${BOOK} Birthday Registered`,
-						description: `${ARROW_RIGHT} ${inlineCode(
-							`The birthday of ${targetUser.username} was successfully registered.`,
-						)}`,
+						title: `${SUCCESS} Success`,
+						description: `${ARROW_RIGHT} Registered the birthday of ${targetUser.username} successfully.`,
 						fields: [
 							{
 								name: 'Date',
@@ -169,7 +167,6 @@ export class ListCommand extends Command {
 								inline: true,
 							},
 						],
-						thumbnail_url: IMG_CAKE,
 					}),
 				],
 				ephemeral: true,
