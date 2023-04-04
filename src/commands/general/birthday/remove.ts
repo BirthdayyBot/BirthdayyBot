@@ -25,7 +25,7 @@ export class ListCommand extends Command {
 
 		if (
 			interaction.user.id !== targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: targetUser, permissions: ['ManageRoles'] }))
+			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
 		) {
 			return replyToInteraction(interaction, {
 				embeds: [
