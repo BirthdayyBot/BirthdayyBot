@@ -1,7 +1,13 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import generateBirthdayList from '../../../helpers/generate/birthdayList';
+import { container } from '@sapphire/framework';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import { inlineCode, userMention } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
+import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
+import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
+import { formatDateForDisplay } from '../../../helpers/utils/date';
+import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('birthday', (builder) =>
@@ -20,51 +26,51 @@ import thinking from '../../../lib/discord/thinking';
 				.setDescription('Month of birthday')
 				.addChoices(
 					{
-						name: 'January',
+						name: 'January | 1',
 						value: '01',
 					},
 					{
-						name: 'February',
+						name: 'February | 2',
 						value: '02',
 					},
 					{
-						name: 'March',
+						name: 'March | 3',
 						value: '03',
 					},
 					{
-						name: 'April',
+						name: 'April | 4',
 						value: '04',
 					},
 					{
-						name: 'May',
+						name: 'May | 5',
 						value: '05',
 					},
 					{
-						name: 'June',
+						name: 'June | 6',
 						value: '06',
 					},
 					{
-						name: 'July',
+						name: 'July | 7',
 						value: '07',
 					},
 					{
-						name: 'August',
+						name: 'August | 8',
 						value: '08',
 					},
 					{
-						name: 'September',
+						name: 'September | 9',
 						value: '09',
 					},
 					{
-						name: 'October',
+						name: 'October | 10',
 						value: '10',
 					},
 					{
-						name: 'November',
+						name: 'November | 11',
 						value: '11',
 					},
 					{
-						name: 'December',
+						name: 'December | 12',
 						value: '12',
 					},
 				)
@@ -82,10 +88,81 @@ import thinking from '../../../lib/discord/thinking';
 export class UpdateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
+		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 
-		const { embed, components } = await generateBirthdayList(1, interaction.guildId);
+		if (
+			interaction.user.id !== targetUser.id &&
+			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))
+		) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode(
+							"You don't have the permission to update other users birthdays.",
+						)}`,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
 
-		const generatedEmbed = generateEmbed(embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed], components });
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
+			interaction.guildId,
+			targetUser.id,
+		);
+
+		if (isNullOrUndefinedOrEmpty(birthday)) {
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode("This user doesn't have a birthday registered.")}`,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
+
+		const date = getDateFromInteraction(interaction);
+
+		if (isNullOrUndefinedOrEmpty(date.date)) {
+			const embed = generateEmbed({
+				title: `${FAIL} Failed`,
+				description: `${ARROW_RIGHT} ${inlineCode('Please provide a valid date')}`,
+			});
+
+			return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
+		}
+
+		try {
+			await container.utilities.birthday.update.BirthdayByUserAndGuild(
+				interaction.guildId,
+				targetUser.id,
+				date.date,
+			);
+
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${SUCCESS} Success`,
+						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(
+							birthday.userId,
+						)} to the ${formatDateForDisplay(date.date)}. 🎂`,
+					}),
+				],
+			});
+		} catch (error: any) {
+			container.logger.error(error);
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failed`,
+						description: `${ARROW_RIGHT} ${inlineCode('An error occurred while updating the birthday.')}`,
+					}),
+				],
+				ephemeral: true,
+			});
+		}
 	}
 }
