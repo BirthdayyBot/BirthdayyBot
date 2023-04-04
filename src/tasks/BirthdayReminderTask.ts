@@ -3,10 +3,10 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
-import { APIEmbed, Guild, GuildMember, Role, roleMention, Snowflake, userMention } from 'discord.js';
+import { APIEmbed, Guild, GuildMember, inlineCode, Role, roleMention, Snowflake, userMention } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
 import { logAll } from '../helpers/provide/config';
-import { DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
@@ -16,28 +16,44 @@ import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model'
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
 		container.logger.debug('[BirthdayTask] Task run');
-		if (birthdayEvent) {
+		if (birthdayEvent && Object.keys(birthdayEvent).length !== 0) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
 			return this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
 		}
 
 		const current = getCurrentOffset();
-		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not found');
-		const { dateFormatted } = current;
+		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+		const { dateFormatted, utcOffset, timezone } = current;
+		const dateFields = [
+			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
+			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
+			{ name: 'Timezone', value: inlineCode(JSON.stringify(timezone)), inline: true },
+		];
 
 		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
 			current.date,
-			current.timezone,
+			current.utcOffset,
 		);
+		console.log('todaysBirthdays', todaysBirthdays);
 
 		if (!todaysBirthdays.length) {
+			// TODO: Send Log that 0 birthdays where found.
+			await sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: 'BirthdayScheduler Report',
+						description: 'No Birthdays Now',
+						fields: dateFields,
+					}),
+				],
+			});
 			return this.container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.timezone}`,
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
 			);
 		}
 
 		this.container.logger.debug(
-			`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.timezone}`,
+			`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
 		);
 
 		for (const birthday of todaysBirthdays) {
@@ -47,8 +63,17 @@ export class BirthdayReminderTask extends ScheduledTask {
 				);
 			await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 		}
-		container.logger.info(
-			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for timezone ${current.timezone} [${current.dateFormatted}}]`,
+		await sendMessage(BOT_ADMIN_LOG, {
+			embeds: [
+				generateEmbed({
+					title: 'BirthdayScheduler Report',
+					description: `Run ${todaysBirthdays.length} Birthdays`,
+					fields: dateFields,
+				}),
+			],
+		});
+		return container.logger.info(
+			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
 		);
 	}
 
@@ -104,7 +129,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 			return await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: isTest ? Time.Minute * 3 : Time.Day,
+				delay: isTest ? Time.Minute / 6 : Time.Day,
 			});
 		} catch (error) {
 			return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error);
