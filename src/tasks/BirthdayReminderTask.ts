@@ -22,7 +22,17 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		const current = getCurrentOffset();
-		if (!current) return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+		if (!current) {
+			await sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: 'BirthdayScheduler Report',
+						description: 'No Current Offset infos could be generated',
+					}),
+				],
+			});
+			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+		}
 		const { dateFormatted, utcOffset, timezone } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
