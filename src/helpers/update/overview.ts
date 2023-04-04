@@ -27,13 +27,16 @@ export default async function updateBirthdayOverview(guild_id: string) {
 						error.message.includes('Message not found')
 					) {
 						await generateNewOverviewMessage(overviewChannel, birthdayList);
-						container.logger.error('Message Not found, so generated new overview message');
+						container.logger.warn('Message Not found, so generated new overview message');
+					} else {
+						container.logger.error('[OVERVIEW CHANNEL] ', error);
 					}
-					container.logger.error('[OVERVIEW CHANNEL] ', error);
 				}
 			}
 			container.logger.info(`Updated Overview Message in guild: ${guild_id}`);
-		} else if (!overviewMessage) {
+			return;
+		}
+		if (!overviewMessage) {
 			await generateNewOverviewMessage(overviewChannel, birthdayList);
 		}
 	} catch (error) {
