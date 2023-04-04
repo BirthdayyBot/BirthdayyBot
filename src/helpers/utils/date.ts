@@ -132,7 +132,8 @@ const TIMEZONE_VALUES: Record<number, string> = {
 interface TimezoneObject {
 	date: Dayjs;
 	dateFormatted: string;
-	timezone: keyof typeof TIMEZONE_VALUES;
+	utcOffset: keyof typeof TIMEZONE_VALUES;
+	timezone: typeof TIMEZONE_VALUES;
 }
 
 /**
@@ -149,10 +150,10 @@ export function getCurrentOffset() {
  */
 
 export function createTimezoneObjects(): TimezoneObject[] {
-	const allZones = Object.entries(TIMEZONE_VALUES).map(([timezone, zone]) => {
-		const date = getCurrentDate(zone);
-		const dateFormatted = getCurrentDateFormated(zone);
-		return { date, dateFormatted, timezone: Number(timezone) };
+	const allZones = Object.entries(TIMEZONE_VALUES).map(([utcOffset, tzString]) => {
+		const date = getCurrentDate(tzString);
+		const dateFormatted = getCurrentDateFormated(tzString);
+		return { date, dateFormatted, timezone: tzString, utcOffset: Number(utcOffset) };
 	});
 	return allZones;
 }

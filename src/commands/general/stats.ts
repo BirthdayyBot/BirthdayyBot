@@ -35,7 +35,7 @@ export class StatsCommand extends Command {
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
 		const stats = {
 			date: todayUTC,
-			offset: dateObject?.timezone,
+			offset: dateObject?.utcOffset,
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
