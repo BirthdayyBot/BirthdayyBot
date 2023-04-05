@@ -93,7 +93,7 @@ export class UpdateCommand extends Command {
 		const { guildId } = interaction;
 		if (
 			interaction.user.id !== targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: targetUser.id, permissions: ['ManageRoles'] }))
+			!(await hasUserGuildPermissions({ interaction, user: interaction.user.id, permissions: ['ManageRoles'] }))
 		) {
 			return replyToInteraction(interaction, {
 				embeds: [
