@@ -44,10 +44,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			current.date,
 			current.utcOffset,
 		);
-		console.log('todaysBirthdays', todaysBirthdays);
 
 		if (!todaysBirthdays.length) {
-			// TODO: Send Log that 0 birthdays where found.
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateEmbed({
