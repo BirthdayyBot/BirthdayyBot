@@ -8,8 +8,10 @@ import { ChatInputSubcommandErrorPayload, SubcommandPluginEvents } from '@sapphi
 export class ChatInputSubcommandErrorEvent extends Listener<typeof SubcommandPluginEvents.ChatInputSubcommandError> {
 	public run(error: Error, payload: ChatInputSubcommandErrorPayload) {
 		return handleCommandErrorAndSendToUser({
-			error, interaction: payload.interaction, loggerSeverityLevel: 'error', sentrySeverityLevel: 'error',
+			error,
+			interaction: payload.interaction,
+			loggerSeverityLevel: 'error',
+			sentrySeverityLevel: 'error',
 		});
 	}
 }
-

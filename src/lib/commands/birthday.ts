@@ -1,15 +1,20 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	ChatInputApplicationCommandData,
+	PermissionFlagsBits,
+} from 'discord.js';
 import { getLocalizedString } from '../../helpers/utils/translate';
 
-export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
+export function BirthdayCMD(): ChatInputApplicationCommandData {
 	return {
-		name: await getLocalizedString('en-US', 'commands/birthday:name'),
+		name: getLocalizedString('en-US', 'commands/birthday:name'),
 		nameLocalizations: {
-			de: await getLocalizedString('de-DE', 'commands/birthday:name'),
+			de: getLocalizedString('de-DE', 'commands/birthday:name'),
 		},
-		description: await getLocalizedString('en-US', 'commands/birthday:description'),
+		description: getLocalizedString('en-US', 'commands/birthday:description'),
 		descriptionLocalizations: {
-			de: await getLocalizedString('de-DE', 'commands/birthday:description'),
+			de: getLocalizedString('de-DE', 'commands/birthday:description'),
 		},
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
@@ -17,13 +22,13 @@ export async function BirthdayCMD(): Promise<ChatInputApplicationCommandData> {
 		options: [
 			{
 				type: ApplicationCommandOptionType.Subcommand,
-				name: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
+				name: getLocalizedString('en-US', 'commands/birthday:subcommand.register.name'),
 				nameLocalizations: {
-					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
+					de: getLocalizedString('de-DE', 'commands/birthday:subcommand.register.name'),
 				},
-				description: await getLocalizedString('en-US', 'commands/birthday:subcommand.register.description'),
+				description: getLocalizedString('en-US', 'commands/birthday:subcommand.register.description'),
 				descriptionLocalizations: {
-					de: await getLocalizedString('de-DE', 'commands/birthday:subcommand.register.descriptionde'),
+					de: getLocalizedString('de-DE', 'commands/birthday:subcommand.register.descriptionde'),
 				},
 				options: [
 					{

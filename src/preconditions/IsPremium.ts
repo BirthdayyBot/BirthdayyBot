@@ -13,11 +13,11 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	}
 
 	public override async messageRun(message: Message) {
-		return await this.premiumCheck(message.guildId!);
+		return this.premiumCheck(message.guildId!);
 	}
 
 	private async premiumCheck(guild_id: string) {
-		const is_premium: boolean = (await this.container.utilities.guild.get.GuildByID(guild_id))?.premium ?? false;
+		const is_premium: boolean = (await this.container.utilities.guild.get.GuildById(guild_id))?.premium ?? false;
 		return is_premium ? this.ok() : this.error({ message: this.#message });
 	}
 }

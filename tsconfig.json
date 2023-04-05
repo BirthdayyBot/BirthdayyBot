@@ -5,7 +5,8 @@
 		"outDir": "dist",
 		"tsBuildInfoFile": "dist/.tsbuildinfo",
 		"preserveConstEnums": true,
-        "ignoreDeprecations": "5.0",
+		"ignoreDeprecations": "5.0",
+		"skipLibCheck": true
 	},
 	"include": ["src", "src/**/*.json", "./env.d.ts"]
 }

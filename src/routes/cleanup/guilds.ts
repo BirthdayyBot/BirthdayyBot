@@ -7,9 +7,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 export class CleanUpGuildsRoute extends Route {
 	@authenticated()
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-
 		const guildIds = (await container.client.guilds.fetch()).map((guild) => guild.id);
-
 
 		const [guilds, bithdays] = await container.utilities.guild.update.ByNotInAndBirthdays(guildIds, true);
 

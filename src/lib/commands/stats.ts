@@ -1,8 +1,8 @@
 import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function StatusCMD(): Promise<ChatInputApplicationCommandData> {
+export function StatsCMD(): ChatInputApplicationCommandData {
 	return {
-		name: 'status',
+		name: 'stats',
 		description: 'Status Command',
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],

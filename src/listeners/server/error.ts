@@ -6,6 +6,12 @@ import { handleRouteApiError } from '../../lib/utils/errorHandling';
 @ApplyOptions<Listener.Options>({ emitter: 'server', event: ServerEvents.Error })
 export class ServerErrorEvent extends Listener {
 	public run(error: Error, { response, request }: MiddlewareErrorContext) {
-		return handleRouteApiError({ error, request, response, loggerSeverityLevel: 'error', sentrySeverityLevel: 'error' });
+		return handleRouteApiError({
+			error,
+			request,
+			response,
+			loggerSeverityLevel: 'error',
+			sentrySeverityLevel: 'error',
+		});
 	}
 }

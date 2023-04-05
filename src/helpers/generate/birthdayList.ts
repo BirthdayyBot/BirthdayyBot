@@ -3,14 +3,14 @@ import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { userMention } from 'discord.js';
-import { getGuildInformation, getGuildMember } from '../../lib/discord/guild';
+import { getGuildInformation, getGuildMember } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthname } from '../utils/date';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
-	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildID(guild_id);
+	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
@@ -24,12 +24,11 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
 		const embed = await createEmbed(guild_id, finalList);
 
 		const components = generateComponents(page_id, splitBirthdayList.listAmount);
-		return { embed: embed, components: components };
-	} else {
-		container.logger.info('no birthdays');
-		const embed = await createEmbed(guild_id, []);
-		return { embed: embed, components: [] };
+		return { embed, components };
 	}
+	container.logger.info('no birthdays');
+	const embed = await createEmbed(guild_id, []);
+	return { embed, components: [] };
 }
 
 /**
@@ -39,11 +38,15 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
  * @returns obj - Object
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
-function getBirthdaysAsLists(allBirthdays: Array<Birthday>, maxBirthdaysPerList: number): { birthdays: Array<Array<Birthday>>; listAmount: number } {
-	const length = allBirthdays.length;
+function getBirthdaysAsLists(
+	allBirthdays: Array<Birthday>,
+	maxBirthdaysPerList: number,
+): { birthdays: Array<Array<Birthday>>; listAmount: number } {
+	const { length } = allBirthdays;
 	// split birthdays into arrays with max length x entries
 	const splitBirthdays = [];
-	for (let i = 0; i < length; i += maxBirthdaysPerList) splitBirthdays.push(allBirthdays.slice(i, i + maxBirthdaysPerList));
+	for (let i = 0; i < length; i += maxBirthdaysPerList)
+		splitBirthdays.push(allBirthdays.slice(i, i + maxBirthdaysPerList));
 
 	return { birthdays: splitBirthdays, listAmount: splitBirthdays.length };
 }
@@ -73,13 +76,14 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 		if (isNullOrUndefinedOrEmpty(month.birthdays)) continue;
 		// For each birthday in current month
 		for (const birthday of month.birthdays) {
-			const { user_id, birthday: bday } = birthday;
-			const guild_member = guild_id === GuildIDEnum.CHILLI_ATTACK_V2 ? true : await getGuildMember(guild_id, user_id);
+			const { userId, birthday: bday } = birthday;
+			const guild_member =
+				guild_id === GuildIDEnum.CHILLI_ATTACK_V2 ? true : await getGuildMember(guild_id, userId);
 			if (isNullOrUndefinedOrEmpty(guild_member)) {
-				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, user_id);
+				await container.utilities.birthday.delete.ByGuildAndUser(guild_id, userId);
 				continue;
 			}
-			const descriptionToAdd = `${userMention(user_id)} ${formatDateForDisplay(bday)}\n`;
+			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(bday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
 				embed.fields.push({
@@ -108,7 +112,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
  * @returns Array with all components
  */
 function generateComponents(page_id: number, listAmount: number): any[] {
-	if (listAmount == 1) return [];
+	if (listAmount === 1) return [];
 	const innerComponents = [];
 	/*
     max 5 buttons per row
@@ -118,14 +122,14 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 	for (let i = 1; i <= listAmount; i++) {
 		if (i > 5) break;
 		const label = `${i}`;
-		const isActive = i == page_id ? true : false;
+		const isActive = i === page_id ? true : false;
 		const disabled = isActive ? true : false;
 		const style = isActive ? 1 : 2;
 		innerComponents.push({
-			style: style,
-			label: label,
+			style,
+			label,
 			custom_id: `birthday_list_page_${i}`,
-			disabled: disabled,
+			disabled,
 			type: 2,
 		});
 	}
@@ -170,10 +174,10 @@ function prepareBirthdayList() {
 /**
  * sort all birthdays to the corresponding month object
  */
-function prepareBirthdays(birthdays: Array<Birthday>): Array<{ monthname: string; birthdays: Array<Birthday> }> {
+function prepareBirthdays(birthdays: Array<Birthday>): { monthname: string; birthdays: Birthday[] }[] {
 	const list = prepareBirthdayList();
 
-	birthdays.forEach(function(singleBirthday) {
+	birthdays.forEach((singleBirthday) => {
 		const d = new Date(singleBirthday.birthday);
 		if (d.toString() === 'Invalid Date') {
 			return;
@@ -186,7 +190,7 @@ function prepareBirthdays(birthdays: Array<Birthday>): Array<{ monthname: string
 	return list;
 }
 
-function sortByDayAndMonth(arr: any[]) {
+function sortByDayAndMonth(arr: Birthday[]) {
 	arr.sort((a: { birthday: string }, b: { birthday: string }) => {
 		const now = new Date();
 		const dateA: Date = new Date(a.birthday);

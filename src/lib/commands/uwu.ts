@@ -1,6 +1,11 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	ChatInputApplicationCommandData,
+	PermissionFlagsBits,
+} from 'discord.js';
 
-export async function UwUCMD(): Promise<ChatInputApplicationCommandData> {
+export function UwUCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'uwu',
 		description: 'UwU Command',

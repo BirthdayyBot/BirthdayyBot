@@ -5,24 +5,24 @@ import generateEmbed from '../../helpers/generate/embed';
 import { APP_ENV, PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
-import { getCurrentDate, getCurrentOffset } from '../../helpers/utils/date';
+import { getCurrentDateFormated, getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { StatusCMD } from '../../lib/commands';
+import { StatsCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
 
 @ApplyOptions<Command.Options>({
-	name: 'status',
-	description: 'Status Command',
+	name: 'stats',
+	description: 'Stats Command',
 	// TODO: Enable this when #71 is done
 	enabled: APP_ENV !== 'prd',
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })
-export class StatusCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await StatusCMD(), {
+export class StatsCommand extends Command {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(StatsCMD(), {
 			guildIds: getCommandGuilds('global'),
 			registerCommandIfMissing: true,
 		});
@@ -31,11 +31,11 @@ export class StatusCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const dateObject = getCurrentOffset();
-		const todayUTC = getCurrentDate();
+		const todayUTC = getCurrentDateFormated();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
-		const status = {
+		const stats = {
 			date: todayUTC,
-			offset: dateObject?.timezone,
+			offset: dateObject?.utcOffset,
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
@@ -43,28 +43,28 @@ export class StatusCommand extends Command {
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
-			title: `${PING} Current Status`,
-			description: 'This is the overview of the bot\'s current stats.',
+			title: `${PING} Current Stats`,
+			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{
 					name: 'Date',
-					value: `${status.date}`,
+					value: `${stats.date}`,
 					inline: true,
 				},
 				{
 					name: 'Offset',
-					value: `${status.offset}`,
+					value: `${stats.offset ?? 'Unknown'}`,
 					inline: true,
 				},
 				{
 					name: 'Next Offset',
-					value: `${status.offset === -11 ? 12 : status.offset! - 1}`,
+					value: `${stats.offset === -11 ? 12 : stats.offset! - 1}`,
 					inline: true,
 				},
 
 				{
 					name: 'Servercount',
-					value: `${status.servercount}`,
+					value: `${stats.servercount}`,
 					inline: true,
 				},
 				{
@@ -74,7 +74,7 @@ export class StatusCommand extends Command {
 				},
 				{
 					name: 'Bot Ping',
-					value: `${status.ping}ms`,
+					value: `${stats.ping}ms`,
 					inline: true,
 				},
 				{
@@ -84,17 +84,17 @@ export class StatusCommand extends Command {
 				},
 				{
 					name: 'CPU Usage',
-					value: `${status.cpu.system.toFixed(2)}%`,
+					value: `${stats.cpu.system.toFixed(2)}%`,
 					inline: true,
 				},
 				{
 					name: 'RAM Usage',
-					value: `${status.memory}%`,
+					value: `${stats.memory}%`,
 					inline: true,
 				},
 			],
 		};
-		const embed = await generateEmbed(embedRaw);
-		return await replyToInteraction(interaction, { embeds: [embed] });
+		const embed = generateEmbed(embedRaw);
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

@@ -1,6 +1,11 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import {
+	ApplicationCommandOptionType,
+	ApplicationCommandType,
+	ChatInputApplicationCommandData,
+	PermissionFlagsBits,
+} from 'discord.js';
 
-export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
+export function ConfigCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'config',
 		type: ApplicationCommandType.ChatInput,
@@ -16,7 +21,7 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'announcement-channel',
-				description: 'Announce if its somebody\'s birthday today',
+				description: "Announce if its somebody's birthday today",
 				options: [
 					{
 						type: ApplicationCommandOptionType.Channel,
@@ -42,7 +47,8 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'birthday-role',
-				description: 'Give the birthday child a special role for one day. Gets assigned and removed automatically',
+				description:
+					'Give the birthday child a special role for one day. Gets assigned and removed automatically',
 				options: [
 					{
 						type: ApplicationCommandOptionType.Role,
@@ -193,23 +199,23 @@ export async function ConfigCMD(): Promise<ChatInputApplicationCommandData> {
 						choices: [
 							{
 								name: 'Announcement Channel',
-								value: 'announcement_channel',
+								value: 'announcementChannel',
 							},
 							{
 								name: 'Overview Channel',
-								value: 'overview_channel',
+								value: 'overviewChannel',
 							},
 							{
 								name: 'Birthday Role',
-								value: 'birthday_role',
+								value: 'birthdayRole',
 							},
 							{
 								name: 'Ping Role',
-								value: 'birthday_ping_role',
+								value: 'birthdayPingRole',
 							},
 							{
 								name: 'Announcement Message',
-								value: 'announcement_message',
+								value: 'announcementMessage',
 							},
 							// {
 							// 	name: 'Logs',

@@ -29,8 +29,8 @@ export class TemplateCommand extends Subcommand {
 		});
 	}
 
-	public override async registerApplicationCommands(registry: Subcommand.Registry) {
-		registry.registerChatInputCommand(await TemplateCMD(), {
+	public override registerApplicationCommands(registry: Subcommand.Registry) {
+		registry.registerChatInputCommand(TemplateCMD(), {
 			guildIds: getCommandGuilds('testing'),
 		});
 	}
@@ -39,6 +39,6 @@ export class TemplateCommand extends Subcommand {
 		container.logger.info('testCommand Command');
 		await thinking(interaction);
 		const embed = generateEmbed({ title: 'Test', description: 'A Test Command' });
-		return await replyToInteraction(interaction, { embeds: [embed] });
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

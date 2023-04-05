@@ -7,13 +7,13 @@ import { logErrorToContainer } from '../../lib/utils/errorHandling';
 @ApplyOptions<Listener.Options>({ event: Events.Error })
 export class ErrorEvent extends Listener<typeof Events.Error> {
 	public run(error: Error) {
-
-		const SendErrorToSentry = () => Sentry.withScope(scope => {
-			scope.setLevel('error');
-			scope.setFingerprint([error.name]);
-			scope.setTransactionName('ErrorEvent');
-			Sentry.captureException(error);
-		});
+		const SendErrorToSentry = () =>
+			Sentry.withScope((scope) => {
+				scope.setLevel('error');
+				scope.setFingerprint([error.name]);
+				scope.setTransactionName('ErrorEvent');
+				Sentry.captureException(error);
+			});
 
 		if (SENTRY_DSN) return SendErrorToSentry;
 

@@ -1,4 +1,4 @@
-export type GuildConfigModel = {
+export interface GuildConfigModel {
 	GUILD_ID: string;
 	BIRTHDAY_ROLE?: string;
 	BIRTHDAY_PING_ROLE?: string;
@@ -10,4 +10,4 @@ export type GuildConfigModel = {
 	TIMEZONE: number;
 	LANGUAGE: string;
 	PREMIUM: boolean;
-};
+}
