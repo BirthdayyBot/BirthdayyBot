@@ -81,7 +81,7 @@ import thinking from '../../../lib/discord/thinking';
 			option
 				.setName('year')
 				.setDescription('Year of birthday')
-				.setRequired(true)
+				.setRequired(false)
 				.setMinValue(1900)
 				.setMaxValue(2021),
 		),
