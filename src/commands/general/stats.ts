@@ -2,20 +2,21 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
 import generateEmbed from '../../helpers/generate/embed';
-import { APP_ENV, PING } from '../../helpers/provide/environment';
+import { PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
-import { getCurrentDateFormated, getCurrentOffset } from '../../helpers/utils/date';
+import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
+import { isNotPrd } from '../../lib/utils/config';
 
 @ApplyOptions<Command.Options>({
 	name: 'stats',
 	description: 'Stats Command',
 	// TODO: Enable this when #71 is done
-	enabled: APP_ENV !== 'prd',
+	enabled: isNotPrd,
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
@@ -30,16 +31,19 @@ export class StatsCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const dateObject = getCurrentOffset();
-		const todayUTC = getCurrentDateFormated();
+		const currentOffset = getCurrentOffset();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
 		const stats = {
-			date: todayUTC,
-			offset: dateObject?.utcOffset,
+			date: currentOffset.dateFormatted,
+			offset: currentOffset?.utcOffset,
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
-			memory: memoryUsageInPercent,
+			memory: {
+				usage: memoryUsageInPercent,
+				used: process.memoryUsage().heapUsed,
+				total: os.totalmem(),
+			},
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
@@ -78,18 +82,29 @@ export class StatsCommand extends Command {
 					inline: true,
 				},
 				{
-					name: 'API Ping',
+					name: 'API Ping #TODO',
 					value: `${date - interaction.createdTimestamp}ms`,
 					inline: true,
 				},
 				{
-					name: 'CPU Usage',
-					value: `${stats.cpu.system.toFixed(2)}%`,
+					name: 'CPU Usage #TODO',
+					value: `${stats.cpu.system.toLocaleString()}%`,
+					inline: true,
+				},
+				{ name: 'Birthdays registered #TODO', value: '0', inline: true },
+				{
+					name: 'RAM Usage',
+					value: `${stats.memory.usage}%`,
 					inline: true,
 				},
 				{
-					name: 'RAM Usage',
-					value: `${stats.memory}%`,
+					name: 'RAM Used',
+					value: `${(stats.memory.used / 1024 / 1024).toFixed(2)}MB`,
+					inline: true,
+				},
+				{
+					name: 'RAM Total',
+					value: `${(stats.memory.total / 1024 / 1024).toFixed(2)}MB`,
 					inline: true,
 				},
 			],

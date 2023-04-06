@@ -15,7 +15,7 @@ import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model'
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
-		container.logger.debug('[BirthdayTask] Task run');
+		container.logger.info('[BirthdayTask] Started');
 		if (birthdayEvent && Object.keys(birthdayEvent).length !== 0) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
 			return this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
@@ -23,6 +23,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const current = getCurrentOffset();
 		if (!current.utcOffset) {
+			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateEmbed({
@@ -111,10 +112,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!announcementChannel) {
-			if (DEBUG)
-				this.container.logger.warn(
-					`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
-				);
+			this.container.logger.warn(
+				`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
+			);
 			return { error: true, message: 'No announcement channel set' };
 		}
 
@@ -139,8 +139,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 				repeated: false,
 				delay: isTest ? Time.Minute / 6 : Time.Day,
 			});
-		} catch (error) {
-			return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error);
+		} catch (error: any) {
+			if (error instanceof Error)
+				return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
 		}
 	}
 
@@ -154,7 +155,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return message;
 		} catch (error: any) {
 			if (error instanceof Error) {
-				container.logger.warn("COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n", error);
+				container.logger.warn(
+					"COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
+					error.message,
+				);
 				// Send error message to log channel
 				// TODO: Changed error message
 				if (error.message.includes('Missing Access')) {
