@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
