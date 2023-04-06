@@ -22,12 +22,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		const current = getCurrentOffset();
-		if (!current) {
+		if (!current.utcOffset) {
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateEmbed({
 						title: 'BirthdayScheduler Report',
-						description: 'No Current Offset infos could be generated',
+						description: 'No Current Offset could be generated',
 					}),
 				],
 			});
@@ -44,10 +44,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			current.date,
 			current.utcOffset,
 		);
-		console.log('todaysBirthdays', todaysBirthdays);
 
 		if (!todaysBirthdays.length) {
-			// TODO: Send Log that 0 birthdays where found.
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateEmbed({

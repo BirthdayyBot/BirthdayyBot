@@ -6,7 +6,6 @@ import generateEmbed from '../generate/embed';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
-	console.log('config', config);
 	if (!config || !config.overviewChannel) return;
 	const { overviewChannel, overviewMessage } = config;
 
