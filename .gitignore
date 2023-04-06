@@ -129,3 +129,6 @@ dist/
 
 # ignore changes in the doppler.yml
 doppler.yml
+
+# vscode
+./vscode/settings.json
