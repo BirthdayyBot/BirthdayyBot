@@ -157,8 +157,8 @@ export function createTimezoneObjects(): TimezoneObject[] {
 }
 
 export function getCurrentOffset(): TimezoneObject {
-	// Loop through all possible UTC offsets (-12 to +14)
-	for (let i = -12; i <= 14; i++) {
+	// Loop through all possible UTC offsets (-11 to +12)
+	for (let i = -11; i <= 12; i++) {
 		// Get the current time in the UTC offset timezone
 		const currentTime = dayjs().utcOffset(i).hour();
 
