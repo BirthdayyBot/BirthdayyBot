@@ -1,6 +1,6 @@
 import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
 
-export async function InviteCMD(): Promise<ChatInputApplicationCommandData> {
+export function InviteCMD(): ChatInputApplicationCommandData {
 	return {
 		name: 'invite',
 		description: 'Invite Birthdayy to your Discord Server!',

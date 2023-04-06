@@ -1,6 +1,6 @@
 import { container } from '@sapphire/pieces';
 
-export function useCorrectDayFormat(number: number | string): string {
+export function addZeroToSingleDigitNumber(number: number | string): string {
 	return number.toString().length < 2 ? `0${number}` : `${number}`;
 }
 
@@ -10,7 +10,6 @@ export function checkIfLengthIsTwo(number: string) {
 
 export function logLimiter() {
 	container.logger.info('===============================');
-	return;
 }
 
 export function checkLength(length: number, string: string) {

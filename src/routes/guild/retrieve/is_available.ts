@@ -1,39 +1,32 @@
 import { container } from '@sapphire/pieces';
-import { type ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { type ApiResponse, methods, Route, ApiRequest } from '@sapphire/plugin-api';
 import { parseBoolean } from '../../../helpers/utils/utils';
-import type { ApiRequest, GuildQuery } from '../../../lib/api/types';
-import { authenticated, validateParams } from '../../../lib/api/utils';
+import { authenticated } from '../../../lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-
-type GuildRetrieveQuery = GuildQuery & {
-	disable?: string;
-};
 
 @ApplyOptions<Route.Options>({ route: 'guild/retrieve/is-available' })
 export class UserRoute extends Route {
 	@authenticated()
-	@validateParams<GuildRetrieveQuery>(['guild_id'])
-	public async [methods.GET](request: ApiRequest<GuildRetrieveQuery>, response: ApiResponse) {
-		const { query } = request;
-		const guild_id = query.guild_id;
-		const disable = parseBoolean(query.disable ? query.disable.toString() : 'false');
+	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
+		const { guildId, disable } = request.query as { guildId: string; disable: string };
+		const toDisable = parseBoolean(disable ? disable.toString() : 'false');
 
 		const guild = await container.client.guilds.fetch({
-			guild: guild_id,
+			guild: guildId,
 			withCounts: false,
 		});
 
 		if (!guild) {
-			if (disable) {
-				const guildDisabled = await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
+			if (toDisable) {
+				const disabledGuild = await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true);
 				return response.badRequest({
 					is_available: false,
-					data: { guild_id, disabledGuild: guildDisabled },
+					data: { guild, disabledGuild },
 				});
 			}
-			return response.badRequest({ is_available: false, data: { guild_id } });
+			return response.badRequest({ is_available: false, data: { guildId } });
 		}
 
-		return response.ok({ is_available: guild ? true : false, data: guild ? guild : null });
+		return response.ok({ is_available: Boolean(guild), data: guild ? guild : null });
 	}
 }

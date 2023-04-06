@@ -2,7 +2,6 @@ import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { DEBUG } from '../provide/environment';
 import { checkIfLengthIsTwo } from './string';
 
 dayjs.extend(utc);
@@ -32,38 +31,43 @@ export function getCurrentDateFormated(timezone = 'UTC'): string {
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
-	// DD.MM.YYY
-	let items;
+	// DD.MM.YYYY
 	let day: string;
 	let month: string;
 	let year: string;
 	if (fromHumanFormat) {
-		items = date.split('.');
-		day = items[0];
-		month = items[1];
+		[day, month, year] = date.split('.');
 		month = numberToMonthname(parseInt(month));
-		year = items[2];
 	} else {
-		// container.logger.info(DEBUG ? 'date: ' + date : '');
-		items = date.split('-');
-		day = items[2];
-		month = items[1];
+		[year, month, day] = date.split('-');
 		month = numberToMonthname(parseInt(month));
-		year = items[0];
 	}
 	let finalString = `${day}. ${month}`;
-	year.includes('XXXX') ? (finalString += '') : (finalString += ` ${year}`);
+	year.includes('XXXX') ? (finalString = String(finalString)) : (finalString += ` ${year}`);
 	return finalString;
 }
 
 function getMonths() {
 	// TODO: Add Translation
-	return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	return [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	];
 }
 
 export function numberToMonthname(number: number) {
 	const months = getMonths();
-	number = number - 1;
+	number -= 1;
 	return months[number];
 }
 
@@ -83,7 +87,7 @@ export function extractDayAndMonth(inputDate: string) {
 	const day = d.getDate();
 	const dayString = day.toString().length === 1 ? '0'.concat(day.toString()) : day.toString();
 	let month = d.getMonth();
-	month = month + 1;
+	month += 1;
 	const monthString = month.toString().length === 1 ? '0'.concat(month.toString()) : month.toString();
 	const str = `-${monthString}-${dayString}`;
 	return str;
@@ -92,48 +96,49 @@ export function extractDayAndMonth(inputDate: string) {
 export function isDateString(date: string): boolean {
 	// ESLint compains so - /^(\d{4}|X{4})\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(date)
 	const isDate = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(date);
-	if (DEBUG) container.logger.debug(`isDate [${date}]`, isDate);
+	container.logger.debug(`isDate [${date}]`, isDate);
 	return isDate;
 }
 
 const TIMEZONE_VALUES: Record<number, string> = {
-	0: 'Europe/Dublin',
-	1: 'Europe/Paris',
-	2: 'Europe/Helsinki',
-	3: 'Europe/Moscow',
-	4: 'Asia/Dubai',
-	5: 'Asia/Karachi',
-	6: 'Asia/Dhaka',
-	7: 'Asia/Bangkok',
-	8: 'Asia/Shanghai',
-	9: 'Asia/Tokyo',
-	10: 'Australia/Sydney',
-	11: 'Pacific/Guadalcanal',
-	12: 'Pacific/Auckland',
-	'-11': 'Pacific/Midway',
+	'-11': 'Pacific/Samoa',
 	'-10': 'Pacific/Honolulu',
 	'-9': 'America/Anchorage',
 	'-8': 'America/Los_Angeles',
 	'-7': 'America/Denver',
-	'-6': 'America/Mexico_City',
+	'-6': 'America/Chicago',
 	'-5': 'America/New_York',
 	'-4': 'America/Caracas',
-	'-3': 'America/Sao_Paulo',
+	'-3': 'America/Argentina/Buenos_Aires',
 	'-2': 'Atlantic/South_Georgia',
 	'-1': 'Atlantic/Azores',
+	0: 'Europe/London',
+	1: 'Europe/Paris',
+	2: 'Europe/Berlin',
+	3: 'Europe/Moscow',
+	4: 'Asia/Dubai',
+	5: 'Asia/Karachi',
+	6: 'Asia/Dhaka',
+	7: 'Asia/Jakarta',
+	8: 'Asia/Shanghai',
+	9: 'Asia/Tokyo',
+	10: 'Australia/Brisbane',
+	11: 'Pacific/Noumea',
+	12: 'Pacific/Fiji',
 };
 
-type TimezoneObject = {
+interface TimezoneObject {
 	date: Dayjs;
 	dateFormatted: string;
-	timezone: keyof typeof TIMEZONE_VALUES;
-};
+	utcOffset?: keyof typeof TIMEZONE_VALUES;
+	timezone?: typeof TIMEZONE_VALUES;
+}
 
 /**
  * It creates an array of timezone objects, then finds the one where the hour is 0
  * @returns The timezone offset of the current timezone.
  */
-export function getCurrentOffset() {
+export function getCurrentOffsetOld() {
 	const allZones = createTimezoneObjects();
 	return allZones.find(({ date }) => date.hour() === 0) ?? null;
 }
@@ -143,10 +148,39 @@ export function getCurrentOffset() {
  */
 
 export function createTimezoneObjects(): TimezoneObject[] {
-	const allZones = Object.entries(TIMEZONE_VALUES).map(([timezone, zone]) => {
-		const date = getCurrentDate(zone);
-		const dateFormatted = getCurrentDateFormated(zone);
-		return { date, dateFormatted, timezone: Number(timezone) };
+	const allZones = Object.entries(TIMEZONE_VALUES).map(([utcOffset, tzString]) => {
+		const date = getCurrentDate(tzString);
+		const dateFormatted = getCurrentDateFormated(tzString);
+		return { date, dateFormatted, timezone: tzString, utcOffset: Number(utcOffset) };
 	});
 	return allZones;
+}
+
+export function getCurrentOffset(): TimezoneObject {
+	// Loop through all possible UTC offsets (-11 to +12)
+	for (let i = -11; i <= 12; i++) {
+		// Get the current time in the UTC offset timezone
+		const currentTime = dayjs().utcOffset(i).hour();
+
+		// If the current time is 0, set the UTC offset as the hourZeroTimezone
+		if (currentTime === 0) {
+			const offsetWithHourZero = i;
+			const today = dayjs().utcOffset(offsetWithHourZero);
+			const timezoneObject: TimezoneObject = {
+				date: today,
+				dateFormatted: today.format('YYYY-MM-DD'),
+				utcOffset: offsetWithHourZero,
+				timezone: TIMEZONE_VALUES[offsetWithHourZero],
+			};
+			container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
+			return timezoneObject;
+		}
+	}
+	container.logger.error('getCurrentOffset ~ Could not find timezone offset');
+	return {
+		date: dayjs(),
+		dateFormatted: dayjs().format('YYYY-MM-DD'),
+		utcOffset: undefined,
+		timezone: undefined,
+	};
 }

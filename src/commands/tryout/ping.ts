@@ -18,6 +18,7 @@ export class PingCommand extends Command {
 			},
 		);
 	}
+
 	// slash command
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({ content: 'Ping?', fetchReply: true });
@@ -25,8 +26,8 @@ export class PingCommand extends Command {
 			msg.createdTimestamp - interaction.createdTimestamp
 		}ms.`;
 
-		return await interaction.editReply({
-			content: content,
+		return interaction.editReply({
+			content,
 		});
 	}
 }

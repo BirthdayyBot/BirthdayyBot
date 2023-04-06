@@ -1,24 +1,32 @@
-import * as Sentry from '@sentry/node';
 import { container } from '@sapphire/framework';
-import type { APIEmbed } from 'discord.js';
 import { codeBlock } from '@sapphire/utilities';
+import * as Sentry from '@sentry/node';
+import type { APIEmbed } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
 import { DEBUG, SENTRY_DSN } from '../../helpers/provide/environment';
+import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
+import { isPrd } from './config';
 
-
-export function logErrorToContainer({ error, loggerSeverityLevel }: Pick<ErrorHandlerOptions, 'error' | 'loggerSeverityLevel'>): void {
+export function logErrorToContainer({
+	error,
+	loggerSeverityLevel,
+}: Pick<ErrorHandlerOptions, 'error' | 'loggerSeverityLevel'>): void {
 	container.logger[loggerSeverityLevel](error);
 }
 
 export function defaultScope({ scope, error, sentrySeverityLevel }: ErrorDefaultSentryScope) {
 	scope.setFingerprint([error.name, error.message]),
-	scope.setTransactionName(error.name),
-	scope.setLevel(sentrySeverityLevel);
+		scope.setTransactionName(error.name),
+		scope.setLevel(sentrySeverityLevel);
 	return Sentry.captureException(error);
 }
 
-export function captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel }: Omit<ErrorHandlerOptions, 'loggerSeverityLevel'>): void {
+export function captureCommandErrorToSentry({
+	interaction,
+	error,
+	sentrySeverityLevel,
+}: Omit<ErrorHandlerOptions, 'loggerSeverityLevel'>): void {
 	return Sentry.withScope((scope) => {
 		scope.setTags({
 			guildId: interaction.guildId,
@@ -29,49 +37,66 @@ export function captureCommandErrorToSentry({ interaction, error, sentrySeverity
 	});
 }
 
-export function captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel }:
-	Omit<RouteApiErrorHandler, 'response' | 'loggerSeverityLevel'>,
-): void {
+export function captureRouteApiErrorToSentry({
+	request,
+	error,
+	sentrySeverityLevel,
+}: Omit<RouteApiErrorHandler, 'response' | 'loggerSeverityLevel'>): void {
 	return Sentry.withScope((scope) => {
 		scope.setTag('method', request.method);
 		return defaultScope({ scope, error, sentrySeverityLevel });
 	});
 }
 
-function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions, 'interaction' | 'error' >): void {
+function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions, 'interaction' | 'error'>): void {
+	let errorString = `Command: ${interaction.commandName}\n`;
+	if (error.message) errorString += `Error: ${error.message}\n`;
+	if (error.cause) errorString += `Cause: ${JSON.stringify(error.cause)}\n`;
+	if (error.stack && !isPrd) errorString += `Stack: ${JSON.stringify(error.stack)}`;
+
 	const errorMessageEmbed = generateEmbed({
 		title: 'An error has occured',
-		description: codeBlock('shell', `Command : ${
-			interaction.isChatInputCommand() ? interaction.commandName : 'Unknown'}\nErreur : ${error.message}`),
-		color: 'RED',
+		description: `${codeBlock(`js`, errorString)}`,
+		color: BotColorEnum.BIRTHDAYY_DEV,
 	});
 
 	if (interaction.replied || interaction.deferred) {
-		interaction.editReply({ embeds: [errorMessageEmbed] }).catch(
-			() => interaction.user.send({ embeds: [errorMessageEmbed] }),
-		);
+		interaction
+			.editReply({ embeds: [errorMessageEmbed] })
+			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
 	} else {
-		interaction.reply({ embeds: [errorMessageEmbed], ephemeral: true }).catch(
-			() => interaction.user.send({ embeds: [errorMessageEmbed] }),
-		);
+		interaction
+			.reply({ embeds: [errorMessageEmbed], ephemeral: true })
+			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
 	}
 
 	sendErrorMessageToAdmin(errorMessageEmbed);
 }
 
 function sendErrorMessageToAdmin(embed: APIEmbed): void {
-	const webhook = container.webhook;
+	const { webhook } = container;
 	if (webhook === null) return;
-	webhook.send({ embeds: [embed] });
+	void webhook.send({ embeds: [embed] });
 }
 
-export function handleCommandErrorAndSendToUser({ interaction, error, loggerSeverityLevel, sentrySeverityLevel }: ErrorHandlerOptions): void {
+export function handleCommandErrorAndSendToUser({
+	interaction,
+	error,
+	loggerSeverityLevel,
+	sentrySeverityLevel,
+}: ErrorHandlerOptions): void {
 	if (SENTRY_DSN) captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel });
 	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return sendErrorMessageToUser({ interaction, error });
 }
 
-export function handleRouteApiError({ request, response, error, loggerSeverityLevel, sentrySeverityLevel }: RouteApiErrorHandler): void {
+export function handleRouteApiError({
+	request,
+	response,
+	error,
+	loggerSeverityLevel,
+	sentrySeverityLevel,
+}: RouteApiErrorHandler): void {
 	if (SENTRY_DSN) captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel });
 	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return response.status(500).json({ error: error.message });

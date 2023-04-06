@@ -17,8 +17,8 @@ import { VoteEmbed } from '../../lib/embeds';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class VoteCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await VoteCMD(), {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(VoteCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}

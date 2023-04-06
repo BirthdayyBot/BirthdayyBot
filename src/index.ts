@@ -11,11 +11,11 @@ const client = new BirthdayyClient();
 async function main() {
 	try {
 		if (SENTRY_DSN) Sentry.init(SENTRY_OPTIONS);
-		container.prisma.$connect();
+		await container.prisma.$connect();
 		await client.login();
 	} catch (error) {
 		container.logger.error(error);
-		container.prisma.$disconnect();
+		await container.prisma.$disconnect();
 		client.destroy();
 		process.exit(1);
 	}

@@ -18,8 +18,8 @@ import { InviteEmbed } from '../../lib/embeds';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await InviteCMD(), {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(InviteCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}

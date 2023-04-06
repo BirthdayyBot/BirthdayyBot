@@ -1,4 +1,14 @@
-import { ARROW_RIGHT, BOOK, BOT_NAME, DOCS_URL, LINK, PLUS, PREMIUM_URL, SIGN, SUPPORT } from '../../helpers/provide/environment';
+import {
+	ARROW_RIGHT,
+	BOOK,
+	BOT_NAME,
+	DOCS_URL,
+	LINK,
+	PLUS,
+	PREMIUM_URL,
+	SIGN,
+	SUPPORT,
+} from '../../helpers/provide/environment';
 
 export const HelpEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,

@@ -119,9 +119,6 @@ dist
 #dist
 dist/
 
-# vscode
-settings.json
-
 #ignore .yarn
 .yarn/*
 !.yarn/patches
@@ -132,3 +129,6 @@ settings.json
 
 # ignore changes in the doppler.yml
 doppler.yml
+
+# vscode
+./vscode/settings.json

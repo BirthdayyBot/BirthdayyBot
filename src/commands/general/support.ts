@@ -18,8 +18,8 @@ import { SupportEmbed } from '../../lib/embeds';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class SupportCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await SupportCMD(), {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(SupportCMD(), {
 			guildIds: getCommandGuilds('global'),
 		});
 	}

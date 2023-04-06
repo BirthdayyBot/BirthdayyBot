@@ -11,21 +11,26 @@ import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/envir
  */
 
 export default function generateEmbed({
-	title, description, author_name, author_avatar,
-	thumbnail_url, image_url, fields, color,
+	title,
+	description,
+	author_name,
+	author_avatar,
+	thumbnail_url,
+	image_url,
+	fields,
+	color,
 }: EmbedInformationModel): APIEmbed {
-
 	return {
 		title: title ?? '',
 		color: parseInt(color as string) || BOT_COLOR,
-		description: description,
+		description,
 		timestamp: new Date().toISOString(),
 		author: {
 			name: author_name ?? '',
 			icon_url: author_avatar ?? '',
 		},
 		footer: { text: `${BOT_NAME} ${IS_CUSTOM_BOT ? '👑' : ''}`, icon_url: BOT_AVATAR },
-		fields: fields,
+		fields,
 		thumbnail: {
 			url: thumbnail_url ?? '',
 		},

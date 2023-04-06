@@ -2,27 +2,28 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
 import generateEmbed from '../../helpers/generate/embed';
-import { APP_ENV, PING } from '../../helpers/provide/environment';
+import { PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
-import { getCurrentDate, getCurrentOffset } from '../../helpers/utils/date';
+import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { StatusCMD } from '../../lib/commands';
+import { StatsCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
+import { isNotPrd } from '../../lib/utils/config';
 
 @ApplyOptions<Command.Options>({
-	name: 'status',
-	description: 'Status Command',
+	name: 'stats',
+	description: 'Stats Command',
 	// TODO: Enable this when #71 is done
-	enabled: APP_ENV !== 'prd',
+	enabled: isNotPrd,
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })
-export class StatusCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(await StatusCMD(), {
+export class StatsCommand extends Command {
+	public override registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(StatsCMD(), {
 			guildIds: getCommandGuilds('global'),
 			registerCommandIfMissing: true,
 		});
@@ -30,41 +31,44 @@ export class StatusCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const dateObject = getCurrentOffset();
-		const todayUTC = getCurrentDate();
+		const currentOffset = getCurrentOffset();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
-		const status = {
-			date: todayUTC,
-			offset: dateObject?.timezone,
+		const stats = {
+			date: currentOffset.dateFormatted,
+			offset: currentOffset?.utcOffset,
 			servercount: getGuildCount(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
-			memory: memoryUsageInPercent,
+			memory: {
+				usage: memoryUsageInPercent,
+				used: process.memoryUsage().heapUsed,
+				total: os.totalmem(),
+			},
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
-			title: `${PING} Current Status`,
-			description: 'This is the overview of the bot\'s current stats.',
+			title: `${PING} Current Stats`,
+			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{
 					name: 'Date',
-					value: `${status.date}`,
+					value: `${stats.date}`,
 					inline: true,
 				},
 				{
 					name: 'Offset',
-					value: `${status.offset}`,
+					value: `${stats.offset ?? 'Unknown'}`,
 					inline: true,
 				},
 				{
 					name: 'Next Offset',
-					value: `${status.offset === -11 ? 12 : status.offset! - 1}`,
+					value: `${stats.offset === -11 ? 12 : stats.offset! - 1}`,
 					inline: true,
 				},
 
 				{
 					name: 'Servercount',
-					value: `${status.servercount}`,
+					value: `${stats.servercount}`,
 					inline: true,
 				},
 				{
@@ -74,27 +78,38 @@ export class StatusCommand extends Command {
 				},
 				{
 					name: 'Bot Ping',
-					value: `${status.ping}ms`,
+					value: `${stats.ping}ms`,
 					inline: true,
 				},
 				{
-					name: 'API Ping',
+					name: 'API Ping #TODO',
 					value: `${date - interaction.createdTimestamp}ms`,
 					inline: true,
 				},
 				{
-					name: 'CPU Usage',
-					value: `${status.cpu.system.toFixed(2)}%`,
+					name: 'CPU Usage #TODO',
+					value: `${stats.cpu.system.toLocaleString()}%`,
+					inline: true,
+				},
+				{ name: 'Birthdays registered #TODO', value: '0', inline: true },
+				{
+					name: 'RAM Usage',
+					value: `${stats.memory.usage}%`,
 					inline: true,
 				},
 				{
-					name: 'RAM Usage',
-					value: `${status.memory}%`,
+					name: 'RAM Used',
+					value: `${(stats.memory.used / 1024 / 1024).toFixed(2)}MB`,
+					inline: true,
+				},
+				{
+					name: 'RAM Total',
+					value: `${(stats.memory.total / 1024 / 1024).toFixed(2)}MB`,
 					inline: true,
 				},
 			],
 		};
-		const embed = await generateEmbed(embedRaw);
-		return await replyToInteraction(interaction, { embeds: [embed] });
+		const embed = generateEmbed(embedRaw);
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

@@ -7,7 +7,7 @@ import { authenticated } from '../../lib/api/utils';
 @ApplyOptions<Route.Options>({ route: 'cleanup/disabled' })
 export class UserRoute extends Route {
 	@authenticated()
-	public async [methods.DELETE](_request: ApiRequest, response: ApiResponse) {
+	public [methods.DELETE](_request: ApiRequest, response: ApiResponse) {
 		const oneDayAgo = new Date();
 		oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 		DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
