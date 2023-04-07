@@ -1,3 +1,13 @@
+import { container } from '@sapphire/framework';
+
 export default function getPremiumGuilds() {
-	// TODO: #11 Get premium guilds from API
+	return container.prisma.guild.findMany({
+		where: {
+			premium: true,
+		},
+		select: {
+			guildId: true,
+			premium: true,
+		},
+	});
 }
