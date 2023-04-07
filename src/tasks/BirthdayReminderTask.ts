@@ -7,12 +7,14 @@ import { Time } from '@sapphire/timestamp';
 import {
 	APIEmbed,
 	codeBlock,
+	EmbedField,
 	Guild,
 	GuildMember,
 	inlineCode,
 	Role,
 	roleMention,
 	Snowflake,
+	ThreadAutoArchiveDuration,
 	userMention,
 } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
@@ -21,7 +23,7 @@ import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environ
 import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
-import type { BirthdayEventInfoModel } from '../lib/model';
+import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
@@ -86,27 +88,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfos.push(eventInfo);
 		}
 		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
-
-		const embedDescription =
-			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-						0,
-						EmbedLimits.MaximumDescriptionLength - 3,
-				  )}...`
-				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
-
-		await sendMessage(BOT_ADMIN_LOG, {
-			embeds: [
-				generateEmbed({
-					title: 'BirthdayScheduler Report',
-					description: embedDescription,
-					fields: [
-						...dateFields,
-						{ name: 'Birthday Count', value: inlineCode(todaysBirthdays.length.toString()), inline: true },
-					],
-				}),
-			],
-		});
+		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, todaysBirthdays.length, current);
 		return container.logger.info(
 			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
 		);
@@ -283,5 +265,48 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		return formattedMessage;
+	}
+
+	private async sendBirthdaySchedulerReport(
+		eventInfos: BirthdayEventInfoModel[],
+		dateFields: EmbedField[],
+		birthdayCount: number,
+		current: TimezoneObject,
+	) {
+		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
+
+		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
+		const embedDescription =
+			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+						0,
+						EmbedLimits.MaximumDescriptionLength - 3,
+				  )}...`
+				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
+
+		const schedulerReportMessage = await sendMessage(BOT_ADMIN_LOG, {
+			embeds: [
+				generateEmbed({
+					title: embedTitle,
+					description: '',
+					fields: [
+						...dateFields,
+						{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
+					],
+				}),
+			],
+		});
+		const schedulerLogThread = await schedulerReportMessage?.startThread({
+			name: embedTitle,
+			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+		});
+		await schedulerLogThread?.send({
+			embeds: [
+				generateEmbed({
+					title: embedTitle,
+					description: embedDescription,
+				}),
+			],
+		});
 	}
 }
