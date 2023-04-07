@@ -102,10 +102,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (birthdayRole) {
 			const role = await guild.roles.fetch(birthdayRole);
 			if (!role) {
-				if (DEBUG)
-					this.container.logger.warn(
-						`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`,
-					);
+				this.container.logger.warn(
+					`[BirthdayTask] Birthday role not found for guild ${guild.id} [${guild.name}]`,
+				);
 				return { error: true, message: 'Birthday role not found' };
 			}
 			await this.addCurrentBirthdayChildRole(member, guildId, role, isTest);
@@ -127,7 +126,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
 		const birthdayEmbed = generateEmbed(embed);
 
-		return this.sendBirthdayAnnouncement(content, announcementChannel, birthdayEmbed);
+		return this.sendBirthdayAnnouncement(guildId, content, announcementChannel, birthdayEmbed);
 	}
 
 	private async addCurrentBirthdayChildRole(member: GuildMember, guildId: Snowflake, role: Role, isTest: boolean) {
@@ -140,12 +139,22 @@ export class BirthdayReminderTask extends ScheduledTask {
 				delay: isTest ? Time.Minute / 6 : Time.Day,
 			});
 		} catch (error: any) {
-			if (error instanceof Error)
+			if (error instanceof Error) {
+				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
+					// send Log to user and remove role from config
+					await this.container.utilities.guild.reset.BirthdayRole(guildId);
+				}
 				return this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
+			}
 		}
 	}
 
-	private async sendBirthdayAnnouncement(content: string, channel_id: string, birthdayEmbed: APIEmbed) {
+	private async sendBirthdayAnnouncement(
+		guildId: Snowflake,
+		content: string,
+		channel_id: Snowflake,
+		birthdayEmbed: APIEmbed,
+	) {
 		try {
 			const message = await sendMessage(channel_id, {
 				content,
@@ -155,15 +164,20 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return message;
 		} catch (error: any) {
 			if (error instanceof Error) {
-				container.logger.warn(
+				// Send error message to log channel
+				// TODO: Changed error message
+				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
+					// send Log to user and remove channel from config
+					await this.container.utilities.guild.reset.AnnouncementChannel(guildId);
+				}
+				if (error.message.includes('Unknown Channel')) {
+					// send Log to user and remove channel from config
+					await this.container.utilities.guild.reset.AnnouncementChannel(guildId);
+				}
+				return container.logger.warn(
 					"COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
 					error.message,
 				);
-				// Send error message to log channel
-				// TODO: Changed error message
-				if (error.message.includes('Missing Access')) {
-					// send Log to user
-				}
 			}
 
 			return null;
