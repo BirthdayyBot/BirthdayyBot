@@ -2,6 +2,7 @@ import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import type { TimezoneObject } from '../../lib/model';
 import { checkIfLengthIsTwo } from './string';
 
 dayjs.extend(utc);
@@ -100,7 +101,7 @@ export function isDateString(date: string): boolean {
 	return isDate;
 }
 
-const TIMEZONE_VALUES: Record<number, string> = {
+export const TIMEZONE_VALUES: Record<number, string> = {
 	'-11': 'Pacific/Samoa',
 	'-10': 'Pacific/Honolulu',
 	'-9': 'America/Anchorage',
@@ -126,13 +127,6 @@ const TIMEZONE_VALUES: Record<number, string> = {
 	11: 'Pacific/Noumea',
 	12: 'Pacific/Fiji',
 };
-
-interface TimezoneObject {
-	date: Dayjs;
-	dateFormatted: string;
-	utcOffset?: keyof typeof TIMEZONE_VALUES;
-	timezone?: typeof TIMEZONE_VALUES;
-}
 
 /**
  * It creates an array of timezone objects, then finds the one where the hour is 0

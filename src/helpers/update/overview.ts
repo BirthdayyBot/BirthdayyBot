@@ -27,8 +27,15 @@ export default async function updateBirthdayOverview(guild_id: string) {
 					) {
 						await generateNewOverviewMessage(overviewChannel, birthdayList);
 						container.logger.warn('Message Not found, so generated new overview message');
+					} else if (error.message.includes('Missing Permissions')) {
+						await container.utilities.guild.reset.OverviewChannel(guild_id);
+						await container.utilities.guild.reset.OverviewMessage(guild_id);
+						container.logger.warn('Overview Channel was missing permissions, so reset it');
 					} else {
-						container.logger.error('[OVERVIEW CHANNEL] ', error);
+						container.logger.error('[OVERVIEW CHANNEL 1] ', error.message);
+						if (error.message.includes('empty message')) {
+							container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', birthdayEmbedObj);
+						}
 					}
 				}
 			}
@@ -39,7 +46,12 @@ export default async function updateBirthdayOverview(guild_id: string) {
 			await generateNewOverviewMessage(overviewChannel, birthdayList);
 		}
 	} catch (error) {
-		container.logger.error('[OVERVIEW CHANNEL] ', error);
+		if (error instanceof Error) {
+			container.logger.error('[OVERVIEW CHANNEL 2] ', error.message);
+			if (error.message.includes('empty message')) {
+				container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', birthdayEmbedObj);
+			}
+		}
 	}
 }
 

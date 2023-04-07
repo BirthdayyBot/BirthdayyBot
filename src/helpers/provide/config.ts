@@ -51,28 +51,28 @@ export async function setDefaultConfigs(guildId: string) {
 export async function setDefaultConfig(config_name: ConfigName, guildId: string) {
 	switch (config_name) {
 		case 'announcementChannel':
-			await container.utilities.guild.set.AnnouncementChannel(guildId, null);
+			await container.utilities.guild.reset.AnnouncementChannel(guildId);
 			break;
 		case 'overviewChannel':
-			await container.utilities.guild.set.OverviewChannel(guildId, null);
+			await container.utilities.guild.reset.OverviewChannel(guildId);
 			break;
 		case 'logChannel':
-			await container.utilities.guild.set.LogChannel(guildId, null);
+			await container.utilities.guild.reset.LogChannel(guildId);
 			break;
 		case 'announcementMessage':
-			await container.utilities.guild.set.AnnouncementMessage(guildId, undefined);
+			await container.utilities.guild.reset.AnnouncementMessage(guildId);
 			break;
 		case 'overviewMessage':
-			await container.utilities.guild.set.OverviewMessage(guildId, null);
+			await container.utilities.guild.reset.OverviewMessage(guildId);
 			break;
 		case 'timezone':
-			await container.utilities.guild.set.Timezone(guildId, undefined);
+			await container.utilities.guild.reset.Timezone(guildId);
 			break;
 		case 'birthdayRole':
-			await container.utilities.guild.set.BirthdayRole(guildId, null);
+			await container.utilities.guild.reset.BirthdayRole(guildId);
 			break;
 		case 'birthdayPingRole':
-			await container.utilities.guild.set.BirthdayPingRole(guildId, null);
+			await container.utilities.guild.reset.BirthdayPingRole(guildId);
 			break;
 		default:
 			throw new Error(`Unknown config ${config_name}`);
