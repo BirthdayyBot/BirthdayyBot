@@ -7,6 +7,7 @@ import { Time } from '@sapphire/timestamp';
 import {
 	APIEmbed,
 	codeBlock,
+	DiscordAPIError,
 	EmbedField,
 	Guild,
 	GuildMember,
@@ -95,20 +96,20 @@ export class BirthdayReminderTask extends ScheduledTask {
 	}
 
 	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {
-		const guild = await getGuildInformation(guildId);
-		const member = await getGuildMember(guildId, userId);
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
 			guildId,
 			error: '',
 		};
-
+		const guild = await getGuildInformation(guildId);
 		if (!guild) {
+			await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true);
 			eventInfo.error = 'Guild not found';
 			return eventInfo;
 		}
-
+		const member = await getGuildMember(guildId, userId);
 		if (!member) {
+			await this.container.utilities.birthday.update.BirthdayDisabled(userId, guildId, true);
 			eventInfo.error = 'Member not found';
 			return eventInfo;
 		}
@@ -191,7 +192,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			returnData.message = 'Success';
 			return returnData;
 		} catch (error: any) {
-			if (error instanceof Error) {
+			if (error instanceof DiscordAPIError) {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
 					// send Log to user and remove role from config
 					await this.container.utilities.guild.reset.BirthdayRole(guildId);
@@ -225,7 +226,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			returnData.message = 'Success';
 			return returnData;
 		} catch (error: any) {
-			if (error instanceof Error) {
+			if (error instanceof DiscordAPIError) {
 				// TODO: Changed error message
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
 					// send Log to user and remove channel from config

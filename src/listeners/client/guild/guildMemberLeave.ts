@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener } from '@sapphire/framework';
-import type { GuildMember } from 'discord.js';
+import { DiscordAPIError, GuildMember } from 'discord.js';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 
 @ApplyOptions<Listener.Options>({ event: Events.GuildMemberRemove })
@@ -16,7 +16,7 @@ export class UserEvent extends Listener {
 				await updateBirthdayOverview(guildId);
 			}
 		} catch (error: any) {
-			if (error instanceof Error) {
+			if (error instanceof DiscordAPIError) {
 				container.logger.warn(
 					`[GuildMemberLeave] [GID: ${guildId}] [UID ${userId}] Could not remove birthday from left user: `,
 					error.message,

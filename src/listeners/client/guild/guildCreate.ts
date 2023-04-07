@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
-import type { Guild, Snowflake } from 'discord.js';
+import { DiscordAPIError, Guild, Snowflake } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
 import { IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
 import joinServerLog from '../../../helpers/send/joinServerLog';
@@ -59,7 +59,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 				container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
 				return userId;
 			} catch (error) {
-				if (error instanceof Error) {
+				if (error instanceof DiscordAPIError) {
 					container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error.message}`);
 					return undefined;
 				}

@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import type { MessageCreateOptions } from 'discord.js';
+import { DiscordAPIError, MessageCreateOptions } from 'discord.js';
 import { editMessage, sendMessage } from '../../lib/discord/message';
 import generateBirthdayList from '../generate/birthdayList';
 import generateEmbed from '../generate/embed';
@@ -19,7 +19,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 					components: birthdayList.components,
 				});
 			} catch (error: any) {
-				if (error instanceof Error) {
+				if (error instanceof DiscordAPIError) {
 					if (
 						error.message === 'Unknown Message' ||
 						error.message.includes('authored by another user') ||
@@ -46,7 +46,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 			await generateNewOverviewMessage(overviewChannel, birthdayList);
 		}
 	} catch (error) {
-		if (error instanceof Error) {
+		if (error instanceof DiscordAPIError) {
 			container.logger.error('[OVERVIEW CHANNEL 2] ', error.message);
 			if (error.message.includes('empty message')) {
 				container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', birthdayEmbedObj);

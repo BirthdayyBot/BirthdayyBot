@@ -1,8 +1,9 @@
-import { container } from '@sapphire/pieces';
-import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
-import { authenticated } from '../../lib/api/utils';
-import { ApplyOptions } from '@sapphire/decorators';
 import type { Guild } from '@prisma/client';
+import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/pieces';
+import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { DiscordAPIError } from 'discord.js';
+import { authenticated } from '../../lib/api/utils';
 
 @ApplyOptions<Route.Options>({ route: 'cleanup/test' })
 export class UserRoute extends Route {
@@ -31,7 +32,7 @@ export class UserRoute extends Route {
 			const guildExists = await container.client.guilds.fetch(guild_id);
 			container.logger.info('guild exists', guildExists.id);
 		} catch (error: any) {
-			if (error instanceof Error) {
+			if (error instanceof DiscordAPIError) {
 				if (error.message === 'Unknown Guild') return false;
 				container.logger.info('error', error.message);
 			}
