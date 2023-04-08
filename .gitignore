@@ -134,6 +134,4 @@ doppler.yml
 ./vscode/settings.json
 
 # ignore .idea
-/.idea/.gitignore
-/.idea/inspectionProfiles/Project_Default.xml
-/.idea/vcs.xml
+.idea
