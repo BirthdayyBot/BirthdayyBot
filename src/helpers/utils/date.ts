@@ -151,15 +151,13 @@ export function createTimezoneObjects(): TimezoneObject[] {
 }
 
 export function getCurrentOffset(): TimezoneObject {
-	// Loop through all possible UTC offsets (-11 to +12)
-	for (let i = -11; i <= 12; i++) {
+	for (let offset = -11; offset <= 12; offset++) {
 		// Get the current time in the UTC offset timezone
-		const offset = i;
-		const hourWithHourZero = offset === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(i).hour();
+		const hourWithHourZero = offset === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(offset).hour();
+		const today = offset === 0 ? dayjs().tz('UTC') : dayjs().utcOffset(offset);
 
 		// If the current time is 0, set the UTC offset as the hourZeroTimezone
 		if (hourWithHourZero === 0) {
-			const today = dayjs().utcOffset(offset);
 			const timezoneObject: TimezoneObject = {
 				date: today,
 				dateFormatted: today.format('YYYY-MM-DD'),
