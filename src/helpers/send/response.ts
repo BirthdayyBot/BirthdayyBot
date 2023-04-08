@@ -1,4 +1,5 @@
 import type {
+	ButtonInteraction,
 	ChatInputCommandInteraction,
 	ContextMenuCommandInteraction,
 	InteractionReplyOptions,
@@ -13,6 +14,13 @@ import type {
  */
 export default async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
+	options: string | MessagePayload | InteractionReplyOptions,
+) {
+	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+}
+
+export async function replyToButtonInteraction(
+	interaction: ButtonInteraction,
 	options: string | MessagePayload | InteractionReplyOptions,
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);

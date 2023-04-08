@@ -7,8 +7,8 @@ import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { isNotDev } from '../lib/utils/config';
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'CleaningTask', pattern: '0 0 * * *', enabled: isNotDev })
-export class BirthdayReminderTask extends ScheduledTask {
+@ApplyOptions<ScheduledTask.Options>({ name: 'CleanDatabaseTask', pattern: '0 0 * * *', enabled: isNotDev })
+export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		this.container.logger.debug('[CleaningTask] Started');
 

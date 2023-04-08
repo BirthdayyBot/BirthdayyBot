@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { isPrd } from '../../lib/utils/config';
 import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
 
@@ -75,7 +76,7 @@ export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 export const BOT_SERVER_LOG = process.env.LOG_CHANNEL_SERVER ?? '1077621363881300018';
 export const BOT_ADMIN_LOG = process.env.LOG_CHANNEL_ADMIN ?? '1077621363881300018';
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
-export const VOTE_CHANNEL_ID = '950683261540130816';
+export const VOTE_CHANNEL_ID = isPrd ? '950683261540130816' : BOT_ADMIN_LOG;
 export const VOTE_ROLE_ID = '1039089174948626473';
 
 // Config
