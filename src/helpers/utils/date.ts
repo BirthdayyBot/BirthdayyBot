@@ -154,17 +154,17 @@ export function getCurrentOffset(): TimezoneObject {
 	// Loop through all possible UTC offsets (-11 to +12)
 	for (let i = -11; i <= 12; i++) {
 		// Get the current time in the UTC offset timezone
-		const currentTime = dayjs().utcOffset(i).hour();
+		const offset = i;
+		const hourWithHourZero = offset === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(i).hour();
 
 		// If the current time is 0, set the UTC offset as the hourZeroTimezone
-		if (currentTime === 0) {
-			const offsetWithHourZero = i;
-			const today = dayjs().utcOffset(offsetWithHourZero);
+		if (hourWithHourZero === 0) {
+			const today = dayjs().utcOffset(offset);
 			const timezoneObject: TimezoneObject = {
 				date: today,
 				dateFormatted: today.format('YYYY-MM-DD'),
-				utcOffset: offsetWithHourZero,
-				timezone: TIMEZONE_VALUES[offsetWithHourZero],
+				utcOffset: offset,
+				timezone: TIMEZONE_VALUES[offset],
 			};
 			container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 			return timezoneObject;
