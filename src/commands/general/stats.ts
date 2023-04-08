@@ -24,7 +24,7 @@ import { isNotPrd } from '../../lib/utils/config';
 export class StatsCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(StatsCMD(), {
-			guildIds: getCommandGuilds('global'),
+			guildIds: getCommandGuilds('testing'),
 			registerCommandIfMissing: true,
 		});
 	}
