@@ -16,7 +16,7 @@ export class VoteReminderButton extends InteractionHandler {
 		return this.some({ time: timeUntil12HoursLater });
 	}
 
-	public async run(interaction: ButtonInteraction<'cached'>, result: { time: number }) {
+	public async run(interaction: ButtonInteraction, result: { time: number }) {
 		await interaction.deferUpdate();
 		await editInteractionResponse(interaction, {
 			components: [
