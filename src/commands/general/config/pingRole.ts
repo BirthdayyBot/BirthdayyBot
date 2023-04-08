@@ -25,7 +25,7 @@ export class PingRoleCommand extends Command {
 		const result = await Result.fromAsync(() =>
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { birthdayRole: role.id },
+				data: { birthdayPingRole: role.id },
 			}),
 		);
 
