@@ -7,7 +7,7 @@ import { editInteractionResponse } from '../lib/discord/interaction';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
-	public override parse(interaction: ButtonInteraction<'cached'>) {
+	public override parse(interaction: ButtonInteraction) {
 		this.container.logger.info('VoteReminderButton ~ overrideparse ~ interaction.customId:', interaction.customId);
 		if (!(interaction.customId === 'vote-reminder-button')) return this.none();
 
