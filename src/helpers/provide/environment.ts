@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
-import { isPrd } from '../../lib/utils/config';
 import { parseBoolean } from '../utils/utils';
 import { getGuildPremium } from './config';
 
@@ -12,6 +11,14 @@ export const SRC_DIR = join(ROOT_DIR, 'src');
 export const { NODE_ENV } = process.env;
 export const { APP_ENV } = process.env;
 export const DEBUG = parseBoolean(process.env.DEBUG);
+
+// ENVIRONMENT
+export const isPrd = APP_ENV === 'prd';
+export const isTst = APP_ENV === 'tst';
+export const isDev = APP_ENV === 'dev';
+
+export const isNotPrd = APP_ENV !== 'prd';
+export const isNotDev = APP_ENV !== 'dev';
 
 // GENERIC
 export const { BOT_NAME } = process.env;

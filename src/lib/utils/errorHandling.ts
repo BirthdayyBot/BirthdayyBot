@@ -3,10 +3,9 @@ import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
 import type { APIEmbed } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
-import { DEBUG, SENTRY_DSN } from '../../helpers/provide/environment';
+import { DEBUG, isPrd, SENTRY_DSN } from '../../helpers/provide/environment';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
-import { isPrd } from './config';
 
 export function logErrorToContainer({
 	error,

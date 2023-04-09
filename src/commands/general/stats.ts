@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
 import generateEmbed from '../../helpers/generate/embed';
-import { PING } from '../../helpers/provide/environment';
+import { isNotPrd, PING } from '../../helpers/provide/environment';
 import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
@@ -10,7 +10,6 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
-import { isNotPrd } from '../../lib/utils/config';
 
 @ApplyOptions<Command.Options>({
 	name: 'stats',
