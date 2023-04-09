@@ -172,7 +172,7 @@ export function getCurrentOffset(): TimezoneObject {
 	return {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY-MM-DD'),
-		utcOffset: undefined,
-		timezone: undefined,
+		utcOffset: 0,
+		timezone: 'UTC',
 	};
 }
