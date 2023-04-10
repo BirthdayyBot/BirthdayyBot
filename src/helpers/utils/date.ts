@@ -151,6 +151,7 @@ export function createTimezoneObjects(): TimezoneObject[] {
 }
 
 export function getCurrentOffset(): TimezoneObject {
+	let timezoneObject: TimezoneObject;
 	for (let offset = -11; offset <= 12; offset++) {
 		// Get the current time in the UTC offset timezone
 		const hourWithHourZero = offset === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(offset).hour();
@@ -158,21 +159,22 @@ export function getCurrentOffset(): TimezoneObject {
 
 		// If the current time is 0, set the UTC offset as the hourZeroTimezone
 		if (hourWithHourZero === 0) {
-			const timezoneObject: TimezoneObject = {
+			timezoneObject = {
 				date: today,
 				dateFormatted: today.format('YYYY-MM-DD'),
 				utcOffset: offset,
 				timezone: TIMEZONE_VALUES[offset],
 			};
-			container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 			return timezoneObject;
 		}
 	}
-	container.logger.error('getCurrentOffset ~ Could not find timezone offset');
-	return {
+	container.logger.warn('getCurrentOffset ~ Could not find timezone offset');
+	timezoneObject = {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY-MM-DD'),
-		utcOffset: undefined,
-		timezone: undefined,
+		utcOffset: 0,
+		timezone: 'UTC',
 	};
+	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
+	return timezoneObject;
 }

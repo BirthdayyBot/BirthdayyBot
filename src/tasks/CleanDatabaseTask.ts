@@ -3,9 +3,8 @@ import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
-import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, isNotDev } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
-import { isNotDev } from '../lib/utils/config';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'CleanDatabaseTask', pattern: '0 0 * * *', enabled: isNotDev })
 export class CleanDatabaseTask extends ScheduledTask {
