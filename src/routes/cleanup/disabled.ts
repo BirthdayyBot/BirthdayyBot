@@ -12,10 +12,7 @@ export class UserRoute extends Route {
 		oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 		DEBUG ? container.logger.debug('oneDayAgo.toISOString()', oneDayAgo.toISOString()) : null;
 
-		const [guilds, birthdays] = await container.prisma.$transaction([
-			container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo),
-			container.utilities.birthday.delete.ByLastUpdatedDisabled(oneDayAgo),
-		]);
+		const [birthdays, guilds] = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
 
 		return response.ok({
 			count: {
