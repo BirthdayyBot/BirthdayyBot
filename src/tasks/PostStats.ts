@@ -9,6 +9,7 @@ import { isPrd } from '../helpers/provide/environment';
 })
 export class PostStats extends ScheduledTask {
 	public run() {
+		if (!isPrd) return;
 		return this.container.botList.postStats();
 	}
 }
