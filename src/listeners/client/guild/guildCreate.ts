@@ -40,6 +40,8 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			});
 		}
 
+		await this.container.tasks.run('PostStats', {});
+
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
 			if (
 				!(await guild.members.fetchMe()).permissions.has(

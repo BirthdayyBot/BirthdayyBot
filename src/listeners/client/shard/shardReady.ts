@@ -7,5 +7,6 @@ export class UserShardEvent extends Listener<typeof Events.ShardReady> {
 		if (id === 0) {
 			await this.container.server.connect();
 		}
+		await this.container.tasks.run('PostStats', {});
 	}
 }
