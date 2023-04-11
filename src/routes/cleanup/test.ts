@@ -1,7 +1,7 @@
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
-import { methods, Route, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
+import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { DiscordAPIError } from 'discord.js';
 import { authenticated } from '../../lib/api/utils';
 
@@ -9,7 +9,7 @@ import { authenticated } from '../../lib/api/utils';
 export class UserRoute extends Route {
 	@authenticated()
 	public async [methods.POST](_request: ApiRequest, response: ApiResponse) {
-		const enableGuild = await container.utilities.guild.get.GuildsEnableds();
+		const enableGuild = await container.utilities.guild.get.GuildsDisabled(false);
 
 		const cleanedGuilds = await this.processGuilds(enableGuild);
 		return response.ok({ enableGuild, countCleanedGuilds: cleanedGuilds.length, cleanedGuilds });

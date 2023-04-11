@@ -14,6 +14,7 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		await sendMessage(BOT_ADMIN_LOG, { content: 'online' });
+		await this.container.tasks.run('PostStats', {});
 	}
 
 	private printBanner() {

@@ -5,6 +5,7 @@ import { inlineCode } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
 import { BOT_ADMIN_LOG, isNotDev } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
+import { container } from '@sapphire/framework';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'CleanDatabaseTask', pattern: '0 0 * * *', enabled: isNotDev })
 export class CleanDatabaseTask extends ScheduledTask {
@@ -14,10 +15,10 @@ export class CleanDatabaseTask extends ScheduledTask {
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		// Delete all guilds and birthdays that are disabled and haven't been updated in the last 24 hours
-		const deletedGuilds = await this.container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
-		const deletedBirthdays = await this.container.utilities.birthday.delete.ByLastUpdatedDisabled(oneDayAgo);
-		const deletedGuildsCount = deletedGuilds.count;
-		const deletedBirthdaysCount = deletedBirthdays.count;
+
+		const [deletedBirthdays, deletedGuilds] = await container.utilities.guild.delete.ByLastUpdatedDisabled(
+			oneDayAgo,
+		);
 
 		await sendMessage(BOT_ADMIN_LOG, {
 			embeds: [
@@ -25,10 +26,10 @@ export class CleanDatabaseTask extends ScheduledTask {
 					title: 'CleanUp Report',
 					description: '',
 					fields: [
-						{ name: 'Deleted Guilds', value: inlineCode(deletedGuildsCount.toString()), inline: true },
+						{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.count.toString()), inline: true },
 						{
 							name: 'Deleted Birthdays',
-							value: inlineCode(deletedBirthdaysCount.toString()),
+							value: inlineCode(deletedBirthdays.count.toString()),
 							inline: true,
 						},
 					],
