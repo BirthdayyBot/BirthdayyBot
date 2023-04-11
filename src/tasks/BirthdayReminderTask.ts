@@ -37,7 +37,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		const current = getCurrentOffset();
-		if (!current.utcOffset) {
+		if (current.utcOffset === undefined) {
 			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
