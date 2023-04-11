@@ -16,6 +16,5 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 		await leaveServerLog(guild);
 		await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
-		await this.container.tasks.run('PostStats', {});
 	}
 }

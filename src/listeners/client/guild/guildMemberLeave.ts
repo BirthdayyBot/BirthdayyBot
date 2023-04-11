@@ -15,7 +15,6 @@ export class UserEvent extends Listener {
 			if (removeUserRequest) {
 				await updateBirthdayOverview(guildId);
 			}
-			await this.container.tasks.run('PostStats', {});
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				container.logger.warn(
