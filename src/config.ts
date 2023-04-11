@@ -5,17 +5,16 @@ import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
-import { Time } from '@sapphire/time-utilities';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
+	type ClientOptions,
 	GatewayIntentBits,
 	PresenceData,
 	PresenceUpdateStatus,
 	WebhookClientData,
-	type ClientOptions,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import {
@@ -54,7 +53,6 @@ function parseBotListOptions(): BotList.Options {
 		shard: true,
 		autoPost: {
 			enabled: APP_ENV === 'prd',
-			interval: 3 * Time.Hour,
 		},
 		keys: {
 			topGG: TOKEN_TOPGG,

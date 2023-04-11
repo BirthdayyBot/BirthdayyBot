@@ -4,21 +4,19 @@ import type { Snowflake } from 'discord.js';
 
 export class Guild extends Utility {
 	public get = {
-		GuildById: async (guildId: string) => this.prisma.guild.findUnique({ where: { guildId } }),
-		GuildsByIds: async (guildIds: string[]) => this.prisma.guild.findMany({ where: { guildId: { in: guildIds } } }),
-		GuildsNotInIds: async (guildIds: string[]) =>
-			this.prisma.guild.findMany({ where: { guildId: { notIn: guildIds } } }),
-		GuildsByTimezone: async (guildIds: string[], timezone: number) =>
+		GuildById: (guildId: string) => this.prisma.guild.findUnique({ where: { guildId } }),
+		GuildsByIds: (guildIds: string[]) => this.prisma.guild.findMany({ where: { guildId: { in: guildIds } } }),
+		GuildsNotInIds: (guildIds: string[]) => this.prisma.guild.findMany({ where: { guildId: { notIn: guildIds } } }),
+		GuildsByTimezone: (guildIds: string[], timezone: number) =>
 			this.prisma.guild.findMany({ where: { guildId: { in: guildIds }, timezone } }),
-		GuildsEnableds: async () => this.prisma.guild.findMany({ where: { disabled: false } }),
-		GuildsDisabled: async () => this.prisma.guild.findMany({ where: { disabled: true } }),
-		GuildLanguage: async (guildId: string) =>
+		GuildsDisabled: (disabled = true) => this.prisma.guild.findMany({ where: { disabled } }),
+		GuildLanguage: (guildId: string) =>
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, language: true } }),
-		GuildPremium: async (guildId: string) =>
+		GuildPremium: (guildId: string) =>
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, premium: true } }),
-		GuildDisabled: async (guildId: string) =>
+		GuildDisabled: (guildId: string) =>
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, disabled: true } }),
-		GuildConfig: async (guildId: string) =>
+		GuildConfig: (guildId: string) =>
 			this.prisma.guild.findUnique({
 				where: { guildId },
 				select: {
@@ -38,30 +36,30 @@ export class Guild extends Utility {
 	};
 
 	public set = {
-		AnnouncementChannel: async (guildId: string, channelID: string) =>
+		AnnouncementChannel: (guildId: string, channelID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { announcementChannel: channelID } }),
-		AnnouncementMessage: async (guildId: string, message: string) =>
+		AnnouncementMessage: (guildId: string, message: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { announcementMessage: message } }),
-		OverviewChannel: async (guildId: string, channelID: string) =>
+		OverviewChannel: (guildId: string, channelID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { overviewChannel: channelID } }),
-		OverviewMessage: async (guildId: string, messageID: string) =>
+		OverviewMessage: (guildId: string, messageID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { overviewMessage: messageID } }),
-		LogChannel: async (guildId: string, channelID: string) =>
+		LogChannel: (guildId: string, channelID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { logChannel: channelID } }),
-		Timezone: async (guildId: string, timezone: number) =>
+		Timezone: (guildId: string, timezone: number) =>
 			this.prisma.guild.update({ where: { guildId }, data: { timezone } }),
-		Language: async (guildId: string, language: string) =>
+		Language: (guildId: string, language: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { language } }),
-		BirthdayRole: async (guildId: string, roleID: string) =>
+		BirthdayRole: (guildId: string, roleID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayRole: roleID } }),
-		BirthdayPingRole: async (guildId: string, roleID: string) =>
+		BirthdayPingRole: (guildId: string, roleID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: roleID } }),
-		Premium: async (guildId: string, premium: boolean) =>
+		Premium: (guildId: string, premium: boolean) =>
 			this.prisma.guild.update({ where: { guildId }, data: { premium } }),
 	};
 
 	public update = {
-		DisableGuildAndBirthdays: async (guildId: string, disabled: boolean) =>
+		DisableGuildAndBirthdays: (guildId: string, disabled: boolean) =>
 			this.prisma.guild.update({
 				where: {
 					guildId,
@@ -79,7 +77,7 @@ export class Guild extends Utility {
 				},
 				include: { birthday: true },
 			}),
-		ByNotInAndBirthdays: async (guildId: string[], disabled: boolean) =>
+		ByNotInAndBirthdays: (guildId: string[], disabled: boolean) =>
 			this.prisma.$transaction([
 				this.prisma.guild.updateMany({
 					where: {
@@ -101,10 +99,13 @@ export class Guild extends Utility {
 	};
 
 	public delete = {
-		GuildByID: async (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
-		ByDisabledGuilds: async () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
-		ByLastUpdatedDisabled: async (date: Date) =>
-			this.prisma.guild.deleteMany({ where: { lastUpdated: date.toISOString(), disabled: true } }),
+		GuildByID: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
+		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
+		ByLastUpdatedDisabled: (date: Date) =>
+			this.prisma.$transaction([
+				this.prisma.birthday.deleteMany({ where: { guild: { lastUpdated: { lt: date.toISOString() } } } }),
+				this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() } } }),
+			]),
 	};
 
 	public check = {
@@ -118,9 +119,9 @@ export class Guild extends Utility {
 	};
 
 	public reset = {
-		AnnouncementChannel: async (guildId: Snowflake) =>
+		AnnouncementChannel: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { announcementChannel: null } }),
-		AnnouncementMessage: async (guildId: Snowflake) =>
+		AnnouncementMessage: (guildId: Snowflake) =>
 			this.prisma.guild.update({
 				where: { guildId },
 				data: {
@@ -128,18 +129,17 @@ export class Guild extends Utility {
 						'<:arrwright:931267038746390578> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3',
 				},
 			}),
-		OverviewChannel: async (guildId: Snowflake) =>
+		OverviewChannel: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { overviewChannel: null } }),
-		OverviewMessage: async (guildId: Snowflake) =>
+		OverviewMessage: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { overviewMessage: null } }),
-		LogChannel: async (guildId: Snowflake) =>
+		LogChannel: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { logChannel: null } }),
-		Timezone: async (guildId: Snowflake) => this.prisma.guild.update({ where: { guildId }, data: { timezone: 0 } }),
-		Language: async (guildId: Snowflake) =>
-			this.prisma.guild.update({ where: { guildId }, data: { language: 'en-US' } }),
-		BirthdayRole: async (guildId: Snowflake) =>
+		Timezone: (guildId: Snowflake) => this.prisma.guild.update({ where: { guildId }, data: { timezone: 0 } }),
+		Language: (guildId: Snowflake) => this.prisma.guild.update({ where: { guildId }, data: { language: 'en-US' } }),
+		BirthdayRole: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayRole: null } }),
-		BirthdayPingRole: async (guildId: Snowflake) =>
+		BirthdayPingRole: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: null } }),
 	};
 

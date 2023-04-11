@@ -83,6 +83,7 @@ declare module '@sapphire/plugin-scheduled-tasks' {
 		BirthdayRoleRemoverTask: never;
 		VoteReminderTask: never;
 		CleanDatabaseTask: never;
+		PostStats: never;
 	}
 }
 
