@@ -10,18 +10,18 @@ import * as Sentry from '@sentry/node';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
-	type ClientOptions,
 	GatewayIntentBits,
 	PresenceData,
 	PresenceUpdateStatus,
 	WebhookClientData,
+	type ClientOptions,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import {
 	API_EXTENSION,
 	API_PORT,
-	APP_ENV,
 	DEBUG,
+	isPrd,
 	REDIS_DB,
 	REDIS_HOST,
 	REDIS_PASSWORD,
@@ -52,7 +52,7 @@ function parseBotListOptions(): BotList.Options {
 		debug: DEBUG,
 		shard: true,
 		autoPost: {
-			enabled: APP_ENV === 'prd',
+			enabled: isPrd,
 		},
 		keys: {
 			topGG: TOKEN_TOPGG,
