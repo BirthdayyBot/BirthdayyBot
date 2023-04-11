@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@sapphire/eslint-config": "^4.4.0",
-		"@sapphire/ts-config": "^3.3.4",
+		"@sapphire/ts-config": "^4.0.0",
 		"@types/node": "^18.15.11",
 		"@types/ws": "^8.5.4",
 		"@typescript-eslint/eslint-plugin": "^5.57.1",
