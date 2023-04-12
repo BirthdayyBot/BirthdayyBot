@@ -11,7 +11,7 @@ import { container } from '@sapphire/framework';
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		this.container.logger.debug('[CleaningTask] Started');
-
+		return;
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		// Delete all guilds and birthdays that are disabled and haven't been updated in the last 24 hours
