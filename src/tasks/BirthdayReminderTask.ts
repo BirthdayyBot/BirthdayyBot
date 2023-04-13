@@ -99,7 +99,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
 			guildId,
-			error: '',
 		};
 		const guild = await getGuildInformation(guildId);
 		if (!guild) {
@@ -279,6 +278,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		current: TimezoneObject,
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
+
+		eventInfos.forEach((eventInfo) => {
+			if (eventInfo.announcement && eventInfo.announcement.sent) delete eventInfo.announcement;
+			if (eventInfo.birthday_role && eventInfo.birthday_role.added) delete eventInfo.birthday_role;
+			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
+		});
 
 		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
 		const embedDescription =
