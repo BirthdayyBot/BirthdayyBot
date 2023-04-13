@@ -61,15 +61,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		);
 
 		if (!todaysBirthdays.length) {
-			await sendMessage(BOT_ADMIN_LOG, {
-				embeds: [
-					generateEmbed({
-						title: 'BirthdayScheduler Report',
-						description: 'No Birthdays Now',
-						fields: dateFields,
-					}),
-				],
-			});
+			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return this.container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
 			);
@@ -278,6 +270,30 @@ export class BirthdayReminderTask extends ScheduledTask {
 		current: TimezoneObject,
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
+		const embedFields = [
+			...dateFields,
+			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
+		];
+		const embedDescription =
+			birthdayCount > 0
+				? codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+					? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+							0,
+							EmbedLimits.MaximumDescriptionLength - 3,
+					  )}...`
+					: codeBlock('json', JSON.stringify(eventInfos, null, 2))
+				: 'No Birthdays Today';
+
+		if (eventInfos.length <= 0) {
+			await sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: embedTitle,
+						description: embedDescription,
+					}),
+				],
+			});
+		}
 
 		eventInfos.forEach((eventInfo) => {
 			if (eventInfo.announcement && eventInfo.announcement.sent) delete eventInfo.announcement;
@@ -285,24 +301,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
 		});
 
-		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
-		const embedDescription =
-			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-						0,
-						EmbedLimits.MaximumDescriptionLength - 3,
-				  )}...`
-				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
-
 		const schedulerReportMessage = await sendMessage(BOT_ADMIN_LOG, {
 			embeds: [
 				generateEmbed({
 					title: embedTitle,
 					description: '',
-					fields: [
-						...dateFields,
-						{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
-					],
+					fields: embedFields,
 				}),
 			],
 		});
