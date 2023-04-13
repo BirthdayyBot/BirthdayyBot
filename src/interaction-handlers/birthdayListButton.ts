@@ -8,7 +8,7 @@ import generateEmbed from '../helpers/generate/embed';
 export class ExampleParseMethod extends InteractionHandler {
 	public override async parse(interaction: ButtonInteraction<'cached'>) {
 		if (!interaction.customId.startsWith('birthday_list_page_')) return this.none();
-		await interaction.deferUpdate();
+		await interaction.deferReply({ ephemeral: true });
 		if (!interaction.channel || !interaction.message) return this.none();
 		const message = await interaction.channel.messages.fetch(interaction.message.id);
 		return this.some({ isNormalMessage: message?.interaction ? false : true });
