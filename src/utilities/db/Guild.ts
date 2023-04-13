@@ -104,8 +104,12 @@ export class Guild extends Utility {
 		ByLastUpdatedDisabled: (date: Date) =>
 			this.prisma
 				.$transaction([
-					this.prisma.birthday.deleteMany({ where: { guild: { lastUpdated: { lt: date.toISOString() } } } }),
-					this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() } } }),
+					this.prisma.birthday.deleteMany({
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+					}),
+					this.prisma.guild.deleteMany({
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
+					}),
 				])
 				.catch((error: any) => {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
