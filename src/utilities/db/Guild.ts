@@ -33,6 +33,24 @@ export class Guild extends Utility {
 					premium: true,
 				},
 			}),
+		ByLastUpdatedDisabled: (date: Date) =>
+			this.prisma
+				.$transaction([
+					this.prisma.birthday.findMany({
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+					}),
+					this.prisma.guild.findMany({
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
+					}),
+				])
+				.then(([birthdays, guilds]) => ({
+					deletedBirthdays: birthdays.length,
+					deletedGuilds: guilds.length,
+				}))
+				.catch((error: any) => {
+					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					return { deletedBirthdays: 0, deletedGuilds: 0 };
+				}),
 	};
 
 	public set = {
@@ -102,10 +120,23 @@ export class Guild extends Utility {
 		GuildByID: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
 		ByLastUpdatedDisabled: (date: Date) =>
-			this.prisma.$transaction([
-				this.prisma.birthday.deleteMany({ where: { guild: { lastUpdated: { lt: date.toISOString() } } } }),
-				this.prisma.guild.deleteMany({ where: { lastUpdated: { lt: date.toISOString() } } }),
-			]),
+			this.prisma
+				.$transaction([
+					this.prisma.birthday.deleteMany({
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+					}),
+					this.prisma.guild.deleteMany({
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
+					}),
+				])
+				.then(([deletedBirthdays, deletedGuilds]) => ({
+					deletedBirthdays: deletedBirthdays.count,
+					deletedGuilds: deletedGuilds.count,
+				}))
+				.catch((error: any) => {
+					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					return { deletedBirthdays: 0, deletedGuilds: 0 };
+				}),
 	};
 
 	public check = {
