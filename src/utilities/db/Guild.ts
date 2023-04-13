@@ -33,6 +33,24 @@ export class Guild extends Utility {
 					premium: true,
 				},
 			}),
+		ByLastUpdatedDisabled: (date: Date) =>
+			this.prisma
+				.$transaction([
+					this.prisma.birthday.findMany({
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+					}),
+					this.prisma.guild.findMany({
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
+					}),
+				])
+				.then(([birthdays, guilds]) => ({
+					deletedBirthdays: birthdays.length,
+					deletedGuilds: guilds.length,
+				}))
+				.catch((error: any) => {
+					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					return { deletedBirthdays: 0, deletedGuilds: 0 };
+				}),
 	};
 
 	public set = {
@@ -111,8 +129,13 @@ export class Guild extends Utility {
 						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
 					}),
 				])
+				.then(([deletedBirthdays, deletedGuilds]) => ({
+					deletedBirthdays: deletedBirthdays.count,
+					deletedGuilds: deletedGuilds.count,
+				}))
 				.catch((error: any) => {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					return { deletedBirthdays: 0, deletedGuilds: 0 };
 				}),
 	};
 
