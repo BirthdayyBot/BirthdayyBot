@@ -61,15 +61,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		);
 
 		if (!todaysBirthdays.length) {
-			await sendMessage(BOT_ADMIN_LOG, {
-				embeds: [
-					generateEmbed({
-						title: 'BirthdayScheduler Report',
-						description: 'No Birthdays Now',
-						fields: dateFields,
-					}),
-				],
-			});
+			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return this.container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
 			);
@@ -99,7 +91,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
 			guildId,
-			error: '',
 		};
 		const guild = await getGuildInformation(guildId);
 		if (!guild) {
@@ -279,33 +270,36 @@ export class BirthdayReminderTask extends ScheduledTask {
 		current: TimezoneObject,
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
-
-		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
+		const embedFields = [
+			...dateFields,
+			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
+		];
 		const embedDescription =
-			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-						0,
-						EmbedLimits.MaximumDescriptionLength - 3,
-				  )}...`
-				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
+			birthdayCount > 0
+				? codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+					? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+							0,
+							EmbedLimits.MaximumDescriptionLength - 3,
+					  )}...`
+					: codeBlock('json', JSON.stringify(eventInfos, null, 2))
+				: 'No Birthdays Today';
 
-		const schedulerReportMessage = await sendMessage(BOT_ADMIN_LOG, {
-			embeds: [
-				generateEmbed({
-					title: embedTitle,
-					description: '',
-					fields: [
-						...dateFields,
-						{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
-					],
-				}),
-			],
+		if (eventInfos.length <= 0) {
+			return sendReport();
+		}
+
+		eventInfos.forEach((eventInfo) => {
+			if (eventInfo.announcement && eventInfo.announcement.sent) eventInfo.announcement = undefined;
+			if (eventInfo.birthday_role && eventInfo.birthday_role.added) eventInfo.birthday_role = undefined;
+			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
 		});
+
+		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
 			name: embedTitle,
 			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
 		});
-		await schedulerLogThread?.send({
+		return schedulerLogThread?.send({
 			embeds: [
 				generateEmbed({
 					title: embedTitle,
@@ -313,5 +307,17 @@ export class BirthdayReminderTask extends ScheduledTask {
 				}),
 			],
 		});
+
+		async function sendReport() {
+			return sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: embedTitle,
+						description: embedDescription,
+						fields: embedFields,
+					}),
+				],
+			});
+		}
 	}
 }
