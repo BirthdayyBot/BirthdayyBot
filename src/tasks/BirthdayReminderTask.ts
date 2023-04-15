@@ -285,36 +285,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 				: 'No Birthdays Today';
 
 		if (eventInfos.length <= 0) {
-			await sendMessage(BOT_ADMIN_LOG, {
-				embeds: [
-					generateEmbed({
-						title: embedTitle,
-						description: embedDescription,
-					}),
-				],
-			});
+			return sendReport();
 		}
 
 		eventInfos.forEach((eventInfo) => {
-			if (eventInfo.announcement && eventInfo.announcement.sent) delete eventInfo.announcement;
-			if (eventInfo.birthday_role && eventInfo.birthday_role.added) delete eventInfo.birthday_role;
+			if (eventInfo.announcement && eventInfo.announcement.sent) eventInfo.announcement = undefined;
+			if (eventInfo.birthday_role && eventInfo.birthday_role.added) eventInfo.birthday_role = undefined;
 			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
 		});
 
-		const schedulerReportMessage = await sendMessage(BOT_ADMIN_LOG, {
-			embeds: [
-				generateEmbed({
-					title: embedTitle,
-					description: '',
-					fields: embedFields,
-				}),
-			],
-		});
+		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
 			name: embedTitle,
 			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
 		});
-		await schedulerLogThread?.send({
+		return schedulerLogThread?.send({
 			embeds: [
 				generateEmbed({
 					title: embedTitle,
@@ -322,5 +307,17 @@ export class BirthdayReminderTask extends ScheduledTask {
 				}),
 			],
 		});
+
+		async function sendReport() {
+			return sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: embedTitle,
+						description: embedDescription,
+						fields: embedFields,
+					}),
+				],
+			});
+		}
 	}
 }
