@@ -1168,7 +1168,7 @@ __metadata:
     husky: ^8.0.3
     lib: ^5.0.1
     lint-staged: ^13.2.1
-    mysql2: ^3.2.2
+    mysql2: ^3.2.3
     npm-run-all: ^4.1.5
     prettier: ^2.8.7
     prisma: ^4.12.0
@@ -3251,9 +3251,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mysql2@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "mysql2@npm:3.2.2"
+"mysql2@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "mysql2@npm:3.2.3"
   dependencies:
     denque: ^2.1.0
     generate-function: ^2.3.1
@@ -3263,7 +3263,7 @@ __metadata:
     named-placeholders: ^1.1.3
     seq-queue: ^0.0.5
     sqlstring: ^2.3.2
-  checksum: 07d5640a78bf8dba959c2ee6930f7e4d4c5195c51fbccf8928c03911676268e807960e967540415a442bab1f2141785ef8ae0201526d0d07ea0a702a3d5e0f9b
+  checksum: 5b44b96cc2ae92c94c64573cc3a235e4e7a97b237bf22b8e8ab545c1acaf5cd2d24f7589d9a399c5d5641440ed68a11a272053791617c42a2ecbb32ee22b4465
   languageName: node
   linkType: hard
 
