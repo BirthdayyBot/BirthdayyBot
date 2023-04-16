@@ -30,7 +30,7 @@
     "@sentry/tracing": "^7.48.0",
     "@types/node-cron": "^3.0.7",
     "bullmq": "^3.10.4",
-    "colorette": "^2.0.19",
+    "colorette": "^2.0.20",
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.38",
     "discord.js": "^14.9.0",
