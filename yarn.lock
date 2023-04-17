@@ -734,13 +734,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-cron@npm:^3.0.7":
-  version: 3.0.7
-  resolution: "@types/node-cron@npm:3.0.7"
-  checksum: 1a37bd32efe55a285b08299ef4fb8b11edaa1c0d4ef5d541611a9a4a631b4d5db3dbb5b02321ce04b882d4d07f4b3a05c2ff5fd70ce4614d7f8abd45d2f28da2
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*, @types/node@npm:^18.15.11":
   version: 18.15.11
   resolution: "@types/node@npm:18.15.11"
@@ -1127,7 +1120,6 @@ __metadata:
     "@sentry/node": ^7.48.0
     "@sentry/tracing": ^7.48.0
     "@types/node": ^18.15.11
-    "@types/node-cron": ^3.0.7
     "@types/ws": ^8.5.4
     "@typescript-eslint/eslint-plugin": ^5.58.0
     "@typescript-eslint/parser": ^5.58.0
@@ -1141,7 +1133,6 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-tsdoc: ^0.2.17
     husky: ^8.0.3
-    lib: ^5.0.1
     lint-staged: ^13.2.1
     mysql2: ^3.2.3
     npm-run-all: ^4.1.5
@@ -2782,13 +2773,6 @@ __metadata:
     prelude-ls: ^1.2.1
     type-check: ~0.4.0
   checksum: 12c5021c859bd0f5248561bf139121f0358285ec545ebf48bb3d346820d5c61a4309535c7f387ed7d84361cf821e124ce346c6b7cef8ee09a67c1473b46d0fc4
-  languageName: node
-  linkType: hard
-
-"lib@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "lib@npm:5.0.1"
-  checksum: 3f82974d7a015e0dab7051d955e46a5208fd112303833ea5fa1e1b0953f8162062222dc68cdce832d97888fab24fb48ef2a3094e2be766b4d6f9b69128020afc
   languageName: node
   linkType: hard
 
