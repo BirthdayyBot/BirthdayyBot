@@ -28,13 +28,11 @@
     "@sentry/integrations": "^7.48.0",
     "@sentry/node": "^7.48.0",
     "@sentry/tracing": "^7.48.0",
-    "@types/node-cron": "^3.0.7",
     "bullmq": "^3.10.4",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.38",
     "discord.js": "^14.9.0",
-    "lib": "^5.0.1",
     "mysql2": "^3.2.3",
     "prisma": "^4.12.0",
     "reflect-metadata": "^0.1.13"
