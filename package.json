@@ -38,6 +38,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@sapphire/cli": "^1.6.0",
     "@sapphire/eslint-config": "^4.4.1",
     "@sapphire/ts-config": "^3.3.4",
     "@types/node": "^18.15.11",
