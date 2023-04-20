@@ -1280,7 +1280,7 @@ __metadata:
     "@types/ws": ^8.5.4
     "@typescript-eslint/eslint-plugin": ^5.59.0
     "@typescript-eslint/parser": ^5.59.0
-    bullmq: ^3.11.0
+    bullmq: ^3.12.0
     colorette: ^2.0.20
     dayjs: ^1.11.7
     discord-api-types: ^0.37.39
@@ -1329,19 +1329,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^3.11.0":
-  version: 3.11.0
-  resolution: "bullmq@npm:3.11.0"
+"bullmq@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "bullmq@npm:3.12.0"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
-    ioredis: ^5.3.0
+    ioredis: ^5.3.2
     lodash: ^4.17.21
     msgpackr: ^1.6.2
     semver: ^7.3.7
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 52abef20aec101fa6b8eeb14b44d6cea5efd07440d7d7eed3487da846214fd6bdb5c6451e7a926160e9c6e5b44721336c4373d8ae5b01efe843369e30f35f955
+  checksum: 474992627af6894e55721c17943204ec28ec750f4f859b26a862910d1ccc01453aab9e6f3ba11bf039096dd36c87cf1b9e538ff4b9e70edff74c35aec1933fc0
   languageName: node
   linkType: hard
 
@@ -2642,7 +2642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ioredis@npm:^5.3.0":
+"ioredis@npm:^5.3.2":
   version: 5.3.2
   resolution: "ioredis@npm:5.3.2"
   dependencies:

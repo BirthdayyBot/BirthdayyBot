@@ -28,7 +28,7 @@
     "@sentry/integrations": "^7.48.0",
     "@sentry/node": "^7.48.0",
     "@sentry/tracing": "^7.48.0",
-    "bullmq": "^3.11.0",
+    "bullmq": "^3.12.0",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.39",
