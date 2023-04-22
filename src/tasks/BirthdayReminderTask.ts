@@ -279,19 +279,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
 				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
 						0,
-						EmbedLimits.MaximumDescriptionLength - 3,
-				  )}...`
+						EmbedLimits.MaximumDescriptionLength - 6,
+				  )}...\`\`\``
 				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
-
+		// TODO: #228 Use Paginated Embeds when Content is too long
 		if (eventInfos.length <= 0) {
-			return sendMessage(BOT_ADMIN_LOG, {
-				embeds: [
-					generateEmbed({
-						title: embedTitle,
-						description: embedDescription,
-					}),
-				],
-			});
+			return sendReport();
 		}
 
 		eventInfos.map((eventInfo) => {
