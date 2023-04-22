@@ -6,8 +6,9 @@ import { userMention } from 'discord.js';
 import { getGuildInformation, getGuildMember } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
-import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
+import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthname } from '../utils/date';
+import { envParseNumber } from '@skyra/env-utilities';
 
 export default async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
@@ -15,7 +16,7 @@ export default async function generateBirthdayList(page_id: number, guild_id: st
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
 		// split the sorted birthdays into multiple lists
-		const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, MAX_BIRTHDAYS);
+		const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
 		// get the birthdays for the current page
 		const birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
 		// TODO: Should only contain the birthdays for the current page (80 birthdays)

@@ -1,15 +1,15 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import { isNotPrd, isPrd } from '../helpers/provide/environment';
+import { envIs } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
-	enabled: isPrd,
+	enabled: envIs('APP_ENV', 'production'),
 	pattern: '0 * * * *',
 })
 export class PostStats extends ScheduledTask {
 	public run() {
-		if (isNotPrd) return;
+		if (!envIs('APP_ENV', 'production')) return;
 
 		return this.container.botList
 			.postStats()

@@ -739,6 +739,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@skyra/env-utilities@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@skyra/env-utilities@npm:1.2.0"
+  dependencies:
+    dotenv: ^16.0.3
+    dotenv-expand: ^10.0.0
+  checksum: 977d46bca06cc0578786c9acef0978f54adbfcd248d6b57c6376a59d18685b8666c5ec36df47ad8c1216b0cc2b301977dacf0d920dde2564f2350a407c334c3b
+  languageName: node
+  linkType: hard
+
 "@skyra/i18next-backend@npm:^2.0.2":
   version: 2.0.3
   resolution: "@skyra/i18next-backend@npm:2.0.3"
@@ -1283,6 +1293,7 @@ __metadata:
     "@sentry/integrations": ^7.49.0
     "@sentry/node": ^7.49.0
     "@sentry/tracing": ^7.49.0
+    "@skyra/env-utilities": ^1.2.0
     "@types/node": ^18.15.13
     "@types/ws": ^8.5.4
     "@typescript-eslint/eslint-plugin": ^5.59.0
@@ -1733,6 +1744,20 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dotenv-expand@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "dotenv-expand@npm:10.0.0"
+  checksum: 2a38b470efe0abcb1ac8490421a55e1d764dc9440fd220942bce40965074f3fb00b585f4346020cb0f0f219966ee6b4ee5023458b3e2953fe5b3214de1b314ee
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3"
+  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 
