@@ -145,7 +145,7 @@ export class ListCommand extends Command {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
+						description: `${ARROW_RIGHT} This user's birthday is already registered. Use </birthday update:${935174192389840896n}>`,
 					}),
 				],
 				ephemeral: true,

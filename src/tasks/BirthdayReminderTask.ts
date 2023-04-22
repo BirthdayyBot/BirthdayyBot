@@ -274,24 +274,34 @@ export class BirthdayReminderTask extends ScheduledTask {
 			...dateFields,
 			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
 		];
-		const embedDescription =
-			birthdayCount > 0
-				? codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-					? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-							0,
-							EmbedLimits.MaximumDescriptionLength - 3,
-					  )}...`
-					: codeBlock('json', JSON.stringify(eventInfos, null, 2))
-				: 'No Birthdays Today';
+		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
+		const reportDescription =
+			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+						0,
+						EmbedLimits.MaximumDescriptionLength - 3,
+				  )}...`
+				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
 
 		if (eventInfos.length <= 0) {
-			return sendReport();
+			return sendMessage(BOT_ADMIN_LOG, {
+				embeds: [
+					generateEmbed({
+						title: embedTitle,
+						description: embedDescription,
+					}),
+				],
+			});
 		}
 
-		eventInfos.forEach((eventInfo) => {
-			if (eventInfo.announcement && eventInfo.announcement.sent) eventInfo.announcement = undefined;
-			if (eventInfo.birthday_role && eventInfo.birthday_role.added) eventInfo.birthday_role = undefined;
-			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
+		eventInfos.map((eventInfo) => {
+			if (typeof eventInfo.announcement === 'object' && eventInfo.announcement.sent) {
+				eventInfo.announcement = 'sent';
+			}
+			if (typeof eventInfo.birthday_role === 'object' && eventInfo.birthday_role.added) {
+				eventInfo.birthday_role = 'added';
+			}
+			return eventInfo;
 		});
 
 		const schedulerReportMessage = await sendReport();
@@ -303,7 +313,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			embeds: [
 				generateEmbed({
 					title: embedTitle,
-					description: embedDescription,
+					description: reportDescription,
 				}),
 			],
 		});
