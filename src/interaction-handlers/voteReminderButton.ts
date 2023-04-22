@@ -1,14 +1,14 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
+import { ButtonInteraction, time, TimestampStyles } from 'discord.js';
 import { remindMeButtonDisabled } from '../lib/components/button';
 import { editInteractionResponse } from '../lib/discord/interaction';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
 	public override parse(interaction: ButtonInteraction) {
-		if (!interaction.customId.startsWith('vote-reminder-button')) return this.none();
+		if (interaction.customId !== 'vote-reminder-button') return this.none();
 
 		const timestampTwelveHoursLater = interaction.message.createdTimestamp + Time.Hour * 12;
 		return this.some({ time: timestampTwelveHoursLater });
@@ -29,7 +29,7 @@ export class VoteReminderButton extends InteractionHandler {
 		const delay = result.time - Date.now();
 
 		if (delay < 0) {
-			return interaction.followUp({ content: 'You can vote now already!', ephemeral: true });
+			return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
 		}
 
 		await this.container.tasks.create(
@@ -37,9 +37,11 @@ export class VoteReminderButton extends InteractionHandler {
 			{ memberId: interaction.user.id },
 			{ repeated: false, delay },
 		);
-
 		return interaction.followUp({
-			content: `I will remind you to vote ${time(result.time, TimestampStyles.RelativeTime)} !`,
+			content: `I will remind you to vote ${time(
+				Math.round(result.time / 1000),
+				TimestampStyles.RelativeTime,
+			)} !`,
 			ephemeral: true,
 		});
 	}
