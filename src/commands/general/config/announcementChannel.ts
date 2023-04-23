@@ -3,6 +3,7 @@ import { Result } from '@sapphire/result';
 import { channelMention } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
+import replyToInteraction from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -25,13 +26,16 @@ export class AnnouncementChannelCommand extends Command {
 		const hasPermissionInNewChannel = channel.permissionsFor(guildClient).has(['ViewChannel', 'SendMessages']);
 
 		if (!hasPermissionInNewChannel) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failure`,
-				description: `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
-					channel.id,
-				)}.`,
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failure`,
+						description: `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
+							channel.id,
+						)}.`,
+					}),
+				],
 			});
-			return interaction.reply({ embeds: [embed] });
 		}
 
 		const result = await Result.fromAsync(() =>
@@ -42,17 +46,25 @@ export class AnnouncementChannelCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failure`,
-				description: `${ARROW_RIGHT} An error occurred while updating the database.`,
+			return replyToInteraction(interaction, {
+				embeds: [
+					generateEmbed({
+						title: `${FAIL} Failure`,
+						description: `${ARROW_RIGHT} An error occurred while updating the database.`,
+					}),
+				],
 			});
-			return interaction.reply({ embeds: [embed] });
 		}
 
-		const embed = generateEmbed({
-			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} The announcement channel has been set to ${channelMention(channel.id)}.`,
+		return replyToInteraction(interaction, {
+			embeds: [
+				generateEmbed({
+					title: `${SUCCESS} Success`,
+					description: `${ARROW_RIGHT} The announcement channel has been set to ${channelMention(
+						channel.id,
+					)}.`,
+				}),
+			],
 		});
-		return interaction.reply({ embeds: [embed] });
 	}
 }

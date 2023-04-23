@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client';
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { container } from '@sapphire/framework';
 import type { ConfigName } from '../../lib/database';
-import { API_SECRET, API_URL } from './environment';
+import { envParseString } from '@skyra/env-utilities';
 
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: string) {
 	await container.prisma.guild.update({
@@ -51,28 +51,28 @@ export async function setDefaultConfigs(guildId: string) {
 export async function setDefaultConfig(config_name: ConfigName, guildId: string) {
 	switch (config_name) {
 		case 'announcementChannel':
-			await container.utilities.guild.set.AnnouncementChannel(guildId, null);
+			await container.utilities.guild.reset.AnnouncementChannel(guildId);
 			break;
 		case 'overviewChannel':
-			await container.utilities.guild.set.OverviewChannel(guildId, null);
+			await container.utilities.guild.reset.OverviewChannel(guildId);
 			break;
 		case 'logChannel':
-			await container.utilities.guild.set.LogChannel(guildId, null);
+			await container.utilities.guild.reset.LogChannel(guildId);
 			break;
 		case 'announcementMessage':
-			await container.utilities.guild.set.AnnouncementMessage(guildId, undefined);
+			await container.utilities.guild.reset.AnnouncementMessage(guildId);
 			break;
 		case 'overviewMessage':
-			await container.utilities.guild.set.OverviewMessage(guildId, null);
+			await container.utilities.guild.reset.OverviewMessage(guildId);
 			break;
 		case 'timezone':
-			await container.utilities.guild.set.Timezone(guildId, undefined);
+			await container.utilities.guild.reset.Timezone(guildId);
 			break;
 		case 'birthdayRole':
-			await container.utilities.guild.set.BirthdayRole(guildId, null);
+			await container.utilities.guild.reset.BirthdayRole(guildId);
 			break;
 		case 'birthdayPingRole':
-			await container.utilities.guild.set.BirthdayPingRole(guildId, null);
+			await container.utilities.guild.reset.BirthdayPingRole(guildId);
 			break;
 		default:
 			throw new Error(`Unknown config ${config_name}`);
@@ -96,22 +96,22 @@ export function logAll(config: Prisma.GuildUpdateInput) {
 }
 
 export async function getGuildLanguage(guildId: string): Promise<string> {
-	const requestURL = new URL(`${API_URL}guild/retrieve/language`);
+	const requestURL = new URL(`${envParseString('API_URL')}guild/retrieve/language`);
 	requestURL.searchParams.append('guildId', guildId);
 	const data = await fetch<{ guildId: string; language: string }>(
 		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		{ method: FetchMethods.Get, headers: { Authorization: envParseString('API_SECRET') } },
 		FetchResultTypes.JSON,
 	);
 	return data.language;
 }
 
 export async function getGuildPremium(guildId: string): Promise<boolean> {
-	const requestURL = new URL(`${API_URL}guild/retrieve/premium`);
+	const requestURL = new URL(`${envParseString('API_URL')}guild/retrieve/premium`);
 	requestURL.searchParams.append('guildId', guildId);
 	const data = await fetch<{ guildId: string; premium: boolean }>(
 		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: API_SECRET } },
+		{ method: FetchMethods.Get, headers: { Authorization: envParseString('API_SECRET') } },
 		FetchResultTypes.JSON,
 	);
 	return data.premium;

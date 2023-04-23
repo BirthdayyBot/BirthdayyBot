@@ -13,92 +13,100 @@ import thinking from '../../../lib/discord/thinking';
 		.addIntegerOption((option) =>
 			option.setName('timezone').setDescription('The Timezone to set.').setRequired(true).addChoices(
 				{
-					name: 'Greenwich Mean Time | GMT | UTC',
-					value: 0,
-				},
-				{
-					name: 'European Central Time | ECT | UTC+1:00',
-					value: 1,
-				},
-				{
-					name: 'Eastern European Time | EET | UTC+2:00',
-					value: 2,
-				},
-				{
-					name: 'Eastern African Time | EAT | UTC+3:00',
-					value: 3,
-				},
-				{
-					name: 'Near East Time | NET | UTC+4:00',
-					value: 4,
-				},
-				{
-					name: 'Pakistan Lahore Time | PLT | UTC+5:00',
-					value: 5,
-				},
-				{
-					name: 'Bangladesh Standard Time | BST | UTC+6:00',
-					value: 6,
-				},
-				{
-					name: 'Vietnam Standard Time | VST | UTC+7:00',
-					value: 7,
-				},
-				{
-					name: 'China Taiwan Time | CTT | UTC+8:00',
-					value: 8,
-				},
-				{
-					name: 'Japan Standard Time | JST | UTC+9:00',
-					value: 9,
-				},
-				{
-					name: 'Australia Eastern Time | AET | UTC+10:00',
-					value: 10,
-				},
-				{
-					name: 'Solomon Standard Time | SST | UTC+11:00',
-					value: 11,
-				},
-				{
-					name: 'New Zealand Standard Time | NST | UTC+12:00',
-					value: 12,
-				},
-				{
-					name: 'Midway Islands Time | MIT | UTC-11:00',
+					name: 'Niue Time | NUT | UTC -11',
 					value: -11,
 				},
 				{
-					name: 'Hawaii Standard Time | HST | UTC-10:00',
+					name: 'Hawaii-Aleutian Standard Time | HST | UTC -10',
 					value: -10,
 				},
 				{
-					name: 'Alaska Standard Time | AST | UTC-9:00',
+					name: 'Alaska Standard Time | AKST | UTC -9',
 					value: -9,
 				},
 				{
-					name: 'Pacific Standard Time | PST | UTC-8:00',
+					name: 'Pacific Standard Time | PST | UTC -8',
 					value: -8,
 				},
 				{
-					name: 'Phoenix Standard Time | PNT | UTC-7:00',
+					name: 'Mountain Standard Time | MST | UTC -7',
 					value: -7,
 				},
 				{
-					name: 'Central Standard Time | CST | UTC-6:00',
+					name: 'Central Standard Time | CST | UTC -6',
 					value: -6,
 				},
 				{
-					name: 'Eastern Standard Time | EST | UTC-5:00',
+					name: 'Eastern Standard Time | EST | UTC -5',
 					value: -5,
 				},
 				{
-					name: 'Puerto Rico and US Virgin Islands Time | PRT | UTC-4:00',
+					name: 'Atlantic Standard Time | AST | UTC -4',
 					value: -4,
 				},
 				{
-					name: 'Brazil Eastern Time | BET | UTC-2:00',
+					name: 'Amazon Time Zone | AMT | UTC -3',
+					value: -3,
+				},
+				{
+					name: 'Fernando de Noronha Time | FNT | UTC -2',
 					value: -2,
+				},
+				{
+					name: 'Azores Time | AZOT | UTC -1',
+					value: -1,
+				},
+				{
+					name: 'Greenwich Mean Time | GMT | UTC +0',
+					value: 0,
+				},
+				{
+					name: 'Central European Time | CET | UTC +1',
+					value: 1,
+				},
+				{
+					name: 'Eastern European Time | EET | UTC +2',
+					value: 2,
+				},
+				{
+					name: 'Moscow Standard Time | MSK | UTC +3',
+					value: 3,
+				},
+				{
+					name: 'Gulf Standard Time | GST | UTC +4',
+					value: 4,
+				},
+				{
+					name: 'Pakistan Standard Time | PKT | UTC +5',
+					value: 5,
+				},
+				{
+					name: 'Bangladesh Standard Time | BST | UTC +6',
+					value: 6,
+				},
+				{
+					name: 'Indochina Time | ICT | UTC +7',
+					value: 7,
+				},
+				{
+					name: 'China Standard Time | CST | UTC +8',
+					value: 8,
+				},
+				{
+					name: 'Japan Standard Time | JST | UTC +9',
+					value: 9,
+				},
+				{
+					name: 'Australian Eastern Standard Time | AEST | UTC +10',
+					value: 10,
+				},
+				{
+					name: 'Solomon Island Time | SBT | UTC +11',
+					value: 11,
+				},
+				{
+					name: 'New Zealand Standard Time | NZST | UTC +12',
+					value: 12,
 				},
 			),
 		),

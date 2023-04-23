@@ -4,9 +4,10 @@ import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE } from '../../../helpers/provide/environment';
+import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
 import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
 import replyToInteraction from '../../../helpers/send/response';
+import updateBirthdayOverview from '../../../helpers/update/overview';
 import { formatDateForDisplay } from '../../../helpers/utils/date';
 import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
@@ -36,51 +37,51 @@ import thinking from '../../../lib/discord/thinking';
 				.setRequired(true)
 				.addChoices(
 					{
-						name: 'January',
+						name: 'January | 1',
 						value: '01',
 					},
 					{
-						name: 'February',
+						name: 'February | 2',
 						value: '02',
 					},
 					{
-						name: 'March',
+						name: 'March | 3',
 						value: '03',
 					},
 					{
-						name: 'April',
+						name: 'April | 4',
 						value: '04',
 					},
 					{
-						name: 'May',
+						name: 'May | 5',
 						value: '05',
 					},
 					{
-						name: 'June',
+						name: 'June | 6',
 						value: '06',
 					},
 					{
-						name: 'July',
+						name: 'July | 7',
 						value: '07',
 					},
 					{
-						name: 'August',
+						name: 'August | 8',
 						value: '08',
 					},
 					{
-						name: 'September',
+						name: 'September | 9',
 						value: '09',
 					},
 					{
-						name: 'October',
+						name: 'October | 10',
 						value: '10',
 					},
 					{
-						name: 'November',
+						name: 'November | 11',
 						value: '11',
 					},
 					{
-						name: 'December',
+						name: 'December | 12',
 						value: '12',
 					},
 				),
@@ -91,7 +92,6 @@ import thinking from '../../../lib/discord/thinking';
 				'commands/birthday:subcommand.register.options.year.name',
 				'commands/birthday:subcommand.register.options.year.description',
 			)
-				.setRequired(true)
 				.setMinValue(1900)
 				.setMaxValue(new Date().getFullYear()),
 		)
@@ -107,7 +107,7 @@ export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-
+		const { guildId } = interaction;
 		if (
 			interaction.user.id !== targetUser.id &&
 			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
@@ -138,17 +138,14 @@ export class ListCommand extends Command {
 			});
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
-			interaction.guildId,
-			targetUser.id,
-		);
+		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
 
 		if (!isNullOrUndefinedOrEmpty(birthday)) {
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
+						description: `${ARROW_RIGHT} This user's birthday is already registered. Use </birthday update:${935174192389840896n}>`,
 					}),
 				],
 				ephemeral: true,
@@ -156,15 +153,13 @@ export class ListCommand extends Command {
 		}
 
 		try {
-			await container.utilities.birthday.create(date.date, interaction.guildId, targetUser);
-
+			await container.utilities.birthday.create(date.date, guildId, targetUser);
+			await updateBirthdayOverview(guildId);
 			return replyToInteraction(interaction, {
 				embeds: [
 					generateEmbed({
-						title: `${BOOK} Birthday Registered`,
-						description: `${ARROW_RIGHT} ${inlineCode(
-							`The birthday of ${targetUser.username} was successfully registered.`,
-						)}`,
+						title: `${SUCCESS} Success`,
+						description: `${ARROW_RIGHT} Registered the birthday of ${targetUser.username} successfully.`,
 						fields: [
 							{
 								name: 'Date',
@@ -172,7 +167,6 @@ export class ListCommand extends Command {
 								inline: true,
 							},
 						],
-						thumbnail_url: IMG_CAKE,
 					}),
 				],
 				ephemeral: true,

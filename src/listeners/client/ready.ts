@@ -1,10 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { APP_ENV, BOT_ADMIN_LOG } from '../../helpers/provide/environment';
+import { BOT_ADMIN_LOG } from '../../helpers/provide/environment';
 import { sendMessage } from '../../lib/discord/message';
+import { envIs } from '../../lib/utils/env';
 
-const isDev = APP_ENV !== 'prd';
+const isDev = !envIs('APP_ENV', 'production');
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {
@@ -14,6 +15,7 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		await sendMessage(BOT_ADMIN_LOG, { content: 'online' });
+		await this.container.tasks.run('PostStats', {});
 	}
 
 	private printBanner() {

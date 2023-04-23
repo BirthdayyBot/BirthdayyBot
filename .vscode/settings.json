@@ -16,5 +16,14 @@
 	"files.eol": "\n",
 	"editor.detectIndentation": false,
 	"conventionalCommits.emojiFormat": "emoji",
-	"conventionalCommits.scopes": ["bot", "api"]
+	"conventionalCommits.scopes": [
+		"bot",
+		"api"
+	],
+	"turboConsoleLog.logFunction": "container.logger.info",
+	"turboConsoleLog.logMessagePrefix": "",
+	"turboConsoleLog.quote": "'",
+	"turboConsoleLog.wrapLogMessage": false,
+	"turboConsoleLog.includeFileNameAndLineNum": false,
+	"turboConsoleLog.addSemicolonInTheEnd": true
 }

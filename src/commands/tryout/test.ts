@@ -6,6 +6,7 @@ import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
+import { envIs } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -29,24 +30,14 @@ export class TestCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const fields = [{ name: 'test', value: 'Test Test' }];
-		// await enableGuildRequest(interaction.guildId!);
-		// await createGuildRequest(111 + interaction.guildId!, '945106657527078952');
 		const current = getCurrentOffset();
 		if (!current) {
 			const embed = generateEmbed({ title: 'test', description: 'No current time' });
 			return replyToInteraction(interaction, { embeds: [embed] });
 		}
-		const request = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
-			current.date,
-			current.timezone,
-		);
-		fields.push({
-			name: 'getBirthdaysByDateAndTimezone',
-			value: `\`\`\`${JSON.stringify(request, null, 2)}\`\`\``,
-		});
-
+		if (!envIs('APP_ENV', 'production')) await this.container.tasks.run('BirthdayReminderTask', {});
 		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateEmbed(embedObj);
-		return replyToInteraction(interaction, { content: '```TEST RUN```', embeds: [embed] });
+		return replyToInteraction(interaction, { embeds: [embed] });
 	}
 }

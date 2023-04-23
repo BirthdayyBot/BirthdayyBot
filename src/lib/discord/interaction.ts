@@ -12,7 +12,7 @@ import type {
  * @param  options - The options to pass to the reply method.
  * @returns A promise that resolves to the message that was sent.
  */
-export default async function replyToInteraction(
+export async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
 	options: string | MessagePayload | InteractionReplyOptions,
 ) {
@@ -24,4 +24,11 @@ export async function replyToButtonInteraction(
 	options: string | MessagePayload | InteractionReplyOptions,
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+}
+
+export async function editInteractionResponse(
+	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | ButtonInteraction,
+	options: string | MessagePayload | InteractionReplyOptions,
+) {
+	return interaction.editReply(options);
 }

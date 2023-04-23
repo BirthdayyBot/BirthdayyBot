@@ -1,14 +1,14 @@
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import type { ApiResponse } from '@sapphire/plugin-api';
-import { API_SECRET } from '../../helpers/provide/environment';
 import type { ApiRequest } from './types';
+import { envParseString } from '@skyra/env-utilities';
 
 /**
  * It returns a function that takes a request and returns a response
  * @param token - The token to check against. Defaults to the API_SECRET environment variable.
  * @returns A function that takes a request and a response and returns a boolean.
  */
-export function authenticated(token = API_SECRET) {
+export function authenticated(token = envParseString('API_SECRET')) {
 	return createFunctionPrecondition(
 		(req: ApiRequest) => req.headers.authorization === token,
 		(_req: ApiRequest, res: ApiResponse) => res.unauthorized(),

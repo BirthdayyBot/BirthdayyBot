@@ -8,18 +8,15 @@ import generateEmbed from '../helpers/generate/embed';
 export class ExampleParseMethod extends InteractionHandler {
 	public override async parse(interaction: ButtonInteraction<'cached'>) {
 		if (!interaction.customId.startsWith('birthday_list_page_')) return this.none();
+		const pageNumber = parseInt(interaction.customId.split('_')[3]);
 		await interaction.deferUpdate();
 		if (!interaction.channel || !interaction.message) return this.none();
-		const message = await interaction.channel.messages.fetch(interaction.message.id);
-		return this.some({ isNormalMessage: message?.interaction ? false : true });
+		return this.some({ pageNumber });
 	}
 
-	public async run(interaction: ButtonInteraction<'cached'>, result: { isNormalMessage: boolean }) {
-		const { isNormalMessage } = result;
-		const page_number = parseInt(interaction.customId.split('_')[3], 10);
-		const { embed, components } = await generateBirthdayList(page_number, interaction.guildId);
+	public async run(interaction: ButtonInteraction<'cached'>, result: { pageNumber: number }) {
+		const { embed, components } = await generateBirthdayList(result.pageNumber, interaction.guildId);
 		const finalEmbed = generateEmbed(embed);
-		if (isNormalMessage) return interaction.message.edit({ embeds: [finalEmbed], components });
-		return interaction.editReply({ embeds: [finalEmbed], components });
+		return interaction.message.edit({ embeds: [finalEmbed], components });
 	}
 }

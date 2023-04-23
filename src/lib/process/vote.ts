@@ -2,7 +2,8 @@ import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import type { User } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
-import { APP_ENV, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers/provide/environment';
+import { EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers/provide/environment';
+import { remindMeButton } from '../components/button';
 import { sendDMMessage, sendMessage } from '../discord/message';
 import { GuildIDEnum } from '../enum/GuildID.enum';
 import type { VoteProvider } from '../types/VoteProvider.type';
@@ -28,15 +29,7 @@ async function sendVoteDM(providerInfo: { name: string; url: string }, user_id: 
 	const dmEmbedObj = generateEmbed(dmEmbed);
 	const component = {
 		type: 1,
-		components: [
-			{
-				style: 3,
-				label: '⏰ Remind Me in 12hrs',
-				custom_id: 'remind-me-to-vote',
-				disabled: false,
-				type: 2,
-			},
-		],
+		components: [remindMeButton],
 	};
 
 	return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
@@ -52,7 +45,7 @@ async function sendVoteAnnouncement(providerInfo: { name: string; url: string },
 		thumbnail_url: avatar_url,
 	};
 	const embedObj = generateEmbed(embed);
-	return sendMessage(APP_ENV === 'prd' ? VOTE_CHANNEL_ID : '1077621363881300018', { embeds: [embedObj] });
+	return sendMessage(VOTE_CHANNEL_ID, { embeds: [embedObj] });
 }
 
 /**

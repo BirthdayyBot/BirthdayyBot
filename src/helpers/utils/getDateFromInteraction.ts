@@ -1,6 +1,6 @@
 import type { Command } from '@sapphire/framework';
 import type { Subcommand } from '@sapphire/plugin-subcommands';
-import { useCorrectDayFormat } from './string';
+import { addZeroToSingleDigitNumber } from './string';
 
 interface DateResult {
 	isValidDate: boolean;
@@ -17,8 +17,8 @@ export default function getDateFromInteraction(
 		message: 'Something went wrong while validating the date.',
 	};
 
-	const day = useCorrectDayFormat(interaction.options.getInteger('day', true));
-	const month = parseInt(interaction.options.getString('month', true));
+	const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));
+	const month = addZeroToSingleDigitNumber(interaction.options.getString('month', true));
 	const year = interaction.options.getInteger('year', false) ?? 'XXXX';
 
 	result.isValidDate = true;
