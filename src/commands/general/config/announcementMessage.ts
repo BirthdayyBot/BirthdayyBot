@@ -1,10 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
 import { Result } from '@sapphire/result';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, PLUS, PREMIUM_URL } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { generateEmbed, PLUS, ARROW_RIGHT, PREMIUM_URL, reply } from '../../../helpers';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -31,7 +29,7 @@ export class AnnouncementMessageCommand extends Command {
 				If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`,
 			});
 
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		if (message.length > EmbedLimits.MaximumDescriptionLength - 500) {
@@ -40,7 +38,7 @@ export class AnnouncementMessageCommand extends Command {
 				description: `${ARROW_RIGHT} The message you provided is too long. Please try again with a shorter message.`,
 			});
 
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const result = await Result.fromAsync(() =>
@@ -56,7 +54,7 @@ export class AnnouncementMessageCommand extends Command {
 				description: `${ARROW_RIGHT} An error occured while trying to update the config. Please try again later.`,
 			});
 
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const embed = generateEmbed({
@@ -64,6 +62,6 @@ export class AnnouncementMessageCommand extends Command {
 			description: `${ARROW_RIGHT} You have successfully updated the announcement message.`,
 		});
 
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

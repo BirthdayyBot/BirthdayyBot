@@ -1,8 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import generateBirthdayList from '../../../helpers/generate/birthdayList';
-import generateEmbed from '../../../helpers/generate/embed';
-import replyToInteraction from '../../../helpers/send/response';
+import { generateBirthdayList, reply } from '../../../helpers/';
 import thinking from '../../../lib/discord/thinking';
+import { generateEmbedWithDefault } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder.setName('list').setDescription('List all Birthdays in this Discord server'),
@@ -13,7 +12,6 @@ export class ListCommand extends Command {
 
 		const { embed, components } = await generateBirthdayList(1, interaction.guildId);
 
-		const generatedEmbed = generateEmbed(embed);
-		await replyToInteraction(interaction, { embeds: [generatedEmbed], components });
+		await reply(interaction, { embeds: [generateEmbedWithDefault(embed)], components });
 	}
 }

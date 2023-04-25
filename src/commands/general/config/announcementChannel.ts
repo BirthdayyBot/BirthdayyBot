@@ -1,9 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
 import { channelMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import { ARROW_RIGHT, FAIL, SUCCESS, generateEmbed, reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -26,7 +24,7 @@ export class AnnouncementChannelCommand extends Command {
 		const hasPermissionInNewChannel = channel.permissionsFor(guildClient).has(['ViewChannel', 'SendMessages']);
 
 		if (!hasPermissionInNewChannel) {
-			return replyToInteraction(interaction, {
+			return reply(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failure`,
@@ -46,7 +44,7 @@ export class AnnouncementChannelCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			return replyToInteraction(interaction, {
+			return reply(interaction, {
 				embeds: [
 					generateEmbed({
 						title: `${FAIL} Failure`,
@@ -56,7 +54,7 @@ export class AnnouncementChannelCommand extends Command {
 			});
 		}
 
-		return replyToInteraction(interaction, {
+		return reply(interaction, {
 			embeds: [
 				generateEmbed({
 					title: `${SUCCESS} Success`,

@@ -4,7 +4,7 @@ import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, SUCCESS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import reply from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -34,7 +34,7 @@ export class PingRoleCommand extends Command {
 				title: 'Error',
 				description: 'An error occurred while trying to set the birthday role.',
 			});
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const embed = generateEmbed({
@@ -42,6 +42,6 @@ export class PingRoleCommand extends Command {
 			description: `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(role.id)}`,
 		});
 
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

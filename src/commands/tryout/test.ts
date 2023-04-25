@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import generateEmbed from '../../helpers/generate/embed';
-import replyToInteraction from '../../helpers/send/response';
+import reply from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
@@ -33,11 +33,11 @@ export class TestCommand extends Command {
 		const current = getCurrentOffset();
 		if (!current) {
 			const embed = generateEmbed({ title: 'test', description: 'No current time' });
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 		if (!envIs('APP_ENV', 'production')) await this.container.tasks.run('BirthdayReminderTask', {});
 		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateEmbed(embedObj);
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

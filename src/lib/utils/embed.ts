@@ -1,5 +1,13 @@
 import type { APIEmbed, BaseMessageOptions, InteractionReplyOptions } from 'discord.js';
-import { BOT_AVATAR, BOT_COLOR, BOT_NAME, FAIL, IS_CUSTOM_BOT, SUCCESS } from '../../helpers/provide/environment';
+import {
+	ARROW_RIGHT,
+	BOT_AVATAR,
+	BOT_COLOR,
+	BOT_NAME,
+	FAIL,
+	IS_CUSTOM_BOT,
+	SUCCESS,
+} from '../../helpers/provide/environment';
 
 type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
 type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;
@@ -28,7 +36,7 @@ export function validate(description: string): APIEmbed {
 	return {
 		...defaultEmbed(),
 		title: `${SUCCESS} Success`,
-		description,
+		description: `${ARROW_RIGHT} ${description}`,
 	};
 }
 
@@ -53,7 +61,7 @@ export function problem(description: string): APIEmbed {
 	return {
 		...defaultEmbed(),
 		title: `${FAIL} Failure`,
-		description,
+		description: `${ARROW_RIGHT} ${description}`,
 	};
 }
 

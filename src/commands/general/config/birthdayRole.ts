@@ -2,8 +2,7 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import replyToInteraction from '../../../helpers/send/response';
+import { generateEmbed, reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -33,7 +32,7 @@ export class ListCommand extends Command {
 				title: 'Error',
 				description: 'An error occurred while trying to set the birthday role.',
 			});
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const embed = generateEmbed({
@@ -41,6 +40,6 @@ export class ListCommand extends Command {
 			description: `The birthday role has been set to ${roleMention(role.id)}.`,
 		});
 
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

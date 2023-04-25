@@ -1,5 +1,5 @@
 import { container } from '@sapphire/pieces';
 
-export default function getGuildCount() {
+export function getGuildCount() {
 	return container.client.guilds.cache.size;
 }

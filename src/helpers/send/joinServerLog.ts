@@ -3,11 +3,11 @@ import { sendMessage } from '../../lib/discord/message';
 import { getUserInfo } from '../../lib/discord/user';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import generateEmbed from '../generate/embed';
+import { generateEmbed } from '../generate/embed';
 import { BOT_NAME, BOT_SERVER_LOG, SUCCESS } from '../provide/environment';
-import getGuildCount from '../provide/guildCount';
+import { getGuildCount } from '../provide/guildCount';
 
-export default async function joinServerLog(guild: Guild, inviterId?: Snowflake) {
+export async function joinServerLog(guild: Guild, inviterId?: Snowflake) {
 	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 	const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');

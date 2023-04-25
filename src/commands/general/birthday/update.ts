@@ -1,15 +1,10 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/framework';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { inlineCode, userMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
-import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
-import replyToInteraction from '../../../helpers/send/response';
+import { userMention } from 'discord.js';
+import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
-import { formatDateForDisplay } from '../../../helpers/utils/date';
-import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder
@@ -90,77 +85,54 @@ export class UpdateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-		const { guildId } = interaction;
-		if (
-			interaction.user.id !== targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: interaction.user.id, permissions: ['ManageRoles'] }))
-		) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode(
-							"You don't have the permission to update other users birthdays.",
-						)}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		const { guildId, memberPermissions } = interaction;
+		const authorIsTarget = interaction.user.id === targetUser.id;
+
+		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
+			return reply(
+				interaction,
+				interactionProblem("You don't have the permission to update other users birthdays."),
+			);
 		}
 
 		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
 
-		if (isNullOrUndefinedOrEmpty(birthday)) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode("This user doesn't have a birthday registered.")}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!birthday) {
+			return reply(
+				interaction,
+				interactionProblem(`I couldn't find a birthday for ${userMention(targetUser.id)}.`),
+			);
 		}
 
 		const date = getDateFromInteraction(interaction);
 
-		if (isNullOrUndefinedOrEmpty(date.date)) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('Please provide a valid date')}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!date.isValidDate) {
+			return reply(interaction, interactionProblem('Please provide a valid date'));
 		}
 
-		try {
-			await container.utilities.birthday.update.BirthdayByUserAndGuild(guildId, targetUser.id, date.date);
+		const updateBirthday = await container.utilities.birthday.update
+			.BirthdayByUserAndGuild(guildId, targetUser.id, date.date)
+			.catch(() => null);
 
-			await updateBirthdayOverview(guildId);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} I updated the Birthday from ${userMention(
-							birthday.userId,
-						)} to the ${formatDateForDisplay(date.date)}. 🎂`,
-					}),
-				],
-			});
-		} catch (error: any) {
-			container.logger.error(error);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('An error occurred while updating the birthday.')}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!updateBirthday) {
+			return reply(
+				interaction,
+				interactionProblem(
+					`I couldn't update the birthday for ${userMention(targetUser.id)} to ${formatDateForDisplay(
+						date.date,
+					)}.`,
+				),
+			);
 		}
+
+		await updateBirthdayOverview(guildId);
+		return reply(
+			interaction,
+			interactionValidate(
+				`${
+					authorIsTarget ? 'Your' : `${targetUser.username}'s`
+				} birthday was been updated on ${formatDateForDisplay(date.date)}.`,
+			),
+		);
 	}
 }

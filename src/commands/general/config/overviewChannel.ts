@@ -5,7 +5,7 @@ import generateBirthdayList from '../../../helpers/generate/birthdayList';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
 import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
-import replyToInteraction from '../../../helpers/send/response';
+import reply from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -37,7 +37,7 @@ export class OverviewChannelCommand extends Command {
 					channel.id,
 				)}.`,
 			});
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const birthdayList = await generateBirthdayList(1, interaction.guildId);
@@ -60,7 +60,7 @@ export class OverviewChannelCommand extends Command {
 				title: `${FAIL} Failure`,
 				description: `${ARROW_RIGHT} An error occurred while updating the database.`,
 			});
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const embed = generateEmbed({
@@ -68,6 +68,6 @@ export class OverviewChannelCommand extends Command {
 			description: `${ARROW_RIGHT} The birthday overview channel has been set to ${channelMention(channel.id)}.`,
 		});
 
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

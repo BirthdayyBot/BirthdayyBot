@@ -7,10 +7,10 @@ import { getGuildInformation, getGuildMember } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
-import { formatDateForDisplay, numberToMonthname } from '../utils/date';
+import { formatDateForDisplay, numberToMonthName } from '../utils/date';
 import { envParseNumber } from '@skyra/env-utilities';
 
-export default async function generateBirthdayList(page_id: number, guild_id: string) {
+export async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
@@ -165,7 +165,7 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 function prepareBirthdayList() {
 	const monthArray = [];
 	for (let i = 1; i <= 12; i++) {
-		const monthname = numberToMonthname(i);
+		const monthname = numberToMonthName(i);
 		const emptyArray: Birthday[] = [];
 		monthArray.push({ monthname, birthdays: emptyArray });
 	}

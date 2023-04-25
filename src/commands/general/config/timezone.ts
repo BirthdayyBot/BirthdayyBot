@@ -3,7 +3,7 @@ import { Result } from '@sapphire/result';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import reply from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -127,7 +127,7 @@ export class TimezoneCommand extends Command {
 				description: 'An error occurred while trying to set the timezone.',
 			});
 
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, { embeds: [embed] });
 		}
 
 		const embed = generateEmbed({
@@ -137,6 +137,6 @@ export class TimezoneCommand extends Command {
 			)}`,
 		});
 
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

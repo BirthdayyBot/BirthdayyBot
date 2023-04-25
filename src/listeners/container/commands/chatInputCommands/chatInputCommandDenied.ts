@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ChatInputCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
-import replyToInteraction from '../../../../helpers/send/response';
+import reply from '../../../../helpers/send/response';
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandDenied })
 export class UserEvent extends Listener<typeof Events.ChatInputCommandDenied> {
@@ -9,7 +9,7 @@ export class UserEvent extends Listener<typeof Events.ChatInputCommandDenied> {
 		// Use cases for this are for example permissions error when running the `eval` command.
 		if (Reflect.get(Object(context), 'silent')) return;
 
-		return replyToInteraction(interaction, {
+		return reply(interaction, {
 			content,
 			allowedMentions: { users: [interaction.user.id], roles: [] },
 			ephemeral: true,

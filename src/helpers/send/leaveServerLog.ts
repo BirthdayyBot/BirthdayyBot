@@ -4,11 +4,11 @@ import { Guild, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import generateEmbed from '../generate/embed';
+import { generateEmbed } from '../generate/embed';
 import { BOT_NAME, BOT_SERVER_LOG, FAIL } from '../provide/environment';
-import getGuildCount from '../provide/guildCount';
+import { getGuildCount } from '../provide/guildCount';
 
-export default async function leaveServerLog(guild: Guild) {
+export async function leaveServerLog(guild: Guild) {
 	container.logger.info('Removed from Guild');
 	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;

@@ -10,7 +10,7 @@ import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '../provide/envir
  * @returns embed - A RichEmbed object with the given information
  */
 
-export default function generateEmbed({
+export function generateEmbed({
 	title,
 	description,
 	author_name,

@@ -5,7 +5,7 @@ import { objectEntries } from '@sapphire/utilities';
 import { APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
 import generateEmbed from '../../../helpers/generate/embed';
 import { ARROW_RIGHT, PLUS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import reply from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -24,7 +24,7 @@ export class ListCommand extends Command {
 			fields: embedFields,
 		});
 
-		await replyToInteraction(interaction, { embeds: [embed] });
+		await reply(interaction, { embeds: [embed] });
 	}
 }
 
