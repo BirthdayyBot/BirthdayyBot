@@ -4,10 +4,15 @@ import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../helpers/generate/embed';
-import { BOT_ADMIN_LOG, isNotDev } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
+import { envIs } from '../lib/utils/env';
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'CleanDatabaseTask', pattern: '0 0 * * *', enabled: isNotDev })
+@ApplyOptions<ScheduledTask.Options>({
+	name: 'CleanDatabaseTask',
+	pattern: '0 0 * * *',
+	enabled: envIs('APP_ENV', 'production'),
+})
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		this.container.logger.debug('[CleaningTask] Started');

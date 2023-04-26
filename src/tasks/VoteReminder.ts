@@ -1,9 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import type { Snowflake } from 'discord.js';
-import { BOT_NAME } from '../helpers/provide/environment';
 import { getUserInfo } from '../lib/discord';
 import { VoteEmbed } from '../lib/embeds';
+import { envParseString } from '@skyra/env-utilities';
 
 interface VoteReminderTaskPayload {
 	memberId: Snowflake;
@@ -17,7 +17,7 @@ export class VoteReminderTask extends ScheduledTask {
 		const user = await getUserInfo(memberId);
 		if (!user) return;
 		await user.send({
-			content: `Hi, you can vote for ${BOT_NAME} again!`,
+			content: `Hi, you can vote for ${envParseString('BOT_NAME')} again!`,
 			embeds: [VoteEmbed],
 		});
 	}

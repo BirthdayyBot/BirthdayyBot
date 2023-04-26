@@ -1,24 +1,15 @@
+import { envParseArray, envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { join } from 'path';
+import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
+import { envIs } from '../../lib/utils/env';
 import { parseBoolean } from '../utils/utils';
-import { getGuildPremium } from './config';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
 export const SRC_DIR = join(ROOT_DIR, 'src');
 
-// MAIN
-export const { NODE_ENV } = process.env;
-export const { APP_ENV } = process.env;
-export const DEBUG = parseBoolean(process.env.DEBUG);
-
-// ENVIRONMENT
-export const isPrd = APP_ENV === 'prd';
-export const isTst = APP_ENV === 'tst';
-export const isDev = APP_ENV === 'dev';
-
-export const isNotPrd = APP_ENV !== 'prd';
-export const isNotDev = APP_ENV !== 'dev';
+export const DEBUG = parseBoolean('DEBUG');
 
 // GENERIC
 export const { BOT_NAME } = process.env;
@@ -33,20 +24,13 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 	.BOT_ID!}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE =
 	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = parseInt(process.env.BOT_COLOR);
-export const BOT_OWNER = process.env.BOT_OWNER
-	? process.env.BOT_OWNER.includes(',')
-		? process.env.BOT_OWNER.split(',')
-		: process.env.BOT_OWNER
-	: [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA];
+export const BOT_COLOR = parseInt(envParseString('BOT_COLOR', BotColorEnum.BIRTHDAYY));
+export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA]);
 export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
-export const IS_CUSTOM_BOT = parseBoolean(process.env.CUSTOM_BOT);
-export const IS_PREMIUM = async (guild_id: string) => {
-	return getGuildPremium(guild_id);
-};
+export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT', false);
 
 // EMOJIS
 export const SUCCESS = '<:checkmark_square:931267038272434198>';
@@ -80,45 +64,10 @@ export const CONFIG_LIST = '</config list:935174203882217483>';
 export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 
 // Values
-export const BOT_SERVER_LOG = process.env.LOG_CHANNEL_SERVER ?? '1077621363881300018';
-export const BOT_ADMIN_LOG = process.env.LOG_CHANNEL_ADMIN ?? '1077621363881300018';
+export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
+export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '1077621363881300018');
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
-export const VOTE_CHANNEL_ID = isPrd ? '950683261540130816' : BOT_ADMIN_LOG;
+export const VOTE_CHANNEL_ID = envIs('APP_ENV', 'production')
+	? '950683261540130816'
+	: envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
-
-// Config
-export const MAX_BIRTHDAYS = parseInt(process.env.MAX_BIRTHDAYS_PER_SITE) || 80;
-
-// Autocode
-export const AUTOCODE_ENV = `@${process.env.AUTOCODE_ENV}`;
-
-// Sentry
-export const { SENTRY_DSN } = process.env;
-
-// API
-export const { API_BASE_URL } = process.env;
-export const { API_EXTENSION } = process.env;
-export const API_PORT = parseInt(process.env.API_PORT);
-export const { API_SECRET } = process.env;
-export const { API_URL } = process.env;
-export const { WEBHOOK_SECRET } = process.env;
-
-// REDIS
-export const { REDIS_HOST } = process.env;
-export const REDIS_PORT = parseInt(process.env.REDIS_PORT);
-export const { REDIS_PASSWORD } = process.env;
-export const REDIS_DB = parseInt(process.env.REDIS_DB);
-export const { REDIS_USERNAME } = process.env;
-
-// DATABASE
-export const { DB_URL } = process.env;
-
-// BOT WEBSITES
-// TODO: Change env name
-export const TOKEN_TOPGG = process.env.TOPGG_TOKEN;
-export const TOKEN_DISCORDLIST = process.env.DISCORDLIST_TOKEN;
-export const TOKEN_DISCORDBOTLIST = process.env.DISCORDBOTLIST_TOKEN;
-
-// WEBHOOKS
-export const { WEBHOOK_ID } = process.env;
-export const { WEBHOOK_TOKEN } = process.env;
