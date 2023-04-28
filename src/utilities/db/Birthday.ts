@@ -17,6 +17,9 @@ export class Birthday extends Utility {
 			}),
 		BirthdaysNotDisabled: (guildId: string) =>
 			this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
+		BirthdayCountByGuildId: (guildId: string) =>
+			this.prisma.birthday.count({ where: { guildId, disabled: false } }),
+		BirthdayCount: () => this.prisma.birthday.count(),
 	};
 
 	public update = {
