@@ -23,7 +23,7 @@ export class UserPrecondition extends AllFlowsPrecondition {
 						where: { guildId },
 					})
 					.then((guild) => (guild?.premium ? this.ok() : this.error({ message: this.#message })))
-					.catch((err) => this.error({ message: err.message }))
+					.catch(() => this.error({ message: this.#message }))
 			: this.error({ message: this.#message });
 	}
 }
