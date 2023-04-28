@@ -32,8 +32,8 @@ export function getCurrentDateFormatted(timezone = 'UTC'): string {
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
-	const [day, month, year] = date.split(fromHumanFormat ? '.' : '-');
-	return `${day}. ${month} ${year.includes('XXXX') ? '' : year}`;
+	const [year, month, day] = date.split(fromHumanFormat ? '.' : '-');
+	return `${day}. ${numberToMonthName(Number(month))} ${year.includes('XXXX') ? '' : year}`;
 }
 
 function getMonths() {
