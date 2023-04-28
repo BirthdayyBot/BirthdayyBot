@@ -4,7 +4,7 @@ import type { Args } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { generateEmbed } from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { UwUCMD } from '../../lib/commands/uwu';
 
@@ -40,7 +40,7 @@ export class UwuCommand extends Subcommand {
 
 	public async runOnce(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const title = await resolveKey(interaction, 'commands/uwu:uwuss');
-		const embed = generateEmbed({ title, description: 'Uwu' });
+		const embed = generateDefaultEmbed({ title, description: 'Uwu' });
 		return interaction.reply({ embeds: [embed] });
 	}
 
@@ -52,13 +52,13 @@ export class UwuCommand extends Subcommand {
 		for (let i = 0; i < times; i++) {
 			uwu += 'UwU ';
 		}
-		const embed = generateEmbed({ title: 'UwU', description: uwu });
+		const embed = generateDefaultEmbed({ title: 'UwU', description: uwu });
 		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runRandom(interaction: Subcommand.ChatInputCommandInteraction, _args: Args) {
 		const user = interaction.options.getUser('user') ?? interaction.user;
-		const embed = generateEmbed({ title: 'UwU', description: `UwU <@${user.id}>` });
+		const embed = generateDefaultEmbed({ title: 'UwU', description: `UwU <@${user.id}>` });
 		return interaction.reply({ embeds: [embed] });
 	}
 
@@ -75,7 +75,7 @@ export class UwuCommand extends Subcommand {
 			'https://jsonplaceholder.typicode.com/todos/1',
 			FetchResultTypes.JSON,
 		);
-		const embed = generateEmbed({
+		const embed = generateDefaultEmbed({
 			title: 'UwU Fetch',
 			description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\``,
 		});

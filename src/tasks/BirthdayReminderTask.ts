@@ -25,7 +25,7 @@ import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
-import { generateEmbed } from '../helpers';
+import { generateDefaultEmbed } from '../lib/utils/embed';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -41,7 +41,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
-					generateEmbed({
+					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
 						description: 'No Current Offset could be generated',
 					}),
@@ -151,7 +151,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		};
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
-		const birthdayEmbed = generateEmbed(embed);
+		const birthdayEmbed = generateDefaultEmbed(embed);
 
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,
@@ -304,7 +304,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 		return schedulerLogThread?.send({
 			embeds: [
-				generateEmbed({
+				generateDefaultEmbed({
 					title: embedTitle,
 					description: reportDescription,
 				}),
@@ -314,7 +314,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		async function sendReport() {
 			return sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
-					generateEmbed({
+					generateDefaultEmbed({
 						title: embedTitle,
 						description: embedDescription,
 						fields: embedFields,

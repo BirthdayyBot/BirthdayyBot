@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import { generateEmbed } from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { PING } from '../../helpers/provide/environment';
 import { getGuildCount } from '../../helpers/provide/guildCount';
 import { reply } from '../../helpers/send/response';
@@ -109,7 +109,7 @@ export class StatsCommand extends Command {
 				},
 			],
 		};
-		const embed = generateEmbed(embedRaw);
+		const embed = generateDefaultEmbed(embedRaw);
 		return reply(interaction, { embeds: [embed] });
 	}
 }

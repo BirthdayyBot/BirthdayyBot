@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateEmbed } from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { VoteCMD } from '../../lib/commands/vote';
@@ -25,7 +25,7 @@ export class VoteCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = generateEmbed(VoteEmbed);
+		const embed = generateDefaultEmbed(VoteEmbed);
 		await reply(interaction, {
 			embeds: [embed],
 		});

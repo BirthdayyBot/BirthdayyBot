@@ -3,7 +3,7 @@ import type { Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { objectEntries } from '@sapphire/utilities';
 import { type APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
-import { generateEmbed } from '../../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../../lib/utils/embed';
 import { ARROW_RIGHT, PLUS } from '../../../helpers/provide/environment';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
@@ -18,7 +18,7 @@ export class ListCommand extends Command {
 
 		const embedFields = await generateFields(interaction.guildId);
 
-		const embed = generateEmbed({
+		const embed = generateDefaultEmbed({
 			title: `Config List - ${interaction.guild.name}`,
 			description: 'Use /config `<setting>` `<value>` to change any setting',
 			fields: embedFields,

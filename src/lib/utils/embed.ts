@@ -12,7 +12,7 @@ import {
 type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
 type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;
 
-export function generateEmbedWithDefault(embed: APIEmbed): APIEmbed {
+export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
 		...defaultEmbed(),
 		...embed,

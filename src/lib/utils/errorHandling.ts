@@ -2,7 +2,7 @@ import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
 import type { APIEmbed } from 'discord.js';
-import { generateEmbed } from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
 import { envIs } from './env';
@@ -54,7 +54,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 	if (error.cause) errorString += `Cause: ${JSON.stringify(error.cause)}\n`;
 	if (error.stack && !envIs('APP_ENV', 'production')) errorString += `Stack: ${JSON.stringify(error.stack)}`;
 
-	const errorMessageEmbed = generateEmbed({
+	const errorMessageEmbed = generateDefaultEmbed({
 		title: 'An error has occured',
 		description: `${codeBlock(`js`, errorString)}`,
 		color: BotColorEnum.BIRTHDAYY_DEV,

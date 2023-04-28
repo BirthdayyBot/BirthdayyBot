@@ -1,4 +1,4 @@
-import { envParseArray, envParseBoolean, envParseString } from '@skyra/env-utilities';
+import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';

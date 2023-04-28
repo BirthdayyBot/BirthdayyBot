@@ -1,3 +1,4 @@
+import type { APIEmbed } from 'discord-api-types/v9';
 import { ARROW_RIGHT, HEART, PLUS, PREMIUM_URL } from '../../helpers/provide/environment';
 
 // ! Currently not working??
@@ -13,7 +14,7 @@ import { VoteSites } from '../db/voteSites';
 	return value;
 }; */
 
-export const VoteEmbed = {
+export const VoteEmbed: APIEmbed = {
 	title: `${HEART} Support Birthdayy`,
 	description: '',
 	fields: [

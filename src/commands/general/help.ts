@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateEmbed } from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { HelpCMD } from '../../lib/commands';
@@ -26,7 +26,7 @@ export class HelpCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = generateEmbed(HelpEmbed);
+		const embed = generateDefaultEmbed(HelpEmbed);
 		await reply(interaction, {
 			embeds: [embed],
 			components: [
