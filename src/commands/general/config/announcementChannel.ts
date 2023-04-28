@@ -1,8 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Result } from '@sapphire/result';
 import { channelMention } from 'discord.js';
-import { ARROW_RIGHT, FAIL, SUCCESS, generateEmbed, reply } from '../../../helpers';
+import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -24,45 +24,36 @@ export class AnnouncementChannelCommand extends Command {
 		const hasPermissionInNewChannel = channel.permissionsFor(guildClient).has(['ViewChannel', 'SendMessages']);
 
 		if (!hasPermissionInNewChannel) {
-			return reply(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failure`,
-						description: `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
-							channel.id,
-						)}.`,
-					}),
-				],
-			});
+			return reply(
+				interaction,
+				interactionProblem(` I don't have permission to send messages in ${channelMention(channel.id)}.`),
+			);
 		}
 
-		const result = await Result.fromAsync(() =>
-			this.container.prisma.guild.update({
+		return this.container.prisma.guild
+			.update({
 				where: { guildId: interaction.guildId },
 				data: { announcementChannel: channel.id },
-			}),
-		);
-
-		if (result.isErr()) {
-			return reply(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failure`,
-						description: `${ARROW_RIGHT} An error occurred while updating the database.`,
-					}),
-				],
+			})
+			.then((birthday) => {
+				if (!birthday) {
+					return reply(
+						interaction,
+						interactionProblem(
+							`An error occurred while trying to update the config. Please try again later.`,
+						),
+					);
+				}
+				return reply(
+					interaction,
+					interactionValidate(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
+				);
+			})
+			.catch(() => {
+				return reply(
+					interaction,
+					interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
+				);
 			});
-		}
-
-		return reply(interaction, {
-			embeds: [
-				generateEmbed({
-					title: `${SUCCESS} Success`,
-					description: `${ARROW_RIGHT} The announcement channel has been set to ${channelMention(
-						channel.id,
-					)}.`,
-				}),
-			],
-		});
 	}
 }

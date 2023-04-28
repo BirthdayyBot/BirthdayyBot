@@ -2,8 +2,9 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
-import { generateEmbed, reply } from '../../../helpers';
+import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -28,18 +29,12 @@ export class ListCommand extends Command {
 		);
 
 		if (guildResult.isErr()) {
-			const embed = generateEmbed({
-				title: 'Error',
-				description: 'An error occurred while trying to set the birthday role.',
-			});
-			return reply(interaction, { embeds: [embed] });
+			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		const embed = generateEmbed({
-			title: 'Success',
-			description: `The birthday role has been set to ${roleMention(role.id)}.`,
-		});
-
-		return reply(interaction, { embeds: [embed] });
+		return reply(
+			interaction,
+			interactionValidate(`Successfully set the birthday role to ${roleMention(role.id)}.`),
+		);
 	}
 }

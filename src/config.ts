@@ -1,6 +1,6 @@
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
-import { ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
+import { type ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
@@ -11,9 +11,9 @@ import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
 	GatewayIntentBits,
-	PresenceData,
+	type PresenceData,
 	PresenceUpdateStatus,
-	WebhookClientData,
+	type WebhookClientData,
 	type ClientOptions,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';

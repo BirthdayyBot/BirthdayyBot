@@ -1,12 +1,12 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
 import { channelMention, ChannelType } from 'discord.js';
-import generateBirthdayList from '../../../helpers/generate/birthdayList';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
+import { generateBirthdayList } from '../../../helpers/generate/birthdayList';
+import { generateEmbed } from '../../../helpers/generate/embed';
 import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
-import reply from '../../../helpers/send/response';
+import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -31,13 +31,10 @@ export class OverviewChannelCommand extends Command {
 		});
 
 		if (!hasWritingPermissionsInChannel) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failure`,
-				description: `${ARROW_RIGHT} I don't have the permission to see & send messages in ${channelMention(
-					channel.id,
-				)}.`,
-			});
-			return reply(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem(`I don't have permission to send messages in ${channelMention(channel.id)}.`),
+			);
 		}
 
 		const birthdayList = await generateBirthdayList(1, interaction.guildId);
@@ -56,18 +53,19 @@ export class OverviewChannelCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failure`,
-				description: `${ARROW_RIGHT} An error occurred while updating the database.`,
-			});
-			return reply(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
+			);
 		}
 
-		const embed = generateEmbed({
-			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} The birthday overview channel has been set to ${channelMention(channel.id)}.`,
-		});
-
-		return reply(interaction, { embeds: [embed] });
+		return reply(
+			interaction,
+			interactionValidate(
+				`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${
+					message.url
+				}.`,
+			),
+		);
 	}
 }

@@ -1,10 +1,10 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import generateEmbed from '../../helpers/generate/embed';
+import { generateEmbed } from '../../helpers/generate/embed';
 import { PING } from '../../helpers/provide/environment';
-import getGuildCount from '../../helpers/provide/guildCount';
-import reply from '../../helpers/send/response';
+import { getGuildCount } from '../../helpers/provide/guildCount';
+import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';

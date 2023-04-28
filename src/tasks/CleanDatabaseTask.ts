@@ -3,7 +3,7 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import generateEmbed from '../helpers/generate/embed';
+import { generateEmbed } from '../helpers/generate/embed';
 import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { envIs } from '../lib/utils/env';

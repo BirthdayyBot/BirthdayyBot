@@ -1,12 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
+import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
-import { DiscordAPIError, Guild, Snowflake } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
+import { DiscordAPIError, Guild, type Snowflake } from 'discord.js';
 import { IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
-import joinServerLog from '../../../helpers/send/joinServerLog';
 import { sendDMMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
+import { joinServerLog, generateEmbed } from '../../../helpers';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {

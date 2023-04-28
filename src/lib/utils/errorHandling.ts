@@ -2,7 +2,7 @@ import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
 import type { APIEmbed } from 'discord.js';
-import generateEmbed from '../../helpers/generate/embed';
+import { generateEmbed } from '../../helpers/generate/embed';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
 import { envIs } from './env';

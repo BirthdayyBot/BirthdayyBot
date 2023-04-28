@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import generateEmbed from '../../helpers/generate/embed';
-import reply from '../../helpers/send/response';
+import { generateEmbed } from '../../helpers/generate/embed';
+import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { ReminderCMD } from '../../lib/commands/reminder';
 import { inviteButton } from '../../lib/components/button';
@@ -11,7 +11,7 @@ import { InviteEmbed } from '../../lib/embeds';
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
 	description: 'premium tryout',
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],

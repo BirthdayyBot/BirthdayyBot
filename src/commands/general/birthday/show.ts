@@ -1,8 +1,6 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Result } from '@sapphire/result';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { userMention } from 'discord.js';
-import { ARROW_RIGHT, BOOK, IMG_CAKE, formatDateForDisplay, generateEmbed, reply } from '../../../helpers';
+import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
 import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
 

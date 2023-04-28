@@ -1,5 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
+import { Result } from '@sapphire/result';
 import { envIs } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
@@ -8,17 +9,13 @@ import { envIs } from '../lib/utils/env';
 	pattern: '0 * * * *',
 })
 export class PostStats extends ScheduledTask {
-	public run() {
+	public async run() {
 		if (!envIs('APP_ENV', 'production')) return;
+		const result = await Result.fromAsync(this.container.botList.postStats());
 
-		return this.container.botList
-			.postStats()
-			.then(() => {
-				this.container.logger.info('Posted stats to bot lists.');
-			})
-			.catch((err) => {
-				this.container.logger.error('Failed to post stats to bot lists.');
-				this.container.logger.error(err);
-			});
+		return result.match({
+			ok: () => this.container.logger.info('Successfully posted stats to bot lists.'),
+			err: (error) => this.container.logger.error(error),
+		});
 	}
 }

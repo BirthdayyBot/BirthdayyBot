@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ContextMenuCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
-import reply from '../../../../helpers/send/response';
+import { type ContextMenuCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
+import { reply } from '../../../../helpers';
 
 @ApplyOptions<Listener.Options>({ event: Events.ContextMenuCommandDenied })
 export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> {

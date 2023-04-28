@@ -1,7 +1,6 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { chatInputApplicationCommandMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';

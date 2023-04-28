@@ -5,20 +5,19 @@ import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
 import {
-	APIEmbed,
 	codeBlock,
 	DiscordAPIError,
-	EmbedField,
 	Guild,
 	GuildMember,
 	inlineCode,
 	Role,
 	roleMention,
-	Snowflake,
 	ThreadAutoArchiveDuration,
 	userMention,
+	type APIEmbed,
+	type EmbedField,
+	type Snowflake,
 } from 'discord.js';
-import generateEmbed from '../helpers/generate/embed';
 import { logAll } from '../helpers/provide/config';
 import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
@@ -26,6 +25,7 @@ import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
+import { generateEmbed } from '../helpers';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -235,7 +235,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 					returnData.message = error.message;
 				}
 				container.logger.warn(
-					"COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
+					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
 					error.message,
 				);
 			}

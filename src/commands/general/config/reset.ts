@@ -1,11 +1,10 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
-import generateEmbed from '../../../helpers/generate/embed';
 import { setDefaultConfig } from '../../../helpers/provide/config';
-import { SUCCESS, ARROW_RIGHT } from '../../../helpers/provide/environment';
-import reply from '../../../helpers/send/response';
+import { reply } from '../../../helpers/send/response';
 import { type ConfigName, configNameExtended } from '../../../lib/database';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -53,18 +52,12 @@ export class ResetCommand extends Command {
 		const result = await Result.fromAsync(() => setDefaultConfig(config, interaction.guildId));
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: 'Error',
-				description: 'An error occurred while trying to reset the config.',
-			});
-			return reply(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem(`An error occurred while trying to reset the ${configName} config.`),
+			);
 		}
 
-		const embed = generateEmbed({
-			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} You reset the **${configName}** config.`,
-		});
-
-		return reply(interaction, { embeds: [embed] });
+		return reply(interaction, interactionValidate(`Successfully reset the ${configName} config.`));
 	}
 }
