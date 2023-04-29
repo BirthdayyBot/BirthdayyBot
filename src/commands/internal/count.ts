@@ -24,7 +24,7 @@ export class CountCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const fields = (await this.stats()).map<APIEmbedField>((field) => {
-			return { ...field, value: inlineCode(field.value), inline: true };
+			return { ...field, value: inlineCode(field.value.toString()), inline: true };
 		});
 
 		await replyToInteraction(interaction, {
@@ -37,35 +37,31 @@ export class CountCommand extends Command {
 		});
 	}
 
-	private async stats(): Promise<APIEmbedField[]> {
+	private async stats() {
 		return [
 			{
 				name: 'Discord Guilds',
-				value: await this.container.botList.computeGuilds().then((guilds) => guilds.toString()),
+				value: await this.container.botList.computeGuilds(),
 			},
 			{
 				name: 'Discord Shards',
-				value: this.container.client.shard?.count?.toString() ?? '1',
+				value: this.container.client.shard?.count?.toString() ?? 1,
 			},
 			{
 				name: 'Discord Users',
-				value: await this.container.botList.computeUsers().then((users) => users.toString()),
+				value: await this.container.botList.computeUsers(),
 			},
 			{
 				name: 'Guilds',
-				value: await this.container.utilities.guild.get
-					.GuildAvailableCount()
-					.then((guilds) => guilds.toString()),
+				value: await this.container.utilities.guild.get.GuildAvailableCount(),
 			},
 			{
 				name: 'Birthdays',
-				value: await this.container.utilities.birthday.get
-					.BirthdayAvailableCount()
-					.then((birthdays) => birthdays.toString()),
+				value: await this.container.utilities.birthday.get.BirthdayAvailableCount(),
 			},
 			{
 				name: 'Users',
-				value: await this.container.utilities.user.get.UserCount().then((users) => users.toString()),
+				value: await this.container.utilities.user.get.UserCount(),
 			},
 		];
 	}
