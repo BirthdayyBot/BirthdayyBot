@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
-import getGuildCount from '../../helpers/provide/guildCount';
 import replyToInteraction from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { CountCMD } from '../../lib/commands/count';
@@ -49,7 +48,7 @@ export class CountCommand extends Command {
 			},
 			database: {
 				guilds: await this.container.utilities.guild.get.GuildCount(),
-				birthdays: await this.container.utilities.birthday.get.BirthdayCount(),
+				birthdays: await this.container.utilities.birthday.get.BirthdayAvailableCount(),
 				users: await this.container.utilities.user.get.UserCount(),
 			},
 		};
