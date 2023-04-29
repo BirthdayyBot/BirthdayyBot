@@ -6,11 +6,9 @@ import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import generateEmbed from '../generate/embed';
 import { BOT_NAME, BOT_SERVER_LOG, FAIL } from '../provide/environment';
-import getGuildCount from '../provide/guildCount';
 
 export default async function leaveServerLog(guild: Guild) {
 	container.logger.info('Removed from Guild');
-	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 	const joinedAgo = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
 	const joinedDate = time(Math.floor(rawJoinedTimestamp / 1000), 'R');
@@ -30,7 +28,7 @@ export default async function leaveServerLog(guild: Guild) {
 	if (timeServed) fields.push({ name: 'TimeServed', value: `${timeServed}` });
 	const embedObj: EmbedInformationModel = {
 		title: `${FAIL} ${BOT_NAME} got removed from a Guild`,
-		description: `I am now in \`${server_count}\` guilds`,
+		description: `I am now in \`${await container.botList.computeGuilds()}\` guilds`,
 		fields,
 		color: BotColorEnum.BIRTHDAYY_DEV,
 	};

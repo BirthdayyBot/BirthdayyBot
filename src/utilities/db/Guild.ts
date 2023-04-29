@@ -51,7 +51,9 @@ export class Guild extends Utility {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
 					return { deletedBirthdays: 0, deletedGuilds: 0 };
 				}),
-		GuildCount: () => this.prisma.guild.count(),
+		GuildCount: () => this.prisma.guild.count({ where: { disabled: false } }),
+		GuildAvailableCount: () => this.prisma.guild.count({ where: { disabled: false } }),
+		GuildNotAvailableCount: () => this.prisma.guild.count({ where: { disabled: true } }),
 	};
 
 	public set = {

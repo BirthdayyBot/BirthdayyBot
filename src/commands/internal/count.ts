@@ -1,12 +1,10 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { inlineCode } from 'discord.js';
+import { inlineCode, type APIEmbedField } from 'discord.js';
 import generateEmbed from '../../helpers/generate/embed';
 import replyToInteraction from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { CountCMD } from '../../lib/commands/count';
-import thinking from '../../lib/discord/thinking';
-import type { EmbedInformationModel } from '../../lib/model';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',
@@ -25,75 +23,50 @@ export class CountCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		interface CountInformation {
-			discord: {
-				guilds: number;
-				shards: number;
-				users: number;
-			};
-			database: {
-				guilds: number;
-				birthdays: number;
-				users: number;
-			};
-		}
-
-		await thinking(interaction);
-
-		const embedInformation: CountInformation = {
-			discord: {
-				guilds: await this.container.botList.computeGuilds(),
-				shards: this.container.client.shard?.count ?? 1,
-				users: await this.container.botList.computeUsers(),
-			},
-			database: {
-				guilds: await this.container.utilities.guild.get.GuildCount(),
-				birthdays: await this.container.utilities.birthday.get.BirthdayAvailableCount(),
-				users: await this.container.utilities.user.get.UserCount(),
-			},
-		};
-
-		const countEmbed: EmbedInformationModel = {
-			title: 'Count Information',
-			description: '',
-			fields: [
-				{
-					name: 'Discord Servers',
-					value: inlineCode(embedInformation.discord.guilds.toString()),
-					inline: true,
-				},
-				{
-					name: 'Discord Shards',
-					value: inlineCode(embedInformation.discord.shards.toString()),
-					inline: true,
-				},
-				{
-					name: 'Discord Users',
-					value: inlineCode(embedInformation.discord.users.toString()),
-					inline: false,
-				},
-
-				{
-					name: 'Guilds',
-					value: inlineCode(embedInformation.database.guilds.toString()),
-					inline: true,
-				},
-				{
-					name: 'Birthdays',
-					value: inlineCode(embedInformation.database.birthdays.toString()),
-					inline: true,
-				},
-				{
-					name: 'Users',
-					value: inlineCode(embedInformation.database.users.toString()),
-					inline: true,
-				},
-			],
-		};
-
-		const embed = generateEmbed(countEmbed);
-		await replyToInteraction(interaction, {
-			embeds: [embed],
+		const fields = (await this.stats()).map<APIEmbedField>((field) => {
+			return { ...field, value: inlineCode(field.value), inline: true };
 		});
+
+		await replyToInteraction(interaction, {
+			embeds: [
+				generateEmbed({
+					title: 'Count Information',
+					fields,
+				}),
+			],
+		});
+	}
+
+	private async stats(): Promise<APIEmbedField[]> {
+		return [
+			{
+				name: 'Discord Guilds',
+				value: await this.container.botList.computeGuilds().then((guilds) => guilds.toString()),
+			},
+			{
+				name: 'Discord Shards',
+				value: this.container.client.shard?.count?.toString() ?? '1',
+			},
+			{
+				name: 'Discord Users',
+				value: await this.container.botList.computeUsers().then((users) => users.toString()),
+			},
+			{
+				name: 'Guilds',
+				value: await this.container.utilities.guild.get
+					.GuildAvailableCount()
+					.then((guilds) => guilds.toString()),
+			},
+			{
+				name: 'Birthdays',
+				value: await this.container.utilities.birthday.get
+					.BirthdayAvailableCount()
+					.then((birthdays) => birthdays.toString()),
+			},
+			{
+				name: 'Users',
+				value: await this.container.utilities.user.get.UserCount().then((users) => users.toString()),
+			},
+		];
 	}
 }
