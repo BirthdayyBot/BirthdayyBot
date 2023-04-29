@@ -13,7 +13,7 @@ import type { EmbedInformationModel } from '../../lib/model';
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
