@@ -43,9 +43,9 @@ export class CountCommand extends Command {
 
 		const embedInformation: CountInformation = {
 			discord: {
-				guilds: getGuildCount(),
+				guilds: await this.container.botList.computeGuilds(),
 				shards: this.container.client.shard?.count ?? 1,
-				users: this.container.client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) ?? 0,
+				users: await this.container.botList.computeUsers(),
 			},
 			database: {
 				guilds: await this.container.utilities.guild.get.GuildCount(),
