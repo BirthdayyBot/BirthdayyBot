@@ -12,7 +12,7 @@ import { SupportEmbed } from '../../lib/embeds';
 	name: 'support',
 	description: 'Need help? Join my Support Discord Server!',
 	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
