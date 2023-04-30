@@ -3,6 +3,7 @@ import { container } from '@sapphire/framework';
 import { userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
+import { BIRTHDAY_REGISTER } from '../../../lib/commands';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
@@ -100,7 +101,11 @@ export class UpdateCommand extends Command {
 		if (!birthday) {
 			return reply(
 				interaction,
-				interactionProblem(`I couldn't find a birthday for ${userMention(targetUser.id)}.`),
+				interactionProblem(
+					`I couldn't find a birthday for ${userMention(
+						targetUser.id,
+					)}. Use ${BIRTHDAY_REGISTER} to register a birthday.`,
+				),
 			);
 		}
 
@@ -131,7 +136,7 @@ export class UpdateCommand extends Command {
 			interactionSuccess(
 				`${
 					authorIsTarget ? 'Your' : `${targetUser.username}'s`
-				} birthday was been updated on ${formatDateForDisplay(date.date)}.`,
+				} birthday has been updated on ${formatDateForDisplay(date.date)}.`,
 			),
 		);
 	}

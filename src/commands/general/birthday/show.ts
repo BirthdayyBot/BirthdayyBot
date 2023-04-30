@@ -30,7 +30,7 @@ export class ShowCommand extends Command {
 		if (!birthday) {
 			return reply(
 				interaction,
-				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}`),
+				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}.`),
 			);
 		}
 
