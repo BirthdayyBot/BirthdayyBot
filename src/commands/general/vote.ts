@@ -11,7 +11,7 @@ import { VoteEmbed } from '../../lib/embeds';
 	name: 'vote',
 	description: 'Vote for Birthdayy <3',
 	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],

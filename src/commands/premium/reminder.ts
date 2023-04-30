@@ -11,7 +11,7 @@ import { InviteEmbed } from '../../lib/embeds';
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
 	description: 'premium tryout',
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],

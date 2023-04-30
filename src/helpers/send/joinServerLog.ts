@@ -1,14 +1,13 @@
-import { Guild, Snowflake, time } from 'discord.js';
+import { Guild, type Snowflake, time } from 'discord.js';
 import { sendMessage } from '../../lib/discord/message';
 import { getUserInfo } from '../../lib/discord/user';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import generateEmbed from '../generate/embed';
 import { BOT_NAME, BOT_SERVER_LOG, SUCCESS } from '../provide/environment';
-import getGuildCount from '../provide/guildCount';
+import { container } from '@sapphire/framework';
 
 export default async function joinServerLog(guild: Guild, inviterId?: Snowflake) {
-	const server_count = getGuildCount();
 	const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 	const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
 	const fields = [
@@ -30,7 +29,7 @@ export default async function joinServerLog(guild: Guild, inviterId?: Snowflake)
 
 	const embedObj: EmbedInformationModel = {
 		title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
-		description: `I am now in \`${server_count}\` guilds`,
+		description: `I am now in \`${await container.botList.computeGuilds()}\` guilds`,
 		fields,
 		color: BotColorEnum.BIRTHDAYY,
 		thumbnail_url: guild.iconURL() ?? undefined,
