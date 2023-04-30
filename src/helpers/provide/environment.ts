@@ -1,4 +1,4 @@
-import { envParseArray, envParseBoolean, envParseString } from '@skyra/env-utilities';
+import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
@@ -24,7 +24,7 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 	.BOT_ID!}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE =
 	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
-export const BOT_COLOR = parseInt(envParseString('BOT_COLOR', BotColorEnum.BIRTHDAYY));
+export const BOT_COLOR = envParseInteger('BOT_COLOR', BotColorEnum.BIRTHDAYY);
 export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA]);
 export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
 export const WEBSITE_URL = 'https://birthdayy.xyz/';

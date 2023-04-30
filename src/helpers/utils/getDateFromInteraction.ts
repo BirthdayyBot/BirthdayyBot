@@ -8,7 +8,7 @@ interface DateResult {
 	message: string;
 }
 
-export default function getDateFromInteraction(
+export function getDateFromInteraction(
 	interaction: Command.ChatInputCommandInteraction | Subcommand.ChatInputCommandInteraction,
 ): DateResult {
 	const result: DateResult = {

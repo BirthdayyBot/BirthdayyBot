@@ -1,13 +1,10 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { inlineCode, userMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, BOOK, FAIL } from '../../../helpers/provide/environment';
-import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
-import replyToInteraction from '../../../helpers/send/response';
+import { userMention } from 'discord.js';
+import { reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
-import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder
@@ -19,66 +16,44 @@ import thinking from '../../../lib/discord/thinking';
 )
 export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
-		const targetUser = interaction.options.getUser('user') ?? interaction.user;
+		const targetUser = interaction.options.getMember('user') ?? interaction.member;
 		const { guildId } = interaction;
 
-		if (
-			interaction.user.id !== targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
-		) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode(
-							"You don't have the permission to remove other users birthdays.",
-						)}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		const TargetIsNotUser = targetUser.id !== interaction.user.id;
+
+		if (TargetIsNotUser && interaction.member.permissions.has('ManageRoles')) {
+			return reply(
+				interaction,
+				interactionProblem("You don't have the permission to remove other users birthdays."),
+			);
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
+		const birthday = await catchToNull(
+			container.prisma.birthday.delete({
+				where: {
+					userId_guildId: {
+						userId: targetUser.id,
+						guildId,
+					},
+				},
+			}),
+		);
 
-		if (isNullOrUndefinedOrEmpty(birthday)) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('This user has no birthday registered.')}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!birthday) {
+			return reply(
+				interaction,
+				interactionProblem(
+					`${TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'} birthday is not registered.`,
+				),
+			);
 		}
 
-		try {
-			await container.utilities.birthday.delete.ByGuildAndUser(guildId, targetUser.id);
-			await updateBirthdayOverview(guildId);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${BOOK} Birthday Removed`,
-						description: `${ARROW_RIGHT} The birthday of ${userMention(
-							targetUser.id,
-						)} was successfully removed.`,
-					}),
-				],
-				ephemeral: true,
-			});
-		} catch (error: any) {
-			container.logger.error(error);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('An error occured while removing the birthday.')}`,
-					}),
-				],
-				ephemeral: true,
-			});
-		}
+		await updateBirthdayOverview(guildId);
+		return reply(
+			interaction,
+			interactionSuccess(
+				`${TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'} birthday has been removed.`,
+			),
+		);
 	}
 }

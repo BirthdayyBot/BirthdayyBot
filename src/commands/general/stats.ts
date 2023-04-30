@@ -1,9 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import generateEmbed from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { PING } from '../../helpers/provide/environment';
-import replyToInteraction from '../../helpers/send/response';
+import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';
@@ -108,7 +108,7 @@ export class StatsCommand extends Command {
 				},
 			],
 		};
-		const embed = generateEmbed(embedRaw);
-		return replyToInteraction(interaction, { embeds: [embed] });
+		const embed = generateDefaultEmbed(embedRaw);
+		return reply(interaction, { embeds: [embed] });
 	}
 }

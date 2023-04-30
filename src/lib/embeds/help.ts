@@ -1,3 +1,4 @@
+import type { APIEmbed } from 'discord-api-types/v9';
 import {
 	ARROW_RIGHT,
 	BOOK,
@@ -10,7 +11,7 @@ import {
 	SUPPORT,
 } from '../../helpers/provide/environment';
 
-export const HelpEmbed = {
+export const HelpEmbed: APIEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,
 	description: `
   ${SUPPORT} Confused what each command does?

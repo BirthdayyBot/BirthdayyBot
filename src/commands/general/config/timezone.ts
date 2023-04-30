@@ -1,10 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
-import { inlineCode } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -122,21 +120,12 @@ export class TimezoneCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: `${FAIL} Failure`,
-				description: 'An error occurred while trying to set the timezone.',
-			});
-
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, interactionProblem("I couldn't set the **Timezone**."));
 		}
 
-		const embed = generateEmbed({
-			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} You set the **Timezone** to ${inlineCode(
-				timezone < 0 ? `UTC${timezone}` : `UTC+${timezone}`,
-			)}`,
-		});
-
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(
+			interaction,
+			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone})}.`),
+		);
 	}
 }

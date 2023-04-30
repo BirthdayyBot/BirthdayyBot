@@ -2,10 +2,10 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import type { Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { objectEntries } from '@sapphire/utilities';
-import { APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
+import { type APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
+import { generateDefaultEmbed } from '../../../lib/utils/embed';
 import { ARROW_RIGHT, PLUS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 
 @RegisterSubCommand('config', (builder) =>
@@ -18,13 +18,13 @@ export class ListCommand extends Command {
 
 		const embedFields = await generateFields(interaction.guildId);
 
-		const embed = generateEmbed({
+		const embed = generateDefaultEmbed({
 			title: `Config List - ${interaction.guild.name}`,
 			description: 'Use /config `<setting>` `<value>` to change any setting',
 			fields: embedFields,
 		});
 
-		await replyToInteraction(interaction, { embeds: [embed] });
+		await reply(interaction, { embeds: [embed] });
 	}
 }
 
