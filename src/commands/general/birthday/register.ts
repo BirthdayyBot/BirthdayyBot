@@ -126,7 +126,7 @@ export class ListCommand extends Command {
 			}),
 		);
 
-		if (!memberBirthday) {
+		if (memberBirthday) {
 			return reply(
 				interaction,
 				interactionProblem(
