@@ -2,7 +2,7 @@ import { envParseArray, envParseBoolean, envParseInteger, envParseString } from 
 import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
-import { envIs } from '../../lib/utils/env';
+import { isProduction } from '../../lib/utils/env';
 import { parseBoolean } from '../utils/utils';
 
 // DIRECTORY
@@ -33,31 +33,31 @@ export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT', false);
 
 // EMOJIS
-export const SUCCESS = '<:checkmark_square:931267038272434198>';
-export const FAIL = '<:cross_square:931267041795637328>';
-export const YES = '<:checkmark_square:931267038272434198>';
-export const NO = '<:cross_square:931267041795637328>';
-export const ARROW_RIGHT = '<:arrwright:931267038746390578>';
-export const ARROW_LEFT = '<:arrwleft:931267038528274473>';
-export const PLUS = '<:plus:936220828817825793>';
-export const LINK = '<:link:931267039019020340>';
-export const EXCLAMATION = '<:exclamationmark:936214710032924732>';
-export const CAKE = '<:birthday_cake:931267038687670302>';
-export const CROWN = '<:crown:931267039732047902>';
-export const NEWS = '<:news:931267039232946196>';
-export const GIFT = '<:gift:931267039094534175>';
-export const BOOK = '<:book:931267038662504508>';
-export const ALARM = '<:notify:931267039035818014>';
-export const SUPPORT = '<:support:934485818062561310>';
-export const SIGN = '<:sign:931267038431834174>';
-export const HEART = '<:heart:931267039623000134>';
-export const PING = '<:ping:931267038968705104>';
-export const PEOPLE = '<:people:931267038574432308>';
-export const COMMENT = '<:bubble:931267038670897213>';
-export const ONLINE = '<:online:931267038662508585>';
-export const OFFLINE = '<:offline:976766832662937620>';
-export const WARNING = '<:warning:976767964110020628>';
-export const COMPASS = '<:compass:931267039576871052>';
+export const SUCCESS = '<:checkmark_square_birthdayy:1102222019476586526>';
+export const FAIL = '<:cross_square_birthdayy:1102222032155988068> ';
+export const YES = '<:checkmark_square_birthdayy:1102222019476586526>';
+export const NO = '<:cross_square_birthdayy:1102222032155988068> ';
+export const ARROW_RIGHT = '<:arrow_right_birthdayy:1102221944016875650>';
+export const ARROW_LEFT = '<:arrow_left_birthdayy:1102221941223477268>';
+export const PLUS = '<:plus_birthdayy:1102222100544110712>';
+export const LINK = '<:link_birthdayy:1102222076380725319>';
+export const EXCLAMATION = '<:exclamation_mark_birthdayy:1102222058777223209>';
+export const CAKE = '<:cake_birthdayy:1102221988380020766>';
+export const CROWN = '<:crown_birthdayy:1102222034458660915>';
+export const NEWS = '<:news_birthdayy:1102222080029761618>';
+export const GIFT = '<:gift_birthdayy:1102222060845015050>';
+export const BOOK = '<:book_birthdayy:1102221958592086137>';
+export const ALARM = '<:bell_birthdayy:1102221947003219968>';
+export const SUPPORT = '<:support_birthdayy:1102222115056386208>';
+export const SIGN = '<:sign_birthdayy:1102222111155703909> ';
+export const HEART = '<:heart_birthdayy:1102222063030239232>';
+export const PING = '<:ping_birthdayy:1102222097788440657>';
+export const PEOPLE = '<:people_birthdayy:1102222095573844108>';
+export const COMMENT = '<:speech_bubble_birthdayy:1102222112711786577>';
+export const ONLINE = '<:online_birthdayy:1102222090712657930>';
+export const OFFLINE = '<:offline_birthdayy:1102222087973769368>';
+export const WARNING = '<:warning_birthdayy:1102222123809906778>';
+export const COMPASS = '<:compass_birthdayy:1102222027101839360>';
 
 // COMMAND
 export const CONFIG_LIST = '</config list:935174203882217483>';
@@ -67,7 +67,5 @@ export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
 export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '1077621363881300018');
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
-export const VOTE_CHANNEL_ID = envIs('APP_ENV', 'production')
-	? '950683261540130816'
-	: envParseString('LOG_CHANNEL_ADMIN');
+export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
