@@ -1,25 +1,25 @@
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
-import { ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
+import { type ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
+import { envIsDefined, envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
 	GatewayIntentBits,
-	PresenceData,
+	type PresenceData,
 	PresenceUpdateStatus,
-	WebhookClientData,
+	type WebhookClientData,
 	type ClientOptions,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import { ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
-import { envIsDefined, envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { envIs } from './lib/utils/env';
 
 function parseApi(): ServerOptions {

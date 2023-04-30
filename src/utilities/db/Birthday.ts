@@ -17,6 +17,10 @@ export class Birthday extends Utility {
 			}),
 		BirthdaysNotDisabled: (guildId: string) =>
 			this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
+		BirthdayCountByGuildId: (guildId: string) =>
+			this.prisma.birthday.count({ where: { guildId, disabled: false } }),
+		BirthdayAvailableCount: () => this.prisma.birthday.count({ where: { disabled: false } }),
+		BirthdayNotAvailableCount: () => this.prisma.birthday.count(),
 	};
 
 	public update = {
@@ -36,11 +40,7 @@ export class Birthday extends Utility {
 		GuildById: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
 		ByGuildAndUser: (guildId: string, userId: string) =>
-			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } }).catch(() => {
-				this.container.logger.error(
-					`[Birthday][DeleteByGuildAndUser] Failed to delete birthday for user ${userId} in guild ${guildId}`,
-				);
-			}),
+			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } }),
 	};
 
 	private prisma = this.container.prisma;

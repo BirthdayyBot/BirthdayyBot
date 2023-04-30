@@ -1,12 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { container } from '@sapphire/pieces';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { inlineCode, userMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, BOOK, FAIL, IMG_CAKE } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
-import { formatDateForDisplay } from '../../../helpers/utils/date';
-import thinking from '../../../lib/discord/thinking';
+import { userMention } from 'discord.js';
+import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
+import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
+import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder
@@ -18,34 +14,32 @@ import thinking from '../../../lib/discord/thinking';
 )
 export class ShowCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
+		const TargetIsNotUser = targetUser.id !== interaction.user.id;
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(
-			interaction.guildId,
-			targetUser.id,
+		const birthday = await catchToNull(
+			this.container.prisma.birthday.findFirst({
+				where: {
+					userId: targetUser.id,
+					guildId: interaction.guildId,
+				},
+			}),
 		);
 
-		if (isNullOrUndefinedOrEmpty(birthday)) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode("This user doesn't have a birthday registered.")}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!birthday) {
+			return reply(interaction, interactionProblem(`This user doesn't have a birthday registered.`));
 		}
 
-		const embed = generateEmbed({
-			title: `${BOOK} Birthday`,
-			description: `${ARROW_RIGHT} ${userMention(birthday.userId)}'s birthday is at the ${formatDateForDisplay(
-				birthday.birthday,
-			)}.`,
-			thumbnail_url: IMG_CAKE,
+		return reply(interaction, {
+			embeds: [
+				{
+					...defaultEmbed(),
+					title: `${BOOK} Birthday`,
+					description: `${ARROW_RIGHT} ${
+						TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'
+					} birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
+				},
+			],
 		});
-
-		return replyToInteraction(interaction, { embeds: [embed], ephemeral: true });
 	}
 }

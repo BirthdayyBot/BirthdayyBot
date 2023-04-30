@@ -8,5 +8,5 @@ export interface EmbedInformationModel {
 	thumbnail_url?: string;
 	image_url?: string;
 	fields?: APIEmbedField[];
-	color?: string;
+	color?: number;
 }

@@ -1,8 +1,9 @@
 import type { PrismaClient } from '@prisma/client';
-import type { ArrayString, BooleanString, NumberString } from '@skyra/env-utilities';
+import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
 import type { Birthday } from '../../utilities/db/Birthday';
 import type { Guild } from '../../utilities/db/Guild';
+import type { User } from '../../utilities/db/User';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -24,7 +25,7 @@ declare module '@skyra/env-utilities' {
 		BOT_OWNER: ArrayString;
 		BOT_NAME: string;
 		BOT_AVATAR: string;
-		BOT_COLOR: string;
+		BOT_COLOR: IntegerString;
 		TOPGG_TOKEN: string;
 		DISCORDLIST_TOKEN: string;
 		DISCORDBOTLIST_TOKEN: string;
@@ -88,5 +89,6 @@ declare module '@sapphire/plugin-utilities-store' {
 	export interface Utilities {
 		guild: Guild;
 		birthday: Birthday;
+		user: User;
 	}
 }

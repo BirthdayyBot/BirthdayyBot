@@ -1,10 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import generateEmbed from '../../helpers/generate/embed';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { PING } from '../../helpers/provide/environment';
-import getGuildCount from '../../helpers/provide/guildCount';
-import replyToInteraction from '../../helpers/send/response';
+import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';
@@ -36,7 +35,7 @@ export class StatsCommand extends Command {
 		const stats = {
 			date: currentOffset.dateFormatted,
 			offset: currentOffset?.utcOffset,
-			servercount: getGuildCount(),
+			servercount: await this.container.botList.computeGuilds(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
 			memory: {
@@ -109,7 +108,7 @@ export class StatsCommand extends Command {
 				},
 			],
 		};
-		const embed = generateEmbed(embedRaw);
-		return replyToInteraction(interaction, { embeds: [embed] });
+		const embed = generateDefaultEmbed(embedRaw);
+		return reply(interaction, { embeds: [embed] });
 	}
 }

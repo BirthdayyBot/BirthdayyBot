@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import generateEmbed from '../../helpers/generate/embed';
-import replyToInteraction from '../../helpers/send/response';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { InviteCMD } from '../../lib/commands';
 import { inviteButton } from '../../lib/components/button';
@@ -12,7 +12,7 @@ import { InviteEmbed } from '../../lib/embeds';
 	name: 'invite',
 	description: 'Invite Birthdayy to your Discord Server!',
 	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTYY BROKEN
+	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
@@ -26,8 +26,8 @@ export class GuideCommand extends Command {
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
-		const embed = generateEmbed(InviteEmbed);
-		await replyToInteraction(interaction, {
+		const embed = generateDefaultEmbed(InviteEmbed);
+		await reply(interaction, {
 			embeds: [embed],
 			components: [
 				{

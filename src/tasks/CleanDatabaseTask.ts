@@ -3,9 +3,9 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import generateEmbed from '../helpers/generate/embed';
 import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
+import { generateDefaultEmbed } from '../lib/utils/embed';
 import { envIs } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
@@ -23,7 +23,7 @@ export class CleanDatabaseTask extends ScheduledTask {
 
 		await sendMessage(BOT_ADMIN_LOG, {
 			embeds: [
-				generateEmbed({
+				generateDefaultEmbed({
 					title: `CleanUp Report (DELETE)`,
 					description: '',
 					fields: [
