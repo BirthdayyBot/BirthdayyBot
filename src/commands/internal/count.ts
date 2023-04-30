@@ -1,10 +1,10 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import generateEmbed from '../../helpers/generate/embed';
-import replyToInteraction from '../../helpers/send/response';
+import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { CountCMD } from '../../lib/commands/count';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',
@@ -27,9 +27,9 @@ export class CountCommand extends Command {
 			return { ...field, value: inlineCode(field.value.toString()), inline: true };
 		});
 
-		await replyToInteraction(interaction, {
+		await reply(interaction, {
 			embeds: [
-				generateEmbed({
+				generateDefaultEmbed({
 					title: 'Count Information',
 					fields,
 				}),
