@@ -1,6 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { userMention } from 'discord.js';
 import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
+import { BIRTHDAY_REGISTER } from '../../../lib/commands';
 import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
 
@@ -27,7 +28,10 @@ export class ShowCommand extends Command {
 		);
 
 		if (!birthday) {
-			return reply(interaction, interactionProblem(`This user doesn't have a birthday registered.`));
+			return reply(
+				interaction,
+				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}`),
+			);
 		}
 
 		return reply(interaction, {

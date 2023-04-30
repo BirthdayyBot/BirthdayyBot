@@ -3,13 +3,11 @@ import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { BOT_ADMIN_LOG } from '../../helpers/provide/environment';
 import { sendMessage } from '../../lib/discord/message';
-import { envIs } from '../../lib/utils/env';
-
-const isDev = !envIs('APP_ENV', 'production');
+import { isDevelopment } from '../../lib/utils/env';
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {
-	private readonly style = isDev ? yellow : blue;
+	private readonly style = isDevelopment ? yellow : blue;
 
 	public async run() {
 		this.printBanner();
@@ -21,8 +19,8 @@ export class UserEvent extends Listener {
 	private printBanner() {
 		const success = green('+');
 
-		const llc = isDev ? magentaBright : white;
-		const blc = isDev ? magenta : blue;
+		const llc = isDevelopment ? magentaBright : white;
+		const blc = isDevelopment ? magenta : blue;
 
 		const line01 = llc('');
 		const line02 = llc('');
@@ -35,7 +33,7 @@ export class UserEvent extends Listener {
 			String.raw`
 ${line01} ${pad}${blc('1.0.0')}
 ${line02} ${pad}[${success}] Gateway
-${line03}${isDev ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
+${line03}${isDevelopment ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
 		`.trim(),
 		);
 	}

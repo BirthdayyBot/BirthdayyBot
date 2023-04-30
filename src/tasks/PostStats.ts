@@ -1,16 +1,16 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Result } from '@sapphire/result';
-import { envIs } from '../lib/utils/env';
+import { isDevelopment, isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
-	enabled: envIs('APP_ENV', 'production'),
+	enabled: isProduction,
 	pattern: '0 * * * *',
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
-		if (!envIs('APP_ENV', 'production')) return;
+		if (isDevelopment) return;
 		const result = await Result.fromAsync(this.container.botList.postStats());
 
 		return result.match({

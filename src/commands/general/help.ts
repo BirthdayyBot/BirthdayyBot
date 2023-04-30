@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { HelpCMD } from '../../lib/commands';
 import { discordButton, docsButton, websiteButton } from '../../lib/components/button';
 import thinking from '../../lib/discord/thinking';
@@ -19,9 +18,7 @@ import { HelpEmbed } from '../../lib/embeds';
 })
 export class HelpCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(HelpCMD(), {
-			guildIds: getCommandGuilds('global'),
-		});
+		registry.registerChatInputCommand(HelpCMD());
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
