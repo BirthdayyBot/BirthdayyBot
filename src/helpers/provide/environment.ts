@@ -59,10 +59,6 @@ export const OFFLINE = '<:offline_birthdayy:1102222087973769368>';
 export const WARNING = '<:warning_birthdayy:1102222123809906778>';
 export const COMPASS = '<:compass_birthdayy:1102222027101839360>';
 
-// COMMAND
-export const CONFIG_LIST = '</config list:935174203882217483>';
-export const BIRTHDAY_REGISTER = '</birthday register:935174192389840896>';
-
 // Values
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
 export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '1077621363881300018');

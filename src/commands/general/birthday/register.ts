@@ -1,9 +1,9 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
-import { chatInputApplicationCommandMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
+import { BIRTHDAY_UPDATE } from '../../../lib/commands';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
@@ -130,11 +130,7 @@ export class ListCommand extends Command {
 			return reply(
 				interaction,
 				interactionProblem(
-					`This user's birthday is already registered. If you want to change it, use the ${chatInputApplicationCommandMention(
-						'birthday',
-						'update',
-						'935174192389840896',
-					)}`,
+					`This user's birthday is already registered. If you want to change it, use ${BIRTHDAY_UPDATE}`,
 				),
 			);
 		}
