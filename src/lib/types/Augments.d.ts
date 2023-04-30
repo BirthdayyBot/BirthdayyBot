@@ -3,6 +3,7 @@ import type { ArrayString, BooleanString, IntegerString, NumberString } from '@s
 import type { WebhookClient } from 'discord.js';
 import type { Birthday } from '../../utilities/db/Birthday';
 import type { Guild } from '../../utilities/db/Guild';
+import type { User } from '../../utilities/db/User';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -88,5 +89,6 @@ declare module '@sapphire/plugin-utilities-store' {
 	export interface Utilities {
 		guild: Guild;
 		birthday: Birthday;
+		user: User;
 	}
 }

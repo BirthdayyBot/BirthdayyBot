@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
 import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
-import { getGuildCount } from '../../../helpers';
 import { BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT, SUCCESS } from '../../../helpers/provide/environment';
 import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
@@ -71,7 +70,6 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 	}
 
 	private async joinServerLog(guild: Guild, inviterId?: Snowflake) {
-		const server_count = getGuildCount();
 		const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 		const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
 		const fields = [
@@ -94,7 +92,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		const embedObj: EmbedInformationModel = {
 			title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
-			description: `I am now in \`${server_count}\` guilds`,
+			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BotColorEnum.BIRTHDAYY,
 			thumbnail_url: guild.iconURL() ?? undefined,

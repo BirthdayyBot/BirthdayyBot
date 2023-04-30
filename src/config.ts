@@ -7,6 +7,7 @@ import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
+import { envIsDefined, envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
@@ -19,7 +20,6 @@ import {
 import { getGuildLanguage } from './helpers/provide/config';
 import { ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
-import { envIsDefined, envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { envIs } from './lib/utils/env';
 
 function parseApi(): ServerOptions {

@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { Guild, time } from 'discord.js';
-import { BOT_NAME, BOT_SERVER_LOG, DEBUG, FAIL, getGuildCount } from '../../../helpers';
+import { BOT_NAME, BOT_SERVER_LOG, DEBUG, FAIL } from '../../../helpers';
 import { sendMessage } from '../../../lib/discord';
 import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../../lib/model';
@@ -24,7 +24,6 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 	private async leaveServerLog(guild: Guild) {
 		container.logger.info('Removed from Guild');
-		const server_count = getGuildCount();
 		const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 		const joinedAgo = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
 		const joinedDate = time(Math.floor(rawJoinedTimestamp / 1000), 'R');
@@ -44,7 +43,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 		if (timeServed) fields.push({ name: 'TimeServed', value: `${timeServed}` });
 		const embedObj: EmbedInformationModel = {
 			title: `${FAIL} ${BOT_NAME} got removed from a Guild`,
-			description: `I am now in \`${server_count}\` guilds`,
+			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BotColorEnum.BIRTHDAYY_DEV,
 		};

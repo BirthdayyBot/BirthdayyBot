@@ -3,7 +3,6 @@ import { Command } from '@sapphire/framework';
 import os from 'os';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { PING } from '../../helpers/provide/environment';
-import { getGuildCount } from '../../helpers/provide/guildCount';
 import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
@@ -36,7 +35,7 @@ export class StatsCommand extends Command {
 		const stats = {
 			date: currentOffset.dateFormatted,
 			offset: currentOffset?.utcOffset,
-			servercount: getGuildCount(),
+			servercount: await this.container.botList.computeGuilds(),
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
 			memory: {
