@@ -1,6 +1,6 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/framework';
-import { userMention } from 'discord.js';
+import { bold, userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import { BIRTHDAY_REGISTER } from '../../../lib/commands';
@@ -123,8 +123,8 @@ export class UpdateCommand extends Command {
 			return reply(
 				interaction,
 				interactionProblem(
-					`I couldn't update the birthday for ${userMention(targetUser.id)} to ${formatDateForDisplay(
-						date.date,
+					`I couldn't update the birthday for ${userMention(targetUser.id)} to the ${bold(
+						formatDateForDisplay(date.date),
 					)}.`,
 				),
 			);
@@ -134,9 +134,9 @@ export class UpdateCommand extends Command {
 		return reply(
 			interaction,
 			interactionSuccess(
-				`${
-					authorIsTarget ? 'Your' : `${targetUser.username}'s`
-				} birthday has been updated on ${formatDateForDisplay(date.date)}.`,
+				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been updated to the ${bold(
+					formatDateForDisplay(date.date),
+				)}.`,
 			),
 		);
 	}

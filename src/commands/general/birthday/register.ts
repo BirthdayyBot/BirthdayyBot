@@ -1,6 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { bold } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import { BIRTHDAY_UPDATE } from '../../../lib/commands';
@@ -153,9 +154,9 @@ export class ListCommand extends Command {
 		return reply(
 			interaction,
 			interactionSuccess(
-				`${
-					authorIsTarget ? 'Your' : `${targetUser.username}'s`
-				} birthday was been registered on ${formatDateForDisplay(date.date)}.`,
+				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been registered on ${bold(
+					formatDateForDisplay(date.date),
+				)}.`,
 			),
 		);
 	}
