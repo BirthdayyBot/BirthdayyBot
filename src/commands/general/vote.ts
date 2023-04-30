@@ -2,7 +2,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { VoteCMD } from '../../lib/commands/vote';
 import thinking from '../../lib/discord/thinking';
 import { VoteEmbed } from '../../lib/embeds';
@@ -18,9 +17,7 @@ import { VoteEmbed } from '../../lib/embeds';
 })
 export class VoteCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(VoteCMD(), {
-			guildIds: getCommandGuilds('global'),
-		});
+		registry.registerChatInputCommand(VoteCMD());
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {

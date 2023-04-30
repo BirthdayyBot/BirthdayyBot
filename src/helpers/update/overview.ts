@@ -2,7 +2,6 @@ import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessageCreateOptions, MessagePayload } from 'discord.js';
 import { editMessage, sendMessage } from '../../lib/discord/message';
 import { generateBirthdayList } from '../generate/birthdayList';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
@@ -10,14 +9,12 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	const { overviewChannel, overviewMessage } = config;
 
 	const birthdayList = await generateBirthdayList(1, guild_id);
-	const birthdayEmbedObj = generateDefaultEmbed(birthdayList.embed);
+
+	const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
 
 	if (overviewMessage) {
 		try {
-			await editMessage(overviewChannel, overviewMessage, {
-				embeds: [birthdayEmbedObj],
-				components: birthdayList.components,
-			});
+			await editMessage(overviewChannel, overviewMessage, options);
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				if (
@@ -25,7 +22,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 					error.message.includes('authored by another user') ||
 					error.message.includes('Message not found')
 				) {
-					await generateNewOverviewMessage(overviewChannel, birthdayList);
+					await generateNewOverviewMessage(overviewChannel, options);
 					container.logger.warn('Message Not found, so generated new overview message');
 				} else if (error.message.includes('Missing Permissions')) {
 					await container.utilities.guild.reset.OverviewChannel(guild_id);
@@ -34,7 +31,7 @@ export default async function updateBirthdayOverview(guild_id: string) {
 				} else {
 					container.logger.error('[OVERVIEW CHANNEL 1] ', error.message);
 					if (error.message.includes('empty message')) {
-						container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', birthdayEmbedObj);
+						container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', options.embeds?.[0]);
 					}
 				}
 			}
@@ -43,11 +40,11 @@ export default async function updateBirthdayOverview(guild_id: string) {
 		return;
 	}
 	if (!overviewMessage) {
-		await generateNewOverviewMessage(overviewChannel, birthdayList).catch((error: any) => {
+		await generateNewOverviewMessage(overviewChannel, options).catch((error: any) => {
 			if (error instanceof DiscordAPIError) {
 				container.logger.error('[OVERVIEW CHANNEL 2] ', error.message);
 				if (error.message.includes('empty message')) {
-					container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', birthdayEmbedObj);
+					container.logger.error('updateBirthdayOverview ~ birthdayEmbedObj:', options.embeds?.[0]);
 				}
 			}
 		});

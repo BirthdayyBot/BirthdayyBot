@@ -1,13 +1,13 @@
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { isDevelopment } from '../../lib/utils/env';
 
-export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin'): string[] {
+export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin') {
 	const testingGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.CHILLI_ATTACK_V2, GuildIDEnum.BIRTHDAYY_TESTING];
 	const adminGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.BIRTHDAYY_HQ];
 	if (isDevelopment) return testingGuilds;
 	switch (commandLevel) {
 		case 'global':
-			return [];
+			return undefined;
 		case 'testing':
 			return testingGuilds;
 		case 'premium':
@@ -16,6 +16,6 @@ export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' 
 		case 'admin':
 			return adminGuilds;
 		default:
-			return [];
+			return undefined;
 	}
 }

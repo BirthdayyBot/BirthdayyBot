@@ -9,6 +9,7 @@ import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthName } from '../utils/date';
 import { envParseNumber } from '@skyra/env-utilities';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 export async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
@@ -66,7 +67,7 @@ async function createEmbed(guild_id: string, allBirthdays: { month: string; birt
 		thumbnail_url: IMG_CAKE,
 	};
 
-	if (!allBirthdays.length) return embed;
+	if (!allBirthdays.length) return generateDefaultEmbed(embed);
 
 	if (isNullOrUndefinedOrEmpty(embed.fields)) embed.fields = [];
 
@@ -104,7 +105,7 @@ async function createEmbed(guild_id: string, allBirthdays: { month: string; birt
 			currentDescription = '';
 		}
 	}
-	return embed;
+	return generateDefaultEmbed(embed);
 }
 /**
  *  Generate Components for the Birthday List according to the amount of pages
