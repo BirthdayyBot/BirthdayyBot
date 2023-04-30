@@ -6,12 +6,12 @@ import { inlineCode } from 'discord.js';
 import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { generateDefaultEmbed } from '../lib/utils/embed';
-import { envIs } from '../lib/utils/env';
+import { isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',
 	pattern: '0 0 * * *',
-	enabled: envIs('APP_ENV', 'production'),
+	enabled: isProduction,
 })
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {

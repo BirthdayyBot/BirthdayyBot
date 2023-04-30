@@ -1,12 +1,12 @@
 import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
+import { envIsDefined, envParseBoolean } from '@skyra/env-utilities';
 import type { APIEmbed } from 'discord.js';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
-import { envIs } from './env';
-import { envIsDefined, envParseBoolean } from '@skyra/env-utilities';
+import { isDevelopment } from './env';
 
 export function logErrorToContainer({
 	error,
@@ -52,7 +52,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 	let errorString = `Command: ${interaction.commandName}\n`;
 	if (error.message) errorString += `Error: ${error.message}\n`;
 	if (error.cause) errorString += `Cause: ${JSON.stringify(error.cause)}\n`;
-	if (error.stack && !envIs('APP_ENV', 'production')) errorString += `Stack: ${JSON.stringify(error.stack)}`;
+	if (error.stack && isDevelopment) errorString += `Stack: ${JSON.stringify(error.stack)}`;
 
 	const errorMessageEmbed = generateDefaultEmbed({
 		title: 'An error has occured',

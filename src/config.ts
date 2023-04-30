@@ -1,6 +1,6 @@
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
-import { type ClientLoggerOptions, container, LogLevel } from '@sapphire/framework';
+import { container, LogLevel, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
@@ -12,15 +12,15 @@ import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
 	GatewayIntentBits,
-	type PresenceData,
 	PresenceUpdateStatus,
-	type WebhookClientData,
 	type ClientOptions,
+	type PresenceData,
+	type WebhookClientData,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
 import { ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
-import { envIs } from './lib/utils/env';
+import { isProduction } from './lib/utils/env';
 
 function parseApi(): ServerOptions {
 	return {
@@ -37,7 +37,7 @@ function parseBotListOptions(): BotList.Options {
 		debug: envParseBoolean('DEBUG'),
 		shard: true,
 		autoPost: {
-			enabled: envIs('APP_ENV', 'production'),
+			enabled: isProduction,
 		},
 		keys: {
 			topGG: envParseString('TOPGG_TOKEN'),

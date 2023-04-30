@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import { envIs } from '../../lib/utils/env';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { isDevelopment } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -35,7 +35,7 @@ export class TestCommand extends Command {
 			const embed = generateDefaultEmbed({ title: 'test', description: 'No current time' });
 			return reply(interaction, { embeds: [embed] });
 		}
-		if (!envIs('APP_ENV', 'production')) await this.container.tasks.run('BirthdayReminderTask', {});
+		if (isDevelopment) await this.container.tasks.run('BirthdayReminderTask', {});
 		const embedObj: EmbedInformationModel = { title: 'test', fields };
 		const embed = generateDefaultEmbed(embedObj);
 		return reply(interaction, { embeds: [embed] });

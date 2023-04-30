@@ -9,7 +9,7 @@ declare module '@skyra/env-utilities' {
 	interface Env {
 		// Environment
 		NODE_ENV: 'development' | 'production';
-		APP_ENV: Env['NODE_ENV'];
+		APP_ENV: 'dev' | 'tst' | 'prd';
 		DEBUG: BooleanString;
 
 		// API
