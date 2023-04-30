@@ -2,7 +2,7 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { Result } from '@sapphire/result';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -125,7 +125,7 @@ export class TimezoneCommand extends Command {
 
 		return reply(
 			interaction,
-			interactionValidate(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone})}.`),
+			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone})}.`),
 		);
 	}
 }

@@ -2,7 +2,7 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { channelMention } from 'discord.js';
 import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -46,7 +46,7 @@ export class AnnouncementChannelCommand extends Command {
 				}
 				return reply(
 					interaction,
-					interactionValidate(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
+					interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
 				);
 			})
 			.catch(() => {

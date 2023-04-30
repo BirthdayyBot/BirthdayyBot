@@ -4,7 +4,7 @@ import { setDefaultConfig } from '../../../helpers/provide/config';
 import { reply } from '../../../helpers/send/response';
 import { type ConfigName, configNameExtended } from '../../../lib/database';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -58,6 +58,6 @@ export class ResetCommand extends Command {
 			);
 		}
 
-		return reply(interaction, interactionValidate(`Successfully reset the ${configName} config.`));
+		return reply(interaction, interactionSuccess(`Successfully reset the ${configName} config.`));
 	}
 }

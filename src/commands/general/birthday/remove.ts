@@ -3,7 +3,7 @@ import { container } from '@sapphire/pieces';
 import { userMention } from 'discord.js';
 import { reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) =>
@@ -51,7 +51,7 @@ export class ListCommand extends Command {
 		await updateBirthdayOverview(guildId);
 		return reply(
 			interaction,
-			interactionValidate(
+			interactionSuccess(
 				`${TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'} birthday has been removed.`,
 			),
 		);

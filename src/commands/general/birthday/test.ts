@@ -1,5 +1,5 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { interactionValidate } from '../../../lib/utils/embed';
+import { interactionSuccess } from '../../../lib/utils/embed';
 import { RequiresUserPermissions } from '@sapphire/decorators';
 import { reply } from '../../../helpers';
 
@@ -15,6 +15,6 @@ export class TestCommand extends Command {
 			isTest: true,
 		});
 
-		return reply(interaction, interactionValidate('Birthday Test Run!'));
+		return reply(interaction, interactionSuccess('Birthday Test Run!'));
 	}
 }

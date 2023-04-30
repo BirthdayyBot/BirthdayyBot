@@ -3,7 +3,7 @@ import { EmbedLimits } from '@sapphire/discord.js-utilities';
 import { Result } from '@sapphire/result';
 import thinking from '../../../lib/discord/thinking';
 import { PREMIUM_URL, reply } from '../../../helpers';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -52,6 +52,6 @@ export class AnnouncementMessageCommand extends Command {
 			);
 		}
 
-		return reply(interaction, interactionValidate('You have successfully updated the announcement message.'));
+		return reply(interaction, interactionSuccess('You have successfully updated the announcement message.'));
 	}
 }

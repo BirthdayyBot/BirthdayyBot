@@ -4,7 +4,7 @@ import { userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder
@@ -128,7 +128,7 @@ export class UpdateCommand extends Command {
 		await updateBirthdayOverview(guildId);
 		return reply(
 			interaction,
-			interactionValidate(
+			interactionSuccess(
 				`${
 					authorIsTarget ? 'Your' : `${targetUser.username}'s`
 				} birthday was been updated on ${formatDateForDisplay(date.date)}.`,

@@ -5,7 +5,7 @@ import { generateBirthdayList } from '../../../helpers/generate/birthdayList';
 import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -60,7 +60,7 @@ export class OverviewChannelCommand extends Command {
 
 		return reply(
 			interaction,
-			interactionValidate(
+			interactionSuccess(
 				`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${
 					message.url
 				}.`,

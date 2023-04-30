@@ -4,7 +4,7 @@ import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
 import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -32,9 +32,6 @@ export class ListCommand extends Command {
 			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		return reply(
-			interaction,
-			interactionValidate(`Successfully set the birthday role to ${roleMention(role.id)}.`),
-		);
+		return reply(interaction, interactionSuccess(`Successfully set the birthday role to ${roleMention(role.id)}.`));
 	}
 }

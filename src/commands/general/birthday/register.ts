@@ -5,7 +5,7 @@ import { chatInputApplicationCommandMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) => {
@@ -156,7 +156,7 @@ export class ListCommand extends Command {
 		await updateBirthdayOverview(birthday.guildId);
 		return reply(
 			interaction,
-			interactionValidate(
+			interactionSuccess(
 				`${
 					authorIsTarget ? 'Your' : `${targetUser.username}'s`
 				} birthday was been registered on ${formatDateForDisplay(date.date)}.`,

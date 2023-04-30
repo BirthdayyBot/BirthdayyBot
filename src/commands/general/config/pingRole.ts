@@ -4,7 +4,7 @@ import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionValidate } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -34,7 +34,7 @@ export class PingRoleCommand extends Command {
 
 		return reply(
 			interaction,
-			interactionValidate(`Successfully set the birthday ping role to ${roleMention(role.id)}`),
+			interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`),
 		);
 	}
 }

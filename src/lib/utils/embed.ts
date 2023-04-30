@@ -32,7 +32,7 @@ export function defaultEmbed(): APIEmbed {
 
 export type APIEmbedWithoutDefault = Omit<APIEmbed, 'timestamp' | 'footer'>;
 
-export function validate(description: string): APIEmbed {
+export function success(description: string): APIEmbed {
 	return {
 		...defaultEmbed(),
 		title: `${SUCCESS} Success`,
@@ -40,18 +40,18 @@ export function validate(description: string): APIEmbed {
 	};
 }
 
-export function messageValidate(message: string): UniversalMessageOptions {
+export function messageSuccess(message: string): UniversalMessageOptions {
 	return {
 		content: '',
-		embeds: [validate(message)],
+		embeds: [success(message)],
 		components: [],
 	};
 }
 
-export function interactionValidate(message: string, ephemeral = true): UniversalInteractionOptions {
+export function interactionSuccess(message: string, ephemeral = true): UniversalInteractionOptions {
 	return {
 		content: '',
-		embeds: [validate(message)],
+		embeds: [success(message)],
 		components: [],
 		ephemeral,
 	};
