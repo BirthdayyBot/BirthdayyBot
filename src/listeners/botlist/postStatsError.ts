@@ -1,8 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
-import { SENTRY_DSN } from '../../helpers/provide/environment';
 import { logErrorToContainer } from '../../lib/utils/errorHandling';
+import { envIsDefined } from '@skyra/env-utilities';
 
 @ApplyOptions<Listener.Options>({ emitter: container.botList, event: 'postStatsError' })
 export class postStatsErrorEvent extends Listener<typeof Events.Error> {
@@ -15,7 +15,7 @@ export class postStatsErrorEvent extends Listener<typeof Events.Error> {
 				Sentry.captureException(error);
 			});
 
-		if (SENTRY_DSN) return SendErrorToSentry;
+		if (envIsDefined('SENTRY_DSN')) return SendErrorToSentry;
 
 		return logErrorToContainer({ error, loggerSeverityLevel: 'error' });
 	}

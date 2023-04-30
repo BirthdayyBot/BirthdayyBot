@@ -1,12 +1,13 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events, Listener, ListenerOptions } from '@sapphire/framework';
+import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
-import { DiscordAPIError, Guild, Snowflake } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
-import joinServerLog from '../../../helpers/send/joinServerLog';
-import { sendDMMessage } from '../../../lib/discord';
+import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
+import { BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT, SUCCESS } from '../../../helpers/provide/environment';
+import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
+import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
+import type { EmbedInformationModel } from '../../../lib/model';
+import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
@@ -31,10 +32,10 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			await sendGuide(inviterId);
 		}
 
-		await joinServerLog(guild, inviterId);
+		await this.joinServerLog(guild, inviterId);
 
 		async function sendGuide(userId: string) {
-			const embed = generateEmbed(GuideEmbed);
+			const embed = generateDefaultEmbed(GuideEmbed);
 			await sendDMMessage(userId, {
 				embeds: [embed],
 			});
@@ -66,5 +67,44 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 				return undefined;
 			}
 		}
+	}
+
+	private async joinServerLog(guild: Guild, inviterId?: Snowflake) {
+		const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
+		const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
+		const fields = [
+			{ name: 'GuildName', value: `${name}` },
+			{
+				name: 'GuildID',
+				value: `${guild_id}`,
+			},
+		];
+
+		const ownerInfo = await getUserInfo(ownerId);
+		const inviterInfo = inviterId ? await getUserInfo(inviterId) : undefined;
+
+		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
+		if (memberCount) fields.push({ name: 'GuildMemberCount', value: `${memberCount}` });
+		if (ownerId) fields.push({ name: 'GuildOwner', value: this.generateInfoString(ownerId, ownerInfo?.username) });
+		if (inviterId)
+			fields.push({ name: 'Inviter', value: this.generateInfoString(inviterId, inviterInfo?.username) });
+		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
+
+		const embedObj: EmbedInformationModel = {
+			title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
+			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
+			fields,
+			color: BotColorEnum.BIRTHDAYY,
+			thumbnail_url: guild.iconURL() ?? undefined,
+		};
+		const embed = generateDefaultEmbed(embedObj);
+		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
+	}
+
+	private generateInfoString(id: string | undefined, name: string | undefined): string {
+		let string = '';
+		if (name) string += `Name: ${name}\n`;
+		if (id) string += `ID: ${id}\n`;
+		return string;
 	}
 }

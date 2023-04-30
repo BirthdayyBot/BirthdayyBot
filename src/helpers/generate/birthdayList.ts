@@ -6,16 +6,17 @@ import { userMention } from 'discord.js';
 import { getGuildInformation, getGuildMember } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
-import { ARROW_RIGHT, IMG_CAKE, MAX_BIRTHDAYS } from '../provide/environment';
-import { formatDateForDisplay, numberToMonthname } from '../utils/date';
+import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
+import { formatDateForDisplay, numberToMonthName } from '../utils/date';
+import { envParseNumber } from '@skyra/env-utilities';
 
-export default async function generateBirthdayList(page_id: number, guild_id: string) {
+export async function generateBirthdayList(page_id: number, guild_id: string) {
 	const allBirthdaysByGuild = await container.utilities.birthday.get.BirthdaysByGuildId(guild_id);
 	if (!isNullOrUndefinedOrEmpty(allBirthdaysByGuild)) {
 		// sort all birthdays by day and month
 		const sortedBirthdays = sortByDayAndMonth(allBirthdaysByGuild);
 		// split the sorted birthdays into multiple lists
-		const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, MAX_BIRTHDAYS);
+		const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
 		// get the birthdays for the current page
 		const birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
 		// TODO: Should only contain the birthdays for the current page (80 birthdays)
@@ -57,7 +58,7 @@ function getBirthdaysAsLists(
  * @param birthdays - Array with all birthdays
  * @returns embed - Embed with the given values
  */
-async function createEmbed(guild_id: string, allBirthdays: { monthname: string; birthdays: Array<Birthday> }[]) {
+async function createEmbed(guild_id: string, allBirthdays: { month: string; birthdays: Array<Birthday> }[]) {
 	const guild = await getGuildInformation(guild_id);
 	const embed: CustomEmbedModel = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
@@ -72,7 +73,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 	let currentDescription = '';
 
 	for (const month of allBirthdays) {
-		const { monthname } = month;
+		const { month: name } = month;
 		if (isNullOrUndefinedOrEmpty(month.birthdays)) continue;
 		// For each birthday in current month
 		for (const birthday of month.birthdays) {
@@ -87,7 +88,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
 				embed.fields.push({
-					name: monthname,
+					name,
 					value: currentDescription,
 				});
 				currentDescription = '';
@@ -97,7 +98,7 @@ async function createEmbed(guild_id: string, allBirthdays: { monthname: string; 
 		if (currentDescription.length > 0) {
 			// If the current description is not empty, add it to the embed
 			embed.fields.push({
-				name: monthname,
+				name,
 				value: currentDescription,
 			});
 			currentDescription = '';
@@ -164,9 +165,9 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 function prepareBirthdayList() {
 	const monthArray = [];
 	for (let i = 1; i <= 12; i++) {
-		const monthname = numberToMonthname(i);
+		const month = numberToMonthName(i);
 		const emptyArray: Birthday[] = [];
-		monthArray.push({ monthname, birthdays: emptyArray });
+		monthArray.push({ month, birthdays: emptyArray });
 	}
 	return monthArray;
 }
@@ -174,7 +175,7 @@ function prepareBirthdayList() {
 /**
  * sort all birthdays to the corresponding month object
  */
-function prepareBirthdays(birthdays: Array<Birthday>): { monthname: string; birthdays: Birthday[] }[] {
+function prepareBirthdays(birthdays: Array<Birthday>): { month: string; birthdays: Birthday[] }[] {
 	const list = prepareBirthdayList();
 
 	birthdays.forEach((singleBirthday) => {

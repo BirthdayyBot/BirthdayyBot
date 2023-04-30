@@ -3,32 +3,28 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import generateEmbed from '../helpers/generate/embed';
-import { BOT_ADMIN_LOG, isNotDev, isPrd } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
+import { generateDefaultEmbed } from '../lib/utils/embed';
+import { envIs } from '../lib/utils/env';
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'CleanDatabaseTask', pattern: '0 0 * * *', enabled: isNotDev })
+@ApplyOptions<ScheduledTask.Options>({
+	name: 'CleanDatabaseTask',
+	pattern: '0 0 * * *',
+	enabled: envIs('APP_ENV', 'production'),
+})
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		this.container.logger.debug('[CleaningTask] Started');
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
-		// Delete all guilds and birthdays that are disabled and haven't been updated in the last 24 hours
-		let deletedBirthdays;
-		let deletedGuilds;
-		if (isPrd) {
-			const res = await container.utilities.guild.get.ByLastUpdatedDisabled(oneDayAgo);
-			deletedBirthdays = res.deletedBirthdays;
-			deletedGuilds = res.deletedGuilds;
-		} else {
-			const res = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
-			deletedBirthdays = res.deletedBirthdays;
-			deletedGuilds = res.deletedGuilds;
-		}
+		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
+		const { deletedBirthdays, deletedGuilds } = req;
+
 		await sendMessage(BOT_ADMIN_LOG, {
 			embeds: [
-				generateEmbed({
-					title: `CleanUp Report${isPrd ? `(SELECT)` : ' (DELETE)'}`,
+				generateDefaultEmbed({
+					title: `CleanUp Report (DELETE)`,
 					description: '',
 					fields: [
 						{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.toString()), inline: true },

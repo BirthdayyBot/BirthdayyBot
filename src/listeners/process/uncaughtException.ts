@@ -1,13 +1,13 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { SENTRY_DSN } from '../../helpers/provide/environment';
 import * as Sentry from '@sentry/node';
 import { logErrorToContainer } from '../../lib/utils/errorHandling';
+import { envIsDefined } from '@skyra/env-utilities';
 
 @ApplyOptions<Listener.Options>({ emitter: process, event: 'uncaughtException' })
 export class uncaughtExceptionEvent extends Listener {
 	public run(error: Error) {
-		if (SENTRY_DSN) {
+		if (envIsDefined('SENTRY_DSN')) {
 			Sentry.withScope((scope) => {
 				scope.setLevel('error');
 				scope.setFingerprint([error.name]);

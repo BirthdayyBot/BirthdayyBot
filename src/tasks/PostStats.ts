@@ -1,24 +1,21 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import { isNotPrd, isPrd } from '../helpers/provide/environment';
+import { Result } from '@sapphire/result';
+import { envIs } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
-	enabled: isPrd,
+	enabled: envIs('APP_ENV', 'production'),
 	pattern: '0 * * * *',
 })
 export class PostStats extends ScheduledTask {
-	public run() {
-		if (isNotPrd) return;
+	public async run() {
+		if (!envIs('APP_ENV', 'production')) return;
+		const result = await Result.fromAsync(this.container.botList.postStats());
 
-		return this.container.botList
-			.postStats()
-			.then(() => {
-				this.container.logger.info('Posted stats to bot lists.');
-			})
-			.catch((err) => {
-				this.container.logger.error('Failed to post stats to bot lists.');
-				this.container.logger.error(err);
-			});
+		return result.match({
+			ok: () => this.container.logger.info('Successfully posted stats to bot lists.'),
+			err: (error) => this.container.logger.error(error),
+		});
 	}
 }

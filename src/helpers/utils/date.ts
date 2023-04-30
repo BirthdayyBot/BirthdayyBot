@@ -24,7 +24,7 @@ export function getCurrentDate(timezone = 'UTC'): Dayjs {
  * @param timezone - The timezone to use.
  * @returns  The formatted date.
  */
-export function getCurrentDateFormated(timezone = 'UTC'): string {
+export function getCurrentDateFormatted(timezone = 'UTC'): string {
 	const today = dayjs();
 	const todayUTC = dayjs.tz(today, timezone);
 	const formattedDate = todayUTC.format('YYYY-MM-DD');
@@ -32,20 +32,8 @@ export function getCurrentDateFormated(timezone = 'UTC'): string {
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
-	// DD.MM.YYYY
-	let day: string;
-	let month: string;
-	let year: string;
-	if (fromHumanFormat) {
-		[day, month, year] = date.split('.');
-		month = numberToMonthname(parseInt(month));
-	} else {
-		[year, month, day] = date.split('-');
-		month = numberToMonthname(parseInt(month));
-	}
-	let finalString = `${day}. ${month}`;
-	year.includes('XXXX') ? (finalString = String(finalString)) : (finalString += ` ${year}`);
-	return finalString;
+	const [year, month, day] = date.split(fromHumanFormat ? '.' : '-');
+	return `${day}. ${numberToMonthName(Number(month))} ${year.includes('XXXX') ? '' : year}`;
 }
 
 function getMonths() {
@@ -66,20 +54,20 @@ function getMonths() {
 	];
 }
 
-export function numberToMonthname(number: number) {
+export function numberToMonthName(number: number) {
 	const months = getMonths();
 	number -= 1;
 	return months[number];
 }
 
 export function getStringDate(date: Dayjs) {
-	const d = date.day();
-	const m = date.month() + 1;
+	const day = date.date();
+	const month = date.month() + 1;
 	const year = date.year();
-	const day = checkIfLengthIsTwo(`${d}`);
-	const month = checkIfLengthIsTwo(`${m}`);
+	const formattedDay = checkIfLengthIsTwo(`${day}`);
+	const formattedMonth = checkIfLengthIsTwo(`${month}`);
 
-	return `${year}-${month}-${day}`;
+	return `${year}-${formattedMonth}-${formattedDay}`;
 }
 
 export function extractDayAndMonth(inputDate: string) {
@@ -95,10 +83,8 @@ export function extractDayAndMonth(inputDate: string) {
 }
 
 export function isDateString(date: string): boolean {
-	// ESLint compains so - /^(\d{4}|X{4})\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(date)
-	const isDate = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(date);
-	container.logger.debug(`isDate [${date}]`, isDate);
-	return isDate;
+	const regex = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
+	return regex.test(date);
 }
 
 export const TIMEZONE_VALUES: Record<number, string> = {
@@ -144,7 +130,7 @@ export function getCurrentOffsetOld() {
 export function createTimezoneObjects(): TimezoneObject[] {
 	const allZones = Object.entries(TIMEZONE_VALUES).map(([utcOffset, tzString]) => {
 		const date = getCurrentDate(tzString);
-		const dateFormatted = getCurrentDateFormated(tzString);
+		const dateFormatted = getCurrentDateFormatted(tzString);
 		return { date, dateFormatted, timezone: tzString, utcOffset: Number(utcOffset) };
 	});
 	return allZones;

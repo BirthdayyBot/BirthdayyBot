@@ -5,20 +5,19 @@ import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Time } from '@sapphire/timestamp';
 import {
-	APIEmbed,
 	codeBlock,
 	DiscordAPIError,
-	EmbedField,
 	Guild,
 	GuildMember,
 	inlineCode,
 	Role,
 	roleMention,
-	Snowflake,
 	ThreadAutoArchiveDuration,
 	userMention,
+	type APIEmbed,
+	type EmbedField,
+	type Snowflake,
 } from 'discord.js';
-import generateEmbed from '../helpers/generate/embed';
 import { logAll } from '../helpers/provide/config';
 import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
@@ -26,6 +25,7 @@ import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
+import { generateDefaultEmbed } from '../lib/utils/embed';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -41,7 +41,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
-					generateEmbed({
+					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
 						description: 'No Current Offset could be generated',
 					}),
@@ -151,7 +151,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		};
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
-		const birthdayEmbed = generateEmbed(embed);
+		const birthdayEmbed = generateDefaultEmbed(embed);
 
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,
@@ -235,7 +235,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 					returnData.message = error.message;
 				}
 				container.logger.warn(
-					"COULND'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
+					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
 					error.message,
 				);
 			}
@@ -274,24 +274,27 @@ export class BirthdayReminderTask extends ScheduledTask {
 			...dateFields,
 			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
 		];
-		const embedDescription =
-			birthdayCount > 0
-				? codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-					? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-							0,
-							EmbedLimits.MaximumDescriptionLength - 3,
-					  )}...`
-					: codeBlock('json', JSON.stringify(eventInfos, null, 2))
-				: 'No Birthdays Today';
-
+		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
+		const reportDescription =
+			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+						0,
+						EmbedLimits.MaximumDescriptionLength - 6,
+				  )}...\`\`\``
+				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
+		// TODO: #228 Use Paginated Embeds when Content is too long
 		if (eventInfos.length <= 0) {
 			return sendReport();
 		}
 
-		eventInfos.forEach((eventInfo) => {
-			if (eventInfo.announcement && eventInfo.announcement.sent) eventInfo.announcement = undefined;
-			if (eventInfo.birthday_role && eventInfo.birthday_role.added) eventInfo.birthday_role = undefined;
-			if (!eventInfo.error) eventInfo.message = 'Sent Announcement & Added Role';
+		eventInfos.map((eventInfo) => {
+			if (typeof eventInfo.announcement === 'object' && eventInfo.announcement.sent) {
+				eventInfo.announcement = 'sent';
+			}
+			if (typeof eventInfo.birthday_role === 'object' && eventInfo.birthday_role.added) {
+				eventInfo.birthday_role = 'added';
+			}
+			return eventInfo;
 		});
 
 		const schedulerReportMessage = await sendReport();
@@ -301,9 +304,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 		return schedulerLogThread?.send({
 			embeds: [
-				generateEmbed({
+				generateDefaultEmbed({
 					title: embedTitle,
-					description: embedDescription,
+					description: reportDescription,
 				}),
 			],
 		});
@@ -311,7 +314,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		async function sendReport() {
 			return sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
-					generateEmbed({
+					generateDefaultEmbed({
 						title: embedTitle,
 						description: embedDescription,
 						fields: embedFields,

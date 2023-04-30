@@ -1,10 +1,9 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
 import { Result } from '@sapphire/result';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, PLUS, PREMIUM_URL } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { PREMIUM_URL, reply } from '../../../helpers';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -25,22 +24,18 @@ export class AnnouncementMessageCommand extends Command {
 		const isPremium = await this.container.utilities.guild.check.isGuildPremium(interaction.guildId);
 
 		if (!isPremium) {
-			const embed = generateEmbed({
-				title: `${PLUS} Early access only`,
-				description: `${ARROW_RIGHT} This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
-				If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`,
-			});
-
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem(`This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
+				If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`),
+			);
 		}
 
 		if (message.length > EmbedLimits.MaximumDescriptionLength - 500) {
-			const embed = generateEmbed({
-				title: `${PLUS} Message too long`,
-				description: `${ARROW_RIGHT} The message you provided is too long. Please try again with a shorter message.`,
-			});
-
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem('The message you provided is too long. Please try again with a shorter message.'),
+			);
 		}
 
 		const result = await Result.fromAsync(() =>
@@ -51,19 +46,12 @@ export class AnnouncementMessageCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: `${PLUS} Error`,
-				description: `${ARROW_RIGHT} An error occured while trying to update the config. Please try again later.`,
-			});
-
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(
+				interaction,
+				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
+			);
 		}
 
-		const embed = generateEmbed({
-			title: `${PLUS} Success`,
-			description: `${ARROW_RIGHT} You have successfully updated the announcement message.`,
-		});
-
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(interaction, interactionSuccess('You have successfully updated the announcement message.'));
 	}
 }

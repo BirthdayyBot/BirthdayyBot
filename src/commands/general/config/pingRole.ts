@@ -2,10 +2,9 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { Result } from '@sapphire/result';
 import { roleMention } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, SUCCESS } from '../../../helpers/provide/environment';
-import replyToInteraction from '../../../helpers/send/response';
+import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -30,18 +29,12 @@ export class PingRoleCommand extends Command {
 		);
 
 		if (result.isErr()) {
-			const embed = generateEmbed({
-				title: 'Error',
-				description: 'An error occurred while trying to set the birthday role.',
-			});
-			return replyToInteraction(interaction, { embeds: [embed] });
+			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		const embed = generateEmbed({
-			title: `${SUCCESS} Success`,
-			description: `${ARROW_RIGHT} You set the **Birthday Ping Role** to ${roleMention(role.id)}`,
-		});
-
-		return replyToInteraction(interaction, { embeds: [embed] });
+		return reply(
+			interaction,
+			interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`),
+		);
 	}
 }

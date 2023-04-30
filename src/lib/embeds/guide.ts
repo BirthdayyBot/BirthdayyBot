@@ -1,3 +1,4 @@
+import type { APIEmbed } from 'discord-api-types/v9';
 import {
 	ARROW_RIGHT,
 	BOT_INVITE,
@@ -10,7 +11,7 @@ import {
 	PREMIUM_URL,
 } from '../../helpers/provide/environment';
 
-export const GuideEmbed = {
+export const GuideEmbed: APIEmbed = {
 	title: `${HEART} ${BOT_NAME} Guide!`,
 	description: `
     ${ARROW_RIGHT} By typing **/help** in chat, you can check out all my features and available commands.

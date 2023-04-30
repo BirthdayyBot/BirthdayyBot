@@ -1,16 +1,12 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { inlineCode } from 'discord.js';
-import generateEmbed from '../../../helpers/generate/embed';
-import { ARROW_RIGHT, FAIL, SUCCESS } from '../../../helpers/provide/environment';
-import { hasUserGuildPermissions } from '../../../helpers/provide/permission';
-import replyToInteraction from '../../../helpers/send/response';
+import { chatInputApplicationCommandMention } from 'discord.js';
+import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
-import { formatDateForDisplay } from '../../../helpers/utils/date';
-import getDateFromInteraction from '../../../helpers/utils/getDateFromInteraction';
 import thinking from '../../../lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) => {
 	return applyLocalizedBuilder(
@@ -107,81 +103,64 @@ export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-		const { guildId } = interaction;
-		if (
-			interaction.user.id !== targetUser.id &&
-			!(await hasUserGuildPermissions({ interaction, user: interaction.user, permissions: ['ManageRoles'] }))
-		) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode(
-							"You don't have the permission to register other users birthdays.",
-						)}`,
-					}),
-				],
-				ephemeral: true,
-			});
+		const { guildId, memberPermissions } = interaction;
+		const authorIsTarget = interaction.user.id === targetUser.id;
+
+		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
+			return reply(
+				interaction,
+				interactionProblem("You don't have the permission to register other users birthdays."),
+			);
 		}
 
 		const date = getDateFromInteraction(interaction);
-		if (isNullOrUndefinedOrEmpty(date) || !date.isValidDate) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('The date you entered is not valid.')}`,
-					}),
-				],
-				ephemeral: true,
-			});
+
+		if (!date.isValidDate) return reply(interaction, interactionProblem('The date you entered is not valid.'));
+
+		const memberBirthday = await catchToNull(
+			container.prisma.birthday.findFirst({
+				where: {
+					userId: targetUser.id,
+					guildId,
+				},
+			}),
+		);
+
+		if (!memberBirthday) {
+			return reply(
+				interaction,
+				interactionProblem(
+					`This user's birthday is already registered. If you want to change it, use the ${chatInputApplicationCommandMention(
+						'birthday',
+						'update',
+						'935174192389840896',
+					)}`,
+				),
+			);
 		}
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
+		const birthday = await catchToNull(
+			container.prisma.birthday.create({
+				data: {
+					userId: targetUser.id,
+					guildId,
+					birthday: date.date,
+				},
+			}),
+		);
 
-		if (!isNullOrUndefinedOrEmpty(birthday)) {
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} This user's birthday is already registerd. Use </birthday update:${935174192389840896n}>`,
-					}),
-				],
-				ephemeral: true,
-			});
+		if (!birthday) {
+			return reply(interaction, interactionProblem('An error occurred while registering the birthday.'));
 		}
 
-		try {
-			await container.utilities.birthday.create(date.date, guildId, targetUser);
-			await updateBirthdayOverview(guildId);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${SUCCESS} Success`,
-						description: `${ARROW_RIGHT} Registered the birthday of ${targetUser.username} successfully.`,
-						fields: [
-							{
-								name: 'Date',
-								value: formatDateForDisplay(date.date),
-								inline: true,
-							},
-						],
-					}),
-				],
-				ephemeral: true,
-			});
-		} catch (error: any) {
-			container.logger.error(error);
-			return replyToInteraction(interaction, {
-				embeds: [
-					generateEmbed({
-						title: `${FAIL} Failed`,
-						description: `${ARROW_RIGHT} ${inlineCode('An error occured while registering the birthday.')}`,
-					}),
-				],
-				ephemeral: true,
-			});
-		}
+		await updateBirthdayOverview(birthday.guildId);
+		return reply(
+			interaction,
+			interactionSuccess(
+				`${
+					authorIsTarget ? 'Your' : `${targetUser.username}'s`
+				} birthday was been registered on ${formatDateForDisplay(date.date)}.`,
+			),
+		);
 	}
 }

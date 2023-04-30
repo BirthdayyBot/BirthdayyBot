@@ -1,23 +1,22 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import type { ButtonInteraction } from 'discord.js';
+import { ButtonInteraction, time, TimestampStyles } from 'discord.js';
 import { remindMeButtonDisabled } from '../lib/components/button';
 import { editInteractionResponse } from '../lib/discord/interaction';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
 	public override parse(interaction: ButtonInteraction) {
-		this.container.logger.info('VoteReminderButton ~ overrideparse ~ interaction.customId:', interaction.customId);
-		if (!(interaction.customId === 'vote-reminder-button')) return this.none();
+		if (interaction.customId !== 'vote-reminder-button') return this.none();
 
-		const twelveHoursLaterTimestamp = interaction.message.createdTimestamp + Time.Hour * 12;
-		const timeUntil12HoursLater = twelveHoursLaterTimestamp - Date.now();
-		return this.some({ time: timeUntil12HoursLater });
+		const timestampTwelveHoursLater = interaction.message.createdTimestamp + Time.Hour * 12;
+		return this.some({ time: timestampTwelveHoursLater });
 	}
 
 	public async run(interaction: ButtonInteraction, result: { time: number }) {
 		await interaction.deferUpdate();
+
 		await editInteractionResponse(interaction, {
 			components: [
 				{
@@ -26,13 +25,24 @@ export class VoteReminderButton extends InteractionHandler {
 				},
 			],
 		});
-		if (result.time < 0) return interaction.followUp({ content: 'You can vote now already!', ephemeral: true });
-		const taskCreation = await this.container.tasks.create(
+
+		const delay = result.time - Date.now();
+
+		if (delay < 0) {
+			return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
+		}
+
+		await this.container.tasks.create(
 			'VoteReminderTask',
 			{ memberId: interaction.user.id },
-			{ repeated: false, delay: result.time },
+			{ repeated: false, delay },
 		);
-		if (!taskCreation) return interaction.followUp({ content: 'Something went wrong!', ephemeral: true });
-		return interaction.followUp({ content: 'I will remind you in 12 hours to vote!', ephemeral: true });
+		return interaction.followUp({
+			content: `I will remind you to vote ${time(
+				Math.round(result.time / 1000),
+				TimestampStyles.RelativeTime,
+			)} !`,
+			ephemeral: true,
+		});
 	}
 }
