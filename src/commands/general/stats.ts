@@ -5,7 +5,6 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { PING } from '../../helpers/provide/environment';
 import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { StatsCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
@@ -22,10 +21,7 @@ import { envIs } from '../../lib/utils/env';
 })
 export class StatsCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(StatsCMD(), {
-			guildIds: getCommandGuilds('global'),
-			registerCommandIfMissing: true,
-		});
+		registry.registerChatInputCommand(StatsCMD());
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
