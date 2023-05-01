@@ -82,14 +82,10 @@ async function createEmbed(guildId: string, birthdaySortByMonth: { month: string
 		for (const birthday of birthdays) {
 			const { userId, birthday: dateOfTheBirthday } = birthday;
 			const member = await getGuildMember(guildId, userId);
-			if (!member) {
-				if (guildId === GuildIDEnum.CHILLI_ATTACK_V2) {
-					// If the guild is Chilli Attack, skip the birthday
-					continue;
-				} else {
-					// Delete the birthday if the member is not in the guild
-					await container.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } });
-				}
+			if (!member && guildId !== GuildIDEnum.CHILLI_ATTACK_V2) {
+				// Delete the birthday if the member is not in the guild
+				await container.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } });
+				continue;
 			}
 			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
@@ -190,7 +186,9 @@ function prepareBirthdays(birthdays: Birthday[]): BirthdaysListWithMonth[] {
 	const list = prepareBirthdayList();
 
 	for (const birthday of birthdays) {
-		const month = dayjs(birthday.birthday).month();
+		const date = dayjs(birthday.birthday);
+		if (!date.isValid()) continue;
+		const month = date.month();
 		list[month].birthdays.push(birthday);
 	}
 	return list;
