@@ -4,13 +4,17 @@ import { RequiresUserPermissions } from '@sapphire/decorators';
 import { reply } from '../../../helpers';
 
 @RegisterSubCommand('birthday', (builder) =>
-	builder.setName('test').setDescription('Test your current birthday configurations'),
+	builder
+		.setName('test')
+		.setDescription('Test your current birthday configurations')
+		.addUserOption((option) => option.setName('user').setDescription('The user to test the birthday for')),
 )
 export class TestCommand extends Command {
-	@RequiresUserPermissions(['ManageRoles'])
+	@RequiresUserPermissions(['ManageGuild'])
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
+		const target = interaction.options.getUser('user') ?? interaction.member.user;
 		await this.container.tasks.run('BirthdayReminderTask', {
-			userId: interaction.member.id,
+			userId: target.id,
 			guildId: interaction.guildId,
 			isTest: true,
 		});
