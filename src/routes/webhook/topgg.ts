@@ -6,12 +6,12 @@ import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import { envIsDefined, envParseBoolean, envParseString } from '@skyra/env-utilities';
 import type { VoteProvider } from '../../lib/types/VoteProvider.type';
 import { Time } from '@sapphire/cron';
-import type { User } from 'discord.js';
-import { VOTE_ROLE_ID, SUCCESS, HEART, EXCLAMATION, VOTE_CHANNEL_ID } from '../../helpers';
+import { VOTE_ROLE_ID, SUCCESS, HEART, EXCLAMATION, VOTE_CHANNEL_ID, BOT_NAME } from '../../helpers';
 import { remindMeButton } from '../../lib/components/button';
 import { sendDMMessage, sendMessage } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
+import type { User } from 'discord.js';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('WEBHOOK_SECRET') })
 export class UserRoute extends Route {
@@ -60,17 +60,21 @@ export class UserRoute extends Route {
 		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
 	}
 
-	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, member: User) {
-		const { username, discriminator } = member;
-		const avatar_url = member.avatarURL() || member.defaultAvatarURL;
-		const embed = {
-			title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
-			description: `\`${username}#${discriminator}\` has **voted** for Birthdayy!
-      Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-			thumbnail_url: avatar_url,
-		};
-		const embedObj = generateDefaultEmbed(embed);
-		return sendMessage(VOTE_CHANNEL_ID, { embeds: [embedObj] });
+	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
+		const { username, discriminator } = user;
+
+		return sendMessage(VOTE_CHANNEL_ID, {
+			embeds: [
+				generateDefaultEmbed({
+					title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
+					description: `\`${username}#${discriminator}\` has **voted** for ${
+						container.client.user?.username ?? BOT_NAME
+					}!
+				  Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
+					thumbnail: { url: user.avatarURL() ?? user.defaultAvatarURL },
+				}),
+			],
+		});
 	}
 
 	/**
