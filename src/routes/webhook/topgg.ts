@@ -8,10 +8,11 @@ import type { VoteProvider } from '../../lib/types/VoteProvider.type';
 import { Time } from '@sapphire/cron';
 import { VOTE_ROLE_ID, SUCCESS, HEART, EXCLAMATION, VOTE_CHANNEL_ID, BOT_NAME } from '../../helpers';
 import { remindMeButton } from '../../lib/components/button';
-import { sendDMMessage, sendMessage } from '../../lib/discord';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
+import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import type { User } from 'discord.js';
+import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
+import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('WEBHOOK_SECRET') })
 export class UserRoute extends Route {
@@ -30,20 +31,35 @@ export class UserRoute extends Route {
 			default:
 				return response.badRequest({ error: 'Bad Request' });
 		}
-		return response.ok({ message: 'TOPGG VERIFIED' });
+		return response.end();
 	}
 
-	private async voteProcess(provider: VoteProvider, user_id: string) {
+	private async voteProcess(provider: VoteProvider, userId: string) {
 		const providerInfo = this.getProviderInfo(provider);
-		const member = await container.client.users.fetch(user_id);
+
+		const guild = await getGuildInformation(GuildIDEnum.BIRTHDAYY_HQ);
+		if (!guild) return;
+
+		const user = await getUserInfo(userId);
+		if (!user) return;
+
+		const member = await getGuildMember(guild?.id, userId);
+		if (!member) return;
+
+		const role = guild.roles.cache.get(VOTE_ROLE_ID);
+		if (!role) return;
+
 		// 1. Send DM
-		await this.sendVoteDM(providerInfo, user_id);
+		await this.sendVoteDM(providerInfo, userId);
 		// 2. Message To Server
-		await this.sendVoteAnnouncement(providerInfo, member);
+		await this.sendVoteAnnouncement(providerInfo, user);
 		// 3. Update role
-		const addRole = await this.addVoteRole(user_id);
+
+		const addRole = await member.roles.add(VOTE_ROLE_ID).catch(() => null);
+		if (!addRole) return;
+
 		// 4. Schedule role removal
-		if (addRole) await this.scheduleRoleRemoval(VOTE_ROLE_ID, user_id, GuildIDEnum.BIRTHDAYY_HQ);
+		await this.scheduleRoleRemoval({ userId, guildId: guild.id, roleId: role.id });
 	}
 
 	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
@@ -71,30 +87,13 @@ export class UserRoute extends Route {
 						container.client.user?.username ?? BOT_NAME
 					}!
 				  Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-					thumbnail: { url: user.avatarURL() ?? user.defaultAvatarURL },
+					thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
 				}),
 			],
 		});
 	}
 
-	/**
-	 * Adds the vote role to the user with the provided user ID
-	 * @param user_id - The ID of the user to add the vote role to
-	 * @returns A boolean indicating whether the role was added or not
-	 */
-	private async addVoteRole(user_id: string): Promise<boolean> {
-		const user = await (await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ)).members.fetch(user_id);
-		if (!user) return false;
-
-		const role = await (await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ)).roles.fetch(VOTE_ROLE_ID);
-		if (!role) return false;
-
-		await user.roles.add(role);
-		return true;
-	}
-
-	private async scheduleRoleRemoval(user_id: string, role_id: string, guild_id: string) {
-		const options = { user_id, role_id, guild_id };
+	private async scheduleRoleRemoval(options: RoleRemovePayload) {
 		await container.tasks.create('BirthdayRoleRemoverTask', options, { repeated: false, delay: Time.Hour * 12 });
 	}
 
