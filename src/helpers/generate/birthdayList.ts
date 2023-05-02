@@ -3,7 +3,7 @@ import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { userMention } from 'discord.js';
-import { getGuildInformation, getGuildMember } from '../../lib/discord';
+import { getGuildInformation } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
@@ -74,6 +74,7 @@ async function createEmbed(guildId: string, birthdaySortByMonth: { month: string
 	if (isNullOrUndefinedOrEmpty(embed.fields)) embed.fields = [];
 
 	let currentDescription = '';
+	const guildIsChilliAttackV2 = guildId === GuildIDEnum.CHILLI_ATTACK_V2;
 
 	for (const birthdayOfTheMonth of birthdaySortByMonth) {
 		const { birthdays, month } = birthdayOfTheMonth;
@@ -81,8 +82,11 @@ async function createEmbed(guildId: string, birthdaySortByMonth: { month: string
 		// For each birthday in current month
 		for (const birthday of birthdays) {
 			const { userId, birthday: dateOfTheBirthday } = birthday;
-			const member = await getGuildMember(guildId, userId);
-			if (!member && guildId !== GuildIDEnum.CHILLI_ATTACK_V2) {
+			const member = guildIsChilliAttackV2
+				? guild?.members.cache.get(userId) ?? null
+				: await guild?.members.fetch(userId).catch(() => null);
+
+			if (!member && !guildIsChilliAttackV2) {
 				// Delete the birthday if the member is not in the guild
 				await container.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } });
 				continue;
