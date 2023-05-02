@@ -18,7 +18,6 @@ export class CleanDatabaseTask extends ScheduledTask {
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
-		container.logger.info('CleanDatabaseTask ~ run ~ req:', req);
 		const { deletedBirthdays, deletedGuilds } = req;
 
 		await sendMessage(BOT_ADMIN_LOG, {
@@ -41,7 +40,5 @@ export class CleanDatabaseTask extends ScheduledTask {
 		this.container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
 
 		this.container.logger.debug('[CleaningTask] Done');
-
-		return req;
 	}
 }
