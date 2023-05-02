@@ -125,7 +125,7 @@ export class TimezoneCommand extends Command {
 
 		return reply(
 			interaction,
-			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone})}.`),
+			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone}.`),
 		);
 	}
 }

@@ -10,7 +10,7 @@ export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 
-		const { embed, components } = await generateBirthdayList(1, interaction.guildId);
+		const { embed, components } = await generateBirthdayList(1, interaction.guild);
 
 		await reply(interaction, { embeds: [generateDefaultEmbed(embed)], components });
 	}

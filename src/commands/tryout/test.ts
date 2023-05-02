@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import { codeBlock } from '@sapphire/utilities';
 import { reply } from '../../helpers/send/response';
-import { getCurrentOffset } from '../../helpers/utils/date';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
@@ -30,14 +30,18 @@ export class TestCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const fields = [{ name: 'test', value: 'Test Test' }];
-		const current = getCurrentOffset();
-		if (!current) {
-			const embed = generateDefaultEmbed({ title: 'test', description: 'No current time' });
-			return reply(interaction, { embeds: [embed] });
-		}
 		if (isDevelopment) await this.container.tasks.run('BirthdayReminderTask', {});
-		const embedObj: EmbedInformationModel = { title: 'test', fields };
-		const embed = generateDefaultEmbed(embedObj);
-		return reply(interaction, { embeds: [embed] });
+		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
+		const testEmbed = generateDefaultEmbed(testEmbedObj);
+
+		const cleanReq = await this.container.tasks.run('CleanDatabaseTask', {});
+
+		this.container.logger.info('TestCommand ~ overridechatInputRun ~ cleanReq:', cleanReq);
+		const cleaningEmbed = generateDefaultEmbed({
+			title: 'CleanUp Report (DELETE)',
+			description: codeBlock('js', JSON.stringify(cleanReq, null, 2)),
+		});
+
+		return reply(interaction, { embeds: [testEmbed, cleaningEmbed] });
 	}
 }

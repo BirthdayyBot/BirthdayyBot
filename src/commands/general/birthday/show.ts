@@ -1,5 +1,5 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { userMention } from 'discord.js';
+import { bold, userMention } from 'discord.js';
 import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
 import { BIRTHDAY_REGISTER } from '../../../lib/commands';
 import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
@@ -30,7 +30,7 @@ export class ShowCommand extends Command {
 		if (!birthday) {
 			return reply(
 				interaction,
-				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}`),
+				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}.`),
 			);
 		}
 
@@ -41,7 +41,7 @@ export class ShowCommand extends Command {
 					title: `${BOOK} Birthday`,
 					description: `${ARROW_RIGHT} ${
 						TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'
-					} birthday is at the ${formatDateForDisplay(birthday.birthday)}.`,
+					} birthday is at the ${bold(formatDateForDisplay(birthday.birthday))}.`,
 				},
 			],
 		});

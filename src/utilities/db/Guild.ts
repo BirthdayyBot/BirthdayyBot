@@ -1,6 +1,9 @@
 import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
+import { codeBlock } from '@sapphire/utilities';
 import type { Snowflake } from 'discord.js';
+import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '../../helpers';
+import { sendMessage } from '../../lib/discord';
 
 export class Guild extends Utility {
 	public get = {
@@ -136,8 +139,11 @@ export class Guild extends Utility {
 					deletedBirthdays: deletedBirthdays.count,
 					deletedGuilds: deletedGuilds.count,
 				}))
-				.catch((error: any) => {
+				.catch(async (error: any) => {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					await sendMessage(BOT_ADMIN_LOG, {
+						content: `**[ERROR][DeleteByLastUpdated]**\n${codeBlock(JSON.stringify(error))}`,
+					});
 					return { deletedBirthdays: 0, deletedGuilds: 0 };
 				}),
 	};
@@ -159,8 +165,7 @@ export class Guild extends Utility {
 			this.prisma.guild.update({
 				where: { guildId },
 				data: {
-					announcementMessage:
-						'<:arrwright:931267038746390578> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3',
+					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
 				},
 			}),
 		OverviewChannel: (guildId: Snowflake) =>

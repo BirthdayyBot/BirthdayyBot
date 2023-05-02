@@ -2,7 +2,7 @@ import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-adva
 import { Result } from '@sapphire/result';
 import { setDefaultConfig } from '../../../helpers/provide/config';
 import { reply } from '../../../helpers/send/response';
-import { type ConfigName, configNameExtended } from '../../../lib/database';
+import { type ConfigName, configNameExtended, configChoices } from '../../../lib/database';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
@@ -14,32 +14,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 			option
 				.setName('config')
 				.setDescription('Config that you want to remove')
-				.addChoices(
-					{
-						name: 'Announcement Channel',
-						value: 'announcementChannel',
-					},
-					{
-						name: 'Overview Channel',
-						value: 'overviewChannel',
-					},
-					{
-						name: 'Birthday Role',
-						value: 'birthdayRole',
-					},
-					{
-						name: 'Ping Role',
-						value: 'birthdayPingRole',
-					},
-					{
-						name: 'Announcement Message',
-						value: 'announcementMessage',
-					},
-					// {
-					// 	name: 'Logs',
-					// 	value: 'logs'
-					// }
-				)
+				.addChoices(...configChoices)
 				.setRequired(true),
 		),
 )
