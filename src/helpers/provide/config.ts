@@ -77,8 +77,6 @@ export async function setDefaultConfig(config_name: ConfigName, guildId: string)
 		case 'birthdayPingRole':
 			await container.utilities.guild.reset.BirthdayPingRole(guildId);
 			break;
-		default:
-			throw new Error(`Unknown config ${config_name}`);
 	}
 }
 
