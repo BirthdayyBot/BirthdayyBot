@@ -65,3 +65,4 @@ export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '10776213638813
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
+export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${ARROW_RIGHT} Today is a special Day!{NEW_LINE}${GIFT} Please wish {MENTION} a happy Birthday <3`;
