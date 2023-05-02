@@ -16,7 +16,7 @@ const minYear = currentYear - 100;
 		.setName('update')
 		.setDescription('Update your birthday - MANAGER ONLY')
 		.addUserOption((option) =>
-			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY').setRequired(true),
+			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY'),
 		)
 		.addIntegerOption((option) =>
 			option.setName('day').setDescription('Day of birthday').setRequired(true).setMinValue(1).setMaxValue(31),
