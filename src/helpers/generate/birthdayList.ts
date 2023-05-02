@@ -15,13 +15,17 @@ import dayjs from 'dayjs';
 export async function generateBirthdayList(page_id: number, guild_id: string) {
 	const guild = await container.prisma.guild.findUnique({
 		where: { guildId: guild_id },
-		include: { birthday: true },
+		include: {
+			birthday: {
+				where: { disabled: false },
+			},
+		},
 	});
 
 	if (!guild || !guild.birthday) return { embed: await createEmbed(guild_id, []), components: [] };
 
 	// sort all birthdays by day and month
-	const sortedBirthdays = sortByDayAndMonth(guild.birthday.filter((birthday) => !birthday.disabled));
+	const sortedBirthdays = sortByDayAndMonth(guild.birthday);
 	// split the sorted birthdays into multiple lists
 	const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
 	// get the birthdays for the current page
