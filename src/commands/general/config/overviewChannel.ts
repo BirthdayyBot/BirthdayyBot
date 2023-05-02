@@ -36,7 +36,7 @@ export class OverviewChannelCommand extends Command {
 			);
 		}
 
-		const birthdayList = await generateBirthdayList(1, interaction.guildId);
+		const birthdayList = await generateBirthdayList(1, interaction.guild);
 		const birthdayListEmbed = generateDefaultEmbed(birthdayList.embed);
 
 		const message = await channel.send({

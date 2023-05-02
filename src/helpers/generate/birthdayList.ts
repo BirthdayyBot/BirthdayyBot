@@ -2,8 +2,7 @@ import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { userMention } from 'discord.js';
-import { getGuildInformation } from '../../lib/discord';
+import { Guild, userMention } from 'discord.js';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { CustomEmbedModel } from '../../lib/model';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
@@ -12,28 +11,21 @@ import { envParseNumber } from '@skyra/env-utilities';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import dayjs from 'dayjs';
 
-export async function generateBirthdayList(page_id: number, guild_id: string) {
-	const guild = await container.prisma.guild.findUnique({
-		where: { guildId: guild_id },
-		include: {
-			birthday: {
-				where: { disabled: false },
-			},
-		},
-	});
+export async function generateBirthdayList(page_id: number, guild: Guild) {
+	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
 
-	if (!guild || !guild.birthday) return { embed: await createEmbed(guild_id, []), components: [] };
+	if (!birthdays) return { embed: await createEmbed(guild, []), components: [] };
 
 	// sort all birthdays by day and month
-	const sortedBirthdays = sortByDayAndMonth(guild.birthday);
+	const sortedBirthdays = sortByDayAndMonth(birthdays);
 	// split the sorted birthdays into multiple lists
 	const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
 	// get the birthdays for the current page
-	const birthdays = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
+	const birthdaySplitted = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
 	// TODO: Should only contain the birthdays for the current page (80 birthdays)
 
-	const finalList = prepareBirthdays(birthdays);
-	const embed = await createEmbed(guild_id, finalList);
+	const finalList = prepareBirthdays(birthdaySplitted);
+	const embed = await createEmbed(guild, finalList);
 
 	const components = generateComponents(page_id, splitBirthdayList.listAmount);
 	return { embed, components };
@@ -61,12 +53,11 @@ function getBirthdaysAsLists(
 
 /**
  * Create the embed with the fields etc with the given values
- * @param guildId - ID of the guild
+ * @param guild - ID of the guild
  * @param birthdays - Array with all birthdays
  * @returns embed - Embed with the given values
  */
-async function createEmbed(guildId: string, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
-	const guild = await getGuildInformation(guildId);
+async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
 	const embed: CustomEmbedModel = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${ARROW_RIGHT}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
@@ -78,7 +69,7 @@ async function createEmbed(guildId: string, birthdaySortByMonth: { month: string
 	if (isNullOrUndefinedOrEmpty(embed.fields)) embed.fields = [];
 
 	let currentDescription = '';
-	const guildIsChilliAttackV2 = guildId === GuildIDEnum.CHILLI_ATTACK_V2;
+	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.CHILLI_ATTACK_V2;
 
 	for (const birthdayOfTheMonth of birthdaySortByMonth) {
 		const { birthdays, month } = birthdayOfTheMonth;
@@ -92,7 +83,7 @@ async function createEmbed(guildId: string, birthdaySortByMonth: { month: string
 
 			if (!member && !guildIsChilliAttackV2) {
 				// Delete the birthday if the member is not in the guild
-				await container.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } });
+				await container.prisma.birthday.delete({ where: { userId_guildId: { guildId: guild.id, userId } } });
 				continue;
 			}
 			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
