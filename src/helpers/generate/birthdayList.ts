@@ -186,7 +186,9 @@ function prepareBirthdays(birthdays: Birthday[]): BirthdaysListWithMonth[] {
 	const list = prepareBirthdayList();
 
 	for (const birthday of birthdays) {
-		const month = dayjs(birthday.birthday).month();
+		const date = dayjs(birthday.birthday);
+		if (!date.isValid()) continue;
+		const month = date.month();
 		list[month].birthdays.push(birthday);
 	}
 	return list;
