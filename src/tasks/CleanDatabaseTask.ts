@@ -6,12 +6,11 @@ import { inlineCode } from 'discord.js';
 import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { generateDefaultEmbed } from '../lib/utils/embed';
-import { isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',
 	pattern: '0 0 * * *',
-	enabled: isProduction,
+	enabled: true,
 })
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
@@ -19,6 +18,7 @@ export class CleanDatabaseTask extends ScheduledTask {
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
+		container.logger.info('CleanDatabaseTask ~ run ~ req:', req);
 		const { deletedBirthdays, deletedGuilds } = req;
 
 		await sendMessage(BOT_ADMIN_LOG, {
@@ -41,5 +41,7 @@ export class CleanDatabaseTask extends ScheduledTask {
 		this.container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
 
 		this.container.logger.debug('[CleaningTask] Done');
+
+		return req;
 	}
 }
