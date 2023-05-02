@@ -3,6 +3,7 @@ import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { container } from '@sapphire/framework';
 import type { ConfigName } from '../../lib/database';
 import { envParseString } from '@skyra/env-utilities';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from './environment';
 
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: string) {
 	await container.prisma.guild.update({
@@ -37,8 +38,10 @@ export async function setDefaultConfigs(guildId: string) {
 			overviewChannel: null,
 			logChannel: null,
 			overviewMessage: null,
-			timezone: undefined,
-			announcementMessage: undefined,
+			timezone: 0,
+			announcementMessage: {
+				set: DEFAULT_ANNOUNCEMENT_MESSAGE,
+			},
 		},
 	});
 }

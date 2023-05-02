@@ -1,6 +1,7 @@
 import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import type { Snowflake } from 'discord.js';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '../../helpers';
 
 export class Guild extends Utility {
 	public get = {
@@ -159,8 +160,7 @@ export class Guild extends Utility {
 			this.prisma.guild.update({
 				where: { guildId },
 				data: {
-					announcementMessage:
-						'<:arrwright:931267038746390578> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3',
+					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
 				},
 			}),
 		OverviewChannel: (guildId: Snowflake) =>
