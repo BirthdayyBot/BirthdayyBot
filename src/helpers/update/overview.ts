@@ -7,8 +7,9 @@ export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
 	if (!config || !config.overviewChannel) return;
 	const { overviewChannel, overviewMessage } = config;
+	const guild = await container.client.guilds.fetch(guild_id);
 
-	const birthdayList = await generateBirthdayList(1, guild_id);
+	const birthdayList = await generateBirthdayList(1, guild);
 
 	const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
 

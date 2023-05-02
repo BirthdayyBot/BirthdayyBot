@@ -15,7 +15,7 @@ export class ExampleParseMethod extends InteractionHandler {
 	}
 
 	public async run(interaction: ButtonInteraction<'cached'>, result: { pageNumber: number }) {
-		const { embed, components } = await generateBirthdayList(result.pageNumber, interaction.guildId);
+		const { embed, components } = await generateBirthdayList(result.pageNumber, interaction.guild);
 		const finalEmbed = generateDefaultEmbed(embed);
 		return interaction.message.edit({ embeds: [finalEmbed], components });
 	}
