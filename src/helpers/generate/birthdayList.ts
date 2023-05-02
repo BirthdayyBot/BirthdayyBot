@@ -194,9 +194,14 @@ function prepareBirthdays(birthdays: Birthday[]): BirthdaysListWithMonth[] {
 }
 
 function sortByDayAndMonth(birthdays: Birthday[]): Birthday[] {
-	return birthdays.sort((firstBirthday, secondBirthday) =>
-		dayjs(firstBirthday.birthday).diff(dayjs(secondBirthday.birthday)),
-	);
+	return birthdays.sort((firstBirthday, secondBirthday) => {
+		const firstBirthdayDate = dayjs(firstBirthday.birthday);
+		const secondBirthdayDate = dayjs(secondBirthday.birthday);
+
+		return firstBirthdayDate.month() === secondBirthdayDate.month()
+			? firstBirthdayDate.date() - secondBirthdayDate.date()
+			: firstBirthdayDate.month() - secondBirthdayDate.month();
+	});
 }
 
 // convert page_id into array index
