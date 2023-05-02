@@ -62,7 +62,7 @@ export class ListCommand extends Command {
 		const { guildId, memberPermissions } = interaction;
 		const authorIsTarget = interaction.user.id === targetUser.id;
 
-		if (!authorIsTarget && !memberPermissions.has('ManageGuild')) {
+		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
 			return reply(
 				interaction,
 				interactionProblem("You don't have the permission to register other users birthdays."),

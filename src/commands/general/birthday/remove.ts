@@ -21,7 +21,7 @@ export class ListCommand extends Command {
 
 		const TargetIsNotUser = targetUser.id !== interaction.user.id;
 
-		if (TargetIsNotUser && !interaction.member.permissions.has('ManageGuild')) {
+		if (TargetIsNotUser && !interaction.member.permissions.has('ManageRoles')) {
 			return reply(
 				interaction,
 				interactionProblem("You don't have the permission to remove other users birthdays."),
