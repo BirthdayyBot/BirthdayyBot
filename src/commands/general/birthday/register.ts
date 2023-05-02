@@ -1,6 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
+import dayjs from 'dayjs';
 import { bold } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
@@ -8,6 +9,9 @@ import { BIRTHDAY_UPDATE } from '../../../lib/commands';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 import { catchToNull } from '../../../lib/utils/promises';
+
+const currentYear = dayjs().year();
+const minYear = currentYear - 100;
 
 @RegisterSubCommand('birthday', (builder) => {
 	return applyLocalizedBuilder(
@@ -89,8 +93,8 @@ import { catchToNull } from '../../../lib/utils/promises';
 				'commands/birthday:subcommand.register.options.year.name',
 				'commands/birthday:subcommand.register.options.year.description',
 			)
-				.setMinValue(1900)
-				.setMaxValue(new Date().getFullYear()),
+				.setMinValue(minYear)
+				.setMaxValue(currentYear),
 		)
 		.addUserOption((option) =>
 			applyLocalizedBuilder(
@@ -107,7 +111,7 @@ export class ListCommand extends Command {
 		const { guildId, memberPermissions } = interaction;
 		const authorIsTarget = interaction.user.id === targetUser.id;
 
-		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
+		if (!authorIsTarget && !memberPermissions.has('ManageGuild')) {
 			return reply(
 				interaction,
 				interactionProblem("You don't have the permission to register other users birthdays."),

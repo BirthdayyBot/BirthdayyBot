@@ -1,11 +1,15 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/framework';
+import dayjs from 'dayjs';
 import { bold, userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import { BIRTHDAY_REGISTER } from '../../../lib/commands';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+
+const currentYear = dayjs().year();
+const minYear = currentYear - 100;
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder
@@ -78,8 +82,8 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 				.setName('year')
 				.setDescription('Year of birthday')
 				.setRequired(false)
-				.setMinValue(1900)
-				.setMaxValue(2021),
+				.setMinValue(minYear)
+				.setMaxValue(currentYear),
 		),
 )
 export class UpdateCommand extends Command {
