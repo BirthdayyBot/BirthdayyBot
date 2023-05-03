@@ -484,16 +484,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^5.0.3":
-  version: 5.0.3
-  resolution: "@sapphire/plugin-api@npm:5.0.3"
+"@sapphire/plugin-api@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "@sapphire/plugin-api@npm:5.0.4"
   dependencies:
-    "@types/psl": ^1.1.0
     "@types/ws": ^8.5.4
-    psl: ^1.9.0
+    tldts: ^6.0.4
     tslib: ^2.5.0
-    undici: ^5.21.2
-  checksum: 74f6ebad8759330f5061fd4565cd8a24f88d80bf8fddf9e193517e99ff7bfaa28361f1d158482d53c0042349c11eb47c0504e1b273984f315df6cbad9914c51d
+    undici: ^5.22.0
+  checksum: 476d8f281484fa03560bef181dff1a6e87c1d1a017361134071bc9dcccb9f13e513b9e4be364b3c5bfca8019e3e90446b4d62f9cfd9d7ede203e79aa1fae0452
   languageName: node
   linkType: hard
 
@@ -530,14 +529,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-logger@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@sapphire/plugin-logger@npm:3.0.3"
+"@sapphire/plugin-logger@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@sapphire/plugin-logger@npm:3.0.4"
   dependencies:
     "@sapphire/timestamp": ^1.0.1
-    colorette: ^2.0.19
+    colorette: ^2.0.20
     tslib: ^2.5.0
-  checksum: 5e956474366daea23ef3a1c3d751850f9b7bcff9e9c8819ee71804ad981cbc30f59bdaa1e2701a2b9024e38ad73c327a1b4050dc160ddecea0e3756698ed6ddc
+  checksum: 8863a121bea5a5bd816a7e52b144dedbfb10057e3532209fe50fb0fb210af58f04310f8ecae268e7945410846cf164bba12b9239a36c4db058f2c03d6b1c9128
   languageName: node
   linkType: hard
 
@@ -795,13 +794,6 @@ __metadata:
   version: 18.16.3
   resolution: "@types/node@npm:18.16.3"
   checksum: 816b39d45b05ebdc6f362b630970df3f6d82f71d418a2555353522f4eeeb078fa201de5299f02c09a09faa975e43b2745fe19c263d44069f87ddf37d6c37b717
-  languageName: node
-  linkType: hard
-
-"@types/psl@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@types/psl@npm:1.1.0"
-  checksum: 648a4a40827fb101a05616b9c448b04d40c467db9f09e08099274759fd5e032e7d276013296679765c7d7359f43f0479094c1d8b6a56a8f9445b84b5a9af1263
   languageName: node
   linkType: hard
 
@@ -1167,11 +1159,11 @@ __metadata:
     "@sapphire/eslint-config": ^4.4.2
     "@sapphire/fetch": ^2.4.1
     "@sapphire/framework": ^4.4.3
-    "@sapphire/plugin-api": ^5.0.3
+    "@sapphire/plugin-api": ^5.0.4
     "@sapphire/plugin-editable-commands": ^3.0.2
     "@sapphire/plugin-hmr": ^2.0.1
     "@sapphire/plugin-i18next": ^5.0.3
-    "@sapphire/plugin-logger": ^3.0.3
+    "@sapphire/plugin-logger": ^3.0.4
     "@sapphire/plugin-scheduled-tasks": ^6.0.1
     "@sapphire/plugin-subcommands": ^4.0.1
     "@sapphire/plugin-utilities-store": ^1.0.1
@@ -3815,13 +3807,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"psl@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "psl@npm:1.9.0"
-  checksum: 20c4277f640c93d393130673f392618e9a8044c6c7bf61c53917a0fddb4952790f5f362c6c730a9c32b124813e173733f9895add8d26f566ed0ea0654b2e711d
-  languageName: node
-  linkType: hard
-
 "punycode@npm:^2.1.0":
   version: 2.3.0
   resolution: "punycode@npm:2.3.0"
@@ -4502,6 +4487,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tldts-core@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "tldts-core@npm:6.0.4"
+  checksum: 0255b9cb1f979d6aaebad231ec2c129ec12fe319e50868c84a7b3549c27f56e14460bc086c71a3fc2ac3b7bda78926590be9cffbbc604b3a4e79d4c619bdc2d5
+  languageName: node
+  linkType: hard
+
+"tldts@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "tldts@npm:6.0.4"
+  dependencies:
+    tldts-core: ^6.0.4
+  bin:
+    tldts: bin/cli.js
+  checksum: 2ddc4b68764ddf80dd5f6b0012a70d425fcc4c99e2a873ff2543e090a8e86bd8a5e8520da59ecb0ab65588308c6941ad4357d2f4f12d3b48a2b487ef94c43fdc
+  languageName: node
+  linkType: hard
+
 "to-regex-range@npm:^5.0.1":
   version: 5.0.1
   resolution: "to-regex-range@npm:5.0.1"
@@ -4662,7 +4665,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.16.0, undici@npm:^5.21.2, undici@npm:^5.22.0":
+"undici@npm:^5.16.0, undici@npm:^5.22.0":
   version: 5.22.0
   resolution: "undici@npm:5.22.0"
   dependencies:
