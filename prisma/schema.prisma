@@ -62,7 +62,7 @@ model User {
     @@map("user")
 }
 
-model blacklist {
+model Blacklist {
     id       BigInt   @id @default(autoincrement())
     guild_id String   @db.VarChar(32)
     user_id  String   @db.VarChar(32)
@@ -71,6 +71,7 @@ model blacklist {
 
     @@index([guild_id], map: "index_guild_id_blacklist")
     @@index([user_id], map: "index_user_id_blacklist")
+    @@map("blacklist")
 }
 
 model Premium {
