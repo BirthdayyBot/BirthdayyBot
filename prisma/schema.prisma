@@ -29,18 +29,6 @@ model Birthday {
     @@map("birthday")
 }
 
-model Blocklist {
-    id       BigInt   @id @default(autoincrement())
-    guildId  String   @map("guild_id") @db.VarChar(32)
-    userId   String   @map("user_id") @db.VarChar(32)
-    addedAt  DateTime @default(now()) @map("added_at") @db.Timestamp(0)
-    disabled Boolean  @default(false)
-
-    @@index([guildId], map: "index_guild_id_blocklist")
-    @@index([userId], map: "index_user_id_blocklist")
-    @@map("blocklist")
-}
-
 model Guild {
     guildId             String     @id @map("guild_id") @db.VarChar(32)
     inviter             String?    @db.VarChar(20)
@@ -60,23 +48,6 @@ model Guild {
 
     @@index([lastUpdated], map: "index_last_updated_guild")
     @@map("guild")
-}
-
-model Premium {
-    id      Int     @id @default(autoincrement())
-    userId  String  @map("user_id") @db.VarChar(32)
-    guildId String? @map("guild_id") @db.VarChar(32)
-    tier    Boolean @default(true)
-
-    @@map("premium")
-}
-
-model Tiers {
-    id          Int      @id @default(autoincrement())
-    name        String?  @db.VarChar(512)
-    lastUpdated DateTime @default(now()) @map("last_updated") @db.Timestamp(0)
-
-    @@map("tiers")
 }
 
 model User {
@@ -100,4 +71,21 @@ model blacklist {
 
     @@index([guild_id], map: "index_guild_id_blacklist")
     @@index([user_id], map: "index_user_id_blacklist")
+}
+
+model Premium {
+    id      Int     @id @default(autoincrement())
+    userId  String  @map("user_id") @db.VarChar(32)
+    guildId String? @map("guild_id") @db.VarChar(32)
+    tier    Boolean @default(true)
+
+    @@map("premium")
+}
+
+model Tiers {
+    id          Int      @id @default(autoincrement())
+    name        String?  @db.VarChar(512)
+    lastUpdated DateTime @default(now()) @map("last_updated") @db.Timestamp(0)
+
+    @@map("tiers")
 }
