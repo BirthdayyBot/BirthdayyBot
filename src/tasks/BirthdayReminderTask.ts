@@ -118,11 +118,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		eventInfo.announcement = {
 			sent: false,
-			message: 'Error',
+			message: 'Not set',
 		};
 		eventInfo.birthday_role = {
 			added: false,
-			message: 'Error',
+			message: 'Not set',
 		};
 		logAll(config);
 
@@ -133,6 +133,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				eventInfo.birthday_role = birthdayChildInfo;
 			} else {
 				eventInfo.birthday_role.message = 'Role not found';
+				await container.utilities.guild.reset.BirthdayRole(guildId);
 			}
 		}
 
@@ -141,6 +142,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
 			);
 			eventInfo.announcement.message = 'Announcement Channel not found';
+			await container.utilities.guild.reset.AnnouncementChannel(guildId);
 			return eventInfo;
 		}
 
@@ -270,6 +272,15 @@ export class BirthdayReminderTask extends ScheduledTask {
 		current: TimezoneObject,
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
+		eventInfos.map((eventInfo) => {
+			if (typeof eventInfo.announcement === 'object' && eventInfo.announcement.sent) {
+				eventInfo.announcement = 'sent';
+			}
+			if (typeof eventInfo.birthday_role === 'object' && eventInfo.birthday_role.added) {
+				eventInfo.birthday_role = 'added';
+			}
+			return eventInfo;
+		});
 		const embedFields = [
 			...dateFields,
 			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
@@ -286,16 +297,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (eventInfos.length <= 0) {
 			return sendReport();
 		}
-
-		eventInfos.map((eventInfo) => {
-			if (typeof eventInfo.announcement === 'object' && eventInfo.announcement.sent) {
-				eventInfo.announcement = 'sent';
-			}
-			if (typeof eventInfo.birthday_role === 'object' && eventInfo.birthday_role.added) {
-				eventInfo.birthday_role = 'added';
-			}
-			return eventInfo;
-		});
 
 		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
