@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { codeBlock } from '@sapphire/utilities';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
@@ -28,20 +27,21 @@ export class TestCommand extends Command {
 
 	// slash command
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+		const toggle = {
+			cleanUp: false,
+			displayStats: true,
+			reminder: true,
+		};
+
 		await thinking(interaction);
 		const fields = [{ name: 'test', value: 'Test Test' }];
-		if (isDevelopment) await this.container.tasks.run('BirthdayReminderTask', {});
 		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
 		const testEmbed = generateDefaultEmbed(testEmbedObj);
 
-		const cleanReq = await this.container.tasks.run('CleanDatabaseTask', {});
+		if (isDevelopment && toggle.reminder) await this.container.tasks.run('BirthdayReminderTask', {});
+		if (toggle.cleanUp) await this.container.tasks.run('CleanDatabaseTask', {});
+		if (toggle.displayStats) await this.container.tasks.run('DisplayStats', {});
 
-		this.container.logger.info('TestCommand ~ overridechatInputRun ~ cleanReq:', cleanReq);
-		const cleaningEmbed = generateDefaultEmbed({
-			title: 'CleanUp Report (DELETE)',
-			description: codeBlock('js', JSON.stringify(cleanReq, null, 2)),
-		});
-
-		return reply(interaction, { embeds: [testEmbed, cleaningEmbed] });
+		return reply(interaction, { embeds: [testEmbed] });
 	}
 }

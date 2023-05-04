@@ -1,7 +1,7 @@
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { DiscordAPIError, Guild, GuildMember, Role, Snowflake } from 'discord.js';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
+import { DiscordAPIError, Guild, GuildMember, Role, Snowflake } from 'discord.js';
 
 export async function getGuildInformation(guildId: Snowflake): Promise<Guild | null> {
 	return container.client.guilds.fetch(guildId).catch((error) => {

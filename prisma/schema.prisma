@@ -1,9 +1,3 @@
-datasource db {
-    provider     = "mysql"
-    url          = env("DB_URL")
-    relationMode = "prisma"
-}
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -13,32 +7,26 @@ generator studio-client {
     binaryTargets = ["native"]
 }
 
+datasource db {
+    provider     = "mysql"
+    url          = env("DB_URL")
+    relationMode = "prisma"
+}
+
 model Birthday {
     id       BigInt  @id @default(autoincrement())
     userId   String  @map("user_id") @db.VarChar(32)
-    user     User    @relation(fields: [userId], references: [userId])
-    guild    Guild   @relation(fields: [guildId], references: [guildId])
     guildId  String  @map("guild_id") @db.VarChar(32)
     birthday String  @db.VarChar(10)
     disabled Boolean @default(false)
+    user     User    @relation(fields: [userId], references: [userId])
+    guild    Guild   @relation(fields: [guildId], references: [guildId])
 
     @@unique([userId, guildId], map: "unique_user_guild")
     @@index([birthday], map: "index_birthday_birthday")
     @@index([guildId], map: "index_guild_id_birthday")
     @@index([userId], map: "index_user_id_birthday")
     @@map("birthday")
-}
-
-model Blocklist {
-    id       BigInt   @id @default(autoincrement())
-    guildId  String   @map("guild_id") @db.VarChar(32)
-    userId   String   @map("user_id") @db.VarChar(32)
-    addedAt  DateTime @default(now()) @map("added_at") @db.Timestamp(0)
-    disabled Boolean  @default(false)
-
-    @@index([guildId], map: "index_guild_id_blocklist")
-    @@index([userId], map: "index_user_id_blocklist")
-    @@map("blocklist")
 }
 
 model Guild {
@@ -62,6 +50,30 @@ model Guild {
     @@map("guild")
 }
 
+model User {
+    userId        String     @id @map("user_id") @db.VarChar(32)
+    username      String?    @db.VarChar(32)
+    discriminator String?    @db.VarChar(4)
+    premium       Boolean    @default(false)
+    lastUpdated   DateTime   @default(now()) @map("last_updated") @db.Timestamp(0)
+    birthday      Birthday[]
+
+    @@index([username], map: "index_user_birthday")
+    @@map("user")
+}
+
+model Blacklist {
+    id       BigInt   @id @default(autoincrement())
+    guild_id String   @db.VarChar(32)
+    user_id  String   @db.VarChar(32)
+    added_at DateTime @default(now()) @db.Timestamp(0)
+    disabled Boolean  @default(false)
+
+    @@index([guild_id], map: "index_guild_id_blacklist")
+    @@index([user_id], map: "index_user_id_blacklist")
+    @@map("blacklist")
+}
+
 model Premium {
     id      Int     @id @default(autoincrement())
     userId  String  @map("user_id") @db.VarChar(32)
@@ -77,16 +89,4 @@ model Tiers {
     lastUpdated DateTime @default(now()) @map("last_updated") @db.Timestamp(0)
 
     @@map("tiers")
-}
-
-model User {
-    userId        String     @id @map("user_id") @db.VarChar(32)
-    username      String?    @db.VarChar(32)
-    discriminator String?    @db.VarChar(4)
-    premium       Boolean    @default(false)
-    lastUpdated   DateTime   @default(now()) @map("last_updated") @db.Timestamp(0)
-    birthday      Birthday[]
-
-    @@index([username], map: "index_user_birthday")
-    @@map("user")
 }

@@ -1,5 +1,5 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { channelMention } from 'discord.js';
+import { channelMention, ChannelType } from 'discord.js';
 import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
@@ -12,6 +12,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 			option
 				.setName('channel')
 				.setDescription('Channel where the announcement should get sent')
+				.addChannelTypes(ChannelType.GuildText)
 				.setRequired(true),
 		),
 )

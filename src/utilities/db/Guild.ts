@@ -57,6 +57,8 @@ export class Guild extends Utility {
 		GuildCount: () => this.prisma.guild.count({ where: { disabled: false } }),
 		GuildAvailableCount: () => this.prisma.guild.count({ where: { disabled: false } }),
 		GuildNotAvailableCount: () => this.prisma.guild.count({ where: { disabled: true } }),
+		GuildTimezone: (guildId: string) =>
+			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, timezone: true } }),
 	};
 
 	public set = {

@@ -16,7 +16,7 @@ declare module '@skyra/env-utilities' {
 		API_URL: string;
 		API_BASE_URL: string;
 		API_SECRET: string;
-		API_EXTENSION: string;
+		API_EXTENSION?: string;
 		API_PORT: NumberString;
 
 		// Discord
@@ -26,15 +26,18 @@ declare module '@skyra/env-utilities' {
 		BOT_NAME: string;
 		BOT_AVATAR: string;
 		BOT_COLOR: IntegerString;
-		TOPGG_TOKEN: string;
-		DISCORDLIST_TOKEN: string;
-		DISCORDBOTLIST_TOKEN: string;
 		MAX_BIRTHDAYS_PER_SITE: NumberString;
-		WEBHOOK_SECRET: string;
+		MAIN_DISCORD: string;
+
+		// Voting
+		TOPGG_TOKEN?: string;
+		DISCORDLIST_TOKEN?: string;
+		DISCORDBOTLIST_TOKEN?: string;
+		TOPGG_WEBHOOK_SECRET: string;
 
 		// Database
 		DB_NAME: string;
-		DB_USER: string;
+		DB_USERNAME: string;
 		DB_PASSWORD: string;
 		DB_HOST: string;
 		DB_PORT: NumberString;
@@ -56,8 +59,8 @@ declare module '@skyra/env-utilities' {
 		LOG_CHANNEL_SERVER: string;
 
 		// Webhooks
-		WEBHOOK_ID?: string;
-		WEBHOOK_TOKEN?: string;
+		DISCORD_ERROR_WEBHOOK_ID?: string;
+		DISCORD_ERROR_WEBHOOK_TOKEN?: string;
 	}
 }
 

@@ -15,8 +15,8 @@ import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '..
 			option
 				.setName('channel')
 				.setDescription('Channel where the overview should get sent and updated in')
-				.setRequired(true)
-				.addChannelTypes(ChannelType.GuildText),
+				.addChannelTypes(ChannelType.GuildText)
+				.setRequired(true),
 		),
 )
 export class OverviewChannelCommand extends Command {

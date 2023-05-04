@@ -45,7 +45,8 @@ const minYear = currentYear - 100;
 				'commands/birthday:subcommand.register.options.year.description',
 			)
 				.setMinValue(minYear)
-				.setMaxValue(currentYear),
+				.setMaxValue(currentYear)
+				.setRequired(false),
 		)
 		.addUserOption((option) =>
 			applyLocalizedBuilder(
