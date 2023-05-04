@@ -134,11 +134,11 @@ export const CLIENT_OPTIONS: ClientOptions = {
 };
 
 function parseWebhookError(): WebhookClientData | null {
-	if (!envIsDefined('WEBHOOK_ID', 'WEBHOOK_TOKEN')) return null;
+	if (!envIsDefined('DISCORD_ERROR_WEBHOOK_ID', 'DISCORD_ERROR_WEBHOOK_TOKEN')) return null;
 
 	return {
-		id: envParseString('WEBHOOK_ID'),
-		token: envParseString('WEBHOOK_TOKEN'),
+		id: envParseString('DISCORD_ERROR_WEBHOOK_ID'),
+		token: envParseString('DISCORD_ERROR_WEBHOOK_TOKEN'),
 	};
 }
 

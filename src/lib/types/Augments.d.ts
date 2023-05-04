@@ -26,11 +26,13 @@ declare module '@skyra/env-utilities' {
 		BOT_NAME: string;
 		BOT_AVATAR: string;
 		BOT_COLOR: IntegerString;
+		MAX_BIRTHDAYS_PER_SITE: NumberString;
+
+		// Voting
 		TOPGG_TOKEN?: string;
 		DISCORDLIST_TOKEN?: string;
 		DISCORDBOTLIST_TOKEN?: string;
-		MAX_BIRTHDAYS_PER_SITE: NumberString;
-		WEBHOOK_SECRET: string;
+		TOPGG_WEBHOOK_SECRET: string;
 
 		// Database
 		DB_NAME: string;
@@ -56,8 +58,8 @@ declare module '@skyra/env-utilities' {
 		LOG_CHANNEL_SERVER: string;
 
 		// Webhooks
-		WEBHOOK_ID?: string;
-		WEBHOOK_TOKEN?: string;
+		DISCORD_ERROR_WEBHOOK_ID?: string;
+		DISCORD_ERROR_WEBHOOK_TOKEN?: string;
 	}
 }
 

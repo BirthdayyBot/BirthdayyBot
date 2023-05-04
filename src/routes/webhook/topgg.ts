@@ -14,9 +14,9 @@ import type { VoteProvider } from '../../lib/types/VoteProvider.type';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
 
-@ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('WEBHOOK_SECRET') })
+@ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
-	@authenticated(envParseString('WEBHOOK_SECRET'))
+	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		container.logger.debug(request.body);
 
