@@ -40,9 +40,9 @@ function parseBotListOptions(): BotList.Options {
 			enabled: isProduction,
 		},
 		keys: {
-			topGG: envParseString('TOPGG_TOKEN', undefined),
-			discordListGG: envParseString('DISCORDLIST_TOKEN', undefined),
-			discordBotList: envParseString('DISCORDBOTLIST_TOKEN', undefined),
+			topGG: envParseString('TOPGG_TOKEN', ''),
+			discordListGG: envParseString('DISCORDLIST_TOKEN', ''),
+			discordBotList: envParseString('DISCORDBOTLIST_TOKEN', ''),
 		},
 	};
 }
