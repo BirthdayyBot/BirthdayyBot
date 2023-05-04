@@ -27,6 +27,7 @@ declare module '@skyra/env-utilities' {
 		BOT_AVATAR: string;
 		BOT_COLOR: IntegerString;
 		MAX_BIRTHDAYS_PER_SITE: NumberString;
+		MAIN_DISCORD: string;
 
 		// Voting
 		TOPGG_TOKEN?: string;

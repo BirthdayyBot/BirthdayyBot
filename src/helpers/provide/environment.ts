@@ -1,6 +1,7 @@
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
+import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { isProduction } from '../../lib/utils/env';
 
@@ -62,3 +63,4 @@ export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
 export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${ARROW_RIGHT} Today is a special Day!{NEW_LINE}${GIFT} Please wish {MENTION} a happy Birthday <3`;
+export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum.BIRTHDAYY_HQ);

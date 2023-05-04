@@ -19,7 +19,7 @@ import {
 	type Snowflake,
 } from 'discord.js';
 import { logAll } from '../helpers/provide/config';
-import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, NEWS } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, IS_CUSTOM_BOT, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
@@ -49,6 +49,19 @@ export class BirthdayReminderTask extends ScheduledTask {
 			});
 			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
+		if (IS_CUSTOM_BOT) {
+			const guildTz = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
+			if (guildTz?.timezone !== current.utcOffset) return;
+			const todaysBirthdays: Birthday[] =
+				await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
+					current.date,
+					current.utcOffset,
+					MAIN_DISCORD,
+				);
+			if (!todaysBirthdays.length) return;
+			await this.birthdayReminderLoop(todaysBirthdays);
+			return;
+		}
 		const { dateFormatted, utcOffset } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
@@ -71,20 +84,25 @@ export class BirthdayReminderTask extends ScheduledTask {
 			`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
 		);
 
-		const eventInfos = [];
-		for (const birthday of todaysBirthdays) {
-			if (DEBUG)
-				this.container.logger.info(
-					`[BirthdayTask] Birthday loop: ${todaysBirthdays.indexOf(birthday) + 1}/${todaysBirthdays.length}`,
-				);
-			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
-			eventInfos.push(eventInfo);
-		}
+		const eventInfos = await this.birthdayReminderLoop(todaysBirthdays);
 		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
 		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, todaysBirthdays.length, current);
 		return container.logger.info(
 			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
 		);
+	}
+
+	private async birthdayReminderLoop(birthdays: Birthday[]): Promise<BirthdayEventInfoModel[]> {
+		const eventInfos = [];
+		for (const birthday of birthdays) {
+			if (DEBUG)
+				this.container.logger.info(
+					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
+				);
+			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
+			eventInfos.push(eventInfo);
+		}
+		return eventInfos;
 	}
 
 	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {

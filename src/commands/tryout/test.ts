@@ -30,7 +30,7 @@ export class TestCommand extends Command {
 		const toggle = {
 			cleanUp: false,
 			displayStats: true,
-			reminder: false,
+			reminder: true,
 		};
 
 		await thinking(interaction);
