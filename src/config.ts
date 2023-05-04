@@ -24,7 +24,7 @@ import { isProduction } from './lib/utils/env';
 
 function parseApi(): ServerOptions {
 	return {
-		prefix: envParseString('API_EXTENSION'),
+		prefix: envParseString('API_EXTENSION', ''),
 		origin: '*',
 		listenOptions: { port: envParseNumber('API_PORT', 4000) },
 		automaticallyConnect: false,
