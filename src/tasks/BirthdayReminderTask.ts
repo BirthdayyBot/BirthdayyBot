@@ -50,17 +50,19 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
 		if (IS_CUSTOM_BOT) {
+			container.logger.info('[BirthdayTask] Custom Bot task');
 			const guildTz = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
-			if (guildTz?.timezone !== current.utcOffset) return;
+			if (guildTz?.timezone !== current.utcOffset)
+				return container.logger.debug('[BirthdayTask Custom] Not current timezone');
 			const todaysBirthdays: Birthday[] =
 				await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 					current.date,
 					current.utcOffset,
 					MAIN_DISCORD,
 				);
-			if (!todaysBirthdays.length) return;
+			if (!todaysBirthdays.length) return container.logger.debug('[BirthdayTask Custom] No Birthdays');
 			await this.birthdayReminderLoop(todaysBirthdays);
-			return;
+			return container.logger.debug(`[BirthdayTask Custom] Finished ${todaysBirthdays.length} birthdays`);
 		}
 		const { dateFormatted, utcOffset } = current;
 		const dateFields = [
