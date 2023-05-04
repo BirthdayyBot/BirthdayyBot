@@ -19,9 +19,8 @@ env:
   # Uses docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: straykids
+  IMAGE_NAME: ${{ github.repository }}
   REPOSITORY_NAME: ${{ github.event.repository.name }}
-  DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS}}
 
 jobs:
   Publish:
@@ -71,14 +70,14 @@ jobs:
         id: save_tag
         run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
 
-  Deploy:
-    name: Deploy using Docker
+  Deploy-Straykids:
+    name: Deploy Straykids using Docker
     needs: [Publish]
     uses: nikolaischunk/utilities/.github/workflows/docker-deploy.yml@main
     secrets:
-      DOCKER_TAG: '${{ env.IMAGE_NAME }}'
+      DOCKER_TAG: 'StrayKids'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ env.DOPPLER_TOKEN }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
       SSH_PRIVATE_KEY: '${{ secrets.SSH_PK }}'
       SSH_USER: '${{ secrets.SSH_USER }}'
