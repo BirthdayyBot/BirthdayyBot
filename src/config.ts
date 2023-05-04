@@ -7,7 +7,7 @@ import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
-import { envIsDefined, envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
+import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
@@ -18,7 +18,7 @@ import {
 	type WebhookClientData,
 } from 'discord.js';
 import { getGuildLanguage } from './helpers/provide/config';
-import { ROOT_DIR } from './helpers/provide/environment';
+import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import { isProduction } from './lib/utils/env';
 
@@ -34,15 +34,15 @@ function parseApi(): ServerOptions {
 function parseBotListOptions(): BotList.Options {
 	return {
 		clientId: UserIDEnum.BIRTHDAYY,
-		debug: envParseBoolean('DEBUG'),
+		debug: DEBUG,
 		shard: true,
 		autoPost: {
 			enabled: isProduction,
 		},
 		keys: {
-			topGG: envParseString('TOPGG_TOKEN'),
-			discordListGG: envParseString('DISCORDLIST_TOKEN'),
-			discordBotList: envParseString('DISCORDBOTLIST_TOKEN'),
+			topGG: envParseString('TOPGG_TOKEN', undefined),
+			discordListGG: envParseString('DISCORDLIST_TOKEN', undefined),
+			discordBotList: envParseString('DISCORDBOTLIST_TOKEN', undefined),
 		},
 	};
 }
@@ -96,7 +96,7 @@ function parsePresenceOptions(): PresenceData {
 
 function parseLoggerOptions(): ClientLoggerOptions {
 	return {
-		level: envParseBoolean('DEBUG') ? LogLevel.Debug : LogLevel.Info,
+		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
 		instance: container.logger,
 	};
 }
@@ -109,7 +109,7 @@ function parseSubcommandsAdvancedOptions(): PluginSubcommandOptions {
 
 export const SENTRY_OPTIONS: Sentry.NodeOptions = {
 	dsn: envParseString('SENTRY_DSN'),
-	debug: envParseBoolean('DEBUG'),
+	debug: DEBUG,
 	integrations: [
 		new Sentry.Integrations.Modules(),
 		new Sentry.Integrations.FunctionToString(),

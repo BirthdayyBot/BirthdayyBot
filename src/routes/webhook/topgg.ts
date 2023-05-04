@@ -1,24 +1,24 @@
+import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { envIsDefined, envParseString } from '@skyra/env-utilities';
+import type { User } from 'discord.js';
+import { BOT_NAME, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
 import { authenticated } from '../../lib/api/utils';
-import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
-import { envIsDefined, envParseBoolean, envParseString } from '@skyra/env-utilities';
-import type { VoteProvider } from '../../lib/types/VoteProvider.type';
-import { Time } from '@sapphire/cron';
-import { VOTE_ROLE_ID, SUCCESS, HEART, EXCLAMATION, VOTE_CHANNEL_ID, BOT_NAME } from '../../helpers';
 import { remindMeButton } from '../../lib/components/button';
 import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import type { User } from 'discord.js';
-import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
+import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
+import type { VoteProvider } from '../../lib/types/VoteProvider.type';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
+import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('WEBHOOK_SECRET') })
 export class UserRoute extends Route {
 	@authenticated(envParseString('WEBHOOK_SECRET'))
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		envParseBoolean('DEBUG') ? container.logger.info(request.body) : null;
+		container.logger.debug(request.body);
 
 		const { type, user } = request.body as APIWebhookTopGG;
 		switch (type) {
