@@ -56,6 +56,7 @@ jobs:
             type=ref,event=pr
             type=raw,value=${{ steps.package_version.outputs.version }}
             type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
+            type=raw, value=stray-kids
             type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
 
       - name: Build and push Docker image
