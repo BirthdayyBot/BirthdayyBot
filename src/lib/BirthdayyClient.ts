@@ -9,11 +9,11 @@ import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '../config';
 export class BirthdayyClient extends SapphireClient {
 	public constructor() {
 		super(CLIENT_OPTIONS);
+		this.initailizeDB_URL();
+		this.registerPaths();
 
 		container.prisma = new PrismaClient();
 		container.webhook = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
-		this.registerPaths();
-		this.initailizeDB_URL();
 	}
 
 	private registerPaths() {
