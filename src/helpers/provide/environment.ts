@@ -3,18 +3,15 @@ import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { isProduction } from '../../lib/utils/env';
-import { parseBoolean } from '../utils/utils';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
 export const SRC_DIR = join(ROOT_DIR, 'src');
 
-export const DEBUG = parseBoolean('DEBUG');
+export const DEBUG = envParseBoolean('DEBUG', true);
 
 // GENERIC
-export const { BOT_NAME } = process.env;
-export const { BOT_ID } = process.env;
-export const { BOT_AVATAR } = process.env;
+export const { BOT_ID, BOT_NAME, BOT_AVATAR } = process.env;
 export const IMG_CAKE =
 	process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
 export const IMG_BLOCK =
@@ -25,8 +22,7 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 export const BIRTHDAYY_INVITE =
 	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
 export const BOT_COLOR = envParseInteger('BOT_COLOR', BotColorEnum.BIRTHDAYY);
-export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO, UserIDEnum.SORAYA]);
-export const BOT_ADMIN = UserIDEnum.CHILLIHERO;
+export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO]);
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
