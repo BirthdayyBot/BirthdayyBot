@@ -1,9 +1,9 @@
 import type { Birthday } from '@prisma/client';
+import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import { Time } from '@sapphire/timestamp';
 import {
 	codeBlock,
 	DiscordAPIError,
@@ -35,7 +35,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
 			return this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
 		}
-
+		let currentBirthdays: Birthday[] = [];
 		const current = getCurrentOffset();
 		if (current.utcOffset === undefined) {
 			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
@@ -49,33 +49,32 @@ export class BirthdayReminderTask extends ScheduledTask {
 			});
 			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
-		if (IS_CUSTOM_BOT) {
-			container.logger.info('[BirthdayTask] Custom Bot task');
-			const guildTz = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
-			if (guildTz?.timezone !== current.utcOffset)
-				return container.logger.debug('[BirthdayTask Custom] Not current timezone');
-			const todaysBirthdays: Birthday[] =
-				await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
-					current.date,
-					current.utcOffset,
-					MAIN_DISCORD,
-				);
-			if (!todaysBirthdays.length) return container.logger.debug('[BirthdayTask Custom] No Birthdays');
-			await this.birthdayReminderLoop(todaysBirthdays);
-			return container.logger.debug(`[BirthdayTask Custom] Finished ${todaysBirthdays.length} birthdays`);
-		}
-		const { dateFormatted, utcOffset } = current;
+		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
 			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
 		];
 
-		const todaysBirthdays: Birthday[] = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
-			current.date,
-			current.utcOffset,
-		);
+		if (IS_CUSTOM_BOT) {
+			container.logger.info('[BirthdayTask] Custom Bot task');
+			const guildOffset = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
+			if (guildOffset?.timezone !== utcOffset) {
+				return container.logger.debug('[BirthdayTask Custom] Not current Offset');
+			}
+			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
+				todaysDate,
+				utcOffset,
+				MAIN_DISCORD,
+			);
+		} else {
+			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
+				todaysDate,
+				utcOffset,
+			);
+		}
 
-		if (!todaysBirthdays.length) {
+		if (!currentBirthdays.length) {
+			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return this.container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
@@ -83,14 +82,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		this.container.logger.debug(
-			`[BirthdayTask] Birthdays today: ${todaysBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
+			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
 		);
 
-		const eventInfos = await this.birthdayReminderLoop(todaysBirthdays);
-		// check if codeBlock('json', JSON.stringify(eventInfos, null, 2)) is longer than Embed description limit if yes remove the to much characters
-		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, todaysBirthdays.length, current);
+		const eventInfos = await this.birthdayReminderLoop(currentBirthdays);
+		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, currentBirthdays.length, current);
 		return container.logger.info(
-			`[BirthdayTask] Finished running ${todaysBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
+			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
 		);
 	}
 
@@ -197,7 +195,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const payload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
-			message: 'Error',
+			message: 'Not set',
 		};
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
@@ -211,7 +209,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
-					// send Log to user and remove role from config
 					await this.container.utilities.guild.reset.BirthdayRole(guildId);
 					returnData.message = 'Missing Permissions';
 				} else {
@@ -231,7 +228,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,
-			message: 'Error',
+			message: 'Not set',
 		};
 		try {
 			await sendMessage(channel_id, {
