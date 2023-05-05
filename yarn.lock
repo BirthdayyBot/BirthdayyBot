@@ -404,7 +404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/discord.js-utilities@npm:6.0.7, @sapphire/discord.js-utilities@npm:^6.0.7":
+"@sapphire/discord.js-utilities@npm:6.0.7":
   version: 6.0.7
   resolution: "@sapphire/discord.js-utilities@npm:6.0.7"
   dependencies:
@@ -413,6 +413,18 @@ __metadata:
     "@sapphire/utilities": ^3.11.1
     tslib: ^2.5.0
   checksum: c74d41057caeb66b8c832f783d5a81bbacdefab79c47196f4bf76c4fecf38d5ad4d85b5c55298d153316153343224eb696eb800753413ad49b40a8fc206a747e
+  languageName: node
+  linkType: hard
+
+"@sapphire/discord.js-utilities@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@sapphire/discord.js-utilities@npm:6.1.0"
+  dependencies:
+    "@sapphire/discord-utilities": ^3.0.3
+    "@sapphire/duration": ^1.1.0
+    "@sapphire/utilities": ^3.11.1
+    tslib: ^2.5.0
+  checksum: 988fdc320a111f7574d7ca596295b642198eb7ccbbadebaa7ec3423d4c732f5140b3ba2cdc03e36592cf6669c55c7616ec507cd0237d45860f0e4cc8225fb79f
   languageName: node
   linkType: hard
 
@@ -1155,7 +1167,7 @@ __metadata:
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.0
     "@sapphire/decorators": ^6.0.1
-    "@sapphire/discord.js-utilities": ^6.0.7
+    "@sapphire/discord.js-utilities": ^6.1.0
     "@sapphire/eslint-config": ^4.4.2
     "@sapphire/fetch": ^2.4.1
     "@sapphire/framework": ^4.4.3
