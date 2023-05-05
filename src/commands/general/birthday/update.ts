@@ -15,11 +15,8 @@ const minYear = currentYear - 100;
 	builder
 		.setName('update')
 		.setDescription('Update your birthday - MANAGER ONLY')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY'),
-		)
 		.addIntegerOption((option) =>
-			option.setName('day').setDescription('Day of birthday').setRequired(true).setMinValue(1).setMaxValue(31),
+			option.setName('day').setDescription('Day of birthday').setMinValue(1).setMaxValue(31).setRequired(true),
 		)
 		.addStringOption((option) =>
 			option
@@ -28,13 +25,16 @@ const minYear = currentYear - 100;
 				.addChoices(...monthChoices)
 				.setRequired(true),
 		)
+		.addUserOption((option) =>
+			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY').setRequired(false),
+		)
 		.addIntegerOption((option) =>
 			option
 				.setName('year')
 				.setDescription('Year of birthday')
-				.setRequired(false)
 				.setMinValue(minYear)
-				.setMaxValue(currentYear),
+				.setMaxValue(currentYear)
+				.setRequired(false),
 		),
 )
 export class UpdateCommand extends Command {

@@ -10,6 +10,11 @@ export class Birthday extends Utility {
 			this.prisma.birthday.findMany({
 				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } },
 			}),
+		BirthdayByDateTimezoneAndGuild: (date: Dayjs, timezone: number, guildId: string) => {
+			return this.prisma.birthday.findMany({
+				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone, guildId } },
+			});
+		},
 		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
 		BirthdayByUserAndGuild: (guildId: string, userId: string) =>
 			this.prisma.birthday.findUnique({

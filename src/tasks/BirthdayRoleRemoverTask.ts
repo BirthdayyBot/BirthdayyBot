@@ -22,8 +22,7 @@ export class BirthdayRoleRemoverTask extends ScheduledTask {
 			this.container.logger.warn(`[BirthdayRoleRemoverTask]: GuildId undefined: ${JSON.stringify(guildId)}`);
 		if (!role) this.container.logger.warn(`[BirthdayRoleRemoverTask]: Role undefined: ${JSON.stringify(role)}`);
 		if (!member || !guildId || !role) return;
-
-		if (!member.roles.cache.has(roleId)) {
+		if (!member?.roles?.cache.has(roleId)) {
 			return this.container.logger.info(
 				`[BirthdayRoleRemoverTask]: Role ${roleId} not found on member ${userId}`,
 			);

@@ -1,8 +1,9 @@
 import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
-import { envIsDefined, envParseBoolean } from '@skyra/env-utilities';
+import { envIsDefined } from '@skyra/env-utilities';
 import type { APIEmbed } from 'discord.js';
+import { DEBUG } from '../../helpers/provide/environment';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
@@ -86,7 +87,7 @@ export function handleCommandErrorAndSendToUser({
 	sentrySeverityLevel,
 }: ErrorHandlerOptions): void {
 	if (envIsDefined('SENTRY_DSN')) captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel });
-	if (envParseBoolean('DEBUG')) logErrorToContainer({ error, loggerSeverityLevel });
+	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return sendErrorMessageToUser({ interaction, error });
 }
 
@@ -98,6 +99,6 @@ export function handleRouteApiError({
 	sentrySeverityLevel,
 }: RouteApiErrorHandler): void {
 	if (envIsDefined('SENTRY_DSN')) captureRouteApiErrorToSentry({ request, error, sentrySeverityLevel });
-	if (envParseBoolean('DEBUG')) logErrorToContainer({ error, loggerSeverityLevel });
+	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return response.status(500).json({ error: error.message });
 }
