@@ -4,7 +4,7 @@ import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { envParseNumber } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
-import { APIEmbed, Guild, userMention } from 'discord.js';
+import { Guild, userMention, type APIEmbed } from 'discord.js';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
