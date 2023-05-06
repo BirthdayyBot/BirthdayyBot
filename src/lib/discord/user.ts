@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import { DiscordAPIError, Snowflake, User } from 'discord.js';
+import { DiscordAPIError, User, type Snowflake } from 'discord.js';
 
 export async function getUserInfo(userId: Snowflake): Promise<User | null> {
 	try {

@@ -1,8 +1,8 @@
 import {
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
-	ChatInputApplicationCommandData,
 	PermissionFlagsBits,
+	type ChatInputApplicationCommandData,
 } from 'discord.js';
 
 export function ReminderCMD(): ChatInputApplicationCommandData {

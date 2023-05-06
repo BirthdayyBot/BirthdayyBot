@@ -34,15 +34,14 @@
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.41",
     "discord.js": "^14.11.0",
-    "mysql2": "^3.2.4",
     "prisma": "^4.13.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^4.4.2",
-    "@sapphire/ts-config": "^3.3.4",
-    "@types/node": "^18.16.5",
+    "@sapphire/ts-config": "^4.0.0",
+    "@types/node": "^20.1.0",
     "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
@@ -55,7 +54,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.8",
     "tsc-watch": "^6.0.4",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "build": "tsc",
