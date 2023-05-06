@@ -10,7 +10,7 @@ import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-subcommands/register';
 import '@kaname-png/plugin-subcommands-advanced/register';
 import '@sapphire/plugin-i18next/register';
-import '@sapphire/plugin-scheduled-tasks/register-redis';
+import '@sapphire/plugin-scheduled-tasks/register';
 import '@sapphire/plugin-utilities-store/register';
 import '@devtomio/plugin-botlist/register';
 
