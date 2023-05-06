@@ -2,19 +2,18 @@ import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { Guild, userMention } from 'discord.js';
+import { envParseNumber } from '@skyra/env-utilities';
+import dayjs from 'dayjs';
+import { APIEmbed, Guild, userMention } from 'discord.js';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import type { CustomEmbedModel } from '../../lib/model';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthName } from '../utils/date';
-import { envParseNumber } from '@skyra/env-utilities';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import dayjs from 'dayjs';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
 
-	if (!birthdays) return { embed: await createEmbed(guild, []), components: [] };
+	if (isNullOrUndefinedOrEmpty(birthdays)) return { embed: await createEmbed(guild, []), components: [] };
 
 	// sort all birthdays by day and month
 	const sortedBirthdays = sortByDayAndMonth(birthdays);
@@ -28,6 +27,7 @@ export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const embed = await createEmbed(guild, finalList);
 
 	const components = generateComponents(page_id, splitBirthdayList.listAmount);
+
 	return { embed, components };
 }
 
@@ -58,15 +58,14 @@ function getBirthdaysAsLists(
  * @returns embed - Embed with the given values
  */
 async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
-	const embed: CustomEmbedModel = {
+	const embed: APIEmbed = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${ARROW_RIGHT}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
-		thumbnail_url: IMG_CAKE,
+		fields: [],
+		thumbnail: { url: IMG_CAKE },
 	};
 
-	if (!birthdaySortByMonth.length) return generateDefaultEmbed(embed);
-
-	if (isNullOrUndefinedOrEmpty(embed.fields)) embed.fields = [];
+	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
 
 	let currentDescription = '';
 	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.CHILLI_ATTACK_V2;
@@ -89,7 +88,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
-				embed.fields.push({
+				embed.fields?.push({
 					name: month,
 					value: currentDescription,
 				});
@@ -99,7 +98,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 		}
 		if (currentDescription.length > 0) {
 			// If the current description is not empty, add it to the embed
-			embed.fields.push({
+			embed.fields?.push({
 				name: month,
 				value: currentDescription,
 			});
