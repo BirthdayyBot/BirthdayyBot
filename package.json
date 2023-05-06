@@ -34,7 +34,6 @@
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.41",
     "discord.js": "^14.11.0",
-    "mysql2": "^3.3.0",
     "prisma": "^4.13.0",
     "reflect-metadata": "^0.1.13"
   },
