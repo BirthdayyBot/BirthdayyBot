@@ -25,5 +25,5 @@ export async function editMessage(
 
 export async function sendDMMessage(user_id: string, options: string | MessagePayload | MessageCreateOptions) {
 	const user = await container.client.users.fetch(user_id);
-	return user.send(options);
+	return user.dmChannel?.send(options) ?? user.createDM().then((channel) => channel.send(options));
 }
