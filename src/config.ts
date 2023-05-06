@@ -3,8 +3,6 @@ import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-adv
 import { container, LogLevel, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
-import type { ScheduledTasksOptions } from '@sapphire/plugin-scheduled-tasks';
-import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { RewriteFrames } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
@@ -21,6 +19,7 @@ import { getGuildLanguage } from './helpers/provide/config';
 import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import { isProduction } from './lib/utils/env';
+import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 
 function parseApi(): ServerOptions {
 	return {
@@ -74,11 +73,9 @@ function parseBullOptions(): QueueOptions {
 	};
 }
 
-function parseScheduledTasksOptions(): ScheduledTasksOptions {
+function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
 	return {
-		strategy: new ScheduledTaskRedisStrategy({
-			bull: parseBullOptions(),
-		}),
+		bull: parseBullOptions(),
 	};
 }
 
