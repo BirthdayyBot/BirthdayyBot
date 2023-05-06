@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ContextMenuCommandErrorPayload, Events, Listener } from '@sapphire/framework';
+import { Events, Listener, type ContextMenuCommandErrorPayload } from '@sapphire/framework';
 import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: Events.ContextMenuCommandError })
