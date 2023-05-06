@@ -76,13 +76,11 @@ jobs:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
       - name: StrayKids 🧒
         uses: ./.github/workflows/deploy.yml
-        if: github.ref == 'refs/heads/production'
         env:
           DOCKER_TAG: 'stray-kids'
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
       - name: Birthdayy Custom 🤡
         uses: ./.github/workflows/deploy.yml
-        if: github.ref == 'refs/heads/production'
         env:
           DOCKER_TAG: 'custom-bot'
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
