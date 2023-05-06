@@ -17,7 +17,7 @@
     "@sapphire/plugin-hmr": "^2.0.1",
     "@sapphire/plugin-i18next": "^5.0.3",
     "@sapphire/plugin-logger": "^3.0.4",
-    "@sapphire/plugin-scheduled-tasks": "^6.0.1",
+    "@sapphire/plugin-scheduled-tasks": "^7.0.0",
     "@sapphire/plugin-subcommands": "^4.0.1",
     "@sapphire/plugin-utilities-store": "^1.0.1",
     "@sapphire/result": "^2.6.3",
