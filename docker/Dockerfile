@@ -8,9 +8,9 @@ RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.ke
 COPY --chown=node:node package.json yarn.lock ./
 COPY --chown=node:node tsconfig.json ./
 
-RUN npm set-script prepare ""
-
 FROM base as builder
+
+RUN yarn install
 
 COPY --chown=node:node ./src ./src
 COPY --chown=node:node ./prisma ./prisma

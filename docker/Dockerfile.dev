@@ -6,7 +6,6 @@ RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.ke
     apk add doppler
 
 COPY --chown=node:node package.json yarn.lock ./
-COPY --chown=node:node ./.yarn ./.yarn
 COPY --chown=node:node tsconfig.json ./
 
 RUN yarn install
