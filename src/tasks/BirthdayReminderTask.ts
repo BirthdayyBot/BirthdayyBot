@@ -26,6 +26,7 @@ import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 import { generateDefaultEmbed } from '../lib/utils/embed';
+import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -194,11 +195,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		added: boolean;
 		message: string;
 	}> {
-		const payload = { memberId: member.id, guildId, roleId: role.id };
+		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
 			message: 'Error',
 		};
+
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 			await container.tasks.create('BirthdayRoleRemoverTask', payload, {
