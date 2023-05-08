@@ -59,7 +59,7 @@ export class UserRoute extends Route {
 		if (!addRole) return;
 
 		// 4. Schedule role removal
-		await this.scheduleRoleRemoval({ userId, guildId: guild.id, roleId: role.id });
+		await this.scheduleRoleRemoval({ memberId: userId, guildId: guild.id, roleId: role.id });
 	}
 
 	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
