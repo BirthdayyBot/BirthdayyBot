@@ -4,15 +4,14 @@ import type { Snowflake } from 'discord.js';
 import { getGuildMember, getGuildRole } from '../lib/discord';
 
 export interface RoleRemovePayload {
-	userId: Snowflake;
+	memberId: Snowflake;
 	guildId: Snowflake;
 	roleId: Snowflake;
 }
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayRoleRemoverTask', bullJobsOptions: { removeOnComplete: true } })
 export class BirthdayRoleRemoverTask extends ScheduledTask {
-	public async run(payload: RoleRemovePayload) {
-		const { userId, guildId, roleId } = payload;
+	public async run({ memberId: userId, guildId, roleId }: RoleRemovePayload) {
 		const member = await getGuildMember(guildId, userId);
 		const role = await getGuildRole(guildId, roleId);
 

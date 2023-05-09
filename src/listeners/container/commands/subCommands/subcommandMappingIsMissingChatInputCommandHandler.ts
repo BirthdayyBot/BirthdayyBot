@@ -1,13 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
-
 import {
-	ChatInputSubcommandAcceptedPayload,
-	SubcommandMappingMethod,
 	SubcommandPluginEvents,
+	type ChatInputSubcommandAcceptedPayload,
+	type SubcommandMappingMethod,
 } from '@sapphire/plugin-subcommands';
 import type { CacheType, Interaction } from 'discord.js';
+import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: SubcommandPluginEvents.SubcommandMappingIsMissingChatInputCommandHandler })
 export class ChatInputSubcommandErrorEvent extends Listener<

@@ -1,0 +1,25 @@
+FROM node:18.16.0-alpine
+WORKDIR /app
+
+RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub && \
+    echo 'https://packages.doppler.com/public/cli/alpine/any-version/main' | tee -a /etc/apk/repositories && \
+    apk add doppler
+
+COPY --chown=node:node package.json yarn.lock ./
+COPY --chown=node:node tsconfig.json ./
+
+RUN yarn install
+
+COPY --chown=node:node ./src ./src
+COPY --chown=node:node ./prisma ./prisma
+
+RUN npx prisma generate
+
+ENV NODE_ENV=developement
+
+ENV NODE_OPTIONS="--enable-source-maps"
+
+EXPOSE 4000
+
+ENTRYPOINT ["doppler", "run", "--"]
+CMD npx tsc-watch --onSuccess "node dist/index.js"
