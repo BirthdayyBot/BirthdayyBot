@@ -70,37 +70,42 @@ jobs:
     if: github.ref == 'refs/heads/production'
     needs: Publish
     steps:
-      - name: Birthdayy Bot 🎂
+      - name: Birthdayy 🎂
         uses: ./.github/workflows/deploy.yml
-        env:
-          secrets: inherit
         with:
           DOCKER_TAG: 'production'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
-      - name: StrayKids Bot 🧒
+          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
+          SSH_HOST: '${{ secrets.SSH_HOST }}'
+          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+          SSH_USER: '${{ secrets.SSH_USER }}'
+      - name: Custom 🤡
         uses: ./.github/workflows/deploy.yml
-        env:
-          secrets: inherit
-        with:
-          DOCKER_TAG: 'staykids'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
-      - name: Birthdayy Custom Bot 🤡
-        uses: ./.github/workflows/deploy.yml
-        env:
-          secrets: inherit
         with:
           DOCKER_TAG: 'custom'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
+          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
+          SSH_HOST: '${{ secrets.SSH_HOST }}'
+          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+          SSH_USER: '${{ secrets.SSH_USER }}'
+      - name: StayKids 🤡
+        uses: ./.github/workflows/deploy.yml
+        with:
+          DOCKER_TAG: 'staykids'
+          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
+          SSH_HOST: '${{ secrets.SSH_HOST }}'
+          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+          SSH_USER: '${{ secrets.SSH_USER }}'
   deploy_testing:
     name: Deploy Testing Bot 🧪
-    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/testing'
     needs: Publish
-    steps:
-      - name: Birthdayy Testing Bot 🎂
-        uses: ./.github/workflows/deploy.yml
-        env:
-          secrets: inherit
-        with:
-          DOCKER_TAG: 'production'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'testing'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_TESTING }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'

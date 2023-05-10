@@ -2,15 +2,23 @@ name: Deploy using Docker via SSH
 
 on:
   workflow_call:
-    inputs:
+    secrets:
+      SSH_HOST:
+        required: true
+      SSH_USER:
+        required: true
+      SSH_KEY:
+        required: true
       DOCKER_TAG:
-        description: 'Docker tag to deploy'
-        type: string
         required: true
       DOPPLER_TOKEN:
-        description: 'Doppler token'
-        type: string
         required: true
+      DOCKER_NETWORK:
+        required: true
+      GHCR_USER:
+        required: false
+      GHCR_TOKEN:
+        required: false
 
 jobs:
   ssh:
@@ -41,4 +49,4 @@ jobs:
           ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop ${{ github.event.repository.name }}-${{ env.DOCKER_TAG }} || true \\
           && docker rm ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} || true \\
           && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ env.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ env.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ env.DOCKER_TAG || 'latest' }}"
+          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ env.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ env.DOCKER_TAG || 'latest' }}"
