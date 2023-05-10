@@ -20,7 +20,7 @@ RUN npx tsc
 
 FROM base as production
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/prisma ./prisma
