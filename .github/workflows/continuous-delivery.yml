@@ -24,14 +24,14 @@ jobs:
       deploy_tag: ${{ steps.save_tag.outputs.tag }}
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          submodules: true
+        uses: actions/checkout@v2
 
       - name: Extract version from package.json
         id: package_version
         uses: saionaro/extract-package-version@v1.2.1
+
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2.1.0
@@ -56,6 +56,7 @@ jobs:
         uses: docker/build-push-action@v4.0.0
         with:
           context: .
+          file: ./docker/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -63,34 +64,35 @@ jobs:
       - name: Save image tag for use in deploy job
         id: save_tag
         run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
-  Deploy_Prod:
+  deploy_production:
     name: Deploy Production Bots 🚀
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/production'
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'production'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
+    needs: Publish
+  deploy_straykids:
+    name: Deploy StrayKids Bot 🧒
     if: github.ref == 'refs/heads/production'
     needs: Publish
-    steps:
-      - name: Bithdayy 🎂
-        uses: ./.github/workflows/deploy.yml
-        env:
-          DOCKER_TAG: 'production'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
-      - name: StrayKids 🧒
-        uses: ./.github/workflows/deploy.yml
-        env:
-          DOCKER_TAG: 'stray-kids'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
-      - name: Birthdayy Custom 🤡
-        uses: ./.github/workflows/deploy.yml
-        env:
-          DOCKER_TAG: 'custom-bot'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
-  Deploy_Test:
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'stray-kids'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
+  deploy_birthdayy_custom:
+    name: Deploy Birthdayy Custom Bot 🤡
+    if: github.ref == 'refs/heads/production'
+    needs: Publish
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'custom-bot'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
+  deploy_testing:
     name: Deploy Testing Bot 🧪
-    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/testing'
     needs: Publish
-    steps:
-      - uses: ./.github/workflows/deploy.yml
-        env:
-          DOCKER_TAG: 'testing'
-          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'testing'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
