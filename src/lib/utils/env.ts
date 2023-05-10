@@ -11,3 +11,4 @@ export const isPrd = envIs('APP_ENV', 'prd');
 
 export const isDevelopment = isDev || isTst;
 export const isProduction = isPrd && !IS_CUSTOM_BOT;
+export const isCustom = IS_CUSTOM_BOT;
