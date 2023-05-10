@@ -2,16 +2,23 @@ name: Deploy using Docker via SSH
 
 on:
   workflow_call:
-    secrets:
+    inputs:
       DOCKER_TAG:
-        required: false
+        description: 'Docker tag to deploy'
+        type: string
+        required: true
       DOPPLER_TOKEN:
+        description: 'Doppler token'
+        type: string
         required: true
 
 jobs:
   ssh:
     name: SSH and deploy
     runs-on: ubuntu-latest
+    env:
+      DOCKER_TAG: ${{ github.event.inputs.DOCKER_TAG }}
+      DOPPLER_TOKEN: ${{ github.event.inputs.DOPPLER_TOKEN }}
     steps:
       - name: Login to GHCR.io
         uses: docker/login-action@v2
@@ -23,7 +30,7 @@ jobs:
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           known_hosts: 'placeholder'
 
       - name: Add known hosts
@@ -31,7 +38,7 @@ jobs:
 
       - name: Run commands in remote host
         run: |
-          ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} || true \\
+          ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop ${{ github.event.repository.name }}-${{ env.DOCKER_TAG }} || true \\
           && docker rm ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} || true \\
           && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ secrets.DOCKER_TAG || 'latest' }}"
+          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ env.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ env.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ env.DOCKER_TAG || 'latest' }}"

@@ -66,33 +66,41 @@ jobs:
         run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
   deploy_production:
     name: Deploy Production Bots 🚀
-    if: github.ref == 'refs/heads/production'
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      DOCKER_TAG: 'production'
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
-    needs: Publish
-  deploy_straykids:
-    name: Deploy StrayKids Bot 🧒
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/production'
     needs: Publish
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      DOCKER_TAG: 'stray-kids'
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
-  deploy_birthdayy_custom:
-    name: Deploy Birthdayy Custom Bot 🤡
-    if: github.ref == 'refs/heads/production'
-    needs: Publish
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      DOCKER_TAG: 'custom-bot'
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
+    steps:
+      - name: Birthdayy Bot 🎂
+        uses: ./.github/workflows/deploy.yml
+        env:
+          secrets: inherit
+        with:
+          DOCKER_TAG: 'production'
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
+      - name: StrayKids Bot 🧒
+        uses: ./.github/workflows/deploy.yml
+        env:
+          secrets: inherit
+        with:
+          DOCKER_TAG: 'staykids'
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
+      - name: Birthdayy Custom Bot 🤡
+        uses: ./.github/workflows/deploy.yml
+        env:
+          secrets: inherit
+        with:
+          DOCKER_TAG: 'custom'
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
   deploy_testing:
     name: Deploy Testing Bot 🧪
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/testing'
     needs: Publish
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      DOCKER_TAG: 'testing'
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
+    steps:
+      - name: Birthdayy Testing Bot 🎂
+        uses: ./.github/workflows/deploy.yml
+        env:
+          secrets: inherit
+        with:
+          DOCKER_TAG: 'production'
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
