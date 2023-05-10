@@ -5,14 +5,14 @@ import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import {
-	codeBlock,
 	DiscordAPIError,
 	Guild,
 	GuildMember,
-	inlineCode,
 	Role,
-	roleMention,
 	ThreadAutoArchiveDuration,
+	codeBlock,
+	inlineCode,
+	roleMention,
 	userMention,
 	type APIEmbed,
 	type EmbedField,
@@ -157,11 +157,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!announcementChannel) {
-			this.container.logger.warn(
-				`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
+			this.container.logger.debug(
+				`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`,
 			);
-			eventInfo.announcement.message = 'Announcement Channel not found';
-			await container.utilities.guild.reset.AnnouncementChannel(guildId);
+			eventInfo.announcement.message = 'Announcement Channel not set';
 			return eventInfo;
 		}
 
