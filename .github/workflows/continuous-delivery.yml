@@ -1,0 +1,98 @@
+name: Continuous Delivery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [testing, production]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  # Uses docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  REPOSITORY_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  Publish:
+    name: Publish image to GHCR 🚀
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_tag: ${{ steps.save_tag.outputs.tag }}
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+
+      - name: Extract version from package.json
+        id: package_version
+        uses: saionaro/extract-package-version@v1.2.1
+
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker images
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=raw,value=${{ steps.package_version.outputs.version }}
+            type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
+            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Save image tag for use in deploy job
+        id: save_tag
+        run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
+  deploy_production:
+    name: Deploy Production Bots 🚀
+    if: github.ref == 'refs/heads/production'
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'production'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_PRODUCTION }}
+    needs: Publish
+  deploy_straykids:
+    name: Deploy StrayKids Bot 🧒
+    if: github.ref == 'refs/heads/production'
+    needs: Publish
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'stray-kids'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}
+  deploy_birthdayy_custom:
+    name: Deploy Birthdayy Custom Bot 🤡
+    if: github.ref == 'refs/heads/production'
+    needs: Publish
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'custom-bot'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}
+  deploy_testing:
+    name: Deploy Testing Bot 🧪
+    if: github.ref == 'refs/heads/testing'
+    needs: Publish
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'testing'
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TESTING }}
