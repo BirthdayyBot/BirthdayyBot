@@ -46,7 +46,7 @@ jobs:
 
       - name: Run commands in remote host
         run: |
-          ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop ${{ github.event.repository.name }}-${{ env.DOCKER_TAG }} || true \\
+          ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} || true \\
           && docker rm ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} || true \\
           && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ env.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ env.DOCKER_TAG || 'latest' }}"
+          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ env.DOPPLER_TOKEN }} --name ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }} ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ secrets.DOCKER_TAG || 'latest' }}"
