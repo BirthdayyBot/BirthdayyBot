@@ -29,7 +29,7 @@ jobs:
         uses: saionaro/extract-package-version@v1.2.1
 
       - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
+        uses: docker/setup-buildx-action@a946f06b5ddbde456d0115dc585e8dc3c7a0c3e0
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2.1.0
@@ -60,42 +60,48 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy_production:
-    name: Deploy Production Bots 🚀
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/production'
+    name: Birthdayy 🎂
     needs: Publish
-    steps:
-      - name: Birthdayy 🎂
-        uses: ./.github/workflows/deploy.yml
-        with:
-          DOCKER_TAG: 'production'
-          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
-          SSH_HOST: '${{ secrets.SSH_HOST }}'
-          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-          SSH_USER: '${{ secrets.SSH_USER }}'
-      - name: Custom 🤡
-        uses: ./.github/workflows/deploy.yml
-        with:
-          DOCKER_TAG: 'custom'
-          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
-          SSH_HOST: '${{ secrets.SSH_HOST }}'
-          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-          SSH_USER: '${{ secrets.SSH_USER }}'
-      - name: StayKids 🤡
-        uses: ./.github/workflows/deploy.yml
-        with:
-          DOCKER_TAG: 'staykids'
-          DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-          DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
-          SSH_HOST: '${{ secrets.SSH_HOST }}'
-          SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-          SSH_USER: '${{ secrets.SSH_USER }}'
+    if: github.ref == 'refs/heads/production'
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'production'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'
+
+  deploy_custom:
+    name: Custom 🎂
+    needs: Publish
+    if: github.ref == 'refs/heads/production'
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'custom'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'
+
+  deploy_staykids:
+    name: StayKids 🎂
+    needs: Publish
+    if: github.ref == 'refs/heads/production'
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'staykids'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'
+
   deploy_testing:
     name: Deploy Testing Bot 🧪
-    if: github.ref == 'refs/heads/testing'
     needs: Publish
+    if: github.ref == 'refs/heads/testing'
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'testing'
