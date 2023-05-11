@@ -20,8 +20,6 @@ jobs:
   Publish:
     name: Publish image to GHCR 🚀
     runs-on: ubuntu-latest
-    outputs:
-      deploy_tag: ${{ steps.save_tag.outputs.tag }}
     steps:
       - name: Checkout Project
         uses: actions/checkout@v2
@@ -61,9 +59,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Save image tag for use in deploy job
-        id: save_tag
-        run: echo "::set-output name=tag::${{ steps.package_version.outputs.version }}.${{ github.run_number }}"
   deploy_production:
     name: Deploy Production Bots 🚀
     runs-on: ubuntu-latest
