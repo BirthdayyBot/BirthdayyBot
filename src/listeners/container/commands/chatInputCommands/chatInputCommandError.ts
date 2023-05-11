@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ChatInputCommandErrorPayload, Events, Listener } from '@sapphire/framework';
+import { Events, Listener, type ChatInputCommandErrorPayload } from '@sapphire/framework';
 import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandError })

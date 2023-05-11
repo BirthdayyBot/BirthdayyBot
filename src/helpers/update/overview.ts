@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import { DiscordAPIError, MessageCreateOptions, MessagePayload } from 'discord.js';
+import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
 import { editMessage, sendMessage } from '../../lib/discord/message';
 import { generateBirthdayList } from '../generate/birthdayList';
 

@@ -5,14 +5,14 @@ import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import {
-	codeBlock,
 	DiscordAPIError,
 	Guild,
 	GuildMember,
-	inlineCode,
 	Role,
-	roleMention,
 	ThreadAutoArchiveDuration,
+	codeBlock,
+	inlineCode,
+	roleMention,
 	userMention,
 	type APIEmbed,
 	type EmbedField,
@@ -26,6 +26,7 @@ import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 import { generateDefaultEmbed } from '../lib/utils/embed';
+import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -156,11 +157,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!announcementChannel) {
-			this.container.logger.warn(
-				`[BirthdayTask] Announcement Channel not found for guild ${guild.id} [${guild.name}]`,
+			this.container.logger.debug(
+				`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`,
 			);
-			eventInfo.announcement.message = 'Announcement Channel not found';
-			await container.utilities.guild.reset.AnnouncementChannel(guildId);
+			eventInfo.announcement.message = 'Announcement Channel not set';
 			return eventInfo;
 		}
 
@@ -192,11 +192,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		added: boolean;
 		message: string;
 	}> {
-		const payload = { memberId: member.id, guildId, roleId: role.id };
+		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
 			message: 'Not set',
 		};
+
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 			await container.tasks.create('BirthdayRoleRemoverTask', payload, {

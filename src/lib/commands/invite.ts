@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ChatInputApplicationCommandData, PermissionFlagsBits } from 'discord.js';
+import { ApplicationCommandType, PermissionFlagsBits, type ChatInputApplicationCommandData } from 'discord.js';
 
 export function InviteCMD(): ChatInputApplicationCommandData {
 	return {
