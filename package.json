@@ -20,7 +20,7 @@
     "@sapphire/plugin-scheduled-tasks": "^7.0.0",
     "@sapphire/plugin-subcommands": "^4.0.1",
     "@sapphire/plugin-utilities-store": "^1.0.1",
-    "@sapphire/result": "^2.6.3",
+    "@sapphire/result": "^2.6.4",
     "@sapphire/stopwatch": "^1.5.0",
     "@sapphire/time-utilities": "^1.7.9",
     "@sapphire/type": "^2.4.0",
