@@ -65,7 +65,7 @@
     "doppler": "DOPPLER_TOKEN=\"$(doppler configs tokens create dev --plain --max-age 1m)\"",
     "dev": "yarn run doppler \\docker compose -f ./docker/docker-compose.dev.yml up",
     "dev:legacy": "doppler run -- yarn node --enable-source-maps dist/index.js",
-    "dev:watch": "tsc-watch --onSuccess \"yarn run dev:legacy\"",
+    "dev:watch": "tsc-watch",
     "dev:build": "docker compose -f ./docker/docker-compose.dev.yml build",
     "dev:down": "docker compose -f ./docker/docker-compose.dev.yml down",
     "dev:shell": "docker exec -it birthdayy-dev bash",
