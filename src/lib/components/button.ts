@@ -1,12 +1,13 @@
-import type { APIButtonComponent } from 'discord.js';
+import { ButtonStyle, ComponentType, type APIButtonComponent } from 'discord.js';
 import { BIRTHDAYY_INVITE, DISCORD_INVITE, DOCS_URL, WEBSITE_URL } from '../../helpers/provide/environment';
+import { CustomButtonIdEnum } from '../enum/CustomButtonId.enum';
 
 export const discordButton: APIButtonComponent = {
-	style: 5,
+	type: ComponentType.Button,
+	style: ButtonStyle.Link,
 	label: 'Support Discord',
 	url: `${DISCORD_INVITE}`,
 	disabled: false,
-	type: 2,
 	emoji: {
 		id: '931267038574432308',
 		name: 'people',
@@ -15,11 +16,11 @@ export const discordButton: APIButtonComponent = {
 };
 
 export const docsButton: APIButtonComponent = {
-	style: 5,
+	type: ComponentType.Button,
+	style: ButtonStyle.Link,
 	label: 'Docs',
 	url: `${DOCS_URL}`,
 	disabled: false,
-	type: 2,
 	emoji: {
 		id: '931267038662504508',
 		name: 'book',
@@ -28,11 +29,11 @@ export const docsButton: APIButtonComponent = {
 };
 
 export const inviteButton: APIButtonComponent = {
-	style: 5,
+	type: ComponentType.Button,
+	style: ButtonStyle.Link,
 	label: 'Invite Birthdayy',
 	url: `${BIRTHDAYY_INVITE}`,
 	disabled: false,
-	type: 2,
 	emoji: {
 		id: '931267039094534175',
 		name: 'gift',
@@ -41,11 +42,11 @@ export const inviteButton: APIButtonComponent = {
 };
 
 export const remindMeButton: APIButtonComponent = {
-	style: 3,
+	type: ComponentType.Button,
+	style: ButtonStyle.Success,
 	label: '⏰ Remind Me in 12hrs',
-	custom_id: 'vote-reminder-button',
+	custom_id: CustomButtonIdEnum.VOTE_REMINDER,
 	disabled: false,
-	type: 2,
 };
 
 export const remindMeButtonDisabled: APIButtonComponent = {
@@ -54,14 +55,47 @@ export const remindMeButtonDisabled: APIButtonComponent = {
 };
 
 export const websiteButton: APIButtonComponent = {
-	style: 5,
+	type: ComponentType.Button,
+	style: ButtonStyle.Link,
 	label: 'Website',
 	url: `${WEBSITE_URL}`,
 	disabled: false,
-	type: 2,
 	emoji: {
 		id: '931267039019020340',
 		name: 'link',
 		animated: false,
+	},
+};
+
+export const birthdayListChoice: APIButtonComponent = {
+	type: ComponentType.Button,
+	style: ButtonStyle.Secondary,
+	label: 'Birthday List',
+	custom_id: CustomButtonIdEnum.CHOICE_BIRTHDAY_LIST,
+	disabled: false,
+	emoji: {
+		name: '🎂',
+	},
+};
+
+export const guildConfigChoice: APIButtonComponent = {
+	type: ComponentType.Button,
+	style: ButtonStyle.Secondary,
+	label: 'Guild Config',
+	custom_id: CustomButtonIdEnum.CHOICE_GUILD_CONFIG,
+	disabled: false,
+	emoji: {
+		name: '⚙️',
+	},
+};
+
+export const discordInformationChoice: APIButtonComponent = {
+	type: ComponentType.Button,
+	style: ButtonStyle.Secondary,
+	label: 'Discord Information',
+	custom_id: CustomButtonIdEnum.CHOICE_DISCORD_INFORMATION,
+	disabled: false,
+	emoji: {
+		name: 'ℹ️',
 	},
 };
