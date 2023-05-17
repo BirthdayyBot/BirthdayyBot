@@ -19,7 +19,7 @@ export class TestCommand extends Command {
 		}
 
 		await this.container.tasks.run('BirthdayReminderTask', {
-			memberId: target.id,
+			userId: target.id,
 			guildId: interaction.guildId,
 			isTest: true,
 		});
