@@ -120,7 +120,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return eventInfo;
 		}
 		const member = await getGuildMember(guildId, userId);
-		if (!member) {
+		if (!member || !isTest) {
 			await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
 				this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
 			});
@@ -169,9 +169,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail_url: IMG_CAKE,
 		};
+		const birthdayEmbed = generateDefaultEmbed(embed);
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
-		const birthdayEmbed = generateDefaultEmbed(embed);
 
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,

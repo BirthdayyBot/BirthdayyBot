@@ -13,7 +13,7 @@ export async function getGuildInformation(guildId: Snowflake): Promise<Guild | n
 
 export async function getGuildMember(guildId: Snowflake, userId: Snowflake): Promise<GuildMember | null> {
 	const guild = await getGuildInformation(guildId);
-	if (isNullOrUndefinedOrEmpty(guild)) return null;
+	if (isNullOrUndefinedOrEmpty(guild) || isNullOrUndefinedOrEmpty(userId)) return null;
 	return guild.members.fetch(userId).catch((error) => {
 		if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMember) return null;
 		container.logger.error(`Error fetching guild member with id ${userId}:`, error);
