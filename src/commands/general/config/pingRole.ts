@@ -20,7 +20,11 @@ export class PingRoleCommand extends Command {
 		await thinking(interaction);
 
 		const role = interaction.options.getRole('role', true);
-
+		// check if role is everyone or here
+		if (role.id === interaction.guildId) {
+			return reply(interaction, interactionProblem('You can not set the ping role to @everyone or @here'));
+			// TODO: #32 Enable everyone and here to be pinged
+		}
 		const result = await Result.fromAsync(() =>
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
