@@ -120,10 +120,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return eventInfo;
 		}
 		const member = await getGuildMember(guildId, userId);
-		if (!member || !isTest) {
-			await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
-				this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
-			});
+		if (!member) {
+			if (!isTest) {
+				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
+					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
+				});
+			}
 			eventInfo.error = 'Member not found';
 			return eventInfo;
 		}
