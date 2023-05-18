@@ -81,7 +81,8 @@ jobs:
   deploy_custom:
     name: Custom 🎂
     needs: Publish
-    if: github.ref == 'refs/heads/production'
+    if: |
+      github.event.inputs.environment == 'custom' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'custom'
@@ -95,7 +96,8 @@ jobs:
   deploy_staykids:
     name: StayKids 🎂
     needs: Publish
-    if: github.ref == 'refs/heads/production'
+    if: |
+      github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'staykids'
@@ -109,7 +111,8 @@ jobs:
   deploy_testing:
     name: Deploy Testing Bot 🧪
     needs: Publish
-    if: github.ref == 'refs/heads/testing'
+    if: |
+      github.event.inputs.environment == 'testing' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'testing'
