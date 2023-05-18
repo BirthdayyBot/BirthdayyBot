@@ -94,7 +94,7 @@ jobs:
       SSH_USER: '${{ secrets.SSH_USER }}'
 
   deploy_staykids:
-    name: StayKids 🎂
+    name: StrayKids 🎂
     needs: Publish
     if: |
       github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
