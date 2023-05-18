@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Bot Environment (production, testing, custom, staykids)'
+        description: 'Bot Environment (production, testing, custom, straykids)'
         required: false
   push:
     branches: [testing, production]
@@ -100,7 +100,7 @@ jobs:
       github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'staykids'
+      DOCKER_TAG: 'straykids'
       IMAGE_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
