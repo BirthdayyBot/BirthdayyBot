@@ -109,7 +109,7 @@ jobs:
       SSH_USER: '${{ secrets.SSH_USER }}'
 
   deploy_testing:
-    name: Deploy Testing Bot 🧪
+    name: Testing 🧪
     needs: Publish
     if: |
       github.event.inputs.environment == 'testing' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
