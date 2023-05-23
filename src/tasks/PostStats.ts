@@ -10,7 +10,7 @@ import { isProduction } from '../lib/utils/env';
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
-		if (isProduction) return;
+		if (!isProduction) return;
 		const result = await Result.fromAsync(this.container.botList.postStats());
 
 		return result.match({
