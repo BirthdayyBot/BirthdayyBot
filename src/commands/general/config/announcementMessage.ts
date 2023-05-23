@@ -12,7 +12,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 		.addStringOption((option) =>
 			option
 				.setName('message')
-				.setDescription('{MENTION}, {USERNAME}, {DISCRIMINATOR}, {LINE_BREAK}, {SERVERNAME}')
+				.setDescription('{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}')
 				.setRequired(true),
 		),
 )
