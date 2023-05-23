@@ -1,8 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
 import { Result } from '@sapphire/result';
-import thinking from '../../../lib/discord/thinking';
 import { PREMIUM_URL, reply } from '../../../helpers';
+import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
@@ -39,10 +39,7 @@ export class AnnouncementMessageCommand extends Command {
 		}
 
 		const result = await Result.fromAsync(() =>
-			this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { overviewMessage: message },
-			}),
+			this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message),
 		);
 
 		if (result.isErr()) {
