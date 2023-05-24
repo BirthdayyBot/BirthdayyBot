@@ -11,12 +11,12 @@ on:
         required: true
       DOCKER_TAG:
         required: true
-      IMAGE_TAG:
-        required: true
       DOPPLER_TOKEN:
         required: true
       DOCKER_NETWORK:
         required: true
+      IMAGE_TAG:
+        required: false
       GHCR_USER:
         required: false
       GHCR_TOKEN:

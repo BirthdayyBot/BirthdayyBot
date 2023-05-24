@@ -73,7 +73,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'production'
-      IMAGE_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -88,7 +87,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'custom'
-      IMAGE_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -103,7 +101,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'straykids'
-      IMAGE_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
