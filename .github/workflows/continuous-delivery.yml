@@ -27,6 +27,7 @@ jobs:
     steps:
       - name: Checkout Project
         uses: actions/checkout@v2
+        with: ${{ github.ref }}
 
       - name: Extract version from package.json
         id: package_version
