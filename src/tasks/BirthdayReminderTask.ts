@@ -24,7 +24,6 @@ import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
-import type { EmbedInformationModel } from '../lib/model/EmbedInformation.model';
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
 
@@ -166,10 +165,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return eventInfo;
 		}
 
-		const embed: EmbedInformationModel = {
+		const embed: APIEmbed = {
 			title: `${NEWS} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
-			thumbnail_url: IMG_CAKE,
+			thumbnail: {
+				url: IMG_CAKE,
+			},
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);
 
