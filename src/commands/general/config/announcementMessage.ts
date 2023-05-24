@@ -38,11 +38,14 @@ export class AnnouncementMessageCommand extends Command {
 			);
 		}
 
-		const result = await Result.fromAsync(() =>
+		const result = await Result.fromAsync(async () =>
 			this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message),
 		);
 
 		if (result.isErr()) {
+			result.unwrapOrElse((error) => {
+				this.container.logger.error('AnnouncementMessageCommand ~ result.unwrapOrElse ~ error:', error);
+			});
 			return reply(
 				interaction,
 				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
