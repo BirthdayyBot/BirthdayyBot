@@ -54,7 +54,7 @@ jobs:
             type=ref,event=pr
             type=raw,value=${{ steps.package_version.outputs.version }}
             type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
-            type=raw,value=latest,enable=${{ endsWith(github.ref, github.event.repository.default_branch) }}
+            type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.0.0
