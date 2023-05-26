@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Bot Environment (production, testing, custom, straykids)'
+        description: 'Bot Environment (prd, tst, custom, straykids, nayeon)'
         required: false
   push:
     branches: [testing, production]
@@ -69,7 +69,7 @@ jobs:
     name: Birthdayy 🎂
     needs: Publish
     if: |
-      github.event.inputs.environment == 'production' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
+      github.event.inputs.environment == 'prd' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'production'
@@ -107,11 +107,25 @@ jobs:
       SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
       SSH_USER: '${{ secrets.SSH_USER }}'
 
+  deploy_nayeon:
+    name: NAYEON 🎂
+    needs: Publish
+    if: |
+      github.event.inputs.environment == 'nayeon' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      DOCKER_TAG: 'nayeon'
+      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
+      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_NAYEON }}'
+      SSH_HOST: '${{ secrets.SSH_HOST }}'
+      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
+      SSH_USER: '${{ secrets.SSH_USER }}'
+
   deploy_testing:
     name: Testing 🧪
     needs: Publish
     if: |
-      github.event.inputs.environment == 'testing' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
+      github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'testing'
