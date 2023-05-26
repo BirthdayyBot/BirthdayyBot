@@ -7,7 +7,7 @@ import { envIsDefined } from '@skyra/env-utilities';
 
 @ApplyOptions<Listener.Options>({ event: ScheduledTaskEvents.ScheduledTaskError })
 export class ScheduledTaskErrorEvent extends Listener<typeof ScheduledTaskEvents.ScheduledTaskError> {
-	public run(error: Error, task: string, _duration: number, _payload: any) {
+	public run(error: Error, task: string, _payload: unknown) {
 		if (envIsDefined('SENTRY_DSN')) {
 			Sentry.withScope((scope) => {
 				scope.setLevel('error');
