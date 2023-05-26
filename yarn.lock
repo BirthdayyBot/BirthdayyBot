@@ -404,18 +404,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/discord.js-utilities@npm:6.0.7":
-  version: 6.0.7
-  resolution: "@sapphire/discord.js-utilities@npm:6.0.7"
-  dependencies:
-    "@sapphire/discord-utilities": ^3.0.3
-    "@sapphire/duration": ^1.1.0
-    "@sapphire/utilities": ^3.11.1
-    tslib: ^2.5.0
-  checksum: c74d41057caeb66b8c832f783d5a81bbacdefab79c47196f4bf76c4fecf38d5ad4d85b5c55298d153316153343224eb696eb800753413ad49b40a8fc206a747e
-  languageName: node
-  linkType: hard
-
 "@sapphire/discord.js-utilities@npm:^6.1.0":
   version: 6.1.0
   resolution: "@sapphire/discord.js-utilities@npm:6.1.0"
@@ -459,24 +447,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/framework@npm:^4.4.3":
-  version: 4.4.3
-  resolution: "@sapphire/framework@npm:4.4.3"
+"@sapphire/framework@npm:^4.4.4":
+  version: 4.4.4
+  resolution: "@sapphire/framework@npm:4.4.4"
   dependencies:
     "@discordjs/builders": ^1.6.3
     "@sapphire/discord-utilities": ^3.0.3
-    "@sapphire/discord.js-utilities": 6.0.7
-    "@sapphire/lexure": ^1.1.4
+    "@sapphire/discord.js-utilities": ^6.1.0
+    "@sapphire/lexure": ^1.1.5
     "@sapphire/pieces": ^3.6.3
     "@sapphire/ratelimits": ^2.4.6
-    "@sapphire/result": ^2.6.3
+    "@sapphire/result": ^2.6.4
     "@sapphire/stopwatch": ^1.5.0
-    "@sapphire/utilities": ^3.11.1
-  checksum: a7f9b57e2c0178fc533e57cd74630ce8cf43dccd355a6792a79cebeb71e8c1fd2644aba8325aa99db5a13a3b72bb1e30b034a2aaaa36f4cb66a21608786779bf
+    "@sapphire/utilities": ^3.11.2
+  checksum: 732ae91ac551b4105f60d21e94de48d47a142d27895b8ab88da91eff86f51f84d9a53267d74ad3ccb382b6f43bf07f7429eb801deb448e29e652aa16ce3c8eff
   languageName: node
   linkType: hard
 
-"@sapphire/lexure@npm:^1.1.4":
+"@sapphire/lexure@npm:^1.1.5":
   version: 1.1.5
   resolution: "@sapphire/lexure@npm:1.1.5"
   dependencies:
@@ -552,15 +540,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-scheduled-tasks@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@sapphire/plugin-scheduled-tasks@npm:7.0.0"
+"@sapphire/plugin-scheduled-tasks@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "@sapphire/plugin-scheduled-tasks@npm:7.1.0"
   dependencies:
     "@sapphire/stopwatch": ^1.5.0
-    "@sapphire/utilities": ^3.11.1
-    bullmq: ^3.12.0
-    tslib: ^2.5.0
-  checksum: 3f0b94c7ef78831219a9c1a2d28ac1cbe0a503cb870ae0db7088a9e9090dd7ff54bee5bfbee39d834438f993e9d1fb04536223342d1fd0e12db416edd6432af5
+    "@sapphire/utilities": ^3.11.2
+    bullmq: 3.14.0
+    tslib: ^2.5.2
+  checksum: 008ca8ed5d4d68ed9e89e5df02f43b6a7cea8703480a6d68e2d933eb8aa156c42fbbad6a84eb9883973c25f893d41f90f550626bf7f82ed91353310c1b35b03a
   languageName: node
   linkType: hard
 
@@ -1297,13 +1285,13 @@ __metadata:
     "@sapphire/discord.js-utilities": ^6.1.0
     "@sapphire/eslint-config": ^4.4.2
     "@sapphire/fetch": ^2.4.1
-    "@sapphire/framework": ^4.4.3
+    "@sapphire/framework": ^4.4.4
     "@sapphire/plugin-api": ^5.0.4
     "@sapphire/plugin-editable-commands": ^3.0.2
     "@sapphire/plugin-hmr": ^2.0.1
     "@sapphire/plugin-i18next": ^5.0.3
     "@sapphire/plugin-logger": ^3.0.4
-    "@sapphire/plugin-scheduled-tasks": ^7.0.0
+    "@sapphire/plugin-scheduled-tasks": ^7.1.0
     "@sapphire/plugin-subcommands": ^4.0.1
     "@sapphire/plugin-utilities-store": ^1.0.1
     "@sapphire/result": ^2.6.4
@@ -1368,23 +1356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^3.12.0":
-  version: 3.13.4
-  resolution: "bullmq@npm:3.13.4"
-  dependencies:
-    cron-parser: ^4.6.0
-    glob: ^8.0.3
-    ioredis: ^5.3.2
-    lodash: ^4.17.21
-    msgpackr: ^1.6.2
-    semver: ^7.3.7
-    tslib: ^2.0.0
-    uuid: ^9.0.0
-  checksum: 6f40ca98f910bc5f4ebc23fc5488b1dfe205999b7d10c77940e1963cfbe6025449a9c4aaceabf5e5989b222820ffae6279e0afb432b15eebc9dfc17c1e5ad483
-  languageName: node
-  linkType: hard
-
-"bullmq@npm:^3.14.0":
+"bullmq@npm:3.14.0, bullmq@npm:^3.14.0":
   version: 3.14.0
   resolution: "bullmq@npm:3.14.0"
   dependencies:
@@ -4625,7 +4597,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.x, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0":
+"tslib@npm:2.x, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:^2.5.2":
   version: 2.5.2
   resolution: "tslib@npm:2.5.2"
   checksum: 4d3c1e238b94127ed0e88aa0380db3c2ddae581dc0f4bae5a982345e9f50ee5eda90835b8bfba99b02df10a5734470be197158c36f9129ac49fdc14a6a9da222
