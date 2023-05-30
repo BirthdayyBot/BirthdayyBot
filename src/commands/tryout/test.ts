@@ -1,5 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import { inlineCode, type APIEmbedField } from 'discord.js';
+import { IS_CUSTOM_BOT } from '../../helpers';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
@@ -31,16 +33,19 @@ export class TestCommand extends Command {
 			cleanUp: false,
 			displayStats: true,
 			reminder: true,
+			isCustomBotCheck: true,
 		};
+		const fields: APIEmbedField[] = [{ name: 'test', value: 'Test Test' }];
 
 		await thinking(interaction);
-		const fields = [{ name: 'test', value: 'Test Test' }];
-		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
-		const testEmbed = generateDefaultEmbed(testEmbedObj);
 
 		if (isDevelopment && toggle.reminder) await this.container.tasks.run('BirthdayReminderTask', {});
 		if (toggle.cleanUp) await this.container.tasks.run('CleanDatabaseTask', {});
 		if (toggle.displayStats) await this.container.tasks.run('DisplayStats', {});
+		if (toggle.isCustomBotCheck) fields.push({ name: 'IsCustomBot?', value: inlineCode(String(IS_CUSTOM_BOT)) });
+
+		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
+		const testEmbed = generateDefaultEmbed(testEmbedObj);
 
 		return reply(interaction, { embeds: [testEmbed] });
 	}
