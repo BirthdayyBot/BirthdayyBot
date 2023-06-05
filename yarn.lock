@@ -223,13 +223,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaname-png/plugin-subcommands-advanced@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.2.1"
+"@kaname-png/plugin-subcommands-advanced@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.2.2"
   dependencies:
-    "@sapphire/decorators": ^6.0.0
-    tslib: ^2.4.1
-  checksum: 497dbfade4ba1db27402030c41a518bdc112f5fdca325b8a70631177294ac5ed1261a38c1f92fd3c44417fd758e79bcf6484a8d8a78499396bd44addfc1985fc
+    "@sapphire/decorators": ^6.0.1
+    tslib: ^2.5.3
+  checksum: c8aae941e0bf840b78827b592f52b89b7fdeca4a28f29dddb5e80e08096a897981909c758fb1751a45ee9da8f5e5a036d374978ac9274d657de6330941d193a3
   languageName: node
   linkType: hard
 
@@ -404,7 +404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/decorators@npm:^6.0.0, @sapphire/decorators@npm:^6.0.1":
+"@sapphire/decorators@npm:^6.0.1":
   version: 6.0.1
   resolution: "@sapphire/decorators@npm:6.0.1"
   dependencies:
@@ -1179,7 +1179,7 @@ __metadata:
   resolution: "birthdayy-discord-bot@workspace:."
   dependencies:
     "@devtomio/plugin-botlist": ^1.3.0
-    "@kaname-png/plugin-subcommands-advanced": ^2.2.1
+    "@kaname-png/plugin-subcommands-advanced": ^2.2.2
     "@prisma/client": ^4.15.0
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.0
@@ -4564,7 +4564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.x, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1, tslib@npm:^2.5.0, tslib@npm:^2.5.2":
+"tslib@npm:2.x, tslib@npm:^2.0.0, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.5.2":
   version: 2.5.2
   resolution: "tslib@npm:2.5.2"
   checksum: 4d3c1e238b94127ed0e88aa0380db3c2ddae581dc0f4bae5a982345e9f50ee5eda90835b8bfba99b02df10a5734470be197158c36f9129ac49fdc14a6a9da222
@@ -4575,6 +4575,13 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.5.3":
+  version: 2.5.3
+  resolution: "tslib@npm:2.5.3"
+  checksum: 88902b309afaf83259131c1e13da1dceb0ad1682a213143a1346a649143924d78cf3760c448b84d796938fd76127183894f8d85cbb3bf9c4fddbfcc140c0003c
   languageName: node
   linkType: hard
 
