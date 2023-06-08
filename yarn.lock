@@ -205,13 +205,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaname-png/plugin-subcommands-advanced@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.2.2"
+"@kaname-png/plugin-subcommands-advanced@npm:^2.2.3":
+  version: 2.2.3
+  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.2.3"
   dependencies:
     "@sapphire/decorators": ^6.0.1
     tslib: ^2.5.3
-  checksum: c8aae941e0bf840b78827b592f52b89b7fdeca4a28f29dddb5e80e08096a897981909c758fb1751a45ee9da8f5e5a036d374978ac9274d657de6330941d193a3
+  checksum: 43207241f1fbd0f6781088ce6cf329300128cdcbdc6fe1efcd062a1fd21dfc2a1c8d0a9be708726633b6a98f2db641d38adbd341c15bf9befea3c3216d1d7441
   languageName: node
   linkType: hard
 
@@ -1161,7 +1161,7 @@ __metadata:
   resolution: "birthdayy-discord-bot@workspace:."
   dependencies:
     "@devtomio/plugin-botlist": ^1.3.0
-    "@kaname-png/plugin-subcommands-advanced": ^2.2.2
+    "@kaname-png/plugin-subcommands-advanced": ^2.2.3
     "@prisma/client": ^4.15.0
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.0
