@@ -2,6 +2,7 @@ import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
 import type { Birthday } from '../../utilities/db/Birthday';
+import type { Blacklist } from '../../utilities/db/Blacklist';
 import type { Guild } from '../../utilities/db/Guild';
 import type { User } from '../../utilities/db/User';
 
@@ -94,5 +95,6 @@ declare module '@sapphire/plugin-utilities-store' {
 		guild: Guild;
 		birthday: Birthday;
 		user: User;
+		blacklist: Blacklist;
 	}
 }

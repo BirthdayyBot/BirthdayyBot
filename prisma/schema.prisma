@@ -69,6 +69,7 @@ model Blacklist {
     added_at DateTime @default(now()) @db.Timestamp(0)
     disabled Boolean  @default(false)
 
+    @@unique([userId, guildId], map: "unique_user_guild_blacklist")
     @@index([guildId], map: "index_guild_id_blacklist")
     @@index([userId], map: "index_user_id_blacklist")
     @@map("blacklist")
