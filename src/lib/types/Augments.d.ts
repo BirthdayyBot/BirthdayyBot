@@ -75,6 +75,7 @@ declare module '@sapphire/framework' {
 	interface Preconditions {
 		IsPremium: never;
 		OwnerOnly: never;
+		CanManageRoles: never;
 	}
 }
 
