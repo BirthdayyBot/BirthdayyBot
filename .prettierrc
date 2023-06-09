@@ -13,5 +13,6 @@
 			}
 		}
 	],
-	"editorconfig": true
+	"editorconfig": true,
+    "endOfLine": "lf"
 }
