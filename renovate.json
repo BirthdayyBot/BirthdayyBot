@@ -1,6 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [":dependencyDashboard", ":semanticCommitTypeAll(chore)", ":autodetectPinVersions", ":prHourlyLimitNone", ":prConcurrentLimitNone", "group:recommended"],
+  "extends": [
+    ":dependencyDashboard",
+    ":semanticCommitTypeAll(chore)",
+    ":autodetectPinVersions",
+    ":prHourlyLimitNone",
+    ":prConcurrentLimitNone",
+    "group:recommended"
+  ],
   "baseBranches": ["develop"],
   "automergeSchedule": ["at any time"],
   "automergeType": "pr",
@@ -23,7 +30,13 @@
     },
     {
       "groupName": "Devtools Dependencies",
-      "matchPackagePatterns": ["eslint", "prettier", "commitlint", "lint-staged", "husky"],
+      "matchPackagePatterns": [
+        "eslint",
+        "prettier",
+        "commitlint",
+        "lint-staged",
+        "husky"
+      ],
       "automerge": true,
       "automergeType": "branch"
     },
