@@ -15,6 +15,7 @@ export class AddCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const blacklistUser = interaction.options.getUser('user', true);
+		this.container.logger.info('AddCommand ~ overridechatInputRun ~ blacklistUser:', blacklistUser);
 
 		return reply(interaction, {
 			embeds: [
