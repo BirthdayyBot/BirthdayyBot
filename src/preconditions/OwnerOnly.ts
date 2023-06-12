@@ -3,7 +3,7 @@ import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowfl
 import { BOT_OWNER } from '../helpers/provide/environment';
 
 export class UserPrecondition extends AllFlowsPrecondition {
-	#message = 'This command can only be used by the owner.';
+	#message = 'This command can only be used by the bot owner.';
 
 	public override chatInputRun(interaction: CommandInteraction) {
 		return this.doOwnerCheck(interaction.user.id);
