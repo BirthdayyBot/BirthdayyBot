@@ -57,7 +57,7 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4.1.0
+        uses: docker/build-push-action@v4.1.1
         with:
           context: .
           file: ./docker/Dockerfile
