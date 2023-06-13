@@ -64,3 +64,4 @@ export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseStr
 export const VOTE_ROLE_ID = '1039089174948626473';
 export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${ARROW_RIGHT} Today is a special Day!{NEW_LINE}${GIFT} Please wish {MENTION} a happy Birthday <3`;
 export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum.BIRTHDAYY_HQ);
+export const BOT_ADMINS = [UserIDEnum.CHILLIHERO, UserIDEnum.SWIIZYY];
