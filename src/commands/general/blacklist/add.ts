@@ -1,7 +1,9 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
+import { Prisma } from '@prisma/client';
+import { userMention } from 'discord.js';
 import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
+import { PrismaErrorCodeEnum } from '../../../lib/enum/PrismaErrorCode.enum';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('blacklist', (builder) =>
 	builder
@@ -13,17 +15,19 @@ import { generateDefaultEmbed } from '../../../lib/utils/embed';
 )
 export class AddCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
 		const blacklistUser = interaction.options.getUser('user', true);
-		this.container.logger.info('AddCommand ~ overridechatInputRun ~ blacklistUser:', blacklistUser);
-
-		return reply(interaction, {
-			embeds: [
-				generateDefaultEmbed({
-					title: 'Blacklist Add',
-					description: `Blacklisted users:`,
-				}),
-			],
-		});
+		try {
+			await this.container.utilities.blacklist.create.BlacklistEntry(interaction.guildId, blacklistUser.id);
+		} catch (error: any) {
+			if (error instanceof Prisma.PrismaClientKnownRequestError) {
+				if (error.code === PrismaErrorCodeEnum.UNIQUE_CONSTRAINT_FAILED) {
+					return reply(
+						interaction,
+						interactionProblem(`${userMention(blacklistUser.id)} is already on the blacklist.`, true),
+					);
+				}
+			}
+		}
+		return reply(interaction, interactionSuccess(`Added ${userMention(blacklistUser.id)} to the blacklist.`, true));
 	}
 }

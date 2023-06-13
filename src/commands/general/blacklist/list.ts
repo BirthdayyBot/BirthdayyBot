@@ -30,7 +30,7 @@ export class ListCommand extends Command {
 			});
 
 			const userList = formattedUsers.join('\n');
-			return `list: \n${userList}`;
+			return `${userList}`;
 		}
 	}
 }
