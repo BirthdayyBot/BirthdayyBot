@@ -31,6 +31,11 @@ export class ListCommand extends Command {
 			}
 			const formattedUsers = users.map((user) => {
 				const { userId, added_at } = user;
+
+				if (!added_at || !userId) {
+					return '';
+				}
+
 				const formattedDate = time(Math.floor(added_at.getTime() / 1000), 'D');
 				return `${userMention(userId)} - ${formattedDate}`;
 			});
