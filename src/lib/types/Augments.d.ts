@@ -74,9 +74,11 @@ declare module '@sapphire/pieces' {
 
 declare module '@sapphire/framework' {
 	interface Preconditions {
-		IsPremium: never;
-		OwnerOnly: never;
+		GuildPremium: never;
+		BotOwnerOnly: never;
+		AdminOnly: never;
 		CanManageRoles: never;
+		IsNotBlacklisted: never;
 	}
 }
 
