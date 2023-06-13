@@ -1,7 +1,7 @@
-import { AllFlowsPrecondition } from '@sapphire/framework';
+import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';
 
-export class UserPrecondition extends AllFlowsPrecondition {
+export class IsPremiumPrecondition extends Precondition {
 	#message = 'This command is a premium only command.'; // TODO: Adjust Premium Message
 
 	public override async chatInputRun(interaction: CommandInteraction) {
@@ -24,6 +24,6 @@ export class UserPrecondition extends AllFlowsPrecondition {
 					})
 					.then((guild) => (guild?.premium ? this.ok() : this.error({ message: this.#message })))
 					.catch(() => this.error({ message: this.#message }))
-			: this.error({ message: this.#message });
+			: this.error({ identifier: 'IsNotPremium', message: this.#message });
 	}
 }

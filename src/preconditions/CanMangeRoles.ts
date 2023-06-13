@@ -1,7 +1,7 @@
-import { AllFlowsPrecondition } from '@sapphire/framework';
+import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, PermissionsBitField } from 'discord.js';
 
-export class CanManageRolesPrecondition extends AllFlowsPrecondition {
+export class CanManageRolesPrecondition extends Precondition {
 	#message = 'You need to have the `Manage Roles` permission to use this command.';
 	#NotInGuildMessage = 'You need to be in a guild to use this command.';
 
@@ -20,6 +20,6 @@ export class CanManageRolesPrecondition extends AllFlowsPrecondition {
 	private canManageRoles(permissions: PermissionsBitField | null | undefined) {
 		if (!permissions) return this.error({ message: this.#NotInGuildMessage });
 		if (permissions.has('ManageRoles')) return this.ok();
-		return this.error({ message: this.#message });
+		return this.error({ identifier: 'CannotManageRoles', message: this.#message });
 	}
 }
