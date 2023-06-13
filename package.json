@@ -78,11 +78,16 @@
     "db:migrate": "docker exec -it birthdayy npx prisma migrate deploy",
     "db:generate": "docker exec -it birthdayy npx prisma generate"
   },
+  "engines": {
+    "node": "18.16.x",
+    "npm": "^9"
+  },
   "lint-staged": {
     "*.{ts}": "eslint --fix --ext ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BirthdayyBot/BirthdayyBotSapphire.git"
-  }
+  },
+  "packageManager": "yarn@3.6.0"
 }
