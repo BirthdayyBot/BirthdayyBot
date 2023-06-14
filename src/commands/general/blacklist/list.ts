@@ -30,13 +30,8 @@ export class ListCommand extends Command {
 				return `${ARROW_RIGHT}No users on the blacklist.`;
 			}
 			const formattedUsers = users.map((user) => {
-				const { userId, added_at } = user;
-
-				if (!added_at || !userId) {
-					return '';
-				}
-
-				const formattedDate = time(Math.floor(added_at.getTime() / 1000), 'D');
+				const { userId, addedAt } = user;
+				const formattedDate = time(Math.floor(addedAt.getTime() / 1000), 'D');
 				return `${userMention(userId)} - ${formattedDate}`;
 			});
 
