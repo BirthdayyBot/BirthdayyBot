@@ -1,18 +1,18 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { ReminderCMD } from '../../lib/commands/reminder';
 import { inviteButton } from '../../lib/components/button';
 import thinking from '../../lib/discord/thinking';
 import { InviteEmbed } from '../../lib/embeds';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
 	description: 'premium tryout',
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'], 'IsPremium' /* any other preconditions here */],
+	preconditions: [['DMOnly', 'GuildTextOnly'], 'GuildPremium' /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })
