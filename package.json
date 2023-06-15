@@ -32,7 +32,7 @@
     "bullmq": "^3.15.6",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.8",
-    "discord-api-types": "^0.37.43",
+    "discord-api-types": "^0.37.45",
     "discord.js": "^14.11.0",
     "prisma": "^4.15.0",
     "reflect-metadata": "^0.1.13"
