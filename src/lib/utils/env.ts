@@ -1,5 +1,5 @@
 import type { Env, EnvString } from '@skyra/env-utilities';
-import { IS_CUSTOM_BOT } from '../../helpers';
+import { IS_CUSTOM_BOT } from '../../helpers/provide/environment';
 
 export function envIs<T extends EnvString>(key: T, value: Env[T]): boolean {
 	return process.env[key] === value;
@@ -11,4 +11,3 @@ export const isPrd = envIs('APP_ENV', 'prd');
 
 export const isDevelopment = isDev || isTst;
 export const isProduction = isPrd && !IS_CUSTOM_BOT;
-export const isCustom = IS_CUSTOM_BOT;

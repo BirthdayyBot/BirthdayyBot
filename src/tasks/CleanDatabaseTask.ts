@@ -3,10 +3,10 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import { BOT_ADMIN_LOG } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { generateDefaultEmbed } from '../lib/utils/embed';
-import { isCustom, isDevelopment, isProduction } from '../lib/utils/env';
+import { isDevelopment, isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',
@@ -15,7 +15,7 @@ import { isCustom, isDevelopment, isProduction } from '../lib/utils/env';
 })
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
-		if (isCustom) return;
+		if (IS_CUSTOM_BOT) return;
 		this.container.logger.debug('[CleaningTask] Started');
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
