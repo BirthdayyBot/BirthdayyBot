@@ -768,13 +768,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/env-utilities@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@skyra/env-utilities@npm:1.2.0"
+"@skyra/env-utilities@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@skyra/env-utilities@npm:1.2.1"
   dependencies:
-    dotenv: ^16.0.3
+    dotenv: ^16.3.0
     dotenv-expand: ^10.0.0
-  checksum: 977d46bca06cc0578786c9acef0978f54adbfcd248d6b57c6376a59d18685b8666c5ec36df47ad8c1216b0cc2b301977dacf0d920dde2564f2350a407c334c3b
+  checksum: a2695d2ce23a90d33a0de41c8edfb63599740528b82c93df395ea13163b84c48ce76423bbfaf99c49e54cb22e112fad90126c4616a4da9dbee702b625640921c
   languageName: node
   linkType: hard
 
@@ -1322,12 +1322,12 @@ __metadata:
     "@sentry/integrations": ^7.55.2
     "@sentry/node": ^7.55.2
     "@sentry/tracing": ^7.55.2
-    "@skyra/env-utilities": ^1.2.0
+    "@skyra/env-utilities": ^1.2.1
     "@types/node": ^20.3.1
     "@types/ws": ^8.5.5
     "@typescript-eslint/eslint-plugin": ^5.59.11
     "@typescript-eslint/parser": ^5.59.11
-    bullmq: ^3.15.6
+    bullmq: ^3.15.8
     colorette: ^2.0.20
     dayjs: ^1.11.8
     discord-api-types: ^0.37.45
@@ -1391,9 +1391,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^3.15.6":
-  version: 3.15.6
-  resolution: "bullmq@npm:3.15.6"
+"bullmq@npm:^3.15.8":
+  version: 3.15.8
+  resolution: "bullmq@npm:3.15.8"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
@@ -1403,7 +1403,7 @@ __metadata:
     semver: ^7.3.7
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 5be283cca00a3c42ecd6a2ffa0674a76008fdc10118c2dfa8706e6a24313a6cfea798fd4bfa5e51dd7c1f69acaf8667bf8f3d76a8d4777f321530c0364087f41
+  checksum: bca20de291acbb97c67736c2d29b88b4f99e372ffd818b2041d4629ffba126a8c75ba6e25a1d181053c6e03ee4e260020e67fbb91412908040273187146493a4
   languageName: node
   linkType: hard
 
@@ -1799,10 +1799,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.0.3":
-  version: 16.1.4
-  resolution: "dotenv@npm:16.1.4"
-  checksum: c1b2e13df4d374a6a29e134c56c7b040ba20500677fe8b9939ea654f3b3badb9aaa0b172e40e4dfa1233a4177dbb8fb79d84cc79a50ac9c9641fe2ad98c14876
+"dotenv@npm:^16.3.0":
+  version: 16.3.0
+  resolution: "dotenv@npm:16.3.0"
+  checksum: 43a90ec87868c8b962a028b69cbe86e71621c76837249a9d65fb131b03ee69817b019d34a5456174cb04095052a496b4e1b5da72e4af2393df6083513ab62d4b
   languageName: node
   linkType: hard
 
