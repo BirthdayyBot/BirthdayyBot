@@ -1,6 +1,6 @@
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
-import { container, LogLevel, type ClientLoggerOptions } from '@sapphire/framework';
+import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
