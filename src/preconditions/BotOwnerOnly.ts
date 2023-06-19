@@ -1,8 +1,8 @@
-import { AllFlowsPrecondition } from '@sapphire/framework';
+import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
 import { BOT_OWNER } from '../helpers/provide/environment';
 
-export class UserPrecondition extends AllFlowsPrecondition {
+export class OwnerOwnlyPrecondition extends Precondition {
 	#message = 'This command can only be used by the bot owner.';
 
 	public override chatInputRun(interaction: CommandInteraction) {
@@ -18,6 +18,8 @@ export class UserPrecondition extends AllFlowsPrecondition {
 	}
 
 	private doOwnerCheck(userId: Snowflake) {
-		return BOT_OWNER.includes(userId) ? this.ok() : this.error({ message: this.#message });
+		return BOT_OWNER.includes(userId)
+			? this.ok()
+			: this.error({ identifier: 'IsNotOwner', message: this.#message });
 	}
 }

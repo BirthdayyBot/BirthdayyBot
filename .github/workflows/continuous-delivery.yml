@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ github.ref_name }}
 
@@ -35,7 +35,7 @@ jobs:
         uses: saionaro/extract-package-version@v1.2.1
 
       - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@bdd549bec0b79f87fdf6064e966f34404a39cc33
+        uses: docker/setup-buildx-action@ecf95283f03858871ff00b787d79c419715afc34
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2.2.0
@@ -57,7 +57,7 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4.1.0
+        uses: docker/build-push-action@v4.1.1
         with:
           context: .
           file: ./docker/Dockerfile

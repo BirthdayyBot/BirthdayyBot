@@ -22,11 +22,13 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		const guildData = await this.container.utilities.guild.get.GuildById(guildId);
 
-		if (!guildData) {
+		if (guildData) {
+			// When Guild is already in the database, update the disabled status
+			await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
+		} else {
+			// When Guild is not in the database, create a new entry
 			await this.container.utilities.guild.create({ guildId, inviter: inviterId });
 		}
-
-		await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
 
 		if (inviterId) {
 			await sendGuide(inviterId);

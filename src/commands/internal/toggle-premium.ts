@@ -11,7 +11,7 @@ import { generateDefaultEmbed, interactionProblem } from '../../lib/utils/embed'
 	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: true,
-	preconditions: [['DMOnly', 'GuildTextOnly'], 'OwnerOnly' /* any other preconditions here */],
+	preconditions: [['DMOnly', 'GuildTextOnly'], 'AdminOnly' /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })

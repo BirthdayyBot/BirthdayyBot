@@ -1,8 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import { IS_CUSTOM_BOT } from '../../helpers';
-import { reply } from '../../helpers/send/response';
+import { IS_CUSTOM_BOT, reply } from '../../helpers';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
@@ -30,7 +29,7 @@ export class TestCommand extends Command {
 	// slash command
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const toggle = {
-			cleanUp: false,
+			cleanUp: true,
 			displayStats: true,
 			reminder: true,
 			isCustomBotCheck: true,
