@@ -1,8 +1,9 @@
 import { AllFlowsPrecondition, Piece, Result } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
+import { canManageRoles } from '../lib/utils/precondition';
 
 export class CanManageRolesPrecondition extends AllFlowsPrecondition {
-	#message = 'You are blacklisted on this server from using Birthdayy.';
+	#message = 'You are blacklisted from using Birthdayy on this.';
 
 	public constructor(context: Piece.Context, options: AllFlowsPrecondition.Options) {
 		super(context, {
@@ -12,14 +13,17 @@ export class CanManageRolesPrecondition extends AllFlowsPrecondition {
 	}
 
 	public override async chatInputRun(interaction: CommandInteraction) {
+		if (canManageRoles(interaction.memberPermissions)) return this.ok();
 		return this.isBlacklisted(interaction.guildId, interaction.user.id);
 	}
 
 	public override async contextMenuRun(interaction: ContextMenuCommandInteraction) {
+		if (canManageRoles(interaction.memberPermissions)) return this.ok();
 		return this.isBlacklisted(interaction.guildId, interaction.user.id);
 	}
 
 	public override async messageRun(message: Message) {
+		if (canManageRoles(message.member?.permissions)) return this.ok();
 		return this.isBlacklisted(message.guildId, message.author.id);
 	}
 

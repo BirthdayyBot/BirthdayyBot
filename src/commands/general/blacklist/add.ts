@@ -16,6 +16,9 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 export class AddCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		const blacklistUser = interaction.options.getUser('user', true);
+		if (blacklistUser.id === interaction.user.id) {
+			return reply(interaction, interactionProblem(`You can't blacklist yourself.`, true));
+		}
 		try {
 			await this.container.utilities.blacklist.create.BlacklistEntry(interaction.guildId, blacklistUser.id);
 		} catch (error: any) {
