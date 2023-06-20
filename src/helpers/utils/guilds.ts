@@ -1,7 +1,11 @@
+import type { Guild } from '@prisma/client';
+import { container } from '@sapphire/framework';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { isDevelopment } from '../../lib/utils/env';
 
-export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin') {
+export async function getCommandGuilds(
+	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
+): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.CHILLI_ATTACK_V2, GuildIDEnum.BIRTHDAYY_TESTING];
 	const adminGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.BIRTHDAYY_HQ];
 	if (isDevelopment) return testingGuilds;
@@ -10,9 +14,11 @@ export function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' 
 			return undefined;
 		case 'testing':
 			return testingGuilds;
-		case 'premium':
-			// todo: retrieve premium guilds from db
-			return [''];
+		case 'premium': {
+			const guilds: Guild[] = await container.utilities.guild.get.PremiumGuilds();
+			const guildIds: string[] = guilds.map((guild) => guild.guildId);
+			return guildIds;
+		}
 		case 'admin':
 			return adminGuilds;
 		default:

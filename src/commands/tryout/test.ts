@@ -13,7 +13,7 @@ import { isDevelopment } from '../../lib/utils/env';
 	description: 'test things',
 })
 export class TestCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+	public override async registerApplicationCommands(registry: Command.Registry) {
 		// Register slash command
 		registry.registerChatInputCommand(
 			{
@@ -21,7 +21,7 @@ export class TestCommand extends Command {
 				description: this.description,
 			},
 			{
-				guildIds: getCommandGuilds('testing'),
+				guildIds: await getCommandGuilds('testing'),
 			},
 		);
 	}

@@ -4,9 +4,9 @@ import type { Args } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { UwUCMD } from '../../lib/commands/uwu';
+import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',
@@ -32,9 +32,9 @@ import { UwUCMD } from '../../lib/commands/uwu';
 export class UwuCommand extends Subcommand {
 	// private readonly _uwuString = 'UwU';
 
-	public override registerApplicationCommands(registry: Subcommand.Registry) {
+	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(UwUCMD(), {
-			guildIds: getCommandGuilds('testing'),
+			guildIds: await getCommandGuilds('testing'),
 		});
 	}
 
