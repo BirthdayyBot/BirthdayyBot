@@ -1319,7 +1319,7 @@ __metadata:
     bullmq: ^3.15.8
     colorette: ^2.0.20
     dayjs: ^1.11.8
-    discord-api-types: ^0.37.45
+    discord-api-types: ^0.37.46
     discord.js: ^14.11.0
     eslint: ^8.43.0
     eslint-config-prettier: ^8.8.0
@@ -1730,10 +1730,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.41, discord-api-types@npm:^0.37.45":
+"discord-api-types@npm:^0.37.41":
   version: 0.37.45
   resolution: "discord-api-types@npm:0.37.45"
   checksum: 10cc44a1e9f340586cc3e1c86fd9a48b9b03ca8c28d9b244cfd0e7bc1251c92b516711794b0cfc810f4cb416056139faec961eedc21cfcc331c948270d31b5b0
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.37.46":
+  version: 0.37.46
+  resolution: "discord-api-types@npm:0.37.46"
+  checksum: 86da1a4ed1d57164fa7bbda10bc6126c72685e55b6ed8b30299406fc8cace721e78d3aebe0fe1b35039fad37be4d52a208c9e53f2abfde1bfc3d1aa034f8d264
   languageName: node
   linkType: hard
 
