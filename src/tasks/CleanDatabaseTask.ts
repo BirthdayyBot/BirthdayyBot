@@ -10,7 +10,7 @@ import { isDevelopment, isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',
-	pattern: '0 0 * * *',
+	pattern: '30 0 * * *',
 	enabled: isProduction || isDevelopment,
 })
 export class CleanDatabaseTask extends ScheduledTask {
