@@ -10,6 +10,7 @@ export const ROOT_DIR = join(__dirname, '..', '..', '..');
 export const SRC_DIR = join(ROOT_DIR, 'src');
 
 export const DEBUG = envParseBoolean('DEBUG', true);
+export const APP_ENV = envParseString('APP_ENV');
 
 // GENERIC
 export const { BOT_ID, BOT_NAME, BOT_AVATAR } = process.env;
@@ -27,7 +28,7 @@ export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO]);
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
-export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT', false);
+export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT');
 
 // EMOJIS
 export const SUCCESS = '<:checkmark_square_birthdayy:1102222019476586526>';

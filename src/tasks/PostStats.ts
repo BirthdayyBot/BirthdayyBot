@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Result } from '@sapphire/result';
+import { IS_CUSTOM_BOT } from '../helpers';
 import { isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
@@ -10,7 +11,7 @@ import { isProduction } from '../lib/utils/env';
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
-		if (!isProduction) return;
+		if (!isProduction || IS_CUSTOM_BOT) return;
 		const result = await Result.fromAsync(this.container.botList.postStats());
 
 		return result.match({

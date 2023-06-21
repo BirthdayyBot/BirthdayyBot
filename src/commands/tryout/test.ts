@@ -1,12 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import { IS_CUSTOM_BOT, reply } from '../../helpers';
+import { APP_ENV, IS_CUSTOM_BOT, reply } from '../../helpers';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isDevelopment } from '../../lib/utils/env';
+import { envIs, isDevelopment } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -14,7 +14,6 @@ import { isDevelopment } from '../../lib/utils/env';
 })
 export class TestCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
-		// Register slash command
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
@@ -26,13 +25,13 @@ export class TestCommand extends Command {
 		);
 	}
 
-	// slash command
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const toggle = {
-			cleanUp: true,
+			cleanUp: false,
 			displayStats: true,
 			reminder: true,
 			isCustomBotCheck: true,
+			appEnv: true,
 		};
 		const fields: APIEmbedField[] = [{ name: 'test', value: 'Test Test' }];
 
@@ -42,6 +41,8 @@ export class TestCommand extends Command {
 		if (toggle.cleanUp) await this.container.tasks.run('CleanDatabaseTask', {});
 		if (toggle.displayStats) await this.container.tasks.run('DisplayStats', {});
 		if (toggle.isCustomBotCheck) fields.push({ name: 'IsCustomBot?', value: inlineCode(String(IS_CUSTOM_BOT)) });
+		if (toggle.appEnv) fields.push({ name: 'APP ENV', value: inlineCode(APP_ENV) });
+		if (toggle.appEnv) fields.push({ name: 'IS APP ENV', value: inlineCode(String(envIs('APP_ENV', 'dev'))) });
 
 		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
 		const testEmbed = generateDefaultEmbed(testEmbedObj);
