@@ -11,7 +11,7 @@ import { isProduction } from '../lib/utils/env';
 })
 export class DisplayStats extends ScheduledTask {
 	public async run() {
-		if (!isProduction) return;
+		if (!isProduction) return this.container.logger.error('DisplayStats task is disabled.');
 		const guilds = await this.container.botList.computeGuilds();
 		const users = await this.container.botList.computeUsers();
 		const serverCountChannel = await getVoiceChannel(ChannelIdEnum.GUILD_STATS_CHANNEL);

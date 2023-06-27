@@ -6,7 +6,7 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 	description: 'ping pong',
 })
 export class PingCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+	public override async registerApplicationCommands(registry: Command.Registry) {
 		// Register slash command
 		registry.registerChatInputCommand(
 			{
@@ -14,7 +14,7 @@ export class PingCommand extends Command {
 				description: this.description,
 			},
 			{
-				guildIds: getCommandGuilds('testing'),
+				guildIds: await getCommandGuilds('testing'),
 			},
 		);
 	}

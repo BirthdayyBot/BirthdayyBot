@@ -16,7 +16,7 @@ import { generateDefaultEmbed, interactionProblem } from '../../lib/utils/embed'
 	requiredClientPermissions: ['SendMessages'],
 })
 export class TogglePremiumCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>
 				builder
@@ -32,7 +32,7 @@ export class TogglePremiumCommand extends Command {
 						option.setName('toggle').setDescription('The toggle value').setRequired(true),
 					),
 			{
-				guildIds: getCommandGuilds('admin'),
+				guildIds: await getCommandGuilds('admin'),
 			},
 		);
 	}

@@ -16,9 +16,9 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class CountCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(CountCMD(), {
-			guildIds: getCommandGuilds('admin'),
+			guildIds: await getCommandGuilds('admin'),
 		});
 	}
 

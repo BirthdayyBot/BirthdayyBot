@@ -17,6 +17,7 @@ export class Guild extends Utility {
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, language: true } }),
 		GuildPremium: (guildId: string) =>
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, premium: true } }),
+		PremiumGuilds: () => this.prisma.guild.findMany({ where: { premium: true } }),
 		GuildDisabled: (guildId: string) =>
 			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, disabled: true } }),
 		GuildConfig: (guildId: string) =>

@@ -17,9 +17,9 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	requiredClientPermissions: ['SendMessages'],
 })
 export class GuideCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(ReminderCMD(), {
-			guildIds: getCommandGuilds('testing'),
+			guildIds: await getCommandGuilds('testing'),
 		});
 	}
 

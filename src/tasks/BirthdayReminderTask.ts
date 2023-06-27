@@ -19,18 +19,19 @@ import {
 	type Snowflake,
 } from 'discord.js';
 import { logAll } from '../helpers/provide/config';
-import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, IS_CUSTOM_BOT, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import { generateDefaultEmbed } from '../lib/utils/embed';
+import { isCustom } from '../lib/utils/env';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
-		container.logger.info('[BirthdayTask] Started');
+		container.logger.debug('[BirthdayTask] Started');
 		if (birthdayEvent && Object.keys(birthdayEvent).length !== 0) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');
 			return this.birthdayEvent(birthdayEvent.userId, birthdayEvent.guildId, birthdayEvent.isTest);
@@ -55,11 +56,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
 		];
 
-		if (IS_CUSTOM_BOT) {
+		if (isCustom) {
 			container.logger.info('[BirthdayTask] Custom Bot task');
 			const guildOffset = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
 			if (guildOffset?.timezone !== utcOffset) {
-				return container.logger.debug('[BirthdayTask Custom] Not current Offset');
+				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
+				return container.logger.debug(
+					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
+				);
 			}
 			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
@@ -87,7 +91,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const eventInfos = await this.birthdayReminderLoop(currentBirthdays);
 		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, currentBirthdays.length, current);
-		return container.logger.info(
+		return container.logger.debug(
 			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
 		);
 	}
@@ -96,7 +100,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const eventInfos = [];
 		for (const birthday of birthdays) {
 			if (DEBUG)
-				this.container.logger.info(
+				this.container.logger.debug(
 					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
 				);
 			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
@@ -110,31 +114,42 @@ export class BirthdayReminderTask extends ScheduledTask {
 			userId,
 			guildId,
 		};
-		const guild = await getGuildInformation(guildId);
-		if (!guild) {
-			await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error) => {
-				this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
-			});
-			eventInfo.error = 'Guild not found';
-			return eventInfo;
-		}
-		const member = await getGuildMember(guildId, userId);
-		if (!member) {
-			if (!isTest) {
-				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
-					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
-				});
-			}
-			eventInfo.error = 'Member not found';
-			return eventInfo;
-		}
-
-		const config = await this.container.utilities.guild.get.GuildConfig(guild.id);
+		const config = await this.container.utilities.guild.get.GuildConfig(guildId);
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const { announcementChannel, birthdayRole, birthdayPingRole, announcementMessage } = config;
+		const {
+			announcementChannel,
+			birthdayRole,
+			birthdayPingRole,
+			announcementMessage,
+			premium: guildIsPremium,
+		} = config;
+
+		const guild = await getGuildInformation(guildId);
+		if (!guild) {
+			eventInfo.error = 'Guild not found';
+			if (!guildIsPremium) {
+				// TODO: Clean up in #407
+				await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error) => {
+					this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+				});
+				eventInfo.error += ' - Guild & Birthdays disabled';
+			}
+			return eventInfo;
+		}
+		const member = await getGuildMember(guildId, userId);
+		if (!member) {
+			eventInfo.error = 'Member not found';
+			if (!isTest && !guildIsPremium) {
+				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
+					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
+				});
+				eventInfo.error += ' - Birthday deleted';
+			}
+			return eventInfo;
+		}
 
 		eventInfo.announcement = {
 			sent: false,
@@ -239,7 +254,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				content,
 				embeds: [birthdayEmbed],
 			});
-			container.logger.info('Sent Birthday Announcement');
+			container.logger.debug('Sent Birthday Announcement');
 			returnData.sent = true;
 			returnData.message = 'Success';
 			return returnData;
