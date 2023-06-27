@@ -6,7 +6,7 @@ import { getCommandGuilds } from '../../helpers/utils/guilds';
 import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { envIs, isDevelopment } from '../../lib/utils/env';
+import { isProduction } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -37,13 +37,12 @@ export class TestCommand extends Command {
 
 		await thinking(interaction);
 
-		if (isDevelopment && toggle.reminder) await this.container.tasks.run('BirthdayReminderTask', {});
+		if (true) await this.container.tasks.run('BirthdayReminderTask', {});
 		if (toggle.cleanUp) await this.container.tasks.run('CleanDatabaseTask', {});
 		if (toggle.displayStats) await this.container.tasks.run('DisplayStats', {});
 		if (toggle.isCustomBotCheck) fields.push({ name: 'IsCustomBot?', value: inlineCode(String(IS_CUSTOM_BOT)) });
 		if (toggle.appEnv) fields.push({ name: 'APP ENV', value: inlineCode(APP_ENV) });
-		if (toggle.appEnv) fields.push({ name: 'IS APP ENV', value: inlineCode(String(envIs('APP_ENV', 'dev'))) });
-
+		if (toggle.appEnv) fields.push({ name: 'isProduction', value: inlineCode(isProduction ? 'true' : 'false') });
 		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
 		const testEmbed = generateDefaultEmbed(testEmbedObj);
 

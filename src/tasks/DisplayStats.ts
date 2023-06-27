@@ -1,6 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import { IS_CUSTOM_BOT } from '../helpers';
 import { getVoiceChannel } from '../lib/discord';
 import { ChannelIdEnum } from '../lib/enum/ChannelId.enum';
 import { isProduction } from '../lib/utils/env';
@@ -12,7 +11,7 @@ import { isProduction } from '../lib/utils/env';
 })
 export class DisplayStats extends ScheduledTask {
 	public async run() {
-		if (!isProduction || IS_CUSTOM_BOT) return;
+		if (!isProduction) return this.container.logger.error('DisplayStats task is disabled.');
 		const guilds = await this.container.botList.computeGuilds();
 		const users = await this.container.botList.computeUsers();
 		const serverCountChannel = await getVoiceChannel(ChannelIdEnum.GUILD_STATS_CHANNEL);
