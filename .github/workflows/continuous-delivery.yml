@@ -50,7 +50,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
+            type=ref,event=branch,value=${{ github.ref_name }}
             type=ref,event=pr
             type=raw,value=${{ steps.package_version.outputs.version }}
             type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
@@ -72,7 +72,7 @@ jobs:
       github.event.inputs.environment == 'prd' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'production'
+      CONTAINER_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -86,7 +86,7 @@ jobs:
       github.event.inputs.environment == 'custom' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'custom'
+      CONTAINER_TAG: 'custom'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -100,7 +100,7 @@ jobs:
       github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'straykids'
+      CONTAINER_TAG: 'straykids'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -114,7 +114,7 @@ jobs:
       github.event.inputs.environment == 'nayeon' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'nayeon'
+      CONTAINER_TAG: 'nayeon'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_NAYEON }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -128,8 +128,7 @@ jobs:
       github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
     uses: ./.github/workflows/deploy.yml
     secrets:
-      DOCKER_TAG: 'testing'
-      IMAGE_TAG: 'testing'
+      CONTAINER_TAG: 'testing'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_TESTING }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
