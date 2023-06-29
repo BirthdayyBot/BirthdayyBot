@@ -87,6 +87,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'custom'
+      IMAGE_TAG: 'production'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
@@ -115,6 +116,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     secrets:
       DOCKER_TAG: 'nayeon'
+      IMAGE_TAG: 'testing'
       DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
       DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_NAYEON }}'
       SSH_HOST: '${{ secrets.SSH_HOST }}'
