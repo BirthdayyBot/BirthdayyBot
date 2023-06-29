@@ -15,8 +15,6 @@ on:
         required: true
       DOCKER_NETWORK:
         required: true
-      IMAGE_TAG:
-        required: false
       GHCR_USER:
         required: false
       GHCR_TOKEN:
@@ -24,7 +22,7 @@ on:
 
 env:
   CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
-  REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ secrets.IMAGE_TAG || 'latest' }}
+  REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{  github.ref_name || 'latest' }}
 
 jobs:
   ssh:
