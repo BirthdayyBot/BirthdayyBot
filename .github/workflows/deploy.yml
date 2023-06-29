@@ -9,7 +9,7 @@ on:
         required: true
       SSH_KEY:
         required: true
-      DOCKER_TAG:
+      CONTAINER_TAG:
         required: true
       DOPPLER_TOKEN:
         required: true
@@ -23,7 +23,7 @@ on:
         required: false
 
 env:
-  CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.DOCKER_TAG }}
+  CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
   REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ secrets.IMAGE_TAG || 'latest' }}
 
 jobs:
