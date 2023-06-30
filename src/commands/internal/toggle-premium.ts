@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { Command } from '@sapphire/framework';
 import { bold, inlineCode } from 'discord.js';
 import { getCommandGuilds } from '../../helpers';
 import { reply } from '../../helpers/send/response';
