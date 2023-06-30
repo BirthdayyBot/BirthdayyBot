@@ -15,7 +15,7 @@ export const HelpEmbed: APIEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,
 	description: `
   ${SUPPORT} Confused what each command does?
-  ${LINK} Check out our docs: [https://docs.birthdayy.xyz](${DOCS_URL})
+  ${LINK} Check out our docs: [Birthdayy Docs](${DOCS_URL})
   ${PLUS} Unlock Beta / Premium Features: [Birthdayy Patreon](${PREMIUM_URL})\n
   ${SIGN} \`<>\` required
   ${SIGN} \`[]\` optional
@@ -37,7 +37,7 @@ export const HelpEmbed: APIEmbed = {
 			name: '/birthday',
 			value: `
   ${ARROW_RIGHT}register \`<day>\` \`<month>\` \`[year]\` \`[user]\`
-  ${ARROW_RIGHT}list 
+  ${ARROW_RIGHT}list
   ${ARROW_RIGHT}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
   ${ARROW_RIGHT}remove \`<user>\`
   ${ARROW_RIGHT}show \`[user]\`
