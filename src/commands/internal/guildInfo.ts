@@ -1,16 +1,17 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { getCommandGuilds, getFormattedTimestamp, reply } from '../../helpers';
 import { GuildInfoCMD } from '../../lib/commands/guildInfo';
 import thinking from '../../lib/discord/thinking';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { isCustom } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'guild-info',
 	description: 'Get Infos about a Guild',
-	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
+	enabled: !isCustom,
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	preconditions: ['AdminOnly'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })

@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { bold, inlineCode } from 'discord.js';
 import { getCommandGuilds } from '../../helpers';
 import { reply } from '../../helpers/send/response';
@@ -11,7 +11,8 @@ import { generateDefaultEmbed, interactionProblem } from '../../lib/utils/embed'
 	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: true,
-	preconditions: [['DMOnly', 'GuildTextOnly'], 'AdminOnly' /* any other preconditions here */],
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	preconditions: ['AdminOnly'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })
