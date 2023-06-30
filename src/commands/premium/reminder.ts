@@ -11,8 +11,8 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
 	description: 'premium tryout',
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'], 'GuildPremium' /* any other preconditions here */],
+	enabled: false,
+	preconditions: ['GuildPremium'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })
