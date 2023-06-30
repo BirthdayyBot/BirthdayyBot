@@ -9,7 +9,6 @@ export const isTst = envIs('APP_ENV', 'tst');
 export const isPrd = envIs('APP_ENV', 'prd');
 
 export const isCustom = envParseBoolean('CUSTOM_BOT');
+export const isNotCustom = !isCustom;
 export const isDevelopment = isDev || isTst;
-// when isCustom is false and isPrd is true return true else return false
-// export const isProduction = isCustom ? false : isPrd ? true : false;
-export const isProduction = isPrd && !isCustom;
+export const isProduction = isPrd && isNotCustom;

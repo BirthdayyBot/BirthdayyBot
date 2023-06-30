@@ -5,13 +5,13 @@ import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { CountCMD } from '../../lib/commands/count';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { isNotCustom } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: true,
-	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
-	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
+	enabled: isNotCustom,
+	preconditions: [['DMOnly', 'GuildTextOnly']],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
 })

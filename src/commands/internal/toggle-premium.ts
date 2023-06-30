@@ -6,12 +6,12 @@ import { reply } from '../../helpers/send/response';
 import { getGuildInformation } from '../../lib/discord';
 import thinking from '../../lib/discord/thinking';
 import { generateDefaultEmbed, interactionProblem } from '../../lib/utils/embed';
+import { isNotCustom } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: true,
-	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	enabled: isNotCustom,
 	preconditions: ['AdminOnly'],
 	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
