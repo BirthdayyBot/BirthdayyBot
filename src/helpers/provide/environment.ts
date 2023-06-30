@@ -3,7 +3,7 @@ import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { UserIDEnum } from '../../lib/enum/UserID.enum';
-import { isProduction } from '../../lib/utils/env';
+import { isCustom, isProduction } from '../../lib/utils/env';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
@@ -21,8 +21,9 @@ export const IMG_BLOCK =
 	'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env
 	.BOT_ID!}&permissions=8&scope=bot`;
-export const BIRTHDAYY_INVITE =
-	'https://discord.com/oauth2/authorize?client_id=916434908728164372&permissions=525529836753&scope=bot';
+export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=${
+	isCustom ? UserIDEnum.BIRTHDAYY : BOT_ID || UserIDEnum.BIRTHDAYY
+}&permissions=525529836753&scope=bot`;
 export const BOT_COLOR = envParseInteger('BOT_COLOR', BotColorEnum.BIRTHDAYY);
 export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO]);
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
