@@ -31,7 +31,7 @@
     "@skyra/env-utilities": "^1.2.1",
     "bullmq": "^4.1.0",
     "colorette": "^2.0.20",
-    "dayjs": "^1.11.8",
+    "dayjs": "^1.11.9",
     "discord-api-types": "^0.37.47",
     "discord.js": "^14.11.0",
     "prisma": "^4.16.2",
@@ -89,5 +89,5 @@
     "type": "git",
     "url": "git+https://github.com/BirthdayyBot/BirthdayyBotSapphire.git"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@3.6.1"
 }
