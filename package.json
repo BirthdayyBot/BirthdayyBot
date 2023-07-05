@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@sapphire/cli": "^1.6.1",
-    "@sapphire/eslint-config": "^4.4.2",
+    "@sapphire/eslint-config": "^4.4.3",
     "@sapphire/ts-config": "^4.0.0",
     "@types/node": "^20.3.3",
     "@types/ws": "^8.5.5",
