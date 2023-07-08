@@ -1,6 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { getCommandGuilds, getFormattedTimestamp, reply } from '../../helpers';
+import generateConfigList from '../../helpers/generate/configList';
 import { GuildInfoCMD } from '../../lib/commands/guildInfo';
 import thinking from '../../lib/discord/thinking';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
@@ -29,7 +30,10 @@ export class GuildInfoCommand extends Command {
 		const guildDiscord = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
+		this.container.logger.info('GuildInfoCommand ~ overridechatInputRun ~ guildDiscord:', guildDiscord);
+		this.container.logger.info('GuildInfoCommand ~ overridechatInputRun ~ guildDatabase:', guildDatabase);
 		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
+
 		const embed = generateDefaultEmbed({
 			title: 'GuildInfos',
 			thumbnail: {
@@ -51,7 +55,6 @@ export class GuildInfoCommand extends Command {
 					value: guildDiscord.description ?? 'No Description',
 					inline: true,
 				},
-
 				{
 					name: 'GuildShard',
 					value: `Shard ${guildDiscord.shardId + 1}`,
@@ -109,9 +112,11 @@ export class GuildInfoCommand extends Command {
 			],
 		});
 
+		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));
+
 		return reply(interaction, {
 			content: `GuildInfos for ${guildDiscord.name}`,
-			embeds: [embed],
+			embeds: [embed, configEmbed],
 		});
 	}
 }

@@ -1,12 +1,8 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import type { Guild } from '@prisma/client';
-import { container } from '@sapphire/framework';
-import { objectEntries } from '@sapphire/utilities';
-import { type APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
-import { ARROW_RIGHT, PLUS } from '../../../helpers/provide/environment';
+import generateConfigList from '../../../helpers/generate/configList';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
+import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder.setName('list').setDescription('List all Birthdays in this Discord server'),
@@ -16,80 +12,8 @@ export class ListCommand extends Command {
 		// TODO: Implement configList Command
 		await thinking(interaction);
 
-		const embedFields = await generateFields(interaction.guildId);
+		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
 
-		const embed = generateDefaultEmbed({
-			title: `Config List - ${interaction.guild.name}`,
-			description: 'Use /config `<setting>` `<value>` to change any setting',
-			fields: embedFields,
-		});
-
-		await reply(interaction, { embeds: [embed] });
-	}
-}
-
-async function generateFields(guildId: string): Promise<APIEmbedField[]> {
-	let config = await container.prisma.guild.findUnique({
-		where: { guildId },
-		select: {
-			birthdayRole: true,
-			birthdayPingRole: true,
-			announcementChannel: true,
-			announcementMessage: true,
-			overviewChannel: true,
-			timezone: true,
-			language: true,
-			premium: true,
-		},
-	});
-
-	if (!config) config = await container.utilities.guild.create({ guildId });
-
-	return objectEntries(config).map(([name, value]) => {
-		const valueString = getValueString(name, value);
-		const nameString = getNameString(name);
-		return {
-			name: nameString,
-			value: valueString,
-			inline: false,
-		};
-	});
-}
-
-function getValueString(name: keyof Guild, value: string | number | boolean | null) {
-	if (value === null) {
-		return `${ARROW_RIGHT} not set`;
-	} else if (name === 'timezone' && typeof value === 'number') {
-		return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
-	} else if (name.includes('Channel') && typeof value === 'string') {
-		return `${ARROW_RIGHT} ${channelMention(value)}`;
-	} else if (name.includes('Role') && typeof value === 'string') {
-		return `${ARROW_RIGHT} ${roleMention(value)}`;
-	} else if (name.includes('User') && typeof value === 'string') {
-		return `${ARROW_RIGHT} ${userMention(value)}`;
-	}
-	return `${ARROW_RIGHT} ${value.toString()}`;
-}
-
-function getNameString(name: keyof Guild): string {
-	switch (name) {
-		case 'announcementChannel':
-			return 'Announcement Channel';
-		case 'overviewChannel':
-			return 'Overview Channel';
-		case 'birthdayRole':
-			return 'Birthday Role';
-		case 'birthdayPingRole':
-			return 'Birthday Ping Role';
-		case 'logChannel':
-			return 'Log Channel';
-		case 'timezone':
-			return 'Timezone';
-		case 'announcementMessage':
-			return `${PLUS} Birthday Message`;
-		case 'premium':
-			return 'Premium';
-		default:
-			return name;
+		await reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
 	}
 }
