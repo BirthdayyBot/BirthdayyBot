@@ -8,7 +8,7 @@ export async function getCommandGuilds(
 	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
 ): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.CHILLI_ATTACK_V2, GuildIDEnum.BIRTHDAYY_TESTING];
-	const adminGuilds = [GuildIDEnum.BIRTHDAYY_HQ];
+	const adminGuilds = [GuildIDEnum.BIRTHDAYY_HQ, GuildIDEnum.BIRTHDAYY_TESTING];
 	const customGuild = [MAIN_DISCORD];
 	if (isNotCustom) adminGuilds.push(GuildIDEnum.CHILLI_HQ);
 	if (isDevelopment) return testingGuilds;
