@@ -22,9 +22,16 @@ on:
 
 env:
   CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
-  REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{  github.ref_name || 'latest' }}
+  PACKAGE_URL: ghcr.io/${{ github.repository }}:${{  github.ref_name }}
 
 jobs:
+  printEnvironmentVariables:
+    name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Package URL
+        run: echo $PACKAGE_URL
   ssh:
     name: SSH and deploy
     runs-on: ubuntu-latest
@@ -54,4 +61,4 @@ jobs:
           ssh -T ${{ secrets.SSH_HOST }} "docker stop ${{ env.CONTAINER_NAME }} || true \\
           && docker rm ${{ env.CONTAINER_NAME }} || true \\
           && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.REPOSITORY_NAME }}"
+          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}"
