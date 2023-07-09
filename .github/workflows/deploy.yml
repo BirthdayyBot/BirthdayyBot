@@ -22,14 +22,27 @@ on:
 
 env:
   CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
-  PACKAGE_URL: ghcr.io/${{ github.repository }}:${{  github.ref_name }}
+  REPOSITORY_NAME_LOWERCASE: ${{ github.repository  }} # will be set later
+  PACKAGE_URL: null # will be set later
 
 jobs:
-  printEnvironmentVariables:
+  prepare_environment:
     name:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set lowercase repository name
+        run: |
+          echo "REPOSITORY_NAME_LOWERCASE=$(echo ${{ env.REPOSITORY_NAME_LOWERCASE }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Use lowercase repository name
+        run: |
+          echo "PACKAGE_URL: ghcr.io/${{ env.REPOSITORY_NAME_LOWERCASE }}:${{ github.ref_name }}"
+
+      - name: Display lowercase repository name
+        run: |
+          echo ${{ env.REPOSITORY_NAME_LOWERCASE }}
+
       - name: Print Package URL
         run: echo $PACKAGE_URL
   ssh:
