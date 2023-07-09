@@ -2,6 +2,7 @@ import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { time, type TimestampStylesString } from 'discord.js';
 import type { TimezoneObject } from '../../lib/model';
 import { checkIfLengthIsTwo } from './string';
 
@@ -163,4 +164,8 @@ export function getCurrentOffset(): TimezoneObject {
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;
+}
+
+export function getFormattedTimestamp(discordTimestamp: number, style: TimestampStylesString): string {
+	return time(Math.floor(discordTimestamp / 1000), style);
 }

@@ -1,10 +1,10 @@
 import type { Birthday } from '@prisma/client';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import {
+	AttachmentBuilder,
 	DiscordAPIError,
 	Guild,
 	GuildMember,
@@ -322,16 +322,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
 		];
 		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
-		const reportDescription =
-			codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
-				? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
-						0,
-						EmbedLimits.MaximumDescriptionLength - 6,
-				  )}...\`\`\``
-				: codeBlock('json', JSON.stringify(eventInfos, null, 2));
-		// TODO: #228 Use Paginated Embeds when Content is too long
+		// const reportDescription =
+		// 	codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
+		// 		? `${codeBlock('json', JSON.stringify(eventInfos, null, 2)).substring(
+		// 				0,
+		// 				EmbedLimits.MaximumDescriptionLength - 6,
+		// 		  )}...\`\`\``
+		// 		: codeBlock('json', JSON.stringify(eventInfos, null, 2));
+		const reportContent = JSON.stringify(eventInfos, null, 2);
 		if (eventInfos.length <= 0) {
 			return sendReport();
+		}
+
+		let guildIdsString = '';
+		for (const eventInfo of eventInfos) {
+			guildIdsString += `${eventInfo.guildId}\n`;
 		}
 
 		const schedulerReportMessage = await sendReport();
@@ -339,13 +344,25 @@ export class BirthdayReminderTask extends ScheduledTask {
 			name: embedTitle,
 			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
 		});
-		return schedulerLogThread?.send({
+		const reportFile = new AttachmentBuilder(Buffer.from(reportContent), {
+			name: `${embedTitle}.json`,
+			description: 'Scheduler Report File',
+		});
+
+		if (!schedulerLogThread) {
+			return schedulerReportMessage?.channel.send('Couldnt create a thread!');
+		}
+		await schedulerLogThread.send({
 			embeds: [
 				generateDefaultEmbed({
 					title: embedTitle,
-					description: reportDescription,
+					description: `Guilds:\n${codeBlock(guildIdsString)}`,
 				}),
 			],
+		});
+
+		return schedulerLogThread.send({
+			files: [reportFile],
 		});
 
 		async function sendReport() {
