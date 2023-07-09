@@ -37,7 +37,7 @@ export class TestCommand extends Command {
 
 		await thinking(interaction);
 
-		if (toggle.reminder) await this.container.tasks.run('BirthdayReminderTask', {});
+		if (toggle.reminder && !isProduction) await this.container.tasks.run('BirthdayReminderTask', {});
 		if (toggle.cleanUp) await this.container.tasks.run('CleanDatabaseTask', {});
 		if (toggle.displayStats) await this.container.tasks.run('DisplayStats', {});
 		if (toggle.isCustomBotCheck) fields.push({ name: 'IsCustomBot', value: inlineCode(String(isCustom)) });
