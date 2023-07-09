@@ -37,7 +37,7 @@ jobs:
 
       - name: Use lowercase repository name
         run: |
-          echo "PACKAGE_URL: ghcr.io/${{ env.REPOSITORY_NAME_LOWERCASE }}:${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "PACKAGE_URL=ghcr.io/${{ env.REPOSITORY_NAME_LOWERCASE }}:${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Display lowercase repository name
         run: |
