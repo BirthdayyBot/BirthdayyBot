@@ -32,9 +32,6 @@ jobs:
     steps:
       - name: Print Package URL
         run: echo $PACKAGE_URL
-
-      - name: Print Container Name
-        run: echo $CONTAINER_NAME
   ssh:
     name: SSH and deploy
     runs-on: ubuntu-latest
