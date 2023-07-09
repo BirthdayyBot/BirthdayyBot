@@ -21,56 +21,63 @@ env:
   REPOSITORY_NAME: ${{ github.event.repository.name }}
 
 jobs:
-  Publish:
-    name: Publish image to GHCR 🚀
+  # Publish:
+  #   name: Publish image to GHCR 🚀
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Project
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref_name }}
+
+  #     - name: Extract version from package.json
+  #       id: package_version
+  #       uses: saionaro/extract-package-version@v1.2.1
+
+  #     - name: Setup Docker buildx
+  #       uses: docker/setup-buildx-action@2a1a44ac4aa01993040736bd95bb470da1a38365
+
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v2.2.0
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.repository_owner }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+
+  #     - name: Extract metadata for Docker images
+  #       id: meta
+  #       uses: docker/metadata-action@v4
+  #       with:
+  #         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+  #         tags: |
+  #           type=ref,event=branch,value=${{ github.ref_name }}
+  #           type=ref,event=pr
+  #           type=raw,value=${{ steps.package_version.outputs.version }}
+  #           type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
+  #           type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
+
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v4.1.1
+  #       with:
+  #         context: .
+  #         file: ./docker/Dockerfile
+  #         push: true
+  #         tags: ${{ steps.meta.outputs.tags }}
+  #         labels: ${{ steps.meta.outputs.labels }}
+
+  #     - name: Print Docker image tags
+  #       run: echo "${{ steps.meta.outputs.tags }}"
+  REF_NAME:
+    name:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Project
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }}
-
-      - name: Extract version from package.json
-        id: package_version
-        uses: saionaro/extract-package-version@v1.2.1
-
-      - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@2a1a44ac4aa01993040736bd95bb470da1a38365
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.2.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata for Docker images
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch,value=${{ github.ref_name }}
-            type=ref,event=pr
-            type=raw,value=${{ steps.package_version.outputs.version }}
-            type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
-            type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4.1.1
-        with:
-          context: .
-          file: ./docker/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Print Docker image tags
-        run: echo "${{ steps.meta.outputs.tags }}"
+      - name: REF NAME
+        run: echo ${{ github.ref_name }}
 
   deploy_production:
     name: Birthdayy 🎂
-    needs: Publish
+    # needs: Publish
     if: |
       github.event.inputs.environment == 'prd' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
@@ -84,7 +91,7 @@ jobs:
 
   deploy_custom:
     name: Custom 🎂
-    needs: Publish
+    # needs: Publish
     if: |
       github.event.inputs.environment == 'custom' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
@@ -98,7 +105,7 @@ jobs:
 
   deploy_staykids:
     name: StrayKids 🎂
-    needs: Publish
+    # needs: Publish
     if: |
       github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
@@ -112,7 +119,7 @@ jobs:
 
   deploy_nayeon:
     name: NAYEON 🎂
-    needs: Publish
+    # needs: Publish
     if: |
       github.event.inputs.environment == 'nayeon' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
     uses: ./.github/workflows/deploy.yml
@@ -126,7 +133,7 @@ jobs:
 
   deploy_testing:
     name: Testing 🧪
-    needs: Publish
+    # needs: Publish
     if: |
       github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
     uses: ./.github/workflows/deploy.yml

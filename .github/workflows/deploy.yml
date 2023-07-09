@@ -30,9 +30,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print Repository Name
-        run: echo $REPOSITORY_NAME
-
       - name: Print Package URL
         run: echo $PACKAGE_URL
 
