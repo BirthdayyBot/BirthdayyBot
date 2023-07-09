@@ -26,10 +26,9 @@ env:
   PACKAGE_URL: default yet # will be set later
 
 jobs:
-  prepare_environment:
-    name: Prepare environment
+  ssh:
+    name: SSH and deploy
     runs-on: ubuntu-latest
-
     steps:
       - name: Set lowercase repository name
         run: |
@@ -45,14 +44,7 @@ jobs:
 
       - name: Print Package URL
         run: echo $PACKAGE_URL
-        id: package-url
-        env:
-          PACKAGE_URL: ${{ env.PACKAGE_URL }}
 
-  ssh:
-    name: SSH and deploy
-    runs-on: ubuntu-latest
-    steps:
       - name: Login to GHCR.io
         uses: docker/login-action@v2
         with:
@@ -78,4 +70,4 @@ jobs:
           ssh -T ${{ secrets.SSH_HOST }} "docker stop ${{ env.CONTAINER_NAME }} || true \\
           && docker rm ${{ env.CONTAINER_NAME }} || true \\
           && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ steps.package-url.outputs.PACKAGE_URL }}"
+          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}"
