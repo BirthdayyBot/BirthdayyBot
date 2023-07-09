@@ -23,7 +23,7 @@ on:
 env:
   CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
   REPOSITORY_NAME_LOWERCASE: ${{ github.repository  }} # will be set later
-  PACKAGE_URL: null # will be set later
+  PACKAGE_URL: default yet # will be set later
 
 jobs:
   prepare_environment:
