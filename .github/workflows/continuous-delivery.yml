@@ -65,6 +65,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Print Docker image tags
+        run: echo "${{ steps.meta.outputs.tags }}"
+
   deploy_production:
     name: Birthdayy 🎂
     needs: Publish

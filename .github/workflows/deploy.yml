@@ -22,9 +22,19 @@ on:
 
 env:
   CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
-  REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{  github.ref_name || 'latest' }}
+  REPOSITORY_NAME: ghcr.io/$( echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' ):${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name || 'latest' }}
 
 jobs:
+  printEnvironmentVariables:
+    name: Print Environment Variables
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Repository Name
+        run: echo $REPOSITORY_NAME
+
+      - name: Print Container Name
+        run: echo $CONTAINER_NAME
   ssh:
     name: SSH and deploy
     runs-on: ubuntu-latest
