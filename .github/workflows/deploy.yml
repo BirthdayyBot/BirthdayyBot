@@ -25,15 +25,7 @@ env:
   REPOSITORY_NAME_LOWERCASE: ${{ github.repository  }} # will be set later
   PACKAGE_URL: ghcr.io/${{ github.repository }}:${{  github.ref_name }}
 
-
 jobs:
-  printEnvironmentVariables:
-    name:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Print Package URL
-        run: echo $PACKAGE_URL
   ssh:
     name: SSH and deploy
     runs-on: ubuntu-latest

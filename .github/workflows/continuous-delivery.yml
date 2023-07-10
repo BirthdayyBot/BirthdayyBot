@@ -67,16 +67,6 @@ jobs:
 
       - name: Print Docker image tags
         run: echo "${{ steps.meta.outputs.tags }}"
-  REF_NAME:
-    name:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: REF NAME
-        run: echo ${{ github.ref_name }}
-
-      - name: Print Docker image tags
-        run: echo "${{ steps.meta.outputs.tags }}"
 
   deploy_production:
     name: Birthdayy 🎂
