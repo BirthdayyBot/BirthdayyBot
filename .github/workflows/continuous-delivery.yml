@@ -4,10 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Bot Environment (prd, tst, custom, straykids, nayeon)'
-        required: false
+        description: 'Bot Environment'
+        type: choice
+        options:
+          - prd
+          - tst
+          - custom
+          - straykids
+          - nayeon
+        required: true
       publish: # Publish image to GHCR
-        description: 'Publish image to GHCR'
+        description: 'Publish image to GHCR?'
         required: false
         type: boolean
         default: true
@@ -62,7 +69,7 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
 
       - name: Build and push Docker image
-        if: github.event.inputs.publish == 'true'
+        if: github.event.inputs.publish == 'true' || github.event_name == 'push'
         uses: docker/build-push-action@v4.1.1
         id: docker_build_push
         with:
@@ -142,7 +149,7 @@ jobs:
     name: Testing 🧪
     needs: Publish
     if: |
-      github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing')
+      github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing') || (github.event.inputs.environment == null && github.ref == 'refs/heads/develop')
     uses: ./.github/workflows/deploy.yml
     with:
       CONTAINER_TAG: 'testing'
