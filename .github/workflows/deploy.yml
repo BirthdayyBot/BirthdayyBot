@@ -86,4 +86,5 @@ jobs:
             docker stop ${{ env.CONTAINER_NAME }} || true
             docker rm ${{ env.CONTAINER_NAME }} || true
             docker image prune -a -f
-            docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} --pull ${{ env.PACKAGE_URL }}
+            docker pull ${{ env.PACKAGE_URL }}
+            docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} --pull always ${{ env.PACKAGE_URL }}
