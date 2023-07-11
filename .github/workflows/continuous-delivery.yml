@@ -29,7 +29,6 @@ jobs:
   Publish:
     name: Publish image to GHCR 🚀
     runs-on: ubuntu-latest
-    if: github.event.inputs.publish == 'true'
     steps:
       - name: Checkout Project
         uses: actions/checkout@v3
@@ -63,6 +62,7 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
 
       - name: Build and push Docker image
+        if: github.event.inputs.publish == 'true'
         uses: docker/build-push-action@v4.1.1
         id: docker_build_push
         with:
