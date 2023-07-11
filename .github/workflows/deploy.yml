@@ -2,14 +2,17 @@ name: Deploy using Docker via SSH
 
 on:
   workflow_call:
+    inputs:
+      CONTAINER_TAG:
+        required: true
+        type: string
+        description: 'The tag of the container to deploy'
     secrets:
       SSH_HOST:
         required: true
       SSH_USER:
         required: true
       SSH_KEY:
-        required: true
-      CONTAINER_TAG:
         required: true
       DOPPLER_TOKEN:
         required: true
@@ -21,7 +24,7 @@ on:
         required: false
 
 env:
-  CONTAINER_NAME: ${{ github.event.repository.name }}-${{ secrets.CONTAINER_TAG }}
+  CONTAINER_NAME: ${{ github.event.repository.name }}-${{ inputs.CONTAINER_TAG }}
   REPOSITORY_NAME_LOWERCASE: ${{ github.repository  }} # will be set later
   PACKAGE_URL: ghcr.io/${{ github.repository }}:${{  github.ref_name }}
 
@@ -52,22 +55,35 @@ jobs:
           username: ${{ secrets.GHCR_USER || github.actor }}
           password: ${{ secrets.GHCR_TOKEN || github.token }}
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: 'placeholder'
-          config: |
-            Host ${{ secrets.SSH_HOST }}
-            HostName ${{ secrets.SSH_HOST }}
-            User ${{ secrets.SSH_USER }}
-            StrictHostKeyChecking no
-      - name: Add known hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      # - name: Install SSH Key
+      #   uses: shimataro/ssh-key-action@v2
+      #   with:
+      #     key: ${{ secrets.SSH_KEY }}
+      #     known_hosts: 'placeholder'
+      #     config: |
+      #       Host ${{ secrets.SSH_HOST }}
+      #       HostName ${{ secrets.SSH_HOST }}
+      #       User ${{ secrets.SSH_USER }}
+      #       StrictHostKeyChecking no
+      # - name: Add known hosts
+      #   run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Run commands in remote host
-        run: |
-          ssh -T ${{ secrets.SSH_HOST }} "docker stop ${{ env.CONTAINER_NAME }} || true \\
-          && docker rm ${{ env.CONTAINER_NAME }} || true \\
-          && docker image prune -a -f \\
-          && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}"
+      # - name: Run commands in remote host
+      #   run: |
+      #     ssh -T ${{ secrets.SSH_HOST }} "docker stop ${{ env.CONTAINER_NAME }} || true \\
+      #     && docker rm ${{ env.CONTAINER_NAME }} || true \\
+      #     && docker image prune -a -f \\
+      #     && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}"
+
+      - name: Run on VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
+            docker image prune -a -f
+            docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}
