@@ -55,28 +55,8 @@ jobs:
           username: ${{ secrets.GHCR_USER || github.actor }}
           password: ${{ secrets.GHCR_TOKEN || github.token }}
 
-      # - name: Install SSH Key
-      #   uses: shimataro/ssh-key-action@v2
-      #   with:
-      #     key: ${{ secrets.SSH_KEY }}
-      #     known_hosts: 'placeholder'
-      #     config: |
-      #       Host ${{ secrets.SSH_HOST }}
-      #       HostName ${{ secrets.SSH_HOST }}
-      #       User ${{ secrets.SSH_USER }}
-      #       StrictHostKeyChecking no
-      # - name: Add known hosts
-      #   run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      # - name: Run commands in remote host
-      #   run: |
-      #     ssh -T ${{ secrets.SSH_HOST }} "docker stop ${{ env.CONTAINER_NAME }} || true \\
-      #     && docker rm ${{ env.CONTAINER_NAME }} || true \\
-      #     && docker image prune -a -f \\
-      #     && docker run -d --restart=unless-stopped --net ${{ secrets.DOCKER_NETWORK }} --env DOPPLER_TOKEN=${{ secrets.DOPPLER_TOKEN }} --name ${{ env.CONTAINER_NAME }} ${{ env.PACKAGE_URL }}"
-
       - name: Run on VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
