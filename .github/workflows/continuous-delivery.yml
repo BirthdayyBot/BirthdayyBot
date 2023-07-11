@@ -6,6 +6,11 @@ on:
       environment:
         description: 'Bot Environment (prd, tst, custom, straykids, nayeon)'
         required: false
+      publish: # Publish image to GHCR
+        description: 'Publish image to GHCR'
+        required: false
+        type: boolean
+        default: true
   push:
     branches: [testing, production]
 
@@ -24,6 +29,7 @@ jobs:
   Publish:
     name: Publish image to GHCR 🚀
     runs-on: ubuntu-latest
+    if: github.event.inputs.publish == 'true'
     steps:
       - name: Checkout Project
         uses: actions/checkout@v3
