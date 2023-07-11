@@ -58,6 +58,7 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4.1.1
+        id: docker_build_push
         with:
           context: .
           file: ./docker/Dockerfile
@@ -69,7 +70,7 @@ jobs:
         run: echo "${{ steps.meta.outputs.tags }}"
 
       - name: Print Build Digest
-        run: echo "${{ steps.meta.outputs.digest }}"
+        run: echo "${{ steps.docker_build_push.outputs.digest }}"
 
   deploy_production:
     name: Birthdayy 🎂
