@@ -29,7 +29,7 @@
     "@sentry/node": "^7.59.2",
     "@sentry/tracing": "^7.59.2",
     "@skyra/env-utilities": "^1.2.1",
-    "bullmq": "^4.4.0",
+    "bullmq": "^4.5.0",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.9",
     "discord-api-types": "^0.37.48",
@@ -82,7 +82,7 @@
     "db:generate": "docker exec -it birthdayy npx prisma generate"
   },
   "engines": {
-    "node": "18.16.x",
+    "node": "18.17.x",
     "npm": "^9.8.0"
   },
   "lint-staged": {
