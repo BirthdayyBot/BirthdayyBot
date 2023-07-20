@@ -1276,7 +1276,7 @@ __metadata:
     "@types/ws": ^8.5.5
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
-    bullmq: ^4.5.0
+    bullmq: ^4.6.0
     colorette: ^2.0.20
     dayjs: ^1.11.9
     discord-api-types: ^0.37.48
@@ -1352,19 +1352,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "bullmq@npm:4.5.0"
+"bullmq@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "bullmq@npm:4.6.0"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
     ioredis: ^5.3.2
     lodash: ^4.17.21
     msgpackr: ^1.6.2
-    semver: ^7.3.7
+    semver: ^7.5.4
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 35eab7c68e55a6bf4fbe2671dd17c17d27ad52532c1b33b258b1b3267f5baa1f758fd24581b12aa220b652ff59475478fa2602ba2bddae0d45c2ff377edfc0a5
+  checksum: c2ab388b52444d5d10d7122ea1951808cba488d84be0c098b4a5f08d5029b97fb30d4d5437dd3cbf9dfb3a34fab402f72832b72e57dc5c4d3f90782bd79f0342
   languageName: node
   linkType: hard
 
@@ -4542,7 +4542,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5, semver@npm:^7.3.7":
+"semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.4":
   version: 7.5.4
   resolution: "semver@npm:7.5.4"
   dependencies:
