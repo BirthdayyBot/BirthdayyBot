@@ -1425,14 +1425,14 @@ __metadata:
     discord-api-types: ^0.37.50
     discord.js: ^14.11.0
     eslint: ^8.46.0
-    eslint-config-prettier: ^8.9.0
+    eslint-config-prettier: ^8.10.0
     eslint-plugin-import: ^2.28.0
     eslint-plugin-prettier: ^5.0.0
     eslint-plugin-tsdoc: ^0.2.17
     husky: ^8.0.3
     lint-staged: ^13.2.3
     npm-run-all: ^4.1.5
-    prettier: ^3.0.0
+    prettier: ^3.0.1
     prettier-plugin-packagejson: ^2.4.5
     prettier-plugin-prisma: ^5.0.0
     prisma: ^5.1.1
@@ -2119,7 +2119,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.8.0, eslint-config-prettier@npm:^8.9.0":
+"eslint-config-prettier@npm:^8.10.0":
+  version: 8.10.0
+  resolution: "eslint-config-prettier@npm:8.10.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  bin:
+    eslint-config-prettier: bin/cli.js
+  checksum: 153266badd477e49b0759816246b2132f1dbdb6c7f313ca60a9af5822fd1071c2bc5684a3720d78b725452bbac04bb130878b2513aea5e72b1b792de5a69fec8
+  languageName: node
+  linkType: hard
+
+"eslint-config-prettier@npm:^8.8.0":
   version: 8.9.0
   resolution: "eslint-config-prettier@npm:8.9.0"
   peerDependencies:
@@ -4366,6 +4377,15 @@ __metadata:
   bin:
     prettier: bin/prettier.cjs
   checksum: 6a832876a1552dc58330d2467874e5a0b46b9ccbfc5d3531eb69d15684743e7f83dc9fbd202db6270446deba9c82b79d24383d09924c462b457136a759425e33
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "prettier@npm:3.0.1"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: e1f3f16c7fe0495de3faa182597871f74927d787cce3c52095a66ff5d7eacc05173371d5f58bf12141a0a1b6bfe739a338531d6cf18b92c7256c1319f2c84e73
   languageName: node
   linkType: hard
 
