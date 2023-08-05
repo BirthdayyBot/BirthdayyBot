@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "Comenzi de gestionare a zilei de naștere",
+  "birthdayName": "zi de nastere",
+  "listDescription": "Listați toate zilele de naștere înregistrate",
+  "listName": "listă",
+  "registerDescription": "Înregistrează-ți ziua de naștere",
+  "registerName": "Inregistreaza-te",
+  "removeDescription": "Eliminați ziua de naștere",
+  "removeName": "elimina",
+  "showDescription": "Arată ziua ta de naștere",
+  "showName": "spectacol",
+  "testDescription": "Testați configurațiile actuale ale zilei de naștere",
+  "testName": "Test",
+  "updateDescription": "Actualizează-ți ziua de naștere",
+  "updateName": "Actualizați",
+  "register": {
+    "alreadyRegistered_author": "Ziua ta de naștere este deja înregistrată. \nDacă doriți să o schimbați, utilizați {{comandă}}",
+    "alreadyRegistered_target": "Ziua de naștere a acestui utilizator este deja înregistrată. \nDacă doriți să o schimbați, utilizați {{comandă}}",
+    "dayDescription": "Ziua zilei de naștere",
+    "dayName": "zi",
+    "hasNotPermissionManagesRoles": "Nu aveți permisiunea de a înregistra zile de naștere",
+    "hasNotPermissionToManageThisUser": "Nu aveți permisiunea de a înregistra ziua de naștere a acestui utilizator.",
+    "monthDescription": "Luna zilei de naștere",
+    "monthName": "lună",
+    "notCreated": "Ziua de naștere nu a putut fi creată. \nVă rugăm să încercați din nou mai târziu.",
+    "success_author": "Ziua ta de naștere a fost creată cu succes.",
+    "success_target": "Ziua de naștere a lui {{target}} a fost creată cu succes.",
+    "userDescription": "Utilizatorul pentru care este creată ziua de naștere - NUMAI MANAGER.",
+    "userName": "utilizator",
+    "yearDescription": "Anul zilei de naștere",
+    "yearName": "an"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Nu aveți permisiunea de a elimina zilele de naștere",
+    "hasNotPermissionToManageThisUser": "Nu aveți permisiunea de a elimina ziua de naștere a acestui utilizator.",
+    "notRegistered_author": "Ziua ta de naștere nu este înregistrată.",
+    "notRegistered_target": "Ziua de naștere a lui {{target}} nu este înregistrată.",
+    "success_author": "Ziua ta de naștere a fost eliminată cu succes.",
+    "success_target": "Ziua de naștere a lui {target}} a fost eliminată.",
+    "userDescription": "Eliminați o zi de naștere pentru o persoană - NUMAI MANAGER",
+    "userName": "utilizator"
+  },
+  "show": {
+    "description_author": "{{emoji}}Ziua ta de naștere este la {{data}}.",
+    "description_target": "Ziua de naștere a lui {{emoji}} {{target}} este la {{date}}.",
+    "notRegistered_author": "Ziua ta de naștere nu este înregistrată. \nFolosiți {{comandă}} pentru a o înregistra.",
+    "notRegistered_target": "Ziua de naștere a lui {{target}} nu este înregistrată.",
+    "title": "{{emoji}} ziua de naștere",
+    "userDescription": "Afișați o zi de naștere pentru o persoană - NUMAI MANAGER",
+    "userName": "utilizator"
+  },
+  "test": {
+    "userDescription": "Testați o zi de naștere pentru o persoană - NUMAI MANAGER",
+    "userName": "utilizator"
+  },
+  "update": {
+    "dayDescription": "Ziua zilei de naștere",
+    "dayName": "zi",
+    "hasNotPermissionToManageThisUser": "Nu aveți permisiunea de a actualiza data de naștere a acestui utilizator.",
+    "monthDescription": "Luna zilei de naștere",
+    "monthName": "lună",
+    "notRegistered_author": "Ziua ta de naștere nu este înregistrată. \nFolosiți {{comandă}} pentru a o înregistra.",
+    "notRegistered_target": "Ziua de naștere a lui {{target}} nu este înregistrată.",
+    "notUpdated": "Ziua de naștere nu a putut fi actualizată. \nVă rugăm să încercați din nou mai târziu.",
+    "success_author": "Ziua ta de naștere a fost actualizată cu succes la {{date}}.",
+    "success_target": "Ziua de naștere a lui {{target}} a fost actualizată cu succes la {{date}}.",
+    "userDescription": "Utilizatorul pentru care ziua de naștere este actualizată - NUMAI MANAGER.",
+    "userName": "utilizator",
+    "yearDescription": "Anul zilei de naștere",
+    "yearName": "an"
+  }
+}

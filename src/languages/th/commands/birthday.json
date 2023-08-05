@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "คำสั่งการจัดการวันเกิด",
+  "birthdayName": "วันเกิด",
+  "listDescription": "รายการวันเกิดที่ลงทะเบียนทั้งหมด",
+  "listName": "รายการ",
+  "registerDescription": "ลงทะเบียนวันเกิดของคุณ",
+  "registerName": "ลงทะเบียน",
+  "removeDescription": "ลบวันเกิดของคุณ",
+  "removeName": "ลบ",
+  "showDescription": "แสดงวันเกิดของคุณ",
+  "showName": "แสดง",
+  "testDescription": "ทดสอบการกำหนดค่าวันเกิดปัจจุบันของคุณ",
+  "testName": "ทดสอบ",
+  "updateDescription": "อัพเดทวันเกิดของคุณ",
+  "updateName": "อัปเดต",
+  "register": {
+    "alreadyRegistered_author": "วันเกิดของคุณลงทะเบียนแล้ว \nหากต้องการเปลี่ยน ให้ใช้ {{command}}",
+    "alreadyRegistered_target": "มีการลงทะเบียนวันเกิดของผู้ใช้รายนี้แล้ว \nหากต้องการเปลี่ยน ให้ใช้ {{command}}",
+    "dayDescription": "วันคล้ายวันเกิด",
+    "dayName": "วัน",
+    "hasNotPermissionManagesRoles": "คุณไม่ได้รับอนุญาตให้ลงทะเบียนวันเกิด",
+    "hasNotPermissionToManageThisUser": "คุณไม่ได้รับอนุญาตให้ลงทะเบียนวันเกิดของผู้ใช้รายนี้",
+    "monthDescription": "เดือนเกิด",
+    "monthName": "เดือน",
+    "notCreated": "ไม่สามารถสร้างวันเกิดได้ \nกรุณาลองใหม่อีกครั้งในภายหลัง.",
+    "success_author": "สร้างวันเกิดของคุณสำเร็จแล้ว",
+    "success_target": "สร้างวันเกิดของ {{target}} สำเร็จแล้ว",
+    "userDescription": "ผู้ใช้ที่สร้างวันเกิด - ผู้จัดการเท่านั้น",
+    "userName": "ผู้ใช้",
+    "yearDescription": "ปีเกิด",
+    "yearName": "ปี"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "คุณไม่ได้รับอนุญาตให้ลบวันเกิด",
+    "hasNotPermissionToManageThisUser": "คุณไม่ได้รับอนุญาตให้ลบวันเกิดของผู้ใช้รายนี้",
+    "notRegistered_author": "วันเกิดของคุณไม่ได้ลงทะเบียน",
+    "notRegistered_target": "วันเกิดของ {{target}} ไม่ได้ลงทะเบียน",
+    "success_author": "ลบวันเกิดของคุณเรียบร้อยแล้ว",
+    "success_target": "ลบวันเกิดของ {target}} เรียบร้อยแล้ว",
+    "userDescription": "ลบวันเกิดของบุคคล - ผู้จัดการเท่านั้น",
+    "userName": "ผู้ใช้"
+  },
+  "show": {
+    "description_author": "{{emoji}}วันเกิดของคุณคือวันที่ {{date}}",
+    "description_target": "วันเกิดของ {{emoji}} {{target}} คือวันที่ {{date}}",
+    "notRegistered_author": "วันเกิดของคุณไม่ได้ลงทะเบียน \nใช้ {{command}} เพื่อลงทะเบียน",
+    "notRegistered_target": "วันเกิดของ {{target}} ไม่ได้ลงทะเบียน",
+    "title": "{{อีโมจิ}} วันเกิด",
+    "userDescription": "แสดงวันเกิดของบุคคล - ผู้จัดการเท่านั้น",
+    "userName": "ผู้ใช้"
+  },
+  "test": {
+    "userDescription": "ทดสอบวันเกิดสำหรับบุคคล - ผู้จัดการเท่านั้น",
+    "userName": "ผู้ใช้"
+  },
+  "update": {
+    "dayDescription": "วันคล้ายวันเกิด",
+    "dayName": "วัน",
+    "hasNotPermissionToManageThisUser": "คุณไม่มีสิทธิ์อัปเดตวันเกิดของผู้ใช้รายนี้",
+    "monthDescription": "เดือนเกิด",
+    "monthName": "เดือน",
+    "notRegistered_author": "วันเกิดของคุณไม่ได้ลงทะเบียน \nใช้ {{command}} เพื่อลงทะเบียน",
+    "notRegistered_target": "วันเกิดของ {{target}} ไม่ได้ลงทะเบียน",
+    "notUpdated": "ไม่สามารถอัปเดตวันเกิดได้ \nกรุณาลองใหม่อีกครั้งในภายหลัง.",
+    "success_author": "อัปเดตวันเกิดของคุณเรียบร้อยแล้วเมื่อ {{date}}",
+    "success_target": "อัปเดตวันเกิดของ {{target}} เรียบร้อยแล้วเมื่อ {{date}}",
+    "userDescription": "ผู้ใช้ที่มีการอัปเดตวันเกิด - ผู้จัดการเท่านั้น",
+    "userName": "ผู้ใช้",
+    "yearDescription": "ปีเกิด",
+    "yearName": "ปี"
+  }
+}

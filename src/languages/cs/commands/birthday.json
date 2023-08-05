@@ -1,0 +1,73 @@
+{
+  "birthdayDescription": "Příkazy pro správu narozenin",
+  "birthdayName": "narozeniny",
+  "listDescription": "Seznam všech registrovaných narozenin",
+  "listName": "seznam",
+  "register": {
+    "alreadyRegistered_author": "Vaše narozeniny jsou již zaregistrovány. \nPokud to chcete změnit, použijte {{command}}",
+    "alreadyRegistered_target": "Narozeniny tohoto uživatele jsou již zaregistrovány. \nPokud to chcete změnit, použijte {{command}}",
+    "dayDescription": "Den narozenin",
+    "dayName": "den",
+    "hasNotPermissionManagesRoles": "Nemáte oprávnění k registraci narozenin",
+    "hasNotPermissionToManageThisUser": "Nemáte oprávnění zaregistrovat narozeniny tohoto uživatele.",
+    "monthDescription": "Měsíc narozenin",
+    "monthName": "Měsíc",
+    "notCreated": "Narozeniny se nepodařilo vytvořit. \nProsím zkuste to znovu později.",
+    "success_author": "Vaše narozeniny byly úspěšně vytvořeny.",
+    "success_target": "Narozeniny uživatele {{target}} byly úspěšně vytvořeny.",
+    "userDescription": "Uživatel, pro kterého jsou narozeniny vytvořeny – POUZE SPRÁVCE.",
+    "userName": "uživatel",
+    "yearDescription": "Rok narozenin",
+    "yearName": "rok"
+  },
+  "registerDescription": "Zaregistrujte své narozeniny",
+  "registerName": "Registrovat",
+  "remove": {
+    "hasNotPermissionManagesRoles": "Nemáte oprávnění odebrat narozeniny",
+    "hasNotPermissionToManageThisUser": "Nemáte oprávnění odebrat datum narození tohoto uživatele.",
+    "notRegistered_author": "Vaše datum narození není zaregistrováno.",
+    "notRegistered_target": "Datum narození uživatele {{target}} není zaregistrováno.",
+    "success_author": "Vaše narozeniny byly úspěšně odstraněny.",
+    "success_target": "Narozeniny uživatele {target}} byly úspěšně odstraněny.",
+    "userDescription": "Odebrat narozeniny pro osobu – POUZE SPRÁVCE",
+    "userName": "uživatel"
+  },
+  "removeDescription": "Odebrat datum narození",
+  "removeName": "odstranit",
+  "show": {
+    "description_author": "{{emoji}}Vaše narozeniny jsou {{date}}.",
+    "description_target": "{{emoji}} {{target}} má narozeniny {{date}}.",
+    "notRegistered_author": "Vaše datum narození není zaregistrováno. \nK registraci použijte {{command}}.",
+    "notRegistered_target": "Datum narození uživatele {{target}} není zaregistrováno.",
+    "title": "{{emoji}} narozeniny",
+    "userDescription": "Zobrazit narozeniny pro osobu – POUZE SPRÁVCE",
+    "userName": "uživatel"
+  },
+  "showDescription": "Ukaž své narozeniny",
+  "showName": "ukázat",
+  "test": {
+    "userDescription": "Otestujte narozeniny pro osobu – POUZE SPRÁVCE",
+    "userName": "uživatel"
+  },
+  "testDescription": "Otestujte své aktuální narozeninové konfigurace",
+  "testName": "test",
+  "update": {
+    "dayDescription": "Den narozenin",
+    "dayName": "den",
+    "hasNotPermissionManagesRoles": "",
+    "hasNotPermissionToManageThisUser": "Nemáte oprávnění aktualizovat datum narození tohoto uživatele.",
+    "monthDescription": "Měsíc narozenin",
+    "monthName": "Měsíc",
+    "notRegistered_author": "Vaše datum narození není zaregistrováno. \nK registraci použijte {{command}}.",
+    "notRegistered_target": "Datum narození uživatele {{target}} není zaregistrováno.",
+    "notUpdated": "Datum narozenin se nepodařilo aktualizovat. \nProsím zkuste to znovu později.",
+    "success_author": "Vaše narozeniny byly úspěšně aktualizovány {{date}}.",
+    "success_target": "Narozeniny uživatele {{target}} byly úspěšně aktualizovány dne {{date}}.",
+    "userDescription": "Uživatel, u kterého se datum narození aktualizuje – POUZE SPRÁVCE.",
+    "userName": "uživatel",
+    "yearDescription": "Rok narozenin",
+    "yearName": "rok"
+  },
+  "updateDescription": "Aktualizujte své narozeniny",
+  "updateName": "Aktualizace"
+}

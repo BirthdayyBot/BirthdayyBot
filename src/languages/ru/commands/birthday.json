@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "Команды управления днем ​​рождения",
+  "birthdayName": "день рождения",
+  "listDescription": "Список всех зарегистрированных дней рождения",
+  "listName": "список",
+  "registerDescription": "Зарегистрируйте свой день рождения",
+  "registerName": "регистр",
+  "removeDescription": "Удалить дату рождения",
+  "removeName": "удалять",
+  "showDescription": "Покажи свой день рождения",
+  "showName": "показывать",
+  "testDescription": "Проверьте текущие настройки дня рождения",
+  "testName": "тест",
+  "updateDescription": "Обновите дату своего рождения",
+  "updateName": "обновлять",
+  "register": {
+    "alreadyRegistered_author": "Ваш день рождения уже зарегистрирован. \nЕсли вы хотите изменить его, используйте {{command}}",
+    "alreadyRegistered_target": "День рождения этого пользователя уже зарегистрирован. \nЕсли вы хотите изменить его, используйте {{command}}",
+    "dayDescription": "День рождения",
+    "dayName": "день",
+    "hasNotPermissionManagesRoles": "У вас недостаточно прав для регистрации дней рождения",
+    "hasNotPermissionToManageThisUser": "У вас недостаточно прав для регистрации дня рождения этого пользователя.",
+    "monthDescription": "Месяц дня рождения",
+    "monthName": "месяц",
+    "notCreated": "Не удалось создать день рождения. \nПожалуйста, повторите попытку позже.",
+    "success_author": "Ваш день рождения успешно создан.",
+    "success_target": "День рождения {{target}} успешно создан.",
+    "userDescription": "Пользователь, для которого создается день рождения - ТОЛЬКО МЕНЕДЖЕР.",
+    "userName": "пользователь",
+    "yearDescription": "Год дня рождения",
+    "yearName": "год"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "У вас недостаточно прав для удаления дней рождения.",
+    "hasNotPermissionToManageThisUser": "У вас нет разрешения на удаление дня рождения этого пользователя.",
+    "notRegistered_author": "Ваш день рождения не зарегистрирован.",
+    "notRegistered_target": "День рождения {{target}} не зарегистрирован.",
+    "success_author": "Дата вашего рождения успешно удалена.",
+    "success_target": "Дата рождения пользователя {target}} удалена.",
+    "userDescription": "Удалить день рождения для человека - ТОЛЬКО МЕНЕДЖЕР",
+    "userName": "пользователь"
+  },
+  "show": {
+    "description_author": "{{emoji}}Ваш день рождения {{date}}.",
+    "description_target": "У {{emoji}} {{target}} день рождения {{date}}.",
+    "notRegistered_author": "Ваш день рождения не зарегистрирован. \nИспользуйте {{command}}, чтобы зарегистрировать его.",
+    "notRegistered_target": "День рождения {{target}} не зарегистрирован.",
+    "title": "{{emoji}} день рождения",
+    "userDescription": "Показать день рождения для человека - ТОЛЬКО МЕНЕДЖЕР",
+    "userName": "пользователь"
+  },
+  "test": {
+    "userDescription": "Протестировать день рождения для человека - ТОЛЬКО МЕНЕДЖЕР",
+    "userName": "пользователь"
+  },
+  "update": {
+    "dayDescription": "День рождения",
+    "dayName": "день",
+    "hasNotPermissionToManageThisUser": "У вас недостаточно прав для обновления даты рождения этого пользователя.",
+    "monthDescription": "Месяц дня рождения",
+    "monthName": "месяц",
+    "notRegistered_author": "Ваш день рождения не зарегистрирован. \nИспользуйте {{command}}, чтобы зарегистрировать его.",
+    "notRegistered_target": "День рождения {{target}} не зарегистрирован.",
+    "notUpdated": "Дата рождения не может быть обновлена. \nПожалуйста, повторите попытку позже.",
+    "success_author": "Дата вашего рождения была успешно обновлена ​​{{date}}.",
+    "success_target": "День рождения {{target}} был успешно обновлен {{date}}.",
+    "userDescription": "Пользователь, для которого обновляется день рождения - ТОЛЬКО МЕНЕДЖЕР.",
+    "userName": "пользователь",
+    "yearDescription": "Год дня рождения",
+    "yearName": "год"
+  }
+}

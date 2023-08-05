@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "Perintah manajemen ulang tahun",
+  "birthdayName": "hari ulang tahun",
+  "listDescription": "Buat daftar semua ulang tahun yang terdaftar",
+  "listName": "daftar",
+  "registerDescription": "Daftarkan tanggal lahir Anda",
+  "registerName": "daftar",
+  "removeDescription": "Hapus tanggal lahir Anda",
+  "removeName": "menghapus",
+  "showDescription": "Tunjukkan tanggal lahir Anda",
+  "showName": "menunjukkan",
+  "testDescription": "Uji konfigurasi ulang tahun Anda saat ini",
+  "testName": "tes",
+  "updateDescription": "Perbarui tanggal lahir Anda",
+  "updateName": "memperbarui",
+  "register": {
+    "alreadyRegistered_author": "Tanggal lahir Anda sudah terdaftar. \nJika Anda ingin mengubahnya, gunakan {{command}}",
+    "alreadyRegistered_target": "Ulang tahun pengguna ini sudah terdaftar. \nJika Anda ingin mengubahnya, gunakan {{command}}",
+    "dayDescription": "Hari ulang tahun",
+    "dayName": "hari",
+    "hasNotPermissionManagesRoles": "Anda tidak memiliki izin untuk mendaftarkan ulang tahun",
+    "hasNotPermissionToManageThisUser": "Anda tidak memiliki izin untuk mendaftarkan ulang tahun pengguna ini.",
+    "monthDescription": "Bulan ulang tahun",
+    "monthName": "bulan",
+    "notCreated": "Tanggal lahir tidak dapat dibuat. \nCoba lagi nanti.",
+    "success_author": "Ulang tahun Anda berhasil dibuat.",
+    "success_target": "Ulang tahun {{target}} berhasil dibuat.",
+    "userDescription": "Pengguna yang ulang tahunnya dibuat - KHUSUS MANAJER.",
+    "userName": "pengguna",
+    "yearDescription": "Tahun ulang tahun",
+    "yearName": "tahun"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Anda tidak memiliki izin untuk menghapus ulang tahun",
+    "hasNotPermissionToManageThisUser": "Anda tidak memiliki izin untuk menghapus ulang tahun pengguna ini.",
+    "notRegistered_author": "Tanggal lahir Anda tidak terdaftar.",
+    "notRegistered_target": "Ulang tahun {{target}} tidak terdaftar.",
+    "success_author": "Ulang tahun Anda berhasil dihapus.",
+    "success_target": "ulang tahun {target}} berhasil dihapus.",
+    "userDescription": "Hapus Ulang Tahun untuk Seseorang - KHUSUS MANAJER",
+    "userName": "pengguna"
+  },
+  "show": {
+    "description_author": "{{emoji}}Ulang tahun Anda pada {{tanggal}}.",
+    "description_target": "Ulang tahun {{emoji}} {{target}} adalah pada {{tanggal}}.",
+    "notRegistered_author": "Tanggal lahir Anda tidak terdaftar. \nGunakan {{command}} untuk mendaftarkannya.",
+    "notRegistered_target": "Ulang tahun {{target}} tidak terdaftar.",
+    "title": "{{emoji}} Ulang tahun",
+    "userDescription": "Tampilkan Ulang Tahun untuk Seseorang - KHUSUS MANAJER",
+    "userName": "pengguna"
+  },
+  "test": {
+    "userDescription": "Menguji Ulang Tahun untuk Seseorang - KHUSUS MANAJER",
+    "userName": "pengguna"
+  },
+  "update": {
+    "dayDescription": "Hari ulang tahun",
+    "dayName": "hari",
+    "hasNotPermissionToManageThisUser": "Anda tidak memiliki izin untuk memperbarui ulang tahun pengguna ini.",
+    "monthDescription": "Bulan ulang tahun",
+    "monthName": "bulan",
+    "notRegistered_author": "Tanggal lahir Anda tidak terdaftar. \nGunakan {{command}} untuk mendaftarkannya.",
+    "notRegistered_target": "Ulang tahun {{target}} tidak terdaftar.",
+    "notUpdated": "Tanggal lahir tidak dapat diperbarui. \nCoba lagi nanti.",
+    "success_author": "Tanggal lahir Anda berhasil diperbarui pada {{date}}.",
+    "success_target": "Ulang tahun {{target}} berhasil diperbarui pada {{date}}.",
+    "userDescription": "Pengguna yang ulang tahunnya diperbarui - KHUSUS MANAJER.",
+    "userName": "pengguna",
+    "yearDescription": "Tahun ulang tahun",
+    "yearName": "tahun"
+  }
+}

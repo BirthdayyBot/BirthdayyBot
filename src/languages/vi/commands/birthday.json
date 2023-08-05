@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "Lệnh quản lý sinh nhật",
+  "birthdayName": "sinh nhật",
+  "listDescription": "Liệt kê tất cả các ngày sinh đã đăng ký",
+  "listName": "danh sách",
+  "registerDescription": "Đăng ký ngày sinh của bạn",
+  "registerName": "đăng ký",
+  "removeDescription": "Xóa ngày sinh của bạn",
+  "removeName": "di dời",
+  "showDescription": "Hiển thị ngày sinh của bạn",
+  "showName": "trình diễn",
+  "testDescription": "Kiểm tra cấu hình sinh nhật hiện tại của bạn",
+  "testName": "Bài kiểm tra",
+  "updateDescription": "Cập nhật ngày sinh của bạn",
+  "updateName": "cập nhật",
+  "register": {
+    "alreadyRegistered_author": "Ngày sinh của bạn đã được đăng ký. \nNếu bạn muốn thay đổi nó, hãy sử dụng {{command}}",
+    "alreadyRegistered_target": "Ngày sinh của người dùng này đã được đăng ký. \nNếu bạn muốn thay đổi nó, hãy sử dụng {{command}}",
+    "dayDescription": "ngày sinh nhật",
+    "dayName": "ngày",
+    "hasNotPermissionManagesRoles": "Bạn không có quyền đăng ký ngày sinh",
+    "hasNotPermissionToManageThisUser": "Bạn không có quyền đăng ký ngày sinh của người dùng này.",
+    "monthDescription": "tháng sinh nhật",
+    "monthName": "tháng",
+    "notCreated": "Không thể tạo ngày sinh nhật. \nVui lòng thử lại sau.",
+    "success_author": "Ngày sinh của bạn đã được tạo thành công.",
+    "success_target": "Sinh nhật của {{mục tiêu}} đã được tạo thành công.",
+    "userDescription": "Người dùng được tạo ngày sinh - CHỈ NGƯỜI QUẢN LÝ.",
+    "userName": "người dùng",
+    "yearDescription": "năm sinh nhật",
+    "yearName": "năm"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Bạn không có quyền xóa ngày sinh",
+    "hasNotPermissionToManageThisUser": "Bạn không có quyền xóa ngày sinh của người dùng này.",
+    "notRegistered_author": "Ngày sinh của bạn chưa được đăng ký.",
+    "notRegistered_target": "Ngày sinh của {{mục tiêu}} chưa được đăng ký.",
+    "success_author": "Ngày sinh của bạn đã được xóa thành công.",
+    "success_target": "Đã xóa thành công ngày sinh của {mục tiêu}}.",
+    "userDescription": "Xóa sinh nhật cho một người - CHỈ NGƯỜI QUẢN LÝ",
+    "userName": "người dùng"
+  },
+  "show": {
+    "description_author": "{{emoji}}Sinh nhật của bạn vào {{date}}.",
+    "description_target": "Sinh nhật của {{emoji}} {{target}} là vào {{date}}.",
+    "notRegistered_author": "Ngày sinh của bạn chưa được đăng ký. \nSử dụng {{command}} để đăng ký nó.",
+    "notRegistered_target": "Ngày sinh của {{mục tiêu}} chưa được đăng ký.",
+    "title": "{{biểu tượng cảm xúc}} Sinh nhật",
+    "userDescription": "Hiển thị ngày sinh của một người - CHỈ NGƯỜI QUẢN LÝ",
+    "userName": "người dùng"
+  },
+  "test": {
+    "userDescription": "Kiểm tra ngày sinh của một người - CHỈ dành cho NGƯỜI QUẢN LÝ",
+    "userName": "người dùng"
+  },
+  "update": {
+    "dayDescription": "ngày sinh nhật",
+    "dayName": "ngày",
+    "hasNotPermissionToManageThisUser": "Bạn không có quyền cập nhật ngày sinh của người dùng này.",
+    "monthDescription": "tháng sinh nhật",
+    "monthName": "tháng",
+    "notRegistered_author": "Ngày sinh của bạn chưa được đăng ký. \nSử dụng {{command}} để đăng ký nó.",
+    "notRegistered_target": "Ngày sinh của {{mục tiêu}} chưa được đăng ký.",
+    "notUpdated": "Không thể cập nhật ngày sinh nhật. \nVui lòng thử lại sau.",
+    "success_author": "Ngày sinh của bạn đã được cập nhật thành công vào {{date}}.",
+    "success_target": "Sinh nhật của {{target}} đã được cập nhật thành công vào {{date}}.",
+    "userDescription": "Người dùng được cập nhật ngày sinh - CHỈ DÀNH CHO NGƯỜI QUẢN LÝ.",
+    "userName": "người dùng",
+    "yearDescription": "năm sinh nhật",
+    "yearName": "năm"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "birthdayDescription": "Syntymäpäivän hallintakomennot",
+  "birthdayName": "syntymäpäivä",
+  "listDescription": "Listaa kaikki rekisteröidyt syntymäpäivät",
+  "listName": "lista",
+  "registerDescription": "Rekisteröi syntymäpäiväsi",
+  "registerName": "rekisteröidy",
+  "removeDescription": "Poista syntymäpäiväsi",
+  "removeName": "Poista",
+  "showDescription": "Näytä syntymäpäiväsi",
+  "showName": "näytä",
+  "testDescription": "Testaa nykyiset syntymäpäivämääritykset",
+  "testName": "testata",
+  "updateDescription": "Päivitä syntymäpäiväsi",
+  "updateName": "päivittää",
+  "register": {
+    "alreadyRegistered_author": "Syntymäpäiväsi on jo rekisteröity. \nJos haluat muuttaa sitä, käytä {{komento}}",
+    "alreadyRegistered_target": "Tämän käyttäjän syntymäpäivä on jo rekisteröity. \nJos haluat muuttaa sitä, käytä {{komento}}",
+    "dayDescription": "Syntymäpäivä",
+    "dayName": "päivä",
+    "hasNotPermissionManagesRoles": "Sinulla ei ole lupaa rekisteröidä syntymäpäiviä",
+    "hasNotPermissionToManageThisUser": "Sinulla ei ole lupaa rekisteröidä tämän käyttäjän syntymäpäivää.",
+    "monthDescription": "Syntymäpäivän kuukausi",
+    "monthName": "kuukausi",
+    "notCreated": "Syntymäpäivää ei voitu luoda. \nYritä uudelleen myöhemmin.",
+    "success_author": "Syntymäpäiväsi luominen onnistui.",
+    "success_target": "Käyttäjän {{target}} syntymäpäivä luotiin onnistuneesti.",
+    "userDescription": "Käyttäjä, jolle syntymäpäivä on luotu - VAIN HALLINTA.",
+    "userName": "käyttäjä",
+    "yearDescription": "Syntymävuosi",
+    "yearName": "vuosi"
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Sinulla ei ole lupaa poistaa syntymäpäiviä",
+    "hasNotPermissionToManageThisUser": "Sinulla ei ole lupaa poistaa tämän käyttäjän syntymäpäivää.",
+    "notRegistered_author": "Syntymäpäivääsi ei ole rekisteröity.",
+    "notRegistered_target": "Käyttäjän {{target}} syntymäpäivää ei ole rekisteröity.",
+    "success_author": "Syntymäpäiväsi poistettiin onnistuneesti.",
+    "success_target": "Käyttäjän {target}} syntymäpäivä poistettiin.",
+    "userDescription": "Syntymäpäivän poistaminen henkilöltä – VAIN JOHTAJA",
+    "userName": "käyttäjä"
+  },
+  "show": {
+    "description_author": "{{emoji}}Syntymäpäiväsi on {{date}}.",
+    "description_target": "{{emoji}}:n {{target}} syntymäpäivä on {{date}}.",
+    "notRegistered_author": "Syntymäpäivääsi ei ole rekisteröity. \nRekisteröi se käyttämällä {{komentoa}}.",
+    "notRegistered_target": "Käyttäjän {{target}} syntymäpäivää ei ole rekisteröity.",
+    "title": "{{emoji}} Syntymäpäivä",
+    "userDescription": "Näytä syntymäpäivä henkilölle – VAIN JOHTAJA",
+    "userName": "käyttäjä"
+  },
+  "test": {
+    "userDescription": "Testaa henkilön syntymäpäivää – VAIN JOHTAJA",
+    "userName": "käyttäjä"
+  },
+  "update": {
+    "dayDescription": "Syntymäpäivä",
+    "dayName": "päivä",
+    "hasNotPermissionToManageThisUser": "Sinulla ei ole lupaa päivittää tämän käyttäjän syntymäpäivää.",
+    "monthDescription": "Syntymäpäivän kuukausi",
+    "monthName": "kuukausi",
+    "notRegistered_author": "Syntymäpäivääsi ei ole rekisteröity. \nRekisteröi se käyttämällä {{komentoa}}.",
+    "notRegistered_target": "Käyttäjän {{target}} syntymäpäivää ei ole rekisteröity.",
+    "notUpdated": "Syntymäpäivää ei voitu päivittää. \nYritä uudelleen myöhemmin.",
+    "success_author": "Syntymäpäiväsi päivitettiin onnistuneesti {{date}}.",
+    "success_target": "Käyttäjän {{target}} syntymäpäivä päivitettiin onnistuneesti {{date}}.",
+    "userDescription": "Käyttäjä, jolle syntymäpäivä päivitetään - VAIN HALLINTA.",
+    "userName": "käyttäjä",
+    "yearDescription": "Syntymävuosi",
+    "yearName": "vuosi"
+  }
+}
