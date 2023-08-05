@@ -16,7 +16,6 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
-import { getGuildLanguage } from './helpers/provide/config';
 import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
 import { UserIDEnum } from './lib/enum/UserID.enum';
 import { isProduction } from './lib/utils/env';
@@ -54,9 +53,11 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 				return 'en-US';
 			}
 
-			const guildLanguage: string = await getGuildLanguage(context.guild.id);
-			container.logger.info(guildLanguage);
-			return guildLanguage || 'en-US';
+			const guild = await container.prisma.guild.findFirst({
+				where: { guildId: context.guild.id },
+			});
+			container.logger.info(guild?.language);
+			return guild?.language || 'en-US';
 		},
 	};
 }

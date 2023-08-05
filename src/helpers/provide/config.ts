@@ -1,8 +1,6 @@
 import type { Prisma } from '@prisma/client';
-import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { container } from '@sapphire/framework';
 import type { ConfigName } from '../../lib/database';
-import { envParseString } from '@skyra/env-utilities';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from './environment';
 
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: string) {
@@ -94,26 +92,4 @@ export function logAll(config: Prisma.GuildUpdateInput) {
 	if (config.announcementMessage !== null)
 		container.logger.debug('ANNOUNCEMENT_MESSAGE: ', config.announcementMessage);
 	container.logger.debug('⩲===============================⩲');
-}
-
-export async function getGuildLanguage(guildId: string): Promise<string> {
-	const requestURL = new URL(`${envParseString('API_URL')}guild/retrieve/language`);
-	requestURL.searchParams.append('guildId', guildId);
-	const data = await fetch<{ guildId: string; language: string }>(
-		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: envParseString('API_SECRET') } },
-		FetchResultTypes.JSON,
-	);
-	return data.language;
-}
-
-export async function getGuildPremium(guildId: string): Promise<boolean> {
-	const requestURL = new URL(`${envParseString('API_URL')}guild/retrieve/premium`);
-	requestURL.searchParams.append('guildId', guildId);
-	const data = await fetch<{ guildId: string; premium: boolean }>(
-		requestURL,
-		{ method: FetchMethods.Get, headers: { Authorization: envParseString('API_SECRET') } },
-		FetchResultTypes.JSON,
-	);
-	return data.premium;
 }

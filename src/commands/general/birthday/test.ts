@@ -1,22 +1,14 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { reply } from '../../../helpers';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { interactionSuccess } from '../../../lib/utils/embed';
+import { testBirthdaySubCommand } from '../../../lib/commands';
+import { RequiresUserPermissions } from '@sapphire/decorators';
 
-@RegisterSubCommand('birthday', (builder) =>
-	builder
-		.setName('test')
-		.setDescription('Test your current birthday configurations')
-		.addUserOption((option) => option.setName('user').setDescription('The user to test the birthday for')),
-)
+@RegisterSubCommand('birthday', (builder) => testBirthdaySubCommand(builder))
 export class TestCommand extends Command {
+	@RequiresUserPermissions('ManageGuild')
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		const target = interaction.options.getUser('user') ?? interaction.member.user;
-
-		const { memberPermissions } = interaction;
-
-		if (!memberPermissions.has('ManageGuild')) {
-			return reply(interaction, interactionProblem("You don't have the permission to test the current configs."));
-		}
 
 		await this.container.tasks.run('BirthdayReminderTask', {
 			userId: target.id,

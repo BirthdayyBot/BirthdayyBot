@@ -18,7 +18,7 @@ services:
     networks:
     - global_dev
 
-  redis: 
+  redis:
     container_name: birthdayy-dev-redis
     image: redis:latest
     restart: unless-stopped

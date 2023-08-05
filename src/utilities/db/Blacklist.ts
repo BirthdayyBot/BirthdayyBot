@@ -1,4 +1,9 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import { Utility } from '@sapphire/plugin-utilities-store';
+
+@ApplyOptions<Utility.Options>({
+	name: 'blacklist',
+})
 export class Blacklist extends Utility {
 	public get = {
 		BlacklistByGuildId: (guildId: string) => this.prisma.blacklist.findMany({ where: { guildId } }),
@@ -15,11 +20,4 @@ export class Blacklist extends Utility {
 	};
 
 	private prisma = this.container.prisma;
-
-	public constructor(context: Utility.Context, options: Utility.Options) {
-		super(context, {
-			...options,
-			name: 'blacklist',
-		});
-	}
 }

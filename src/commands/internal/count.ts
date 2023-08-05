@@ -1,11 +1,11 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { inlineCode, type APIEmbedField } from 'discord.js';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { CountCMD } from '../../lib/commands/count';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { isNotCustom } from '../../lib/utils/env';
+import { BOT_COLOR } from '../../helpers';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',
@@ -23,46 +23,50 @@ export class CountCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const fields = (await this.stats()).map<APIEmbedField>((field) => {
-			return { ...field, value: inlineCode(field.value.toString()), inline: true };
-		});
-
 		await reply(interaction, {
 			embeds: [
+				{
+					title: 'Discord Information',
+					color: BOT_COLOR,
+					fields: [
+						{
+							inline: true,
+							name: 'Guilds',
+							value: (await this.container.botList.computeGuilds()).toString(),
+						},
+						{
+							inline: true,
+							name: 'Shards',
+							value: this.container.client.shard?.count?.toString() ?? '1',
+						},
+						{
+							inline: true,
+							name: 'Users',
+							value: (await this.container.botList.computeUsers()).toString(),
+						},
+					],
+				},
 				generateDefaultEmbed({
-					title: 'Count Information',
-					fields,
+					title: 'Database Information',
+					fields: [
+						{
+							inline: true,
+							name: 'Guilds',
+							value: (await this.container.utilities.guild.get.GuildAvailableCount()).toString(),
+						},
+						{
+							inline: true,
+							name: 'Birthdays',
+							value: (await this.container.utilities.birthday.get.BirthdayAvailableCount()).toString(),
+						},
+						{
+							inline: true,
+							name: 'Users',
+							value: (await this.container.utilities.user.get.UserCount()).toString(),
+						},
+					],
 				}),
 			],
 		});
-	}
-
-	private async stats() {
-		return [
-			{
-				name: 'Discord Guilds',
-				value: await this.container.botList.computeGuilds(),
-			},
-			{
-				name: 'Discord Shards',
-				value: this.container.client.shard?.count?.toString() ?? 1,
-			},
-			{
-				name: 'Discord Users',
-				value: await this.container.botList.computeUsers(),
-			},
-			{
-				name: 'Guilds',
-				value: await this.container.utilities.guild.get.GuildAvailableCount(),
-			},
-			{
-				name: 'Birthdays',
-				value: await this.container.utilities.birthday.get.BirthdayAvailableCount(),
-			},
-			{
-				name: 'Users',
-				value: await this.container.utilities.user.get.UserCount(),
-			},
-		];
 	}
 }

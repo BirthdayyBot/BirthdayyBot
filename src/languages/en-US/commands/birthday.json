@@ -1,17 +1,73 @@
 {
-  "name": "birthday",
-  "description": "Commands for managing birthdays",
-  "subcommand": {
+    "birthdayName": "birthday",
+    "birthdayDescription": "Birthday management commands",
+    "registerName": "register",
+    "registerDescription": "Register your birthday",
     "register": {
-      "name": "register",
-      "description": "Register a new Birthday",
-      "options": {
-        "user": { "name": "user", "description": "Update a Birthday for a Person - MANAGER ONLY" },
-        "day": { "name": "day", "description": "Day of the Birthday" },
-        "month": { "name": "month", "description": "Month of the Birthday" },
-        "year": { "name": "year", "description": "Year of the Birthday" }
-      }
+        "dayName": "day",
+        "dayDescription": "The day of the birthday",
+        "monthName": "month",
+        "monthDescription": "The month of the birthday",
+        "yearName": "year",
+        "yearDescription": "The year of the birthday",
+        "userName": "user",
+        "userDescription": "The user for whom the birthday is created - MANAGER ONLY.",
+        "success_author": "Your birthday was successfully created.",
+        "success_target": "{{target}}'s birthday was successfully created.",
+        "alreadyRegistered_target": "This user's birthday is already registered. If you want to change it, use {{command}}",
+        "alreadyRegistered_author": "Your birthday is already registered. If you want to change it, use {{command}}",
+        "hasNotPermissionManagesRoles": "You don't have permission to register birthdays",
+        "hasNotPermissionToManageThisUser": "You don't have permission to register this user's birthday.",
+        "notCreated": "The birthday could not be created. Please try again later."
     },
-    "update": { "name": "update", "description": "Update an existing birthday" }
-  }
+    "listName": "list",
+    "listDescription": "List all registered birthdays",
+    "removeName": "remove",
+    "removeDescription": "Remove your birthday",
+    "remove": {
+        "userName": "user",
+        "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
+        "success_author": "Your birthday was successfully removed.",
+        "success_target": "{target}}'s birthday was successfully removed.",
+        "notRegistered_author": "Your birthday is not registered.",
+        "notRegistered_target": "{{target}}'s birthday is not registered.",
+        "hasNotPermissionManagesRoles": "You don't have permission to remove birthdays",
+        "hasNotPermissionToManageThisUser": "You don't have permission to remove this user's birthday."
+    },
+    "showName": "show",
+    "showDescription": "Show your birthday",
+    "show": {
+        "userName": "user",
+        "userDescription": "Show a Birthday for a Person - MANAGER ONLY",
+        "title": "{{emoji}} Birthday",
+        "description_author": "{{emoji}}Your birthday is at the {{date}}.",
+        "description_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+        "notRegistered_author": "Your birthday is not registered. Use {{command}} to register it.",
+        "notRegistered_target": "{{target}}'s birthday is not registered."
+    },
+    "updateName": "update",
+    "updateDescription": "Update your birthday",
+    "update": {
+        "dayName": "day",
+        "dayDescription": "The day of the birthday",
+        "monthName": "month",
+        "monthDescription": "The month of the birthday",
+        "yearName": "year",
+        "yearDescription": "The year of the birthday",
+        "userName": "user",
+        "userDescription": "The user for whom the birthday is updated - MANAGER ONLY.",
+        "hasNotPermissionManagesRoles": "You don't have permission to update birthdays",
+        "hasNotPermissionToManageThisUser": "You don't have permission to update this user's birthday.",
+        "success_author": "Your birthday was successfully updated at the {{date}}.",
+        "success_target": "{{target}}'s birthday was successfully updated at the {{date}}.",
+        "notRegistered_author": "Your birthday is not registered. Use {{command}} to register it.",
+        "notRegistered_target": "{{target}}'s birthday is not registered.",
+        "notUpdated": "The birthday could not be updated. Please try again later."
+    },
+    "testName": "test",
+    "testDescription": "Test your current birthday configurations",
+    "test": {
+        "userName": "user",
+        "userDescription": "Test a Birthday for a Person - MANAGER ONLY"
+    }
 }

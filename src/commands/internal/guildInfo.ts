@@ -30,8 +30,6 @@ export class GuildInfoCommand extends Command {
 		const guildDiscord = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
-		this.container.logger.info('GuildInfoCommand ~ overridechatInputRun ~ guildDiscord:', guildDiscord);
-		this.container.logger.info('GuildInfoCommand ~ overridechatInputRun ~ guildDatabase:', guildDatabase);
 		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
 
 		const embed = generateDefaultEmbed({

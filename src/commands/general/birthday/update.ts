@@ -1,98 +1,80 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { container } from '@sapphire/framework';
-import dayjs from 'dayjs';
+import { Result, container } from '@sapphire/framework';
 import { bold, userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
-import { BIRTHDAY_REGISTER, monthChoices } from '../../../lib/commands';
+import { BIRTHDAY_REGISTER, updateBirthdaySubCommand } from '../../../lib/commands';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { resolveTarget } from '../../../lib/utils/functions';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '../../../lib/utils/preconditions';
+import { resolveKey } from '@sapphire/plugin-i18next';
 
-const currentYear = dayjs().year();
-const minYear = currentYear - 100;
-
-@RegisterSubCommand('birthday', (builder) =>
-	builder
-		.setName('update')
-		.setDescription('Update your birthday - MANAGER ONLY')
-		.addIntegerOption((option) =>
-			option.setName('day').setDescription('Day of birthday').setMinValue(1).setMaxValue(31).setRequired(true),
-		)
-		.addStringOption((option) =>
-			option
-				.setName('month')
-				.setDescription('Month of birthday')
-				.addChoices(...monthChoices)
-				.setRequired(true),
-		)
-		.addUserOption((option) =>
-			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY').setRequired(false),
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName('year')
-				.setDescription('Year of birthday')
-				.setMinValue(minYear)
-				.setMaxValue(currentYear)
-				.setRequired(false),
-		),
-)
+@RegisterSubCommand('birthday', (builder) => updateBirthdaySubCommand(builder))
 export class UpdateCommand extends Command {
+	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/birthday:update', 'ManageRoles')
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
-		const targetUser = interaction.options.getUser('user') ?? interaction.user;
-		const { guildId, memberPermissions } = interaction;
-		const authorIsTarget = interaction.user.id === targetUser.id;
+		const { target, targetIsAuthor } = resolveTarget(interaction);
+		const { birthday } = container.prisma;
+		const context = targetIsAuthor ? 'author' : 'target';
 
-		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
-			return reply(
-				interaction,
-				interactionProblem("You don't have the permission to update other users birthdays."),
-			);
-		}
+		const where = { userId: target.id, guildId: interaction.guildId };
 
-		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
+		const resultRegistred = await Result.fromAsync(
+			birthday.findUniqueOrThrow({
+				where: { userId_guildId: where },
+			}),
+		);
 
-		if (!birthday) {
+		if (resultRegistred.isErr()) {
 			return reply(
 				interaction,
 				interactionProblem(
-					`I couldn't find a birthday for ${userMention(
-						targetUser.id,
-					)}. Use ${BIRTHDAY_REGISTER} to register a birthday.`,
+					await resolveKey(interaction, 'commands/birthday:update.notRegistered', {
+						context,
+						command: BIRTHDAY_REGISTER,
+						target: userMention(target.username),
+					}),
 				),
 			);
 		}
 
-		const date = getDateFromInteraction(interaction);
+		const { isValidDate, date } = getDateFromInteraction(interaction);
 
-		if (!date.isValidDate) {
+		if (!isValidDate) {
 			return reply(interaction, interactionProblem('Please provide a valid date'));
 		}
 
-		const updateBirthday = await container.utilities.birthday.update
-			.BirthdayByUserAndGuild(guildId, targetUser.id, date.date)
-			.catch(() => null);
-
-		if (!updateBirthday) {
-			return reply(
-				interaction,
-				interactionProblem(
-					`I couldn't update the birthday for ${userMention(targetUser.id)} to the ${bold(
-						formatDateForDisplay(date.date),
-					)}.`,
-				),
-			);
-		}
-
-		await updateBirthdayOverview(guildId);
-		return reply(
-			interaction,
-			interactionSuccess(
-				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been updated to the ${bold(
-					formatDateForDisplay(date.date),
-				)}.`,
-			),
+		const result = await Result.fromAsync(
+			birthday.update({
+				where: { userId_guildId: where },
+				data: {
+					birthday: date,
+				},
+			}),
 		);
+
+		return result.match({
+			ok: async () => {
+				await updateBirthdayOverview(interaction.guildId);
+				return reply(
+					interaction,
+					interactionSuccess(
+						await resolveKey(interaction, 'commands/birthday:update.success', {
+							context,
+							target: userMention(target.id),
+							date: bold(formatDateForDisplay(date)),
+						}),
+					),
+				);
+			},
+			err: async () => {
+				return reply(
+					interaction,
+					interactionProblem(await resolveKey(interaction, 'commands/birthday:update.notUpdated')),
+				);
+			},
+		});
 	}
 }
