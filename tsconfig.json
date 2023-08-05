@@ -1,12 +1,16 @@
 {
-	"extends": "@sapphire/ts-config",
-	"compilerOptions": {
-		"rootDir": "src",
-		"outDir": "dist",
-		"tsBuildInfoFile": "dist/.tsbuildinfo",
-		"preserveConstEnums": true,
-		"ignoreDeprecations": "5.0",
-		"skipLibCheck": true
-	},
-	"include": ["src", "src/**/*.json", "./env.d.ts"]
+    "extends": "@sapphire/ts-config",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "tsBuildInfoFile": "dist/.tsbuildinfo",
+        "preserveConstEnums": true,
+        "ignoreDeprecations": "5.0",
+        "skipLibCheck": true
+    },
+    "include": [
+        "src",
+        "src/**/*.json",
+        "./env.d.ts"
+    ]
 }

@@ -1,9 +1,3 @@
 {
-	"recommendations": [
-		"prisma.prisma",
-		"editorconfig.editorconfig",
-		"dbaeumer.vscode-eslint",
-		"esbenp.prettier-vscode",
-		"vivaxy.vscode-conventional-commits"
-	]
+  "recommendations": ["prisma.prisma", "editorconfig.editorconfig", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "vivaxy.vscode-conventional-commits"]
 }

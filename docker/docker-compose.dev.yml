@@ -16,7 +16,7 @@ services:
     depends_on:
       - redis
     networks:
-    - global_dev
+      - global_dev
 
   redis:
     container_name: birthdayy-dev-redis
