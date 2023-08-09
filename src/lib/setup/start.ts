@@ -24,4 +24,4 @@ inspect.defaultOptions.depth = 1;
 // Enable colorette
 colorette.createColors({ useColor: true });
 
-ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.VerboseOverwrite);
+ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
