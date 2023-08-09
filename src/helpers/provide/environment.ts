@@ -1,4 +1,5 @@
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
+import { PermissionsBitField } from 'discord.js';
 import { join } from 'path';
 import { BotColorEnum } from '../../lib/enum/BotColor.enum';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
@@ -32,31 +33,34 @@ export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT');
 
 // EMOJIS
-export const SUCCESS = '<:checkmark_square_birthdayy:1102222019476586526>';
-export const FAIL = '<:cross_square_birthdayy:1102222032155988068> ';
-export const YES = '<:checkmark_square_birthdayy:1102222019476586526>';
-export const NO = '<:cross_square_birthdayy:1102222032155988068> ';
-export const ARROW_RIGHT = '<:arrow_right_birthdayy:1102221944016875650>';
-export const ARROW_LEFT = '<:arrow_left_birthdayy:1102221941223477268>';
-export const PLUS = '<:plus_birthdayy:1102222100544110712>';
-export const LINK = '<:link_birthdayy:1102222076380725319>';
-export const EXCLAMATION = '<:exclamation_mark_birthdayy:1102222058777223209>';
-export const CAKE = '<:cake_birthdayy:1102221988380020766>';
-export const CROWN = '<:crown_birthdayy:1102222034458660915>';
-export const NEWS = '<:news_birthdayy:1102222080029761618>';
-export const GIFT = '<:gift_birthdayy:1102222060845015050>';
-export const BOOK = '<:book_birthdayy:1102221958592086137>';
-export const ALARM = '<:bell_birthdayy:1102221947003219968>';
-export const SUPPORT = '<:support_birthdayy:1102222115056386208>';
-export const SIGN = '<:sign_birthdayy:1102222111155703909> ';
-export const HEART = '<:heart_birthdayy:1102222063030239232>';
-export const PING = '<:ping_birthdayy:1102222097788440657>';
-export const PEOPLE = '<:people_birthdayy:1102222095573844108>';
-export const COMMENT = '<:speech_bubble_birthdayy:1102222112711786577>';
-export const ONLINE = '<:online_birthdayy:1102222090712657930>';
-export const OFFLINE = '<:offline_birthdayy:1102222087973769368>';
-export const WARNING = '<:warning_birthdayy:1102222123809906778>';
-export const COMPASS = '<:compass_birthdayy:1102222027101839360>';
+export const enum BirthdayyEmojis {
+	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
+	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
+	Yes = '<:checkmark_square_birthdayy:1102222019476586526>',
+	No = '<:cross_square_birthdayy:1102222032155988068> ',
+	ArrowRight = '<:arrow_right_birthdayy:1102221944016875650>',
+	ArrowLeft = '<:arrow_left_birthdayy:1102221941223477268>',
+	Plus = '<:plus_birthdayy:1102222100544110712>',
+	Link = '<:link_birthdayy:1102222076380725319>',
+	Exclamation = '<:exclamation_mark_birthdayy:1102222058777223209>',
+	Cake = '<:cake_birthdayy:1102221988380020766>',
+	Crown = '<:crown_birthdayy:1102222034458660915>',
+	News = '<:news_birthdayy:1102222080029761618>',
+	Gift = '<:gift_birthdayy:1102222060845015050>',
+	Book = '<:book_birthdayy:1102221958592086137>',
+	Alarm = '<:bell_birthdayy:1102221947003219968>',
+	Support = '<:support_birthdayy:1102222115056386208>',
+	Sign = '<:sign_birthdayy:1102222111155703909> ',
+	Heart = '<:heart_birthdayy:1102222063030239232>',
+	Ping = '<:ping_birthdayy:1102222097788440657>',
+	People = '<:people_birthdayy:1102222095573844108>',
+	Comment = '<:speech_bubble_birthdayy:1102222112711786577>',
+	Online = '<:online_birthdayy:1102222090712657930>',
+	Offline = '<:offline_birthdayy:1102222087973769368>',
+	Warning = '<:warning_birthdayy:1102222123809906778>',
+	Compass = '<:compass_birthdayy:1102222027101839360>',
+	Tools = '<:tools_birthdayy:1102222421651623936>',
+}
 
 // Values
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
@@ -64,6 +68,34 @@ export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '10776213638813
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
-export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${ARROW_RIGHT} Today is a special Day!{NEW_LINE}${GIFT} Please wish {MENTION} a happy Birthday <3`;
+export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${BirthdayyEmojis.ArrowRight} Today is a special Day!{NEW_LINE}${BirthdayyEmojis.Gift} Please wish {MENTION} a happy Birthday <3`;
 export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum.BIRTHDAYY_HQ);
 export const BOT_ADMINS = [UserIDEnum.CHILLIHERO, UserIDEnum.SWIIZYY];
+
+export const Permission_Bits = [
+	PermissionsBitField.Flags.AddReactions,
+	PermissionsBitField.Flags.AttachFiles,
+
+	PermissionsBitField.Flags.ChangeNickname,
+	PermissionsBitField.Flags.CreateInstantInvite,
+	PermissionsBitField.Flags.CreatePrivateThreads,
+	PermissionsBitField.Flags.CreatePublicThreads,
+
+	PermissionsBitField.Flags.EmbedLinks,
+
+	PermissionsBitField.Flags.ManageChannels,
+	PermissionsBitField.Flags.ManageGuildExpressions,
+	PermissionsBitField.Flags.ManageMessages,
+	PermissionsBitField.Flags.ManageNicknames,
+	PermissionsBitField.Flags.ManageEvents,
+	PermissionsBitField.Flags.ManageRoles,
+
+	PermissionsBitField.Flags.ViewChannel,
+	PermissionsBitField.Flags.ViewAuditLog,
+
+	PermissionsBitField.Flags.SendMessages,
+	PermissionsBitField.Flags.SendMessagesInThreads,
+
+	PermissionsBitField.Flags.UseExternalEmojis,
+	PermissionsBitField.Flags.UseExternalStickers,
+];

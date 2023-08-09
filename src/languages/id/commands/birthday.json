@@ -67,6 +67,7 @@
     "userDescription": "Pengguna yang ulang tahunnya diperbarui - KHUSUS MANAJER.",
     "userName": "pengguna",
     "yearDescription": "Tahun ulang tahun",
-    "yearName": "tahun"
+    "yearName": "tahun",
+    "hasNotPermissionManagesRoles": "Anda tidak memiliki izin untuk memperbarui ulang tahun"
   }
 }

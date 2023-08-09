@@ -54,7 +54,7 @@
   "update": {
     "dayDescription": "Der Tag des Geburtstages",
     "dayName": "Tag",
-    "hasNotPermissionManagesRoles": "",
+    "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu aktualisieren",
     "hasNotPermissionToManageThisUser": "Sie sind nicht berechtigt, den Geburtstag dieses Benutzers zu aktualisieren.",
     "monthDescription": "Der Monat des Geburtstages",
     "monthName": "Monat",

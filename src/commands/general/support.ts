@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { reply } from '../../helpers/send/response';
 import { SupportCMD } from '../../lib/commands';
-import { discordButton, docsButton } from '../../lib/components/button';
+import { discordInformationButtonBuilder, docsButtonBuilder } from '../../lib/components/button';
 import thinking from '../../lib/discord/thinking';
 import { SupportEmbed } from '../../lib/embeds';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
@@ -27,7 +27,10 @@ export class SupportCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [discordButton, docsButton],
+					components: [
+						await discordInformationButtonBuilder(interaction),
+						await docsButtonBuilder(interaction),
+					],
 				},
 			],
 		});

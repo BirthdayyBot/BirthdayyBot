@@ -1,13 +1,5 @@
 import type { APIEmbed, BaseMessageOptions, InteractionReplyOptions } from 'discord.js';
-import {
-	ARROW_RIGHT,
-	BOT_AVATAR,
-	BOT_COLOR,
-	BOT_NAME,
-	FAIL,
-	IS_CUSTOM_BOT,
-	SUCCESS,
-} from '../../helpers/provide/environment';
+import { BOT_AVATAR, BOT_COLOR, BOT_NAME, BirthdayyEmojis, IS_CUSTOM_BOT } from '../../helpers/provide/environment';
 
 type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
 type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;
@@ -35,8 +27,8 @@ export type APIEmbedWithoutDefault = Omit<APIEmbed, 'timestamp' | 'footer'>;
 export function success(description: string): APIEmbed {
 	return {
 		...defaultEmbed(),
-		title: `${SUCCESS} Success`,
-		description: `${ARROW_RIGHT} ${description}`,
+		title: `${BirthdayyEmojis.Success} Success`,
+		description: `${BirthdayyEmojis.ArrowRight} ${description}`,
 	};
 }
 
@@ -60,8 +52,8 @@ export function interactionSuccess(message: string, ephemeral = true): Universal
 export function problem(description: string): APIEmbed {
 	return {
 		...defaultEmbed(),
-		title: `${FAIL} Failure`,
-		description: `${ARROW_RIGHT} ${description}`,
+		title: `${BirthdayyEmojis.Fail} Failure`,
+		description: `${BirthdayyEmojis.ArrowRight} ${description}`,
 	};
 }
 

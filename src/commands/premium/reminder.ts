@@ -3,7 +3,7 @@ import { Command } from '@sapphire/framework';
 import { reply } from '../../helpers/send/response';
 import { getCommandGuilds } from '../../helpers/utils/guilds';
 import { ReminderCMD } from '../../lib/commands/reminder';
-import { inviteButton } from '../../lib/components/button';
+import { inviteBirthdayyButton } from '../../lib/components/button';
 import thinking from '../../lib/discord/thinking';
 import { InviteEmbed } from '../../lib/embeds';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
@@ -31,7 +31,7 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [inviteButton],
+					components: [await inviteBirthdayyButton(interaction)],
 				},
 			],
 		});

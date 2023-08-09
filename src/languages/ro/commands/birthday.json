@@ -67,6 +67,7 @@
     "userDescription": "Utilizatorul pentru care ziua de naștere este actualizată - NUMAI MANAGER.",
     "userName": "utilizator",
     "yearDescription": "Anul zilei de naștere",
-    "yearName": "an"
+    "yearName": "an",
+    "hasNotPermissionManagesRoles": "Nu aveți permisiunea de a actualiza zilele de naștere"
   }
 }

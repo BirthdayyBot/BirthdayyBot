@@ -54,7 +54,7 @@
   "update": {
     "dayDescription": "Денят на рождения ден",
     "dayName": "ден",
-    "hasNotPermissionManagesRoles": "",
+    "hasNotPermissionManagesRoles": "Нямате разрешение да актуализирате рождени дни",
     "hasNotPermissionToManageThisUser": "Нямате разрешение да актуализирате рождената дата на този потребител.",
     "monthDescription": "Месецът на рождения ден",
     "monthName": "месец",

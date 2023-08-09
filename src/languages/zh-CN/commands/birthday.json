@@ -67,6 +67,7 @@
     "userDescription": "更新生日的用户 - 仅限管理员。",
     "userName": "用户",
     "yearDescription": "生日年份",
-    "yearName": "年"
+    "yearName": "年",
+    "hasNotPermissionManagesRoles": "您无权更新生日"
   }
 }

@@ -67,6 +67,7 @@
     "userDescription": "De gebruiker voor wie de verjaardag wordt bijgewerkt - ALLEEN MANAGER.",
     "userName": "gebruiker",
     "yearDescription": "Het jaar van de verjaardag",
-    "yearName": "jaar"
+    "yearName": "jaar",
+    "hasNotPermissionManagesRoles": "U heeft geen toestemming om verjaardagen bij te werken"
   }
 }

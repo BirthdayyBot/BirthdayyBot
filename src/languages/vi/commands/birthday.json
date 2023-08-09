@@ -67,6 +67,7 @@
     "userDescription": "Người dùng được cập nhật ngày sinh - CHỈ DÀNH CHO NGƯỜI QUẢN LÝ.",
     "userName": "người dùng",
     "yearDescription": "năm sinh nhật",
-    "yearName": "năm"
+    "yearName": "năm",
+    "hasNotPermissionManagesRoles": "Bạn không có quyền cập nhật ngày sinh"
   }
 }

@@ -1,34 +1,24 @@
 import type { APIEmbed } from 'discord-api-types/v9';
-import {
-	ARROW_RIGHT,
-	BOOK,
-	BOT_NAME,
-	DOCS_URL,
-	LINK,
-	PLUS,
-	PREMIUM_URL,
-	SIGN,
-	SUPPORT,
-} from '../../helpers/provide/environment';
+import { BOT_NAME, BirthdayyEmojis, DOCS_URL, PREMIUM_URL } from '../../helpers/provide/environment';
 
 export const HelpEmbed: APIEmbed = {
-	title: `${BOOK} ${BOT_NAME} Help`,
+	title: `${BirthdayyEmojis.Book} ${BOT_NAME} Help`,
 	description: `
-  ${SUPPORT} Confused what each command does?
-  ${LINK} Check out our docs: [Birthdayy Docs](${DOCS_URL})
-  ${PLUS} Unlock Beta / Premium Features: [Birthdayy Patreon](${PREMIUM_URL})\n
-  ${SIGN} \`<>\` required
-  ${SIGN} \`[]\` optional
+  ${BirthdayyEmojis.Support} Confused what each command does?
+  ${BirthdayyEmojis.Link} Check out our docs: [Birthdayy Docs](${DOCS_URL})
+  ${BirthdayyEmojis.Plus} Unlock Beta / Premium Features: [Birthdayy Patreon](${PREMIUM_URL})\n
+  ${BirthdayyEmojis.Sign} \`<>\` required
+  ${BirthdayyEmojis.Sign} \`[]\` optional
     `,
 	fields: [
 		{
 			name: 'Utilities',
 			value: `
-  ${ARROW_RIGHT}/help \`[command]\`
-  ${ARROW_RIGHT}/guide
-  ${ARROW_RIGHT}/invite
-  ${ARROW_RIGHT}/status
-  ${ARROW_RIGHT}/vote
+  ${BirthdayyEmojis.ArrowRight}/help \`[command]\`
+  ${BirthdayyEmojis.ArrowRight}/guide
+  ${BirthdayyEmojis.ArrowRight}/invite
+  ${BirthdayyEmojis.ArrowRight}/status
+  ${BirthdayyEmojis.ArrowRight}/vote
         `,
 			inline: true,
 		},
@@ -36,24 +26,24 @@ export const HelpEmbed: APIEmbed = {
 		{
 			name: '/birthday',
 			value: `
-  ${ARROW_RIGHT}register \`<day>\` \`<month>\` \`[year]\` \`[user]\`
-  ${ARROW_RIGHT}list
-  ${ARROW_RIGHT}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
-  ${ARROW_RIGHT}remove \`<user>\`
-  ${ARROW_RIGHT}show \`[user]\`
+  ${BirthdayyEmojis.ArrowRight}register \`<day>\` \`<month>\` \`[year]\` \`[user]\`
+  ${BirthdayyEmojis.ArrowRight}list
+  ${BirthdayyEmojis.ArrowRight}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
+  ${BirthdayyEmojis.ArrowRight}remove \`<user>\`
+  ${BirthdayyEmojis.ArrowRight}show \`[user]\`
       `,
 			inline: true,
 		},
 		{
 			name: '/config',
 			value: `
-  ${ARROW_RIGHT}status
-  ${ARROW_RIGHT}announcement-channel \`<channel>\`
-  ${ARROW_RIGHT}overview-channel \`<channel>\`
-  ${ARROW_RIGHT}birthday-role \`<role>\`
-  ${ARROW_RIGHT}ping-role \`<role>\`
-  ${ARROW_RIGHT}timezone\`<zone>\`
-  ${ARROW_RIGHT}announcement-message\`<message>\` ${PLUS}
+  ${BirthdayyEmojis.ArrowRight}status
+  ${BirthdayyEmojis.ArrowRight}announcement-channel \`<channel>\`
+  ${BirthdayyEmojis.ArrowRight}overview-channel \`<channel>\`
+  ${BirthdayyEmojis.ArrowRight}birthday-role \`<role>\`
+  ${BirthdayyEmojis.ArrowRight}ping-role \`<role>\`
+  ${BirthdayyEmojis.ArrowRight}timezone\`<zone>\`
+  ${BirthdayyEmojis.ArrowRight}announcement-message\`<message>\` ${BirthdayyEmojis.Plus}
       `,
 			inline: true,
 		},

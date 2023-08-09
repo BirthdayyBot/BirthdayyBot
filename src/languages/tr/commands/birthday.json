@@ -67,6 +67,7 @@
     "userDescription": "Doğum gününün güncellendiği kullanıcı - YALNIZCA YÖNETİCİ.",
     "userName": "kullanıcı",
     "yearDescription": "doğum yılı",
-    "yearName": "yıl"
+    "yearName": "yıl",
+    "hasNotPermissionManagesRoles": "Doğum günlerini güncelleme izniniz yok"
   }
 }

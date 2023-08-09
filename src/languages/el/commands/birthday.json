@@ -67,6 +67,7 @@
     "userDescription": "Ο χρήστης για τον οποίο έχουν ενημερωθεί τα γενέθλια - ΜΟΝΟ ΔΙΑΧΕΙΡΙΣΤΗΣ.",
     "userName": "χρήστης",
     "yearDescription": "Το έτος των γενεθλίων",
-    "yearName": "έτος"
+    "yearName": "έτος",
+    "hasNotPermissionManagesRoles": "Δεν έχετε άδεια ενημέρωσης γενεθλίων"
   }
 }

@@ -19,7 +19,7 @@ import {
 	type Snowflake,
 } from 'discord.js';
 import { logAll } from '../helpers/provide/config';
-import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
+import { BOT_ADMIN_LOG, BirthdayyEmojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
@@ -181,7 +181,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		const embed: APIEmbed = {
-			title: `${NEWS} Birthday Announcement!`,
+			title: `${BirthdayyEmojis.News} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail: {
 				url: IMG_CAKE,

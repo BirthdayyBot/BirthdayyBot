@@ -54,7 +54,7 @@
   "update": {
     "dayDescription": "Den narozenin",
     "dayName": "den",
-    "hasNotPermissionManagesRoles": "",
+    "hasNotPermissionManagesRoles": "Nemáte oprávnění aktualizovat narozeniny",
     "hasNotPermissionToManageThisUser": "Nemáte oprávnění aktualizovat datum narození tohoto uživatele.",
     "monthDescription": "Měsíc narozenin",
     "monthName": "Měsíc",

@@ -1,6 +1,6 @@
-import type * as Sentry from '@sentry/node';
 import type { container } from '@sapphire/pieces';
 import type { ApiRequest, ApiResponse } from '@sapphire/plugin-api';
+import type * as Sentry from '@sentry/node';
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 
 export interface ErrorHandlerOptions {

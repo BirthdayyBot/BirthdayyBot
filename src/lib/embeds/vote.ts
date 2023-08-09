@@ -1,5 +1,5 @@
 import type { APIEmbed } from 'discord-api-types/v9';
-import { ARROW_RIGHT, HEART, PLUS, PREMIUM_URL } from '../../helpers/provide/environment';
+import { BirthdayyEmojis, PREMIUM_URL } from '../../helpers/provide/environment';
 
 // ! Currently not working??
 /*
@@ -15,21 +15,21 @@ import { VoteSites } from '../db/voteSites';
 }; */
 
 export const VoteEmbed: APIEmbed = {
-	title: `${HEART} Support Birthdayy`,
+	title: `${BirthdayyEmojis.Heart} Support Birthdayy`,
 	description: '',
 	fields: [
 		{
 			name: 'Vote for Birthdayy',
 			value: `
-            ${ARROW_RIGHT} [top.gg](https://birthdayy.xyz/topgg/vote)
-            ${ARROW_RIGHT} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
-            ${ARROW_RIGHT} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
+            ${BirthdayyEmojis.ArrowRight} [top.gg](https://birthdayy.xyz/topgg/vote)
+            ${BirthdayyEmojis.ArrowRight} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
+            ${BirthdayyEmojis.ArrowRight} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
 			inline: false,
 		},
 		{
 			name: 'Birthdayy Premium',
-			value: `${ARROW_RIGHT} Support the Project and get access to beta features\n${PLUS} [Birthdayy Patreon](${PREMIUM_URL})`,
+			value: `${BirthdayyEmojis.ArrowRight} Support the Project and get access to beta features\n${BirthdayyEmojis.Plus} [Birthdayy Patreon](${PREMIUM_URL})`,
 			inline: false,
 		},
 	],

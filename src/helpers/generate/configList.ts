@@ -6,7 +6,7 @@ import { objectEntries } from '@sapphire/utilities';
 import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
 import { getGuildInformation } from '../../lib/discord';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { ARROW_RIGHT, PLUS } from '../provide';
+import { BirthdayyEmojis } from '../provide/environment';
 
 interface ConfigListOptions {
 	guild?: Guild;
@@ -56,17 +56,19 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 
 	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null) {
 		if (value === null) {
-			return `${ARROW_RIGHT} not set`;
+			return `${BirthdayyEmojis.ArrowRight} not set`;
 		} else if (name === 'timezone' && typeof value === 'number') {
-			return value < 0 ? `${ARROW_RIGHT} UTC${value}` : `${ARROW_RIGHT} UTC+${value}`;
+			return value < 0
+				? `${BirthdayyEmojis.ArrowRight} UTC${value}`
+				: `${BirthdayyEmojis.ArrowRight} UTC+${value}`;
 		} else if (name.includes('Channel') && typeof value === 'string') {
-			return `${ARROW_RIGHT} ${channelMention(value)}`;
+			return `${BirthdayyEmojis.ArrowRight} ${channelMention(value)}`;
 		} else if (name.includes('Role') && typeof value === 'string') {
-			return `${ARROW_RIGHT} ${roleMention(value)}`;
+			return `${BirthdayyEmojis.ArrowRight} ${roleMention(value)}`;
 		} else if (name.includes('User') && typeof value === 'string') {
-			return `${ARROW_RIGHT} ${userMention(value)}`;
+			return `${BirthdayyEmojis.ArrowRight} ${userMention(value)}`;
 		}
-		return `${ARROW_RIGHT} ${value.toString()}`;
+		return `${BirthdayyEmojis.ArrowRight} ${value.toString()}`;
 	}
 
 	function getNameString(name: keyof PrismaGuild): string {
@@ -84,7 +86,7 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 			case 'timezone':
 				return 'Timezone';
 			case 'announcementMessage':
-				return `${PLUS} Birthday Message`;
+				return `${BirthdayyEmojis.Plus} Birthday Message`;
 			case 'premium':
 				return 'Premium';
 			default:

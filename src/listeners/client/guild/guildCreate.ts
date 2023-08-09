@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
 import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
-import { BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT, SUCCESS } from '../../../helpers/provide/environment';
+import { BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
 import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
 import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
@@ -93,7 +93,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
 
 		const embedObj: EmbedInformationModel = {
-			title: `${SUCCESS} ${BOT_NAME} got added to a Guild`,
+			title: `${BirthdayyEmojis.Success} ${BOT_NAME} got added to a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BotColorEnum.BIRTHDAYY,

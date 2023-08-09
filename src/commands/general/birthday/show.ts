@@ -1,6 +1,6 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { bold, userMention } from 'discord.js';
-import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
+import { BirthdayyEmojis, formatDateForDisplay, reply } from '../../../helpers';
 import { BIRTHDAY_REGISTER, showBirthdaySubCommand } from '../../../lib/commands';
 import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
 import { resolveTarget } from '../../../lib/utils/functions';
@@ -28,11 +28,11 @@ export class ShowCommand extends Command {
 		return result.match({
 			ok: async (birthday) => {
 				const title = await resolveKey(interaction, 'commands/birthday:show.title', {
-					emoji: BOOK,
+					emoji: BirthdayyEmojis.Book,
 				});
 				const description = await resolveKey(interaction, 'commands/birthday:show.description', {
 					target: userMention(target.id),
-					emoji: ARROW_RIGHT,
+					emoji: BirthdayyEmojis.ArrowRight,
 					date: bold(formatDateForDisplay(birthday.birthday)),
 					context,
 				});

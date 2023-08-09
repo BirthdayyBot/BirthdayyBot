@@ -67,6 +67,7 @@
     "userDescription": "El usuario para el que se actualiza el cumpleaños: SOLO ADMINISTRADOR.",
     "userName": "usuario",
     "yearDescription": "el año del cumpleaños",
-    "yearName": "año"
+    "yearName": "año",
+    "hasNotPermissionManagesRoles": "No tienes permiso para actualizar los cumpleaños."
   }
 }

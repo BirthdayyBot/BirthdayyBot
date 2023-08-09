@@ -67,6 +67,7 @@
     "userDescription": "Käyttäjä, jolle syntymäpäivä päivitetään - VAIN HALLINTA.",
     "userName": "käyttäjä",
     "yearDescription": "Syntymävuosi",
-    "yearName": "vuosi"
+    "yearName": "vuosi",
+    "hasNotPermissionManagesRoles": "Sinulla ei ole lupaa päivittää syntymäpäiviä"
   }
 }

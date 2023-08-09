@@ -1,7 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import { PING } from '../../helpers/provide/environment';
 import { reply } from '../../helpers/send/response';
 import { getCurrentOffset } from '../../helpers/utils/date';
 import { StatsCMD } from '../../lib/commands';
@@ -9,6 +8,7 @@ import thinking from '../../lib/discord/thinking';
 import type { EmbedInformationModel } from '../../lib/model';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { isDevelopment } from '../../lib/utils/env';
+import { BirthdayyEmojis } from '../../helpers';
 
 @ApplyOptions<Command.Options>({
 	name: 'stats',
@@ -42,7 +42,7 @@ export class StatsCommand extends Command {
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
-			title: `${PING} Current Stats`,
+			title: `${BirthdayyEmojis.Ping} Current Stats`,
 			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{

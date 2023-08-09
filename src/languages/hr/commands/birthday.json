@@ -67,6 +67,7 @@
     "userDescription": "Korisnik za kojeg se ažurira rođendan - SAMO UPRAVITELJ.",
     "userName": "korisnik",
     "yearDescription": "Godina rođendana",
-    "yearName": "godina"
+    "yearName": "godina",
+    "hasNotPermissionManagesRoles": "Nemate dopuštenje za ažuriranje rođendana"
   }
 }

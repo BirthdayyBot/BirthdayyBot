@@ -67,6 +67,7 @@
     "userDescription": "Vartotojas, kuriam atnaujintas gimtadienis – TIK VADOVAS.",
     "userName": "Vartotojas",
     "yearDescription": "Gimtadienio metai",
-    "yearName": "metų"
+    "yearName": "metų",
+    "hasNotPermissionManagesRoles": "Neturite leidimo atnaujinti gimtadienių"
   }
 }

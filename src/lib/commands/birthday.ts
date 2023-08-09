@@ -1,13 +1,23 @@
-import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { applyLocalizedBuilder, createLocalizedChoice } from '@sapphire/plugin-i18next';
 import dayjs from 'dayjs';
 import {
 	PermissionFlagsBits,
-	type SlashCommandBuilder,
-	type SlashCommandIntegerOption,
-	type SlashCommandStringOption,
-	type SlashCommandSubcommandBuilder,
-	type SlashCommandUserOption,
+	SlashCommandBuilder,
+	SlashCommandIntegerOption,
+	SlashCommandStringOption,
+	SlashCommandSubcommandBuilder,
+	SlashCommandUserOption,
+	chatInputApplicationCommandMention,
 } from 'discord.js';
+
+export const BirthdayApplicationCommandMentions = {
+	Register: chatInputApplicationCommandMention('birthday', 'register', '935174192389840896'),
+	Remove: chatInputApplicationCommandMention('birthday', 'remove', '935174192389840896'),
+	List: chatInputApplicationCommandMention('birthday', 'list', '935174192389840896'),
+	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
+	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896'),
+	Update: chatInputApplicationCommandMention('birthday', 'update', '935174192389840896'),
+} as const;
 
 export function birthdayCommand(builder: SlashCommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:birthday')
@@ -24,7 +34,7 @@ export function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilde
 }
 
 export function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:list');
+	return applyLocalizedBuilder(builder, 'commands/birthday:listName', 'commands/birthday:listDescription');
 }
 
 export function removeBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
@@ -60,7 +70,20 @@ function dayOptions(option: SlashCommandIntegerOption, key: string) {
 function monthOptions(option: SlashCommandStringOption, key: string) {
 	return applyLocalizedBuilder(option, key)
 		.setRequired(true)
-		.addChoices(...monthChoices);
+		.addChoices(
+			createLocalizedChoice('month:january', { value: '01' }),
+			createLocalizedChoice('month:february', { value: '02' }),
+			createLocalizedChoice('month:february', { value: '03' }),
+			createLocalizedChoice('month:april', { value: '04' }),
+			createLocalizedChoice('month:may', { value: '05' }),
+			createLocalizedChoice('month:june', { value: '06' }),
+			createLocalizedChoice('month:july', { value: '07' }),
+			createLocalizedChoice('month:august', { value: '08' }),
+			createLocalizedChoice('month:september', { value: '09' }),
+			createLocalizedChoice('month:october', { value: '10' }),
+			createLocalizedChoice('month:november', { value: '11' }),
+			createLocalizedChoice('month:december', { value: '12' }),
+		);
 }
 
 function yearOptions(option: SlashCommandIntegerOption, key: string) {
@@ -72,54 +95,3 @@ function yearOptions(option: SlashCommandIntegerOption, key: string) {
 function userOptions(option: SlashCommandUserOption, key: string) {
 	return applyLocalizedBuilder(option, key).setRequired(false);
 }
-
-const monthChoices = [
-	{
-		name: 'January | 1',
-		value: '01',
-	},
-	{
-		name: 'February | 2',
-		value: '02',
-	},
-	{
-		name: 'March | 3',
-		value: '03',
-	},
-	{
-		name: 'April | 4',
-		value: '04',
-	},
-	{
-		name: 'May | 5',
-		value: '05',
-	},
-	{
-		name: 'June | 6',
-		value: '06',
-	},
-	{
-		name: 'July | 7',
-		value: '07',
-	},
-	{
-		name: 'August | 8',
-		value: '08',
-	},
-	{
-		name: 'September | 9',
-		value: '09',
-	},
-	{
-		name: 'October | 10',
-		value: '10',
-	},
-	{
-		name: 'November | 11',
-		value: '11',
-	},
-	{
-		name: 'December | 12',
-		value: '12',
-	},
-] as const;

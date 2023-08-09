@@ -54,7 +54,7 @@
   "update": {
     "dayDescription": "Fødselsdagens dag",
     "dayName": "dag",
-    "hasNotPermissionManagesRoles": "",
+    "hasNotPermissionManagesRoles": "Du har ikke tilladelse til at opdatere fødselsdage",
     "hasNotPermissionToManageThisUser": "Du har ikke tilladelse til at opdatere denne brugers fødselsdag.",
     "monthDescription": "Fødselsdagens måned",
     "monthName": "måned",

@@ -1,101 +1,90 @@
-import { ButtonStyle, ComponentType, type APIButtonComponent } from 'discord.js';
-import { BIRTHDAYY_INVITE, DISCORD_INVITE, DOCS_URL, WEBSITE_URL } from '../../helpers/provide/environment';
-import { CustomButtonIdEnum } from '../enum/CustomButtonId.enum';
+import { container } from '@sapphire/framework';
+import { resolveKey, type Target } from '@sapphire/plugin-i18next';
+import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes } from 'discord.js';
+import { BirthdayyEmojis, Permission_Bits } from '../../helpers/provide/environment';
 
-export const discordButton: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Link,
-	label: 'Support Discord',
-	url: `${DISCORD_INVITE}`,
-	disabled: false,
-	emoji: {
-		id: '931267038574432308',
-		name: 'people',
-		animated: false,
-	},
-};
+export const WebsiteUrl = (path?: string) => `https://birthdayy.xyz/${path ? `${path}` : ''}`;
 
-export const docsButton: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Link,
-	label: 'Docs',
-	url: `${DOCS_URL}`,
-	disabled: false,
-	emoji: {
-		id: '931267038662504508',
-		name: 'book',
-		animated: false,
-	},
-};
+export const enum ButtonID {
+	voteReminder = 'vote-reminder-button',
+	choiceBirthdayList = 'choice-birthday-list',
+	choiceGuildConfig = 'choice-guild-config',
+	choiceDiscordInformation = 'choice-discord-information',
+}
 
-export const inviteButton: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Link,
-	label: 'Invite Birthdayy',
-	url: `${BIRTHDAYY_INVITE}`,
-	disabled: false,
-	emoji: {
-		id: '931267039094534175',
-		name: 'gift',
-		animated: false,
-	},
-};
+export function defaultButtonBuilder(data?: import('discord.js').ButtonComponentData) {
+	return new ButtonBuilder({
+		style: ButtonStyle.Link,
+		type: ComponentType.Button,
+		disabled: false,
+		...data,
+	});
+}
 
-export const remindMeButton: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Success,
-	label: '⏰ Remind Me in 12hrs',
-	custom_id: CustomButtonIdEnum.VOTE_REMINDER,
-	disabled: false,
-};
+export async function inviteSupportDicordButton(target: Target) {
+	return defaultButtonBuilder()
+		.setLabel(await resolveKey(target, 'button.supportDiscord'))
+		.setURL(WebsiteUrl('discord'))
+		.setEmoji(BirthdayyEmojis.People);
+}
 
-export const remindMeButtonDisabled: APIButtonComponent = {
-	...remindMeButton,
-	disabled: true,
-};
+export async function docsButtonBuilder(target: Target) {
+	return defaultButtonBuilder()
+		.setLabel(await resolveKey(target, 'button.docsBirthday'))
+		.setURL(WebsiteUrl('docs'))
+		.setEmoji(BirthdayyEmojis.Book);
+}
 
-export const websiteButton: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Link,
-	label: 'Website',
-	url: `${WEBSITE_URL}`,
-	disabled: false,
-	emoji: {
-		id: '931267039019020340',
-		name: 'link',
-		animated: false,
-	},
-};
+export async function inviteBirthdayyButton(target: Target) {
+	return defaultButtonBuilder()
+		.setLabel(await resolveKey(target, 'button.inviteBithdayy'))
+		.setURL(
+			container.client.generateInvite({
+				scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
+				permissions: Permission_Bits,
+			}),
+		)
+		.setEmoji(BirthdayyEmojis.Gift);
+}
 
-export const birthdayListChoice: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Secondary,
-	label: 'Birthday List',
-	custom_id: CustomButtonIdEnum.CHOICE_BIRTHDAY_LIST,
-	disabled: false,
-	emoji: {
-		name: '🎂',
-	},
-};
+export async function remindMeButtonBuilder(target: Target) {
+	return defaultButtonBuilder()
+		.setLabel(await resolveKey(target, 'button.remindeMe'))
+		.setCustomId(ButtonID.voteReminder)
+		.setEmoji(BirthdayyEmojis.Alarm);
+}
 
-export const guildConfigChoice: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Secondary,
-	label: 'Guild Config',
-	custom_id: CustomButtonIdEnum.CHOICE_GUILD_CONFIG,
-	disabled: false,
-	emoji: {
-		name: '⚙️',
-	},
-};
+export async function remindMeButtonDisabledBuilder(target: Target) {
+	return (await remindMeButtonBuilder(target)).setDisabled(true);
+}
 
-export const discordInformationChoice: APIButtonComponent = {
-	type: ComponentType.Button,
-	style: ButtonStyle.Secondary,
-	label: 'Discord Information',
-	custom_id: CustomButtonIdEnum.CHOICE_DISCORD_INFORMATION,
-	disabled: false,
-	emoji: {
-		name: 'ℹ️',
-	},
-};
+export async function websiteButtonBuiler(target: Target) {
+	return defaultButtonBuilder()
+		.setLabel(await resolveKey(target, 'button.supportDiscord'))
+		.setEmoji(BirthdayyEmojis.Link)
+		.setURL(WebsiteUrl());
+}
+
+export async function birthdayListButtonBuilder(target: Target) {
+	return defaultButtonBuilder()
+		.setStyle(ButtonStyle.Secondary)
+		.setLabel(await resolveKey(target, 'button.birthdayyList'))
+		.setEmoji(BirthdayyEmojis.Cake)
+		.setCustomId(ButtonID.choiceBirthdayList);
+}
+
+export async function guildConfigButtonBuilder(target: Target) {
+	return defaultButtonBuilder()
+		.setStyle(ButtonStyle.Secondary)
+		.setLabel(await resolveKey(target, 'button.guildConfig'))
+		.setEmoji(BirthdayyEmojis.Tools)
+		.setCustomId(ButtonID.choiceGuildConfig);
+}
+
+export async function discordInformationButtonBuilder(target: Target) {
+	return defaultButtonBuilder()
+		.setStyle(ButtonStyle.Secondary)
+		.setLabel(await resolveKey(target, 'button.discordInfo'))
+		.setEmoji(BirthdayyEmojis.Support)
+		.setCustomId(ButtonID.choiceDiscordInformation);
+}

@@ -67,6 +67,7 @@
     "userDescription": "ผู้ใช้ที่มีการอัปเดตวันเกิด - ผู้จัดการเท่านั้น",
     "userName": "ผู้ใช้",
     "yearDescription": "ปีเกิด",
-    "yearName": "ปี"
+    "yearName": "ปี",
+    "hasNotPermissionManagesRoles": "คุณไม่มีสิทธิ์อัปเดตวันเกิด"
   }
 }

@@ -3,10 +3,10 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import type { User } from 'discord.js';
-import { BOT_NAME, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
+import { ActionRowBuilder, ButtonBuilder, type User } from 'discord.js';
+import { BirthdayyEmojis, BOT_NAME, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
 import { authenticated } from '../../lib/api/utils';
-import { remindMeButton } from '../../lib/components/button';
+import { remindMeButtonBuilder } from '../../lib/components/button';
 import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
@@ -64,16 +64,15 @@ export class UserRoute extends Route {
 
 	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
 		const dmEmbed = {
-			title: `${SUCCESS} You voted for Birthdayy on ${providerInfo.name}`,
-			description: `Thank you so much for supporting me, you're the best ${HEART}`,
+			title: `${BirthdayyEmojis.Success} You voted for Birthdayy on ${providerInfo.name}`,
+			description: `Thank you so much for supporting me, you're the best ${BirthdayyEmojis.Heart}`,
 		};
 		const dmEmbedObj = generateDefaultEmbed(dmEmbed);
-		const component = {
-			type: 1,
-			components: [remindMeButton],
-		};
 
-		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
+		const button = await remindMeButtonBuilder(await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ));
+		const components = new ActionRowBuilder<ButtonBuilder>().setComponents(button).toJSON();
+
+		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [components] });
 	}
 
 	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
@@ -82,7 +81,7 @@ export class UserRoute extends Route {
 		return sendMessage(VOTE_CHANNEL_ID, {
 			embeds: [
 				generateDefaultEmbed({
-					title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
+					title: `${BirthdayyEmojis.Exclamation} New Vote on ${providerInfo.name}`,
 					description: `\`${username}#${discriminator}\` has **voted** for ${
 						container.client.user?.username ?? BOT_NAME
 					}!

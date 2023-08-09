@@ -67,6 +67,7 @@
     "userDescription": "L'utente per il quale viene aggiornata la data di nascita - SOLO MANAGER.",
     "userName": "utente",
     "yearDescription": "L'anno del compleanno",
-    "yearName": "anno"
+    "yearName": "anno",
+    "hasNotPermissionManagesRoles": "Non sei autorizzato ad aggiornare i compleanni"
   }
 }

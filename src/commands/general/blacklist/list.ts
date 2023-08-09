@@ -1,7 +1,7 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Blacklist } from '@prisma/client';
 import { time, userMention } from 'discord.js';
-import { ARROW_RIGHT, IMG_BLOCK } from '../../../helpers';
+import { BirthdayyEmojis, IMG_BLOCK } from '../../../helpers';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
 import { generateDefaultEmbed } from '../../../lib/utils/embed';
@@ -27,7 +27,7 @@ export class ListCommand extends Command {
 
 		function processBlacklistedUsers(users: Blacklist[]): string {
 			if (users.length === 0) {
-				return `${ARROW_RIGHT}No users on the blacklist.`;
+				return `${BirthdayyEmojis.ArrowRight}No users on the blacklist.`;
 			}
 			const formattedUsers = users.map((user) => {
 				const { userId, addedAt } = user;

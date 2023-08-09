@@ -67,6 +67,7 @@
     "userDescription": "Användaren för vilken födelsedagen uppdateras - ENDAST MANAGER.",
     "userName": "användare",
     "yearDescription": "Året för födelsedagen",
-    "yearName": "år"
+    "yearName": "år",
+    "hasNotPermissionManagesRoles": "Du har inte behörighet att uppdatera födelsedagar"
   }
 }

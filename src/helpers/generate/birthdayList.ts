@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { Guild, userMention, type APIEmbed } from 'discord.js';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
+import { BirthdayyEmojis, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthName } from '../utils/date';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
@@ -60,7 +60,7 @@ function getBirthdaysAsLists(
 async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
 	const embed: APIEmbed = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
-		description: `${ARROW_RIGHT}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
+		description: `${BirthdayyEmojis.ArrowRight}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
 		fields: [],
 		thumbnail: { url: IMG_CAKE },
 	};

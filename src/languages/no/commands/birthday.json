@@ -67,6 +67,7 @@
     "userDescription": "Brukeren som fødselsdagen er oppdatert for - KUN MANAGER.",
     "userName": "bruker",
     "yearDescription": "Året for bursdagen",
-    "yearName": "år"
+    "yearName": "år",
+    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å oppdatere fødselsdager"
   }
 }

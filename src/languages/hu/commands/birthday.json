@@ -67,6 +67,7 @@
     "userDescription": "Az a felhasználó, akinek a születésnapja frissül – CSAK KEZELŐ.",
     "userName": "felhasználó",
     "yearDescription": "A születésnap éve",
-    "yearName": "év"
+    "yearName": "év",
+    "hasNotPermissionManagesRoles": "Nincs engedélye a születésnapok frissítésére"
   }
 }

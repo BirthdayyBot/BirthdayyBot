@@ -2,14 +2,13 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
-import { remindMeButtonDisabled } from '../lib/components/button';
+import { ButtonID, remindMeButtonDisabledBuilder } from '../lib/components/button';
 import { editInteractionResponse } from '../lib/discord/interaction';
-import { CustomButtonIdEnum } from '../lib/enum/CustomButtonId.enum';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
 	public override parse(interaction: ButtonInteraction) {
-		if (interaction.customId !== CustomButtonIdEnum.VOTE_REMINDER) return this.none();
+		if (interaction.customId !== ButtonID.voteReminder) return this.none();
 
 		const timestampTwelveHoursLater = interaction.message.createdTimestamp + Time.Hour * 12;
 		return this.some({ time: timestampTwelveHoursLater });
@@ -22,7 +21,7 @@ export class VoteReminderButton extends InteractionHandler {
 			components: [
 				{
 					type: 1,
-					components: [remindMeButtonDisabled],
+					components: [await remindMeButtonDisabledBuilder(interaction)],
 				},
 			],
 		});

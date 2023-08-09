@@ -67,6 +67,7 @@
     "userDescription": "Користувач, для якого оновлено день народження - ТІЛЬКИ МЕНЕДЖЕР.",
     "userName": "користувача",
     "yearDescription": "Рік народження",
-    "yearName": "рік"
+    "yearName": "рік",
+    "hasNotPermissionManagesRoles": "Ви не маєте дозволу оновлювати дні народження"
   }
 }

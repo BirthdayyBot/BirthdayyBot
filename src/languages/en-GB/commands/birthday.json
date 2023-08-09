@@ -67,6 +67,7 @@
     "userDescription": "The user for whom the birthday is updated - MANAGER ONLY.",
     "userName": "user",
     "yearDescription": "The year of the birthday",
-    "yearName": "year"
+    "yearName": "year",
+    "hasNotPermissionManagesRoles": "You don't have permission to update birthdays"
   }
 }

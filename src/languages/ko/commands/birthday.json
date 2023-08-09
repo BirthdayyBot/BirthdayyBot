@@ -67,6 +67,7 @@
     "userDescription": "생일이 업데이트된 사용자 - 관리자만 해당.",
     "userName": "사용자",
     "yearDescription": "생일의 해",
-    "yearName": "년도"
+    "yearName": "년도",
+    "hasNotPermissionManagesRoles": "생일을 업데이트할 권한이 없습니다."
   }
 }

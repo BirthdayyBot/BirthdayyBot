@@ -67,6 +67,7 @@
     "userDescription": "誕生日が更新されるユーザー - マネージャーのみ。",
     "userName": "ユーザー",
     "yearDescription": "誕生日の年",
-    "yearName": "年"
+    "yearName": "年",
+    "hasNotPermissionManagesRoles": "誕生日を更新する権限がありません"
   }
 }

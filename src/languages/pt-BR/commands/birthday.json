@@ -67,6 +67,7 @@
     "userDescription": "O usuário para quem o aniversário é atualizado - MANAGER ONLY.",
     "userName": "do utilizador",
     "yearDescription": "O ano do aniversário",
-    "yearName": "ano"
+    "yearName": "ano",
+    "hasNotPermissionManagesRoles": "Você não tem permissão para atualizar aniversários"
   }
 }

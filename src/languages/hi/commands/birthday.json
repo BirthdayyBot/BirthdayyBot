@@ -67,6 +67,7 @@
     "userDescription": "वह उपयोगकर्ता जिसके लिए जन्मदिन अपडेट किया गया है - केवल प्रबंधक।",
     "userName": "उपयोगकर्ता",
     "yearDescription": "जन्मदिन का वर्ष",
-    "yearName": "वर्ष"
+    "yearName": "वर्ष",
+    "hasNotPermissionManagesRoles": "आपको जन्मदिन अपडेट करने की अनुमति नहीं है"
   }
 }

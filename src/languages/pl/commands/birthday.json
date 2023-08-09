@@ -67,6 +67,7 @@
     "userDescription": "Użytkownik, dla którego data urodzenia jest aktualizowana - TYLKO MENEDŻER.",
     "userName": "użytkownik",
     "yearDescription": "Rok urodzin",
-    "yearName": "rok"
+    "yearName": "rok",
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do aktualizowania dat urodzin"
   }
 }
