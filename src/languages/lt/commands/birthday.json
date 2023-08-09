@@ -4,11 +4,11 @@
   "listDescription": "Išvardykite visus registruotus gimtadienius",
   "listName": "sąrašą",
   "registerDescription": "Užregistruokite savo gimtadienį",
-  "registerName": "Registruotis",
+  "registerName": "registruotis",
   "removeDescription": "Pašalinkite savo gimtadienį",
   "removeName": "pašalinti",
   "showDescription": "Parodyk savo gimtadienį",
-  "showName": "Rodyti",
+  "showName": "rodyti",
   "testDescription": "Išbandykite dabartines gimtadienio konfigūracijas",
   "testName": "bandymas",
   "updateDescription": "Atnaujinkite savo gimtadienį",
@@ -26,7 +26,7 @@
     "success_author": "Jūsų gimtadienis sėkmingai sukurtas.",
     "success_target": "{{target}} gimtadienis sėkmingai sukurtas.",
     "userDescription": "Vartotojas, kuriam sukurtas gimtadienis – TIK VADOVAS.",
-    "userName": "Vartotojas",
+    "userName": "vartotojas",
     "yearDescription": "Gimtadienio metai",
     "yearName": "metų"
   },
@@ -38,7 +38,7 @@
     "success_author": "Jūsų gimtadienis sėkmingai pašalintas.",
     "success_target": "{target}} gimtadienis sėkmingai pašalintas.",
     "userDescription": "Pašalinti asmens gimtadienį – TIK VADOVAS",
-    "userName": "Vartotojas"
+    "userName": "vartotojas"
   },
   "show": {
     "description_author": "{{emoji}}Jūsų gimtadienis yra {{date}}.",
@@ -47,11 +47,11 @@
     "notRegistered_target": "{{target}} gimtadienis neužregistruotas.",
     "title": "{{emoji}} Gimtadienis",
     "userDescription": "Rodyti asmens gimtadienį – TIK VADOVAS",
-    "userName": "Vartotojas"
+    "userName": "vartotojas"
   },
   "test": {
     "userDescription": "Išbandykite gimtadienį asmeniui – TIK VADOVAS",
-    "userName": "Vartotojas"
+    "userName": "vartotojas"
   },
   "update": {
     "dayDescription": "Gimtadienio diena",
@@ -65,7 +65,7 @@
     "success_author": "Jūsų gimtadienis sėkmingai atnaujintas {{date}}.",
     "success_target": "{{target}} gimtadienis buvo sėkmingai atnaujintas {{date}}.",
     "userDescription": "Vartotojas, kuriam atnaujintas gimtadienis – TIK VADOVAS.",
-    "userName": "Vartotojas",
+    "userName": "vartotojas",
     "yearDescription": "Gimtadienio metai",
     "yearName": "metų",
     "hasNotPermissionManagesRoles": "Neturite leidimo atnaujinti gimtadienių"

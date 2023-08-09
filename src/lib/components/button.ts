@@ -22,22 +22,20 @@ export function defaultButtonBuilder(data?: import('discord.js').ButtonComponent
 }
 
 export async function inviteSupportDicordButton(target: Target) {
-	return defaultButtonBuilder()
-		.setLabel(await resolveKey(target, 'button.supportDiscord'))
-		.setURL(WebsiteUrl('discord'))
-		.setEmoji(BirthdayyEmojis.People);
+	const label = await resolveKey(target, 'button:supportDiscord');
+	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('discord')).setEmoji(BirthdayyEmojis.People);
 }
 
 export async function docsButtonBuilder(target: Target) {
-	return defaultButtonBuilder()
-		.setLabel(await resolveKey(target, 'button.docsBirthday'))
-		.setURL(WebsiteUrl('docs'))
-		.setEmoji(BirthdayyEmojis.Book);
+	const label = await resolveKey(target, 'button:docsBirthday');
+	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('docs')).setEmoji(BirthdayyEmojis.Book);
 }
 
 export async function inviteBirthdayyButton(target: Target) {
+	const label = await resolveKey(target, 'button:inviteBithdayy');
+	console.log(label);
 	return defaultButtonBuilder()
-		.setLabel(await resolveKey(target, 'button.inviteBithdayy'))
+		.setLabel(label)
 		.setURL(
 			container.client.generateInvite({
 				scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
@@ -48,10 +46,8 @@ export async function inviteBirthdayyButton(target: Target) {
 }
 
 export async function remindMeButtonBuilder(target: Target) {
-	return defaultButtonBuilder()
-		.setLabel(await resolveKey(target, 'button.remindeMe'))
-		.setCustomId(ButtonID.voteReminder)
-		.setEmoji(BirthdayyEmojis.Alarm);
+	const label = await resolveKey(target, 'button:remindeMe');
+	return defaultButtonBuilder().setLabel(label).setCustomId(ButtonID.voteReminder).setEmoji(BirthdayyEmojis.Alarm);
 }
 
 export async function remindMeButtonDisabledBuilder(target: Target) {
@@ -59,32 +55,33 @@ export async function remindMeButtonDisabledBuilder(target: Target) {
 }
 
 export async function websiteButtonBuiler(target: Target) {
-	return defaultButtonBuilder()
-		.setLabel(await resolveKey(target, 'button.supportDiscord'))
-		.setEmoji(BirthdayyEmojis.Link)
-		.setURL(WebsiteUrl());
+	const label = await resolveKey(target, 'button:website');
+	return defaultButtonBuilder().setLabel(label).setEmoji(BirthdayyEmojis.Link).setURL(WebsiteUrl());
 }
 
 export async function birthdayListButtonBuilder(target: Target) {
+	const label = await resolveKey(target, 'button:birthdayyList');
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
-		.setLabel(await resolveKey(target, 'button.birthdayyList'))
+		.setLabel(label)
 		.setEmoji(BirthdayyEmojis.Cake)
 		.setCustomId(ButtonID.choiceBirthdayList);
 }
 
 export async function guildConfigButtonBuilder(target: Target) {
+	const label = await resolveKey(target, 'button:guildConfig');
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
-		.setLabel(await resolveKey(target, 'button.guildConfig'))
+		.setLabel(label)
 		.setEmoji(BirthdayyEmojis.Tools)
 		.setCustomId(ButtonID.choiceGuildConfig);
 }
 
 export async function discordInformationButtonBuilder(target: Target) {
+	const label = await resolveKey(target, 'button:discordInfo');
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
-		.setLabel(await resolveKey(target, 'button.discordInfo'))
+		.setLabel(label)
 		.setEmoji(BirthdayyEmojis.Support)
 		.setCustomId(ButtonID.choiceDiscordInformation);
 }

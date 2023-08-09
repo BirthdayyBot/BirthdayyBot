@@ -4,7 +4,7 @@
   "listDescription": "Lista alla registrerade födelsedagar",
   "listName": "lista",
   "registerDescription": "Registrera din födelsedag",
-  "registerName": "Registrera",
+  "registerName": "registrera",
   "removeDescription": "Ta bort din födelsedag",
   "removeName": "avlägsna",
   "showDescription": "Visa din födelsedag",
@@ -16,7 +16,7 @@
   "register": {
     "alreadyRegistered_author": "Din födelsedag är redan registrerad. \nOm du vill ändra det, använd {{command}}",
     "alreadyRegistered_target": "Denna användares födelsedag är redan registrerad. \nOm du vill ändra det, använd {{command}}",
-    "dayDescription": "Födelsedagen",
+    "dayDescription": "födelsedagen",
     "dayName": "dag",
     "hasNotPermissionManagesRoles": "Du har inte behörighet att registrera födelsedagar",
     "hasNotPermissionToManageThisUser": "Du har inte behörighet att registrera den här användarens födelsedag.",

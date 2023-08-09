@@ -26,7 +26,7 @@
     "success_author": "Seu aniversário foi criado com sucesso.",
     "success_target": "O aniversário de {{target}} foi criado com sucesso.",
     "userDescription": "O usuário para quem o aniversário foi criado - MANAGER ONLY.",
-    "userName": "do utilizador",
+    "userName": "utilizador",
     "yearDescription": "O ano do aniversário",
     "yearName": "ano"
   },
@@ -38,7 +38,7 @@
     "success_author": "Sua data de nascimento foi removida com sucesso.",
     "success_target": "O aniversário de {target}} foi removido com sucesso.",
     "userDescription": "Remover o Aniversário de uma Pessoa - APENAS MANAGER",
-    "userName": "do utilizador"
+    "userName": "utilizador"
   },
   "show": {
     "description_author": "{{emoji}}Seu aniversário é em {{data}}.",
@@ -47,11 +47,11 @@
     "notRegistered_target": "O aniversário de {{target}} não está registrado.",
     "title": "{{emoji}} Aniversário",
     "userDescription": "Mostrar o aniversário de uma pessoa - APENAS MANAGER",
-    "userName": "do utilizador"
+    "userName": "utilizador"
   },
   "test": {
     "userDescription": "Testar o aniversário de uma pessoa - APENAS MANAGER",
-    "userName": "do utilizador"
+    "userName": "utilizador"
   },
   "update": {
     "dayDescription": "O dia do aniversário",
@@ -65,7 +65,7 @@
     "success_author": "Seu aniversário foi atualizado com sucesso em {{date}}.",
     "success_target": "O aniversário de {{target}} foi atualizado com sucesso em {{date}}.",
     "userDescription": "O usuário para quem o aniversário é atualizado - MANAGER ONLY.",
-    "userName": "do utilizador",
+    "userName": "utilizador",
     "yearDescription": "O ano do aniversário",
     "yearName": "ano",
     "hasNotPermissionManagesRoles": "Você não tem permissão para atualizar aniversários"

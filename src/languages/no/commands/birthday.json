@@ -12,7 +12,7 @@
   "testDescription": "Test dine nåværende bursdagskonfigurasjoner",
   "testName": "test",
   "updateDescription": "Oppdater bursdagen din",
-  "updateName": "Oppdater",
+  "updateName": "oppdater",
   "register": {
     "alreadyRegistered_author": "Bursdagen din er allerede registrert. \nHvis du vil endre det, bruk {{command}}",
     "alreadyRegistered_target": "Denne brukerens fødselsdag er allerede registrert. \nHvis du vil endre det, bruk {{command}}",

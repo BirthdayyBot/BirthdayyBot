@@ -1,0 +1,8 @@
+{
+  "supportName": "steun",
+  "supportDescription": "Hulp nodig? Word lid van mijn Support Discord-server!",
+  "invite": {
+    "title": "{{emoji}} Verjaardagsondersteuning",
+    "description": "{{arrow}} Word lid van mijn discord-server [Support]({{support}})\n{{link}} Bekijk de [documentatie]({{docs}})"
+  }
+}

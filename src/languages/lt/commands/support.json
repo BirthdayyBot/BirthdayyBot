@@ -1,0 +1,8 @@
+{
+  "supportName": "parama",
+  "supportDescription": "Reikia pagalbos? Prisijunkite prie mano palaikymo „Discord“ serverio!",
+  "invite": {
+    "title": "{{emoji}} Gimtadienio palaikymas",
+    "description": "{{arrow}} Prisijunkite prie mano discord serverio [Palaikymas]({{support}})\n{{link}} Peržiūrėkite [dokumentaciją]({{docs}})"
+  }
+}

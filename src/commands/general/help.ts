@@ -5,7 +5,7 @@ import { reply } from '../../helpers/send/response';
 import { HelpCMD } from '../../lib/commands';
 import thinking from '../../lib/discord/thinking';
 import { HelpEmbed } from '../../lib/embeds';
-import { discordInformationButtonBuilder, docsButtonBuilder, websiteButtonBuiler } from '../../lib/components/button';
+import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '../../lib/components/button';
 
 @ApplyOptions<Command.Options>({
 	name: 'help',
@@ -31,7 +31,7 @@ export class HelpCommand extends Command {
 					components: [
 						await websiteButtonBuiler(interaction),
 						await docsButtonBuilder(interaction),
-						await discordInformationButtonBuilder(interaction),
+						await inviteSupportDicordButton(interaction),
 					],
 				},
 			],

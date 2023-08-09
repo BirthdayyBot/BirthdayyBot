@@ -1,0 +1,8 @@
+{
+  "supportName": "brukerstøtte",
+  "supportDescription": "Trenger hjelp? Bli med på min Support Discord Server!",
+  "invite": {
+    "title": "{{emoji}} Bursdagsstøtte",
+    "description": "{{arrow}} Bli med i discord-serveren min [Support]({{support}})\n{{link}} Sjekk ut [dokumentasjonen]({{docs}})"
+  }
+}

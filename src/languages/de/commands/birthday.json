@@ -1,24 +1,24 @@
 {
   "birthdayDescription": "Befehle zur Geburtstagsverwaltung",
-  "birthdayName": "Geburtstag",
+  "birthdayName": "geburtstag",
   "listDescription": "Listen Sie alle registrierten Geburtstage auf",
-  "listName": "Liste",
+  "listName": "liste",
   "register": {
     "alreadyRegistered_author": "Ihr Geburtstag ist bereits registriert. \nWenn Sie es ändern möchten, verwenden Sie {{command}}",
     "alreadyRegistered_target": "Der Geburtstag dieses Benutzers ist bereits registriert. \nWenn Sie es ändern möchten, verwenden Sie {{command}}",
     "dayDescription": "Der Tag des Geburtstages",
-    "dayName": "Tag",
+    "dayName": "tag",
     "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu registrieren",
     "hasNotPermissionToManageThisUser": "Sie sind nicht berechtigt, den Geburtstag dieses Benutzers zu registrieren.",
     "monthDescription": "Der Monat des Geburtstages",
-    "monthName": "Monat",
+    "monthName": "monat",
     "notCreated": "Der Geburtstag konnte nicht erstellt werden. \nBitte versuchen Sie es später noch einmal.",
     "success_author": "Ihr Geburtstag wurde erfolgreich erstellt.",
     "success_target": "Der Geburtstag von {{target}} wurde erfolgreich erstellt.",
     "userDescription": "Der Benutzer, für den der Geburtstag erstellt wird – NUR MANAGER.",
-    "userName": "Benutzer",
+    "userName": "benutzer",
     "yearDescription": "Das Jahr des Geburtstages",
-    "yearName": "Jahr"
+    "yearName": "jahr"
   },
   "registerDescription": "Registrieren Sie Ihren Geburtstag",
   "registerName": "registrieren",
@@ -30,7 +30,7 @@
     "success_author": "Ihr Geburtstag wurde erfolgreich entfernt.",
     "success_target": "Der Geburtstag von {target}} wurde erfolgreich entfernt.",
     "userDescription": "Entfernen Sie einen Geburtstag für eine Person – NUR MANAGER",
-    "userName": "Benutzer"
+    "userName": "benutzer"
   },
   "removeDescription": "Entfernen Sie Ihren Geburtstag",
   "removeName": "entfernen",
@@ -41,32 +41,32 @@
     "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
     "title": "{{emoji}} Geburtstag",
     "userDescription": "Zeigen Sie einen Geburtstag für eine Person an – NUR FÜR MANAGER",
-    "userName": "Benutzer"
+    "userName": "benutzer"
   },
   "showDescription": "Zeigen Sie Ihren Geburtstag",
   "showName": "zeigen",
   "test": {
     "userDescription": "Testen Sie einen Geburtstag für eine Person – NUR MANAGER",
-    "userName": "Benutzer"
+    "userName": "benutzer"
   },
   "testDescription": "Testen Sie Ihre aktuellen Geburtstagskonfigurationen",
   "testName": "prüfen",
   "update": {
     "dayDescription": "Der Tag des Geburtstages",
-    "dayName": "Tag",
+    "dayName": "tag",
     "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu aktualisieren",
     "hasNotPermissionToManageThisUser": "Sie sind nicht berechtigt, den Geburtstag dieses Benutzers zu aktualisieren.",
     "monthDescription": "Der Monat des Geburtstages",
-    "monthName": "Monat",
+    "monthName": "monat",
     "notRegistered_author": "Ihr Geburtstag ist nicht registriert. \nVerwenden Sie {{command}}, um es zu registrieren.",
     "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
     "notUpdated": "Der Geburtstag konnte nicht aktualisiert werden. \nBitte versuchen Sie es später noch einmal.",
     "success_author": "Ihr Geburtsdatum wurde am {{date}} erfolgreich aktualisiert.",
     "success_target": "Der Geburtstag von {{target}} wurde am {{date}} erfolgreich aktualisiert.",
     "userDescription": "Der Benutzer, dessen Geburtstag aktualisiert wird – NUR MANAGER.",
-    "userName": "Benutzer",
+    "userName": "benutzer",
     "yearDescription": "Das Jahr des Geburtstages",
-    "yearName": "Jahr"
+    "yearName": "jahr"
   },
   "updateDescription": "Aktualisieren Sie Ihren Geburtstag",
   "updateName": "aktualisieren"
