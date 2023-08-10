@@ -4,9 +4,9 @@ import { DurationFormatter } from '@sapphire/time-utilities';
 import { Guild, time } from 'discord.js';
 import { BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG, DEBUG } from '../../../helpers';
 import { sendMessage } from '../../../lib/discord';
-import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../../lib/model';
 import { generateDefaultEmbed } from '../../../lib/utils/embed';
+import { BirthdayyBotColor } from '../../../lib/types/Enums';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
@@ -45,7 +45,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			title: `${BirthdayyEmojis.Fail} ${BOT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
-			color: BotColorEnum.BIRTHDAYY_DEV,
+			color: BirthdayyBotColor.BirthdayyDev,
 		};
 
 		const embed = generateDefaultEmbed(embedObj);

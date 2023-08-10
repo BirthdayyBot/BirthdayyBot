@@ -17,8 +17,8 @@ import {
 	type WebhookClientData,
 } from 'discord.js';
 import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
-import { UserIDEnum } from './lib/enum/UserID.enum';
 import { isProduction } from './lib/utils/env';
+import { BirthdayyBotId } from './lib/types/Enums';
 
 function parseApi(): ServerOptions {
 	return {
@@ -31,7 +31,7 @@ function parseApi(): ServerOptions {
 
 function parseBotListOptions(): BotList.Options {
 	return {
-		clientId: UserIDEnum.BIRTHDAYY,
+		clientId: BirthdayyBotId.Birthdayy,
 		debug: DEBUG,
 		shard: true,
 		autoPost: {

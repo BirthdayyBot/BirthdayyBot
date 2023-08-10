@@ -8,11 +8,11 @@ import { BirthdayyEmojis, BOT_NAME, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../
 import { authenticated } from '../../lib/api/utils';
 import { remindMeButtonBuilder } from '../../lib/components/button';
 import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import type { VoteProvider } from '../../lib/types/VoteProvider.type';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
+import { GuildIDEnum } from '../../lib/types/Enums';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
@@ -37,7 +37,7 @@ export class UserRoute extends Route {
 	private async voteProcess(provider: VoteProvider, userId: string) {
 		const providerInfo = this.getProviderInfo(provider);
 
-		const guild = await getGuildInformation(GuildIDEnum.BIRTHDAYY_HQ);
+		const guild = await getGuildInformation(GuildIDEnum.Birthdayy);
 		if (!guild) return;
 
 		const user = await getUserInfo(userId);
@@ -69,7 +69,7 @@ export class UserRoute extends Route {
 		};
 		const dmEmbedObj = generateDefaultEmbed(dmEmbed);
 
-		const button = await remindMeButtonBuilder(await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ));
+		const button = await remindMeButtonBuilder(await container.client.guilds.fetch(GuildIDEnum.Birthdayy));
 		const components = new ActionRowBuilder<ButtonBuilder>().setComponents(button).toJSON();
 
 		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [components] });

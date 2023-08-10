@@ -5,7 +5,7 @@ import { envIsDefined } from '@skyra/env-utilities';
 import type { APIEmbed } from 'discord.js';
 import { DEBUG } from '../../helpers/provide/environment';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { BotColorEnum } from '../enum/BotColor.enum';
+import { BirthdayyBotColor } from '../types/Enums';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
 import { isDevelopment } from './env';
 
@@ -58,7 +58,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 	const errorMessageEmbed = generateDefaultEmbed({
 		title: 'An error has occured',
 		description: `${codeBlock(`js`, errorString)}`,
-		color: BotColorEnum.BIRTHDAYY_DEV,
+		color: BirthdayyBotColor.BirthdayyDev,
 	});
 
 	if (interaction.replied || interaction.deferred) {

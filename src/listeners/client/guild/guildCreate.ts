@@ -5,9 +5,10 @@ import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
 import { BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
 import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
 import { GuideEmbed } from '../../../lib/embeds';
-import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
 import type { EmbedInformationModel } from '../../../lib/model';
+import { BirthdayyBotColor } from '../../../lib/types/Enums';
 import { generateDefaultEmbed } from '../../../lib/utils/embed';
+import { BirthdayyBotColor } from '../../../lib/types/Enums';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
@@ -96,7 +97,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			title: `${BirthdayyEmojis.Success} ${BOT_NAME} got added to a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
-			color: BotColorEnum.BIRTHDAYY,
+			color: BirthdayyBotColor.Birthdayy,
 			thumbnail_url: guild.iconURL() ?? undefined,
 		};
 		const embed = generateDefaultEmbed(embedObj);

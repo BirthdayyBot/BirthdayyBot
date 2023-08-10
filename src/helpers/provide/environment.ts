@@ -1,10 +1,8 @@
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { PermissionsBitField } from 'discord.js';
 import { join } from 'path';
-import { BotColorEnum } from '../../lib/enum/BotColor.enum';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import { UserIDEnum } from '../../lib/enum/UserID.enum';
 import { isCustom, isProduction } from '../../lib/utils/env';
+import { BirthdayyBotColor, BirthdayyBotId, GuildIDEnum, OwnerID } from '../../lib/types/Enums';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');
@@ -23,10 +21,10 @@ export const IMG_BLOCK =
 export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env
 	.BOT_ID!}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=${
-	isCustom ? UserIDEnum.BIRTHDAYY : BOT_ID || UserIDEnum.BIRTHDAYY
+	isCustom ? BirthdayyBotId.Birthdayy : BOT_ID || BirthdayyBotId.Birthdayy
 }&permissions=525529836753&scope=bot`;
-export const BOT_COLOR = envParseInteger('BOT_COLOR', BotColorEnum.BIRTHDAYY);
-export const BOT_OWNER = envParseArray('BOT_OWNER', [UserIDEnum.CHILLIHERO]);
+export const BOT_COLOR = envParseInteger('BOT_COLOR', BirthdayyBotColor.Birthdayy);
+export const BOT_OWNER = envParseArray('BOT_OWNER', [OwnerID.Chillihero]);
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
@@ -69,8 +67,8 @@ export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
 export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${BirthdayyEmojis.ArrowRight} Today is a special Day!{NEW_LINE}${BirthdayyEmojis.Gift} Please wish {MENTION} a happy Birthday <3`;
-export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum.BIRTHDAYY_HQ);
-export const BOT_ADMINS = [UserIDEnum.CHILLIHERO, UserIDEnum.SWIIZYY];
+export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum.Birthdayy);
+export const BOT_ADMINS: string[] = [OwnerID.Chillihero, OwnerID.Swiizyy];
 
 export const Permission_Bits = [
 	PermissionsBitField.Flags.AddReactions,

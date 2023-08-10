@@ -5,10 +5,10 @@ import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { envParseNumber } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import { Guild, userMention, type APIEmbed } from 'discord.js';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { BirthdayyEmojis, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthName } from '../utils/date';
+import { GuildIDEnum } from '../../lib/types/Enums';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
@@ -68,7 +68,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
 
 	let currentDescription = '';
-	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.CHILLI_ATTACK_V2;
+	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.ChilliAttackV2;
 
 	for (const birthdayOfTheMonth of birthdaySortByMonth) {
 		const { birthdays, month } = birthdayOfTheMonth;
