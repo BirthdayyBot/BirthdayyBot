@@ -14,7 +14,6 @@
   "updateDescription": "Oppdater bursdagen din",
   "updateName": "oppdater",
   "register": {
-    "alreadyRegistered_author": "Bursdagen din er allerede registrert. \nHvis du vil endre det, bruk {{command}}",
     "alreadyRegistered_target": "Denne brukerens fødselsdag er allerede registrert. \nHvis du vil endre det, bruk {{command}}",
     "dayDescription": "Dagen for bursdagen",
     "dayName": "dag",
@@ -23,31 +22,37 @@
     "monthDescription": "Måneden for bursdagen",
     "monthName": "måned",
     "notCreated": "Fødselsdagen kunne ikke opprettes. \nPrøv igjen senere.",
-    "success_author": "Bursdagen din ble opprettet.",
     "success_target": "Fødselsdagen til {{target}} ble opprettet.",
     "userDescription": "Brukeren som fødselsdagen er opprettet for - KUN MANAGER.",
     "userName": "bruker",
     "yearDescription": "Året for bursdagen",
-    "yearName": "år"
+    "yearName": "år",
+    "dateIsNotValid": "{{date}} er ikke en gyldig dato. Vennligst bruk formatet \"DD/MM/ÅÅÅÅ\".",
+    "alreadyRegistered": "Bursdagen din er allerede registrert. \nHvis du vil endre det, bruk {{kommando}}.",
+    "alreadyRegistered_target-manager": "{{target}} sin bursdag er allerede registrert. \nHvis du vil endre det, bruk {{command}}",
+    "success": "Bursdagen din ble opprettet."
   },
   "remove": {
     "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å fjerne fødselsdager",
     "hasNotPermissionToManageThisUser": "Du har ikke tillatelse til å fjerne denne brukerens fødselsdag.",
-    "notRegistered_author": "Bursdagen din er ikke registrert.",
     "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
-    "success_author": "Fødselsdagen din ble fjernet.",
     "success_target": "Fødselsdagen til {target}} ble fjernet.",
     "userDescription": "Fjern en bursdag for en person - KUN MANAGER",
-    "userName": "bruker"
+    "userName": "bruker",
+    "notRegistered": "Bursdagen din er ikke registrert. Bruk {{command}} for å registrere den.",
+    "notRegistered_target-manager": "{{target}}s fødselsdag er ikke registrert. \nBruk {{command}} for å registrere den.",
+    "success": "Fødselsdagen din ble fjernet."
   },
   "show": {
-    "description_author": "{{emoji}}Du har bursdag {{dato}}.",
     "description_target": "{{emoji}} {{target}} har bursdag {{date}}.",
-    "notRegistered_author": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den.",
     "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
     "title": "{{emoji}} Bursdag",
     "userDescription": "Vis en bursdag for en person - KUN LEDER",
-    "userName": "bruker"
+    "userName": "bruker",
+    "description": "{{emoji}} Bursdagen din er {{date}}.",
+    "description_target-manager": "{{emoji}} {{target}} har bursdag {{date}}. \nHvis du vil endre det, bruk {{kommando}}.",
+    "notRegistered_target-manager": "{{target}}s fødselsdag er ikke registrert. \nBruk {{command}} for å registrere den.",
+    "notRegistered": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den."
   },
   "test": {
     "userDescription": "Test en bursdag for en person - KUN MANAGER",
@@ -62,12 +67,13 @@
     "notRegistered_author": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den.",
     "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
     "notUpdated": "Fødselsdagen kunne ikke oppdateres. \nPrøv igjen senere.",
-    "success_author": "Fødselsdagen din ble oppdatert {{date}}.",
     "success_target": "{{target}}s fødselsdag ble oppdatert {{date}}.",
     "userDescription": "Brukeren som fødselsdagen er oppdatert for - KUN MANAGER.",
     "userName": "bruker",
     "yearDescription": "Året for bursdagen",
     "yearName": "år",
-    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å oppdatere fødselsdager"
+    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å oppdatere fødselsdager",
+    "success": "Fødselsdagen din ble oppdatert {{date}}.",
+    "notRegistered_target-manager": "{{target}}s fødselsdag er ikke registrert. \nBruk {{command}} for å registrere den."
   }
 }

@@ -1,0 +1,26 @@
+{
+  "add": {
+    "alReady": "{{user}} jest już na czarnej liście.",
+    "success": "{{user}} został pomyślnie umieszczony na czarnej liście",
+    "userDescription": "Użytkownik, który ma zostać dodany do czarnej listy",
+    "userName": "użytkownik",
+    "cannotBlacklistSelf": "Nie możesz wpisywać siebie na czarną listę"
+  },
+  "addDescription": "Dodaj użytkownika do czarnej listy",
+  "addName": "dodać",
+  "blacklistDescription": "Czarna lista poleceń zarządzania użytkownikami",
+  "blacklistName": "czarna-lista",
+  "list": {
+    "title": "Użytkownicy z czarnej listy"
+  },
+  "listDescription": "Umieść wszystkich użytkowników na czarnej liście",
+  "listName": "lista",
+  "remove": {
+    "notFound": "{{user}} nie znajduje się na czarnej liście",
+    "success": "{{user}} został pomyślnie usunięty z czarnej listy",
+    "userDescription": "Użytkownik do usunięcia z czarnej listy",
+    "userName": "użytkownik"
+  },
+  "removeDescription": "Usuń użytkownika z czarnej listy",
+  "removeName": "usunąć"
+}

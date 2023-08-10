@@ -14,7 +14,6 @@
   "updateDescription": "Atnaujinkite savo gimtadienį",
   "updateName": "atnaujinti",
   "register": {
-    "alreadyRegistered_author": "Jūsų gimtadienis jau užregistruotas. \nJei norite jį pakeisti, naudokite {{command}}",
     "alreadyRegistered_target": "Šio vartotojo gimtadienis jau užregistruotas. \nJei norite jį pakeisti, naudokite {{command}}",
     "dayDescription": "Gimtadienio diena",
     "dayName": "dieną",
@@ -23,31 +22,37 @@
     "monthDescription": "Gimtadienio mėnuo",
     "monthName": "mėnuo",
     "notCreated": "Gimtadienio sukurti nepavyko. \nPabandykite dar kartą vėliau.",
-    "success_author": "Jūsų gimtadienis sėkmingai sukurtas.",
     "success_target": "{{target}} gimtadienis sėkmingai sukurtas.",
     "userDescription": "Vartotojas, kuriam sukurtas gimtadienis – TIK VADOVAS.",
     "userName": "vartotojas",
     "yearDescription": "Gimtadienio metai",
-    "yearName": "metų"
+    "yearName": "metų",
+    "dateIsNotValid": "{{date}} nėra tinkama data. Naudokite formatą ”DD/MM/YYYY“.",
+    "alreadyRegistered": "Jūsų gimtadienis jau užregistruotas. \nJei norite jį pakeisti, naudokite {{command}}.",
+    "alreadyRegistered_target-manager": "{{target}} gimtadienis jau užregistruotas. \nJei norite jį pakeisti, naudokite {{command}}",
+    "success": "Jūsų gimtadienis sėkmingai sukurtas."
   },
   "remove": {
     "hasNotPermissionManagesRoles": "Neturite leidimo pašalinti gimtadienių",
     "hasNotPermissionToManageThisUser": "Neturite leidimo pašalinti šio vartotojo gimtadienio.",
-    "notRegistered_author": "Jūsų gimtadienis neužregistruotas.",
     "notRegistered_target": "{{target}} gimtadienis neužregistruotas.",
-    "success_author": "Jūsų gimtadienis sėkmingai pašalintas.",
     "success_target": "{target}} gimtadienis sėkmingai pašalintas.",
     "userDescription": "Pašalinti asmens gimtadienį – TIK VADOVAS",
-    "userName": "vartotojas"
+    "userName": "vartotojas",
+    "notRegistered": "Jūsų gimtadienis neužregistruotas. Norėdami jį užregistruoti, naudokite {{command}}.",
+    "notRegistered_target-manager": "{{target}} gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}.",
+    "success": "Jūsų gimtadienis sėkmingai pašalintas."
   },
   "show": {
-    "description_author": "{{emoji}}Jūsų gimtadienis yra {{date}}.",
     "description_target": "{{emoji}} {{target}} gimtadienis yra {{date}}.",
-    "notRegistered_author": "Jūsų gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}.",
     "notRegistered_target": "{{target}} gimtadienis neužregistruotas.",
     "title": "{{emoji}} Gimtadienis",
     "userDescription": "Rodyti asmens gimtadienį – TIK VADOVAS",
-    "userName": "vartotojas"
+    "userName": "vartotojas",
+    "description": "{{emoji}} Jūsų gimtadienis yra {{date}}.",
+    "description_target-manager": "{{emoji}} {{target}} gimtadienis yra {{date}}. \nJei norite jį pakeisti, naudokite {{command}}.",
+    "notRegistered_target-manager": "{{target}} gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}.",
+    "notRegistered": "Jūsų gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}."
   },
   "test": {
     "userDescription": "Išbandykite gimtadienį asmeniui – TIK VADOVAS",
@@ -62,12 +67,13 @@
     "notRegistered_author": "Jūsų gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}.",
     "notRegistered_target": "{{target}} gimtadienis neužregistruotas.",
     "notUpdated": "Gimtadienio atnaujinti nepavyko. \nPabandykite dar kartą vėliau.",
-    "success_author": "Jūsų gimtadienis sėkmingai atnaujintas {{date}}.",
     "success_target": "{{target}} gimtadienis buvo sėkmingai atnaujintas {{date}}.",
     "userDescription": "Vartotojas, kuriam atnaujintas gimtadienis – TIK VADOVAS.",
     "userName": "vartotojas",
     "yearDescription": "Gimtadienio metai",
     "yearName": "metų",
-    "hasNotPermissionManagesRoles": "Neturite leidimo atnaujinti gimtadienių"
+    "hasNotPermissionManagesRoles": "Neturite leidimo atnaujinti gimtadienių",
+    "success": "Jūsų gimtadienis sėkmingai atnaujintas {{date}}.",
+    "notRegistered_target-manager": "{{target}} gimtadienis neužregistruotas. \nNorėdami jį užregistruoti, naudokite {{command}}."
   }
 }

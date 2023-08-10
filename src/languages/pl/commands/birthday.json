@@ -14,7 +14,6 @@
   "updateDescription": "Zaktualizuj swoje urodziny",
   "updateName": "aktualizacja",
   "register": {
-    "alreadyRegistered_author": "Twoje urodziny są już zarejestrowane. \nJeśli chcesz to zmienić, użyj {{command}}",
     "alreadyRegistered_target": "Urodziny tego użytkownika są już zarejestrowane. \nJeśli chcesz to zmienić, użyj {{command}}",
     "dayDescription": "Dzień urodzin",
     "dayName": "dzień",
@@ -23,31 +22,37 @@
     "monthDescription": "Miesiąc urodzin",
     "monthName": "miesiąc",
     "notCreated": "Nie można utworzyć urodzin. \nSpróbuj ponownie później.",
-    "success_author": "Twoje urodziny zostały pomyślnie utworzone.",
     "success_target": "Urodziny użytkownika {{target}} zostały pomyślnie utworzone.",
     "userDescription": "Użytkownik, dla którego tworzone są urodziny - TYLKO MENEDŻER.",
     "userName": "użytkownik",
     "yearDescription": "Rok urodzin",
-    "yearName": "rok"
+    "yearName": "rok",
+    "dateIsNotValid": "{{date}} nie jest prawidłową datą. Proszę użyć formatu ”DD/MM/RRRR”.",
+    "alreadyRegistered": "Twoje urodziny są już zarejestrowane. \nJeśli chcesz to zmienić, użyj {{command}}.",
+    "alreadyRegistered_target-manager": "Urodziny użytkownika {{target}} są już zarejestrowane. \nJeśli chcesz to zmienić, użyj {{command}}",
+    "success": "Twoje urodziny zostały pomyślnie utworzone."
   },
   "remove": {
     "hasNotPermissionManagesRoles": "Nie masz uprawnień do usuwania urodzin",
     "hasNotPermissionToManageThisUser": "Nie masz uprawnień do usunięcia urodzin tego użytkownika.",
-    "notRegistered_author": "Twoje urodziny nie są zarejestrowane.",
     "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
-    "success_author": "Twoje urodziny zostały pomyślnie usunięte.",
     "success_target": "Urodziny użytkownika {target}} zostały pomyślnie usunięte.",
     "userDescription": "Usuń urodziny dla osoby — TYLKO MENEDŻER",
-    "userName": "użytkownik"
+    "userName": "użytkownik",
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. Użyj {{command}}, aby go zarejestrować.",
+    "notRegistered_target-manager": "Urodziny {{target}} nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
+    "success": "Twoje urodziny zostały pomyślnie usunięte."
   },
   "show": {
-    "description_author": "{{emoji}}Twoje urodziny są {{date}}.",
     "description_target": "{{emoji}} {{target}} obchodzi urodziny {{date}}.",
-    "notRegistered_author": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
     "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
     "title": "{{emoji}} Urodziny",
     "userDescription": "Pokaż urodziny dla osoby – TYLKO MENEDŻER",
-    "userName": "użytkownik"
+    "userName": "użytkownik",
+    "description": "{{emoji}} Twoje urodziny są {{date}}.",
+    "description_target-manager": "{{emoji}} {{target}} obchodzi urodziny {{date}}. \nJeśli chcesz to zmienić, użyj {{command}}.",
+    "notRegistered_target-manager": "Urodziny {{target}} nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować."
   },
   "test": {
     "userDescription": "Przetestuj Urodziny dla Osoby - TYLKO MENEDŻER",
@@ -62,12 +67,13 @@
     "notRegistered_author": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
     "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
     "notUpdated": "Nie udało się zaktualizować daty urodzenia. \nSpróbuj ponownie później.",
-    "success_author": "Twoja data urodzenia została pomyślnie zaktualizowana o {{date}}.",
     "success_target": "Data urodzin użytkownika {{target}} została pomyślnie zaktualizowana o {{date}}.",
     "userDescription": "Użytkownik, dla którego data urodzenia jest aktualizowana - TYLKO MENEDŻER.",
     "userName": "użytkownik",
     "yearDescription": "Rok urodzin",
     "yearName": "rok",
-    "hasNotPermissionManagesRoles": "Nie masz uprawnień do aktualizowania dat urodzin"
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do aktualizowania dat urodzin",
+    "success": "Twoja data urodzenia została pomyślnie zaktualizowana {{date}}.",
+    "notRegistered_target-manager": "Urodziny {{target}} nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować."
   }
 }

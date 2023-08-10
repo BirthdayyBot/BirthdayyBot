@@ -14,7 +14,6 @@
   "updateDescription": "Atualize seu aniversário",
   "updateName": "atualizar",
   "register": {
-    "alreadyRegistered_author": "Seu aniversário já está registrado. \nSe você quiser alterá-lo, use {{command}}",
     "alreadyRegistered_target": "O aniversário deste usuário já está registrado. \nSe você quiser alterá-lo, use {{command}}",
     "dayDescription": "O dia do aniversário",
     "dayName": "dia",
@@ -23,31 +22,37 @@
     "monthDescription": "O mês do aniversário",
     "monthName": "mês",
     "notCreated": "O aniversário não pôde ser criado. \nPor favor, tente novamente mais tarde.",
-    "success_author": "Seu aniversário foi criado com sucesso.",
     "success_target": "O aniversário de {{target}} foi criado com sucesso.",
     "userDescription": "O usuário para quem o aniversário foi criado - MANAGER ONLY.",
     "userName": "utilizador",
     "yearDescription": "O ano do aniversário",
-    "yearName": "ano"
+    "yearName": "ano",
+    "dateIsNotValid": "{{data}} não é uma data válida. Use o formato 'DD/MM/AAAA'.",
+    "alreadyRegistered": "Seu aniversário já está registrado. \nSe você quiser alterá-lo, use {{command}}.",
+    "alreadyRegistered_target-manager": "O aniversário de {{target}} já está registrado. \nSe você quiser alterá-lo, use {{command}}",
+    "success": "Seu aniversário foi criado com sucesso."
   },
   "remove": {
     "hasNotPermissionManagesRoles": "Você não tem permissão para remover aniversários",
     "hasNotPermissionToManageThisUser": "Você não tem permissão para remover a data de nascimento deste usuário.",
-    "notRegistered_author": "Seu aniversário não está registrado.",
     "notRegistered_target": "O aniversário de {{target}} não está registrado.",
-    "success_author": "Sua data de nascimento foi removida com sucesso.",
     "success_target": "O aniversário de {target}} foi removido com sucesso.",
     "userDescription": "Remover o Aniversário de uma Pessoa - APENAS MANAGER",
-    "userName": "utilizador"
+    "userName": "utilizador",
+    "notRegistered": "Seu aniversário não está registrado. Use {{command}} para registrá-lo.",
+    "notRegistered_target-manager": "O aniversário de {{target}} não está registrado. \nUse {{command}} para registrá-lo.",
+    "success": "Sua data de nascimento foi removida com sucesso."
   },
   "show": {
-    "description_author": "{{emoji}}Seu aniversário é em {{data}}.",
     "description_target": "O aniversário de {{emoji}} {{target}} é em {{date}}.",
-    "notRegistered_author": "Seu aniversário não está registrado. \nUse {{command}} para registrá-lo.",
     "notRegistered_target": "O aniversário de {{target}} não está registrado.",
     "title": "{{emoji}} Aniversário",
     "userDescription": "Mostrar o aniversário de uma pessoa - APENAS MANAGER",
-    "userName": "utilizador"
+    "userName": "utilizador",
+    "description": "{{emoji}} Seu aniversário é em {{data}}.",
+    "description_target-manager": "O aniversário de {{emoji}} {{target}} é em {{date}}. \nSe você quiser alterá-lo, use {{command}}.",
+    "notRegistered_target-manager": "O aniversário de {{target}} não está registrado. \nUse {{command}} para registrá-lo.",
+    "notRegistered": "Seu aniversário não está registrado. \nUse {{command}} para registrá-lo."
   },
   "test": {
     "userDescription": "Testar o aniversário de uma pessoa - APENAS MANAGER",
@@ -62,12 +67,13 @@
     "notRegistered_author": "Seu aniversário não está registrado. \nUse {{command}} para registrá-lo.",
     "notRegistered_target": "O aniversário de {{target}} não está registrado.",
     "notUpdated": "O aniversário não pôde ser atualizado. \nPor favor, tente novamente mais tarde.",
-    "success_author": "Seu aniversário foi atualizado com sucesso em {{date}}.",
     "success_target": "O aniversário de {{target}} foi atualizado com sucesso em {{date}}.",
     "userDescription": "O usuário para quem o aniversário é atualizado - MANAGER ONLY.",
     "userName": "utilizador",
     "yearDescription": "O ano do aniversário",
     "yearName": "ano",
-    "hasNotPermissionManagesRoles": "Você não tem permissão para atualizar aniversários"
+    "hasNotPermissionManagesRoles": "Você não tem permissão para atualizar aniversários",
+    "success": "Seu aniversário foi atualizado com sucesso em {{date}}.",
+    "notRegistered_target-manager": "O aniversário de {{target}} não está registrado. \nUse {{command}} para registrá-lo."
   }
 }

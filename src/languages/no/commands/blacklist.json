@@ -1,0 +1,26 @@
+{
+  "add": {
+    "alReady": "{{user}} er allerede på svartelisten.",
+    "success": "{{user}} har blitt svartelistet",
+    "userDescription": "Brukeren som skal legges til på svartelisten",
+    "userName": "bruker",
+    "cannotBlacklistSelf": "Du kan ikke svarteliste deg selv"
+  },
+  "addDescription": "Legg til en bruker på svartelisten",
+  "addName": "legg-til",
+  "blacklistDescription": "Svarteliste brukeradministrasjonskommandoer",
+  "blacklistName": "svarte-liste",
+  "list": {
+    "title": "Svartelistede brukere"
+  },
+  "listDescription": "List alle brukere på svartelisten",
+  "listName": "liste",
+  "remove": {
+    "notFound": "{{user}} er ikke på svartelisten",
+    "success": "{{user}} har blitt fjernet fra svartelisten",
+    "userDescription": "Brukeren som skal fjernes fra svartelisten",
+    "userName": "bruker"
+  },
+  "removeDescription": "Fjern en bruker fra svartelisten",
+  "removeName": "fjerne"
+}

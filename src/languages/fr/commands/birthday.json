@@ -12,13 +12,15 @@
     "yearDescription": "L'année de l'anniversaire",
     "userName": "utilisateur",
     "userDescription": "L’utilisateur pour lequel l’anniversaire est créé - MANAGER ONLY.",
-    "success_author": "Votre anniveraire à bien été créé.",
     "success_target": "L'anniversaire de {{target}} à bien été créé.",
     "alreadyRegistered_target": "L'anniversaire de cet utilisateur est déjà enregistré. \nSi vous voulez le changer, utilisez {{command}}",
-    "alreadyRegistered_author": "Votre anniversaire est déjà enregistré. Si vous voulez le changer, utilisez {{command}}",
     "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de créer des anniversaires",
     "hasNotPermissionToManageThisUser": "Vous n'avez pas la permission de créer un anniversaire pour cet utilisateur.",
-    "notCreated": "L'anniversaire n'a pas pu être créé. Veuillez réessayer plus tard."
+    "notCreated": "L'anniversaire n'a pas pu être créé. Veuillez réessayer plus tard.",
+    "dateIsNotValid": "{{date}} n'est pas une date valide. Veuillez utiliser le format 'JJ/MM/AAAA'.",
+    "alreadyRegistered": "Votre anniversaire est déjà enregistré. \nSi vous voulez le changer, utilisez {{command}}.",
+    "alreadyRegistered_target-manager": "L'anniversaire de {{target}} est déjà enregistré. \nSi vous voulez le changer, utilisez {{command}}",
+    "success": "Votre anniversaire a été créé avec succès."
   },
   "listName": "liste",
   "listDescription": "Lister tous les anniversaires enregistrés",
@@ -27,12 +29,13 @@
   "remove": {
     "userName": "user",
     "userDescription": "Supprimer l'anniversaire pour cette utilisateur - MANAGER ONLY",
-    "success_author": "Votre anniversaire à bien été supprimé.",
     "success_target": "L'anniversaire de {{target}} à bien été supprimé.",
-    "notRegistered_author": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer",
     "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
     "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de supprimer des anniversaires",
-    "hasNotPermissionToManageThisUser": "Vous n'avez pas la permission de supprimer l'anniversaire de cet utilisateur."
+    "hasNotPermissionToManageThisUser": "Vous n'avez pas la permission de supprimer l'anniversaire de cet utilisateur.",
+    "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
+    "notRegistered_target-manager": "L'anniversaire de {{target}} n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
+    "success": "Votre anniversaire a été supprimé avec succès."
   },
   "showName": "montrer",
   "showDescription": "Montrer votre anniversaire",
@@ -40,10 +43,12 @@
     "userName": "utilisateur",
     "userDescription": "Montrer l'anniversaire de cette utilisateur - MANAGER ONLY",
     "title": "{{emoji}} Anniversaire",
-    "description_author": "{{emoji}}Votre anniversaire est le {{date}}.",
     "description_target": "{{emoji}} L'anniversaire de {{target}} est le {{date}}.",
-    "notRegistered_author": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer",
-    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré."
+    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
+    "description": "{{emoji}} Votre anniversaire est le {{date}}.",
+    "description_target-manager": "L'anniversaire de {{emoji}} {{target}} est le {{date}}. \nSi vous voulez le changer, utilisez {{command}}.",
+    "notRegistered_target-manager": "L'anniversaire de {{target}} n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
+    "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer."
   },
   "updateName": "modifier",
   "updateDescription": "Modifier votre anniversaire",
@@ -58,11 +63,12 @@
     "userDescription": "L’utilisateur pour lequel l’anniversaire doit être modifié - MANAGER ONLY.",
     "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de modifier des anniversaires",
     "hasNotPermissionToManageThisUser": "Vous n'avez pas la permission de modifier l'anniversaire de cet utilisateur.",
-    "success_author": "Votre anniversaire à bien été mis à jour au {{date}}.",
     "success_target": "L'anniversaire de {{target}} à bien été mis à jour au {{date}}.",
     "notRegistered_author": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer",
     "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
-    "notUpdated": "L'anniversaire n'a pas pu être mis à jour. Veuillez réessayer plus tard."
+    "notUpdated": "L'anniversaire n'a pas pu être mis à jour. Veuillez réessayer plus tard.",
+    "success": "Votre anniversaire a été mis à jour avec succès le {{date}}.",
+    "notRegistered_target-manager": "L'anniversaire de {{target}} n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer."
   },
   "testName": "test",
   "testDescription": "Testez votre configuration d’anniversaire actuelle",

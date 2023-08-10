@@ -1,0 +1,26 @@
+{
+  "add": {
+    "alReady": "{{user}} jau yra juodajame sąraše.",
+    "success": "{{user}} sėkmingai įtrauktas į juodąjį sąrašą",
+    "userDescription": "Vartotojas, kurį reikia įtraukti į juodąjį sąrašą",
+    "userName": "vartotojas",
+    "cannotBlacklistSelf": "Jūs negalite savęs įtraukti į juodąjį sąrašą"
+  },
+  "addDescription": "Įtraukite vartotoją į juodąjį sąrašą",
+  "addName": "papildyti",
+  "blacklistDescription": "Vartotojų valdymo komandos į juodąjį sąrašą",
+  "blacklistName": "juodasis-sąrašas",
+  "list": {
+    "title": "Į juodąjį sąrašą įtraukti vartotojai"
+  },
+  "listDescription": "Išvardykite visus juodajame sąraše esančius vartotojus",
+  "listName": "sąrašą",
+  "remove": {
+    "notFound": "{{user}} nėra juodajame sąraše",
+    "success": "{{user}} sėkmingai pašalintas iš juodojo sąrašo",
+    "userDescription": "Vartotojas, kurį reikia pašalinti iš juodojo sąrašo",
+    "userName": "vartotojas"
+  },
+  "removeDescription": "Pašalinkite vartotoją iš juodojo sąrašo",
+  "removeName": "pašalinti"
+}
