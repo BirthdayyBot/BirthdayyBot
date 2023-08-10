@@ -1,14 +1,11 @@
 {
-  "april": "Aprilie",
-  "august": "August",
-  "december": "decembrie",
-  "february": "februarie",
-  "january": "ianuarie",
-  "july": "iulie",
-  "june": "iunie",
-  "march": "Martie",
-  "may": "Mai",
-  "november": "noiembrie",
-  "october": "octombrie",
-  "september": "Septembrie"
+  "april": "4. Aprilie",
+  "may": "5. Mai",
+  "june": "6. Iunie",
+  "july": "7. Iulie",
+  "august": "9. August",
+  "december": "12. Decembrie",
+  "november": "11. Noiembrie",
+  "october": "10. Octombrie",
+  "september": "9. Septembrie"
 }

@@ -1,14 +1,14 @@
 {
-  "april": "April",
-  "august": "August",
-  "december": "Dezember",
-  "february": "Februar",
-  "january": "Januar",
-  "july": "Juli",
-  "june": "Juni",
-  "march": "Marsch",
-  "may": "Dürfen",
-  "november": "November",
-  "october": "Oktober",
-  "september": "September"
+  "april": "4. April",
+  "august": "9. August",
+  "december": "12. Dezember",
+  "february": "2. Februar",
+  "january": "1. Januar",
+  "july": "7. Juli",
+  "june": "6. Juni",
+  "march": "3. März",
+  "may": "5. Mai",
+  "november": "11. November",
+  "october": "10. Oktober",
+  "september": "9. September"
 }
