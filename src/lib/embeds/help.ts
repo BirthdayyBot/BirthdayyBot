@@ -1,5 +1,5 @@
+import { BirthdayyEmojis, BOT_NAME, DOCS_URL, PREMIUM_URL } from '#lib/utils/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { BOT_NAME, BirthdayyEmojis, DOCS_URL, PREMIUM_URL } from '../../helpers/provide/environment';
 
 export const HelpEmbed: APIEmbed = {
 	title: `${BirthdayyEmojis.Book} ${BOT_NAME} Help`,

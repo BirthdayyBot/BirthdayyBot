@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { ServerEvents, type MiddlewareErrorContext } from '@sapphire/plugin-api';
-import { handleRouteApiError } from '../../lib/utils/errorHandling';
+import { handleRouteApiError } from '../../lib/utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ emitter: 'server', event: ServerEvents.Error })
 export class ServerErrorEvent extends Listener {

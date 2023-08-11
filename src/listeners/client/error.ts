@@ -1,8 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
-import { logErrorToContainer } from '../../lib/utils/errorHandling';
 import { envIsDefined } from '@skyra/env-utilities';
+import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: Events.Error })
 export class ErrorEvent extends Listener<typeof Events.Error> {

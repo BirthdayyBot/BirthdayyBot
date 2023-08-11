@@ -1,7 +1,7 @@
+import { BIRTHDAYY_CUPCAKE } from '#lib/components/images';
+import { isNotCustom } from '#lib/utils/env';
+import { BOT_AVATAR, BOT_NAME, BirthdayyEmojis } from '#lib/utils/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { BOT_AVATAR, BOT_NAME, BirthdayyEmojis } from '../../helpers/provide/environment';
-import { BIRTHDAYY_CUPCAKE } from '../components/images';
-import { isNotCustom } from '../utils/env';
 
 const BotName = isNotCustom ? BOT_NAME : 'Birthdayy';
 export const InviteEmbed: APIEmbed = {

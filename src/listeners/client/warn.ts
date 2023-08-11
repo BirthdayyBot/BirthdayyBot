@@ -1,6 +1,6 @@
+import { DEBUG } from '#lib/utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener } from '@sapphire/framework';
-import { DEBUG } from '../../helpers/provide/environment';
 
 @ApplyOptions<Listener.Options>({ event: Events.Warn })
 export class WarnEvent extends Listener<typeof Events.Warn> {

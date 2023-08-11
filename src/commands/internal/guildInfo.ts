@@ -1,20 +1,21 @@
+import { GuildInfoCMD } from '#lib/commands/guildInfo';
+import thinking from '#lib/discord/thinking';
+import generateConfigList from '#lib/utils/birthday/config';
+import { getFormattedTimestamp } from '#lib/utils/common';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isCustom } from '#lib/utils/env';
+import { getCommandGuilds } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { getCommandGuilds, getFormattedTimestamp, reply } from '../../helpers';
-import generateConfigList from '../../helpers/generate/configList';
-import { GuildInfoCMD } from '../../lib/commands/guildInfo';
-import thinking from '../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isCustom } from '../../lib/utils/env';
-
 @ApplyOptions<Command.Options>({
-	name: 'guild-info',
 	description: 'Get Infos about a Guild',
 	enabled: !isCustom,
-	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	name: 'guild-info',
 	preconditions: ['AdminOnly'],
-	requiredUserPermissions: ['ViewChannel'],
 	requiredClientPermissions: ['SendMessages'],
+	requiredUserPermissions: ['ViewChannel'],
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class GuildInfoCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
@@ -33,10 +34,6 @@ export class GuildInfoCommand extends Command {
 		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
 
 		const embed = generateDefaultEmbed({
-			title: 'GuildInfos',
-			thumbnail: {
-				url: guildDiscord.iconURL({ extension: 'png' }) ?? 'No Image',
-			},
 			fields: [
 				{
 					name: 'GuildId',
@@ -76,8 +73,8 @@ export class GuildInfoCommand extends Command {
 				},
 				{
 					name: 'IsPartnered',
-					value: String(guildDiscord.partnered),
 					inline: true,
+					value: String(guildDiscord.partnered),
 				},
 				{
 					name: 'Premium Tier',
@@ -108,6 +105,10 @@ export class GuildInfoCommand extends Command {
 							.join(' • ') ?? 'No Permissions',
 				},
 			],
+			thumbnail: {
+				url: guildDiscord.iconURL({ extension: 'png' }) ?? 'No Image',
+			},
+			title: 'GuildInfos',
 		});
 
 		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));

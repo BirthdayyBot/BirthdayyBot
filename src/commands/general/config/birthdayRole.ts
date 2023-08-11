@@ -1,10 +1,12 @@
+import thinking from '#lib/discord/thinking';
+import { PrismaErrorCodeEnum } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { Result } from '@sapphire/result';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { roleMention } from 'discord.js';
-import { reply } from '../../../helpers';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -21,14 +23,15 @@ export class ListCommand extends Command {
 
 		const role = interaction.options.getRole('role', true);
 
-		const guildResult = await Result.fromAsync(() =>
+		const guild = await resolveOnErrorCodesPrisma(
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
 				data: { birthdayRole: role.id },
 			}),
+			PrismaErrorCodeEnum.NotFound,
 		);
 
-		if (guildResult.isErr()) {
+		if (isNullOrUndefinedOrEmpty(guild)) {
 			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 

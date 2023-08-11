@@ -1,14 +1,11 @@
+import { sendDMMessage, getUserInfo, sendMessage } from '#lib/discord';
+import { GuideEmbed } from '#lib/embeds';
+import { BirthdayyBotColor } from '#lib/types';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { IS_CUSTOM_BOT, BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG } from '#lib/utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
-import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
-import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
-import { BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT } from '../../../helpers/provide/environment';
-import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
-import { GuideEmbed } from '../../../lib/embeds';
-import type { EmbedInformationModel } from '../../../lib/model';
-import { BirthdayyBotColor } from '../../../lib/types/Enums';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
-import { BirthdayyBotColor } from '../../../lib/types/Enums';
+import { type ListenerOptions, Listener, container } from '@sapphire/framework';
+import { Events, Guild, type Snowflake, PermissionFlagsBits, AuditLogEvent, DiscordAPIError, time } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
@@ -93,14 +90,13 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			fields.push({ name: 'Inviter', value: this.generateInfoString(inviterId, inviterInfo?.username) });
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
 
-		const embedObj: EmbedInformationModel = {
+		const embed = generateDefaultEmbed({
 			title: `${BirthdayyEmojis.Success} ${BOT_NAME} got added to a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BirthdayyBotColor.Birthdayy,
-			thumbnail_url: guild.iconURL() ?? undefined,
-		};
-		const embed = generateDefaultEmbed(embedObj);
+			thumbnail: { url: guild.iconURL() ?? '' },
+		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}
 

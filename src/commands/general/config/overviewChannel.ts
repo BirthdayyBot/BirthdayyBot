@@ -1,11 +1,18 @@
+import thinking from '#lib/discord/thinking';
+import {
+	defaultUserPermissions,
+	defaultClientPermissions,
+	PrismaErrorCodeEnum,
+	hasBotChannelPermissions,
+} from '#lib/types';
+import { generateBirthdayList } from '#lib/utils/birthday';
+import { interactionProblem, generateDefaultEmbed, interactionSuccess } from '#lib/utils/embed';
+import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Result } from '@sapphire/result';
-import { channelMention, ChannelType } from 'discord.js';
-import { generateBirthdayList } from '../../../helpers/generate/birthdayList';
-import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { RequiresUserPermissions, RequiresClientPermissions } from '@sapphire/decorators';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import { ChannelType, channelMention } from 'discord.js';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -20,6 +27,8 @@ import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '..
 		),
 )
 export class OverviewChannelCommand extends Command {
+	@RequiresUserPermissions(defaultUserPermissions)
+	@RequiresClientPermissions(defaultClientPermissions)
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const channel = interaction.options.getChannel<ChannelType.GuildText>('channel', true);
@@ -44,14 +53,15 @@ export class OverviewChannelCommand extends Command {
 			components: birthdayList.components,
 		});
 
-		const result = await Result.fromAsync(() =>
+		const result = await resolveOnErrorCodesPrisma(
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
 				data: { overviewMessage: message.id, overviewChannel: channel.id },
 			}),
+			PrismaErrorCodeEnum.NotFound,
 		);
 
-		if (result.isErr()) {
+		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(
 				interaction,
 				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),

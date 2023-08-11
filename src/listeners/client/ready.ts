@@ -1,7 +1,7 @@
+import { BOT_ADMIN_LOG } from '#lib/utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { BOT_ADMIN_LOG } from '../../helpers/provide/environment';
 import { sendMessage } from '../../lib/discord/message';
 import { isDevelopment } from '../../lib/utils/env';
 

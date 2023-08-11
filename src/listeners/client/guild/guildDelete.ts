@@ -1,12 +1,11 @@
+import { sendMessage } from '#lib/discord';
+import { BirthdayyBotColor } from '#lib/types';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { BOT_NAME, BOT_SERVER_LOG, BirthdayyEmojis, DEBUG } from '#lib/utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
+import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { Guild, time } from 'discord.js';
-import { BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG, DEBUG } from '../../../helpers';
-import { sendMessage } from '../../../lib/discord';
-import type { EmbedInformationModel } from '../../../lib/model';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
-import { BirthdayyBotColor } from '../../../lib/types/Enums';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
@@ -41,14 +40,13 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 		if (ownerId) fields.push({ name: 'GuildOwnerID', value: `${ownerId}` });
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedDate}\n${joinedAgo}` });
 		if (timeServed) fields.push({ name: 'TimeServed', value: `${timeServed}` });
-		const embedObj: EmbedInformationModel = {
+
+		const embed = generateDefaultEmbed({
 			title: `${BirthdayyEmojis.Fail} ${BOT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BirthdayyBotColor.BirthdayyDev,
-		};
-
-		const embed = generateDefaultEmbed(embedObj);
+		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}
 }

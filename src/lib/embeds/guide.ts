@@ -1,5 +1,5 @@
+import { BOT_INVITE, BOT_NAME, BirthdayyEmojis, DISCORD_INVITE, PREMIUM_URL } from '#lib/utils/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { BOT_INVITE, BOT_NAME, BirthdayyEmojis, DISCORD_INVITE, PREMIUM_URL } from '../../helpers/provide/environment';
 
 export const GuideEmbed: APIEmbed = {
 	title: `${BirthdayyEmojis.Heart} ${BOT_NAME} Guide!`,

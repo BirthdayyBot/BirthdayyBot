@@ -1,26 +1,29 @@
+import thinking from '#lib/discord/thinking';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { BirthdayyEmojis, IMG_BLOCK } from '#lib/utils/environment';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Blacklist } from '@prisma/client';
+import { RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
 import { time, userMention } from 'discord.js';
-import { BirthdayyEmojis, IMG_BLOCK } from '../../../helpers';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
+import { listBlacklistSubCommand } from './blacklist';
 
-@RegisterSubCommand('blacklist', (builder) => builder.setName('list').setDescription('List all Users on the blacklist'))
+@RegisterSubCommand('blacklist', (builder) => listBlacklistSubCommand(builder))
 export class ListCommand extends Command {
+	@RequiresUserPermissions(defaultUserPermissions)
+	@RequiresClientPermissions(defaultClientPermissions)
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 		const blacklistedUsers = await this.container.utilities.blacklist.get.BlacklistByGuildId(interaction.guildId);
-		const blackListFormatted = processBlacklistedUsers(blacklistedUsers);
+		const description = processBlacklistedUsers(blacklistedUsers);
 
 		return reply(interaction, {
 			embeds: [
 				generateDefaultEmbed({
+					description,
+					thumbnail: { url: IMG_BLOCK },
 					title: 'Blacklisted Users',
-					description: blackListFormatted,
-					thumbnail: {
-						url: IMG_BLOCK,
-					},
 				}),
 			],
 		});

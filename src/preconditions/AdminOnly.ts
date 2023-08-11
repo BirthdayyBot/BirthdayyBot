@@ -1,6 +1,6 @@
+import { isBotAdmin } from '#lib/utils/functions';
 import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
-import { isBotAdmin } from '../lib/utils/helper';
 
 export class OwnerOwnlyPrecondition extends Precondition {
 	#message = 'This command can only be used by the bot admins.';

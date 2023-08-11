@@ -1,5 +1,5 @@
 import type { APIEmbed, BaseMessageOptions, InteractionReplyOptions } from 'discord.js';
-import { BOT_AVATAR, BOT_COLOR, BOT_NAME, BirthdayyEmojis, IS_CUSTOM_BOT } from '../../helpers/provide/environment';
+import { BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT, BOT_AVATAR, BirthdayyEmojis } from '#lib/utils/environment';
 
 type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
 type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;

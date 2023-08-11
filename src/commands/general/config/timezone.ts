@@ -1,8 +1,10 @@
+import thinking from '#lib/discord/thinking';
+import { PrismaErrorCodeEnum } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Result } from '@sapphire/result';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -119,11 +121,12 @@ export class TimezoneCommand extends Command {
 
 		const timezone = interaction.options.getInteger('timezone', true);
 
-		const result = await Result.fromAsync(() =>
+		const result = await resolveOnErrorCodesPrisma(
 			this.container.prisma.guild.update({ where: { guildId: interaction.guildId }, data: { timezone } }),
+			PrismaErrorCodeEnum.NotFound,
 		);
 
-		if (result.isErr()) {
+		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(interaction, interactionProblem("I couldn't set the **Timezone**."));
 		}
 

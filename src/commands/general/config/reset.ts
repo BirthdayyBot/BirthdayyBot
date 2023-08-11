@@ -1,10 +1,11 @@
+import { configChoices, type ConfigName, configNameExtended } from '#lib/database';
+import thinking from '#lib/discord/thinking';
+import { PrismaErrorCodeEnum } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { setDefaultConfig, resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Result } from '@sapphire/result';
-import { setDefaultConfig } from '../../../helpers/provide/config';
-import { reply } from '../../../helpers/send/response';
-import { type ConfigName, configNameExtended, configChoices } from '../../../lib/database';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -24,9 +25,12 @@ export class ResetCommand extends Command {
 		const config = interaction.options.getString('config', true) as ConfigName;
 		const configName = configNameExtended[config];
 
-		const result = await Result.fromAsync(() => setDefaultConfig(config, interaction.guildId));
+		const result = await resolveOnErrorCodesPrisma(
+			setDefaultConfig(config, interaction.guildId),
+			PrismaErrorCodeEnum.NotFound,
+		);
 
-		if (result.isErr()) {
+		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(
 				interaction,
 				interactionProblem(`An error occurred while trying to reset the ${configName} config.`),

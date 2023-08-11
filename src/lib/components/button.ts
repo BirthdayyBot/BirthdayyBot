@@ -1,7 +1,7 @@
+import { BirthdayyEmojis, Permission_Bits } from '#lib/utils/environment';
 import { container } from '@sapphire/framework';
 import { resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes } from 'discord.js';
-import { BirthdayyEmojis, Permission_Bits } from '../../helpers/provide/environment';
 
 export const WebsiteUrl = (path?: string) => `https://birthdayy.xyz/${path ? `${path}` : ''}`;
 

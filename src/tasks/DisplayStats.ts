@@ -1,8 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { getVoiceChannel } from '../lib/discord';
-import { ChannelIdEnum } from '../lib/enum/ChannelId.enum';
-import { isCustom, isProduction } from '../lib/utils/env';
+import { isCustom, isProduction, isDevelopment } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'DisplayStats',
@@ -11,7 +10,7 @@ import { isCustom, isProduction } from '../lib/utils/env';
 })
 export class DisplayStats extends ScheduledTask {
 	public async run() {
-		if (isCustom) return this.container.logger.error('DisplayStats task is disabled.');
+		if (isCustom || isDevelopment) return this.container.logger.error('DisplayStats task is disabled.');
 		const guilds = await this.container.botList.computeGuilds();
 		const users = await this.container.botList.computeUsers();
 		const serverCountChannel = await getVoiceChannel('951246486279172106');

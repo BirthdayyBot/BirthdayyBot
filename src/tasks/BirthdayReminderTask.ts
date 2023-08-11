@@ -1,3 +1,4 @@
+import { BOT_ADMIN_LOG, BirthdayyEmojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '#lib/utils/environment';
 import type { Birthday } from '@prisma/client';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -18,15 +19,22 @@ import {
 	type EmbedField,
 	type Snowflake,
 } from 'discord.js';
-import { logAll } from '../helpers/provide/config';
-import { BOT_ADMIN_LOG, BirthdayyEmojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '../helpers/provide/environment';
-import { getCurrentOffset } from '../helpers/utils/date';
 import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
-import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
+import { getCurrentOffset, type TimezoneObject } from '../lib/utils/common/date';
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import { isCustom } from '../lib/utils/env';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
+import { logAll } from '#lib/utils/functions';
+
+export interface BirthdayEventInfoModel {
+	userId: string;
+	guildId: string;
+	error?: string;
+	message?: string;
+	announcement?: string | { sent: boolean; message: string };
+	birthday_role?: string | { added: boolean; message: string };
+}
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {

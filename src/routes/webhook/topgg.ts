@@ -1,18 +1,24 @@
+import { authenticated } from '#lib/api/utils';
+import { remindMeButtonBuilder } from '#lib/components/button';
+import { getUserInfo, getGuildMember, sendDMMessage, sendMessage } from '#lib/discord';
+import { type VoteProvider, BirthdayyBotId, GuildIDEnum } from '#lib/types';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { VOTE_ROLE_ID, BirthdayyEmojis, VOTE_CHANNEL_ID, BOT_NAME } from '#lib/utils/environment';
+import { resolveOnErrorCodesDiscord } from '#lib/utils/functions';
+import type { RoleRemovePayload } from '#root/tasks/BirthdayRoleRemoverTask';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/pieces';
-import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { container } from '@sapphire/framework';
+import { Route, methods, ApiRequest, ApiResponse } from '@sapphire/plugin-api';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import { ActionRowBuilder, ButtonBuilder, type User } from 'discord.js';
-import { BirthdayyEmojis, BOT_NAME, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
-import { authenticated } from '../../lib/api/utils';
-import { remindMeButtonBuilder } from '../../lib/components/button';
-import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
-import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
-import type { VoteProvider } from '../../lib/types/VoteProvider.type';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
-import { GuildIDEnum } from '../../lib/types/Enums';
+import { RESTJSONErrorCodes, ActionRowBuilder, ButtonBuilder, User } from 'discord.js';
+
+export interface APIWebhookTopGG {
+	user: string;
+	type: 'test' | 'upvote';
+	query: string;
+	bot: string;
+}
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
@@ -37,7 +43,10 @@ export class UserRoute extends Route {
 	private async voteProcess(provider: VoteProvider, userId: string) {
 		const providerInfo = this.getProviderInfo(provider);
 
-		const guild = await getGuildInformation(GuildIDEnum.Birthdayy);
+		const guild = await resolveOnErrorCodesDiscord(
+			container.client.guilds.fetch(BirthdayyBotId.Birthdayy),
+			RESTJSONErrorCodes.UnknownGuild,
+		);
 		if (!guild) return;
 
 		const user = await getUserInfo(userId);
@@ -75,7 +84,7 @@ export class UserRoute extends Route {
 		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [components] });
 	}
 
-	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
+	private sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
 		const { username, discriminator } = user;
 
 		return sendMessage(VOTE_CHANNEL_ID, {

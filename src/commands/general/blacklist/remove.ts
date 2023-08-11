@@ -1,36 +1,36 @@
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
+import { PrismaErrorCodeEnum, defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply, resolveTarget } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Prisma } from '@prisma/client';
+import { RequiresClientPermissions } from '@sapphire/decorators';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { userMention } from 'discord.js';
-import { reply } from '../../../helpers/send/response';
-import { PrismaErrorCodeEnum } from '../../../lib/enum/PrismaErrorCode.enum';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { removeBlacklistSubCommand } from './blacklist';
 
-@RegisterSubCommand('blacklist', (builder) =>
-	builder
-		.setName('remove')
-		.setDescription('Remove a blacklisted user from the blacklist')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('User to remove from the blacklist').setRequired(true),
-		),
-)
+@RegisterSubCommand('blacklist', (builder) => removeBlacklistSubCommand(builder))
 export class RemoveCommand extends Command {
+	@RequiresClientPermissions(defaultClientPermissions)
+	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/blacklist:remove', defaultUserPermissions.add('ManageGuild'))
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		const blacklistUser = interaction.options.getUser('user', true);
-		try {
-			await this.container.utilities.blacklist.delete.BlacklistEntry(interaction.guildId, blacklistUser.id);
-		} catch (error: any) {
-			if (error instanceof Prisma.PrismaClientKnownRequestError) {
-				if (error.code === PrismaErrorCodeEnum.NOT_FOUND) {
-					return reply(
-						interaction,
-						interactionProblem(`${userMention(blacklistUser.id)} is not blacklisted.`, true),
-					);
-				}
-			}
-		}
-		return reply(
-			interaction,
-			interactionSuccess(`Removed ${userMention(blacklistUser.id)} from the blacklist.`, true),
+		const { user } = resolveTarget(interaction);
+
+		const result = await resolveOnErrorCodesPrisma(
+			this.container.prisma.blacklist.delete({
+				where: {
+					userId_guildId: {
+						guildId: interaction.guildId,
+						userId: user.id,
+					},
+				},
+			}),
+			PrismaErrorCodeEnum.NotFound,
 		);
+
+		if (isNullOrUndefinedOrEmpty(result))
+			return reply(interaction, interactionProblem(`${userMention(user.id)} is not blacklisted.`, true));
+
+		return reply(interaction, interactionSuccess(`Removed ${userMention(user.id)} from the blacklist.`, true));
 	}
 }

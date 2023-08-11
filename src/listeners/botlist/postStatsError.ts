@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
-import { logErrorToContainer } from '../../lib/utils/errorHandling';
+import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
 import { envIsDefined } from '@skyra/env-utilities';
 
 @ApplyOptions<Listener.Options>({ emitter: container.botList, event: 'postStatsError' })

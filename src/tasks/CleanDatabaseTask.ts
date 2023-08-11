@@ -3,10 +3,10 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
 import { sendMessage } from '../lib/discord';
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import { isProduction } from '../lib/utils/env';
+import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '#lib/utils/environment';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',

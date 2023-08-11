@@ -1,8 +1,8 @@
+import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { codeBlock } from '@sapphire/utilities';
 import type { Snowflake } from 'discord.js';
-import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '../../helpers';
 import { sendMessage } from '../../lib/discord';
 
 export class Guild extends Utility {

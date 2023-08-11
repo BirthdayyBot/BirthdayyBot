@@ -1,19 +1,17 @@
+import { HelpCMD } from '#lib/commands';
+import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
+import { HelpEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply } from '#lib/utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { reply } from '../../helpers/send/response';
-import { HelpCMD } from '../../lib/commands';
-import thinking from '../../lib/discord/thinking';
-import { HelpEmbed } from '../../lib/embeds';
-import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '../../lib/components/button';
-
 @ApplyOptions<Command.Options>({
 	name: 'help',
 	description: 'Need help with my Commands?',
-	enabled: true,
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredUserPermissions: ['ViewChannel', 'UseApplicationCommands', 'SendMessages'],
+	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
 })
 export class HelpCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {

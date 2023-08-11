@@ -1,36 +1,45 @@
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
+import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { reply, resolveTarget } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { Prisma } from '@prisma/client';
-import { userMention } from 'discord.js';
-import { reply } from '../../../helpers/send/response';
-import { PrismaErrorCodeEnum } from '../../../lib/enum/PrismaErrorCode.enum';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import type { Prisma } from '@prisma/client';
+import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
+import { resolveKey } from '@sapphire/plugin-i18next';
+import { Result } from '@sapphire/result';
+import { addBlacklistSubCommand } from './blacklist';
 
-@RegisterSubCommand('blacklist', (builder) =>
-	builder
-		.setName('add')
-		.setDescription('Add a user to the blacklist')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('User to add to the blacklist').setRequired(true),
-		),
-)
-export class AddCommand extends Command {
+@RegisterSubCommand('blacklist', (builder) => addBlacklistSubCommand(builder))
+export class AddlacklistCommand extends Command {
+	@RequiresGuildContext()
+	@RequiresClientPermissions(defaultClientPermissions)
+	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/blacklist:add', defaultUserPermissions.add('ManageGuild'))
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		const blacklistUser = interaction.options.getUser('user', true);
-		if (blacklistUser.id === interaction.user.id) {
-			return reply(interaction, interactionProblem(`You can't blacklist yourself.`, true));
+		const { user, options } = resolveTarget(interaction);
+
+		if (options.context === 'author') {
+			const message = await resolveKey(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
+			return reply(interaction, interactionProblem(message, true));
 		}
-		try {
-			await this.container.utilities.blacklist.create.BlacklistEntry(interaction.guildId, blacklistUser.id);
-		} catch (error: any) {
-			if (error instanceof Prisma.PrismaClientKnownRequestError) {
-				if (error.code === PrismaErrorCodeEnum.UNIQUE_CONSTRAINT_FAILED) {
-					return reply(
-						interaction,
-						interactionProblem(`${userMention(blacklistUser.id)} is already on the blacklist.`, true),
-					);
+
+		const data = { guildId: interaction.guildId, userId: user.id };
+
+		const result = await Result.fromAsync(await this.container.prisma.blacklist.create({ data }));
+
+		return result.match({
+			err: async (error: Prisma.PrismaClientKnownRequestError) => {
+				if (error.code === PrismaErrorCodeEnum.UniqueConstraintFailed) {
+					const message = await resolveKey(interaction, 'commands/blacklist:add.alReadyBlacklisted', options);
+					return reply(interaction, interactionProblem(message));
 				}
-			}
-		}
-		return reply(interaction, interactionSuccess(`Added ${userMention(blacklistUser.id)} to the blacklist.`, true));
+
+				const message = await resolveKey(interaction, 'commands/blacklist:add.error', options);
+				return reply(interaction, interactionProblem(message));
+			},
+			ok: async () => {
+				const message = await resolveKey(interaction, 'commands/blacklist:add.success', options);
+				return reply(interaction, interactionSuccess(message));
+			},
+		});
 	}
 }

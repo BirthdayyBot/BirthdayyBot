@@ -1,8 +1,9 @@
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { PREMIUM_URL } from '#lib/utils/environment';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
-import { PREMIUM_URL, reply } from '../../../helpers';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -47,20 +48,5 @@ export class AnnouncementMessageCommand extends Command {
 				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
 			);
 		}
-
-		/* 		const result = await Result.fromAsync(async () =>
-			this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message),
-		);
-
-		if (result.isErr()) {
-			result.unwrapOrElse((error) => {
-				this.container.logger.error('AnnouncementMessageCommand ~ result.unwrapOrElse ~ error:', error);
-			});
-			return reply(
-				interaction,
-				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
-				);
-			}
-			return reply(interaction, interactionSuccess('You have successfully updated the announcement message.')); */
 	}
 }

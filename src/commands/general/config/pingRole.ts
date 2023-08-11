@@ -1,10 +1,12 @@
+import thinking from '#lib/discord/thinking';
+import { PrismaErrorCodeEnum } from '#lib/types';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
+import { reply } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { Result } from '@sapphire/result';
+import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { roleMention } from 'discord.js';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -25,14 +27,16 @@ export class PingRoleCommand extends Command {
 			return reply(interaction, interactionProblem('You can not set the ping role to @everyone or @here'));
 			// TODO: #32 Enable everyone and here to be pinged
 		}
-		const result = await Result.fromAsync(() =>
+
+		const result = await resolveOnErrorCodesPrisma(
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
 				data: { birthdayPingRole: role.id },
 			}),
+			PrismaErrorCodeEnum.NotFound,
 		);
 
-		if (result.isErr()) {
+		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 

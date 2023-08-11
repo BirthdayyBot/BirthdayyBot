@@ -1,16 +1,22 @@
+import { replyToInteraction } from '#lib/discord/interaction';
+import thinking from '#lib/discord/thinking';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { generateBirthdayList } from '#lib/utils/birthday';
+import { generateDefaultEmbed } from '#lib/utils/embed';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { generateBirthdayList, reply } from '../../../helpers/';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
-import { listBirthdaySubCommand } from '../../../lib/commands';
+import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
+import { listBirthdaySubCommand } from './birthday';
 
 @RegisterSubCommand('birthday', (builder) => listBirthdaySubCommand(builder))
 export class ListCommand extends Command {
+	@RequiresGuildContext()
+	@RequiresUserPermissions(defaultUserPermissions)
+	@RequiresClientPermissions(defaultClientPermissions)
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 
 		const { embed, components } = await generateBirthdayList(1, interaction.guild);
 
-		await reply(interaction, { embeds: [generateDefaultEmbed(embed)], components });
+		await replyToInteraction(interaction, { components, embeds: [generateDefaultEmbed(embed)] });
 	}
 }

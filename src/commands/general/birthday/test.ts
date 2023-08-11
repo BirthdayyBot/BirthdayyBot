@@ -1,19 +1,22 @@
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { interactionSuccess } from '#lib/utils/embed';
+import { reply, resolveTarget } from '#lib/utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { reply } from '../../../helpers';
-import { interactionSuccess } from '../../../lib/utils/embed';
-import { testBirthdaySubCommand } from '../../../lib/commands';
-import { RequiresUserPermissions } from '@sapphire/decorators';
+import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
+import { testBirthdaySubCommand } from './birthday';
 
 @RegisterSubCommand('birthday', (builder) => testBirthdaySubCommand(builder))
 export class TestCommand extends Command {
-	@RequiresUserPermissions('ManageGuild')
+	@RequiresGuildContext()
+	@RequiresClientPermissions(defaultClientPermissions)
+	@RequiresUserPermissions(defaultUserPermissions)
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		const target = interaction.options.getUser('user') ?? interaction.member.user;
+		const { user } = resolveTarget(interaction);
 
 		await this.container.tasks.run('BirthdayReminderTask', {
-			userId: target.id,
 			guildId: interaction.guildId,
 			isTest: true,
+			userId: user.id,
 		});
 
 		return reply(interaction, interactionSuccess('Birthday Test Run!'));

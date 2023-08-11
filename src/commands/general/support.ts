@@ -1,15 +1,16 @@
+import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
+import { defaultEmbed } from '#lib/utils/embed';
+import { BirthdayyEmojis } from '#lib/utils/environment';
+import { reply } from '#lib/utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import { BirthdayyEmojis, reply } from '../../helpers';
-import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '../../lib/components/button';
-import { defaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'support',
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredUserPermissions: ['ViewChannel', 'UseApplicationCommands', 'SendMessages'],
+	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
 })
 export class SupportCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
