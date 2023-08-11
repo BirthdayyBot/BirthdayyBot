@@ -28,7 +28,7 @@ COPY --chown=node:node ./prisma ./prisma
 RUN yarn install --immutable
 
 RUN npx prisma generate
-RUN npx tsc
+RUN npx tsc -b src
 
 FROM base as production
 
