@@ -1,11 +1,15 @@
 import { chatInputApplicationCommandMention } from 'discord.js';
 
+export * from './count';
 export * from './guide';
+export * from './guildInfo';
 export * from './help';
 export * from './invite';
 export * from './stats';
 export * from './support';
 export * from './template';
+export * from './reminder';
+export * from './vote';
 export * from './uwu';
 
 // CONFIG

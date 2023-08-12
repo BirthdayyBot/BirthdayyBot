@@ -1,5 +1,5 @@
 import type { ConfigName } from '#lib/database';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 

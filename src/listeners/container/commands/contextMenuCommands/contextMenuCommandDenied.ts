@@ -1,4 +1,4 @@
-import { reply } from '#lib/utils/utils';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { type ContextMenuCommandDeniedPayload, Events, Listener, UserError } from '@sapphire/framework';
 
@@ -9,7 +9,7 @@ export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> 
 		// Use cases for this are for example permissions error when running the `eval` command.
 		if (Reflect.get(Object(context), 'silent')) return;
 
-		return reply(interaction, {
+		return reply({
 			content,
 			allowedMentions: { users: [interaction.user.id], roles: [] },
 			ephemeral: true,

@@ -1,4 +1,4 @@
-import { logSuccessCommand } from '#lib/utils/utils';
+import { logSuccessCommand } from '#utils/utils';
 import type { MessageCommandSuccessPayload } from '@sapphire/framework';
 import { Listener, LogLevel } from '@sapphire/framework';
 import type { Logger } from '@sapphire/plugin-logger';

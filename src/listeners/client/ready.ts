@@ -1,4 +1,4 @@
-import { BOT_ADMIN_LOG } from '#lib/utils/environment';
+import { BOT_ADMIN_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';

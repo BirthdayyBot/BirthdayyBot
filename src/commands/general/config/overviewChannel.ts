@@ -5,10 +5,10 @@ import {
 	PrismaErrorCodeEnum,
 	hasBotChannelPermissions,
 } from '#lib/types';
-import { generateBirthdayList } from '#lib/utils/birthday';
-import { interactionProblem, generateDefaultEmbed, interactionSuccess } from '#lib/utils/embed';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { generateBirthdayList } from '#utils/birthday';
+import { interactionProblem, generateDefaultEmbed, interactionSuccess } from '#utils/embed';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresUserPermissions, RequiresClientPermissions } from '@sapphire/decorators';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
@@ -40,7 +40,6 @@ export class OverviewChannelCommand extends Command {
 
 		if (!hasWritingPermissionsInChannel) {
 			return reply(
-				interaction,
 				interactionProblem(`I don't have permission to send messages in ${channelMention(channel.id)}.`),
 			);
 		}
@@ -63,13 +62,11 @@ export class OverviewChannelCommand extends Command {
 
 		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(
-				interaction,
 				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
 			);
 		}
 
 		return reply(
-			interaction,
 			interactionSuccess(
 				`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${
 					message.url

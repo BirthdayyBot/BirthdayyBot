@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
-import { addZeroToSingleDigitNumber, checkIfLengthIsTwo } from '#lib/utils/common';
+import { addZeroToSingleDigitNumber, checkIfLengthIsTwo } from '#utils/common';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);

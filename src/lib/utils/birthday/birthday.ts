@@ -5,10 +5,10 @@ import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { envParseNumber } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import { Guild, userMention, type APIEmbed } from 'discord.js';
-import { generateDefaultEmbed } from '../embed';
-import { BirthdayyEmojis, IMG_CAKE } from '../environment';
 import { formatDateForDisplay, numberToMonthName } from '../common/date';
-import { GuildIDEnum } from '../../types/Enums';
+import { GuildIDEnum } from '../constants';
+import { generateDefaultEmbed } from '../embed';
+import { Emojis, IMG_CAKE } from '../environment';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
@@ -60,7 +60,7 @@ function getBirthdaysAsLists(
 async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
 	const embed: APIEmbed = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
-		description: `${BirthdayyEmojis.ArrowRight}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
+		description: `${Emojis.ArrowRight}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
 		fields: [],
 		thumbnail: { url: IMG_CAKE },
 	};

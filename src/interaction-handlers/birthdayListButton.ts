@@ -1,5 +1,5 @@
-import { generateBirthdayList } from '#lib/utils/birthday';
-import { generateDefaultEmbed } from '#lib/utils/embed';
+import { generateBirthdayList } from '#utils/birthday/index';
+import { generateDefaultEmbed } from '#utils/embed';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';

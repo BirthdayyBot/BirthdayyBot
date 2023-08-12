@@ -1,5 +1,5 @@
-import { BirthdayyBotColor, BirthdayyBotId, GuildIDEnum, OwnerID } from '#lib/types';
-import { isCustom, isProduction } from '#lib/utils/env';
+import { BirthdayyBotId, BrandingColors, Emojis, GuildIDEnum, OwnerID } from '#lib/types';
+import { isCustom, isProduction } from '#utils/env';
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { PermissionsBitField } from 'discord.js';
 import { join } from 'path';
@@ -23,42 +23,12 @@ export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${proc
 export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=${
 	isCustom ? BirthdayyBotId.Birthdayy : BOT_ID || BirthdayyBotId.Birthdayy
 }&permissions=525529836753&scope=bot`;
-export const BOT_COLOR = envParseInteger('BOT_COLOR', BirthdayyBotColor.Birthdayy);
+export const BOT_COLOR = envParseInteger('BOT_COLOR', BrandingColors.Birthdayy);
 export const BOT_OWNER = envParseArray('BOT_OWNER', [OwnerID.Chillihero]);
 export const WEBSITE_URL = 'https://birthdayy.xyz/';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT');
-
-// EMOJIS
-export const enum BirthdayyEmojis {
-	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
-	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
-	Yes = '<:checkmark_square_birthdayy:1102222019476586526>',
-	No = '<:cross_square_birthdayy:1102222032155988068> ',
-	ArrowRight = '<:arrow_right_birthdayy:1102221944016875650>',
-	ArrowLeft = '<:arrow_left_birthdayy:1102221941223477268>',
-	Plus = '<:plus_birthdayy:1102222100544110712>',
-	Link = '<:link_birthdayy:1102222076380725319>',
-	Exclamation = '<:exclamation_mark_birthdayy:1102222058777223209>',
-	Cake = '<:cake_birthdayy:1102221988380020766>',
-	Crown = '<:crown_birthdayy:1102222034458660915>',
-	News = '<:news_birthdayy:1102222080029761618>',
-	Gift = '<:gift_birthdayy:1102222060845015050>',
-	Book = '<:book_birthdayy:1102221958592086137>',
-	Alarm = '<:bell_birthdayy:1102221947003219968>',
-	Support = '<:support_birthdayy:1102222115056386208>',
-	Sign = '<:sign_birthdayy:1102222111155703909> ',
-	Heart = '<:heart_birthdayy:1102222063030239232>',
-	Ping = '<:ping_birthdayy:1102222097788440657>',
-	People = '<:people_birthdayy:1102222095573844108>',
-	Comment = '<:speech_bubble_birthdayy:1102222112711786577>',
-	Online = '<:online_birthdayy:1102222090712657930>',
-	Offline = '<:offline_birthdayy:1102222087973769368>',
-	Warning = '<:warning_birthdayy:1102222123809906778>',
-	Compass = '<:compass_birthdayy:1102222027101839360>',
-	Tools = '<:tools_birthdayy:1102222421651623936>',
-}
 
 // Values
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
@@ -66,7 +36,7 @@ export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '10776213638813
 export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
-export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${BirthdayyEmojis.ArrowRight} Today is a special Day!{NEW_LINE}${BirthdayyEmojis.Gift} Please wish {MENTION} a happy Birthday <3`;
+export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`;
 export const MAIN_DISCORD = envParseString('MAIN_DISCORD', GuildIDEnum['Birthdayy']);
 export const BOT_ADMINS: string[] = [OwnerID.Chillihero, OwnerID.Swiizyy];
 
@@ -97,3 +67,4 @@ export const Permission_Bits = [
 	PermissionsBitField.Flags.UseExternalEmojis,
 	PermissionsBitField.Flags.UseExternalStickers,
 ];
+export { Emojis };

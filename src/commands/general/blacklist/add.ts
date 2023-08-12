@@ -1,7 +1,7 @@
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { reply, resolveTarget } from '#lib/utils/utils';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Prisma } from '@prisma/client';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
@@ -19,7 +19,7 @@ export class AddlacklistCommand extends Command {
 
 		if (options.context === 'author') {
 			const message = await resolveKey(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
-			return reply(interaction, interactionProblem(message, true));
+			return reply(interactionProblem(message, true));
 		}
 
 		const data = { guildId: interaction.guildId, userId: user.id };
@@ -30,15 +30,13 @@ export class AddlacklistCommand extends Command {
 			err: async (error: Prisma.PrismaClientKnownRequestError) => {
 				if (error.code === PrismaErrorCodeEnum.UniqueConstraintFailed) {
 					const message = await resolveKey(interaction, 'commands/blacklist:add.alReadyBlacklisted', options);
-					return reply(interaction, interactionProblem(message));
+					return reply(interactionProblem(message));
 				}
-
-				const message = await resolveKey(interaction, 'commands/blacklist:add.error', options);
-				return reply(interaction, interactionProblem(message));
+				return reply(interactionProblem(await resolveKey(interaction, 'commands/blacklist:add.notAdded')));
 			},
 			ok: async () => {
 				const message = await resolveKey(interaction, 'commands/blacklist:add.success', options);
-				return reply(interaction, interactionSuccess(message));
+				return reply(interactionSuccess(message));
 			},
 		});
 	}

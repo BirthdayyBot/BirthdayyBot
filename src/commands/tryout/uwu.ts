@@ -1,6 +1,6 @@
 import { UwUCMD } from '#lib/commands';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { getCommandGuilds } from '#lib/utils/functions';
+import { generateDefaultEmbed } from '#utils/embed';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Args } from '@sapphire/framework';

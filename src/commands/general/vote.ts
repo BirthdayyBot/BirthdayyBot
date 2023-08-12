@@ -1,8 +1,8 @@
-import { VoteCMD } from '#lib/commands/vote';
+import { VoteCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
 import { VoteEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 
@@ -20,7 +20,7 @@ export class VoteCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(VoteEmbed);
-		await reply(interaction, {
+		return reply({
 			embeds: [embed],
 		});
 	}

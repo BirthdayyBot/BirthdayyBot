@@ -1,6 +1,6 @@
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { interactionSuccess } from '#lib/utils/embed';
-import { reply, resolveTarget } from '#lib/utils/utils';
+import { interactionSuccess } from '#utils/embed';
+import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
 import { testBirthdaySubCommand } from './birthday';
@@ -19,6 +19,6 @@ export class TestCommand extends Command {
 			userId: user.id,
 		});
 
-		return reply(interaction, interactionSuccess('Birthday Test Run!'));
+		return reply(interactionSuccess('Birthday Test Run!'));
 	}
 }

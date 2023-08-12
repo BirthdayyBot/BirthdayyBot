@@ -1,7 +1,7 @@
 import { sendMessage } from '#lib/discord';
-import { BirthdayyBotColor } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { BOT_NAME, BOT_SERVER_LOG, BirthdayyEmojis, DEBUG } from '#lib/utils/environment';
+import { BrandingColors } from '#lib/types';
+import { generateDefaultEmbed } from '#utils/embed';
+import { BOT_NAME, BOT_SERVER_LOG, Emojis, DEBUG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
@@ -42,10 +42,10 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 		if (timeServed) fields.push({ name: 'TimeServed', value: `${timeServed}` });
 
 		const embed = generateDefaultEmbed({
-			title: `${BirthdayyEmojis.Fail} ${BOT_NAME} got removed from a Guild`,
+			title: `${Emojis.Fail} ${BOT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
-			color: BirthdayyBotColor.BirthdayyDev,
+			color: BrandingColors.BirthdayyDev,
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}

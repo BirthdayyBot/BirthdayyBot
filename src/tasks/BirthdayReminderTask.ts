@@ -1,4 +1,4 @@
-import { BOT_ADMIN_LOG, BirthdayyEmojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '#lib/utils/environment';
+import { BOT_ADMIN_LOG, Emojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
 import type { Birthday } from '@prisma/client';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -25,7 +25,7 @@ import { getCurrentOffset, type TimezoneObject } from '../lib/utils/common/date'
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import { isCustom } from '../lib/utils/env';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
-import { logAll } from '#lib/utils/functions';
+import { logAll } from '#utils/functions';
 
 export interface BirthdayEventInfoModel {
 	userId: string;
@@ -189,7 +189,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		const embed: APIEmbed = {
-			title: `${BirthdayyEmojis.News} Birthday Announcement!`,
+			title: `${Emojis.News} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail: {
 				url: IMG_CAKE,

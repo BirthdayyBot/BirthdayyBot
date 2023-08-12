@@ -1,10 +1,10 @@
 import { StatsCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
-import { getCurrentOffset } from '#lib/utils/common';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { isDevelopment } from '#lib/utils/env';
-import { BirthdayyEmojis } from '#lib/utils/environment';
-import { reply } from '#lib/utils/utils';
+import { getCurrentOffset } from '#utils/common';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isDevelopment } from '#utils/env';
+import { Emojis } from '#utils/environment';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import type { APIEmbed } from 'discord.js';
@@ -42,7 +42,7 @@ export class StatsCommand extends Command {
 		};
 		const date = Date.now();
 		const embedRaw: APIEmbed = {
-			title: `${BirthdayyEmojis.Ping} Current Stats`,
+			title: `${Emojis.Ping} Current Stats`,
 			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{
@@ -105,6 +105,6 @@ export class StatsCommand extends Command {
 			],
 		};
 		const embed = generateDefaultEmbed(embedRaw);
-		return reply(interaction, { embeds: [embed] });
+		return reply({ embeds: [embed] });
 	}
 }

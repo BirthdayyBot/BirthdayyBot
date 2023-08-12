@@ -1,4 +1,4 @@
-import { canManageRoles } from '#lib/utils/functions';
+import { canManageRoles } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { AllFlowsPrecondition, Result, type PreconditionOptions, type PreconditionResult } from '@sapphire/framework';
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';

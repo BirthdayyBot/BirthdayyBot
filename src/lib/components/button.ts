@@ -1,4 +1,4 @@
-import { BirthdayyEmojis, Permission_Bits } from '#lib/utils/environment';
+import { Emojis, Permission_Bits } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes } from 'discord.js';
@@ -23,12 +23,12 @@ export function defaultButtonBuilder(data?: import('discord.js').ButtonComponent
 
 export async function inviteSupportDicordButton(target: Target) {
 	const label = await resolveKey(target, 'button:supportDiscord');
-	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('discord')).setEmoji(BirthdayyEmojis.People);
+	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('discord')).setEmoji(Emojis.People);
 }
 
 export async function docsButtonBuilder(target: Target) {
 	const label = await resolveKey(target, 'button:docsBirthday');
-	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('docs')).setEmoji(BirthdayyEmojis.Book);
+	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('docs')).setEmoji(Emojis.Book);
 }
 
 export async function inviteBirthdayyButton(target: Target) {
@@ -42,12 +42,12 @@ export async function inviteBirthdayyButton(target: Target) {
 				permissions: Permission_Bits,
 			}),
 		)
-		.setEmoji(BirthdayyEmojis.Gift);
+		.setEmoji(Emojis.Gift);
 }
 
 export async function remindMeButtonBuilder(target: Target) {
 	const label = await resolveKey(target, 'button:remindeMe');
-	return defaultButtonBuilder().setLabel(label).setCustomId(ButtonID.voteReminder).setEmoji(BirthdayyEmojis.Alarm);
+	return defaultButtonBuilder().setLabel(label).setCustomId(ButtonID.voteReminder).setEmoji(Emojis.Alarm);
 }
 
 export async function remindMeButtonDisabledBuilder(target: Target) {
@@ -56,7 +56,7 @@ export async function remindMeButtonDisabledBuilder(target: Target) {
 
 export async function websiteButtonBuiler(target: Target) {
 	const label = await resolveKey(target, 'button:website');
-	return defaultButtonBuilder().setLabel(label).setEmoji(BirthdayyEmojis.Link).setURL(WebsiteUrl());
+	return defaultButtonBuilder().setLabel(label).setEmoji(Emojis.Link).setURL(WebsiteUrl());
 }
 
 export async function birthdayListButtonBuilder(target: Target) {
@@ -64,7 +64,7 @@ export async function birthdayListButtonBuilder(target: Target) {
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(label)
-		.setEmoji(BirthdayyEmojis.Cake)
+		.setEmoji(Emojis.Cake)
 		.setCustomId(ButtonID.choiceBirthdayList);
 }
 
@@ -73,7 +73,7 @@ export async function guildConfigButtonBuilder(target: Target) {
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(label)
-		.setEmoji(BirthdayyEmojis.Tools)
+		.setEmoji(Emojis.Tools)
 		.setCustomId(ButtonID.choiceGuildConfig);
 }
 
@@ -82,6 +82,6 @@ export async function discordInformationButtonBuilder(target: Target) {
 	return defaultButtonBuilder()
 		.setStyle(ButtonStyle.Secondary)
 		.setLabel(label)
-		.setEmoji(BirthdayyEmojis.Support)
+		.setEmoji(Emojis.Support)
 		.setCustomId(ButtonID.choiceDiscordInformation);
 }

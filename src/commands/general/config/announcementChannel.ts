@@ -1,8 +1,8 @@
 import thinking from '#lib/discord/thinking';
 import { PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { ChannelType, channelMention } from 'discord.js';
@@ -29,7 +29,6 @@ export class AnnouncementChannelCommand extends Command {
 
 		if (!hasPermissionInNewChannel) {
 			return reply(
-				interaction,
 				interactionProblem(` I don't have permission to send messages in ${channelMention(channel.id)}.`),
 			);
 		}
@@ -44,14 +43,10 @@ export class AnnouncementChannelCommand extends Command {
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return reply(
-				interaction,
 				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
 			);
 		}
 
-		return reply(
-			interaction,
-			interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
-		);
+		return reply(interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`));
 	}
 }

@@ -1,4 +1,4 @@
-import { BOT_OWNER } from '#lib/utils/environment';
+import { BOT_OWNER } from '#utils/environment';
 import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
 

@@ -1,7 +1,7 @@
 import thinking from '#lib/discord/thinking';
-import generateConfigList from '#lib/utils/birthday/config';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { reply } from '#lib/utils/utils';
+import generateConfigList from '#utils/birthday/config';
+import { generateDefaultEmbed } from '#utils/embed';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 
 @RegisterSubCommand('config', (builder) =>
@@ -14,6 +14,6 @@ export class ListCommand extends Command {
 
 		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
 
-		await reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
+		await reply({ embeds: [generateDefaultEmbed(configEmbed)] });
 	}
 }

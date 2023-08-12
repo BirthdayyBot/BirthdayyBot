@@ -1,8 +1,8 @@
 import thinking from '#lib/discord/thinking';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { BirthdayyEmojis, IMG_BLOCK } from '#lib/utils/environment';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { Emojis, IMG_BLOCK } from '#utils/environment';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Blacklist } from '@prisma/client';
 import { RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
@@ -18,7 +18,7 @@ export class ListCommand extends Command {
 		const blacklistedUsers = await this.container.utilities.blacklist.get.BlacklistByGuildId(interaction.guildId);
 		const description = processBlacklistedUsers(blacklistedUsers);
 
-		return reply(interaction, {
+		return reply({
 			embeds: [
 				generateDefaultEmbed({
 					description,
@@ -30,7 +30,7 @@ export class ListCommand extends Command {
 
 		function processBlacklistedUsers(users: Blacklist[]): string {
 			if (users.length === 0) {
-				return `${BirthdayyEmojis.ArrowRight}No users on the blacklist.`;
+				return `${Emojis.ArrowRight}No users on the blacklist.`;
 			}
 			const formattedUsers = users.map((user) => {
 				const { userId, addedAt } = user;

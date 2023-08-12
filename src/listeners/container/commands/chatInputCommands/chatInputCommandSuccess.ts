@@ -1,4 +1,4 @@
-import { logSuccessCommand } from '#lib/utils/utils';
+import { logSuccessCommand } from '#utils/utils';
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, LogLevel, container, type ChatInputCommandSuccessPayload } from '@sapphire/framework';

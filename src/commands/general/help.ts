@@ -2,8 +2,8 @@ import { HelpCMD } from '#lib/commands';
 import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
 import thinking from '#lib/discord/thinking';
 import { HelpEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 @ApplyOptions<Command.Options>({
@@ -21,7 +21,7 @@ export class HelpCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(HelpEmbed);
-		await reply(interaction, {
+		await reply({
 			embeds: [embed],
 			components: [
 				{

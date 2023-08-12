@@ -7,15 +7,19 @@
   "main": "./dist/index.js",
   "imports": {
     "#lib/*": "./dist/lib/*.js",
+    "#lib/commands": "./dist/lib/commands/index.js",
+    "#lib/embeds": "./dist/lib/embeds/index.js",
+    "#lib/database": "./dist/lib/database/index.js",
     "#lib/discord": "./dist/lib/discord/index.js",
     "#lib/structures": "./dist/lib/structures/index.js",
     "#lib/setup": "./dist/lib/setup/index.js",
     "#lib/types": "./dist/lib/types/index.js",
     "#root/*": "./dist/*.js",
     "#languages": "./dist/languages/index.js",
-    "#utils/*": "./dist/lib/util/*.js",
-    "#utils/common": "./dist/lib/util/common/index.js",
-    "#utils/functions": "./dist/lib/util/functions/index.js"
+    "#utils/*": "./dist/lib/utils/*.js",
+    "#utils/common": "./dist/lib/utils/common/index.js",
+    "#utils/functions": "./dist/lib/utils/functions/index.js",
+    "#utils/birthday": "./dist/lib/utils/birthday/index.js"
   },
   "scripts": {
     "start": "docker compose -f ./docker/docker-compose.yml up -d",

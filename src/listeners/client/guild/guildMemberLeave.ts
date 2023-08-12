@@ -1,4 +1,4 @@
-import updateBirthdayOverview from '#lib/utils/birthday/overview';
+import { updateBirthdayOverview } from '#utils/birthday/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener } from '@sapphire/framework';
 import { DiscordAPIError, GuildMember } from 'discord.js';

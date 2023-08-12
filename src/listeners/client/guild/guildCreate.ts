@@ -1,8 +1,8 @@
 import { sendDMMessage, getUserInfo, sendMessage } from '#lib/discord';
 import { GuideEmbed } from '#lib/embeds';
-import { BirthdayyBotColor } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { IS_CUSTOM_BOT, BirthdayyEmojis, BOT_NAME, BOT_SERVER_LOG } from '#lib/utils/environment';
+import { BrandingColors } from '#lib/types';
+import { generateDefaultEmbed } from '#utils/embed';
+import { IS_CUSTOM_BOT, Emojis, BOT_NAME, BOT_SERVER_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { type ListenerOptions, Listener, container } from '@sapphire/framework';
 import { Events, Guild, type Snowflake, PermissionFlagsBits, AuditLogEvent, DiscordAPIError, time } from 'discord.js';
@@ -91,10 +91,10 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
 
 		const embed = generateDefaultEmbed({
-			title: `${BirthdayyEmojis.Success} ${BOT_NAME} got added to a Guild`,
+			title: `${Emojis.Success} ${BOT_NAME} got added to a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
-			color: BirthdayyBotColor.Birthdayy,
+			color: BrandingColors.Birthdayy,
 			thumbnail: { url: guild.iconURL() ?? '' },
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });

@@ -6,7 +6,7 @@ import { inlineCode } from 'discord.js';
 import { sendMessage } from '../lib/discord';
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import { isProduction } from '../lib/utils/env';
-import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '#lib/utils/environment';
+import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '#utils/environment';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',

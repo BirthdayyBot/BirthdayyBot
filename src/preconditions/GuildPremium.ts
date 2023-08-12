@@ -1,4 +1,4 @@
-import { PREMIUM_URL } from '#lib/utils/environment';
+import { PREMIUM_URL } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Precondition, Result, type PreconditionOptions } from '@sapphire/framework';
 import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';

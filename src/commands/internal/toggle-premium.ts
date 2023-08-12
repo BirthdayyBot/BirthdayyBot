@@ -1,9 +1,9 @@
 import { getGuildInformation } from '#lib/discord';
 import thinking from '#lib/discord/thinking';
-import { interactionProblem, generateDefaultEmbed } from '#lib/utils/embed';
-import { isNotCustom } from '#lib/utils/env';
-import { getCommandGuilds } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { interactionProblem, generateDefaultEmbed } from '#utils/embed';
+import { isNotCustom } from '#utils/env';
+import { getCommandGuilds } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { bold, inlineCode } from 'discord.js';
@@ -45,11 +45,11 @@ export class TogglePremiumCommand extends Command {
 		const guild = await getGuildInformation(guildId);
 		await thinking(interaction, true);
 		if (!guild) {
-			return reply(interaction, interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
+			return reply(interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		return reply(interaction, {
+		return reply({
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Toggle Premium',

@@ -2,9 +2,9 @@ import { authenticated } from '#lib/api/utils';
 import { remindMeButtonBuilder } from '#lib/components/button';
 import { getUserInfo, getGuildMember, sendDMMessage, sendMessage } from '#lib/discord';
 import { type VoteProvider, BirthdayyBotId, GuildIDEnum } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { VOTE_ROLE_ID, BirthdayyEmojis, VOTE_CHANNEL_ID, BOT_NAME } from '#lib/utils/environment';
-import { resolveOnErrorCodesDiscord } from '#lib/utils/functions';
+import { generateDefaultEmbed } from '#utils/embed';
+import { VOTE_ROLE_ID, Emojis, VOTE_CHANNEL_ID, BOT_NAME } from '#utils/environment';
+import { resolveOnErrorCodesDiscord } from '#utils/functions';
 import type { RoleRemovePayload } from '#root/tasks/BirthdayRoleRemoverTask';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -73,8 +73,8 @@ export class UserRoute extends Route {
 
 	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
 		const dmEmbed = {
-			title: `${BirthdayyEmojis.Success} You voted for Birthdayy on ${providerInfo.name}`,
-			description: `Thank you so much for supporting me, you're the best ${BirthdayyEmojis.Heart}`,
+			title: `${Emojis.Success} You voted for Birthdayy on ${providerInfo.name}`,
+			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`,
 		};
 		const dmEmbedObj = generateDefaultEmbed(dmEmbed);
 
@@ -90,7 +90,7 @@ export class UserRoute extends Route {
 		return sendMessage(VOTE_CHANNEL_ID, {
 			embeds: [
 				generateDefaultEmbed({
-					title: `${BirthdayyEmojis.Exclamation} New Vote on ${providerInfo.name}`,
+					title: `${Emojis.Exclamation} New Vote on ${providerInfo.name}`,
 					description: `\`${username}#${discriminator}\` has **voted** for ${
 						container.client.user?.username ?? BOT_NAME
 					}!

@@ -1,9 +1,9 @@
 import thinking from '#lib/discord/thinking';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { isCustom, isProduction } from '#lib/utils/env';
-import { APP_ENV } from '#lib/utils/environment';
-import { getCommandGuilds } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isCustom, isProduction } from '#utils/env';
+import { APP_ENV } from '#utils/environment';
+import { getCommandGuilds } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
@@ -44,6 +44,6 @@ export class TestCommand extends Command {
 		if (toggle.appEnv) fields.push({ name: 'APP ENV', value: inlineCode(APP_ENV) });
 		if (toggle.appEnv) fields.push({ name: 'isProduction', value: inlineCode(isProduction ? 'true' : 'false') });
 
-		return reply(interaction, { embeds: [generateDefaultEmbed({ title: 'test', fields })] });
+		return reply({ embeds: [generateDefaultEmbed({ title: 'test', fields })] });
 	}
 }

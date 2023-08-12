@@ -1,9 +1,9 @@
 import { defaultUserPermissions } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { isNotCustom } from '#lib/utils/env';
-import { BOT_COLOR } from '#lib/utils/environment';
-import { getCommandGuilds } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isNotCustom } from '#utils/env';
+import { BOT_COLOR } from '#utils/environment';
+import { getCommandGuilds } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 
@@ -31,8 +31,8 @@ export class CountCommand extends Command {
 		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await reply(interaction, {
+	public override async chatInputRun() {
+		await reply({
 			embeds: [
 				{
 					title: 'Discord Information',

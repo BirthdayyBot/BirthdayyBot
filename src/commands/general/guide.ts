@@ -2,8 +2,8 @@ import { GuideCMD } from '#lib/commands';
 import { docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import thinking from '#lib/discord/thinking';
 import { GuideEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { reply } from '#lib/utils/utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 
@@ -22,7 +22,7 @@ export class GuideCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(GuideEmbed);
-		await reply(interaction, {
+		await reply({
 			embeds: [embed],
 			components: [
 				{

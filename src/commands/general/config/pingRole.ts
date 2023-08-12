@@ -1,8 +1,8 @@
 import thinking from '#lib/discord/thinking';
 import { PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
@@ -24,7 +24,7 @@ export class PingRoleCommand extends Command {
 		const role = interaction.options.getRole('role', true);
 		// check if role is everyone or here
 		if (role.id === interaction.guildId) {
-			return reply(interaction, interactionProblem('You can not set the ping role to @everyone or @here'));
+			return reply(interactionProblem('You can not set the ping role to @everyone or @here'));
 			// TODO: #32 Enable everyone and here to be pinged
 		}
 
@@ -37,12 +37,9 @@ export class PingRoleCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result)) {
-			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
+			return reply(interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		return reply(
-			interaction,
-			interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`),
-		);
+		return reply(interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`));
 	}
 }

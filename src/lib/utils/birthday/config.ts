@@ -6,7 +6,7 @@ import { objectEntries } from '@sapphire/utilities';
 import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
 import { getGuildInformation } from '../../discord';
 import { generateDefaultEmbed } from '../embed';
-import { BirthdayyEmojis } from '../environment';
+import { Emojis } from '../environment';
 
 interface ConfigListOptions {
 	guild?: Guild;
@@ -56,19 +56,17 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 
 	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null) {
 		if (value === null) {
-			return `${BirthdayyEmojis.ArrowRight} not set`;
+			return `${Emojis.ArrowRight} not set`;
 		} else if (name === 'timezone' && typeof value === 'number') {
-			return value < 0
-				? `${BirthdayyEmojis.ArrowRight} UTC${value}`
-				: `${BirthdayyEmojis.ArrowRight} UTC+${value}`;
+			return value < 0 ? `${Emojis.ArrowRight} UTC${value}` : `${Emojis.ArrowRight} UTC+${value}`;
 		} else if (name.includes('Channel') && typeof value === 'string') {
-			return `${BirthdayyEmojis.ArrowRight} ${channelMention(value)}`;
+			return `${Emojis.ArrowRight} ${channelMention(value)}`;
 		} else if (name.includes('Role') && typeof value === 'string') {
-			return `${BirthdayyEmojis.ArrowRight} ${roleMention(value)}`;
+			return `${Emojis.ArrowRight} ${roleMention(value)}`;
 		} else if (name.includes('User') && typeof value === 'string') {
-			return `${BirthdayyEmojis.ArrowRight} ${userMention(value)}`;
+			return `${Emojis.ArrowRight} ${userMention(value)}`;
 		}
-		return `${BirthdayyEmojis.ArrowRight} ${value.toString()}`;
+		return `${Emojis.ArrowRight} ${value.toString()}`;
 	}
 
 	function getNameString(name: keyof PrismaGuild): string {
@@ -86,7 +84,7 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 			case 'timezone':
 				return 'Timezone';
 			case 'announcementMessage':
-				return `${BirthdayyEmojis.Plus} Birthday Message`;
+				return `${Emojis.Plus} Birthday Message`;
 			case 'premium':
 				return 'Premium';
 			default:

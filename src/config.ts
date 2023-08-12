@@ -1,4 +1,4 @@
-import { DEBUG, ROOT_DIR } from '#lib/utils/environment';
+import { DEBUG, ROOT_DIR } from '#utils/environment';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
@@ -17,7 +17,7 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
-import { BirthdayyBotId } from './lib/types/Enums';
+import { BirthdayyBotId } from './lib/utils/constants';
 import { isProduction } from './lib/utils/env';
 
 function parseApi(): ServerOptions {

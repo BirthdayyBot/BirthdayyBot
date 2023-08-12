@@ -1,7 +1,7 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
-import { defaultEmbed } from '#lib/utils/embed';
-import { BirthdayyEmojis } from '#lib/utils/environment';
-import { reply } from '#lib/utils/utils';
+import { defaultEmbed } from '#utils/embed';
+import { Emojis } from '#utils/environment';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
@@ -24,13 +24,13 @@ export class SupportCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const [title, description] = await Promise.all([
 			resolveKey(interaction, 'commands/support:invite.title', {
-				emoji: BirthdayyEmojis.Compass,
+				emoji: Emojis.Compass,
 			}),
 			resolveKey(interaction, 'commands/support:invite.description', {
 				support: WebsiteUrl('discord'),
 				docs: WebsiteUrl('docs'),
-				arrow: BirthdayyEmojis.ArrowRight,
-				link: BirthdayyEmojis.Link,
+				arrow: Emojis.ArrowRight,
+				link: Emojis.Link,
 			}),
 		]);
 
@@ -40,7 +40,7 @@ export class SupportCommand extends Command {
 			await docsButtonBuilder(interaction),
 		]);
 
-		return reply(interaction, {
+		return reply({
 			embeds: [embed],
 			components: [components],
 		});

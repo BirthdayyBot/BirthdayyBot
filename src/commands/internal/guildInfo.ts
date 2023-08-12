@@ -1,11 +1,11 @@
 import { GuildInfoCMD } from '#lib/commands/guildInfo';
 import thinking from '#lib/discord/thinking';
-import generateConfigList from '#lib/utils/birthday/config';
-import { getFormattedTimestamp } from '#lib/utils/common';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { isCustom } from '#lib/utils/env';
-import { getCommandGuilds } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import generateConfigList from '#utils/birthday/config';
+import { getFormattedTimestamp } from '#utils/common';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isCustom } from '#utils/env';
+import { getCommandGuilds } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 @ApplyOptions<Command.Options>({
@@ -31,7 +31,7 @@ export class GuildInfoCommand extends Command {
 		const guildDiscord = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
-		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
+		if (!guildDatabase || !guildDiscord) return reply('Guild Infos not found');
 
 		const embed = generateDefaultEmbed({
 			fields: [
@@ -113,7 +113,7 @@ export class GuildInfoCommand extends Command {
 
 		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));
 
-		return reply(interaction, {
+		return reply({
 			content: `GuildInfos for ${guildDiscord.name}`,
 			embeds: [embed, configEmbed],
 		});

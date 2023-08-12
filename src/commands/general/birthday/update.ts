@@ -1,10 +1,10 @@
 import thinking from '#lib/discord/thinking';
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
 import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
-import updateBirthdayOverview from '#lib/utils/birthday/overview';
-import { formatDateForDisplay, getDateFromInteraction } from '#lib/utils/common';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { reply, resolveTarget } from '#lib/utils/utils';
+import { updateBirthdayOverview } from '#utils/birthday';
+import { formatDateForDisplay, getDateFromInteraction } from '#utils/common';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Prisma } from '@prisma/client';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
@@ -34,18 +34,14 @@ export class UpdateCommand extends Command {
 					const message = await resolveKey(interaction, 'commands/birthday:update.notRegistered', {
 						command: BirthdayApplicationCommandMentions.Register,
 					});
-					return reply(interaction, interactionProblem(message));
+					return reply(interactionProblem(message));
 				}
 
-				return reply(
-					interaction,
-					interactionProblem(await resolveKey(interaction, 'commands/birthday:update.notUpdated')),
-				);
+				return reply(interactionProblem(await resolveKey(interaction, 'commands/birthday:update.notUpdated')));
 			},
 			ok: async (birthday) => {
 				await updateBirthdayOverview(interaction.guildId);
 				return reply(
-					interaction,
 					interactionSuccess(
 						await resolveKey(interaction, 'commands/birthday:update.success', {
 							date: bold(formatDateForDisplay(birthday.birthday, true)),

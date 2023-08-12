@@ -1,4 +1,4 @@
-import { DEBUG } from '#lib/utils/environment';
+import { DEBUG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener } from '@sapphire/framework';
 

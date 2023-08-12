@@ -1,8 +1,8 @@
 import thinking from '#lib/discord/thinking';
 import { PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply } from '#lib/utils/utils';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 
@@ -127,11 +127,10 @@ export class TimezoneCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result)) {
-			return reply(interaction, interactionProblem("I couldn't set the **Timezone**."));
+			return reply(interactionProblem("I couldn't set the **Timezone**."));
 		}
 
 		return reply(
-			interaction,
 			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone}.`),
 		);
 	}

@@ -2,6 +2,7 @@ import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
 import type { Birthday, Blacklist, Guild, User } from '../../utilities/db';
+import type { Events } from './Enums';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -75,6 +76,11 @@ declare module '@sapphire/framework' {
 		AdminOnly: never;
 		CanManageRoles: never;
 		IsNotBlacklisted: never;
+	}
+
+	interface SapphireClient {
+		emit(event: Events.PostStatsError, error: Error): boolean;
+		emit(event: Events.PostStatsSuccess): boolean;
 	}
 }
 

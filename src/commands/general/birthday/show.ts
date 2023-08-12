@@ -1,9 +1,9 @@
 import { PrismaErrorCodeEnum, defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { formatDateForDisplay } from '#lib/utils/common';
-import { defaultEmbed, interactionProblem } from '#lib/utils/embed';
-import { BirthdayyEmojis } from '#lib/utils/environment';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply, resolveTarget } from '#lib/utils/utils';
+import { formatDateForDisplay } from '#utils/common';
+import { defaultEmbed, interactionProblem } from '#utils/embed';
+import { Emojis } from '#utils/environment';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
@@ -29,7 +29,6 @@ export class ShowCommand extends Command {
 
 		if (isNullish(birthday)) {
 			return reply(
-				interaction,
 				interactionProblem(
 					await resolveKey(interaction, 'commands/birthday:show.notRegistered', {
 						command: BirthdayApplicationCommandMentions.Register,
@@ -39,22 +38,23 @@ export class ShowCommand extends Command {
 			);
 		}
 
-		const title = await resolveKey(interaction, 'commands/birthday:show.title', {
-			emoji: BirthdayyEmojis.Book,
-		});
+		const [title, description] = await Promise.all([
+			await resolveKey(interaction, 'commands/birthday:show.title', {
+				emoji: Emojis.Book,
+			}),
+			await resolveKey(interaction, 'commands/birthday:show.description', {
+				date: bold(formatDateForDisplay(birthday.birthday)),
+				emoji: Emojis.ArrowRight,
+				...options,
+			}),
+		]);
 
-		const description = await resolveKey(interaction, 'commands/birthday:show.description', {
-			date: bold(formatDateForDisplay(birthday.birthday)),
-			emoji: BirthdayyEmojis.ArrowRight,
-			...options,
-		});
-
-		return reply(interaction, {
+		return reply({
 			embeds: [
 				{
 					...defaultEmbed(),
-					description,
 					title,
+					description,
 				},
 			],
 		});

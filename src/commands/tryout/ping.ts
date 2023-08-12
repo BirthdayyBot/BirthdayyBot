@@ -1,4 +1,4 @@
-import { getCommandGuilds } from '#lib/utils/functions';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 

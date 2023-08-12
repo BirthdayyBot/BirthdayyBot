@@ -1,12 +1,12 @@
 import {
-	BirthdayyBotColor,
+	BrandingColors,
 	type ErrorDefaultSentryScope,
 	type ErrorHandlerOptions,
 	type RouteApiErrorHandler,
 } from '#lib/types';
-import { generateDefaultEmbed } from '#lib/utils/embed';
-import { isDevelopment } from '#lib/utils/env';
-import { DEBUG } from '#lib/utils/environment';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isDevelopment } from '#utils/env';
+import { DEBUG } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { captureException, withScope } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
@@ -59,7 +59,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 	if (error.stack && isDevelopment) errorString += `Stack: ${JSON.stringify(error.stack)}`;
 
 	const errorMessageEmbed = generateDefaultEmbed({
-		color: BirthdayyBotColor.BirthdayyDev,
+		color: BrandingColors.BirthdayyDev,
 		description: `${codeBlock(`js`, errorString)}`,
 		title: 'An error has occured',
 	});

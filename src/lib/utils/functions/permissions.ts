@@ -1,4 +1,4 @@
-import { BOT_ADMINS } from '#lib/utils/environment';
+import { BOT_ADMINS } from '#utils/environment';
 import type { PermissionsBitField } from 'discord.js';
 
 export function canManageRoles(permissions: PermissionsBitField | null | undefined): boolean {

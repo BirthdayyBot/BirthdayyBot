@@ -105,8 +105,8 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
  * @returns A promise that resolves to the message that was sent.
  */
 export function reply(
-	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
 	options: string | MessagePayload | InteractionReplyOptions,
-) {
-	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+): (interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction) => void {
+	return (interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction) =>
+		interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }

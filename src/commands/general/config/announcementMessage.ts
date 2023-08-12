@@ -1,7 +1,7 @@
 import thinking from '#lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { PREMIUM_URL } from '#lib/utils/environment';
-import { reply } from '#lib/utils/utils';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { PREMIUM_URL } from '#utils/environment';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
 
@@ -25,7 +25,6 @@ export class AnnouncementMessageCommand extends Command {
 
 		if (!isPremium) {
 			return reply(
-				interaction,
 				interactionProblem(`This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**.
 				If you are interested in using this and future features now already, you can support the Development on [Patreon](${PREMIUM_URL}).`),
 			);
@@ -33,18 +32,16 @@ export class AnnouncementMessageCommand extends Command {
 
 		if (message.length > EmbedLimits.MaximumDescriptionLength - 500) {
 			return reply(
-				interaction,
 				interactionProblem('The message you provided is too long. Please try again with a shorter message.'),
 			);
 		}
 		this.container.logger.info('MESSAGE: ', message);
 		try {
 			await this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message);
-			return reply(interaction, interactionSuccess('You have successfully updated the announcement message.'));
+			return reply(interactionSuccess('You have successfully updated the announcement message.'));
 		} catch (error) {
 			this.container.logger.info('AnnouncementMessageCommand ~ overridechatInputRun ~ error:', error);
 			return reply(
-				interaction,
 				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
 			);
 		}

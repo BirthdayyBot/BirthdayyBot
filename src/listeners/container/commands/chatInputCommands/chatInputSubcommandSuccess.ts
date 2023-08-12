@@ -5,7 +5,7 @@ import {
 	type ChatInputCommandSubcommandMappingMethod,
 } from '@sapphire/plugin-subcommands';
 import { Listener, type ChatInputCommand, container } from '@sapphire/framework';
-import { getSuccessLoggerData } from '#lib/utils/utils';
+import { getSuccessLoggerData } from '#utils/utils';
 @ApplyOptions<Listener.Options>({ event: SubcommandPluginEvents.ChatInputSubcommandSuccess })
 export class ChatInputSubcommandSuccessEvent extends Listener<
 	typeof SubcommandPluginEvents.ChatInputSubcommandSuccess

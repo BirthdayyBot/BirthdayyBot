@@ -1,4 +1,4 @@
-import { isBotAdmin } from '#lib/utils/functions';
+import { isBotAdmin } from '#utils/functions';
 import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
 

@@ -1,4 +1,4 @@
-import { dayOptions, monthOptions, yearOptions, userOptions } from '#lib/components/builder';
+import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { defaultUserPermissions } from '#lib/types';
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import { ApplyOptions } from '@sapphire/decorators';

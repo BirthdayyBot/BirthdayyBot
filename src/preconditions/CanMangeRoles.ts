@@ -2,7 +2,7 @@ import { Precondition, type PreconditionOptions } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, PermissionsBitField } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Nullish } from '@sapphire/utilities';
-import { canManageRoles, isBotAdmin } from '#lib/utils/functions';
+import { canManageRoles, isBotAdmin } from '#utils/functions';
 
 @ApplyOptions<PreconditionOptions>({
 	name: 'CanManageRoles',

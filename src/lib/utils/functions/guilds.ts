@@ -1,6 +1,6 @@
 import { GuildIDEnum } from '#lib/types';
-import { isCustom, isDevelopment, isNotCustom } from '#lib/utils/env';
-import { MAIN_DISCORD } from '#lib/utils/environment';
+import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
+import { MAIN_DISCORD } from '#utils/environment';
 import type { Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 

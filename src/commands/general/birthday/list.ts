@@ -1,8 +1,8 @@
-import { replyToInteraction } from '#lib/discord/interaction';
 import thinking from '#lib/discord/thinking';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { generateBirthdayList } from '#lib/utils/birthday';
-import { generateDefaultEmbed } from '#lib/utils/embed';
+import { generateBirthdayList } from '#utils/birthday';
+import { generateDefaultEmbed } from '#utils/embed';
+import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
 import { listBirthdaySubCommand } from './birthday';
@@ -17,6 +17,6 @@ export class ListCommand extends Command {
 
 		const { embed, components } = await generateBirthdayList(1, interaction.guild);
 
-		await replyToInteraction(interaction, { components, embeds: [generateDefaultEmbed(embed)] });
+		return reply({ components, embeds: [generateDefaultEmbed(embed)] });
 	}
 }

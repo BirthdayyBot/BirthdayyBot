@@ -1,11 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { container, Events, Listener } from '@sapphire/framework';
+import { container, Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
 import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
 import { envIsDefined } from '@skyra/env-utilities';
+import { Events } from '#lib/types/Enums';
 
-@ApplyOptions<Listener.Options>({ emitter: container.botList, event: 'postStatsError' })
-export class postStatsErrorEvent extends Listener<typeof Events.Error> {
+@ApplyOptions<Listener.Options>({ emitter: container.botList, event: Events.PostStatsError })
+export class postStatsErrorEvent extends Listener {
 	public run(error: Error) {
 		const SendErrorToSentry = () =>
 			Sentry.withScope((scope) => {

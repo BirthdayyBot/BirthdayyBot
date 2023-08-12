@@ -1,9 +1,9 @@
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
-import updateBirthdayOverview from '#lib/utils/birthday/overview';
-import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
-import { resolveOnErrorCodesPrisma } from '#lib/utils/functions';
-import { reply, resolveTarget } from '#lib/utils/utils';
+import { updateBirthdayOverview } from '#utils/birthday';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
@@ -28,13 +28,10 @@ export class ListCommand extends Command {
 
 		if (isNullish(birthday)) {
 			const message = await resolveKey(interaction, 'commands/birthday:remove.notRegistered', options);
-			return reply(interaction, interactionProblem(message));
+			return reply(interactionProblem(message));
 		}
 
 		await updateBirthdayOverview(birthday.guildId);
-		return reply(
-			interaction,
-			interactionSuccess(await resolveKey(interaction, 'commands/birthday:remove.success', options)),
-		);
+		return reply(interactionSuccess(await resolveKey(interaction, 'commands/birthday:remove.success', options)));
 	}
 }

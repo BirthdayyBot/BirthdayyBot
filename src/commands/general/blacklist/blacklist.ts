@@ -1,6 +1,6 @@
 import { userOptions } from '#lib/components/builder';
 import { defaultUserPermissions } from '#lib/types';
-import { getCommandGuilds } from '#lib/utils/functions';
+import { getCommandGuilds } from '#utils/functions';
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';

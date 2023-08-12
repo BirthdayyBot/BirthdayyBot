@@ -1,4 +1,4 @@
-import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
+import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { codeBlock } from '@sapphire/utilities';

@@ -3,7 +3,7 @@ import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
 import { generateBirthdayList } from './birthday';
 
-export default async function updateBirthdayOverview(guild_id: string) {
+export async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
 	if (!config || !config.overviewChannel) return;
 	const { overviewChannel, overviewMessage } = config;
