@@ -139,3 +139,7 @@ doppler.yml
 # Yarn files
 .yarn/install-state.gz
 .yarn/build-state.yml
+
+# Ignore os specific files
+.DS_Store
+Thumbs.db
