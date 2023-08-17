@@ -1436,7 +1436,7 @@ __metadata:
     "@types/ws": ^8.5.5
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
-    bullmq: ^4.7.2
+    bullmq: ^4.7.3
     colorette: ^2.0.20
     dayjs: ^1.11.9
     discord-api-types: ^0.37.50
@@ -1512,19 +1512,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^4.7.2":
-  version: 4.7.2
-  resolution: "bullmq@npm:4.7.2"
+"bullmq@npm:^4.7.3":
+  version: 4.7.3
+  resolution: "bullmq@npm:4.7.3"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
     ioredis: ^5.3.2
     lodash: ^4.17.21
     msgpackr: ^1.6.2
+    node-abort-controller: ^3.1.1
     semver: ^7.5.4
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 8c33148be591fc65a5298d32d09618955b6004536e7d50d32bf2d6f8afe81453238dac94be12735c4ec81fe909b0fcaabdd406fb959732fc1487fffeb9e51361
+  checksum: 9dad8aefbf05e589488df6a717bcc8f83e2fe70fc18f9e5f755d6f8430ed0a0b8c94790f9224719560965852d0522703c2fbb07c8a212aead77563e7e4f89c82
   languageName: node
   linkType: hard
 
@@ -3940,6 +3941,13 @@ __metadata:
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
   checksum: 0b4af3b5bb5d86c289f7a026303d192a7eb4417231fe47245c460baeabae7277bcd8fd9c728fb6bd62c30b3e15cd6620373e2cf33353b095d8b403d3e8a15aff
+  languageName: node
+  linkType: hard
+
+"node-abort-controller@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "node-abort-controller@npm:3.1.1"
+  checksum: 2c340916af9710328b11c0828223fc65ba320e0d082214a211311bf64c2891028e42ef276b9799188c4ada9e6e1c54cf7a0b7c05dd9d59fcdc8cd633304c8047
   languageName: node
   linkType: hard
 
