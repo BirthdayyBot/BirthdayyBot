@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { ScheduledTaskEvents } from '@sapphire/plugin-scheduled-tasks';
 import { envIsDefined } from '@skyra/env-utilities';
-import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
+import { logErrorToContainer } from '#utils/functions/errorHandling';
 import { captureException, withScope } from '@sentry/node';
 
 @ApplyOptions<Listener.Options>({ event: ScheduledTaskEvents.ScheduledTaskStrategyConnectError })

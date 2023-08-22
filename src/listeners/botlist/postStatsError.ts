@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
-import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
+import { logErrorToContainer } from '#utils/functions/errorHandling';
 import { envIsDefined } from '@skyra/env-utilities';
 import { Events } from '#lib/types/Enums';
 

@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import * as Sentry from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
-import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
+import { logErrorToContainer } from '#utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ emitter: process, event: 'uncaughtException' })
 export class uncaughtExceptionEvent extends Listener {

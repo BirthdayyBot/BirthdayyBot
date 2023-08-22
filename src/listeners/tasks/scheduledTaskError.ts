@@ -3,7 +3,7 @@ import { Listener } from '@sapphire/framework';
 import { ScheduledTaskEvents } from '@sapphire/plugin-scheduled-tasks';
 import { captureException, withScope } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
-import { logErrorToContainer } from '../../lib/utils/functions/errorHandling';
+import { logErrorToContainer } from '#utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: ScheduledTaskEvents.ScheduledTaskError })
 export class ScheduledTaskErrorEvent extends Listener<typeof ScheduledTaskEvents.ScheduledTaskError> {
