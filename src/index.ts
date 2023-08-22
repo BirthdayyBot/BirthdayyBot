@@ -16,7 +16,7 @@ async function main() {
 	} catch (error) {
 		container.logger.error(error);
 		await container.prisma.$disconnect();
-		client.destroy();
+		await client.destroy();
 		process.exit(1);
 	}
 }
