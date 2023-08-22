@@ -25,7 +25,7 @@ export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=
 }&permissions=525529836753&scope=bot`;
 export const BOT_COLOR = envParseInteger('BOT_COLOR', BrandingColors.Birthdayy);
 export const BOT_OWNER = envParseArray('BOT_OWNER', [OwnerID.Chillihero]);
-export const WEBSITE_URL = 'https://birthdayy.xyz/';
+export const WEBSITE_URL = 'https://birthdayy.xyz';
 export const DOCS_URL = 'https://birthdayy.xyz/docs';
 export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
 export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT');

@@ -1458,6 +1458,7 @@ __metadata:
     "@sapphire/plugin-subcommands": ^4.1.0
     "@sapphire/plugin-utilities-store": ^1.0.1
     "@sapphire/result": ^2.6.4
+    "@sapphire/shapeshift": ^3.9.2
     "@sapphire/stopwatch": ^1.5.0
     "@sapphire/time-utilities": ^1.7.10
     "@sapphire/ts-config": ^4.0.1
