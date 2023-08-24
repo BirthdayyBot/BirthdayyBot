@@ -92,5 +92,5 @@
     "type": "git",
     "url": "git+https://github.com/BirthdayyBot/BirthdayyBotSapphire.git"
   },
-  "packageManager": "yarn@3.6.2"
+  "packageManager": "yarn@3.6.3"
 }
