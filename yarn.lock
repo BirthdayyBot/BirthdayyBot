@@ -348,31 +348,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@prisma/client@npm:5.1.1"
+"@prisma/client@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@prisma/client@npm:5.2.0"
   dependencies:
-    "@prisma/engines-version": 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
+    "@prisma/engines-version": 5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 0236462afc722eb6a8dc0cc53843e5f0092cfe41a5dd5e794e41ba34be4d2166ba564c21dbb3c4436111b7a40ba4f66fc1e8328d7f17cdbfb3ac616b7efd4232
+  checksum: ad523b7a54e31d365ecac7bdb89f5a89f62e616f5f567f5dd5060e86b122253a4652ea778c0ccbab31906e2170110e808839fbae7ee91a4fd16a8282ee86f5f1
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e":
-  version: 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
-  resolution: "@prisma/engines-version@npm:5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e"
-  checksum: cfea78fe98cff694eea31335c4167f375cdd8a848d6699bd0035d4a9c05184bf6fe57959249220c098c6214a424c9519f7cd17c51119234866840bd1030c87e1
+"@prisma/engines-version@npm:5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f":
+  version: 5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f
+  resolution: "@prisma/engines-version@npm:5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
+  checksum: 7a0fde44dad7902aef0035a30073c8e3178bccbaf65f688583cf3db94e36d160fd0a52cae8b6422b670facdbd4201861e1d6e2c7371d57ef27b58a2e1c524213
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:5.1.1":
-  version: 5.1.1
-  resolution: "@prisma/engines@npm:5.1.1"
-  checksum: 561c85def110279eb7c764e7c1ea1f8f54d9a2948ed5e5db9b11321c2bef362d178b756e39e7e022ee27cb2be5ac8d9b835967ce341ad8f6a1e8502f988140ee
+"@prisma/engines@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@prisma/engines@npm:5.2.0"
+  checksum: c4d0a424b211ab5f02c977bd87e03a151a7d297d8448b08ef9de931a0dcebbbea76cdefc15a17fd06dacac692b164fd88b32c23eb84f7822dbaf3d0885b700a7
   languageName: node
   linkType: hard
 
@@ -491,9 +491,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/framework@npm:^4.5.2":
-  version: 4.5.2
-  resolution: "@sapphire/framework@npm:4.5.2"
+"@sapphire/framework@npm:^4.5.3":
+  version: 4.5.3
+  resolution: "@sapphire/framework@npm:4.5.3"
   dependencies:
     "@discordjs/builders": ^1.6.5
     "@sapphire/discord-utilities": ^3.1.0
@@ -504,7 +504,7 @@ __metadata:
     "@sapphire/result": ^2.6.4
     "@sapphire/stopwatch": ^1.5.0
     "@sapphire/utilities": ^3.13.0
-  checksum: 2e5bec4afa7b1989cf2f4edf58355f6591898b47939fc5cad96577f19223707615aa8e78b8ca58e9e4d37865caec13b682ef6a40029e9623a53c735fdd452afe
+  checksum: 6e1ff4ec93c8581558e12d0dae8d6b37aac8564379ea8dd6ea683977cf4903dfd246b164afac87bb5dcb1c4b83a8a9e22a0f2716ff2bd83aee0eddcc46aba800
   languageName: node
   linkType: hard
 
@@ -528,90 +528,84 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@sapphire/plugin-api@npm:5.1.0"
+"@sapphire/plugin-api@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@sapphire/plugin-api@npm:5.1.1"
   dependencies:
     "@types/ws": ^8.5.5
-    tldts: ^6.0.5
-    tslib: ^2.5.3
-    undici: ^5.22.1
-  checksum: f8aa319490f063007470dcfc13c78dc2dcd84ef00f4532496c388a9accef2b7c3e5ed6a66d8a8d255dbb43333d9a925d6595cb6fd4fbd11eb35d1a5f75e5c6a6
+    tldts: ^6.0.14
+    tslib: ^2.6.2
+    undici: ^5.23.0
+  checksum: 11940e21587243ea89023165ccbda6aac1fde5b774fccb1ad143185ed661fb3a36d05a3f83a5b91c4fc24b223eec2d3d78577d1e09c1fde91d0ef355eca9af03
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-editable-commands@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@sapphire/plugin-editable-commands@npm:3.0.2"
+"@sapphire/plugin-editable-commands@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "@sapphire/plugin-editable-commands@npm:3.0.3"
   dependencies:
     "@skyra/editable-commands": ^3.0.1
-    tslib: ^2.5.0
-  checksum: 34043aa3394d01ddeae8f5a8bafd0d81c8e19a84c71fd2b6037c1f2bc567ecc4bff6bec08e5d17520c9db6ad6201c8f1cfb2b710be7a389686a2707f55193f0e
+  checksum: c4b6953df71447eb74f4b2e36709f04897e63798ac4bab6237da210dfe59b5cdbfd8f5eb31ca83367c2de69957b49a83d1a663de06825a534bcd039788456019
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-hmr@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@sapphire/plugin-hmr@npm:2.0.1"
+"@sapphire/plugin-hmr@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@sapphire/plugin-hmr@npm:2.0.2"
   dependencies:
     chokidar: ^3.5.3
-    tslib: 2.x
-  checksum: d337f0d358f35f03b50813327ff2a97e13e79b66370a84cc927207fa90885515286026316b54a089b5d196d4de0d608e3803d2576f3a4bd67c8eebff15a45169
+  checksum: c9b19e3567e0b8ccb2f8353db867f364e4b4ee9f366a504ea452ffddab6986ee80f917660515a0d9afdd8323f146465b8050d2f6cb60769e6130384b265e4ce4
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-i18next@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "@sapphire/plugin-i18next@npm:5.0.4"
+"@sapphire/plugin-i18next@npm:^5.0.5":
+  version: 5.0.5
+  resolution: "@sapphire/plugin-i18next@npm:5.0.5"
   dependencies:
     "@sapphire/utilities": ^3.13.0
     "@skyra/i18next-backend": ^2.0.3
     chokidar: ^3.5.3
     i18next: ^22.5.1
-    tslib: ^2.6.0
-  checksum: 7b9d7686aebc17dd5a7516bb6f76fdbe0fada8573f1eee014cae1f23adf97f667cde2e9f34faa3d93e94311b45563d113541aa153099fa53cd725bb4fb9e84bd
+  checksum: 3d6be5f9cefcdd9f78444311206d8775543aa30888106bc6f3de74cb8a82f35845e3a4acdf32d0a841e3dbe7cd3f1ee3b66947e1d1c415deb54daa144beab0d9
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-logger@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "@sapphire/plugin-logger@npm:3.0.5"
+"@sapphire/plugin-logger@npm:^3.0.6":
+  version: 3.0.6
+  resolution: "@sapphire/plugin-logger@npm:3.0.6"
   dependencies:
     "@sapphire/timestamp": ^1.0.1
     colorette: ^2.0.20
-    tslib: ^2.6.0
-  checksum: 65016239fe2c7ed5d9048fffa0bb2c32be9b7740c72d760080353450aed7cb0d17c7469dbdf2d12a0054f78e1a1a07b68e6b6424542980519983e76097d9348c
+  checksum: 18bb5726a52595aaae7bcd07ec367d5c7ba78fc9eb38c45f84427f67efd2c8066c64f06a67af483489d0dd6866cb7b75a16ad37ceee10d76b30c47fe117fb351
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-scheduled-tasks@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@sapphire/plugin-scheduled-tasks@npm:7.1.1"
+"@sapphire/plugin-scheduled-tasks@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "@sapphire/plugin-scheduled-tasks@npm:7.1.2"
   dependencies:
     "@sapphire/stopwatch": ^1.5.0
     "@sapphire/utilities": ^3.13.0
     bullmq: 3.15.8
-    tslib: ^2.6.0
-  checksum: 3ba7c28d7e3ee74436361f9627ba319a630a9978da5c0b44aaa9e66ecf39c0fb20766da2ba69a2f687d9be70701d543a2353c1f66914e03dada4e08f9b92168a
+    tslib: ^2.6.2
+  checksum: c1423bf7583cbdc95d042415cfe438d294131f37cac2081bfbc7cfe03c4aff7de18e2d894013c164b114601f8b730794d32f5d3c85a9d542425f6666a824d510
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-subcommands@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@sapphire/plugin-subcommands@npm:4.1.0"
+"@sapphire/plugin-subcommands@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@sapphire/plugin-subcommands@npm:4.2.0"
   dependencies:
     "@sapphire/utilities": ^3.13.0
     tslib: ^2.6.2
-  checksum: dba0aec927afa4ba5c6cdb420ad4da9737120d7dfcb4df8d2f0e98c1b9e65f64259fc1253ab1cf8fbe9d3fa802f76f919e3f70d05c1b87a8d7508d8ecad4e021
+  checksum: 9fcfa03786a75629f4c31f51e557887f042795746f98b2f592a7b63bafba3961bebac7ba36d6d5fd833141c33e9e3306615183cf49713e5f4ab45fda2328861f
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-utilities-store@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@sapphire/plugin-utilities-store@npm:1.0.1"
-  dependencies:
-    tslib: ^2.5.0
-  checksum: c5dfde454a49f34279accfc7f882e63c5458d529991e573d0b1fb2f4f32532c8160032c225bd78151f7a8df58c4ad08d6b1a903175d8794f5621be53f3aadbea
+"@sapphire/plugin-utilities-store@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@sapphire/plugin-utilities-store@npm:1.0.2"
+  checksum: 810a1d2a3af3da8aaa4c1a2905356ebd28cb40c9ceb775a7ef4b98b6aa561281db32360fa63e774219992380532d43ca5261438cc57c250f0e264093d6dba8ed
   languageName: node
   linkType: hard
 
@@ -833,10 +827,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.5.1":
+"@types/node@npm:*":
   version: 20.5.1
   resolution: "@types/node@npm:20.5.1"
   checksum: 3dbe611cd67afa987102c8558ee70f848949c5dcfee5f60abc073e55c0d7b048e391bf06bb1e0dc052cb7210ca97136ac496cbaf6e89123c989de6bd125fde82
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.5.4":
+  version: 20.5.4
+  resolution: "@types/node@npm:20.5.4"
+  checksum: 18de76c990e1c298183661cfc7cf16c9384531538c8090cc27bc3cab801e7c46b9f6943591ab0433955dd57961601684cc0fb19ba2deee9609e137c91afd2e25
   languageName: node
   linkType: hard
 
@@ -1440,7 +1441,7 @@ __metadata:
   dependencies:
     "@devtomio/plugin-botlist": ^1.3.0
     "@kaname-png/plugin-subcommands-advanced": ^2.2.3
-    "@prisma/client": ^5.1.1
+    "@prisma/client": ^5.2.0
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.1
     "@sapphire/decorators": ^6.0.2
@@ -1448,15 +1449,15 @@ __metadata:
     "@sapphire/eslint-config": ^5.0.1
     "@sapphire/eslint-plugin-result": ^2.0.0
     "@sapphire/fetch": ^2.4.1
-    "@sapphire/framework": ^4.5.2
-    "@sapphire/plugin-api": ^5.1.0
-    "@sapphire/plugin-editable-commands": ^3.0.2
-    "@sapphire/plugin-hmr": ^2.0.1
-    "@sapphire/plugin-i18next": ^5.0.4
-    "@sapphire/plugin-logger": ^3.0.5
-    "@sapphire/plugin-scheduled-tasks": ^7.1.1
-    "@sapphire/plugin-subcommands": ^4.1.0
-    "@sapphire/plugin-utilities-store": ^1.0.1
+    "@sapphire/framework": ^4.5.3
+    "@sapphire/plugin-api": ^5.1.1
+    "@sapphire/plugin-editable-commands": ^3.0.3
+    "@sapphire/plugin-hmr": ^2.0.2
+    "@sapphire/plugin-i18next": ^5.0.5
+    "@sapphire/plugin-logger": ^3.0.6
+    "@sapphire/plugin-scheduled-tasks": ^7.1.2
+    "@sapphire/plugin-subcommands": ^4.2.0
+    "@sapphire/plugin-utilities-store": ^1.0.2
     "@sapphire/result": ^2.6.4
     "@sapphire/shapeshift": ^3.9.2
     "@sapphire/stopwatch": ^1.5.0
@@ -1468,7 +1469,7 @@ __metadata:
     "@sentry/node": ^7.64.0
     "@sentry/tracing": ^7.64.0
     "@skyra/env-utilities": ^1.2.1
-    "@types/node": ^20.5.1
+    "@types/node": ^20.5.4
     "@types/ws": ^8.5.5
     "@typescript-eslint/eslint-plugin": ^5.62.0
     "@typescript-eslint/parser": ^5.62.0
@@ -1488,7 +1489,7 @@ __metadata:
     prettier: ^3.0.2
     prettier-plugin-packagejson: ^2.4.5
     prettier-plugin-prisma: ^5.0.0
-    prisma: ^5.1.1
+    prisma: ^5.2.0
     reflect-metadata: ^0.1.13
     tsc-watch: ^6.0.4
     typescript: ^5.1.6
@@ -4411,14 +4412,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "prisma@npm:5.1.1"
+"prisma@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "prisma@npm:5.2.0"
   dependencies:
-    "@prisma/engines": 5.1.1
+    "@prisma/engines": 5.2.0
   bin:
     prisma: build/index.js
-  checksum: ab0879fdff3a5e3f50956e18308bd996708519824802b2528c80d1639bbb4d8dd499ef17670db27986695811a9e28b2c9d5ab0753031441ee12878b30bace8b7
+  checksum: 8b99ab5a5f801c72b2eb1809db980bd104dfd699cb14c5d5db5b675566c89e46501267399bb2f02bc3ea8fb86fc2f029cccd7178768109dc4d198bc93552b1da
   languageName: node
   linkType: hard
 
@@ -5159,7 +5160,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tldts@npm:^6.0.5":
+"tldts@npm:^6.0.14":
   version: 6.0.14
   resolution: "tldts@npm:6.0.14"
   dependencies:
@@ -5230,17 +5231,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.x, tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.5.3, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
-  version: 2.6.2
-  resolution: "tslib@npm:2.6.2"
-  checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
-  languageName: node
-  linkType: hard
-
 "tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.5.3, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "tslib@npm:2.6.2"
+  checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
   languageName: node
   linkType: hard
 
@@ -5366,7 +5367,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.16.0, undici@npm:^5.22.1":
+"undici@npm:^5.16.0, undici@npm:^5.23.0":
   version: 5.23.0
   resolution: "undici@npm:5.23.0"
   dependencies:
