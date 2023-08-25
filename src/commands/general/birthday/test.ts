@@ -18,6 +18,6 @@ export class TestCommand extends Command {
 			userId: user.id,
 		});
 
-		return reply(interactionSuccess('Birthday Test Run!'));
+		return reply(interaction, interactionSuccess('Birthday Test Run!'));
 	}
 }

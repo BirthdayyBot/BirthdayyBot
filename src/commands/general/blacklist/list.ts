@@ -16,7 +16,7 @@ export class ListCommand extends Command {
 		const blacklistedUsers = await this.container.utilities.blacklist.get.BlacklistByGuildId(interaction.guildId);
 		const description = processBlacklistedUsers(blacklistedUsers);
 
-		return reply({
+		return reply(interaction, {
 			embeds: [
 				generateDefaultEmbed({
 					description,

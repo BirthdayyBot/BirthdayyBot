@@ -29,7 +29,7 @@ export class GuildInfoCommand extends Command {
 		const guildDiscord = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
-		if (!guildDatabase || !guildDiscord) return reply('Guild Infos not found');
+		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
 
 		const embed = generateDefaultEmbed({
 			fields: [
@@ -111,7 +111,7 @@ export class GuildInfoCommand extends Command {
 
 		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));
 
-		return reply({
+		return reply(interaction, {
 			content: `GuildInfos for ${guildDiscord.name}`,
 			embeds: [embed, configEmbed],
 		});

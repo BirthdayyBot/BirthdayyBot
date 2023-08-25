@@ -20,7 +20,7 @@ export class GuideCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(InviteEmbed);
-		await reply({
+		await reply(interaction, {
 			embeds: [embed],
 			components: [
 				{

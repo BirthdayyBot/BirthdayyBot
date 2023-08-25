@@ -43,11 +43,11 @@ export class TogglePremiumCommand extends Command {
 		const guild = await getGuildInformation(guildId);
 		await thinking(interaction, true);
 		if (!guild) {
-			return reply(interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
+			return reply(interaction, interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		return reply({
+		return reply(interaction, {
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Toggle Premium',

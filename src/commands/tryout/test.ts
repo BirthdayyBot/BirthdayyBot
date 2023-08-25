@@ -41,6 +41,6 @@ export class TestCommand extends Command {
 		if (toggle.appEnv) fields.push({ name: 'APP ENV', value: inlineCode(APP_ENV) });
 		if (toggle.appEnv) fields.push({ name: 'isProduction', value: inlineCode(isProduction ? 'true' : 'false') });
 
-		return reply({ embeds: [generateDefaultEmbed({ title: 'test', fields })] });
+		return reply(interaction, { embeds: [generateDefaultEmbed({ title: 'test', fields })] });
 	}
 }

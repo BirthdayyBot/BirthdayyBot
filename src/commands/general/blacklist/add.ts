@@ -18,7 +18,7 @@ export class AddlacklistCommand extends Command {
 
 		if (options.context === 'author') {
 			const message = await resolveKey(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
-			return reply(interactionProblem(message, true));
+			return reply(interaction, interactionProblem(message, true));
 		}
 
 		const data = { guildId: interaction.guildId, userId: user.id };
@@ -29,13 +29,16 @@ export class AddlacklistCommand extends Command {
 			err: async (error: Prisma.PrismaClientKnownRequestError) => {
 				if (error.code === PrismaErrorCodeEnum.UniqueConstraintFailed) {
 					const message = await resolveKey(interaction, 'commands/blacklist:add.alReadyBlacklisted', options);
-					return reply(interactionProblem(message));
+					return reply(interaction, interactionProblem(message));
 				}
-				return reply(interactionProblem(await resolveKey(interaction, 'commands/blacklist:add.notAdded')));
+				return reply(
+					interaction,
+					interactionProblem(await resolveKey(interaction, 'commands/blacklist:add.notAdded')),
+				);
 			},
 			ok: async () => {
 				const message = await resolveKey(interaction, 'commands/blacklist:add.success', options);
-				return reply(interactionSuccess(message));
+				return reply(interaction, interactionSuccess(message));
 			},
 		});
 	}

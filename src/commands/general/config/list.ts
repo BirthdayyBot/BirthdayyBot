@@ -13,6 +13,6 @@ export class ListCommand extends Command {
 
 		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
 
-		await reply({ embeds: [generateDefaultEmbed(configEmbed)] });
+		await reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
 	}
 }

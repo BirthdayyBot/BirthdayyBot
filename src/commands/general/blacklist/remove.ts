@@ -28,8 +28,8 @@ export class RemoveCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result))
-			return reply(interactionProblem(`${userMention(user.id)} is not blacklisted.`, true));
+			return reply(interaction, interactionProblem(`${userMention(user.id)} is not blacklisted.`, true));
 
-		return reply(interactionSuccess(`Removed ${userMention(user.id)} from the blacklist.`, true));
+		return reply(interaction, interactionSuccess(`Removed ${userMention(user.id)} from the blacklist.`, true));
 	}
 }

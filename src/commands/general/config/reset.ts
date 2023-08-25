@@ -29,9 +29,12 @@ export class ResetCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result)) {
-			return reply(interactionProblem(`An error occurred while trying to reset the ${configName} config.`));
+			return reply(
+				interaction,
+				interactionProblem(`An error occurred while trying to reset the ${configName} config.`),
+			);
 		}
 
-		return reply(interactionSuccess(`Successfully reset the ${configName} config.`));
+		return reply(interaction, interactionSuccess(`Successfully reset the ${configName} config.`));
 	}
 }

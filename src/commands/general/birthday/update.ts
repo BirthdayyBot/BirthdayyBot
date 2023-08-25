@@ -33,14 +33,18 @@ export class UpdateCommand extends Command {
 					const message = await resolveKey(interaction, 'commands/birthday:update.notRegistered', {
 						command: BirthdayApplicationCommandMentions.Register,
 					});
-					return reply(interactionProblem(message));
+					return reply(interaction, interactionProblem(message));
 				}
 
-				return reply(interactionProblem(await resolveKey(interaction, 'commands/birthday:update.notUpdated')));
+				return reply(
+					interaction,
+					interactionProblem(await resolveKey(interaction, 'commands/birthday:update.notUpdated')),
+				);
 			},
 			ok: async (birthday) => {
 				await updateBirthdayOverview(interaction.guildId);
 				return reply(
+					interaction,
 					interactionSuccess(
 						await resolveKey(interaction, 'commands/birthday:update.success', {
 							date: bold(formatDateForDisplay(birthday.birthday, true)),

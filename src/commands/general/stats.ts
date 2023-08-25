@@ -102,6 +102,6 @@ export class StatsCommand extends Command {
 			],
 		};
 		const embed = generateDefaultEmbed(embedRaw);
-		return reply({ embeds: [embed] });
+		return reply(interaction, { embeds: [embed] });
 	}
 }

@@ -125,10 +125,11 @@ export class TimezoneCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result)) {
-			return reply(interactionProblem("I couldn't set the **Timezone**."));
+			return reply(interaction, interactionProblem("I couldn't set the **Timezone**."));
 		}
 
 		return reply(
+			interaction,
 			interactionSuccess(`The **Timezone** has been set to UTC${timezone >= 0 ? `+${timezone}` : timezone}.`),
 		);
 	}

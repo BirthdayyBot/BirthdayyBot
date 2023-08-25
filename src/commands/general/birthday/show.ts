@@ -27,6 +27,7 @@ export class ShowCommand extends Command {
 
 		if (isNullish(birthday)) {
 			return reply(
+				interaction,
 				interactionProblem(
 					await resolveKey(interaction, 'commands/birthday:show.notRegistered', {
 						command: BirthdayApplicationCommandMentions.Register,
@@ -47,7 +48,7 @@ export class ShowCommand extends Command {
 			}),
 		]);
 
-		return reply({
+		return reply(interaction, {
 			embeds: [
 				{
 					...defaultEmbed(),

@@ -34,11 +34,11 @@ export class ListCommand extends Command {
 			command: BirthdayApplicationCommandMentions.Update,
 		});
 
-		if (!birthday) return reply(interactionProblem(alreadyRegistered));
+		if (!birthday) return reply(interaction, interactionProblem(alreadyRegistered));
 
 		const success = await resolveKey(interaction, 'commands/birthday:register.success', options);
 
 		await updateBirthdayOverview(birthday.guildId);
-		return reply(interactionSuccess(success));
+		return reply(interaction, interactionSuccess(success));
 	}
 }

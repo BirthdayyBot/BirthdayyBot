@@ -16,6 +16,6 @@ export class ListCommand extends Command {
 
 		const { embed, components } = await generateBirthdayList(1, interaction.guild);
 
-		return reply({ components, embeds: [generateDefaultEmbed(embed)] });
+		return reply(interaction, { components, embeds: [generateDefaultEmbed(embed)] });
 	}
 }

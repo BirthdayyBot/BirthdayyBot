@@ -27,6 +27,7 @@ export class AnnouncementChannelCommand extends Command {
 
 		if (!hasPermissionInNewChannel) {
 			return reply(
+				interaction,
 				interactionProblem(` I don't have permission to send messages in ${channelMention(channel.id)}.`),
 			);
 		}
@@ -41,10 +42,14 @@ export class AnnouncementChannelCommand extends Command {
 
 		if (isNullOrUndefinedOrEmpty(birthday)) {
 			return reply(
+				interaction,
 				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
 			);
 		}
 
-		return reply(interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`));
+		return reply(
+			interaction,
+			interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
+		);
 	}
 }

@@ -3,6 +3,7 @@ import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',
@@ -28,8 +29,8 @@ export class CountCommand extends Command {
 		);
 	}
 
-	public override async chatInputRun() {
-		await reply({
+	public override async chatInputRun(interaction: ChatInputCommandInteraction) {
+		await reply(interaction, {
 			embeds: [
 				{
 					title: 'Discord Information',

@@ -3,6 +3,7 @@ import { BrandingColors } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isDevelopment } from '#utils/env';
 import { DEBUG } from '#utils/environment';
+import { reply } from '#utils/utils';
 import { container } from '@sapphire/framework';
 import { captureException, withScope } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
@@ -60,15 +61,9 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 		title: 'An error has occured',
 	});
 
-	if (interaction.replied || interaction.deferred) {
-		interaction
-			.editReply({ embeds: [errorMessageEmbed] })
-			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
-	} else {
-		interaction
-			.reply({ embeds: [errorMessageEmbed], ephemeral: true })
-			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
-	}
+	reply(interaction, { embeds: [errorMessageEmbed], ephemeral: !interaction.replied || !interaction.deferred }).catch(
+		() => interaction.user.send({ embeds: [errorMessageEmbed] }),
+	);
 
 	return sendErrorMessageToAdmin(errorMessageEmbed);
 }

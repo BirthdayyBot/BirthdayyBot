@@ -34,6 +34,7 @@ export class OverviewChannelCommand extends Command {
 
 		if (!hasWritingPermissionsInChannel) {
 			return reply(
+				interaction,
 				interactionProblem(`I don't have permission to send messages in ${channelMention(channel.id)}.`),
 			);
 		}
@@ -56,11 +57,13 @@ export class OverviewChannelCommand extends Command {
 
 		if (isNullOrUndefinedOrEmpty(result)) {
 			return reply(
+				interaction,
 				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
 			);
 		}
 
 		return reply(
+			interaction,
 			interactionSuccess(
 				`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${
 					message.url

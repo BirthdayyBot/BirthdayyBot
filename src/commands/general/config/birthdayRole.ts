@@ -30,9 +30,9 @@ export class ListCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(guild)) {
-			return reply(interactionProblem('An error occurred while trying to update the config.'));
+			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		return reply(interactionSuccess(`Successfully set the birthday role to ${roleMention(role.id)}.`));
+		return reply(interaction, interactionSuccess(`Successfully set the birthday role to ${roleMention(role.id)}.`));
 	}
 }

@@ -21,7 +21,7 @@ export class HelpCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(HelpEmbed);
-		await reply({
+		await reply(interaction, {
 			embeds: [embed],
 			components: [
 				{

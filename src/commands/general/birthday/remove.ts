@@ -27,10 +27,13 @@ export class ListCommand extends Command {
 
 		if (isNullish(birthday)) {
 			const message = await resolveKey(interaction, 'commands/birthday:remove.notRegistered', options);
-			return reply(interactionProblem(message));
+			return reply(interaction, interactionProblem(message));
 		}
 
 		await updateBirthdayOverview(birthday.guildId);
-		return reply(interactionSuccess(await resolveKey(interaction, 'commands/birthday:remove.success', options)));
+		return reply(
+			interaction,
+			interactionSuccess(await resolveKey(interaction, 'commands/birthday:remove.success', options)),
+		);
 	}
 }

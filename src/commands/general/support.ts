@@ -38,7 +38,7 @@ export class SupportCommand extends Command {
 			await docsButtonBuilder(interaction),
 		]);
 
-		return reply({
+		return reply(interaction, {
 			embeds: [embed],
 			components: [components],
 		});

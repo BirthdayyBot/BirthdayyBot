@@ -17,7 +17,7 @@ import {
 	userMention,
 	type APIUser,
 	type InteractionReplyOptions,
-	ContextMenuCommandInteraction,
+	CommandInteraction,
 } from 'discord.js';
 
 /**
@@ -104,9 +104,6 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
  * @param  options - The options to pass to the reply method.
  * @returns A promise that resolves to the message that was sent.
  */
-export function reply(
-	options: string | MessagePayload | InteractionReplyOptions,
-): (interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction) => void {
-	return (interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction) =>
-		interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+export function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
+	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }

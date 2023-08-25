@@ -9,7 +9,7 @@ export class UserEvent extends Listener<typeof Events.ContextMenuCommandDenied> 
 		// Use cases for this are for example permissions error when running the `eval` command.
 		if (Reflect.get(Object(context), 'silent')) return;
 
-		return reply({
+		return reply(interaction, {
 			content,
 			allowedMentions: { users: [interaction.user.id], roles: [] },
 			ephemeral: true,
