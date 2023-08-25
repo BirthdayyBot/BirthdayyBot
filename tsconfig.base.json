@@ -1,7 +1,8 @@
 {
-    "extends": "@sapphire/ts-config",
+    "extends": "@sapphire/ts-config/extra-strict",
     "compilerOptions": {
-        "target": "ESNext",
+        "moduleResolution": "Node16",
+        "tsBuildInfoFile": "dist/.tsbuildinfo",
         "removeComments": true
     }
 }

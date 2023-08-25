@@ -1,4 +1,4 @@
-import { BirthdayyBotId, BrandingColors, Emojis, GuildIDEnum, OwnerID } from '#lib/types';
+import { BirthdayyBotId, BrandingColors, Emojis, GuildIDEnum, OwnerID } from '#utils/constants';
 import { isCustom, isProduction } from '#utils/env';
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { PermissionsBitField } from 'discord.js';

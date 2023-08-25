@@ -1,0 +1,117 @@
+diff --git a/dist/lib/post.d.ts b/dist/lib/post.d.ts
+index c550caf9bc3dfb4051d060a22f4e037321d77941..335d271dc1d3f550705189f6fecd82e8fb9504da 100644
+--- a/dist/lib/post.d.ts
++++ b/dist/lib/post.d.ts
+@@ -11,7 +11,6 @@ export declare class Post {
+     discordBotList(): Promise<void>;
+     botsOnDiscord(): Promise<void>;
+     discords(): Promise<void>;
+-    discordLabs(): Promise<void>;
+     botListMe(): Promise<void>;
+     discordBotsGG(): Promise<void>;
+     discordExtremeList(): Promise<void>;
+diff --git a/dist/lib/post.js b/dist/lib/post.js
+index 16deba82553f3b21a1969342f83c19f1e0a7e3bb..3d0057d540c703909a880e78f0077735816d91a3 100644
+--- a/dist/lib/post.js
++++ b/dist/lib/post.js
+@@ -34,9 +34,6 @@ class Post {
+     async discords() {
+         return this.query(`https://discords.com/bots/api/bot/${this.botList.clientId}`, this.botList.keys.discords, JSON.stringify({ server_count: await this.botList.computeGuilds() }), 'https://discords.com', 'post');
+     }
+-    async discordLabs() {
+-        return this.query(`https://bots.discordlabs.org/v2/bot/${this.botList.clientId}/stats`, this.botList.keys.discordLabs, JSON.stringify({ server_count: await this.botList.computeGuilds(), shard_count: this.shards }), 'https://bots.discordlabs.org', 'post');
+-    }
+     async botListMe() {
+         return this.query(`https://api.botlist.me/api/v1/bots/${this.botList.clientId}/stats`, `Bot ${this.botList.keys.botListMe}`, JSON.stringify({ server_count: await this.botList.computeGuilds(), shard_count: this.shards }), 'https://botlist.me', 'post');
+     }
+diff --git a/package.json b/package.json
+index 892a7dde84d287f63ba8cfbb9ebe2dbbd18ad347..ee792f853659ae163c72f30f09b8f174ced979e3 100644
+--- a/package.json
++++ b/package.json
+@@ -10,18 +10,18 @@
+   "license": "MIT",
+   "exports": {
+     ".": {
++      "types": "./dist/index.d.ts",
+       "import": "./dist/index.mjs",
+       "require": "./dist/index.js"
+     },
+     "./register": {
+-      "import": "./register.mjs",
+-      "require": "./register.js"
++      "types": "./dist/register.d.ts",
++      "import": "./dist/register.mjs",
++      "require": "./dist/register.js"
+     }
+   },
+   "sideEffects": [
+-    "./dist/register.js",
+-    "./register.js",
+-    "./register.mjs"
++    "./dist/register.js"
+   ],
+   "scripts": {
+     "lint": "eslint src --ext ts --fix",
+@@ -44,6 +44,7 @@
+     "postpack": "pinst --enable"
+   },
+   "dependencies": {
++    "@sapphire/framework": "4.5.3",
+     "tiny-typed-emitter": "^2.1.0",
+     "tslib": "^2.5.0",
+     "undici": "^5.16.0"
+diff --git a/register.d.ts b/register.d.ts
+deleted file mode 100644
+index 06b5a5887266eb895920a53bd3fcca9263886784..0000000000000000000000000000000000000000
+--- a/register.d.ts
++++ /dev/null
+@@ -1 +0,0 @@
+-export * from './dist/register';
+diff --git a/register.js b/register.js
+deleted file mode 100644
+index d3ff6c9b0438f9d9c96ec5c096a978e3c7d94a98..0000000000000000000000000000000000000000
+--- a/register.js
++++ /dev/null
+@@ -1,4 +0,0 @@
+-/* eslint-disable @typescript-eslint/no-var-requires */
+-const tslib = require('tslib');
+-
+-tslib.__exportStar(require('./dist/register.js'), exports);
+diff --git a/register.mjs b/register.mjs
+deleted file mode 100644
+index 7409c2f786867b7ea9e33814012c1fa96fdb42d0..0000000000000000000000000000000000000000
+--- a/register.mjs
++++ /dev/null
+@@ -1 +0,0 @@
+-export * from './dist/register.mjs';
+diff --git a/src/register.ts b/src/register.ts
+deleted file mode 100644
+index 25367ca5f1adb68f977e5015cf225ce5633712a1..0000000000000000000000000000000000000000
+--- a/src/register.ts
++++ /dev/null
+@@ -1,25 +0,0 @@
+-import { Plugin, container, postLogin, preGenericsInitialization, SapphireClient } from '@sapphire/framework';
+-import { BotList } from '.';
+-
+-export class BotListPlugin extends Plugin {
+-	public static [preGenericsInitialization](this: SapphireClient) {
+-		container.botList = new BotList(this.options.botList ?? { keys: {} });
+-	}
+-
+-	public static [postLogin](this: SapphireClient) {
+-		if (this.options.botList?.autoPost?.enabled ?? true) {
+-			container.logger.info('[BotList-Plugin]: Auto-posting has been enabled.');
+-
+-			setInterval(() => container.botList.postStats(), this.options.botList?.autoPost?.interval ?? 3.6e6);
+-		}
+-	}
+-}
+-
+-SapphireClient.plugins.registerPreGenericsInitializationHook(BotListPlugin[preGenericsInitialization], 'BotList-PreGenericsInitialization');
+-SapphireClient.plugins.registerPostLoginHook(BotListPlugin[postLogin], 'BotList-PostLogin');
+-
+-declare module '@sapphire/pieces' {
+-	interface Container {
+-		botList: BotList;
+-	}
+-}

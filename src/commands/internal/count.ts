@@ -1,9 +1,6 @@
 import { defaultUserPermissions } from '#lib/types';
-import { generateDefaultEmbed } from '#utils/embed';
-import { isNotCustom } from '#utils/env';
-import { BOT_COLOR } from '#utils/environment';
+import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 

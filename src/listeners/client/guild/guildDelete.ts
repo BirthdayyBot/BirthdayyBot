@@ -1,7 +1,5 @@
 import { sendMessage } from '#lib/discord';
-import { BrandingColors } from '#lib/types';
-import { generateDefaultEmbed } from '#utils/embed';
-import { BOT_NAME, BOT_SERVER_LOG, Emojis, DEBUG } from '#utils/environment';
+import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, DEBUG, Emojis, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';

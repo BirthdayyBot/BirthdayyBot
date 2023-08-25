@@ -1,15 +1,14 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
-import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
 import { updateBirthdayOverview } from '#utils/birthday';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
-import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
-import { removeBirthdaySubCommand } from './birthday';
+import { removeBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => removeBirthdaySubCommand(builder))
 export class ListCommand extends Command {

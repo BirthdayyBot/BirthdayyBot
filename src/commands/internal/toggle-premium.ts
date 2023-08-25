@@ -1,9 +1,7 @@
 import { getGuildInformation } from '#lib/discord';
 import thinking from '#lib/discord/thinking';
-import { interactionProblem, generateDefaultEmbed } from '#utils/embed';
-import { isNotCustom } from '#utils/env';
+import { generateDefaultEmbed, interactionProblem, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { bold, inlineCode } from 'discord.js';

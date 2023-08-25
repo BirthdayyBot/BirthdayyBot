@@ -1,6 +1,6 @@
 import { container } from '@sapphire/pieces';
 import type { MessageCreateOptions, MessageEditOptions, MessagePayload } from 'discord.js';
-import { getTextChannel } from './channel';
+import { getTextChannel } from './channel.js';
 
 export async function fetchMessage(channel_id: string, message_id: string) {
 	const channel = await container.client.channels.fetch(channel_id);

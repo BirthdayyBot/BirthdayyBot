@@ -1,7 +1,7 @@
 import { editMessage, sendMessage } from '#lib/discord';
 import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
-import { generateBirthdayList } from './birthday';
+import { generateBirthdayList } from './birthday.js';
 
 export async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);

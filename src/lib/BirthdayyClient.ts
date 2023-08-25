@@ -1,10 +1,10 @@
+import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
 import { PrismaClient } from '@prisma/client';
 import { container, SapphireClient } from '@sapphire/framework';
 import { getRootData } from '@sapphire/pieces';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
 import { join } from 'path';
-import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '../config';
 
 export class BirthdayyClient extends SapphireClient {
 	public constructor() {

@@ -1,13 +1,12 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
-import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { reply, resolveTarget } from '#utils/utils';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Prisma } from '@prisma/client';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Result } from '@sapphire/result';
-import { addBlacklistSubCommand } from './blacklist';
+import { addBlacklistSubCommand } from './blacklist.js';
 
 @RegisterSubCommand('blacklist', (builder) => addBlacklistSubCommand(builder))
 export class AddlacklistCommand extends Command {

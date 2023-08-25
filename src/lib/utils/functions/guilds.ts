@@ -1,4 +1,4 @@
-import { GuildIDEnum } from '#lib/types';
+import { GuildIDEnum } from '#utils/constants';
 import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
 import { MAIN_DISCORD } from '#utils/environment';
 import type { Guild } from '@prisma/client';

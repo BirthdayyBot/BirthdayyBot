@@ -1,1 +1,1 @@
-export * from './preconditions';
+export * from './preconditions/index.js';

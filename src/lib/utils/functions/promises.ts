@@ -1,4 +1,4 @@
-import type { PrismaErrorCodeEnum } from '#lib/types';
+import type { PrismaErrorCodeEnum } from '#utils/constants';
 import { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { isThenable, type Awaitable } from '@sapphire/utilities';

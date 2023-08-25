@@ -1,9 +1,9 @@
+import { ButtonID, remindMeButtonDisabledBuilder } from '#lib/components/button';
+import { editInteractionResponse } from '#lib/discord/interaction';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
-import { ButtonID, remindMeButtonDisabledBuilder } from '../lib/components/button';
-import { editInteractionResponse } from '../lib/discord/interaction';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {

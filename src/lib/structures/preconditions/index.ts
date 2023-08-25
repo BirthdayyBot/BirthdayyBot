@@ -1,1 +1,1 @@
-export * from './requiresUserPermissionsIfTargetIsNotAuthor';
+export * from './requiresUserPermissionsIfTargetIsNotAuthor.js';

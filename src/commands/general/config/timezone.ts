@@ -1,8 +1,6 @@
 import thinking from '#lib/discord/thinking';
-import { PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply } from '#utils';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 

@@ -2,10 +2,10 @@ import { HelpCMD } from '#lib/commands';
 import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
 import thinking from '#lib/discord/thinking';
 import { HelpEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#utils/embed';
-import { reply } from '#utils/utils';
+import { generateDefaultEmbed, reply } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
+
 @ApplyOptions<Command.Options>({
 	name: 'help',
 	description: 'Need help with my Commands?',

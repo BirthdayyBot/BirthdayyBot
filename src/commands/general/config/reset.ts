@@ -1,9 +1,7 @@
-import { configChoices, type ConfigName, configNameExtended } from '#lib/database';
+import { configChoices, configNameExtended, type ConfigName } from '#lib/database';
 import thinking from '#lib/discord/thinking';
-import { PrismaErrorCodeEnum } from '#lib/types';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { setDefaultConfig, resolveOnErrorCodesPrisma } from '#utils/functions';
-import { reply } from '#utils/utils';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply } from '#utils';
+import { resolveOnErrorCodesPrisma, setDefaultConfig } from '#utils/functions';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 

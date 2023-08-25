@@ -1,7 +1,5 @@
 import thinking from '#lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { PREMIUM_URL } from '#utils/environment';
-import { reply } from '#utils/utils';
+import { interactionProblem, interactionSuccess, PREMIUM_URL, reply } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
 

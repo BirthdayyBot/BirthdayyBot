@@ -1,8 +1,7 @@
 import { VoteCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
 import { VoteEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#utils/embed';
-import { reply } from '#utils/utils';
+import { generateDefaultEmbed, reply } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 

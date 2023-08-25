@@ -1,9 +1,5 @@
-import {
-	BrandingColors,
-	type ErrorDefaultSentryScope,
-	type ErrorHandlerOptions,
-	type RouteApiErrorHandler,
-} from '#lib/types';
+import { type ErrorDefaultSentryScope, type ErrorHandlerOptions, type RouteApiErrorHandler } from '#lib/types';
+import { BrandingColors } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isDevelopment } from '#utils/env';
 import { DEBUG } from '#utils/environment';

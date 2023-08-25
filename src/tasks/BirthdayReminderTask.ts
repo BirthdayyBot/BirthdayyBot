@@ -1,4 +1,10 @@
-import { BOT_ADMIN_LOG, Emojis, DEBUG, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
+import { getGuildInformation, getGuildMember } from '#lib/discord/guild';
+import { sendMessage } from '#lib/discord/message';
+import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isCustom } from '#utils/env';
+import { BOT_ADMIN_LOG, DEBUG, Emojis, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
+import { logAll } from '#utils/functions/config';
 import type { Birthday } from '@prisma/client';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -19,13 +25,8 @@ import {
 	type EmbedField,
 	type Snowflake,
 } from 'discord.js';
-import { getGuildInformation, getGuildMember } from '../lib/discord';
-import { sendMessage } from '../lib/discord/message';
-import { getCurrentOffset, type TimezoneObject } from '../lib/utils/common/date';
-import { generateDefaultEmbed } from '../lib/utils/embed';
-import { isCustom } from '../lib/utils/env';
-import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
-import { logAll } from '#utils/functions';
+import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
+import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 
 export interface BirthdayEventInfoModel {
 	userId: string;
@@ -140,9 +141,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
 				// TODO: Clean up in #407
-				await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error) => {
-					this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
-				});
+				await this.container.utilities.guild.update
+					.DisableGuildAndBirthdays(guildId, true)
+					.catch((error: PrismaClientUnknownRequestError) => {
+						this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+					});
 				eventInfo.error += ' - Guild & Birthdays disabled';
 			}
 			return eventInfo;
@@ -151,9 +154,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {
-				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
-					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
-				});
+				await this.container.utilities.birthday.delete
+					.ByGuildAndUser(guildId, userId)
+					.catch((error: PrismaClientUnknownRequestError) => {
+						this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
+					});
 				eventInfo.error += ' - Birthday deleted';
 			}
 			return eventInfo;
@@ -373,7 +378,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			files: [reportFile],
 		});
 
-		async function sendReport() {
+		function sendReport() {
 			return sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateDefaultEmbed({

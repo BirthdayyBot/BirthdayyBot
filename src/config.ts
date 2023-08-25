@@ -1,3 +1,5 @@
+import { BirthdayyBotId } from '#utils/constants';
+import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
@@ -17,8 +19,6 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
-import { BirthdayyBotId } from './lib/utils/constants';
-import { isProduction } from './lib/utils/env';
 
 function parseApi(): ServerOptions {
 	return {

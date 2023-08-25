@@ -1,8 +1,8 @@
+import type { Birthday, Blacklist, Guild, User } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
-import type { Birthday, Blacklist, Guild, User } from '../../utilities/db';
-import type { Events } from './Enums';
+import type { Events } from './Enums.js';
 
 declare module '@skyra/env-utilities' {
 	interface Env {

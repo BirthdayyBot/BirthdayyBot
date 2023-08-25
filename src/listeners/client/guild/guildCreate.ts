@@ -1,11 +1,9 @@
-import { sendDMMessage, getUserInfo, sendMessage } from '#lib/discord';
+import { getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
 import { GuideEmbed } from '#lib/embeds';
-import { BrandingColors } from '#lib/types';
-import { generateDefaultEmbed } from '#utils/embed';
-import { IS_CUSTOM_BOT, Emojis, BOT_NAME, BOT_SERVER_LOG } from '#utils/environment';
+import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { type ListenerOptions, Listener, container } from '@sapphire/framework';
-import { Events, Guild, type Snowflake, PermissionFlagsBits, AuditLogEvent, DiscordAPIError, time } from 'discord.js';
+import { Listener, container, type ListenerOptions } from '@sapphire/framework';
+import { AuditLogEvent, DiscordAPIError, Events, Guild, PermissionFlagsBits, time, type Snowflake } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {

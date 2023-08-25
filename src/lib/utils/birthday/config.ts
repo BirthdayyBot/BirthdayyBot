@@ -1,12 +1,11 @@
+import { getGuildInformation } from '#lib/discord/guild';
+import { Emojis } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
 import type { Guild as PrismaGuild } from '@prisma/client';
 import { container } from '@sapphire/framework';
-import type { APIEmbed, Guild, Snowflake } from 'discord.js';
-
 import { objectEntries } from '@sapphire/utilities';
+import type { APIEmbed, Guild, Snowflake } from 'discord.js';
 import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
-import { getGuildInformation } from '../../discord';
-import { generateDefaultEmbed } from '../embed';
-import { Emojis } from '../environment';
 
 interface ConfigListOptions {
 	guild?: Guild;

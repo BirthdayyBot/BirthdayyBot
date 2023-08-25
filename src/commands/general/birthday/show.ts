@@ -1,16 +1,14 @@
-import { PrismaErrorCodeEnum, defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
+import { Emojis, PrismaErrorCodeEnum, defaultEmbed, interactionProblem, reply, resolveTarget } from '#utils';
 import { formatDateForDisplay } from '#utils/common';
-import { defaultEmbed, interactionProblem } from '#utils/embed';
-import { Emojis } from '#utils/environment';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
-import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { bold } from 'discord.js';
-import { BirthdayApplicationCommandMentions, showBirthdaySubCommand } from './birthday';
+import { BirthdayApplicationCommandMentions, showBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => showBirthdaySubCommand(builder))
 export class ShowCommand extends Command {

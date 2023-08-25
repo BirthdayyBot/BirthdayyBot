@@ -1,7 +1,7 @@
+import { isProduction } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Result } from '@sapphire/result';
-import { isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',

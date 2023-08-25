@@ -1,7 +1,5 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
-import { defaultEmbed } from '#utils/embed';
-import { Emojis } from '#utils/environment';
-import { reply } from '#utils/utils';
+import { Emojis, defaultEmbed, reply } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';

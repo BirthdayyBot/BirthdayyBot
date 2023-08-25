@@ -7,16 +7,16 @@
         "baseUrl": ".",
         "paths": {
             "#utils/*": [
-                "lib/utils/*"
+                "lib/utils/*.js"
             ],
             "#lib/*": [
-                "lib/*"
+                "lib/*.js"
             ],
             "#languages": [
-                "languages/index"
+                "languages/index.js"
             ],
             "#root/*": [
-                "*"
+                "*.js"
             ]
         },
         "composite": true

@@ -1,10 +1,9 @@
 import thinking from '#lib/discord/thinking';
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
-import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
 import { updateBirthdayOverview } from '#utils/birthday';
 import { formatDateForDisplay, getDateFromInteraction } from '#utils/common';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { reply, resolveTarget } from '#utils/utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Prisma } from '@prisma/client';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
@@ -12,7 +11,7 @@ import { container } from '@sapphire/framework';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Result } from '@sapphire/result';
 import { bold } from 'colorette';
-import { BirthdayApplicationCommandMentions, updateBirthdaySubCommand } from './birthday';
+import { BirthdayApplicationCommandMentions, updateBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => updateBirthdaySubCommand(builder))
 export class UpdateCommand extends Command {

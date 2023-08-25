@@ -1,10 +1,10 @@
+import { getUserInfo } from '#lib/discord/user';
+import { VoteEmbed } from '#lib/embeds/vote';
+import { generateDefaultEmbed } from '#utils/embed';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { envParseString } from '@skyra/env-utilities';
 import type { Snowflake } from 'discord.js';
-import { getUserInfo } from '../lib/discord';
-import { VoteEmbed } from '../lib/embeds';
-import { generateDefaultEmbed } from '../lib/utils/embed';
 
 interface VoteReminderTaskPayload {
 	memberId: Snowflake;

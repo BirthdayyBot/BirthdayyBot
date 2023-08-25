@@ -1,7 +1,6 @@
 import thinking from '#lib/discord/thinking';
 import generateConfigList from '#utils/birthday/config';
-import { generateDefaultEmbed } from '#utils/embed';
-import { reply } from '#utils/utils';
+import { generateDefaultEmbed, reply } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 
 @RegisterSubCommand('config', (builder) =>

@@ -2,8 +2,7 @@ import { InviteCMD } from '#lib/commands';
 import { inviteBirthdayyButton } from '#lib/components/button';
 import thinking from '#lib/discord/thinking';
 import { InviteEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#utils/embed';
-import { reply } from '#utils/utils';
+import { generateDefaultEmbed, reply } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 

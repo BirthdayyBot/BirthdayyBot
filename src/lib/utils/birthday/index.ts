@@ -1,3 +1,3 @@
-export * from './birthday';
-export * from './config';
-export * from './overview';
+export * from './birthday.js';
+export * from './config.js';
+export * from './overview.js';

@@ -1,16 +1,16 @@
 import { chatInputApplicationCommandMention } from 'discord.js';
 
-export * from './count';
-export * from './guide';
-export * from './guildInfo';
-export * from './help';
-export * from './invite';
-export * from './stats';
-export * from './support';
-export * from './template';
-export * from './reminder';
-export * from './vote';
-export * from './uwu';
+export * from './count.js';
+export * from './guide.js';
+export * from './guildInfo.js';
+export * from './help.js';
+export * from './invite.js';
+export * from './stats.js';
+export * from './support.js';
+export * from './template.js';
+export * from './reminder.js';
+export * from './vote.js';
+export * from './uwu.js';
 
 // CONFIG
 export const CONFIG_LIST = chatInputApplicationCommandMention('config', 'list', '935174203882217483');

@@ -1,11 +1,10 @@
 import thinking from '#lib/discord/thinking';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
 import { generateBirthdayList } from '#utils/birthday';
-import { generateDefaultEmbed } from '#utils/embed';
-import { reply } from '#utils/utils';
+import { generateDefaultEmbed, reply } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
-import { listBirthdaySubCommand } from './birthday';
+import { listBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => listBirthdaySubCommand(builder))
 export class ListCommand extends Command {

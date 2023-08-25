@@ -1,9 +1,6 @@
 import thinking from '#lib/discord/thinking';
-import { generateDefaultEmbed } from '#utils/embed';
-import { isCustom, isProduction } from '#utils/env';
-import { APP_ENV } from '#utils/environment';
+import { APP_ENV, generateDefaultEmbed, isCustom, isProduction, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';

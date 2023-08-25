@@ -1,7 +1,7 @@
 import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
-import dayjstimezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import dayjstimezone from 'dayjs/plugin/timezone.js';
+import utc from 'dayjs/plugin/utc.js';
 import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
 import { addZeroToSingleDigitNumber, checkIfLengthIsTwo } from '#utils/common';
 

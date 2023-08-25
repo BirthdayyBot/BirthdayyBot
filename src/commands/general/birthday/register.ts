@@ -1,14 +1,13 @@
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
-import { defaultClientPermissions, defaultUserPermissions, PrismaErrorCodeEnum } from '#lib/types';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/index';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
 import { updateBirthdayOverview } from '#utils/birthday';
 import { getDateFromInteraction } from '#utils/common';
-import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import { reply, resolveTarget } from '#utils/utils';
+import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
 import { resolveKey } from '@sapphire/plugin-i18next';
-import { BirthdayApplicationCommandMentions, registerBirthdaySubCommand } from './birthday';
+import { BirthdayApplicationCommandMentions, registerBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => {
 	return registerBirthdaySubCommand(builder);

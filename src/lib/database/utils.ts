@@ -1,4 +1,4 @@
-import type { ConfigName } from './types';
+import type { ConfigName } from './types.js';
 
 export const configNameExtended: Record<ConfigName, string> = {
 	birthdayRole: 'Birthday Role',

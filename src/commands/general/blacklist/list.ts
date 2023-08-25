@@ -1,13 +1,11 @@
 import thinking from '#lib/discord/thinking';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { generateDefaultEmbed } from '#utils/embed';
-import { Emojis, IMG_BLOCK } from '#utils/environment';
-import { reply } from '#utils/utils';
+import { Emojis, IMG_BLOCK, generateDefaultEmbed, reply } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Blacklist } from '@prisma/client';
 import { RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
 import { time, userMention } from 'discord.js';
-import { listBlacklistSubCommand } from './blacklist';
+import { listBlacklistSubCommand } from './blacklist.js';
 
 @RegisterSubCommand('blacklist', (builder) => listBlacklistSubCommand(builder))
 export class ListCommand extends Command {

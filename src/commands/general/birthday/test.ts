@@ -1,9 +1,8 @@
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { interactionSuccess } from '#utils/embed';
-import { reply, resolveTarget } from '#utils/utils';
+import { interactionSuccess, reply, resolveTarget } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext, RequiresUserPermissions } from '@sapphire/decorators';
-import { testBirthdaySubCommand } from './birthday';
+import { testBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => testBirthdaySubCommand(builder))
 export class TestCommand extends Command {

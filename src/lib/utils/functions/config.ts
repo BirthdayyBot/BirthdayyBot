@@ -1,4 +1,4 @@
-import type { ConfigName } from '#lib/database';
+import type { ConfigName } from '#lib/database/types';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
@@ -49,7 +49,7 @@ export async function setDefaultConfigs(guildId: string) {
  * @param config_name - the config name to set
  * @param guildId - the guild id to set the config for
  */
-export async function setDefaultConfig(config_name: ConfigName, guildId: string) {
+export function setDefaultConfig(config_name: ConfigName, guildId: string) {
 	switch (config_name) {
 		case 'announcementChannel':
 			return container.utilities.guild.reset.AnnouncementChannel(guildId);

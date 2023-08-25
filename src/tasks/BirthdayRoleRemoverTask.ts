@@ -1,7 +1,7 @@
+import { getGuildMember, getGuildRole } from '#lib/discord/guild';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import type { Snowflake } from 'discord.js';
-import { getGuildMember, getGuildRole } from '../lib/discord';
 
 export interface RoleRemovePayload {
 	memberId: Snowflake;

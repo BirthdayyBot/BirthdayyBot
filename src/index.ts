@@ -1,9 +1,9 @@
 import './lib/setup/start';
 
+import { BirthdayyClient } from '#lib/BirthdayyClient';
+import { SENTRY_OPTIONS } from '#root/config';
 import { container } from '@sapphire/pieces';
 import * as Sentry from '@sentry/node';
-import { SENTRY_OPTIONS } from './config';
-import { BirthdayyClient } from './lib/BirthdayyClient';
 import { envIsDefined } from '@skyra/env-utilities';
 
 const client = new BirthdayyClient();

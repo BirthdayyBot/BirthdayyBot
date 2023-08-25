@@ -1,10 +1,7 @@
 import { StatsCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
+import { Emojis, generateDefaultEmbed, isDevelopment, reply } from '#utils';
 import { getCurrentOffset } from '#utils/common';
-import { generateDefaultEmbed } from '#utils/embed';
-import { isDevelopment } from '#utils/env';
-import { Emojis } from '#utils/environment';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import type { APIEmbed } from 'discord.js';

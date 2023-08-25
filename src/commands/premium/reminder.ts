@@ -2,9 +2,8 @@ import { ReminderCMD } from '#lib/commands/reminder';
 import { inviteBirthdayyButton } from '#lib/components/button';
 import thinking from '#lib/discord/thinking';
 import { InviteEmbed } from '#lib/embeds';
-import { generateDefaultEmbed } from '#utils/embed';
+import { generateDefaultEmbed, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 
