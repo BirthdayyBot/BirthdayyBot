@@ -444,6 +444,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@influxdata/influxdb-client@npm:^1.33.2":
+  version: 1.33.2
+  resolution: "@influxdata/influxdb-client@npm:1.33.2"
+  checksum: f3f054ddc180adfe114cbcc51ac1b9eb22daca4aecf678778fccf5241398fbda87e8d1a405ae5d73b293e2ef3d26e73789e245287bf29050d4bb9437b5a1990c
+  languageName: node
+  linkType: hard
+
 "@ioredis/commands@npm:^1.1.1":
   version: 1.2.0
   resolution: "@ioredis/commands@npm:1.2.0"
@@ -486,6 +493,24 @@ __metadata:
     "@jridgewell/resolve-uri": ^3.0.3
     "@jridgewell/sourcemap-codec": ^1.4.10
   checksum: d89597752fd88d3f3480845691a05a44bd21faac18e2185b6f436c3b0fd0c5a859fbbd9aaa92050c4052caf325ad3e10e2e1d1b64327517471b7d51babc0ddef
+  languageName: node
+  linkType: hard
+
+"@kaname-png/plugin-influxdb@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@kaname-png/plugin-influxdb@npm:1.1.0"
+  dependencies:
+    tslib: ^2.5.3
+  checksum: 6d73b67e2848bff7f30dc5079ff219e05b868b07082d6691e5475e23cf998909d380000b2cc66b8725af0b4b6eb7ec75025518954638c183c4907045140b3cfd
+  languageName: node
+  linkType: hard
+
+"@kaname-png/plugin-sentry@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@kaname-png/plugin-sentry@npm:1.1.0"
+  dependencies:
+    tslib: ^2.5.2
+  checksum: dd6f3eccc7e2bf8bbd815010ed7fb97391c6aaf955da2d84dd6435a4395b511bdcd096da421a3bf8bc1a7a1dfe14c39dec2217a3659c9dbb26dea27e05f4b9a3
   languageName: node
   linkType: hard
 
@@ -1812,6 +1837,9 @@ __metadata:
     "@commitlint/cli": ^17.7.1
     "@commitlint/config-conventional": ^17.7.0
     "@devtomio/plugin-botlist": ^1.3.0
+    "@influxdata/influxdb-client": ^1.33.2
+    "@kaname-png/plugin-influxdb": ^1.1.0
+    "@kaname-png/plugin-sentry": ^1.1.0
     "@kaname-png/plugin-subcommands-advanced": ^2.2.3
     "@prisma/client": ^5.2.0
     "@sapphire/cli": ^1.6.1
@@ -6233,7 +6261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.5.3, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
+"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.5.2, tslib@npm:^2.5.3, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad

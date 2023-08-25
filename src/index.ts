@@ -1,16 +1,12 @@
-import './lib/setup/start';
+import './lib/setup/start.js';
 
 import { BirthdayyClient } from '#lib/BirthdayyClient';
-import { SENTRY_OPTIONS } from '#root/config';
 import { container } from '@sapphire/pieces';
-import * as Sentry from '@sentry/node';
-import { envIsDefined } from '@skyra/env-utilities';
 
 const client = new BirthdayyClient();
 
 async function main() {
 	try {
-		if (envIsDefined('SENTRY_DSN')) Sentry.init(SENTRY_OPTIONS);
 		await container.prisma.$connect();
 		await client.login();
 	} catch (error) {

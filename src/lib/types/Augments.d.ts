@@ -3,6 +3,7 @@ import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
 import type { Events } from './Enums.js';
+import type { WritePrecisionType } from '@influxdata/influxdb-client';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -59,6 +60,17 @@ declare module '@skyra/env-utilities' {
 		// Webhooks
 		DISCORD_ERROR_WEBHOOK_ID?: string;
 		DISCORD_ERROR_WEBHOOK_TOKEN?: string;
+
+		// Influx
+		INFLUX_OPTIONS_STRING: string;
+		INFLUX_URL: string;
+		INFLUX_HEADERS: string;
+		INFLUX_PROXY_URL: string;
+		INFLUX_TIMEOUT: `${number}`;
+		INFLUX_TOKEN: string;
+		INFLUX_ORG: string;
+		INFLUX_WRITE_BUCKET: string;
+		INFLUX_WRITE_PRECISION: WritePrecisionType;
 	}
 }
 
@@ -79,7 +91,6 @@ declare module '@sapphire/framework' {
 	}
 
 	interface SapphireClient {
-		emit(event: Events.PostStatsError, error: Error): boolean;
 		emit(event: Events.PostStatsSuccess): boolean;
 	}
 }

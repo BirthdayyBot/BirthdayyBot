@@ -33,7 +33,6 @@ export async function docsButtonBuilder(target: Target) {
 
 export async function inviteBirthdayyButton(target: Target) {
 	const label = await resolveKey(target, 'button:inviteBithdayy');
-	console.log(label);
 	return defaultButtonBuilder()
 		.setLabel(label)
 		.setURL(
