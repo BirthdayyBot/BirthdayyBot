@@ -18,6 +18,7 @@
     "#root/*": "./dist/*.js",
     "#languages": "./dist/languages/index.js",
     "#utils": "./dist/lib/utils/index.js",
+    "#utils/*": "./dist/lib/utils/*.js",
     "#utils/common": "./dist/lib/utils/common/index.js",
     "#utils/functions": "./dist/lib/utils/functions/index.js",
     "#utils/birthday": "./dist/lib/utils/birthday/index.js"

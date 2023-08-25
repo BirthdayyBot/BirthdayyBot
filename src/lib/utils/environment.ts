@@ -2,11 +2,11 @@ import { BirthdayyBotId, BrandingColors, Emojis, GuildIDEnum, OwnerID } from '#u
 import { isCustom, isProduction } from '#utils/env';
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { PermissionsBitField } from 'discord.js';
-import { join } from 'path';
+import { join, resolve } from 'path';
 
 // DIRECTORY
-export const ROOT_DIR = join(__dirname, '..', '..', '..');
-export const SRC_DIR = join(ROOT_DIR, 'src');
+export const SRC_DIR = resolve('src');
+export const ROOT_DIR = join(SRC_DIR, '../');
 
 export const DEBUG = envParseBoolean('DEBUG', true);
 export const APP_ENV = envParseString('APP_ENV');

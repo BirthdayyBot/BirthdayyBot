@@ -1,15 +1,15 @@
 import { container } from '@sapphire/pieces';
-import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
 import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
 import { addZeroToSingleDigitNumber, checkIfLengthIsTwo } from '#utils/common';
+import dayjs from 'dayjs';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
 
 export interface TimezoneObject {
-	date: Dayjs;
+	date: import('dayjs').Dayjs;
 	dateFormatted: string;
 	utcOffset?: keyof typeof TIMEZONE_VALUES;
 	timezone?: typeof TIMEZONE_VALUES;
@@ -20,7 +20,7 @@ export interface TimezoneObject {
  * @param timezone - The timezone to use.
  * @returns  The date.
  */
-export function getCurrentDate(timezone = 'UTC'): Dayjs {
+export function getCurrentDate(timezone = 'UTC'): import('dayjs').Dayjs {
 	const today = dayjs();
 	const date = dayjs.tz(today, timezone);
 	return date;
@@ -67,7 +67,7 @@ export function numberToMonthName(number: number) {
 	return months[number];
 }
 
-export function getStringDate(date: Dayjs) {
+export function getStringDate(date: import('dayjs').Dayjs) {
 	const day = date.date();
 	const month = date.month() + 1;
 	const year = date.year();
