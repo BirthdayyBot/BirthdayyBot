@@ -1,18 +1,18 @@
 {
   "embedDescription": "{{emoji}} Ved å skrive **/help** i chatten kan du sjekke ut alle funksjonene mine og tilgjengelige kommandoer.",
   "embedTitle": "{{emoji}} {{name}}-veiledning!",
-  "guideDescription": "Trenger en rask oppsettguide! \nIkke bekymre deg, dette vil hjelpe deg!",
+  "guideDescription": "Trenger en rask oppsettguide! Ikke bekymre deg, dette vil hjelpe deg!",
   "guideName": "guide",
   "embedConfigField": {
     "name": "Konfigurer Birthdayy",
-    "value": "{{emoji}} Sørg for å angi **serverkonfigurasjonene** med **/config <config>**!\n\n{{emoji}} Bruk {{kommando}} for å se gjeldende konfigurasjonsinnstilling."
+    "value": "{{emoji}} Sørg for å angi **serverkonfigurasjonene** med **/config <config>**!\n{{emoji}} Bruk {{kommando}} for å se gjeldende konfigurasjonsinnstilling."
   },
   "embedImportantField": {
     "name": "Viktig",
-    "value": "{{emojis.exclamation}} Min **høyeste** rolle må være **over** bursdagsbarnrollen.\n\n{{emojis.arrowRight}} Bli med i [Birthdayy HQ]({{invite}}) for å møte utvikleren og hjelpe til med å forbedre Birthdayy {{emojis.cake}}\n\n{{emojis.heart}} Liker du **bursdag**? \nVurder å [invitere]({{invitere}}) og [stemme]({{stemme}}) for meg!\n\n{{emojis.plus}} Vil du ha tilgang til betafunksjoner? \n[Støtt oss på Patreon]({{premium}})"
+    "value": "{{emojis.exclamation}} Min **høyeste** rolle må være **over** bursdagsbarnrollen.\n{{emojis.arrowRight}} Bli med i [Birthdayy HQ]({{invite}}) for å møte utvikleren og hjelpe til med å forbedre Birthdayy {{emojis.cake}}\n{{emojis.heart}} Liker du **bursdag**? \nVurder å [invitere]({{invitere}}) og [stemme]({{stemme}}) for meg!\n{{emojis.plus}} Vil du ha tilgang til betafunksjoner? \n[Støtt oss på Patreon]({{premium}})"
   },
   "embedStartedField": {
     "name": "Kom i gang",
-    "value": "{{emoji}} Registrer bursdagen din med {{command}}\n\n{{emoji}} Finn mer på [Dokumentasjon]({{url}})"
+    "value": "{{emoji}} Registrer bursdagen din med {{command}}\n{{emoji}} Finn mer på [Dokumentasjon]({{url}})"
   }
 }

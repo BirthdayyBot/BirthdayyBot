@@ -1,18 +1,18 @@
 {
   "embedDescription": "{{emoji}} Door **/help** in de chat te typen, kun je al mijn functies en beschikbare opdrachten bekijken.",
   "embedTitle": "{{emoji}} {{name}} Gids!",
-  "guideDescription": "Een snelle installatiegids nodig! \nMaak je geen zorgen, dit zal je helpen!",
+  "guideDescription": "Een snelle installatiegids nodig! Maak je geen zorgen, dit zal je helpen!",
   "guideName": "gids",
   "embedConfigField": {
     "name": "Configureer Verjaardag",
-    "value": "{{emoji}} Zorg ervoor dat je **Serverconfiguraties** instelt met **/config <config>**!\n\n{{emoji}} Gebruik {{command}} om uw huidige configuratie-instelling te bekijken."
+    "value": "{{emoji}} Zorg ervoor dat je **Serverconfiguraties** instelt met **/config <config>**!\n{{emoji}} Gebruik {{command}} om uw huidige configuratie-instelling te bekijken."
   },
   "embedImportantField": {
     "name": "Belangrijk",
-    "value": "{{emojis.exclamation}} Mijn **hoogste** rol moet **boven** de rol van het jarige kind liggen.\n\n{{emojis.arrowRight}} Sluit je aan bij het [Birthdayy HQ]({{invite}}) om de ontwikkelaar te ontmoeten en te helpen Birthdayy {{emojis.cake}} te verbeteren\n\n{{emojis.heart}} Vind je **Verjaardag** leuk? \nOverweeg [uitnodigen]({{invite}}) en [voting]({{vote}}) voor mij!\n\n{{emojis.plus}} Wil je toegang tot bètafuncties? \n[Steun ons op Patreon]({{premium}})"
+    "value": "{{emojis.exclamation}} Mijn **hoogste** rol moet **boven** de rol van het jarige kind liggen.\n{{emojis.arrowRight}} Sluit je aan bij het [Birthdayy HQ]({{invite}}) om de ontwikkelaar te ontmoeten en te helpen Birthdayy {{emojis.cake}} te verbeteren\n{{emojis.heart}} Vind je **Verjaardag** leuk? \nOverweeg [uitnodigen]({{invite}}) en [voting]({{vote}}) voor mij!\n{{emojis.plus}} Wil je toegang tot bètafuncties? \n[Steun ons op Patreon]({{premium}})"
   },
   "embedStartedField": {
     "name": "Begin",
-    "value": "{{emoji}} Registreer je verjaardag met {{command}}\n\n{{emoji}} Vind meer over [Documentatie]({{url}})"
+    "value": "{{emoji}} Registreer je verjaardag met {{command}}\n{{emoji}} Vind meer over [Documentatie]({{url}})"
   }
 }

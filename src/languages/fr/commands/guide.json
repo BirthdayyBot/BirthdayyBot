@@ -1,18 +1,18 @@
 {
   "embedDescription": "{{emoji}} En tapant **/help** dans le chat, vous pouvez consulter toutes mes fonctionnalités et commandes disponibles.",
   "embedTitle": "{{emoji}} {{nom}} Guide !",
-  "guideDescription": "Besoin d'un guide d'installation rapide ! \nNe vous inquiétez pas, cela vous aidera !",
+  "guideDescription": "Besoin d'un guide d'installation rapide ! Ne vous inquiétez pas, cela vous aidera !",
   "guideName": "guide",
   "embedConfigField": {
     "name": "Configurer l'anniversaire",
-    "value": "{{emoji}} Assurez-vous de définir vos **configurations de serveur** avec **/config <config>** !\n\n{{emoji}} Utilisez {{command}} pour voir votre paramètre de configuration actuel."
+    "value": "{{emoji}} Assurez-vous de définir vos **configurations de serveur** avec **/config <config>** !\n{{emoji}} Utilisez {{command}} pour voir votre paramètre de configuration actuel."
   },
   "embedImportantField": {
     "name": "Important",
-    "value": "{{emojis.exclamation}} Mon rôle **le plus élevé** doit être **au-dessus** du rôle de l'enfant fêté.\n\n{{emojis.arrowRight}} Rejoignez le [Birthdayy HQ]({{invite}}) pour rencontrer le développeur et contribuer à l'amélioration de Birthdayy {{emojis.cake}}\n\n{{emojis.heart}} Vous aimez **Anniversaire** ? \nPensez à [inviter]({{invite}}) et [voter]({{vote}}) pour moi !\n\n{{emojis.plus}} Vous voulez accéder aux fonctionnalités bêta ? \n[Soutenez-nous sur Patreon]({{premium}})"
+    "value": "{{emojis.exclamation}} Mon rôle **le plus élevé** doit être **au-dessus** du rôle de l'enfant fêté.\n{{emojis.arrowRight}} Rejoignez le [Birthdayy HQ]({{invite}}) pour rencontrer le développeur et contribuer à l'amélioration de Birthdayy {{emojis.cake}}\n{{emojis.heart}} Vous aimez **Anniversaire** ? \nPensez à [inviter]({{invite}}) et [voter]({{vote}}) pour moi !\n{{emojis.plus}} Vous voulez accéder aux fonctionnalités bêta ? \n[Soutenez-nous sur Patreon]({{premium}})"
   },
   "embedStartedField": {
     "name": "Commencer",
-    "value": "{{emoji}} Enregistrez votre anniversaire avec {{command}}\n\n{{emoji}} En savoir plus sur [Documentation]({{url}})"
+    "value": "{{emoji}} Enregistrez votre anniversaire avec {{command}}\n{{emoji}} En savoir plus sur [Documentation]({{url}})"
   }
 }

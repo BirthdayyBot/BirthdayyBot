@@ -6,6 +6,7 @@ import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, type APIEmbedField } from 'discord.js';
 import { BirthdayApplicationCommandMentions } from './birthday/birthday.js';
 import { ConfigApplicationCommandMentions } from './config/config.js';
+import { getCommandGuilds } from '#utils/functions/guilds';
 
 @ApplyOptions<Command.Options>({
 	preconditions: [['DMOnly', 'GuildTextOnly']],
@@ -13,8 +14,10 @@ import { ConfigApplicationCommandMentions } from './config/config.js';
 	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
 })
 export class GuideCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand((builder) => applyLocalizedBuilder(builder, 'commands/guide:guide'));
+	public override async registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand((builder) => applyLocalizedBuilder(builder, 'commands/guide:guide'), {
+			guildIds: await getCommandGuilds('global'),
+		});
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
@@ -33,7 +36,7 @@ export class GuideCommand extends Command {
 		return new EmbedBuilder(defaultEmbed())
 			.setTitle(
 				await resolveKey(interaction, 'commands/guide:embedTitle', {
-					name: BOT_NAME ?? interaction.client.user.username,
+					name: BOT_NAME || interaction.client.user.username,
 					emoji: Emojis.Heart,
 				}),
 			)
