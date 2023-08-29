@@ -40,7 +40,7 @@
   "devDependencies": {
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^5.0.1",
-    "@sapphire/ts-config": "^4.0.1",
+    "@sapphire/ts-config": "^5.0.0",
     "@types/node": "^20.5.7",
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
