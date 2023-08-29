@@ -7,6 +7,7 @@
     ],
     "compilerOptions": {
         "tsBuildInfoFile": "dist/.tsbuildinfo",
+        "skipLibCheck": true,
         "removeComments": true
     }
 }
