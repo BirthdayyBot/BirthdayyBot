@@ -1,7 +1,11 @@
 {
-    "extends": "@sapphire/ts-config/extra-strict",
+    "extends": [
+        "@sapphire/ts-config",
+        "@sapphire/ts-config/extra-strict",
+        "@sapphire/ts-config/decorators",
+        "@sapphire/ts-config/verbatim"
+    ],
     "compilerOptions": {
-        "moduleResolution": "Node16",
         "tsBuildInfoFile": "dist/.tsbuildinfo",
         "removeComments": true
     }
