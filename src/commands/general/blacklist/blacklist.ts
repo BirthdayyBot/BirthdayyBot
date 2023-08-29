@@ -4,7 +4,7 @@ import { getCommandGuilds } from '#utils/functions';
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
-import type { SlashCommandSubcommandBuilder } from 'discord.js';
+import { chatInputApplicationCommandMention, type SlashCommandSubcommandBuilder } from 'discord.js';
 
 export class BlacklistCommand extends Subcommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -20,6 +20,12 @@ export class BlacklistCommand extends Subcommand {
 		);
 	}
 }
+
+export const BlacklistApplicationCommandMentions = {
+	Add: chatInputApplicationCommandMention('blacklist', 'add', ''),
+	List: chatInputApplicationCommandMention('blacklist', 'list', ''),
+	Remove: chatInputApplicationCommandMention('blacklist', 'remove', ''),
+} as const;
 
 export function addBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:add').addUserOption((option) =>

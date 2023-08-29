@@ -1,0 +1,18 @@
+{
+  "embedDescription": "{{emoji}} Pokalbyje įvedę **/help** galite peržiūrėti visas mano funkcijas ir galimas komandas.",
+  "embedTitle": "{{emoji}} {{name}} vadovas!",
+  "guideDescription": "Reikia greito sąrankos vadovo! \nNesijaudinkite, tai jums padės!",
+  "guideName": "vadovas",
+  "embedConfigField": {
+    "name": "Konfigūruoti Birthday",
+    "value": "{{emoji}} Būtinai nustatykite **Serverio konfigūracijas** naudodami **/config <config>**!\n\n{{emoji}} Norėdami pamatyti dabartinį konfigūracijos nustatymą, naudokite {{command}}."
+  },
+  "embedImportantField": {
+    "name": "Svarbu",
+    "value": "{{emojis.exclamation}} Mano **aukščiausias** vaidmuo turi būti **viršesnis** gimtadienio vaiko vaidmuo.\n\n{{emojis.arrowRight}} Prisijunkite prie [Birthdayy HQ]({{invite}}), kad susitiktumėte su kūrėju ir padėtumėte tobulinti Birthdayy {{emojis.cake}}\n\n{{emojis.heart}} Patinka **Gimtadienis**? \nApsvarstykite galimybę [pakviesti]({{invite}}) ir [balsuoti]({{balsuoti}}) už mane!\n\n{{emojis.plus}} Norite pasiekti beta versijos funkcijas? \n[Palaikykite mus naudodami Patreon] ({{premium}})"
+  },
+  "embedStartedField": {
+    "name": "Pradėti",
+    "value": "{{emoji}} Užregistruokite savo gimtadienį naudodami {{command}}\n\n{{emoji}} Sužinokite daugiau [Dokumentacija]({{url}})"
+  }
+}

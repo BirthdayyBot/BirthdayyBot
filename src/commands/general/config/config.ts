@@ -1,7 +1,7 @@
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { ApplicationCommandRegistry } from '@sapphire/framework';
-import { PermissionFlagsBits } from 'discord.js';
+import { PermissionFlagsBits, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
 	name: 'config',
@@ -22,3 +22,14 @@ export class ConfigCommand extends Subcommand {
 		});
 	}
 }
+
+export const ConfigApplicationCommandMentions = {
+	AnnoncementChannel: chatInputApplicationCommandMention('config', 'annoncement-channel', '935174203882217483'),
+	AnnoncementMessage: chatInputApplicationCommandMention('config', 'annoncement-message', '935174203882217483'),
+	BirthdayRole: chatInputApplicationCommandMention('config', 'birthday-role', '935174203882217483'),
+	List: chatInputApplicationCommandMention('config', 'list', '935174203882217483'),
+	OverviewChannel: chatInputApplicationCommandMention('overview-channel', 'remove', '935174203882217483'),
+	PingRole: chatInputApplicationCommandMention('config', 'ping-role', '935174203882217483'),
+	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483'),
+	Timezone: chatInputApplicationCommandMention('config', 'timezone', '935174203882217483'),
+} as const;

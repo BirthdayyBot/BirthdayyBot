@@ -1,7 +1,6 @@
 import { chatInputApplicationCommandMention } from 'discord.js';
 
 export * from './count.js';
-export * from './guide.js';
 export * from './guildInfo.js';
 export * from './help.js';
 export * from './invite.js';

@@ -1,0 +1,18 @@
+{
+  "embedDescription": "{{emoji}} Genom att skriva **/help** i chatten kan du kolla in alla mina funktioner och tillgängliga kommandon.",
+  "embedTitle": "{{emoji}} {{name}} Guide!",
+  "guideDescription": "Behöver en snabb installationsguide! \nOroa dig inte, det här kommer att hjälpa dig!",
+  "guideName": "guide",
+  "embedConfigField": {
+    "name": "Konfigurera Birthdayy",
+    "value": "{{emoji}} Se till att ställa in dina **Serverkonfigurationer** med **/config <config>**!\n\n{{emoji}} Använd {{command}} för att se din nuvarande konfigurationsinställning."
+  },
+  "embedImportantField": {
+    "name": "Viktig",
+    "value": "{{emojis.exclamation}} Min **högsta** roll måste vara **över** födelsedagsbarnsrollen.\n\n{{emojis.arrowRight}} Gå med i [Birthdayy HQ]({{invite}}) för att träffa utvecklaren och hjälpa till att förbättra Birthdayy {{emojis.cake}}\n\n{{emojis.heart}} Gillar du **Födelsedag**? \nÖverväg att [bjuda in]({{bjuda in}}) och [rösta]({{vote}}) åt mig!\n\n{{emojis.plus}} Vill du ha tillgång till betafunktioner? \n[Stöd oss ​​på Patreon]({{premium}})"
+  },
+  "embedStartedField": {
+    "name": "Komma igång",
+    "value": "{{emoji}} Registrera din födelsedag med {{command}}\n\n{{emoji}} Läs mer på [Dokumentation]({{url}})"
+  }
+}

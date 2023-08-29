@@ -1,7 +1,7 @@
 import { Emojis, Permission_Bits } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { resolveKey, type Target } from '@sapphire/plugin-i18next';
-import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes } from 'discord.js';
+import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes, type ButtonComponentData } from 'discord.js';
 
 export const WebsiteUrl = (path?: string) => `https://birthdayy.xyz/${path ? `${path}` : ''}`;
 
@@ -12,7 +12,7 @@ export const enum ButtonID {
 	choiceDiscordInformation = 'choice-discord-information',
 }
 
-export function defaultButtonBuilder(data?: import('discord.js').ButtonComponentData) {
+export function defaultButtonBuilder(data?: ButtonComponentData) {
 	return new ButtonBuilder({
 		style: ButtonStyle.Link,
 		type: ComponentType.Button,
