@@ -10,8 +10,6 @@ export const LongWidthSpace = '\u3000';
 export const enum Emojis {
 	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
 	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
-	Yes = '<:checkmark_square_birthdayy:1102222019476586526>',
-	No = '<:cross_square_birthdayy:1102222032155988068> ',
 	ArrowRight = '<:arrow_right_birthdayy:1102221944016875650>',
 	ArrowLeft = '<:arrow_left_birthdayy:1102221941223477268>',
 	Plus = '<:plus_birthdayy:1102222100544110712>',
