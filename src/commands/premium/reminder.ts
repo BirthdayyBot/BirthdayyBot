@@ -1,8 +1,4 @@
 import { ReminderCMD } from '#lib/commands/reminder';
-import { inviteBirthdayyButton } from '#lib/components/button';
-import thinking from '#lib/discord/thinking';
-import { InviteEmbed } from '#lib/embeds';
-import { generateDefaultEmbed, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
@@ -22,17 +18,5 @@ export class GuideCommand extends Command {
 		});
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = generateDefaultEmbed(InviteEmbed);
-		await reply(interaction, {
-			embeds: [embed],
-			components: [
-				{
-					type: 1,
-					components: [await inviteBirthdayyButton(interaction)],
-				},
-			],
-		});
-	}
+	public override async chatInputRun(_interaction: Command.ChatInputCommandInteraction) {}
 }

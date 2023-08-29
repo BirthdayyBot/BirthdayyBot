@@ -1,5 +1,5 @@
 import { getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
-import { GuideEmbed } from '#lib/embeds';
+import { parseGuildEmbed } from '#root/commands/general/guide';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';
@@ -33,8 +33,8 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		await this.joinServerLog(guild, inviterId);
 
 		async function sendGuide(userId: string) {
-			const embed = generateDefaultEmbed(GuideEmbed);
-			await sendDMMessage(userId, {
+			const embed = await parseGuildEmbed(guild);
+			return sendDMMessage(userId, {
 				embeds: [embed],
 			});
 		}

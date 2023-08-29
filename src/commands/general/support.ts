@@ -33,10 +33,10 @@ export class SupportCommand extends Command {
 		]);
 
 		const embed = new EmbedBuilder(defaultEmbed()).setTitle(title).setDescription(description);
-		const components = new ActionRowBuilder<ButtonBuilder>().setComponents([
+		const components = new ActionRowBuilder<ButtonBuilder>().setComponents(
 			await inviteSupportDicordButton(interaction),
 			await docsButtonBuilder(interaction),
-		]);
+		);
 
 		return reply(interaction, {
 			embeds: [embed],

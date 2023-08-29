@@ -1,0 +1,6 @@
+{
+  "inviteName": "invite",
+  "inviteDescription": "Invite Birthdayy to your Discord Server!",
+  "embedTitle": "{{emoji}} Invite {{name}}",
+  "embedDescription": "{{emoji}} Click on the Button below, to invite {{name}} to your Discord Server!"
+}
