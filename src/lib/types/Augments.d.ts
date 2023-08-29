@@ -62,7 +62,7 @@ declare module '@skyra/env-utilities' {
 		DISCORD_ERROR_WEBHOOK_TOKEN?: string;
 
 		// Influx
-		INFLUX_OPTIONS_STRING: string;
+		INFLUX_OPTIONS_STRING?: string;
 		INFLUX_URL: string;
 		INFLUX_HEADERS: string;
 		INFLUX_PROXY_URL: string;
