@@ -1,5 +1,5 @@
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
-import { Emojis, PrismaErrorCodeEnum, defaultEmbed, interactionProblem, reply, resolveTarget } from '#utils';
+import { Emojis, PrismaErrorCodeEnum, interactionProblem, resolveTarget } from '#utils';
 import { formatDateForDisplay } from '#utils/common';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
@@ -9,6 +9,7 @@ import { resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { bold } from 'discord.js';
 import { BirthdayApplicationCommandMentions, showBirthdaySubCommand } from './birthday.js';
+import { replyToInteraction } from '#lib/discord/interaction';
 
 @RegisterSubCommand('birthday', (builder) => showBirthdaySubCommand(builder))
 export class ShowCommand extends Command {
@@ -26,36 +27,18 @@ export class ShowCommand extends Command {
 		);
 
 		if (isNullish(birthday)) {
-			return reply(
-				interaction,
-				interactionProblem(
-					await resolveKey(interaction, 'commands/birthday:show.notRegistered', {
-						command: BirthdayApplicationCommandMentions.Register,
-						...options,
-					}),
-				),
-			);
+			return interactionProblem(interaction, 'commands/birthday:show.notRegistered', {
+				command: BirthdayApplicationCommandMentions.Register,
+				...options,
+			});
 		}
 
-		const [title, description] = await Promise.all([
-			await resolveKey(interaction, 'commands/birthday:show.title', {
-				emoji: Emojis.Book,
-			}),
-			await resolveKey(interaction, 'commands/birthday:show.description', {
-				date: bold(formatDateForDisplay(birthday.birthday)),
-				emoji: Emojis.ArrowRight,
-				...options,
-			}),
-		]);
-
-		return reply(interaction, {
-			embeds: [
-				{
-					...defaultEmbed(),
-					title,
-					description,
-				},
-			],
+		const description = await resolveKey(interaction, 'commands/birthday:show.description', {
+			date: bold(formatDateForDisplay(birthday.birthday)),
+			emoji: Emojis.ArrowRight,
+			...options,
 		});
+
+		return replyToInteraction(interaction, description);
 	}
 }

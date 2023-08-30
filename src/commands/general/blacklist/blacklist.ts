@@ -29,13 +29,13 @@ export const BlacklistApplicationCommandMentions = {
 
 export function addBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:add').addUserOption((option) =>
-		userOptions(option, 'commands/blacklist:add.user'),
+		userOptions(option, 'commands/blacklist:add.user').setRequired(true),
 	);
 }
 
 export function removeBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:remove').addUserOption((option) =>
-		userOptions(option, 'commands/blacklist:remove.user'),
+		userOptions(option, 'commands/blacklist:remove.user').setRequired(true),
 	);
 }
 

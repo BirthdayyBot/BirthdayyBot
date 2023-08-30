@@ -1,55 +1,29 @@
-import thinking from '#lib/discord/thinking';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply } from '#utils';
-import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { defaultClientPermissions, defaultUserPermissions, hasBotChannelPermissions } from '#lib/types/permissions';
+import { interactionProblem, interactionSuccess } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { ChannelType, channelMention } from 'discord.js';
+import { RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
+import { ChannelType, channelMention, type PermissionResolvable } from 'discord.js';
+import { announcementChannelConfigSubCommand } from './config.js';
 
-@RegisterSubCommand('config', (builder) =>
-	builder
-		.setName('announcement-channel')
-		.setDescription("Announce if its somebody's birthday today")
-		.addChannelOption((option) =>
-			option
-				.setName('channel')
-				.setDescription('Channel where the announcement should get sent')
-				.addChannelTypes(ChannelType.GuildText)
-				.setRequired(true),
-		),
-)
-export class AnnouncementChannelCommand extends Command {
+@RegisterSubCommand('config', (builder) => announcementChannelConfigSubCommand(builder))
+export class UserCommand extends Command {
+	@RequiresClientPermissions(defaultClientPermissions)
+	@RequiresUserPermissions(defaultUserPermissions.add('ManageGuild'))
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
-
 		const channel = interaction.options.getChannel('channel', true, [ChannelType.GuildText]);
-		const guildClient = await interaction.guild.members.fetchMe();
-		const hasPermissionInNewChannel = channel.permissionsFor(guildClient).has(['ViewChannel', 'SendMessages']);
+		const permissions: PermissionResolvable[] = ['ViewChannel', 'SendMessages'];
+		const options = { channel: channelMention(channel.id) };
 
-		if (!hasPermissionInNewChannel) {
-			return reply(
-				interaction,
-				interactionProblem(` I don't have permission to send messages in ${channelMention(channel.id)}.`),
-			);
+		if (!hasBotChannelPermissions({ interaction, channel, permissions })) {
+			return interactionProblem(interaction, `commands/config:announcementChannel.cannotPermissions`, options);
 		}
 
-		const birthday = await resolveOnErrorCodesPrisma(
-			this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { announcementChannel: channel.id },
-			}),
-			PrismaErrorCodeEnum.NotFound,
-		);
+		await this.container.prisma.guild.upsert({
+			where: { guildId: interaction.guildId },
+			create: { guildId: interaction.guildId, announcementChannel: channel.id },
+			update: { announcementChannel: channel.id },
+		});
 
-		if (isNullOrUndefinedOrEmpty(birthday)) {
-			return reply(
-				interaction,
-				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
-			);
-		}
-
-		return reply(
-			interaction,
-			interactionSuccess(`Successfully set the announcement channel to ${channelMention(channel.id)}.`),
-		);
+		return interactionSuccess(interaction, `commands/config:announcementChannel.success`, options);
 	}
 }

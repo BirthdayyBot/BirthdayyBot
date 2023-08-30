@@ -1,6 +1,6 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions } from '@sapphire/decorators';
@@ -28,8 +28,8 @@ export class RemoveCommand extends Command {
 		);
 
 		if (isNullOrUndefinedOrEmpty(result))
-			return reply(interaction, interactionProblem(`${userMention(user.id)} is not blacklisted.`, true));
+			return interactionProblem(interaction, `${userMention(user.id)} is not blacklisted.`);
 
-		return reply(interaction, interactionSuccess(`Removed ${userMention(user.id)} from the blacklist.`, true));
+		return interactionSuccess(interaction, `Removed ${userMention(user.id)} from the blacklist.`);
 	}
 }

@@ -5,7 +5,6 @@ import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, Messag
 
 @ApplyOptions<PreconditionOptions>({
 	name: 'IsNotBlacklisted',
-	position: 20,
 })
 export class IsNotBlacklistedPrecondition extends AllFlowsPrecondition {
 	#message = 'You are blacklisted from using Birthdayy on this.';

@@ -3,6 +3,7 @@ import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
 import { MAIN_DISCORD } from '#utils/environment';
 import type { Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
+import type { ChatInputCommandInteraction } from 'discord.js';
 
 export async function getCommandGuilds(
 	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
@@ -29,4 +30,10 @@ export async function getCommandGuilds(
 		default:
 			return undefined;
 	}
+}
+
+export async function createGuildInDB(interaction: ChatInputCommandInteraction<'cached'>) {
+	return container.prisma.guild.create({
+		data: { guildId: interaction.guildId },
+	});
 }

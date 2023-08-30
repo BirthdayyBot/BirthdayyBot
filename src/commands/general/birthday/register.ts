@@ -1,12 +1,12 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/index';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { updateBirthdayOverview } from '#utils/birthday';
 import { getDateFromInteraction } from '#utils/common';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
-import { resolveKey } from '@sapphire/plugin-i18next';
+import { isNullish } from '@sapphire/utilities';
 import { BirthdayApplicationCommandMentions, registerBirthdaySubCommand } from './birthday.js';
 
 @RegisterSubCommand('birthday', (builder) => {
@@ -30,15 +30,14 @@ export class ListCommand extends Command {
 			PrismaErrorCodeEnum.UniqueConstraintFailed,
 		);
 
-		const alreadyRegistered = await resolveKey(interaction, 'commands/birthday:register.alreadyRegistered', {
-			command: BirthdayApplicationCommandMentions.Update,
-		});
-
-		if (!birthday) return reply(interaction, interactionProblem(alreadyRegistered));
-
-		const success = await resolveKey(interaction, 'commands/birthday:register.success', options);
+		if (isNullish(birthday)) {
+			return interactionProblem(interaction, 'commands/birthday:register.alreadyRegistered', {
+				command: BirthdayApplicationCommandMentions.Update,
+			});
+		}
 
 		await updateBirthdayOverview(birthday.guildId);
-		return reply(interaction, interactionSuccess(success));
+
+		return interactionSuccess(interaction, 'commands/birthday:register.success', options);
 	}
 }

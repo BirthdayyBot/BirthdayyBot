@@ -1,11 +1,10 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
+import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import type { Prisma } from '@prisma/client';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
-import { resolveKey } from '@sapphire/plugin-i18next';
-import { Result } from '@sapphire/result';
+import { isNullish } from '@sapphire/utilities';
 import { addBlacklistSubCommand } from './blacklist.js';
 
 @RegisterSubCommand('blacklist', (builder) => addBlacklistSubCommand(builder))
@@ -17,29 +16,20 @@ export class AddlacklistCommand extends Command {
 		const { user, options } = resolveTarget(interaction);
 
 		if (options.context === 'author') {
-			const message = await resolveKey(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
-			return reply(interaction, interactionProblem(message, true));
+			return interactionProblem(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
 		}
 
 		const data = { guildId: interaction.guildId, userId: user.id };
 
-		const result = await Result.fromAsync(await this.container.prisma.blacklist.create({ data }));
+		const result = await resolveOnErrorCodesPrisma(
+			this.container.prisma.blacklist.create({ data }),
+			PrismaErrorCodeEnum.UniqueConstraintFailed,
+		);
 
-		return result.match({
-			err: async (error: Prisma.PrismaClientKnownRequestError) => {
-				if (error.code === PrismaErrorCodeEnum.UniqueConstraintFailed) {
-					const message = await resolveKey(interaction, 'commands/blacklist:add.alReadyBlacklisted', options);
-					return reply(interaction, interactionProblem(message));
-				}
-				return reply(
-					interaction,
-					interactionProblem(await resolveKey(interaction, 'commands/blacklist:add.notAdded')),
-				);
-			},
-			ok: async () => {
-				const message = await resolveKey(interaction, 'commands/blacklist:add.success', options);
-				return reply(interaction, interactionSuccess(message));
-			},
-		});
+		if (isNullish(result)) {
+			return interactionProblem(interaction, 'commands/blacklist:add.alReadyBlacklisted', options);
+		}
+
+		return interactionSuccess(interaction, 'commands/blacklist:add.success', options);
 	}
 }

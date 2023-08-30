@@ -6,7 +6,6 @@ import { canManageRoles, isBotAdmin } from '#utils/functions';
 
 @ApplyOptions<PreconditionOptions>({
 	name: 'CanManageRoles',
-	position: 20,
 })
 export class CanManageRolesPrecondition extends Precondition {
 	#message = 'You need to have the `Manage Roles` permission to use this command.';

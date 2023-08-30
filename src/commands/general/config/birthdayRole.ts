@@ -1,38 +1,29 @@
-import thinking from '#lib/discord/thinking';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply } from '#utils';
-import { resolveOnErrorCodesPrisma } from '#utils/functions';
+import { interactionProblem, interactionSuccess } from '#utils';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import { birthdayRoleConfigSubCommand } from './config.js';
 import { roleMention } from 'discord.js';
 
-@RegisterSubCommand('config', (builder) =>
-	builder
-		.setName('birthday-role')
-		.setDescription('List all Birthdays in this Discord server')
-		.addRoleOption((option) =>
-			option.setName('role').setDescription('Role that should get assigned on a birthday').setRequired(true),
-		),
-)
+@RegisterSubCommand('config', (builder) => birthdayRoleConfigSubCommand(builder))
 export class ListCommand extends Command {
 	@RequiresClientPermissions(['ManageRoles'])
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
-
 		const role = interaction.options.getRole('role', true);
+		const bot = await interaction.guild.members.fetchMe();
+		const highestBotRole = bot.roles.highest;
 
-		const guild = await resolveOnErrorCodesPrisma(
-			this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { birthdayRole: role.id },
-			}),
-			PrismaErrorCodeEnum.NotFound,
-		);
-
-		if (isNullOrUndefinedOrEmpty(guild)) {
-			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
+		if (highestBotRole.position <= role.position) {
+			return interactionProblem(interaction, 'commands/config.birthdayRole.highestBotRole');
 		}
 
-		return reply(interaction, interactionSuccess(`Successfully set the birthday role to ${roleMention(role.id)}.`));
+		await this.container.prisma.guild.upsert({
+			create: { guildId: interaction.guildId, birthdayRole: role.id },
+			where: { guildId: interaction.guildId },
+			update: { birthdayRole: role.id },
+		});
+
+		return interactionSuccess(interaction, 'commands/config.birthdayRole.succes', {
+			role: roleMention(role.id),
+		});
 	}
 }

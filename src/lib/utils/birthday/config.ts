@@ -27,8 +27,10 @@ export default async function generateConfigList(guildId: Snowflake, options: Co
 	});
 }
 async function generateFields(guildId: string): Promise<APIEmbedField[]> {
-	let config = await container.prisma.guild.findUnique({
+	let config = await container.prisma.guild.upsert({
+		create: { guildId },
 		where: { guildId },
+		update: { guildId },
 		select: {
 			birthdayRole: true,
 			birthdayPingRole: true,

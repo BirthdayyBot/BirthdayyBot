@@ -1,8 +1,8 @@
-import type { APIEmbed, BaseMessageOptions, InteractionReplyOptions } from 'discord.js';
+import type { APIEmbed, ChatInputCommandInteraction, Message } from 'discord.js';
 import { BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT, BOT_AVATAR, Emojis } from '#utils/environment';
-
-type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
-type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;
+import { replyToInteraction } from '#lib/discord/interaction';
+import { resolveKey, type StringMap, type Target, type TOptions } from '@sapphire/plugin-i18next';
+import type { NonNullObject } from '@sapphire/utilities';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
@@ -24,52 +24,76 @@ export function defaultEmbed(): APIEmbed {
 
 export type APIEmbedWithoutDefault = Omit<APIEmbed, 'timestamp' | 'footer'>;
 
-export function success(description: string): APIEmbed {
+export async function success<T extends NonNullObject = StringMap>(
+	target: Target,
+	key: string,
+	options?: TOptions<T>,
+): Promise<APIEmbed> {
 	return {
 		...defaultEmbed(),
-		title: `${Emojis.Success} Success`,
-		description: `${Emojis.ArrowRight} ${description}`,
+		description: `${Emojis.Success} ${await resolveKey(target, key, options)}`,
 	};
 }
 
-export function messageSuccess(message: string): UniversalMessageOptions {
-	return {
+export async function messageSuccess<T extends NonNullObject = StringMap>(
+	message: Message,
+	key: string,
+	options?: TOptions<T>,
+) {
+	return message[message.editable ? 'edit' : 'reply']({
 		content: '',
-		embeds: [success(message)],
+		embeds: [await success(message, key, options)],
 		components: [],
-	};
+	});
 }
 
-export function interactionSuccess(message: string, ephemeral = true): UniversalInteractionOptions {
-	return {
+export async function interactionSuccess<T extends NonNullObject = StringMap>(
+	interaction: ChatInputCommandInteraction,
+	message: string,
+	options?: TOptions<T>,
+	ephemeral = true,
+) {
+	return replyToInteraction(interaction, {
 		content: '',
-		embeds: [success(message)],
+		embeds: [await success(interaction, message, options)],
 		components: [],
 		ephemeral,
-	};
+	});
 }
 
-export function problem(description: string): APIEmbed {
+export async function problem<T extends NonNullObject = StringMap>(
+	target: Target,
+	key: string,
+	options?: TOptions<T>,
+): Promise<APIEmbed> {
 	return {
 		...defaultEmbed(),
-		title: `${Emojis.Fail} Failure`,
-		description: `${Emojis.ArrowRight} ${description}`,
+		description: `${Emojis.Fail} ${await resolveKey(target, key, options)}`,
 	};
 }
 
-export function messageProblem(message: string): UniversalMessageOptions {
-	return {
+export async function messageProblem<T extends NonNullObject = StringMap>(
+	message: Message,
+	key: string,
+	options?: TOptions<T>,
+) {
+	return message[message.editable ? 'edit' : 'reply']({
 		content: '',
-		embeds: [problem(message)],
+		embeds: [await problem(message, key, options)],
 		components: [],
-	};
+	});
 }
 
-export function interactionProblem(message: string, ephemeral = true): UniversalInteractionOptions {
-	return {
+export async function interactionProblem<T extends NonNullObject = StringMap>(
+	interaction: ChatInputCommandInteraction,
+	message: string,
+	options?: TOptions<T>,
+	ephemeral = true,
+) {
+	return replyToInteraction(interaction, {
 		content: '',
-		embeds: [problem(message)],
+		embeds: [await problem(interaction, message, options)],
 		components: [],
 		ephemeral,
-	};
+	});
 }

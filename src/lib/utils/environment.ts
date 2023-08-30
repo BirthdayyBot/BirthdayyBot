@@ -51,6 +51,7 @@ export const Permission_Bits = [
 
 	PermissionsBitField.Flags.EmbedLinks,
 
+	PermissionsBitField.Flags.MentionEveryone,
 	PermissionsBitField.Flags.ManageChannels,
 	PermissionsBitField.Flags.ManageGuildExpressions,
 	PermissionsBitField.Flags.ManageMessages,

@@ -27,7 +27,6 @@ import {
 } from 'discord.js';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
-
 export interface BirthdayEventInfoModel {
 	userId: string;
 	guildId: string;
@@ -136,6 +135,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 			premium: guildIsPremium,
 		} = config;
 
+		let content: string | undefined;
+		if (birthdayPingRole) content = roleMention(birthdayPingRole);
+		if (birthdayPingRole === guildId) content = '@everyone';
+
 		const guild = await getGuildInformation(guildId);
 		if (!guild) {
 			eventInfo.error = 'Guild not found';
@@ -202,13 +205,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);
 
-		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
-
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,
-			content,
 			announcementChannel,
 			birthdayEmbed,
+			content,
 		);
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;
@@ -254,9 +255,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 	private async sendBirthdayAnnouncement(
 		guildId: Snowflake,
-		content: string,
 		channel_id: Snowflake,
 		birthdayEmbed: APIEmbed,
+		content?: string,
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,

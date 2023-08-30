@@ -1,12 +1,11 @@
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
-import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, reply, resolveTarget } from '#utils';
+import { PrismaErrorCodeEnum, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { updateBirthdayOverview } from '#utils/birthday';
 import { resolveOnErrorCodesPrisma } from '#utils/functions';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { RequiresClientPermissions, RequiresGuildContext } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
-import { resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { removeBirthdaySubCommand } from './birthday.js';
 
@@ -25,15 +24,11 @@ export class ListCommand extends Command {
 			PrismaErrorCodeEnum.NotFound,
 		);
 
-		if (isNullish(birthday)) {
-			const message = await resolveKey(interaction, 'commands/birthday:remove.notRegistered', options);
-			return reply(interaction, interactionProblem(message));
-		}
+		if (isNullish(birthday))
+			return interactionProblem(interaction, 'commands/birthday:remove.notRegistered', options);
 
 		await updateBirthdayOverview(birthday.guildId);
-		return reply(
-			interaction,
-			interactionSuccess(await resolveKey(interaction, 'commands/birthday:remove.success', options)),
-		);
+
+		return interactionSuccess(interaction, 'commands/birthday:remove.success', options);
 	}
 }

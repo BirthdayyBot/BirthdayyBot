@@ -1,6 +1,6 @@
 import { getGuildInformation } from '#lib/discord';
 import thinking from '#lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem, isNotCustom, reply } from '#utils';
+import { generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
@@ -43,7 +43,7 @@ export class TogglePremiumCommand extends Command {
 		const guild = await getGuildInformation(guildId);
 		await thinking(interaction, true);
 		if (!guild) {
-			return reply(interaction, interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
+			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
