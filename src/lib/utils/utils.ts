@@ -1,9 +1,11 @@
+import { createFunctionPrecondition } from '@sapphire/decorators';
 import {
 	Command,
 	container,
 	type ChatInputCommandSuccessPayload,
 	type ContextMenuCommandSuccessPayload,
 	type MessageCommandSuccessPayload,
+	ApplicationCommandRegistry,
 } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { cyan } from 'colorette';
@@ -18,6 +20,7 @@ import {
 	type APIUser,
 	type InteractionReplyOptions,
 	CommandInteraction,
+	SlashCommandBuilder,
 } from 'discord.js';
 
 /**
@@ -90,11 +93,11 @@ function getGuildInfo(guild: Guild | null) {
 }
 
 export function resolveTarget(interaction: ChatInputCommandInteraction) {
+	let context: string | undefined;
 	const user = interaction.options.getUser('user') ?? interaction.user;
 	const target = userMention(user.id);
 	const targetIsNotAuthor = user !== interaction.user;
-	const key = interaction.memberPermissions?.has('ManageRoles') ? 'target-manager' : 'target';
-	const context = targetIsNotAuthor ? key : '';
+	if (targetIsNotAuthor) context = 'target';
 	return { user, options: { target, context } };
 }
 

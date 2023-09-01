@@ -58,7 +58,7 @@ function getBirthdaysAsLists(
 async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
 	const embed: APIEmbed = {
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
-		description: `${Emojis.ArrowRight}Register your Birthday with\n\`/birthday register <day> <month> [year]\``,
+		description: `${Emojis.ArrowRight}Set your Birthday with\n\`/birthday set <day> <month> [year]\``,
 		fields: [],
 		thumbnail: { url: IMG_CAKE },
 	};

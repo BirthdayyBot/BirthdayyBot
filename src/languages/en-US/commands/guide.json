@@ -5,7 +5,7 @@
   "embedDescription": "{{emoji}} By typing **/help** in chat, you can check out all my features and available commands.",
   "embedStartedField": {
     "name": "Get Started",
-    "value": "{{emoji}} Register your Birthday with {{command}}\n{{emoji}} Find more on [Documentation]({{url}})"
+    "value": "{{emoji}} Set your Birthday with {{command}}\n{{emoji}} Find more on [Documentation]({{url}})"
   },
   "embedConfigField": {
     "name": "Configure Birthdayy",

@@ -85,7 +85,7 @@ function parsePresenceOptions(): PresenceData {
 		status: PresenceUpdateStatus.Online,
 		activities: [
 			{
-				name: '/birthday register 🎂',
+				name: '/birthday set 🎂',
 				type: ActivityType.Watching,
 			},
 		],

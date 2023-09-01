@@ -26,7 +26,7 @@ export const HelpEmbed: APIEmbed = {
 		{
 			name: '/birthday',
 			value: `
-  ${Emojis.ArrowRight}register \`<day>\` \`<month>\` \`[year]\` \`[user]\`
+  ${Emojis.ArrowRight}set \`<day>\` \`<month>\` \`[year]\` \`[user]\`
   ${Emojis.ArrowRight}list
   ${Emojis.ArrowRight}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
   ${Emojis.ArrowRight}remove \`<user>\`

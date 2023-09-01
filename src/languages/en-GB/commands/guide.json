@@ -13,6 +13,6 @@
   },
   "embedStartedField": {
     "name": "Get Started",
-    "value": "{{emoji}} Register your Birthday with {{command}}\n{{emoji}} Find more on [Documentation]({{url}})"
+    "value": "{{emoji}} Set your Birthday with {{command}}\n{{emoji}} Find more on [Documentation]({{url}})"
   }
 }

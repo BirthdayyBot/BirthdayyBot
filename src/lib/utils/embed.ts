@@ -1,7 +1,7 @@
-import type { APIEmbed, ChatInputCommandInteraction, Message } from 'discord.js';
+import { type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
 import { BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT, BOT_AVATAR, Emojis } from '#utils/environment';
 import { replyToInteraction } from '#lib/discord/interaction';
-import { resolveKey, type StringMap, type Target, type TOptions } from '@sapphire/plugin-i18next';
+import { resolveKey, type StringMap, type TOptions } from '@sapphire/plugin-i18next';
 import type { NonNullObject } from '@sapphire/utilities';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
@@ -22,78 +22,36 @@ export function defaultEmbed(): APIEmbed {
 	};
 }
 
-export type APIEmbedWithoutDefault = Omit<APIEmbed, 'timestamp' | 'footer'>;
-
-export async function success<T extends NonNullObject = StringMap>(
-	target: Target,
-	key: string,
-	options?: TOptions<T>,
-): Promise<APIEmbed> {
-	return {
-		...defaultEmbed(),
-		description: `${Emojis.Success} ${await resolveKey(target, key, options)}`,
-	};
-}
-
-export async function messageSuccess<T extends NonNullObject = StringMap>(
-	message: Message,
-	key: string,
-	options?: TOptions<T>,
-) {
-	return message[message.editable ? 'edit' : 'reply']({
-		content: '',
-		embeds: [await success(message, key, options)],
-		components: [],
-	});
-}
-
 export async function interactionSuccess<T extends NonNullObject = StringMap>(
 	interaction: ChatInputCommandInteraction,
-	message: string,
+	key: string,
 	options?: TOptions<T>,
-	ephemeral = true,
+	ephemeral = false,
 ) {
 	return replyToInteraction(interaction, {
-		content: '',
-		embeds: [await success(interaction, message, options)],
-		components: [],
 		ephemeral,
-	});
-}
-
-export async function problem<T extends NonNullObject = StringMap>(
-	target: Target,
-	key: string,
-	options?: TOptions<T>,
-): Promise<APIEmbed> {
-	return {
-		...defaultEmbed(),
-		description: `${Emojis.Fail} ${await resolveKey(target, key, options)}`,
-	};
-}
-
-export async function messageProblem<T extends NonNullObject = StringMap>(
-	message: Message,
-	key: string,
-	options?: TOptions<T>,
-) {
-	return message[message.editable ? 'edit' : 'reply']({
-		content: '',
-		embeds: [await problem(message, key, options)],
-		components: [],
+		embeds: [
+			{
+				color: BOT_COLOR,
+				description: `${Emojis.Success} ${await resolveKey(interaction, key, options)}`,
+			},
+		],
 	});
 }
 
 export async function interactionProblem<T extends NonNullObject = StringMap>(
 	interaction: ChatInputCommandInteraction,
-	message: string,
+	key: string,
 	options?: TOptions<T>,
-	ephemeral = true,
+	ephemeral = false,
 ) {
 	return replyToInteraction(interaction, {
-		content: '',
-		embeds: [await problem(interaction, message, options)],
-		components: [],
 		ephemeral,
+		embeds: [
+			{
+				color: BOT_COLOR,
+				description: `${Emojis.Fail} ${await resolveKey(interaction, key, options)}`,
+			},
+		],
 	});
 }
