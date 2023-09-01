@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Non ho il permesso di inviare messaggi in {{channel}}.",
+    "channelDescription": "Canale a cui inviare l'annuncio",
+    "channelName": "canale",
+    "success": "Imposta con successo il canale dell'annuncio su {{channel}}."
+  },
+  "announcementChannelDescription": "Annuncia se oggi è il compleanno di qualcuno",
+  "announcementChannelName": "canale-di-annunci",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "messaggio",
+    "requirePremium": "Questa funzione è attualmente nella __Fase Beta__ e **Solo Birthday Premium**.\nSe sei interessato a utilizzare questa e le funzionalità future già adesso, puoi supportare lo sviluppo su [Patreon]({{url}}).`),",
+    "success": "Hai aggiornato con successo il messaggio di annuncio."
+  },
+  "announcementMessageDescription": "Aggiungi un messaggio di annuncio di compleanno personalizzato.",
+  "announcementMessageName": "messaggio-annuncio",
+  "birthdayRole": {
+    "highestBotRole": "Non posso assegnare questo ruolo a causa della sua posizione gerarchica.",
+    "roleDescription": "Ruolo che dovrebbe essere assegnato in occasione di un compleanno",
+    "roleName": "ruolo",
+    "success": "Imposta correttamente il ruolo del compleanno su {{role}}."
+  },
+  "birthdayRoleDescription": "Elenca tutti i compleanni in questo server Discord",
+  "birthdayRoleName": "ruolo-di-compleanno",
+  "listName": "elenco",
+  "listDescription": "Elenca tutti i compleanni in questo server Discord",
+  "overviewChannel": {
+    "cannotPermissions": "Non ho il permesso di inviare messaggi in {{channel}}.",
+    "channelDescription": "Canale in cui la panoramica dovrebbe essere inviata e aggiornata",
+    "channelName": "canale",
+    "success": "Imposta correttamente il canale di panoramica su {{channel}} e il [messaggio]({{message}})."
+  },
+  "overviewChannelDescription": "Elenca tutti i compleanni del server in questo canale e lo aggiorna continuamente",
+  "overviewChannelName": "canale-panoramica",
+  "pingRole": {
+    "roleName": "ruolo",
+    "success": "Imposta correttamente il ruolo ping compleanno su {{role}}.",
+    "roleDescription": "Ruolo che dovrebbe essere segnalato il giorno del compleanno di qualcuno"
+  },
+  "pingRoleDescription": "Segnala un ruolo il giorno del compleanno di qualcuno",
+  "pingRoleName": "ruolo-ping",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Canale di annunci",
+      "birthdayRole": "Ruolo del compleanno",
+      "birthdayPingRole": "Ruolo Ping Compleanno",
+      "overviewChannel": "Canale Panoramica",
+      "overviewMessage": "Messaggio di panoramica",
+      "logChannel": "Registra canale",
+      "timezone": "Fuso orario"
+    },
+    "configDescription": "Configurazione che desideri rimuovere",
+    "configName": "config",
+    "error": "Si è verificato un errore durante il tentativo di reimpostare la configurazione di {{config}}.",
+    "success": "Reimposta la configurazione di {{config}} riuscita."
+  },
+  "resetDescription": "Ripristina le impostazioni dalla configurazione del server",
+  "resetName": "ripristina",
+  "timezone": {
+    "success": "Il **fuso orario** è stato impostato su {{timezone}}."
+  },
+  "timezoneName": "fuso-orario",
+  "timezoneDescription": "Cambia il fuso orario quando Birthdayy augura buon compleanno."
+}

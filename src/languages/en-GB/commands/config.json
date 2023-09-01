@@ -1,0 +1,64 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "I don't have permission to send messages in {{channel}}.",
+    "channelDescription": "Channel where the announcement should get sent",
+    "channelName": "channel",
+    "success": "Successfully set the announcement channel to {{channel}}."
+  },
+  "announcementChannelDescription": "Announce if its somebody's birthday today",
+  "announcementChannelName": "announcement-channel",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "message",
+    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**. \nIf you are interested in using this and future features now already, you can support the Development on [Patreon]({{url}}).`),",
+    "success": "You have successfully updated the announcement message."
+  },
+  "announcementMessageDescription": "Add a custom birthday announcement message.",
+  "announcementMessageName": "announcement-message",
+  "birthdayRole": {
+    "highestBotRole": "I can't assign this role because of its hierarchical position.",
+    "roleDescription": "Role that should get assigned on a birthday",
+    "roleName": "role",
+    "success": "Successfully set the birthday role to {{role}}."
+  },
+  "birthdayRoleDescription": "List all Birthdays in this Discord server",
+  "birthdayRoleName": "birthday-role",
+  "listDescription": "List all Birthdays in this Discord server",
+  "overviewChannel": {
+    "cannotPermissions": "I don't have permission to send messages in {{channel}}.",
+    "channelDescription": "Channel where the overview should get sent and updated in",
+    "channelName": "channel",
+    "success": "Successfully set the overview channel to {{channel}} and the [message]({{message}})."
+  },
+  "overviewChannelDescription": "Lists all server birthdays in this channel and updates it continuously",
+  "overviewChannelName": "overview-channel",
+  "pingRole": {
+    "roleName": "role",
+    "success": "Successfully set the birthday ping role to {{role}}.",
+    "roleDescription": "Role that should get pinged on someones birthday"
+  },
+  "pingRoleDescription": "Ping a role on someones birthday",
+  "pingRoleName": "ping-role",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Announcement Channel",
+      "birthdayRole": "Birthday Role",
+      "birthdayPingRole": "Birthday Ping Role",
+      "overviewChannel": "Overview Channel",
+      "overviewMessage": "Overview Message",
+      "logChannel": "Log Channel",
+      "timezone": "Timezone"
+    },
+    "configDescription": "Config that you want to remove",
+    "configName": "config",
+    "error": "An error occurred while trying to reset the {{config}} config.",
+    "success": "Successfully reset the {{config}} config."
+  },
+  "resetDescription": "Reset settings from your server config",
+  "resetName": "reset",
+  "timezone": {
+    "success": "The **Timezone** has been set to {{timezone}}."
+  },
+  "timezoneName": "timezone",
+  "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday."
+}

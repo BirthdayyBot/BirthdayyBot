@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Ik heb geen toestemming om berichten te sturen in {{channel}}.",
+    "channelDescription": "Kanaal waarnaar de aankondiging moet worden verzonden",
+    "channelName": "kanaal",
+    "success": "Stel het aankondigingskanaal succesvol in op {{channel}}."
+  },
+  "announcementChannelDescription": "Kondig aan of er vandaag iemand jarig is",
+  "announcementChannelName": "aankondigingskanaal",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "bericht",
+    "requirePremium": "Deze functie bevindt zich momenteel in de __bètafase__ en **alleen verjaardagspremie**.\nAls u nu al geïnteresseerd bent in het gebruik van deze en toekomstige functies, kunt u de ontwikkeling op [Patreon]({{url}}).`),",
+    "success": "U hebt het aankondigingsbericht bijgewerkt."
+  },
+  "announcementMessageDescription": "Voeg een aangepast verjaardagsaankondigingsbericht toe.",
+  "announcementMessageName": "aankondiging-bericht",
+  "birthdayRole": {
+    "highestBotRole": "Ik kan deze rol niet toewijzen vanwege de hiërarchische positie ervan.",
+    "roleDescription": "Rol die op een verjaardag toegewezen moet worden",
+    "roleName": "rol",
+    "success": "Stel de verjaardagsrol succesvol in op {{role}}."
+  },
+  "birthdayRoleDescription": "Maak een lijst van alle verjaardagen op deze Discord-server",
+  "birthdayRoleName": "verjaardag-rol",
+  "listName": "lijst",
+  "listDescription": "Maak een lijst van alle verjaardagen op deze Discord-server",
+  "overviewChannel": {
+    "cannotPermissions": "Ik heb geen toestemming om berichten te sturen in {{channel}}.",
+    "channelDescription": "Kanaal waarnaar het overzicht moet worden verzonden en bijgewerkt",
+    "channelName": "kanaal",
+    "success": "Stel het overzichtskanaal succesvol in op {{channel}} en de [message]({{message}})."
+  },
+  "overviewChannelDescription": "Geeft een overzicht van alle serververjaardagen in dit kanaal en werkt deze voortdurend bij",
+  "overviewChannelName": "overzicht-kanaal",
+  "pingRole": {
+    "roleName": "rol",
+    "success": "Stel de verjaardagsping-rol in op {{role}}.",
+    "roleDescription": "Rol die op iemands verjaardag moet worden gepingd"
+  },
+  "pingRoleDescription": "Ping een rol op iemands verjaardag",
+  "pingRoleName": "ping-rol",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Aankondigingskanaal",
+      "birthdayRole": "Verjaardagsrol",
+      "birthdayPingRole": "Ping-rol voor verjaardag",
+      "overviewChannel": "Overzicht Kanaal",
+      "overviewMessage": "Overzicht bericht",
+      "logChannel": "Kanaal loggen",
+      "timezone": "Tijdzone"
+    },
+    "configDescription": "Configuratie die u wilt verwijderen",
+    "configName": "configuratie",
+    "error": "Er is een fout opgetreden bij het resetten van de configuratie van {{config}}.",
+    "success": "Reset de configuratie van {{config}} succesvol."
+  },
+  "resetDescription": "Reset de instellingen van uw serverconfiguratie",
+  "resetName": "opnieuw-instellen",
+  "timezone": {
+    "success": "De **tijdzone** is ingesteld op {{timezone}}."
+  },
+  "timezoneName": "tijdzone",
+  "timezoneDescription": "Verander de tijdzone wanneer Birthdayy een gelukkige verjaardag wenst."
+}

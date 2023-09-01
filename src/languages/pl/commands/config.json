@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Nie mam uprawnień do wysyłania wiadomości w {{channel}}.",
+    "channelDescription": "Kanał, na który powinno zostać wysłane ogłoszenie",
+    "channelName": "kanał",
+    "success": "Pomyślnie ustaw kanał ogłoszeń na {{channel}}."
+  },
+  "announcementChannelDescription": "Ogłoś, czy ktoś ma dzisiaj urodziny",
+  "announcementChannelName": "kanał-ogłoszeń",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "wiadomość",
+    "requirePremium": "Ta funkcja jest obecnie w fazie __Beta__ i **Tylko w wersji Premium**.\nJeśli już teraz jesteś zainteresowany korzystaniem z tej i przyszłych funkcji, możesz wesprzeć rozwój na [Patreonie]({{url}}).`),",
+    "success": "Pomyślnie zaktualizowałeś wiadomość z ogłoszeniem."
+  },
+  "announcementMessageDescription": "Dodaj niestandardową wiadomość z ogłoszeniem o urodzinach.",
+  "announcementMessageName": "wiadomość-ogłoszenie",
+  "birthdayRole": {
+    "highestBotRole": "Nie mogę przypisać tej roli ze względu na jej hierarchiczną pozycję.",
+    "roleDescription": "Rola, którą należy przypisać na urodziny",
+    "roleName": "rola",
+    "success": "Pomyślnie ustaw rolę urodzinową na {{role}}."
+  },
+  "birthdayRoleDescription": "Lista wszystkich urodzin na tym serwerze Discord",
+  "birthdayRoleName": "rola-urodzinowa",
+  "listName": "lista",
+  "listDescription": "Lista wszystkich urodzin na tym serwerze Discord",
+  "overviewChannel": {
+    "cannotPermissions": "Nie mam uprawnień do wysyłania wiadomości w {{channel}}.",
+    "channelDescription": "Kanał, na który powinno być wysyłane i aktualizowane podsumowanie",
+    "channelName": "kanał",
+    "success": "Pomyślnie ustaw kanał przeglądu na {{channel}} i [wiadomość]({{wiadomość}})."
+  },
+  "overviewChannelDescription": "Wyświetla listę urodzin wszystkich serwerów w tym kanale i stale ją aktualizuje",
+  "overviewChannelName": "kanał-przeglądowy",
+  "pingRole": {
+    "roleName": "rola",
+    "success": "Pomyślnie ustaw rolę pingu urodzinowego na {{role}}.",
+    "roleDescription": "Rola, która powinna zostać oznaczona w czyjeś urodziny"
+  },
+  "pingRoleDescription": "Pinguj rolę w czyjeś urodziny",
+  "pingRoleName": "rola-ping",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Kanał ogłoszeń",
+      "birthdayRole": "Rola urodzinowa",
+      "birthdayPingRole": "Rola pingu urodzinowego",
+      "overviewChannel": "Przegląd kanału",
+      "overviewMessage": "Wiadomość przeglądowa",
+      "logChannel": "Kanał dziennika",
+      "timezone": "Strefa czasowa"
+    },
+    "configDescription": "Konfiguracja, którą chcesz usunąć",
+    "configName": "konfiguracja",
+    "error": "Wystąpił błąd podczas próby zresetowania konfiguracji {{config}}.",
+    "success": "Pomyślnie zresetowano konfigurację {{config}}."
+  },
+  "resetDescription": "Zresetuj ustawienia z konfiguracji serwera",
+  "resetName": "resetowanie",
+  "timezone": {
+    "success": "**Strefa czasowa** została ustawiona na {{timezone}}."
+  },
+  "timezoneName": "strefa-czasowa",
+  "timezoneDescription": "Zmień strefę czasową, gdy Birthdayy życzy wszystkiego najlepszego."
+}

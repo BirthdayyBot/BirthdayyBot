@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Jag har inte behörighet att skicka meddelanden i {{channel}}.",
+    "channelDescription": "Kanal dit tillkännagivandet ska skickas",
+    "channelName": "kanal",
+    "success": "Ställ in meddelandekanalen till {{channel}}."
+  },
+  "announcementChannelDescription": "Meddela om någon fyller år idag",
+  "announcementChannelName": "tillkännagivande-kanal",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "meddelande",
+    "requirePremium": "Den här funktionen är för närvarande i __Betastadiet__ och **Birthdayy Premium Only**.\nOm du är intresserad av att använda denna och framtida funktioner redan nu kan du stödja utvecklingen på [Patreon]({{url}}).`),",
+    "success": "Du har uppdaterat meddelandet."
+  },
+  "announcementMessageDescription": "Lägg till ett anpassat födelsedagsmeddelande.",
+  "announcementMessageName": "tillkännagivande-meddelande",
+  "birthdayRole": {
+    "highestBotRole": "Jag kan inte tilldela den här rollen på grund av dess hierarkiska position.",
+    "roleDescription": "Roll som bör tilldelas på en födelsedag",
+    "roleName": "roll",
+    "success": "Ange födelsedagsrollen till {{role}}."
+  },
+  "birthdayRoleDescription": "Lista alla födelsedagar i denna Discord-server",
+  "birthdayRoleName": "födelsedagsroll",
+  "listName": "lista",
+  "listDescription": "Lista alla födelsedagar i denna Discord-server",
+  "overviewChannel": {
+    "cannotPermissions": "Jag har inte behörighet att skicka meddelanden i {{channel}}.",
+    "channelDescription": "Kanal där översikten ska skickas och uppdateras in",
+    "channelName": "kanal",
+    "success": "Ställ in översiktskanalen på {{kanal}} och [meddelandet]({{meddelande}})."
+  },
+  "overviewChannelDescription": "Listar alla serverfödelsedagar i den här kanalen och uppdaterar den kontinuerligt",
+  "overviewChannelName": "översiktskanal",
+  "pingRole": {
+    "roleName": "roll",
+    "success": "Ange födelsedagspingrollen till {{role}}.",
+    "roleDescription": "Roll som borde bli pingad på någons födelsedag"
+  },
+  "pingRoleDescription": "Pinga en roll på någons födelsedag",
+  "pingRoleName": "ping-roll",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Annonseringskanal",
+      "birthdayRole": "Födelsedagsroll",
+      "birthdayPingRole": "Födelsedagsping-roll",
+      "overviewChannel": "Översiktskanal",
+      "overviewMessage": "Översiktsmeddelande",
+      "logChannel": "Loggkanal",
+      "timezone": "Tidszon"
+    },
+    "configDescription": "Konfiguration som du vill ta bort",
+    "configName": "config",
+    "error": "Ett fel uppstod när du försökte återställa {{config}}-konfigurationen.",
+    "success": "Återställ {{config}}-konfigurationen."
+  },
+  "resetDescription": "Återställ inställningarna från din serverkonfiguration",
+  "resetName": "återställa",
+  "timezone": {
+    "success": "**tidszonen** har ställts in på {{tidszon}}."
+  },
+  "timezoneName": "tidszon",
+  "timezoneDescription": "Ändra tidszon när Birthdayy önskar grattis på födelsedagen."
+}

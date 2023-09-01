@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
+    "channelDescription": "Canal sur lequel l'annonce doit être envoyée",
+    "channelName": "canal",
+    "success": "Définissez avec succès le canal d'annonce sur {{channel}}."
+  },
+  "announcementChannelDescription": "Annoncer si c'est l'anniversaire de quelqu'un aujourd'hui",
+  "announcementChannelName": "canal-annonce",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "message",
+    "requirePremium": "Cette fonctionnalité est actuellement en __Beta Stage__ et **Birthdayy Premium uniquement**.\nSi vous souhaitez déjà utiliser cette fonctionnalité et les futures, vous pouvez prendre en charge le développement sur [Patreon]({{url}}).`),",
+    "success": "Vous avez mis à jour avec succès le message d'annonce."
+  },
+  "announcementMessageDescription": "Ajoutez un message d'annonce d'anniversaire personnalisé.",
+  "announcementMessageName": "message-annonce",
+  "birthdayRole": {
+    "highestBotRole": "Je ne peux pas attribuer ce rôle en raison de sa position hiérarchique.",
+    "roleDescription": "Rôle qui devrait être attribué le jour d'un anniversaire",
+    "roleName": "role",
+    "success": "Définissez avec succès le rôle d'anniversaire sur {{role}}."
+  },
+  "birthdayRoleDescription": "Répertorier tous les anniversaires de ce serveur Discord",
+  "birthdayRoleName": "role-anniversaire",
+  "listName": "liste",
+  "listDescription": "Répertorier tous les anniversaires de ce serveur Discord",
+  "overviewChannel": {
+    "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
+    "channelDescription": "Canal sur lequel l'aperçu doit être envoyé et mis à jour",
+    "channelName": "canal",
+    "success": "Définissez avec succès le canal de présentation sur {{channel}} et le [message]({{message}})."
+  },
+  "overviewChannelDescription": "Répertorie tous les anniversaires du serveur dans ce canal et le met à jour continuellement",
+  "overviewChannelName": "canal-aperçu",
+  "pingRole": {
+    "roleName": "role",
+    "success": "Définissez avec succès le rôle du ping d'anniversaire sur {{role}}.",
+    "roleDescription": "Rôle qui devrait être cinglé le jour de l'anniversaire de quelqu'un"
+  },
+  "pingRoleDescription": "Ping un rôle le jour de l'anniversaire de quelqu'un",
+  "pingRoleName": "role-ping",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Canal d'annonce",
+      "birthdayRole": "Rôle d'anniversaire",
+      "birthdayPingRole": "Rôle de ping d'anniversaire",
+      "overviewChannel": "Chaîne de présentation",
+      "overviewMessage": "Message de présentation",
+      "logChannel": "Canal de journal",
+      "timezone": "Fuseau horaire"
+    },
+    "configDescription": "Configuration que vous souhaitez supprimer",
+    "configName": "configuration",
+    "error": "Une erreur s'est produite lors de la tentative de réinitialisation de la configuration {{config}}.",
+    "success": "Réinitialisez avec succès la configuration {{config}}."
+  },
+  "resetDescription": "Réinitialiser les paramètres de la configuration de votre serveur",
+  "resetName": "réinitialiser",
+  "timezone": {
+    "success": "Le **fuseau horaire** a été défini sur {{timezone}}."
+  },
+  "timezoneDescription": "Changez le fuseau horaire lorsque Birthdayy souhaite un joyeux anniversaire.",
+  "timezoneName": "fuseau-horaire"
+}

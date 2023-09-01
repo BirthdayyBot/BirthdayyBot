@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Não tenho permissão para enviar mensagens em {{channel}}.",
+    "channelDescription": "Canal para onde o anúncio deve ser enviado",
+    "channelName": "canal",
+    "success": "Defina com sucesso o canal de anúncio para {{channel}}."
+  },
+  "announcementChannelDescription": "Anuncie se é aniversário de alguém hoje",
+  "announcementChannelName": "canal-de-anúncio",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "mensagem",
+    "requirePremium": "Este recurso está atualmente em __Beta Stage__ e **Apenas Birthdayy Premium**.\nSe você já estiver interessado em usar este e futuros recursos, você pode apoiar o desenvolvimento em [Patreon]({{url}}).`),",
+    "success": "Você atualizou com sucesso a mensagem de anúncio."
+  },
+  "announcementMessageDescription": "Adicione uma mensagem personalizada de anúncio de aniversário.",
+  "announcementMessageName": "mensagem-de-anúncio",
+  "birthdayRole": {
+    "highestBotRole": "Não posso atribuir esta função devido à sua posição hierárquica.",
+    "roleDescription": "Função que deve ser atribuída em um aniversário",
+    "roleName": "papel",
+    "success": "Defina com sucesso a função de aniversário para {{role}}."
+  },
+  "birthdayRoleDescription": "Liste todos os aniversários neste servidor Discord",
+  "birthdayRoleName": "papel-de-aniversário",
+  "listName": "lista",
+  "listDescription": "Liste todos os aniversários neste servidor Discord",
+  "overviewChannel": {
+    "cannotPermissions": "Não tenho permissão para enviar mensagens em {{channel}}.",
+    "channelDescription": "Canal para onde a visão geral deve ser enviada e atualizada em",
+    "channelName": "canal",
+    "success": "Defina com sucesso o canal de visão geral para {{channel}} e a [mensagem]({{message}})."
+  },
+  "overviewChannelDescription": "Lista todos os aniversários dos servidores neste canal e os atualiza continuamente",
+  "overviewChannelName": "canal-de-visão-geral",
+  "pingRole": {
+    "roleName": "papel",
+    "success": "Defina com sucesso a função de ping de aniversário para {{role}}.",
+    "roleDescription": "Função que deve receber um ping no aniversário de alguém"
+  },
+  "pingRoleDescription": "Marque uma função no aniversário de alguém",
+  "pingRoleName": "função-de-ping",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Canal de anúncios",
+      "birthdayRole": "Papel de aniversário",
+      "birthdayPingRole": "Função de ping de aniversário",
+      "overviewChannel": "Visão geral do canal",
+      "overviewMessage": "Mensagem de visão geral",
+      "logChannel": "Canal de registro",
+      "timezone": "Fuso horário"
+    },
+    "configDescription": "Configuração que você deseja remover",
+    "configName": "configuração",
+    "error": "Ocorreu um erro ao tentar redefinir a configuração do {{config}}.",
+    "success": "Redefina a configuração {{config}} com sucesso."
+  },
+  "resetDescription": "Redefinir as configurações da configuração do seu servidor",
+  "resetName": "reiniciar",
+  "timezone": {
+    "success": "O **fuso horário** foi definido como {{timezone}}."
+  },
+  "timezoneName": "fuso-horário",
+  "timezoneDescription": "Altere o fuso horário quando o Aniversário deseja feliz aniversário."
+}

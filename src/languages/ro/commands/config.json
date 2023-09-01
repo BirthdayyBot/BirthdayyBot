@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Nu am permisiunea de a trimite mesaje pe {{canal}}.",
+    "channelDescription": "Canalul unde ar trebui să fie trimis anunțul",
+    "channelName": "canal",
+    "success": "Setați cu succes canalul de anunț la {{canal}}."
+  },
+  "announcementChannelDescription": "Anunțați dacă este ziua de naștere a cuiva astăzi",
+  "announcementChannelName": "canal-anunţ",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "mesaj",
+    "requirePremium": "Această funcție este în prezent în __Etapa Beta__ și **Numai pentru ziua de naștere Premium**.\nDacă sunteți interesat să utilizați deja această și viitoare caracteristici acum, puteți sprijini Dezvoltarea pe [Patreon]({{url}}).`),",
+    "success": "Ați actualizat cu succes mesajul de anunț."
+  },
+  "announcementMessageDescription": "Adăugați un mesaj personalizat de anunț de naștere.",
+  "announcementMessageName": "anunt-mesaj",
+  "birthdayRole": {
+    "highestBotRole": "Nu pot atribui acest rol din cauza poziției sale ierarhice.",
+    "roleDescription": "Rol care ar trebui să fie atribuit la o zi de naștere",
+    "roleName": "rol",
+    "success": "Setați cu succes rolul de naștere la {{role}}."
+  },
+  "birthdayRoleDescription": "Listează toate zilele de naștere pe acest server Discord",
+  "birthdayRoleName": "ziua-rol",
+  "listName": "listă",
+  "listDescription": "Listează toate zilele de naștere pe acest server Discord",
+  "overviewChannel": {
+    "cannotPermissions": "Nu am permisiunea de a trimite mesaje pe {{canal}}.",
+    "channelDescription": "Canal în care ar trebui să fie trimisă și actualizată prezentarea generală",
+    "channelName": "canal",
+    "success": "Setați cu succes canalul de prezentare generală la {{canal}} și [mesajul]({{mesaj}})."
+  },
+  "overviewChannelDescription": "Listează toate zilele de naștere ale serverului de pe acest canal și îl actualizează continuu",
+  "overviewChannelName": "prezentare-canal",
+  "pingRole": {
+    "roleName": "rol",
+    "success": "Setați cu succes rolul ping de naștere la {{role}}.",
+    "roleDescription": "Rol care ar trebui să fie ping de ziua cuiva"
+  },
+  "pingRoleDescription": "Ping un rol de ziua cuiva",
+  "pingRoleName": "ping-rol",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Canalul de anunț",
+      "birthdayRole": "Rol de naștere",
+      "birthdayPingRole": "Rol Ping de ziua de nastere",
+      "overviewChannel": "Canal de prezentare generală",
+      "overviewMessage": "Mesaj de prezentare generală",
+      "logChannel": "Canal de jurnal",
+      "timezone": "Fus orar"
+    },
+    "configDescription": "Configurația pe care doriți să o eliminați",
+    "configName": "config",
+    "error": "A apărut o eroare la încercarea de a reseta configurația {{config}}.",
+    "success": "Resetați cu succes configurația {{config}}."
+  },
+  "resetDescription": "Resetați setările din configurația serverului dvs",
+  "resetName": "resetare",
+  "timezone": {
+    "success": "**fusul orar** a fost setat la {{fusul orar}}."
+  },
+  "timezoneName": "fus-orar",
+  "timezoneDescription": "Schimbați fusul orar când Birthdayy dorește La mulți ani."
+}

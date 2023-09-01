@@ -1,0 +1,93 @@
+{
+  "timezone": {
+    "choices": {
+      "0": "Greenwich Mean Time | GMT | UTC +0",
+      "1": "Central European Time | CET | UTC +1",
+      "2": "Eastern European Time | EET | UTC +2",
+      "3": "Moscow Standard Time | MSK | UTC +3",
+      "4": "Gulf Standard Time | GST | UTC +4",
+      "5": "Pakistan Standard Time | PKT | UTC +5",
+      "6": "Bangladesh Standard Time | BST | UTC  6",
+      "7": "Indochina Time | ICT | UTC  7",
+      "8": "China Standard Time | CST | UTC +8",
+      "9": "Japan Standard Time | JST | UTC +9",
+      "10": "Australian Eastern Standard Time | AEST | UTC +10",
+      "11": "Solomon Island Time | SBT | UTC +11",
+      "12": "New Zealand Standard Time | NZST | UTC +12",
+      "-1": "Azores Time | AZOT | UTC -1",
+      "-2": "Fernando de Noronha Time | FNT | UTC -2",
+      "-3": "Amazon Time Zone | AMT | UTC -3",
+      "-4": "Atlantic Standard Time | AST | UTC -4",
+      "-5": "Eastern Standard Time | EST | UTC -5",
+      "-6": "Central Standard Time | CST | UTC -6",
+      "-7": "Mountain Standard Time | MST | UTC -7",
+      "-8": "Pacific Standard Time | PST | UTC -8",
+      "-9": "Alaska Standard Time | AKST | UTC -9",
+      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
+      "-11": "Niue Time | NUT | UTC -11"
+    },
+    "timezoneDescription": "What timezone are you in ?",
+    "timezoneName": "timezone",
+    "success": "The **timezone** has been set to {{timezone}}."
+  },
+  "announcementChannel": {
+    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
+    "channelName": "channel",
+    "channelDescription": "Channel on which the ad should be sent",
+    "success": "Successfully set the announcement channel to {{channel}}."
+  },
+  "announcementChannelDescription": "Announce if it's someone's birthday today",
+  "announcementChannelName": "announcement-channel",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "message",
+    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium only**.\n\nIf you already want to use this feature and future ones, you can support development on [Patreon]({{url}}).`),",
+    "success": "You have successfully updated the announcement message."
+  },
+  "announcementMessageDescription": "Add a personalized birthday announcement message.",
+  "announcementMessageName": "announcement",
+  "birthdayRole": {
+    "highestBotRole": "I cannot assign this role due to its hierarchical position.",
+    "roleDescription": "Role that should be assigned on a birthday",
+    "roleName": "role",
+    "success": "Successfully set the birthday role to {{role}}."
+  },
+  "birthdayRoleDescription": "List all birthdays on this Discord server",
+  "birthdayRoleName": "birthday-role",
+  "listDescription": "List all birthdays on this Discord server",
+  "listName": "list",
+  "overviewChannel": {
+    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
+    "channelDescription": "Channel on which the preview should be sent and updated",
+    "channelName": "channel",
+    "success": "Successfully set the presentation channel to {{channel}} and [message]({{message}})."
+  },
+  "overviewChannelDescription": "Lists all server birthdays in this channel and updates it continuously",
+  "overviewChannelName": "channel-preview",
+  "pingRole": {
+    "roleDescription": "Role who should be pinged on someone's birthday",
+    "roleName": "role",
+    "success": "Successfully set the birthday ping role to {{role}}."
+  },
+  "pingRoleDescription": "Ping a role on someone's birthday",
+  "pingRoleName": "ping-role",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Announcement channel",
+      "birthdayPingRole": "Birthday Ping Role",
+      "birthdayRole": "Birthday role",
+      "logChannel": "News channel",
+      "overviewChannel": "Presentation channel",
+      "overviewMessage": "Introductory message",
+      "timezone": "Timezone"
+    },
+    "configDescription": "Configuration you want to delete",
+    "configName": "configuration",
+    "error": "An error occurred while trying to reset the {{config}} configuration.",
+    "success": "Successfully reset the {{config}} configuration."
+  },
+  "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
+  "timezoneName": "timezone",
+  "resetDescription": "Reset your server configuration settings",
+  "resetName": "reset"
+}

@@ -1,0 +1,65 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Neturiu leidimo siųsti pranešimų per {{channel}}.",
+    "channelDescription": "Kanalas, į kurį turėtų būti išsiųstas pranešimas",
+    "channelName": "kanalas",
+    "success": "Sėkmingai nustatėte pranešimų kanalą į {{channel}}."
+  },
+  "announcementChannelDescription": "Praneškite, jei kas nors šiandien turi gimtadienį",
+  "announcementChannelName": "anonsų-kanalas",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "žinutę",
+    "requirePremium": "Ši funkcija šiuo metu yra __Beta Stage__ ir **Birthdayy Premium**.\nJei jau dabar domitės šia ir būsimomis funkcijomis, galite palaikyti kūrimą [Patreon] ({{url}}).`),",
+    "success": "Sėkmingai atnaujinote pranešimo pranešimą."
+  },
+  "announcementMessageDescription": "Pridėkite tinkintą gimtadienio pranešimo pranešimą.",
+  "announcementMessageName": "pranešimas-žinutė",
+  "birthdayRole": {
+    "highestBotRole": "Negaliu priskirti šio vaidmens dėl hierarchinės padėties.",
+    "roleDescription": "Vaidmuo, kuris turėtų būti paskirtas per gimtadienį",
+    "roleName": "vaidmenį",
+    "success": "Sėkmingai nustatytas gimtadienio vaidmuo į {{role}}."
+  },
+  "birthdayRoleDescription": "Išvardykite visus gimtadienius šiame „Discord“ serveryje",
+  "birthdayRoleName": "gimtadienio-vaidmuo",
+  "listName": "sąrašą",
+  "listDescription": "Išvardykite visus gimtadienius šiame „Discord“ serveryje",
+  "overviewChannel": {
+    "cannotPermissions": "Neturiu leidimo siųsti pranešimų per {{channel}}.",
+    "channelDescription": "Kanalas, kuriame apžvalga turėtų būti išsiųsta ir atnaujinta",
+    "channelName": "kanalas",
+    "success": "Sėkmingai nustatykite apžvalgos kanalą į {{channel}} ir [pranešimas]({{message}})."
+  },
+  "overviewChannelDescription": "Išvardija visus serverio gimtadienius šiame kanale ir nuolat jį atnaujina",
+  "overviewChannelName": "apžvalgos-kanalas",
+  "pingRole": {
+    "roleName": "vaidmenį",
+    "success": "Sėkmingai nustatytas gimtadienio ping vaidmuo į {{role}}.",
+    "roleDescription": "Vaidmuo, kuris turėtų būti paskelbtas kieno nors gimtadienio proga"
+  },
+  "pingRoleDescription": "Ping vaidmenį kažkieno gimtadienio proga",
+  "pingRoleName": "ping-vaidmuo",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Skelbimų kanalas",
+      "birthdayRole": "Gimtadienio vaidmuo",
+      "birthdayPingRole": "Gimtadienio Ping vaidmuo",
+      "overviewChannel": "Apžvalgos kanalas",
+      "overviewMessage": "Apžvalgos pranešimas",
+      "logChannel": "Prisijungti kanalas",
+      "timezone": "Laiko zona"
+    },
+    "configDescription": "Konfigūracija, kurią norite pašalinti",
+    "configName": "konfig",
+    "error": "Bandant iš naujo nustatyti {{config}} konfigūraciją įvyko klaida.",
+    "success": "Sėkmingai iš naujo nustatykite {{config}} konfigūraciją."
+  },
+  "resetDescription": "Iš naujo nustatykite nustatymus iš savo serverio konfigūracijos",
+  "resetName": "atstatyti",
+  "timezone": {
+    "success": "**Laiko juosta** nustatyta į {{timezone}}."
+  },
+  "timezoneName": "laiko-zona",
+  "timezoneDescription": "Pakeiskite laiko juostą, kai Birthdayy sveikina su gimtadieniu."
+}
