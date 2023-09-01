@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Jeg har ikke tillatelse til å sende meldinger i {{channel}}.",
-    "channelDescription": "Kanal hvor kunngjøringen skal sendes",
+    "cannotPermissions": "Å... ser ut til at jeg ikke kan sende en melding i dette rommet. Kan du ta en titt?",
+    "channelDescription": "Hvilken salong skal jeg sende kunngjøringsmeldingen til?",
     "channelName": "kanal",
-    "success": "Still inn kunngjøringskanalen til {{channel}}."
+    "success": "Kunngjøringsrommet er definert på {{channel}}."
   },
-  "announcementChannelDescription": "Fortell om noen har bursdag i dag",
+  "announcementChannelDescription": "Rom hvor jeg ville sendt en melding når det er en brukers bursdag",
   "announcementChannelName": "kunngjøringskanal",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "beskjed",
     "requirePremium": "Denne funksjonen er for øyeblikket i __Beta Stage__ og **Birthdayy Premium Only**.\nHvis du er interessert i å bruke denne og fremtidige funksjoner nå allerede, kan du støtte utviklingen på [Patreon]({{url}}).`),",
-    "success": "Du har oppdatert kunngjøringsmeldingen."
+    "success": "Kunngjøringsmeldingen er endret.\n\n{{beskjed}}"
   },
-  "announcementMessageDescription": "Legg til en tilpasset bursdagskunngjøringsmelding.",
+  "announcementMessageDescription": "Melding jeg ville sendt på en brukers bursdag.",
   "announcementMessageName": "kunngjøring-melding",
   "birthdayRole": {
-    "highestBotRole": "Jeg kan ikke tildele denne rollen på grunn av dens hierarkiske posisjon.",
-    "roleDescription": "Rolle som bør tildeles på en bursdag",
+    "highestBotRole": "Å, jeg kan ikke tildele denne rollen... Ser ut som den er høyere enn min høyeste rolle.",
+    "roleDescription": "Rolle som vil bli tildelt brukeren på fødselsdagen",
     "roleName": "rolle",
-    "success": "Sett bursdagsrollen til {{role}}."
+    "success": "Bursdagsrollen er satt til {{role}}."
   },
-  "birthdayRoleDescription": "List opp alle bursdager på denne Discord-serveren",
+  "birthdayRoleDescription": "Rolle tildelt brukeren på fødselsdagen",
   "birthdayRoleName": "bursdagsrolle",
   "listName": "liste",
-  "listDescription": "List opp alle bursdager på denne Discord-serveren",
+  "listDescription": "List alle bursdager på serveren",
   "overviewChannel": {
-    "cannotPermissions": "Jeg har ikke tillatelse til å sende meldinger i {{channel}}.",
-    "channelDescription": "Kanal hvor oversikten skal sendes og oppdateres inn",
+    "cannotPermissions": "Jeg har ikke tillatelse til å sende meldinger på {{channel}}.",
+    "channelDescription": "Rom som oversikten skal sendes og oppdateres på",
     "channelName": "kanal",
-    "success": "Sett oversiktskanalen til {{kanal}} og [meldingen]({{melding}})."
+    "success": "Forhåndsvisningskanalen er satt til {{kanal}} og den nye [meldingen]({{melding}})."
   },
-  "overviewChannelDescription": "Viser alle serverbursdager i denne kanalen og oppdaterer den kontinuerlig",
+  "overviewChannelDescription": "Rom som viser alle serverbursdager",
   "overviewChannelName": "oversikt-kanal",
   "pingRole": {
     "roleName": "rolle",
-    "success": "Sett bursdagsping-rollen til {{role}}.",
-    "roleDescription": "Rolle som burde bli pinget på noens bursdag"
+    "success": "Omtalerollen er satt til {{role}}.",
+    "roleDescription": "Hvilken rolle skal jeg nevne i kunngjøringsmeldingen?"
   },
-  "pingRoleDescription": "Ping en rolle på noens bursdag",
+  "pingRoleDescription": "Nevn en rolle på noens bursdag",
   "pingRoleName": "ping-rolle",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Tidssone",
       "announcementMessage": "Kunngjøringsmelding"
     },
-    "configDescription": "Konfigurasjonen du vil fjerne",
+    "configDescription": "Konfigurasjonen du vil tilbakestille",
     "configName": "konfig",
     "error": "Det oppstod en feil under forsøk på å tilbakestille {{config}}-konfigurasjonen.",
-    "success": "Vellykket tilbakestilling av {{config}}-konfigurasjonen."
+    "success": "{{config}}-konfigurasjonen har blitt tilbakestilt."
   },
-  "resetDescription": "Tilbakestill innstillingene fra serverkonfigurasjonen",
+  "resetDescription": "Tilbakestill serverkonfigurasjonsinnstillingene",
   "resetName": "nullstille",
   "timezone": {
     "success": "**tidssonen** er satt til {{tidssone}}."

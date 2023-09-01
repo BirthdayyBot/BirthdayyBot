@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Neturiu leidimo siųsti pranešimų per {{channel}}.",
-    "channelDescription": "Kanalas, į kurį turėtų būti išsiųstas pranešimas",
+    "cannotPermissions": "O... atrodo, kad negaliu išsiųsti žinutės šiame kambaryje. Ar galite pasižiūrėti?",
+    "channelDescription": "Kuriam salonui turėčiau siųsti skelbimą?",
     "channelName": "kanalas",
-    "success": "Sėkmingai nustatėte pranešimų kanalą į {{channel}}."
+    "success": "Pranešimų kambarys buvo apibrėžtas {{channel}}."
   },
-  "announcementChannelDescription": "Praneškite, jei kas nors šiandien turi gimtadienį",
+  "announcementChannelDescription": "Kambarys, kuriame siųsčiau žinutę, kai yra vartotojo gimtadienis",
   "announcementChannelName": "anonsų-kanalas",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "žinutę",
     "requirePremium": "Ši funkcija šiuo metu yra __Beta Stage__ ir **Birthdayy Premium**.\nJei jau dabar domitės šia ir būsimomis funkcijomis, galite palaikyti kūrimą [Patreon] ({{url}}).`),",
-    "success": "Sėkmingai atnaujinote pranešimo pranešimą."
+    "success": "Pranešimas buvo pakeistas.\n\n{{message}}"
   },
-  "announcementMessageDescription": "Pridėkite tinkintą gimtadienio pranešimo pranešimą.",
+  "announcementMessageDescription": "Žinutė, kurią siųsčiau vartotojo gimtadienio proga.",
   "announcementMessageName": "pranešimas-žinutė",
   "birthdayRole": {
-    "highestBotRole": "Negaliu priskirti šio vaidmens dėl hierarchinės padėties.",
-    "roleDescription": "Vaidmuo, kuris turėtų būti paskirtas per gimtadienį",
+    "highestBotRole": "Oi negaliu paskirti šio vaidmens... Atrodo, jis aukštesnis už aukščiausią mano vaidmenį.",
+    "roleDescription": "Vaidmuo, kuris bus priskirtas vartotojui jo gimimo dieną",
     "roleName": "vaidmenį",
-    "success": "Sėkmingai nustatytas gimtadienio vaidmuo į {{role}}."
+    "success": "Gimtadienio vaidmuo sėkmingai nustatytas į {{role}}."
   },
-  "birthdayRoleDescription": "Išvardykite visus gimtadienius šiame „Discord“ serveryje",
+  "birthdayRoleDescription": "Vaidmuo, priskirtas vartotojui jo gimimo dieną",
   "birthdayRoleName": "gimtadienio-vaidmuo",
   "listName": "sąrašą",
-  "listDescription": "Išvardykite visus gimtadienius šiame „Discord“ serveryje",
+  "listDescription": "Išvardykite visus gimtadienius serveryje",
   "overviewChannel": {
     "cannotPermissions": "Neturiu leidimo siųsti pranešimų per {{channel}}.",
-    "channelDescription": "Kanalas, kuriame apžvalga turėtų būti išsiųsta ir atnaujinta",
+    "channelDescription": "Kambarys, kuriame apžvalga turėtų būti siunčiama ir atnaujinama",
     "channelName": "kanalas",
-    "success": "Sėkmingai nustatykite apžvalgos kanalą į {{channel}} ir [pranešimas]({{message}})."
+    "success": "Peržiūros kanalas nustatytas į {{channel}} ir naujas [pranešimas]({{message}})."
   },
-  "overviewChannelDescription": "Išvardija visus serverio gimtadienius šiame kanale ir nuolat jį atnaujina",
+  "overviewChannelDescription": "Kambarys, kuriame išvardyti visi serverio gimtadieniai",
   "overviewChannelName": "apžvalgos-kanalas",
   "pingRole": {
     "roleName": "vaidmenį",
-    "success": "Sėkmingai nustatytas gimtadienio ping vaidmuo į {{role}}.",
-    "roleDescription": "Vaidmuo, kuris turėtų būti paskelbtas kieno nors gimtadienio proga"
+    "success": "Paminėjimo vaidmuo nustatytas į {{role}}.",
+    "roleDescription": "Kokį vaidmenį turėčiau paminėti pranešime?"
   },
-  "pingRoleDescription": "Ping vaidmenį kažkieno gimtadienio proga",
+  "pingRoleDescription": "Paminėkite vaidmenį kieno nors gimtadienio proga",
   "pingRoleName": "ping-vaidmuo",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Laiko zona",
       "announcementMessage": "Skelbimo žinutė"
     },
-    "configDescription": "Konfigūracija, kurią norite pašalinti",
+    "configDescription": "Konfigūracija, kurią norite nustatyti iš naujo",
     "configName": "konfig",
     "error": "Bandant iš naujo nustatyti {{config}} konfigūraciją įvyko klaida.",
-    "success": "Sėkmingai iš naujo nustatykite {{config}} konfigūraciją."
+    "success": "{{config}} konfigūracija sėkmingai nustatyta iš naujo."
   },
-  "resetDescription": "Iš naujo nustatykite nustatymus iš savo serverio konfigūracijos",
+  "resetDescription": "Iš naujo nustatykite serverio konfigūracijos nustatymus",
   "resetName": "atstatyti",
   "timezone": {
     "success": "**Laiko juosta** nustatyta į {{timezone}}."

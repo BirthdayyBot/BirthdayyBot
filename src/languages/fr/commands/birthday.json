@@ -49,6 +49,6 @@
   "testDescription": "Testez votre configuration d’anniversaire actuelle",
   "test": {
     "userName": "utilisateur",
-    "userDescription": "Tester l'anniversaire de cette utilisateur - MANAGER ONLY"
+    "userDescription": "Tester l'anniversaire de cet utilisateur - MANAGER ONLY"
   }
 }

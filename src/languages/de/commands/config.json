@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Ich habe keine Berechtigung zum Senden von Nachrichten in {{channel}}.",
-    "channelDescription": "Kanal, an den die Ankündigung gesendet werden soll",
+    "cannotPermissions": "Oh... es sieht so aus, als ob ich in diesem Raum keine Nachricht senden kann. Kannst du dir das mal ansehen?",
+    "channelDescription": "An welchen Salon soll ich die Ankündigungsnachricht senden?",
     "channelName": "kanal",
-    "success": "Stellen Sie den Ankündigungskanal erfolgreich auf {{channel}} ein."
+    "success": "Der Ankündigungskanal wurde erfolgreich auf {{channel}} eingestellt."
   },
-  "announcementChannelDescription": "Geben Sie bekannt, ob heute jemand Geburtstag hat",
+  "announcementChannelDescription": "Raum, in dem ich eine Nachricht senden würde, wenn ein Benutzer Geburtstag hat",
   "announcementChannelName": "ankündigungskanal",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "nachricht",
     "requirePremium": "Diese Funktion ist derzeit in der __Beta-Phase__ und **Nur für Birthdayy Premium** verfügbar.\nWenn Sie bereits jetzt daran interessiert sind, diese und zukünftige Funktionen zu nutzen, können Sie die Entwicklung auf [Patreon]({{url}}).` unterstützen.",
-    "success": "Sie haben die Ankündigungsnachricht erfolgreich aktualisiert."
+    "success": "Die Ankündigungsnachricht wurde geändert.\n\n{{Nachricht}}"
   },
-  "announcementMessageDescription": "Fügen Sie eine benutzerdefinierte Geburtstagsankündigungsnachricht hinzu.",
+  "announcementMessageDescription": "Nachricht, die ich zum Geburtstag eines Benutzers senden würde.",
   "announcementMessageName": "ankündigungsnachricht",
   "birthdayRole": {
-    "highestBotRole": "Ich kann diese Rolle aufgrund ihrer hierarchischen Position nicht zuweisen.",
-    "roleDescription": "Rolle, die an einem Geburtstag zugewiesen werden sollte",
+    "highestBotRole": "Oh, ich kann diese Rolle nicht zuweisen ... Sieht aus, als wäre sie höher als meine höchste Rolle.",
+    "roleDescription": "Rolle, die dem Benutzer an seinem Geburtstag zugewiesen wird",
     "roleName": "rolle",
     "success": "Die Geburtstagsrolle wurde erfolgreich auf {{role}} festgelegt."
   },
-  "birthdayRoleDescription": "Listen Sie alle Geburtstage auf diesem Discord-Server auf",
+  "birthdayRoleDescription": "Dem Benutzer an seinem Geburtstag zugewiesene Rolle",
   "birthdayRoleName": "geburtstagsrolle",
   "listName": "liste",
-  "listDescription": "Listen Sie alle Geburtstage auf diesem Discord-Server auf",
+  "listDescription": "Listen Sie alle Geburtstage auf dem Server auf",
   "overviewChannel": {
-    "cannotPermissions": "Ich habe keine Berechtigung zum Senden von Nachrichten in {{channel}}.",
-    "channelDescription": "Kanal, an den die Übersicht gesendet und aktualisiert werden soll",
+    "cannotPermissions": "Ich habe keine Berechtigung zum Senden von Nachrichten auf {{channel}}.",
+    "channelDescription": "Raum, an den die Übersicht gesendet und aktualisiert werden soll",
     "channelName": "kanal",
-    "success": "Setzen Sie den Übersichtskanal erfolgreich auf {{channel}} und die [Nachricht]({{message}})."
+    "success": "Der Vorschaukanal wurde auf {{channel}} und die neue [Nachricht]({{message}}) eingestellt."
   },
-  "overviewChannelDescription": "Listet alle Servergeburtstage in diesem Kanal auf und aktualisiert sie fortlaufend",
+  "overviewChannelDescription": "Raum, der alle Servergeburtstage auflistet",
   "overviewChannelName": "übersichtskanal",
   "pingRole": {
     "roleName": "rolle",
-    "success": "Die Geburtstags-Ping-Rolle wurde erfolgreich auf {{role}} festgelegt.",
-    "roleDescription": "Rolle, die am Geburtstag einer Person angepingt werden soll"
+    "success": "Die Erwähnungsrolle wurde auf {{role}} festgelegt.",
+    "roleDescription": "Welche Rolle sollte ich in der Ankündigungsnachricht erwähnen?"
   },
-  "pingRoleDescription": "Pingen Sie eine Rolle an jemandes Geburtstag",
+  "pingRoleDescription": "Erwähnen Sie eine Rolle am Geburtstag einer Person",
   "pingRoleName": "ping-rolle",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Zeitzone",
       "announcementMessage": "Ankündigungsnachricht"
     },
-    "configDescription": "Konfiguration, die Sie entfernen möchten",
+    "configDescription": "Konfiguration, die Sie zurücksetzen möchten",
     "configName": "config",
     "error": "Beim Versuch, die {{config}}-Konfiguration zurückzusetzen, ist ein Fehler aufgetreten.",
     "success": "Die {{config}}-Konfiguration wurde erfolgreich zurückgesetzt."
   },
-  "resetDescription": "Setzen Sie die Einstellungen aus Ihrer Serverkonfiguration zurück",
+  "resetDescription": "Setzen Sie Ihre Serverkonfigurationseinstellungen zurück",
   "resetName": "zurücksetzen",
   "timezone": {
     "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt."

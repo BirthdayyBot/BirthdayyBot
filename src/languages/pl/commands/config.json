@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Nie mam uprawnień do wysyłania wiadomości w {{channel}}.",
-    "channelDescription": "Kanał, na który powinno zostać wysłane ogłoszenie",
+    "cannotPermissions": "Och... wygląda na to, że nie mogę wysłać wiadomości w tym pokoju. Czy możesz rzucić okiem?",
+    "channelDescription": "Do jakiego salonu wysłać wiadomość z ogłoszeniem?",
     "channelName": "kanał",
-    "success": "Pomyślnie ustaw kanał ogłoszeń na {{channel}}."
+    "success": "Pokój ogłoszeń został zdefiniowany na {{channel}}."
   },
-  "announcementChannelDescription": "Ogłoś, czy ktoś ma dzisiaj urodziny",
+  "announcementChannelDescription": "Pokój, w którym wysyłam wiadomość, gdy są urodziny użytkownika",
   "announcementChannelName": "kanał-ogłoszeń",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "wiadomość",
     "requirePremium": "Ta funkcja jest obecnie w fazie __Beta__ i **Tylko w wersji Premium**.\nJeśli już teraz jesteś zainteresowany korzystaniem z tej i przyszłych funkcji, możesz wesprzeć rozwój na [Patreonie]({{url}}).`),",
-    "success": "Pomyślnie zaktualizowałeś wiadomość z ogłoszeniem."
+    "success": "Komunikat ogłoszenia został zmodyfikowany.\n\n{{wiadomość}}"
   },
-  "announcementMessageDescription": "Dodaj niestandardową wiadomość z ogłoszeniem o urodzinach.",
+  "announcementMessageDescription": "Wiadomość, którą wysłałbym na urodziny użytkownika.",
   "announcementMessageName": "wiadomość-ogłoszenie",
   "birthdayRole": {
-    "highestBotRole": "Nie mogę przypisać tej roli ze względu na jej hierarchiczną pozycję.",
-    "roleDescription": "Rola, którą należy przypisać na urodziny",
+    "highestBotRole": "Och, nie mogę przypisać tej roli... Wygląda na to, że jest ona wyższa od mojej najwyższej roli.",
+    "roleDescription": "Rola, która zostanie przypisana użytkownikowi w dniu jego urodzin",
     "roleName": "rola",
-    "success": "Pomyślnie ustaw rolę urodzinową na {{role}}."
+    "success": "Rola urodzinowa została ustawiona na {{role}}."
   },
-  "birthdayRoleDescription": "Lista wszystkich urodzin na tym serwerze Discord",
+  "birthdayRoleDescription": "Rola przypisana użytkownikowi w dniu jego urodzin",
   "birthdayRoleName": "rola-urodzinowa",
   "listName": "lista",
-  "listDescription": "Lista wszystkich urodzin na tym serwerze Discord",
+  "listDescription": "Lista wszystkich urodzin na serwerze",
   "overviewChannel": {
-    "cannotPermissions": "Nie mam uprawnień do wysyłania wiadomości w {{channel}}.",
-    "channelDescription": "Kanał, na który powinno być wysyłane i aktualizowane podsumowanie",
+    "cannotPermissions": "Nie mam uprawnień do publikowania postów na kanale {{channel}}.",
+    "channelDescription": "Pokój, w którym należy przesłać i zaktualizować przegląd",
     "channelName": "kanał",
-    "success": "Pomyślnie ustaw kanał przeglądu na {{channel}} i [wiadomość]({{wiadomość}})."
+    "success": "Kanał podglądu został ustawiony na {{channel}} i nową [wiadomość]({{message}})."
   },
-  "overviewChannelDescription": "Wyświetla listę urodzin wszystkich serwerów w tym kanale i stale ją aktualizuje",
+  "overviewChannelDescription": "Pokój zawierający listę urodzin wszystkich serwerów",
   "overviewChannelName": "kanał-przeglądowy",
   "pingRole": {
     "roleName": "rola",
-    "success": "Pomyślnie ustaw rolę pingu urodzinowego na {{role}}.",
-    "roleDescription": "Rola, która powinna zostać oznaczona w czyjeś urodziny"
+    "success": "Rola wzmianki została ustawiona na {{role}}.",
+    "roleDescription": "O jakiej roli powinienem wspomnieć w ogłoszeniu?"
   },
-  "pingRoleDescription": "Pinguj rolę w czyjeś urodziny",
+  "pingRoleDescription": "Wspomnij o roli w czyjeś urodziny",
   "pingRoleName": "rola-ping",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Strefa czasowa",
       "announcementMessage": "Wiadomość ogłoszeniowa"
     },
-    "configDescription": "Konfiguracja, którą chcesz usunąć",
+    "configDescription": "Konfiguracja, którą chcesz zresetować",
     "configName": "konfiguracja",
     "error": "Wystąpił błąd podczas próby zresetowania konfiguracji {{config}}.",
-    "success": "Pomyślnie zresetowano konfigurację {{config}}."
+    "success": "Konfiguracja {{config}} została pomyślnie zresetowana."
   },
-  "resetDescription": "Zresetuj ustawienia z konfiguracji serwera",
+  "resetDescription": "Zresetuj ustawienia konfiguracji serwera",
   "resetName": "resetowanie",
   "timezone": {
     "success": "**Strefa czasowa** została ustawiona na {{timezone}}."

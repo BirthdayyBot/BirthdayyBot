@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Ik heb geen toestemming om berichten te sturen in {{channel}}.",
-    "channelDescription": "Kanaal waarnaar de aankondiging moet worden verzonden",
+    "cannotPermissions": "Oh... het lijkt erop dat ik in deze kamer geen bericht kan sturen. \nKun je even kijken?",
+    "channelDescription": "In welke kamer moet ik het aankondigingsbericht sturen?",
     "channelName": "kanaal",
-    "success": "Stel het aankondigingskanaal succesvol in op {{channel}}."
+    "success": "De aankondigingsruimte is gedefinieerd op {{channel}}."
   },
-  "announcementChannelDescription": "Kondig aan of er vandaag iemand jarig is",
+  "announcementChannelDescription": "Ruimte waar ik een bericht kan sturen als een gebruiker jarig is",
   "announcementChannelName": "aankondigingskanaal",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "bericht",
     "requirePremium": "Deze functie bevindt zich momenteel in de __bètafase__ en **alleen verjaardagspremie**.\nAls u nu al geïnteresseerd bent in het gebruik van deze en toekomstige functies, kunt u de ontwikkeling op [Patreon]({{url}}).`),",
-    "success": "U hebt het aankondigingsbericht bijgewerkt."
+    "success": "Het aankondigingsbericht is aangepast.\n\n{{bericht}}"
   },
-  "announcementMessageDescription": "Voeg een aangepast verjaardagsaankondigingsbericht toe.",
+  "announcementMessageDescription": "Bericht dat ik zou sturen op de verjaardag van een gebruiker.",
   "announcementMessageName": "aankondiging-bericht",
   "birthdayRole": {
-    "highestBotRole": "Ik kan deze rol niet toewijzen vanwege de hiërarchische positie ervan.",
-    "roleDescription": "Rol die op een verjaardag toegewezen moet worden",
+    "highestBotRole": "Oh, ik kan deze rol niet toewijzen... Het lijkt erop dat deze hoger is dan mijn hoogste rol.",
+    "roleDescription": "Rol die op de verjaardag van de gebruiker wordt toegewezen",
     "roleName": "rol",
-    "success": "Stel de verjaardagsrol succesvol in op {{role}}."
+    "success": "De verjaardagsrol is ingesteld op {{role}}."
   },
-  "birthdayRoleDescription": "Maak een lijst van alle verjaardagen op deze Discord-server",
+  "birthdayRoleDescription": "Rol toegewezen aan de gebruiker op zijn of haar verjaardag",
   "birthdayRoleName": "verjaardag-rol",
   "listName": "lijst",
-  "listDescription": "Maak een lijst van alle verjaardagen op deze Discord-server",
+  "listDescription": "Maak een lijst van alle verjaardagen op de server",
   "overviewChannel": {
-    "cannotPermissions": "Ik heb geen toestemming om berichten te sturen in {{channel}}.",
-    "channelDescription": "Kanaal waarnaar het overzicht moet worden verzonden en bijgewerkt",
+    "cannotPermissions": "Ik heb geen toestemming om berichten te sturen op {{channel}}.",
+    "channelDescription": "Ruimte waarnaar het overzicht moet worden verzonden en bijgewerkt",
     "channelName": "kanaal",
-    "success": "Stel het overzichtskanaal succesvol in op {{channel}} en de [message]({{message}})."
+    "success": "Het voorbeeldkanaal is ingesteld op {{channel}} en het nieuwe [bericht]({{message}})."
   },
-  "overviewChannelDescription": "Geeft een overzicht van alle serververjaardagen in dit kanaal en werkt deze voortdurend bij",
+  "overviewChannelDescription": "Ruimte waarin alle serververjaardagen worden vermeld",
   "overviewChannelName": "overzicht-kanaal",
   "pingRole": {
     "roleName": "rol",
-    "success": "Stel de verjaardagsping-rol in op {{role}}.",
-    "roleDescription": "Rol die op iemands verjaardag moet worden gepingd"
+    "success": "De vermeldingsrol is ingesteld op {{role}}.",
+    "roleDescription": "Welke rol moet ik vermelden in het aankondigingsbericht?"
   },
-  "pingRoleDescription": "Ping een rol op iemands verjaardag",
+  "pingRoleDescription": "Noem een ​​rol op iemands verjaardag",
   "pingRoleName": "ping-rol",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Tijdzone",
       "announcementMessage": "Aankondiging bericht"
     },
-    "configDescription": "Configuratie die u wilt verwijderen",
+    "configDescription": "Configuratie die u wilt resetten",
     "configName": "configuratie",
     "error": "Er is een fout opgetreden bij het resetten van de configuratie van {{config}}.",
-    "success": "Reset de configuratie van {{config}} succesvol."
+    "success": "De configuratie {{config}} is succesvol gereset."
   },
-  "resetDescription": "Reset de instellingen van uw serverconfiguratie",
+  "resetDescription": "Reset uw serverconfiguratie-instellingen",
   "resetName": "opnieuw-instellen",
   "timezone": {
     "success": "De **tijdzone** is ingesteld op {{timezone}}."

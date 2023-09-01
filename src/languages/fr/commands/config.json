@@ -13,7 +13,7 @@
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "message",
     "requirePremium": "Cette fonctionnalité est actuellement en __Beta Stage__ et **Birthdayy Premium uniquement**.\nSi vous souhaitez déjà utiliser cette fonctionnalité et les futures, vous pouvez prendre en charge le développement sur [Patreon]({{url}}).`),",
-    "success": "Le message d'annonce à bien été modifier. \n{{message}}"
+    "success": "Le message d'annonce à bien été modifier.\n{{message}}"
   },
   "announcementMessageDescription": "Message que j'enverrais à l'anniversaire d'un utilisateur.",
   "announcementMessageName": "message-annonce",
@@ -53,7 +53,7 @@
       "logChannel": "Salon de journal",
       "timezone": "Fuseau horaire"
     },
-    "configDescription": "Configuration que vous souhaitez supprimer",
+    "configDescription": "Configuration que vous souhaitez réinitialisez",
     "configName": "configuration",
     "error": "Une erreur s'est produite lors de la tentative de réinitialisation de la configuration {{config}}.",
     "success": "La configuration {{config}} a bien été réinitialisée."

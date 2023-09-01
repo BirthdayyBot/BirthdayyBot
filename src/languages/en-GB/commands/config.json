@@ -1,43 +1,43 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "I don't have permission to send messages in {{channel}}.",
-    "channelDescription": "Channel where the announcement should get sent",
+    "cannotPermissions": "Oh... looks like I can't send a message in this room. Can you take a look?",
+    "channelDescription": "Which salon should I send the announcement message to?",
     "channelName": "channel",
-    "success": "Successfully set the announcement channel to {{channel}}."
+    "success": "The announcement channel has been defined on {{channel}}."
   },
-  "announcementChannelDescription": "Announce if its somebody's birthday today",
+  "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
   "announcementChannelName": "announcement-channel",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "message",
     "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium Only**. \nIf you are interested in using this and future features now already, you can support the Development on [Patreon]({{url}}).`),",
-    "success": "You have successfully updated the announcement message."
+    "success": "The announcement message has been modified.\n\n{{message}}"
   },
-  "announcementMessageDescription": "Add a custom birthday announcement message.",
+  "announcementMessageDescription": "Message I would send on a user's birthday.",
   "announcementMessageName": "announcement-message",
   "birthdayRole": {
-    "highestBotRole": "I can't assign this role because of its hierarchical position.",
-    "roleDescription": "Role that should get assigned on a birthday",
+    "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
+    "roleDescription": "Role that will be assigned to the user on their birthday",
     "roleName": "role",
-    "success": "Successfully set the birthday role to {{role}}."
+    "success": "The birthday role has been set to {{role}}."
   },
-  "birthdayRoleDescription": "List all Birthdays in this Discord server",
+  "birthdayRoleDescription": "Role assigned to the user on their birthday",
   "birthdayRoleName": "birthday-role",
-  "listDescription": "List all Birthdays in this Discord server",
+  "listDescription": "List all birthdays on the server",
   "overviewChannel": {
-    "cannotPermissions": "I don't have permission to send messages in {{channel}}.",
-    "channelDescription": "Channel where the overview should get sent and updated in",
+    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
+    "channelDescription": "Channel where the preview should be sent and updated",
     "channelName": "channel",
-    "success": "Successfully set the overview channel to {{channel}} and the [message]({{message}})."
+    "success": "Overview channel successfully set to {{channel}} and new [message]({{message}})."
   },
-  "overviewChannelDescription": "Lists all server birthdays in this channel and updates it continuously",
+  "overviewChannelDescription": "Channel that lists all server birthdays",
   "overviewChannelName": "overview-channel",
   "pingRole": {
     "roleName": "role",
-    "success": "Successfully set the birthday ping role to {{role}}.",
-    "roleDescription": "Role that should get pinged on someones birthday"
+    "success": "The ping role has been set to {{role}}.",
+    "roleDescription": "What role should I mention in the announcement message?"
   },
-  "pingRoleDescription": "Ping a role on someones birthday",
+  "pingRoleDescription": "Mention a role on someone's birthday",
   "pingRoleName": "ping-role",
   "reset": {
     "choices": {
@@ -50,12 +50,12 @@
       "timezone": "Timezone",
       "announcementMessage": "Announcement message"
     },
-    "configDescription": "Config that you want to remove",
+    "configDescription": "Configuration you want to reset",
     "configName": "config",
     "error": "An error occurred while trying to reset the {{config}} config.",
-    "success": "Successfully reset the {{config}} config."
+    "success": "The configuration {{config}} has been successfully reset."
   },
-  "resetDescription": "Reset settings from your server config",
+  "resetDescription": "Reset your server configuration settings",
   "resetName": "reset",
   "timezone": {
     "success": "The **Timezone** has been set to {{timezone}}."

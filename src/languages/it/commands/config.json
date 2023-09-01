@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Non ho il permesso di inviare messaggi in {{channel}}.",
-    "channelDescription": "Canale a cui inviare l'annuncio",
+    "cannotPermissions": "Oh... sembra che non riesca a inviare un messaggio in questa stanza. Puoi dare un'occhiata?",
+    "channelDescription": "A quale salone devo inviare il messaggio di annuncio?",
     "channelName": "canale",
-    "success": "Imposta con successo il canale dell'annuncio su {{channel}}."
+    "success": "La stanza degli annunci è stata definita su {{channel}}."
   },
-  "announcementChannelDescription": "Annuncia se oggi è il compleanno di qualcuno",
+  "announcementChannelDescription": "Stanza in cui invierei un messaggio quando è il compleanno di un utente",
   "announcementChannelName": "canale-di-annunci",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "messaggio",
     "requirePremium": "Questa funzione è attualmente nella __Fase Beta__ e **Solo Birthday Premium**.\nSe sei interessato a utilizzare questa e le funzionalità future già adesso, puoi supportare lo sviluppo su [Patreon]({{url}}).`),",
-    "success": "Hai aggiornato con successo il messaggio di annuncio."
+    "success": "Il messaggio di annuncio è stato modificato.\n\n{{Messaggio}}"
   },
-  "announcementMessageDescription": "Aggiungi un messaggio di annuncio di compleanno personalizzato.",
+  "announcementMessageDescription": "Messaggio che invierei il giorno del compleanno di un utente.",
   "announcementMessageName": "messaggio-annuncio",
   "birthdayRole": {
-    "highestBotRole": "Non posso assegnare questo ruolo a causa della sua posizione gerarchica.",
-    "roleDescription": "Ruolo che dovrebbe essere assegnato in occasione di un compleanno",
+    "highestBotRole": "Oh, non posso assegnare questo ruolo... Sembra che sia più alto del mio ruolo più alto.",
+    "roleDescription": "Ruolo che verrà assegnato all'utente nel giorno del suo compleanno",
     "roleName": "ruolo",
-    "success": "Imposta correttamente il ruolo del compleanno su {{role}}."
+    "success": "Il ruolo del compleanno è stato impostato su {{role}}."
   },
-  "birthdayRoleDescription": "Elenca tutti i compleanni in questo server Discord",
+  "birthdayRoleDescription": "Ruolo assegnato all'utente nel giorno del suo compleanno",
   "birthdayRoleName": "ruolo-di-compleanno",
   "listName": "elenco",
-  "listDescription": "Elenca tutti i compleanni in questo server Discord",
+  "listDescription": "Elenca tutti i compleanni sul server",
   "overviewChannel": {
-    "cannotPermissions": "Non ho il permesso di inviare messaggi in {{channel}}.",
-    "channelDescription": "Canale in cui la panoramica dovrebbe essere inviata e aggiornata",
+    "cannotPermissions": "Non ho il permesso di postare su {{channel}}.",
+    "channelDescription": "Stanza su cui deve essere inviata e aggiornata la panoramica",
     "channelName": "canale",
     "success": "Imposta correttamente il canale di panoramica su {{channel}} e il [messaggio]({{message}})."
   },
-  "overviewChannelDescription": "Elenca tutti i compleanni del server in questo canale e lo aggiorna continuamente",
+  "overviewChannelDescription": "Stanza in cui sono elencati i compleanni di tutti i server",
   "overviewChannelName": "canale-panoramica",
   "pingRole": {
     "roleName": "ruolo",
-    "success": "Imposta correttamente il ruolo ping compleanno su {{role}}.",
-    "roleDescription": "Ruolo che dovrebbe essere segnalato il giorno del compleanno di qualcuno"
+    "success": "Il ruolo della menzione è stato impostato su {{role}}.",
+    "roleDescription": "Quale ruolo devo menzionare nel messaggio di annuncio?"
   },
-  "pingRoleDescription": "Segnala un ruolo il giorno del compleanno di qualcuno",
+  "pingRoleDescription": "Menziona un ruolo nel giorno del compleanno di qualcuno",
   "pingRoleName": "ruolo-ping",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Fuso orario",
       "announcementMessage": "Messaggio di annuncio"
     },
-    "configDescription": "Configurazione che desideri rimuovere",
+    "configDescription": "Configurazione che desideri reimpostare",
     "configName": "config",
     "error": "Si è verificato un errore durante il tentativo di reimpostare la configurazione di {{config}}.",
-    "success": "Reimposta la configurazione di {{config}} riuscita."
+    "success": "La configurazione {{config}} è stata reimpostata con successo."
   },
-  "resetDescription": "Ripristina le impostazioni dalla configurazione del server",
+  "resetDescription": "Ripristina le impostazioni di configurazione del server",
   "resetName": "ripristina",
   "timezone": {
     "success": "Il **fuso orario** è stato impostato su {{timezone}}."

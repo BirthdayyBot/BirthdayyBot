@@ -1,6 +1,6 @@
 {
   "birthdayName": "birthday",
-  "birthdayDescription": "Birthday management commands",
+  "birthdayDescription": "Birthday Management Commands",
   "setName": "set",
   "setDescription": "Set your birthday date on the server.",
   "set": {
@@ -26,29 +26,29 @@
     "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
     "success": "Your birthday was successfully removed.",
     "success_target": "{target}}'s birthday was successfully removed.",
-    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+    "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
     "notRegistered_target": "{{target}}'s birthday is not registered.",
     "notRegistered_target-manager": "{{target}}'s birthday is not registered. Use {{command}} to set it.",
-    "hasNotPermissionManagesRoles": "You don't have permission to remove birthdays",
-    "hasNotPermissionToManageThisUser": "You don't have permission to remove this user's birthday."
+    "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
+    "hasNotPermissionToManageThisUser": "You do not have permission to delete this user's birthday."
   },
   "showName": "show",
   "showDescription": "Show your birthday",
   "show": {
     "userName": "user",
-    "userDescription": "Show a Birthday for a Person - MANAGER ONLY",
+    "userDescription": "Show this user's birthday - MANAGER ONLY",
     "title": "{{emoji}} Birthday",
     "description": "{{emoji}} Your birthday is at the {{date}}.",
     "description_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
     "description_target-manager": "{{emoji}} {{target}}'s birthday is at the {{date}}. If you want to change it, use {{command}}.",
     "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
     "notRegistered_target": "{{target}}'s birthday is not registered.",
-    "notRegistered_target-manager": "{{target}}'s birthday is not registered. Use {{command}} to set it."
+    "notRegistered_target-manager": "{{target}}'s birthday is not recorded. Use {{command}} to save it."
   },
   "testName": "test",
-  "testDescription": "Test your current birthday configurations",
+  "testDescription": "Test your current birthday setup",
   "test": {
     "userName": "user",
-    "userDescription": "Test a Birthday for a Person - MANAGER ONLY"
+    "userDescription": "Test this user's birthday - MANAGER ONLY"
   }
 }

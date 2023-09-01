@@ -1,44 +1,44 @@
 {
   "announcementChannel": {
-    "cannotPermissions": "Jag har inte behörighet att skicka meddelanden i {{channel}}.",
-    "channelDescription": "Kanal dit tillkännagivandet ska skickas",
+    "cannotPermissions": "Åh... det verkar som att jag inte kan skicka ett meddelande i det här rummet. Kan du ta en titt?",
+    "channelDescription": "Vilken salong ska jag skicka meddelandet till?",
     "channelName": "kanal",
-    "success": "Ställ in meddelandekanalen till {{channel}}."
+    "success": "Annonseringsrummet har definierats på {{channel}}."
   },
-  "announcementChannelDescription": "Meddela om någon fyller år idag",
+  "announcementChannelDescription": "Rum där jag skulle skicka ett meddelande när det är en användares födelsedag",
   "announcementChannelName": "tillkännagivande-kanal",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "meddelande",
     "requirePremium": "Den här funktionen är för närvarande i __Betastadiet__ och **Birthdayy Premium Only**.\nOm du är intresserad av att använda denna och framtida funktioner redan nu kan du stödja utvecklingen på [Patreon]({{url}}).`),",
-    "success": "Du har uppdaterat meddelandet."
+    "success": "Meddelandet har ändrats.\n\n{{meddelande}}"
   },
-  "announcementMessageDescription": "Lägg till ett anpassat födelsedagsmeddelande.",
+  "announcementMessageDescription": "Meddelande jag skulle skicka på en användares födelsedag.",
   "announcementMessageName": "tillkännagivande-meddelande",
   "birthdayRole": {
-    "highestBotRole": "Jag kan inte tilldela den här rollen på grund av dess hierarkiska position.",
-    "roleDescription": "Roll som bör tilldelas på en födelsedag",
+    "highestBotRole": "Åh, jag kan inte tilldela den här rollen... Ser ut som att den är högre än min högsta roll.",
+    "roleDescription": "Roll som kommer att tilldelas användaren på deras födelsedag",
     "roleName": "roll",
-    "success": "Ange födelsedagsrollen till {{role}}."
+    "success": "Födelsedagsrollen har ställts in på {{role}}."
   },
-  "birthdayRoleDescription": "Lista alla födelsedagar i denna Discord-server",
+  "birthdayRoleDescription": "Roll tilldelad till användaren på deras födelsedag",
   "birthdayRoleName": "födelsedagsroll",
   "listName": "lista",
-  "listDescription": "Lista alla födelsedagar i denna Discord-server",
+  "listDescription": "Lista alla födelsedagar på servern",
   "overviewChannel": {
-    "cannotPermissions": "Jag har inte behörighet att skicka meddelanden i {{channel}}.",
-    "channelDescription": "Kanal där översikten ska skickas och uppdateras in",
+    "cannotPermissions": "Jag har inte behörighet att skicka meddelanden på {{channel}}.",
+    "channelDescription": "Rum där översikten ska skickas och uppdateras",
     "channelName": "kanal",
-    "success": "Ställ in översiktskanalen på {{kanal}} och [meddelandet]({{meddelande}})."
+    "success": "Förhandsgranskningskanalen har ställts in på {{channel}} och det nya [meddelandet]({{meddelande}})."
   },
-  "overviewChannelDescription": "Listar alla serverfödelsedagar i den här kanalen och uppdaterar den kontinuerligt",
+  "overviewChannelDescription": "Rum som listar alla serverfödelsedagar",
   "overviewChannelName": "översiktskanal",
   "pingRole": {
     "roleName": "roll",
-    "success": "Ange födelsedagspingrollen till {{role}}.",
-    "roleDescription": "Roll som borde bli pingad på någons födelsedag"
+    "success": "Omnämningsrollen har satts till {{role}}.",
+    "roleDescription": "Vilken roll ska jag nämna i tillkännagivandet?"
   },
-  "pingRoleDescription": "Pinga en roll på någons födelsedag",
+  "pingRoleDescription": "Nämn en roll på någons födelsedag",
   "pingRoleName": "ping-roll",
   "reset": {
     "choices": {
@@ -51,12 +51,12 @@
       "timezone": "Tidszon",
       "announcementMessage": "Tillkännagivande meddelande"
     },
-    "configDescription": "Konfiguration som du vill ta bort",
+    "configDescription": "Konfiguration du vill återställa",
     "configName": "config",
     "error": "Ett fel uppstod när du försökte återställa {{config}}-konfigurationen.",
-    "success": "Återställ {{config}}-konfigurationen."
+    "success": "{{config}}-konfigurationen har återställts."
   },
-  "resetDescription": "Återställ inställningarna från din serverkonfiguration",
+  "resetDescription": "Återställ dina serverkonfigurationsinställningar",
   "resetName": "återställa",
   "timezone": {
     "success": "**tidszonen** har ställts in på {{tidszon}}."
