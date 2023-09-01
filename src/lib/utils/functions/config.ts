@@ -59,8 +59,6 @@ export function setDefaultConfig(config_name: ConfigName, guildId: string) {
 			return container.utilities.guild.reset.LogChannel(guildId);
 		case 'announcementMessage':
 			return container.utilities.guild.reset.AnnouncementMessage(guildId);
-		case 'overviewMessage':
-			return container.utilities.guild.reset.OverviewMessage(guildId);
 		case 'timezone':
 			return container.utilities.guild.reset.Timezone(guildId);
 		case 'birthdayRole':

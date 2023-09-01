@@ -48,7 +48,8 @@
       "overviewChannel": "Canale Panoramica",
       "overviewMessage": "Messaggio di panoramica",
       "logChannel": "Registra canale",
-      "timezone": "Fuso orario"
+      "timezone": "Fuso orario",
+      "announcementMessage": "Messaggio di annuncio"
     },
     "configDescription": "Configurazione che desideri rimuovere",
     "configName": "config",
@@ -61,5 +62,7 @@
     "success": "Il **fuso orario** è stato impostato su {{timezone}}."
   },
   "timezoneName": "fuso-orario",
-  "timezoneDescription": "Cambia il fuso orario quando Birthdayy augura buon compleanno."
+  "timezoneDescription": "Cambia il fuso orario quando Birthdayy augura buon compleanno.",
+  "configDescription": "Configurazione delle impostazioni del server",
+  "configName": "config"
 }

@@ -45,7 +45,7 @@
     "success": "You have successfully updated the announcement message."
   },
   "announcementMessageDescription": "Add a personalized birthday announcement message.",
-  "announcementMessageName": "announcement",
+  "announcementMessageName": "announcement-message",
   "birthdayRole": {
     "highestBotRole": "I cannot assign this role due to its hierarchical position.",
     "roleDescription": "Role that should be assigned on a birthday",
@@ -63,7 +63,7 @@
     "success": "Successfully set the presentation channel to {{channel}} and [message]({{message}})."
   },
   "overviewChannelDescription": "Lists all server birthdays in this channel and updates it continuously",
-  "overviewChannelName": "channel-preview",
+  "overviewChannelName": "overview-channel",
   "pingRole": {
     "roleDescription": "Role who should be pinged on someone's birthday",
     "roleName": "role",
@@ -79,15 +79,18 @@
       "logChannel": "News channel",
       "overviewChannel": "Presentation channel",
       "overviewMessage": "Introductory message",
-      "timezone": "Timezone"
+      "timezone": "Timezone",
+      "announcementMessage": "Announcement message"
     },
     "configDescription": "Configuration you want to delete",
-    "configName": "configuration",
+    "configName": "config",
     "error": "An error occurred while trying to reset the {{config}} configuration.",
     "success": "Successfully reset the {{config}} configuration."
   },
   "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
   "timezoneName": "timezone",
   "resetDescription": "Reset your server configuration settings",
-  "resetName": "reset"
+  "resetName": "reset",
+  "configDescription": "Configuring server settings",
+  "configName": "config"
 }

@@ -1,16 +1,15 @@
-import { createFunctionPrecondition } from '@sapphire/decorators';
 import {
 	Command,
 	container,
 	type ChatInputCommandSuccessPayload,
 	type ContextMenuCommandSuccessPayload,
 	type MessageCommandSuccessPayload,
-	ApplicationCommandRegistry,
 } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { cyan } from 'colorette';
 import {
 	ChatInputCommandInteraction,
+	CommandInteraction,
 	EmbedBuilder,
 	Guild,
 	Message,
@@ -19,8 +18,6 @@ import {
 	userMention,
 	type APIUser,
 	type InteractionReplyOptions,
-	CommandInteraction,
-	SlashCommandBuilder,
 } from 'discord.js';
 
 /**

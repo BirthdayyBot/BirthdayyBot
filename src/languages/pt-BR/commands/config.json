@@ -48,7 +48,8 @@
       "overviewChannel": "Visão geral do canal",
       "overviewMessage": "Mensagem de visão geral",
       "logChannel": "Canal de registro",
-      "timezone": "Fuso horário"
+      "timezone": "Fuso horário",
+      "announcementMessage": "Mensagem de anúncio"
     },
     "configDescription": "Configuração que você deseja remover",
     "configName": "configuração",
@@ -61,5 +62,7 @@
     "success": "O **fuso horário** foi definido como {{timezone}}."
   },
   "timezoneName": "fuso-horário",
-  "timezoneDescription": "Altere o fuso horário quando o Aniversário deseja feliz aniversário."
+  "timezoneDescription": "Altere o fuso horário quando o Aniversário deseja feliz aniversário.",
+  "configDescription": "Configurando as configurações do servidor",
+  "configName": "configuração"
 }

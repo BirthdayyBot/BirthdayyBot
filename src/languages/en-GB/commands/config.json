@@ -47,7 +47,8 @@
       "overviewChannel": "Overview Channel",
       "overviewMessage": "Overview Message",
       "logChannel": "Log Channel",
-      "timezone": "Timezone"
+      "timezone": "Timezone",
+      "announcementMessage": "Announcement message"
     },
     "configDescription": "Config that you want to remove",
     "configName": "config",
@@ -60,5 +61,7 @@
     "success": "The **Timezone** has been set to {{timezone}}."
   },
   "timezoneName": "timezone",
-  "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday."
+  "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday.",
+  "configDescription": "Configuring server settings",
+  "configName": "config"
 }

@@ -48,7 +48,8 @@
       "overviewChannel": "Canal de descripción general",
       "overviewMessage": "Mensaje de descripción general",
       "logChannel": "Canal de registro",
-      "timezone": "Zona horaria"
+      "timezone": "Zona horaria",
+      "announcementMessage": "Mensaje de anuncio"
     },
     "configDescription": "Configuración que desea eliminar",
     "configName": "configuración",
@@ -61,5 +62,7 @@
     "success": "La **Zona horaria** se ha establecido en {{timezone}}."
   },
   "timezoneName": "zona-horaria",
-  "timezoneDescription": "Cambie la zona horaria cuando Birthdayy desee feliz cumpleaños."
+  "timezoneDescription": "Cambie la zona horaria cuando Birthdayy desee feliz cumpleaños.",
+  "configDescription": "Configurar los ajustes del servidor",
+  "configName": "configuración"
 }

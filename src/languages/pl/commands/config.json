@@ -48,7 +48,8 @@
       "overviewChannel": "Przegląd kanału",
       "overviewMessage": "Wiadomość przeglądowa",
       "logChannel": "Kanał dziennika",
-      "timezone": "Strefa czasowa"
+      "timezone": "Strefa czasowa",
+      "announcementMessage": "Wiadomość ogłoszeniowa"
     },
     "configDescription": "Konfiguracja, którą chcesz usunąć",
     "configName": "konfiguracja",
@@ -61,5 +62,7 @@
     "success": "**Strefa czasowa** została ustawiona na {{timezone}}."
   },
   "timezoneName": "strefa-czasowa",
-  "timezoneDescription": "Zmień strefę czasową, gdy Birthdayy życzy wszystkiego najlepszego."
+  "timezoneDescription": "Zmień strefę czasową, gdy Birthdayy życzy wszystkiego najlepszego.",
+  "configDescription": "Konfiguracja ustawień serwera",
+  "configName": "konfiguracja"
 }

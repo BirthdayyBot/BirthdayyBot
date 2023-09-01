@@ -48,7 +48,8 @@
       "overviewChannel": "Übersichtskanal",
       "overviewMessage": "Übersichtsnachricht",
       "logChannel": "Protokollkanal",
-      "timezone": "Zeitzone"
+      "timezone": "Zeitzone",
+      "announcementMessage": "Ankündigungsnachricht"
     },
     "configDescription": "Konfiguration, die Sie entfernen möchten",
     "configName": "config",
@@ -61,5 +62,7 @@
     "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt."
   },
   "timezoneName": "zeitzone",
-  "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht."
+  "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht.",
+  "configDescription": "Konfigurieren der Servereinstellungen",
+  "configName": "config"
 }

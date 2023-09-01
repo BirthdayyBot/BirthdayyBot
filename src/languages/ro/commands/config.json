@@ -48,7 +48,8 @@
       "overviewChannel": "Canal de prezentare generală",
       "overviewMessage": "Mesaj de prezentare generală",
       "logChannel": "Canal de jurnal",
-      "timezone": "Fus orar"
+      "timezone": "Fus orar",
+      "announcementMessage": "Mesaj de anunț"
     },
     "configDescription": "Configurația pe care doriți să o eliminați",
     "configName": "config",
@@ -61,5 +62,7 @@
     "success": "**fusul orar** a fost setat la {{fusul orar}}."
   },
   "timezoneName": "fus-orar",
-  "timezoneDescription": "Schimbați fusul orar când Birthdayy dorește La mulți ani."
+  "timezoneDescription": "Schimbați fusul orar când Birthdayy dorește La mulți ani.",
+  "configDescription": "Configurarea setărilor serverului",
+  "configName": "config"
 }

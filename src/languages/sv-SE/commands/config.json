@@ -48,7 +48,8 @@
       "overviewChannel": "Översiktskanal",
       "overviewMessage": "Översiktsmeddelande",
       "logChannel": "Loggkanal",
-      "timezone": "Tidszon"
+      "timezone": "Tidszon",
+      "announcementMessage": "Tillkännagivande meddelande"
     },
     "configDescription": "Konfiguration som du vill ta bort",
     "configName": "config",
@@ -61,5 +62,7 @@
     "success": "**tidszonen** har ställts in på {{tidszon}}."
   },
   "timezoneName": "tidszon",
-  "timezoneDescription": "Ändra tidszon när Birthdayy önskar grattis på födelsedagen."
+  "timezoneDescription": "Ändra tidszon när Birthdayy önskar grattis på födelsedagen.",
+  "configDescription": "Konfigurera serverinställningar",
+  "configName": "config"
 }

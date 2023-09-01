@@ -48,7 +48,8 @@
       "overviewChannel": "Apžvalgos kanalas",
       "overviewMessage": "Apžvalgos pranešimas",
       "logChannel": "Prisijungti kanalas",
-      "timezone": "Laiko zona"
+      "timezone": "Laiko zona",
+      "announcementMessage": "Skelbimo žinutė"
     },
     "configDescription": "Konfigūracija, kurią norite pašalinti",
     "configName": "konfig",
@@ -61,5 +62,7 @@
     "success": "**Laiko juosta** nustatyta į {{timezone}}."
   },
   "timezoneName": "laiko-zona",
-  "timezoneDescription": "Pakeiskite laiko juostą, kai Birthdayy sveikina su gimtadieniu."
+  "timezoneDescription": "Pakeiskite laiko juostą, kai Birthdayy sveikina su gimtadieniu.",
+  "configDescription": "Konfigūruojami serverio nustatymai",
+  "configName": "konfig"
 }

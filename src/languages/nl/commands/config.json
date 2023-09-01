@@ -48,7 +48,8 @@
       "overviewChannel": "Overzicht Kanaal",
       "overviewMessage": "Overzicht bericht",
       "logChannel": "Kanaal loggen",
-      "timezone": "Tijdzone"
+      "timezone": "Tijdzone",
+      "announcementMessage": "Aankondiging bericht"
     },
     "configDescription": "Configuratie die u wilt verwijderen",
     "configName": "configuratie",
@@ -61,5 +62,7 @@
     "success": "De **tijdzone** is ingesteld op {{timezone}}."
   },
   "timezoneName": "tijdzone",
-  "timezoneDescription": "Verander de tijdzone wanneer Birthdayy een gelukkige verjaardag wenst."
+  "timezoneDescription": "Verander de tijdzone wanneer Birthdayy een gelukkige verjaardag wenst.",
+  "configDescription": "Serverinstellingen configureren",
+  "configName": "configuratie"
 }
