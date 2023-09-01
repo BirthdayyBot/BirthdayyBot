@@ -41,16 +41,16 @@ export const ConfigApplicationCommandMentions = {
 } as const;
 
 export function announcementChannelConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:announcement-channel').addChannelOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:announcement-channel.channel')
+	return applyLocalizedBuilder(builder, 'commands/config:announcementChannel').addChannelOption((builder) =>
+		applyLocalizedBuilder(builder, 'commands/config:announcementChannel.channel')
 			.addChannelTypes(ChannelType.GuildText)
 			.setRequired(true),
 	);
 }
 
 export function annoncementMessageConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:announcement-message').addStringOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:announcement-message.message')
+	return applyLocalizedBuilder(builder, 'commands/config:announcementMessage').addStringOption((builder) =>
+		applyLocalizedBuilder(builder, 'commands/config:announcementMessage.message')
 			.setMinLength(1)
 			.setMaxLength(512)
 			.setRequired(true),
@@ -58,8 +58,8 @@ export function annoncementMessageConfigSubCommand(builder: SlashCommandSubcomma
 }
 
 export function birthdayRoleConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:birthday-role').addRoleOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:birthday-role.role').setRequired(true),
+	return applyLocalizedBuilder(builder, 'commands/config:birthdayRole').addRoleOption((builder) =>
+		applyLocalizedBuilder(builder, 'commands/config:birthdayRole.role').setRequired(true),
 	);
 }
 
@@ -68,16 +68,16 @@ export function listConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 }
 
 export function overviewChannelConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:overview-channel').addChannelOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:overview-channel.channel')
+	return applyLocalizedBuilder(builder, 'commands/config:overviewChannel').addChannelOption((builder) =>
+		applyLocalizedBuilder(builder, 'commands/config:overviewChannel.channel')
 			.addChannelTypes(ChannelType.GuildText)
 			.setRequired(true),
 	);
 }
 
 export function pingRoleConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:ping-role').addRoleOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:ping-role').setRequired(true),
+	return applyLocalizedBuilder(builder, 'commands/config:pingRole').addRoleOption((builder) =>
+		applyLocalizedBuilder(builder, 'commands/config:pingRole').setRequired(true),
 	);
 }
 
