@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} er allerede på svartelisten.",
+    "alReadyBlacklisted": "{{user}} er allerede på svartelisten.",
     "success": "{{user}} har blitt svartelistet",
     "userDescription": "Brukeren som skal legges til på svartelisten",
     "userName": "bruker",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Svarteliste brukeradministrasjonskommandoer",
   "blacklistName": "svarte-liste",
   "list": {
-    "title": "Svartelistede brukere"
+    "title": "Svartelistet bruker",
+    "empty": "Det er ingen svartelistede brukere for øyeblikket."
   },
   "listDescription": "List alle brukere på svartelisten",
   "listName": "liste",

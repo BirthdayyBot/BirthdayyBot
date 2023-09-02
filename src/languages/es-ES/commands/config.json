@@ -59,7 +59,9 @@
   "resetDescription": "Restablezca los ajustes de configuración de su servidor",
   "resetName": "reiniciar",
   "timezone": {
-    "success": "La **Zona horaria** se ha establecido en {{timezone}}."
+    "success": "La **Zona horaria** se ha establecido en {{timezone}}.",
+    "timezoneDescription": "En qué zona horaria se encuentra ?",
+    "timezoneName": "zona horaria"
   },
   "timezoneName": "zona-horaria",
   "timezoneDescription": "Cambie la zona horaria cuando Birthdayy desee feliz cumpleaños.",

@@ -58,7 +58,9 @@
   "resetDescription": "Reset your server configuration settings",
   "resetName": "reset",
   "timezone": {
-    "success": "The **Timezone** has been set to {{timezone}}."
+    "success": "The **Timezone** has been set to {{timezone}}.",
+    "timezoneDescription": "What timezone are you in ?",
+    "timezoneName": "timezone"
   },
   "timezoneName": "timezone",
   "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday.",

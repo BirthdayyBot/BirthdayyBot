@@ -59,7 +59,9 @@
   "resetDescription": "Resetați setările de configurare a serverului",
   "resetName": "resetare",
   "timezone": {
-    "success": "**fusul orar** a fost setat la {{fusul orar}}."
+    "success": "**fusul orar** a fost setat la {{fusul orar}}.",
+    "timezoneDescription": "În ce fus orar ești?",
+    "timezoneName": "fus orar"
   },
   "timezoneName": "fus-orar",
   "timezoneDescription": "Schimbați fusul orar când Birthdayy dorește La mulți ani.",

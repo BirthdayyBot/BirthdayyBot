@@ -1,12 +1,12 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
 import { BirthdayApplicationCommandMentions } from '#root/commands/general/birthday';
+import { ConfigApplicationCommandMentions } from '#root/commands/general/config';
 import { BOT_NAME, Emojis, defaultEmbed, reply } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, type APIEmbedField } from 'discord.js';
-import { ConfigApplicationCommandMentions } from './config.js';
 
 @ApplyOptions<Command.Options>({
 	requiredUserPermissions: defaultUserPermissions,

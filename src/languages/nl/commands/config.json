@@ -59,7 +59,9 @@
   "resetDescription": "Reset uw serverconfiguratie-instellingen",
   "resetName": "opnieuw-instellen",
   "timezone": {
-    "success": "De **tijdzone** is ingesteld op {{timezone}}."
+    "success": "De **tijdzone** is ingesteld op {{timezone}}.",
+    "timezoneDescription": "In welke tijdzone zit je?",
+    "timezoneName": "tijdzone"
   },
   "timezoneName": "tijdzone",
   "timezoneDescription": "Verander de tijdzone wanneer Birthdayy een gelukkige verjaardag wenst.",

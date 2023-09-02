@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} jest już na czarnej liście.",
+    "alReadyBlacklisted": "{{user}} jest już na czarnej liście.",
     "success": "{{user}} został pomyślnie umieszczony na czarnej liście",
     "userDescription": "Użytkownik, który ma zostać dodany do czarnej listy",
     "userName": "użytkownik",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Czarna lista poleceń zarządzania użytkownikami",
   "blacklistName": "czarna-lista",
   "list": {
-    "title": "Użytkownicy z czarnej listy"
+    "title": "Użytkownik na czarnej liście",
+    "empty": "W tej chwili nie ma żadnych użytkowników na czarnej liście."
   },
   "listDescription": "Umieść wszystkich użytkowników na czarnej liście",
   "listName": "lista",

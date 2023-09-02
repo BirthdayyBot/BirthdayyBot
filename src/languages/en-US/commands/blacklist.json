@@ -7,13 +7,14 @@
     "userName": "user",
     "userDescription": "The user to add to the blacklist",
     "success": "{{user}} has been successfully blacklisted",
-    "alReady": "{{user}} is already on the blacklist.",
+    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
     "cannotBlacklistSelf": "You can't blacklist yourself"
   },
   "listName": "list",
   "listDescription": "List all users on the blacklist",
   "list": {
-    "title": "Blacklisted users"
+    "empty": "There are no blacklisted users at the moment.",
+    "title": "Blacklisted user"
   },
   "removeName": "remove",
   "removeDescription": "Remove a user from the blacklist",
@@ -21,6 +22,6 @@
     "userName": "user",
     "userDescription": "The user to remove from the blacklist",
     "success": "{{user}} has been successfully removed from the blacklist",
-    "notFound": "{{user}} is not on the blacklist"
+    "notFound": "{{user}} is not blacklisted."
   }
 }

@@ -1,14 +1,18 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { replyToInteraction } from '#lib/discord/interaction';
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures/index';
+import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
-import { generateBirthdayList } from '#utils/birthday/birthday';
-import { updateBirthdayOverview } from '#utils/birthday/overview';
+import {
+	Emojis,
+	PrismaErrorCodeEnum,
+	generateDefaultEmbed,
+	interactionProblem,
+	interactionSuccess,
+	resolveTarget,
+} from '#utils';
+import { generateBirthdayList, updateBirthdayOverview } from '#utils/birthday';
 import { formatDateForDisplay, getDateFromInteraction } from '#utils/common/date';
-import { Emojis, PrismaErrorCodeEnum } from '#utils/constants';
-import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
 import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import { resolveTarget } from '#utils/utils';
 import { ApplyOptions, RequiresUserPermissions } from '@sapphire/decorators';
 import { applyLocalizedBuilder, type StringMap, type TOptions } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';

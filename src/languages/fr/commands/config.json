@@ -61,7 +61,9 @@
   "resetDescription": "Réinitialiser les paramètres de la configuration de votre serveur",
   "resetName": "reinitialiser",
   "timezone": {
-    "success": "Le **fuseau horaire** a été défini sur {{timezone}}."
+    "success": "Le **fuseau horaire** a été défini sur {{timezone}}.",
+    "timezoneDescription": "Dans quel fuseau horaire êtes-vous ?",
+    "timezoneName": "fuseau-horaire"
   },
   "timezoneDescription": "Changez le fuseau horaire lorsque Birthdayy souhaite un joyeux anniversaire.",
   "timezoneName": "fuseau-horaire"

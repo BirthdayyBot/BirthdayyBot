@@ -59,7 +59,9 @@
   "resetDescription": "Tilbakestill serverkonfigurasjonsinnstillingene",
   "resetName": "nullstille",
   "timezone": {
-    "success": "**tidssonen** er satt til {{tidssone}}."
+    "success": "**tidssonen** er satt til {{tidssone}}.",
+    "timezoneDescription": "Hvilken tidssone er du i?",
+    "timezoneName": "tidssone"
   },
   "timezoneName": "tidssone",
   "timezoneDescription": "Endre tidssone når Birthdayy ønsker gratulerer med dagen.",

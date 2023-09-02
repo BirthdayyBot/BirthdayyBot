@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} finns redan på svartlistan.",
+    "alReadyBlacklisted": "{{user}} finns redan på svartlistan.",
     "success": "{{user}} har blivit svartlistad",
     "userDescription": "Användaren att lägga till i svartlistan",
     "userName": "användare",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Svartlista användarhanteringskommandon",
   "blacklistName": "svartlista",
   "list": {
-    "title": "Svartlistade användare"
+    "title": "Svartlistad användare",
+    "empty": "Det finns inga svartlistade användare för tillfället."
   },
   "listDescription": "Lista alla användare på den svarta listan",
   "listName": "lista",

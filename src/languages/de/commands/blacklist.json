@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} ist bereits auf der schwarzen Liste.",
+    "alReady": "",
     "success": "{{user}} wurde erfolgreich auf die schwarze Liste gesetzt",
     "userDescription": "Der Benutzer, der zur Blacklist hinzugefügt werden soll",
     "userName": "benutzer",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Benutzerverwaltungsbefehle auf die schwarze Liste setzen",
   "blacklistName": "schwarze-liste",
   "list": {
-    "title": "Benutzer auf der schwarzen Liste"
+    "title": "Benutzer auf der schwarzen Liste",
+    "empty": "Derzeit gibt es keine Benutzer auf der schwarzen Liste."
   },
   "listDescription": "Listen Sie alle Benutzer auf der Blacklist auf",
   "listName": "liste",

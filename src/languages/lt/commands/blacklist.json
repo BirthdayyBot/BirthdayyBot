@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} jau yra juodajame sąraše.",
+    "alReadyBlacklisted": "{{user}} jau yra juodajame sąraše.",
     "success": "{{user}} sėkmingai įtrauktas į juodąjį sąrašą",
     "userDescription": "Vartotojas, kurį reikia įtraukti į juodąjį sąrašą",
     "userName": "vartotojas",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Vartotojų valdymo komandos į juodąjį sąrašą",
   "blacklistName": "juodasis-sąrašas",
   "list": {
-    "title": "Į juodąjį sąrašą įtraukti vartotojai"
+    "title": "Į juodąjį sąrašą įtrauktas vartotojas",
+    "empty": "Šiuo metu juodajame sąraše nėra vartotojų."
   },
   "listDescription": "Išvardykite visus juodajame sąraše esančius vartotojus",
   "listName": "sąrašą",

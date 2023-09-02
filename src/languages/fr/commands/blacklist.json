@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} est déjà sur la liste noire.",
+    "alReadyBlacklisted": "{{user}} est déjà sur la liste noire.",
     "success": "{{user}} a été mis sur liste noire avec succès",
     "userDescription": "L'utilisateur à ajouter à la liste noire",
     "userName": "utilisateur",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Commandes de gestion des utilisateurs de la liste noire",
   "blacklistName": "liste-noire",
   "list": {
-    "title": "Utilisateurs sur liste noire"
+    "title": "Utilisateur sur liste noire",
+    "empty": "Il n’y a aucun utilisateur sur liste noire pour le moment."
   },
   "listDescription": "Lister tous les utilisateurs sur la liste noire",
   "listName": "liste",

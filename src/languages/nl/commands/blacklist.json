@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} staat al op de zwarte lijst.",
+    "alReadyBlacklisted": "{{user}} staat al op de zwarte lijst.",
     "success": "{{user}} is met succes op de zwarte lijst gezet",
     "userDescription": "De gebruiker die aan de zwarte lijst moet worden toegevoegd",
     "userName": "gebruiker",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Opdrachten voor gebruikersbeheer op de zwarte lijst zetten",
   "blacklistName": "zwarte-lijst",
   "list": {
-    "title": "Gebruikers op de zwarte lijst"
+    "title": "Gebruiker op de zwarte lijst",
+    "empty": "Er zijn momenteel geen gebruikers op de zwarte lijst."
   },
   "listDescription": "Maak een lijst van alle gebruikers op de zwarte lijst",
   "listName": "lijst",

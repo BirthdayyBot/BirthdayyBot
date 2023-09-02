@@ -59,7 +59,9 @@
   "resetDescription": "Iš naujo nustatykite serverio konfigūracijos nustatymus",
   "resetName": "atstatyti",
   "timezone": {
-    "success": "**Laiko juosta** nustatyta į {{timezone}}."
+    "success": "**Laiko juosta** nustatyta į {{timezone}}.",
+    "timezoneDescription": "Kokioje laiko juostoje esate?",
+    "timezoneName": "laiko zona"
   },
   "timezoneName": "laiko-zona",
   "timezoneDescription": "Pakeiskite laiko juostą, kai Birthdayy sveikina su gimtadieniu.",

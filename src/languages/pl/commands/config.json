@@ -59,7 +59,9 @@
   "resetDescription": "Zresetuj ustawienia konfiguracji serwera",
   "resetName": "resetowanie",
   "timezone": {
-    "success": "**Strefa czasowa** została ustawiona na {{timezone}}."
+    "success": "**Strefa czasowa** została ustawiona na {{timezone}}.",
+    "timezoneDescription": "W jakiej strefie czasowej jesteś?",
+    "timezoneName": "strefa czasowa"
   },
   "timezoneName": "strefa-czasowa",
   "timezoneDescription": "Zmień strefę czasową, gdy Birthdayy życzy wszystkiego najlepszego.",

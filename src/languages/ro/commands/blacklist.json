@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} este deja pe lista neagră.",
+    "alReadyBlacklisted": "{{user}} este deja pe lista neagră.",
     "success": "{{user}} a fost inclus cu succes pe lista neagră",
     "userDescription": "Utilizatorul de adăugat pe lista neagră",
     "userName": "utilizator",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Lista neagră a comenzilor de gestionare a utilizatorilor",
   "blacklistName": "listavneagră",
   "list": {
-    "title": "Utilizatori pe lista neagră"
+    "title": "Utilizator pe lista neagră",
+    "empty": "Nu există utilizatori pe lista neagră momentan."
   },
   "listDescription": "Listați toți utilizatorii de pe lista neagră",
   "listName": "listă",

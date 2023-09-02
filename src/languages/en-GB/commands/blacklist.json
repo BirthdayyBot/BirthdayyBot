@@ -1,6 +1,6 @@
 {
   "add": {
-    "alReady": "{{user}} is already on the blacklist.",
+    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
     "success": "{{user}} has been successfully blacklisted",
     "userDescription": "The user to add to the blacklist",
     "userName": "user",
@@ -11,7 +11,8 @@
   "blacklistDescription": "Blacklist user management commands",
   "blacklistName": "blacklist",
   "list": {
-    "title": "Blacklisted users"
+    "title": "Blacklisted user",
+    "empty": "There are no blacklisted users at the moment."
   },
   "listDescription": "List all users on the blacklist",
   "listName": "list",

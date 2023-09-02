@@ -59,7 +59,9 @@
   "resetDescription": "Ripristina le impostazioni di configurazione del server",
   "resetName": "ripristina",
   "timezone": {
-    "success": "Il **fuso orario** è stato impostato su {{timezone}}."
+    "success": "Il **fuso orario** è stato impostato su {{timezone}}.",
+    "timezoneDescription": "In che fuso orario ti trovi?",
+    "timezoneName": "fuso orario"
   },
   "timezoneName": "fuso-orario",
   "timezoneDescription": "Cambia il fuso orario quando Birthdayy augura buon compleanno.",
