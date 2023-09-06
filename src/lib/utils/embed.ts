@@ -20,11 +20,7 @@ export function defaultEmbed(): APIEmbed {
 	};
 }
 
-export async function interactionSuccess(
-	interaction: ChatInputCommandInteraction,
-	description: string,
-	ephemeral = false,
-) {
+export function interactionSuccess(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
 	return replyToInteraction(interaction, {
 		ephemeral,
 		embeds: [
@@ -36,11 +32,7 @@ export async function interactionSuccess(
 	});
 }
 
-export async function interactionProblem(
-	interaction: ChatInputCommandInteraction,
-	description: string,
-	ephemeral = false,
-) {
+export function interactionProblem(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
 	return replyToInteraction(interaction, {
 		ephemeral,
 		embeds: [
