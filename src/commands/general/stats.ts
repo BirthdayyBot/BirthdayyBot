@@ -1,27 +1,23 @@
 import { StatsCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
-import { Emojis, generateDefaultEmbed, isDevelopment, reply } from '#utils';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { Emojis, generateDefaultEmbed, isDevelopment } from '#utils';
 import { getCurrentOffset } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
 import type { APIEmbed } from 'discord.js';
 import { totalmem } from 'os';
 
-@ApplyOptions<Command.Options>({
+@ApplyOptions<CustomCommand.Options>({
 	name: 'stats',
 	description: 'Stats Command',
-	// TODO: Enable this when #71 is done
 	enabled: isDevelopment,
-	runIn: ['GUILD_TEXT'],
-	requiredUserPermissions: ['ViewChannel', 'UseApplicationCommands', 'SendMessages'],
-	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
 })
-export class StatsCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+export class StatsCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(StatsCMD());
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const currentOffset = getCurrentOffset();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / totalmem()) * 100);
@@ -102,6 +98,6 @@ export class StatsCommand extends Command {
 			],
 		};
 		const embed = generateDefaultEmbed(embedRaw);
-		return reply(interaction, { embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

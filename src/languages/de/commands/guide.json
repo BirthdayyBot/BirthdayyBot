@@ -1,18 +1,22 @@
 {
-  "embedDescription": "{{emoji}} Wenn Sie im Chat **/help** eingeben, können Sie sich alle meine Funktionen und verfügbaren Befehle ansehen.",
-  "embedTitle": "{{emoji}} {{name}} Leitfaden!",
   "guideDescription": "Sie brauchen eine schnelle Anleitung zur Einrichtung! Keine Sorge, dies wird Ihnen helfen!",
   "guideName": "fuhrung",
-  "embedConfigField": {
-    "name": "Konfigurieren Sie Birthdayy",
-    "value": "{{emoji}} Stellen Sie sicher, dass Sie Ihre **Serverkonfigurationen** mit **/config <config>** festlegen!\n{{emoji}} Verwenden Sie {{command}}, um Ihre aktuelle Konfigurationseinstellung anzuzeigen."
-  },
-  "embedImportantField": {
-    "name": "Wichtig",
-    "value": "{{emojis.exclamation}} Meine **höchste** Rolle muss **über** der Rolle des Geburtstagskindes liegen.\n{{emojis.arrowRight}} Treten Sie dem [Birthdayy-Hauptquartier] bei ({{invite}}), um den Entwickler zu treffen und bei der Verbesserung von Birthdayy {{emojis.cake}} zu helfen.\n{{emojis.heart}} Wie **Geburtstag**? \nErwägen Sie, für mich [einzuladen]({{invite}}) und [abzustimmen]({{vote}})!\n{{emojis.plus}} Möchten Sie Zugriff auf Beta-Funktionen? \n[Unterstützen Sie uns auf Patreon]({{premium}})"
-  },
-  "embedStartedField": {
-    "name": "Loslegen",
-    "value": "{{emoji}} Registrieren Sie Ihren Geburtstag mit {{command}}\n{{emoji}} Weitere Informationen finden Sie unter [Dokumentation]({{url}})"
+  "embed": {
+    "description": "{{emoji.exclamation}} Wenn Sie im Chat **/help** eingeben, können Sie sich alle meine Funktionen und verfügbaren Befehle ansehen.",
+    "title": "{{emoji.heart}} {{name}} Leitfaden!",
+    "fields": [
+      {
+        "name": "Konfigurieren Sie Birthdayy",
+        "value": "{{emoji}} Stellen Sie sicher, dass Sie Ihre **Serverkonfigurationen** mit **/config <config>** festlegen!\n{{emoji}} Verwenden Sie {{command}}, um Ihre aktuelle Konfigurationseinstellung anzuzeigen."
+      },
+      {
+        "name": "Wichtig",
+        "value": "{{emojis.exclamation}} Meine **höchste** Rolle muss **über** der Rolle des Geburtstagskindes liegen.\n{{emojis.arrowRight}} Treten Sie dem [Birthdayy-Hauptquartier] bei ({{invite}}), um den Entwickler zu treffen und bei der Verbesserung von Birthdayy {{emojis.cake}} zu helfen.\n{{emojis.heart}} Wie **Geburtstag**? \nErwägen Sie, für mich [einzuladen]({{invite}}) und [abzustimmen]({{vote}})!\n{{emojis.plus}} Möchten Sie Zugriff auf Beta-Funktionen? \n[Unterstützen Sie uns auf Patreon]({{premium}})"
+      },
+      {
+        "name": "Loslegen",
+        "value": "{{emoji}} Registrieren Sie Ihren Geburtstag mit {{command}}\n{{emoji}} Weitere Informationen finden Sie unter [Dokumentation]({{url}})"
+      }
+    ]
   }
 }

@@ -4,8 +4,10 @@ import {
 	type ChatInputCommandSuccessPayload,
 	type ContextMenuCommandSuccessPayload,
 	type MessageCommandSuccessPayload,
+	type PreconditionEntryResolvable,
 } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
+import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import { cyan } from 'colorette';
 import {
 	ChatInputCommandInteraction,
@@ -106,4 +108,24 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
  */
 export function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+}
+
+export interface Mapps {
+	name: string;
+	preconditions: readonly PreconditionEntryResolvable[];
+}
+
+export function createSubcommandMappings(...subcommands: Array<string | Mapps>): SubcommandMappingArray {
+	return subcommands.map((subcommand) => {
+		if (typeof subcommand === 'string') return { name: subcommand, chatInputRun: subcommand };
+		return {
+			name: subcommand.name,
+			preconditions: subcommand.preconditions,
+			chatInputRun: snakeToCamel(subcommand.name),
+		};
+	});
+}
+
+export function snakeToCamel(str: string) {
+	return str.replace(/([-_][a-z])/g, (ltr) => ltr.toUpperCase()).replace(/[^a-zA-Z]/g, '');
 }

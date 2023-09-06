@@ -1,6 +1,8 @@
 {
-  "embedDescription": "{{emoji}} Clique no botão abaixo para convidar {{name}} para o seu servidor Discord!",
-  "embedTitle": "{{emoji}} Convidar {{nome}}",
   "inviteDescription": "Convide aniversariante para o seu servidor Discord!",
-  "inviteName": "convidar"
+  "inviteName": "convidar",
+  "embed": {
+    "title": "{{livro}} Convide {{nome}}",
+    "description": "{{arrowRight}} Clique no botão abaixo para convidar {{name}} para o seu servidor Discord!"
+  }
 }

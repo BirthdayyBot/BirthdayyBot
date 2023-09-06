@@ -1,18 +1,25 @@
 {
-  "embedDescription": "{{emoji}} Ao digitar **/help** no chat, você pode conferir todos os meus recursos e comandos disponíveis.",
-  "embedTitle": "{{emoji}} {{name}} Guia!",
   "guideDescription": "Precisa de um guia de configuração rápida! Não se preocupe, isso irá ajudá-lo!",
   "guideName": "guia",
-  "embedConfigField": {
-    "name": "Configurar aniversário",
-    "value": "{{emoji}} Certifique-se de definir suas **Configurações do servidor** com **/config <config>**!\n{{emoji}} Use {{command}} para ver sua configuração atual."
-  },
-  "embedImportantField": {
-    "name": "Importante",
-    "value": "{{emojis.exclamation}} Minha função **mais alta** precisa estar **acima** da função de filho aniversariante.\n{{emojis.arrowRight}} Participe do [QG de aniversário]({{invite}}) para conhecer o desenvolvedor e ajudar a melhorar o {{emojis.cake}} de aniversário\n{{emojis.heart}} Gostou de **Aniversário**? \nConsidere [convidar]({{invite}}) e [votar]({{vote}}) para mim!\n{{emojis.plus}} Quer acesso aos recursos beta? \n[Apoie-nos no Patreon]({{premium}})"
-  },
-  "embedStartedField": {
-    "name": "Iniciar",
-    "value": "{{emoji}} Registre seu aniversário com {{command}}\n{{emoji}} Encontre mais em [Documentação]({{url}})"
+  "embedConfigField": {},
+  "embedImportantField": {},
+  "embedStartedField": {},
+  "embed": {
+    "description": "{{emoji.exclamation}} Ao digitar **/help** no chat, você pode conferir todos os meus recursos e comandos disponíveis.",
+    "title": "{{emoji.heart}} {{name}} Guia!",
+    "fields": [
+      {
+        "name": "Configurar aniversário",
+        "value": "{{emoji}} Certifique-se de definir suas **Configurações do servidor** com **/config <config>**!\n{{emoji}} Use {{command}} para ver sua configuração atual."
+      },
+      {
+        "name": "Importante",
+        "value": "{{emojis.exclamation}} Minha função **mais alta** precisa estar **acima** da função de filho aniversariante.\n{{emojis.arrowRight}} Participe do [QG de aniversário]({{invite}}) para conhecer o desenvolvedor e ajudar a melhorar o {{emojis.cake}} de aniversário\n{{emojis.heart}} Gostou de **Aniversário**? \nConsidere [convidar]({{invite}}) e [votar]({{vote}}) para mim!\n{{emojis.plus}} Quer acesso aos recursos beta? \n[Apoie-nos no Patreon]({{premium}})"
+      },
+      {
+        "name": "Iniciar",
+        "value": "{{emoji}} Registre seu aniversário com {{command}}\n{{emoji}} Encontre mais em [Documentação]({{url}})"
+      }
+    ]
   }
 }

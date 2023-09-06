@@ -1,9 +1,9 @@
-export const enum Events {
+export enum Events {
 	PostStatsError = 'postStatsError',
 	PostStatsSuccess = 'postStatsSuccess',
 }
 
-export const enum PermissionLevels {
+export enum PermissionLevels {
 	Everyone = 0,
 	Moderator = 5,
 	Administrator = 6,

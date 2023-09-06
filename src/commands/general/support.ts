@@ -1,17 +1,12 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
-import { Emojis, defaultEmbed, reply } from '#utils';
-import { ApplyOptions } from '@sapphire/decorators';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { Emojis, defaultEmbed } from '#utils';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits, type APIEmbed } from 'discord.js';
 
-@ApplyOptions<Command.Options>({
-	name: 'support',
-	requiredUserPermissions: ['ViewChannel', 'UseApplicationCommands', 'SendMessages'],
-	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
-})
-export class SupportCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+export class SupportCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			applyLocalizedBuilder(builder, 'commands/support:support')
 				.setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel)
@@ -20,27 +15,23 @@ export class SupportCommand extends Command {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const [title, description] = await Promise.all([
-			resolveKey(interaction, 'commands/support:invite.title', {
-				emoji: Emojis.Compass,
-			}),
-			resolveKey(interaction, 'commands/support:invite.description', {
-				support: WebsiteUrl('discord'),
-				docs: WebsiteUrl('docs'),
-				arrow: Emojis.ArrowRight,
-				link: Emojis.Link,
-			}),
-		]);
-
-		const embed = new EmbedBuilder(defaultEmbed()).setTitle(title).setDescription(description);
-		const components = new ActionRowBuilder<ButtonBuilder>().setComponents(
-			await inviteSupportDicordButton(interaction),
-			await docsButtonBuilder(interaction),
-		);
-
-		return reply(interaction, {
-			embeds: [embed],
-			components: [components],
+		const embed = await resolveKey<APIEmbed>(interaction, 'commands/support:supportEmbed', {
+			returnObjects: true,
+			support: WebsiteUrl('discord'),
+			docs: WebsiteUrl('docs'),
+			arrow: Emojis.ArrowRight,
+			link: Emojis.Link,
+			emoji: Emojis.Compass,
 		});
+
+		const embeds = [new EmbedBuilder({ ...defaultEmbed(), ...embed })];
+		const components = [
+			new ActionRowBuilder<ButtonBuilder>().setComponents(
+				await inviteSupportDicordButton(interaction),
+				await docsButtonBuilder(interaction),
+			),
+		];
+
+		return interaction.reply({ embeds, components });
 	}
 }

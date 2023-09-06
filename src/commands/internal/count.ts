@@ -1,35 +1,29 @@
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types';
 import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import type { ChatInputCommandInteraction } from 'discord.js';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 
-@ApplyOptions<Command.Options>({
+@ApplyOptions<CustomCommand.Options>({
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	preconditions: [['DMOnly', 'GuildTextOnly']],
-	requiredUserPermissions: ['ViewChannel', 'UseApplicationCommands', 'SendMessages'],
-	requiredClientPermissions: ['SendMessages', 'EmbedLinks', 'UseExternalEmojis'],
 })
-export class CountCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
+export class CountCommand extends CustomCommand {
+	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) => {
-				return builder
-					.setName(this.name)
-					.setDMPermission(true)
-					.setDescription(this.description)
-					.setDefaultMemberPermissions(defaultUserPermissions.bitfield);
-			},
+			(builder) =>
+				applyLocalizedBuilder(builder, 'commands/count:count')
+					.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
+					.setDMPermission(true),
 			{
 				guildIds: await getCommandGuilds('admin'),
 			},
 		);
 	}
 
-	public override async chatInputRun(interaction: ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		await reply(interaction, {
 			embeds: [
 				{

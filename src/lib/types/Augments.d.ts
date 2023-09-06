@@ -83,11 +83,13 @@ declare module '@sapphire/pieces' {
 
 declare module '@sapphire/framework' {
 	interface Preconditions {
+		Administrator: never;
+		BotOwner: never;
+		Everyone: never;
 		GuildPremium: never;
-		BotOwnerOnly: never;
-		AdminOnly: never;
-		CanManageRoles: never;
-		IsNotBlacklisted: never;
+		Moderator: never;
+		NotBlacklisted: never;
+		ServerOwner: never;
 	}
 
 	interface SapphireClient {

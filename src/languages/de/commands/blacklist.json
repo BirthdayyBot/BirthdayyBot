@@ -1,10 +1,10 @@
 {
   "add": {
-    "alReady": "",
     "success": "{{user}} wurde erfolgreich auf die schwarze Liste gesetzt",
     "userDescription": "Der Benutzer, der zur Blacklist hinzugefügt werden soll",
     "userName": "benutzer",
-    "cannotBlacklistSelf": "Sie können sich nicht selbst auf die schwarze Liste setzen"
+    "cannotBlacklistSelf": "Sie können sich nicht selbst auf die schwarze Liste setzen",
+    "alReadyBlacklisted": "{{user}} ist bereits auf der schwarzen Liste."
   },
   "addDescription": "Fügen Sie einen Benutzer zur Blacklist hinzu",
   "addName": "hinzufügen",

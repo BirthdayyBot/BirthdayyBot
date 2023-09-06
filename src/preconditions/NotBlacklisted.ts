@@ -1,7 +1,12 @@
 import { PrismaErrorCodeEnum } from '#utils/constants';
-import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
+import { isModerator, resolveOnErrorCodesPrisma } from '#utils/functions';
 import { Precondition } from '@sapphire/framework';
-import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+import { isNullish } from '@sapphire/utilities';
+import {
+	type ChatInputCommandInteraction,
+	type CommandInteraction,
+	type ContextMenuCommandInteraction,
+} from 'discord.js';
 
 export class UserPrecondition extends Precondition {
 	public override async chatInputRun(interaction: ChatInputCommandInteraction<'cached'>) {
@@ -14,12 +19,12 @@ export class UserPrecondition extends Precondition {
 		return result;
 	}
 
-	private async handler({ guildId }: CommandInteraction<'cached'>) {
+	private async handler({ member, guildId, user }: CommandInteraction<'cached'>) {
+		if (isModerator(member!)) return this.ok();
 		const result = await resolveOnErrorCodesPrisma(
-			this.container.prisma.guild.findFirstOrThrow({ where: { guildId } }),
+			this.container.prisma.blacklist.findFirstOrThrow({ where: { guildId, userId: user.id } }),
 			PrismaErrorCodeEnum.NotFound,
 		);
-
-		return result?.premium === true ? this.ok() : this.error({ identifier: 'preconditions:guildPremium' });
+		return isNullish(result) ? this.ok() : this.error({ identifier: 'preconditions:notBlacklisted' });
 	}
 }

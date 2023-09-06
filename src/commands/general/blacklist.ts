@@ -1,43 +1,37 @@
 import { userOptions } from '#lib/components/builder';
-import { defaultUserPermissions } from '#lib/types';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { PermissionLevels } from '#lib/types/Enums';
 import { PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
 import { getCommandGuilds, resolveOnErrorCodesPrisma } from '#utils/functions';
-import { resolveTarget } from '#utils/utils';
+import { createSubcommandMappings, resolveTarget } from '#utils/utils';
+import type { Blacklist } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedFieldMessageEmbed } from '@sapphire/discord.js-utilities';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { Subcommand } from '@sapphire/plugin-subcommands';
-import { EmbedBuilder, SlashCommandBuilder, chatInputApplicationCommandMention, time, userMention } from 'discord.js';
+import {
+	EmbedBuilder,
+	SlashCommandBuilder,
+	SlashCommandSubcommandBuilder,
+	chatInputApplicationCommandMention,
+	time,
+	userMention,
+} from 'discord.js';
 
-@ApplyOptions<Subcommand.Options>({
-	subcommands: [
-		{
-			name: 'add',
-			chatInputRun: 'add',
-			type: 'method',
-		},
-		{
-			name: 'list',
-			chatInputRun: 'list',
-			type: 'method',
-		},
-		{
-			name: 'remove',
-			chatInputRun: 'remove',
-			type: 'method',
-		},
-	],
+@ApplyOptions<CustomCommand.Options>({
+	subcommands: createSubcommandMappings('add', 'list', 'remove'),
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	permissionLevel: PermissionLevels.Moderator,
 })
-export class BlacklistCommand extends Subcommand {
-	public override async registerApplicationCommands(
-		registry: import('@sapphire/framework').ApplicationCommandRegistry,
-	) {
+export class BlacklistCommand extends CustomCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		const guildIds = await getCommandGuilds('premium');
 		registry.registerChatInputCommand((builder) => registerBlacklistCommand(builder), { guildIds });
 	}
 
-	public async add(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async add(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(interaction);
 
 		if (!options.context) return interactionProblem(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
@@ -54,7 +48,7 @@ export class BlacklistCommand extends Subcommand {
 		return interactionSuccess(interaction, 'commands/blacklist:add.success', tOptions);
 	}
 
-	public async list(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const result = await this.container.prisma.blacklist.findMany({
 			where: { guildId: interaction.guildId },
 		});
@@ -68,14 +62,14 @@ export class BlacklistCommand extends Subcommand {
 			return interaction.reply({ embeds: [emptyEmbed] });
 		}
 
-		const paginateMessage = new PaginatedFieldMessageEmbed<import('@prisma/client').Blacklist>();
+		const paginateMessage = new PaginatedFieldMessageEmbed<Blacklist>();
 
 		paginateMessage.setTemplate(embed).setItems(result).formatItems(formatList).setItemsPerPage(6);
 
 		return paginateMessage.make().run(interaction, interaction.user);
 	}
 
-	public async remove(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async remove(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user } = resolveTarget(interaction);
 
 		const result = await resolveOnErrorCodesPrisma(
@@ -93,7 +87,7 @@ export class BlacklistCommand extends Subcommand {
 	}
 }
 
-function formatList(user: import('@prisma/client').Blacklist) {
+function formatList(user: Blacklist) {
 	const formattedDate = time(Math.floor(user.addedAt.getTime() / 1000), 'D');
 	return `${userMention(user.userId)} - ${formattedDate}`;
 }
@@ -113,18 +107,18 @@ export function registerBlacklistCommand(builder: SlashCommandBuilder) {
 		.addSubcommand((builder) => listBlacklistSubCommand(builder));
 }
 
-export function addBlacklistSubCommand(builder: import('discord.js').SlashCommandSubcommandBuilder) {
+export function addBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:add').addUserOption((option) =>
 		userOptions(option, 'commands/blacklist:add.user').setRequired(true),
 	);
 }
 
-export function removeBlacklistSubCommand(builder: import('discord.js').SlashCommandSubcommandBuilder) {
+export function removeBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:remove').addUserOption((option) =>
 		userOptions(option, 'commands/blacklist:remove.user').setRequired(true),
 	);
 }
 
-export function listBlacklistSubCommand(builder: import('discord.js').SlashCommandSubcommandBuilder) {
+export function listBlacklistSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:list');
 }

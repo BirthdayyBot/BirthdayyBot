@@ -1,4 +1,4 @@
-import { BirthdayyBotId } from '#utils/constants';
+import { BirthdayyBotId, OwnerID } from '#utils/constants';
 import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import type { BotList } from '@devtomio/plugin-botlist';
@@ -9,7 +9,7 @@ import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import { Integrations, type NodeOptions } from '@sentry/node';
-import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
+import { envIsDefined, envParseArray, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
@@ -19,6 +19,8 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
+
+export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
 
 function parseApi(): ServerOptions {
 	return {

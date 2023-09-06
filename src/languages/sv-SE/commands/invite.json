@@ -1,6 +1,8 @@
 {
-  "embedDescription": "{{emoji}} Klicka på knappen nedan för att bjuda in {{name}} till din Discord-server!",
-  "embedTitle": "{{emoji}} Bjud in {{name}}",
   "inviteDescription": "Bjud in Birthdayy till din Discord-server!",
-  "inviteName": "bjuda"
+  "inviteName": "bjuda",
+  "embed": {
+    "title": "{{bok}} Bjud in {{name}}",
+    "description": "{{arrowRight}} Klicka på knappen nedan för att bjuda in {{name}} till din Discord-server!"
+  }
 }

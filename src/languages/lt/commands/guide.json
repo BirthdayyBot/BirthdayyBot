@@ -1,18 +1,25 @@
 {
-  "embedDescription": "{{emoji}} Pokalbyje įvedę **/help** galite peržiūrėti visas mano funkcijas ir galimas komandas.",
-  "embedTitle": "{{emoji}} {{name}} vadovas!",
   "guideDescription": "Reikia greito sąrankos vadovo! Nesijaudinkite, tai jums padės!",
   "guideName": "vadovas",
-  "embedConfigField": {
-    "name": "Konfigūruoti Birthday",
-    "value": "{{emoji}} Būtinai nustatykite **Serverio konfigūracijas** naudodami **/config <config>**!\n{{emoji}} Norėdami pamatyti dabartinį konfigūracijos nustatymą, naudokite {{command}}."
-  },
-  "embedImportantField": {
-    "name": "Svarbu",
-    "value": "{{emojis.exclamation}} Mano **aukščiausias** vaidmuo turi būti **viršesnis** gimtadienio vaiko vaidmuo.\n{{emojis.arrowRight}} Prisijunkite prie [Birthdayy HQ]({{invite}}), kad susitiktumėte su kūrėju ir padėtumėte tobulinti Birthdayy {{emojis.cake}}\n{{emojis.heart}} Patinka **Gimtadienis**? \nApsvarstykite galimybę [pakviesti]({{invite}}) ir [balsuoti]({{balsuoti}}) už mane!\n{{emojis.plus}} Norite pasiekti beta versijos funkcijas? \n[Palaikykite mus naudodami Patreon] ({{premium}})"
-  },
-  "embedStartedField": {
-    "name": "Pradėti",
-    "value": "{{emoji}} Užregistruokite savo gimtadienį naudodami {{command}}\n{{emoji}} Sužinokite daugiau [Dokumentacija]({{url}})"
+  "embedConfigField": {},
+  "embedImportantField": {},
+  "embedStartedField": {},
+  "embed": {
+    "description": "{{emoji.exclamation}} Pokalbyje įvedę **/help** galite peržiūrėti visas mano funkcijas ir galimas komandas.",
+    "title": "{{emoji.heart}} {{name}} vadovas!",
+    "fields": [
+      {
+        "name": "Konfigūruoti Birthday",
+        "value": "{{emoji}} Būtinai nustatykite **Serverio konfigūracijas** naudodami **/config <config>**!\n{{emoji}} Norėdami pamatyti dabartinį konfigūracijos nustatymą, naudokite {{command}}."
+      },
+      {
+        "name": "Svarbu",
+        "value": "{{emojis.exclamation}} Mano **aukščiausias** vaidmuo turi būti **viršesnis** gimtadienio vaiko vaidmuo.\n{{emojis.arrowRight}} Prisijunkite prie [Birthdayy HQ]({{invite}}), kad susitiktumėte su kūrėju ir padėtumėte tobulinti Birthdayy {{emojis.cake}}\n{{emojis.heart}} Patinka **Gimtadienis**? \nApsvarstykite galimybę [pakviesti]({{invite}}) ir [balsuoti]({{balsuoti}}) už mane!\n{{emojis.plus}} Norite pasiekti beta versijos funkcijas? \n[Palaikykite mus naudodami Patreon] ({{premium}})"
+      },
+      {
+        "name": "Pradėti",
+        "value": "{{emoji}} Užregistruokite savo gimtadienį naudodami {{command}}\n{{emoji}} Sužinokite daugiau [Dokumentacija]({{url}})"
+      }
+    ]
   }
 }

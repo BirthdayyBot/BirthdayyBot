@@ -1,16 +1,18 @@
 import type { ConfigName } from '#lib/database/types';
 import thinking from '#lib/discord/thinking';
-import { defaultClientPermissions, defaultUserPermissions, hasBotChannelPermissions } from '#lib/types/permissions';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { PermissionLevels } from '#lib/types/Enums';
+import { defaultUserPermissions, hasBotChannelPermissions } from '#lib/types/permissions';
 import { generateBirthdayList } from '#utils/birthday/birthday';
 import generateConfigList from '#utils/birthday/config';
 import { PrismaErrorCodeEnum } from '#utils/constants';
 import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
 import { setDefaultConfig } from '#utils/functions/config';
 import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import { reply } from '#utils/utils';
+import { createSubcommandMappings, reply } from '#utils/utils';
 import { Prisma } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { ApplicationCommandRegistry } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, type ApplicationCommandRegistry } from '@sapphire/framework';
 import {
 	applyLocalizedBuilder,
 	createLocalizedChoice,
@@ -18,7 +20,6 @@ import {
 	type StringMap,
 	type TOptions,
 } from '@sapphire/plugin-i18next';
-import { Subcommand } from '@sapphire/plugin-subcommands';
 import { isNullOrUndefinedOrEmpty, type NonNullObject } from '@sapphire/utilities';
 import {
 	ChannelType,
@@ -31,69 +32,28 @@ import {
 	type PermissionResolvable,
 } from 'discord.js';
 
-@ApplyOptions<Subcommand.Options>({
-	name: 'config',
-	subcommands: [
-		{
-			name: 'announcement-channel',
-			chatInputRun: 'announcementChannel',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'announcement-message',
-			chatInputRun: 'announcementMessage',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'birthday-role',
-			chatInputRun: 'birthdayRole',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'list',
-			chatInputRun: 'list',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'overview-channel',
-			chatInputRun: 'overviewChannel',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'ping-role',
-			chatInputRun: 'pingRole',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'reset',
-			chatInputRun: 'reset',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-		{
-			name: 'timezone',
-			chatInputRun: 'timezone',
-			runIn: 'GUILD_TEXT',
-			type: 'method',
-		},
-	],
-	requiredClientPermissions: defaultClientPermissions,
-	requiredUserPermissions: defaultUserPermissions.add('ManageRoles'),
+@ApplyOptions<CustomCommand.Options>({
+	subcommands: createSubcommandMappings(
+		'announcement-channel',
+		'announcement-message',
+		'birthday-role',
+		'list',
+		'overview-channel',
+		'ping-role',
+		'reset',
+		'timezone',
+	),
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	permissionLevel: PermissionLevels.Administrator,
 })
-export class ConfigCommand extends Subcommand {
+export class ConfigCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
 			guildIds: ['980559116076470272'],
 		});
 	}
 
-	public async announcementChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async announcementChannel(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const announcementChannel = interaction.options.getChannel('channel', true, [ChannelType.GuildText]).id;
 		const permissions: PermissionResolvable[] = ['ViewChannel', 'SendMessages'];
 		const options = { channel: channelMention(announcementChannel) };
@@ -105,7 +65,7 @@ export class ConfigCommand extends Subcommand {
 		return this.updateConfig({ announcementChannel }, interaction, `announcementChannel`, options);
 	}
 
-	public async announcementMessage(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async announcementMessage(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const announcementMessage = interaction.options.getString('message', true);
 
 		const guild = await this.container.prisma.guild.findUniqueOrThrow({
@@ -120,7 +80,7 @@ export class ConfigCommand extends Subcommand {
 		});
 	}
 
-	public async birthdayRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async birthdayRole(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const { id: birthdayRole, position } = interaction.options.getRole('role', true);
 		const bot = await interaction.guild.members.fetchMe();
 		const highestBotRole = bot.roles.highest;
@@ -134,13 +94,13 @@ export class ConfigCommand extends Subcommand {
 		});
 	}
 
-	public async list(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
 
 		return reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
 	}
 
-	public async overviewChannel(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async overviewChannel(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const channel = interaction.options.getChannel<ChannelType.GuildText>('channel', true);
 		const permissions: PermissionResolvable[] = ['ViewChannel', 'SendMessages'];
 
@@ -169,7 +129,7 @@ export class ConfigCommand extends Subcommand {
 		);
 	}
 
-	public async pingRole(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async pingRole(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const role = interaction.options.getRole('role', true);
 
 		return this.updateConfig({ birthdayPingRole: role.id }, interaction, 'pingRole', {
@@ -177,7 +137,7 @@ export class ConfigCommand extends Subcommand {
 		});
 	}
 
-	public async reset(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async reset(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const config = interaction.options.getString('config', true) as ConfigName;
 		this.container.logger.debug(config);
 		const result = await resolveOnErrorCodesPrisma(
@@ -197,7 +157,7 @@ export class ConfigCommand extends Subcommand {
 		});
 	}
 
-	public async timezone(interaction: Subcommand.ChatInputCommandInteraction<'cached'>) {
+	public async timezone(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(interaction);
 
 		const timezone = interaction.options.getInteger('timezone', true);
@@ -215,7 +175,7 @@ export class ConfigCommand extends Subcommand {
 
 	public async updateConfig<T extends NonNullObject = StringMap>(
 		update: Omit<Prisma.XOR<Prisma.GuildCreateInput, Prisma.GuildUncheckedCreateInput>, 'guildId'>,
-		interaction: Subcommand.ChatInputCommandInteraction<'cached'>,
+		interaction: CustomCommand.ChatInputCommandInteraction<'cached'>,
 		key: string,
 		options?: TOptions<T>,
 	) {

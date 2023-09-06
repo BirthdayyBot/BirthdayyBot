@@ -1,11 +1,26 @@
-import { BOT_ADMINS } from '#utils/environment';
-import type { PermissionsBitField } from 'discord.js';
+import { PermissionsBitField, type GuildMember } from 'discord.js';
+import { OWNERS } from '#root/config';
 
-export function canManageRoles(permissions: PermissionsBitField | null | undefined): boolean {
-	if (!permissions) return false;
-	return permissions.has('ManageRoles');
+export function isModerator(member: GuildMember) {
+	return isGuildOwner(member) || checkModerator(member) || checkAdministrator(member);
 }
 
-export function isBotAdmin(userId: string): boolean {
-	return BOT_ADMINS.includes(userId);
+export function isAdmin(member: GuildMember) {
+	return isGuildOwner(member) || checkAdministrator(member);
+}
+
+export function isGuildOwner(member: GuildMember) {
+	return member.id === member.guild.ownerId;
+}
+
+export function isOwner(member: GuildMember) {
+	return OWNERS.includes(member.id);
+}
+
+function checkModerator(member: GuildMember) {
+	return member.permissions.has(PermissionsBitField.Flags.BanMembers);
+}
+
+function checkAdministrator(member: GuildMember) {
+	return member.permissions.has(PermissionsBitField.Flags.ManageGuild);
 }

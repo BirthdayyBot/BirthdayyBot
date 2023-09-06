@@ -65,5 +65,6 @@
   "timezoneName": "timezone",
   "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday.",
   "configDescription": "Configuring server settings",
-  "configName": "config"
+  "configName": "config",
+  "listName": "list"
 }
