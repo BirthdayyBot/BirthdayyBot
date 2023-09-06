@@ -15,7 +15,7 @@ export class VoteCommand extends CustomCommand {
 	}
 
 	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
-		const embed = await resolveKey<APIEmbed>(interaction, 'commands/vote:embed', {
+		const embed = (await resolveKey(interaction, 'commands/vote:embed', {
 			returnObjects: true,
 			arrowRight: Emojis.ArrowRight,
 			heart: Emojis.Heart,
@@ -23,7 +23,7 @@ export class VoteCommand extends CustomCommand {
 			discordlist: WebsiteUrl('discordlist/vote'),
 			'discord-botlist': WebsiteUrl('discord-botlist/vote'),
 			premium: WebsiteUrl('premium'),
-		});
+		})) as APIEmbed;
 
 		return interaction.reply({ embeds: [embed] });
 	}

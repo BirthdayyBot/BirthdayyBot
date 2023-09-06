@@ -3,7 +3,7 @@ import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { Emojis, defaultEmbed } from '#utils';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits, type APIEmbed } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 export class SupportCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
@@ -15,7 +15,7 @@ export class SupportCommand extends CustomCommand {
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const embed = await resolveKey<APIEmbed>(interaction, 'commands/support:supportEmbed', {
+		const embed = await resolveKey(interaction, 'commands/support:supportEmbed', {
 			returnObjects: true,
 			support: WebsiteUrl('discord'),
 			docs: WebsiteUrl('docs'),

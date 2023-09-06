@@ -61,6 +61,7 @@
     "@sapphire/plugin-api": "^5.1.1",
     "@sapphire/plugin-editable-commands": "^3.0.3",
     "@sapphire/plugin-hmr": "^2.0.2",
+    "@sapphire/plugin-i18next": "pr-475",
     "@sapphire/plugin-logger": "^3.0.6",
     "@sapphire/plugin-scheduled-tasks": "^7.1.2",
     "@sapphire/plugin-subcommands": "^4.2.0",
@@ -80,6 +81,7 @@
     "dayjs": "^1.11.9",
     "discord-api-types": "^0.37.55",
     "discord.js": "^14.13.0",
+    "i18next": "^23.4.9",
     "prisma": "^5.2.0",
     "reflect-metadata": "^0.1.13"
   },
@@ -88,7 +90,6 @@
     "@commitlint/config-conventional": "^17.7.0",
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^5.0.2",
-    "@sapphire/plugin-i18next": "^5.0.5",
     "@sapphire/ts-config": "^5.0.0",
     "@types/node": "^20.5.7",
     "@types/ws": "^8.5.5",

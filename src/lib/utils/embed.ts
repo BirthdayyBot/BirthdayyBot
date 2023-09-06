@@ -1,8 +1,6 @@
-import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
-import { BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT, BOT_AVATAR } from '#utils/environment';
 import { replyToInteraction } from '#lib/discord/interaction';
-import { resolveKey, type StringMap, type TOptions } from '@sapphire/plugin-i18next';
-import type { NonNullObject } from '@sapphire/utilities';
+import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '#utils/environment';
+import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
@@ -22,10 +20,9 @@ export function defaultEmbed(): APIEmbed {
 	};
 }
 
-export async function interactionSuccess<T extends NonNullObject = StringMap>(
+export async function interactionSuccess(
 	interaction: ChatInputCommandInteraction,
-	key: string,
-	options?: TOptions<T>,
+	description: string,
 	ephemeral = false,
 ) {
 	return replyToInteraction(interaction, {
@@ -33,16 +30,15 @@ export async function interactionSuccess<T extends NonNullObject = StringMap>(
 		embeds: [
 			{
 				color: Colors.Green,
-				description: `${await resolveKey(interaction, key, options)}`,
+				description: `${description}`,
 			},
 		],
 	});
 }
 
-export async function interactionProblem<T extends NonNullObject = StringMap>(
+export async function interactionProblem(
 	interaction: ChatInputCommandInteraction,
-	key: string,
-	options?: TOptions<T>,
+	description: string,
 	ephemeral = false,
 ) {
 	return replyToInteraction(interaction, {
@@ -50,7 +46,7 @@ export async function interactionProblem<T extends NonNullObject = StringMap>(
 		embeds: [
 			{
 				color: Colors.Red,
-				description: `${await resolveKey(interaction, key, options)}`,
+				description: `${description}`,
 			},
 		],
 	});

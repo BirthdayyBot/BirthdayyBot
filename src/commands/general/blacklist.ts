@@ -1,6 +1,6 @@
 import { userOptions } from '#lib/components/builder';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultClientPermissions, defaultUserPermissions } from '#lib/types';
+import { defaultUserPermissions } from '#lib/types';
 import { PermissionLevels } from '#lib/types/Enums';
 import { PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
@@ -31,59 +31,63 @@ export class BlacklistCommand extends CustomCommand {
 		registry.registerChatInputCommand((builder) => registerBlacklistCommand(builder), { guildIds });
 	}
 
-	public async add(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user, options } = resolveTarget(interaction);
+	public async add(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+		const { user, options: _ } = resolveTarget(ctx);
 
-		if (!options.context) return interactionProblem(interaction, 'commands/blacklist:add.cannotBlacklistSelf');
+		if (!_.context) {
+			return interactionProblem(ctx, await resolveKey(ctx, 'commands/blacklist:add.cannotBlacklistSelf'));
+		}
 
 		const result = await resolveOnErrorCodesPrisma(
-			this.container.prisma.blacklist.create({ data: { guildId: interaction.guildId, userId: user.id } }),
+			this.container.prisma.blacklist.create({ data: { guildId: ctx.guildId, userId: user.id } }),
 			PrismaErrorCodeEnum.UniqueConstraintFailed,
 		);
 
-		const tOptions = { user: userMention(user.id) };
+		const options = { user: userMention(user.id) };
 
-		if (!result) return interactionProblem(interaction, 'commands/blacklist:add.alReadyBlacklisted', tOptions);
+		if (!result) {
+			return interactionProblem(ctx, await resolveKey(ctx, 'commands/blacklist:add.alReadyBlacklisted', options));
+		}
 
-		return interactionSuccess(interaction, 'commands/blacklist:add.success', tOptions);
+		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/blacklist:add.success', options));
 	}
 
-	public async list(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const result = await this.container.prisma.blacklist.findMany({
-			where: { guildId: interaction.guildId },
+			where: { guildId: ctx.guildId },
 		});
 
-		const embed = new EmbedBuilder(defaultEmbed()).setTitle(
-			await resolveKey(interaction, 'commands/blacklist:list.title'),
-		);
+		const embed = new EmbedBuilder(defaultEmbed()).setTitle(await resolveKey(ctx, 'commands/blacklist:list.title'));
 
 		if (result.length === 0) {
-			const emptyEmbed = embed.setDescription(await resolveKey(interaction, 'commands/blacklist:list.empty'));
-			return interaction.reply({ embeds: [emptyEmbed] });
+			const emptyEmbed = embed.setDescription(await resolveKey(ctx, 'commands/blacklist:list.empty'));
+			return ctx.reply({ embeds: [emptyEmbed] });
 		}
 
 		const paginateMessage = new PaginatedFieldMessageEmbed<Blacklist>();
 
 		paginateMessage.setTemplate(embed).setItems(result).formatItems(formatList).setItemsPerPage(6);
 
-		return paginateMessage.make().run(interaction, interaction.user);
+		return paginateMessage.make().run(ctx, ctx.user);
 	}
 
-	public async remove(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user } = resolveTarget(interaction);
+	public async remove(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+		const { user } = resolveTarget(ctx);
 
 		const result = await resolveOnErrorCodesPrisma(
 			this.container.prisma.blacklist.delete({
-				where: { userId_guildId: { guildId: interaction.guildId, userId: user.id } },
+				where: { userId_guildId: { guildId: ctx.guildId, userId: user.id } },
 			}),
 			PrismaErrorCodeEnum.NotFound,
 		);
 
 		const options = { user: userMention(user.id) };
 
-		if (!result) return interactionProblem(interaction, 'commands/blacklist:remove.notFound', options);
+		if (!result) {
+			return interactionProblem(ctx, await resolveKey(ctx, 'commands/blacklist:remove.notFound', options));
+		}
 
-		return interactionSuccess(interaction, 'commands/blacklist:remove.success', options);
+		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/blacklist:remove.success', options));
 	}
 }
 
