@@ -61,7 +61,7 @@
   "timezone": {
     "success": "**fusul orar** a fost setat la {{fusul orar}}.",
     "timezoneDescription": "În ce fus orar ești?",
-    "timezoneName": "fus orar"
+    "timezoneName": "fus-orar"
   },
   "timezoneName": "fus-orar",
   "timezoneDescription": "Schimbați fusul orar când Birthdayy dorește La mulți ani.",

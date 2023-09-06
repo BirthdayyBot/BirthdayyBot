@@ -61,7 +61,7 @@
   "timezone": {
     "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt.",
     "timezoneDescription": "In welcher Zeitzone befinden Sie sich?",
-    "timezoneName": "Zeitzone"
+    "timezoneName": "zeitzone"
   },
   "timezoneName": "zeitzone",
   "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht.",

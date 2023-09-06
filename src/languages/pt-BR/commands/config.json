@@ -61,7 +61,7 @@
   "timezone": {
     "success": "O **fuso horário** foi definido como {{timezone}}.",
     "timezoneDescription": "Em que fuso horário você está ?",
-    "timezoneName": "fuso horário"
+    "timezoneName": "fuso-horário"
   },
   "timezoneName": "fuso-horário",
   "timezoneDescription": "Altere o fuso horário quando o Aniversário deseja feliz aniversário.",

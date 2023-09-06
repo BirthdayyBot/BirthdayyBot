@@ -38,12 +38,10 @@
     "userName": "user",
     "userDescription": "Show this user's birthday - MANAGER ONLY",
     "title": "{{emoji}} Birthday",
-    "description": "{{emoji}} Your birthday is at the {{date}}.",
-    "description_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}}'s birthday is at the {{date}}. If you want to change it, use {{command}}.",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
     "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
-    "notRegistered_target": "{{target}}'s birthday is not registered.",
-    "notRegistered_target-manager": "{{target}}'s birthday is not recorded. Use {{command}} to save it."
+    "notRegistered_target": "{{target}}'s birthday is not registered."
   },
   "testName": "test",
   "testDescription": "Test your current birthday setup",
