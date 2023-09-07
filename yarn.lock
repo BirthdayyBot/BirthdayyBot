@@ -907,13 +907,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-subcommands@npm:^4.2.0":
+"@sapphire/plugin-subcommands@npm:4.2.0":
   version: 4.2.0
   resolution: "@sapphire/plugin-subcommands@npm:4.2.0"
   dependencies:
     "@sapphire/utilities": ^3.13.0
     tslib: ^2.6.2
   checksum: 9fcfa03786a75629f4c31f51e557887f042795746f98b2f592a7b63bafba3961bebac7ba36d6d5fd833141c33e9e3306615183cf49713e5f4ab45fda2328861f
+  languageName: node
+  linkType: hard
+
+"@sapphire/plugin-subcommands@patch:@sapphire/plugin-subcommands@npm%3A4.2.0#./.yarn/patches/@sapphire-plugin-subcommands-npm-4.2.0-6e65e6ece1.patch::locator=birthdayy-discord-bot%40workspace%3A.":
+  version: 4.2.0
+  resolution: "@sapphire/plugin-subcommands@patch:@sapphire/plugin-subcommands@npm%3A4.2.0#./.yarn/patches/@sapphire-plugin-subcommands-npm-4.2.0-6e65e6ece1.patch::version=4.2.0&hash=496028&locator=birthdayy-discord-bot%40workspace%3A."
+  dependencies:
+    "@sapphire/utilities": ^3.13.0
+    tslib: ^2.6.2
+  checksum: b3f791c77853197c6d5ab305452ec7d6843f01724682dabd255261d7213c1a1879eced977469c566940831083628bd41a739e8ca0cfbf3471d58b88484d2ea20
   languageName: node
   linkType: hard
 
