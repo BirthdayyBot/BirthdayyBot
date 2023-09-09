@@ -1,6 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types';
 import {
 	Emojis,
@@ -24,25 +24,25 @@ import {
 	type SlashCommandSubcommandBuilder,
 } from 'discord.js';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings('list', 'set', 'remove', 'show', {
 		name: 'test',
 		preconditions: ['Moderator'],
 	}),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
-export class BirthdayCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class BirthdayCommand extends CustomSubCommand {
+	public override registerApplicationCommands(registry: CustomSubCommand.Registry) {
 		registry.registerChatInputCommand((builder) => registerBirthdayCommand(builder));
 	}
 
-	public async list(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { embed, components } = await generateBirthdayList(1, ctx.guild);
 		return ctx.reply({ components, embeds: [generateDefaultEmbed(embed)] });
 	}
 
 	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/birthday:set', defaultUserPermissions.add('ManageGuild'))
-	public async set(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const birthday = getDateFromInteraction(ctx);
 
@@ -57,7 +57,7 @@ export class BirthdayCommand extends CustomCommand {
 	}
 
 	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/birthday:remove', defaultUserPermissions.add('ManageRoles'))
-	public async remove(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const data = { userId_guildId: { guildId: ctx.guildId, userId: user.id } };
 		const result = await resolveOnErrorCodesPrisma(
@@ -76,7 +76,7 @@ export class BirthdayCommand extends CustomCommand {
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}
 
-	public async show(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async show(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const where = { guildId: ctx.guildId, userId: user.id };
 		const result = await resolveOnErrorCodesPrisma(
@@ -97,7 +97,7 @@ export class BirthdayCommand extends CustomCommand {
 		);
 	}
 
-	public async test(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async test(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user } = resolveTarget(interaction);
 
 		await this.container.tasks.run('BirthdayReminderTask', {

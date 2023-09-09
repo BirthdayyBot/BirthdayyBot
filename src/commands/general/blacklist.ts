@@ -1,5 +1,5 @@
 import { userOptions } from '#lib/components/builder';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types';
 import { PermissionLevels } from '#lib/types/Enums';
 import { PrismaErrorCodeEnum } from '#utils/constants';
@@ -20,18 +20,18 @@ import {
 	userMention,
 } from 'discord.js';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings('add', 'list', 'remove'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Moderator,
 })
-export class BlacklistCommand extends CustomCommand {
+export class BlacklistCommand extends CustomSubCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		const guildIds = await getCommandGuilds('premium');
 		registry.registerChatInputCommand((builder) => registerBlacklistCommand(builder), { guildIds });
 	}
 
-	public async add(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async add(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options: _ } = resolveTarget(ctx);
 
 		if (!_.context) {
@@ -52,7 +52,7 @@ export class BlacklistCommand extends CustomCommand {
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/blacklist:add.success', options));
 	}
 
-	public async list(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const result = await this.container.prisma.blacklist.findMany({
 			where: { guildId: ctx.guildId },
 		});
@@ -71,7 +71,7 @@ export class BlacklistCommand extends CustomCommand {
 		return paginateMessage.make().run(ctx, ctx.user);
 	}
 
-	public async remove(ctx: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user } = resolveTarget(ctx);
 
 		const result = await resolveOnErrorCodesPrisma(

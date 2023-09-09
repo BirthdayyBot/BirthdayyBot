@@ -1,6 +1,6 @@
 import type { ConfigName } from '#lib/database/types';
 import thinking from '#lib/discord/thinking';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { CustomCommand, CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
 import { defaultClientPermissions, defaultUserPermissions, hasBotChannelPermissions } from '#lib/types/permissions';
 import { generateBirthdayList } from '#utils/birthday/birthday';
@@ -25,7 +25,7 @@ import {
 	type PermissionResolvable,
 } from 'discord.js';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(
 		'announcement-channel',
 		'announcement-message',
@@ -39,14 +39,14 @@ import {
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Administrator,
 })
-export class ConfigCommand extends CustomCommand {
+export class ConfigCommand extends CustomSubCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
 			guildIds: ['980559116076470272'],
 		});
 	}
 
-	public async announcementChannel(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async announcementChannel(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const announcementChannel = interaction.options.getChannel('channel', true, [ChannelType.GuildText]).id;
 		const permissions: PermissionResolvable[] = ['ViewChannel', 'SendMessages'];
 		const options = { channel: channelMention(announcementChannel) };
@@ -65,7 +65,7 @@ export class ConfigCommand extends CustomCommand {
 		);
 	}
 
-	public async announcementMessage(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async announcementMessage(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const announcementMessage = interaction.options.getString('message', true);
 
 		const guild = await this.container.prisma.guild.findUniqueOrThrow({
@@ -87,7 +87,7 @@ export class ConfigCommand extends CustomCommand {
 		);
 	}
 
-	public async birthdayRole(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async birthdayRole(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { id: birthdayRole, position } = interaction.options.getRole('role', true);
 		const bot = await interaction.guild.members.fetchMe();
 		const highestBotRole = bot.roles.highest;
@@ -106,13 +106,13 @@ export class ConfigCommand extends CustomCommand {
 		);
 	}
 
-	public async list(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
 
 		return reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
 	}
 
-	public async overviewChannel(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async overviewChannel(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const channel = interaction.options.getChannel<ChannelType.GuildText>('channel', true);
 		const permissions: PermissionResolvable[] = defaultClientPermissions.toArray();
 
@@ -142,7 +142,7 @@ export class ConfigCommand extends CustomCommand {
 		);
 	}
 
-	public async pingRole(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async pingRole(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const role = interaction.options.getRole('role', true);
 
 		return this.updateConfig(
@@ -152,7 +152,7 @@ export class ConfigCommand extends CustomCommand {
 		);
 	}
 
-	public async reset(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public async reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const settings = interaction.options.getString('config', true) as ConfigName;
 		const result = await resolveOnErrorCodesPrisma(
 			setDefaultConfig(settings, interaction.guildId),
