@@ -15,7 +15,7 @@
     "@sapphire/plugin-api": "^5.1.1",
     "@sapphire/plugin-editable-commands": "^3.0.3",
     "@sapphire/plugin-hmr": "^2.0.2",
-    "@sapphire/plugin-i18next": "^5.0.5",
+    "@sapphire/plugin-i18next": "^6.0.1",
     "@sapphire/plugin-logger": "^3.0.6",
     "@sapphire/plugin-scheduled-tasks": "^7.1.2",
     "@sapphire/plugin-subcommands": "^4.2.0",
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^5.0.1",
-    "@sapphire/ts-config": "^4.0.1",
+    "@sapphire/ts-config": "^5.0.0",
     "@types/node": "^20.5.7",
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
