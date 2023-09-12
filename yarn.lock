@@ -514,13 +514,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaname-png/plugin-subcommands-advanced@npm:^2.2.3":
-  version: 2.2.3
-  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.2.3"
+"@kaname-png/plugin-subcommands-advanced@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.3.0"
   dependencies:
-    "@sapphire/decorators": ^6.0.1
-    tslib: ^2.5.3
-  checksum: 43207241f1fbd0f6781088ce6cf329300128cdcbdc6fe1efcd062a1fd21dfc2a1c8d0a9be708726633b6a98f2db641d38adbd341c15bf9befea3c3216d1d7441
+    "@sapphire/decorators": ^6.0.2
+    tslib: ^2.6.2
+  checksum: 1839bf8884b7eb52096b5d7a92fe9a0b7aa3308ddf838881f91768397a1b83d98e60e695f8d955b4b70680ac23e06a17f63b0f51a90cbe4299072117aa1d4037
   languageName: node
   linkType: hard
 
@@ -712,7 +712,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/decorators@npm:^6.0.1, @sapphire/decorators@npm:^6.0.2":
+"@sapphire/decorators@npm:^6.0.2":
   version: 6.0.2
   resolution: "@sapphire/decorators@npm:6.0.2"
   dependencies:
@@ -1779,7 +1779,7 @@ __metadata:
     "@influxdata/influxdb-client": ^1.33.2
     "@kaname-png/plugin-influxdb": ^1.2.0
     "@kaname-png/plugin-sentry": ^1.2.0
-    "@kaname-png/plugin-subcommands-advanced": ^2.2.3
+    "@kaname-png/plugin-subcommands-advanced": ^2.3.0
     "@prisma/client": ^5.2.0
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.1
@@ -1812,7 +1812,7 @@ __metadata:
     "@types/ws": ^8.5.5
     "@typescript-eslint/eslint-plugin": ^6.6.0
     "@typescript-eslint/parser": ^6.6.0
-    bullmq: ^4.9.0
+    bullmq: ^4.10.0
     colorette: ^2.0.20
     dayjs: ^1.11.9
     discord-api-types: ^0.37.56
@@ -1823,7 +1823,7 @@ __metadata:
     eslint-plugin-prettier: ^5.0.0
     eslint-plugin-tsdoc: ^0.2.17
     husky: ^8.0.3
-    i18next: ^23.4.9
+    i18next: ^23.5.1
     lint-staged: ^14.0.1
     npm-run-all: ^4.1.5
     prettier: ^3.0.3
@@ -1889,9 +1889,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^4.9.0":
-  version: 4.9.0
-  resolution: "bullmq@npm:4.9.0"
+"bullmq@npm:^4.10.0":
+  version: 4.10.0
+  resolution: "bullmq@npm:4.10.0"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
@@ -1902,7 +1902,7 @@ __metadata:
     semver: ^7.5.4
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 0423021e9f410610646855bd41cf8e6c39ef23dcad75362c71f636b19632379eb7715d359cc3774bdc5be880e3910832e859dd0517aa2d0e0477878a0e381750
+  checksum: c154ae41cc1d5cf8fc9c36681901bac73c3c61666315b475584a9537e52d6e0323672b2c82c54fccba56725fa60adf6f7700486a2d8f9a9b4129b44882bfcca9
   languageName: node
   linkType: hard
 
@@ -3532,6 +3532,15 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.22.5
   checksum: 46ac2415dc817c0e25e1c5e64332249825cd63b5fb9a5d42e3a2329d4ecd098c0f15a243f56b53e03db02e2e9931ca9bb4447370b2436f9ad6556de40ce981cf
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^23.5.1":
+  version: 23.5.1
+  resolution: "i18next@npm:23.5.1"
+  dependencies:
+    "@babel/runtime": ^7.22.5
+  checksum: 4be043bd72287bfae9777a3252b9458d2e3f5e9a97ea62cf434e6e3767b45df4365d8780d0dd14efd4e9da5eb0f90534510b138f1372d1cb9012000a69bbedaf
   languageName: node
   linkType: hard
 
@@ -6193,7 +6202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.5.3, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
+"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1 || ^1.9.3, tslib@npm:^2.5.0, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
