@@ -4,7 +4,7 @@ import { getGuildInformation } from '#lib/discord/guild';
 import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { addRoleToUser } from '#lib/discord/role';
 import { getUserInfo } from '#lib/discord/user';
-import type { RoleRemovePayload } from '#root/tasks/BirthdayRoleRemoverTask';
+import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { BirthdayyBotId } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { BOT_NAME, Emojis, VOTE_CHANNEL_ID, VOTE_ROLE_ID, WEBSITE_URL } from '#utils/environment';
