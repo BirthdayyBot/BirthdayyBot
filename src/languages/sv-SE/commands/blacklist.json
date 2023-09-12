@@ -1,0 +1,27 @@
+{
+  "add": {
+    "alReadyBlacklisted": "{{user}} finns redan på svartlistan.",
+    "success": "{{user}} har blivit svartlistad",
+    "userDescription": "Användaren att lägga till i svartlistan",
+    "userName": "användare",
+    "cannotBlacklistSelf": "Du kan inte svartlista dig själv"
+  },
+  "addDescription": "Lägg till en användare på svartlistan",
+  "addName": "lägg-till",
+  "blacklistDescription": "Svartlista användarhanteringskommandon",
+  "blacklistName": "svartlista",
+  "list": {
+    "title": "Svartlistad användare",
+    "empty": "Det finns inga svartlistade användare för tillfället."
+  },
+  "listDescription": "Lista alla användare på den svarta listan",
+  "listName": "lista",
+  "remove": {
+    "notFound": "{{user}} finns inte på den svarta listan",
+    "success": "{{user}} har tagits bort från den svarta listan",
+    "userDescription": "Användaren att ta bort från svartlistan",
+    "userName": "användare"
+  },
+  "removeDescription": "Ta bort en användare från den svarta listan",
+  "removeName": "avlägsna"
+}

@@ -1,28 +1,30 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { VoteCMD } from '../../lib/commands/vote';
-import thinking from '../../lib/discord/thinking';
-import { VoteEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { WebsiteUrl } from '#lib/components/button';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { defaultUserPermissions } from '#lib/types/permissions';
+import { Emojis } from '#utils';
+import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import type { APIEmbed } from 'discord.js';
 
-@ApplyOptions<Command.Options>({
-	name: 'vote',
-	description: 'Vote for Birthdayy <3',
-	enabled: true,
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
-})
-export class VoteCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(VoteCMD());
+export class VoteCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+		registry.registerChatInputCommand((builder) => {
+			return applyLocalizedBuilder(builder, 'commands/vote:vote').setDefaultMemberPermissions(
+				defaultUserPermissions.bitfield,
+			);
+		});
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = generateDefaultEmbed(VoteEmbed);
-		await reply(interaction, {
-			embeds: [embed],
-		});
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+		const embed = (await resolveKey(interaction, 'commands/vote:embed', {
+			returnObjects: true,
+			arrowRight: Emojis.ArrowRight,
+			heart: Emojis.Heart,
+			topgg: WebsiteUrl('topgg/vote'),
+			discordlist: WebsiteUrl('discordlist/vote'),
+			'discord-botlist': WebsiteUrl('discord-botlist/vote'),
+			premium: WebsiteUrl('premium'),
+		})) as APIEmbed;
+
+		return interaction.reply({ embeds: [embed] });
 	}
 }

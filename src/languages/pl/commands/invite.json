@@ -1,0 +1,8 @@
+{
+  "inviteDescription": "Zaproś Birthdayy'ego na swój serwer Discord!",
+  "inviteName": "zapraszać",
+  "embed": {
+    "title": "{{book}} Zaproś {{name}}",
+    "description": "{{arrowRight}} Kliknij przycisk poniżej, aby zaprosić {{name}} na swój serwer Discord!"
+  }
+}

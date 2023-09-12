@@ -1,7 +1,7 @@
+import { updateBirthdayOverview } from '#utils/birthday/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener } from '@sapphire/framework';
 import { DiscordAPIError, GuildMember } from 'discord.js';
-import updateBirthdayOverview from '../../../helpers/update/overview';
 
 @ApplyOptions<Listener.Options>({ event: Events.GuildMemberRemove })
 export class UserEvent extends Listener {

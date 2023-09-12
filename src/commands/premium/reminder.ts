@@ -1,12 +1,7 @@
+import { ReminderCMD } from '#lib/commands/reminder';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { ReminderCMD } from '../../lib/commands/reminder';
-import { inviteBirthdayyButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { InviteEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'reminder',
@@ -23,17 +18,5 @@ export class GuideCommand extends Command {
 		});
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = generateDefaultEmbed(InviteEmbed);
-		await reply(interaction, {
-			embeds: [embed],
-			components: [
-				{
-					type: 1,
-					components: [await inviteBirthdayyButton(interaction)],
-				},
-			],
-		});
-	}
+	public override async chatInputRun(_interaction: Command.ChatInputCommandInteraction) {}
 }

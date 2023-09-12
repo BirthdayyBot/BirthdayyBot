@@ -1,7 +1,7 @@
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import type { ApiResponse } from '@sapphire/plugin-api';
-import type { ApiRequest } from './types';
 import { envParseString } from '@skyra/env-utilities';
+import type { ApiRequest } from './types.js';
 
 /**
  * It returns a function that takes a request and returns a response

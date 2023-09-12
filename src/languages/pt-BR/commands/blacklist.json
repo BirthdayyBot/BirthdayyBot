@@ -1,0 +1,27 @@
+{
+  "add": {
+    "alReadyBlacklisted": "{{user}} já está na lista negra.",
+    "success": "{{user}} foi colocado na lista negra com sucesso",
+    "userDescription": "O usuário para adicionar à lista negra",
+    "userName": "utilizador",
+    "cannotBlacklistSelf": "Você não pode se colocar na lista negra"
+  },
+  "addDescription": "Adicionar um usuário à lista negra",
+  "addName": "adicionar",
+  "blacklistDescription": "Comandos de gerenciamento de usuários da lista negra",
+  "blacklistName": "lista-negra",
+  "list": {
+    "title": "Usuário na lista negra",
+    "empty": "Não há usuários na lista negra no momento."
+  },
+  "listDescription": "Listar todos os usuários na lista negra",
+  "listName": "lista",
+  "remove": {
+    "notFound": "{{user}} não está na lista negra",
+    "success": "{{user}} foi removido com sucesso da lista negra",
+    "userDescription": "O usuário a ser removido da lista negra",
+    "userName": "utilizador"
+  },
+  "removeDescription": "Remover um usuário da lista negra",
+  "removeName": "remover"
+}

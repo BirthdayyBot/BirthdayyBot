@@ -1,12 +1,15 @@
+import { BirthdayyBotId, OwnerID } from '#utils/constants';
+import { isProduction } from '#utils/env';
+import { DEBUG, ROOT_DIR } from '#utils/environment';
 import type { BotList } from '@devtomio/plugin-botlist';
+import type { InfluxOptions } from '@kaname-png/plugin-influxdb';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
 import type { InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
-import { RewriteFrames } from '@sentry/integrations';
-import * as Sentry from '@sentry/node';
-import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
+import { Integrations, type NodeOptions } from '@sentry/node';
+import { envIsDefined, envParseArray, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
@@ -16,9 +19,8 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
-import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
-import { UserIDEnum } from './lib/enum/UserID.enum';
-import { isProduction } from './lib/utils/env';
+
+export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
 
 function parseApi(): ServerOptions {
 	return {
@@ -31,7 +33,7 @@ function parseApi(): ServerOptions {
 
 function parseBotListOptions(): BotList.Options {
 	return {
-		clientId: UserIDEnum.BIRTHDAYY,
+		clientId: BirthdayyBotId.Birthdayy,
 		debug: DEBUG,
 		shard: true,
 		autoPost: {
@@ -56,7 +58,6 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			const guild = await container.prisma.guild.findFirst({
 				where: { guildId: context.guild.id },
 			});
-			container.logger.info(guild?.language);
 			return guild?.language || 'en-US';
 		},
 	};
@@ -86,7 +87,7 @@ function parsePresenceOptions(): PresenceData {
 		status: PresenceUpdateStatus.Online,
 		activities: [
 			{
-				name: '/birthday register 🎂',
+				name: '/birthday set 🎂',
 				type: ActivityType.Watching,
 			},
 		],
@@ -106,20 +107,27 @@ function parseSubcommandsAdvancedOptions(): PluginSubcommandOptions {
 	};
 }
 
-export const SENTRY_OPTIONS: Sentry.NodeOptions = {
-	dsn: envParseString('SENTRY_DSN'),
+export const SENTRY_OPTIONS: NodeOptions = {
 	debug: DEBUG,
-	integrations: [
-		new Sentry.Integrations.Modules(),
-		new Sentry.Integrations.FunctionToString(),
-		new Sentry.Integrations.LinkedErrors(),
-		new Sentry.Integrations.Console(),
-		new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
-		new RewriteFrames({ root: ROOT_DIR }),
-	],
+	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
 };
 
+function parseSentryOptions() {
+	return {
+		loadSentryErrorListeners: true,
+		root: ROOT_DIR,
+		options: SENTRY_OPTIONS,
+	};
+}
+
+export function parseAnalytics(): InfluxOptions {
+	return {
+		loadDefaultListeners: true,
+	};
+}
+
 export const CLIENT_OPTIONS: ClientOptions = {
+	analytics: parseAnalytics(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: true,
 	logger: parseLoggerOptions(),
@@ -130,6 +138,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
 	subcommandsAdvanced: parseSubcommandsAdvancedOptions(),
+	sentry: parseSentryOptions(),
 };
 
 function parseWebhookError(): WebhookClientData | null {

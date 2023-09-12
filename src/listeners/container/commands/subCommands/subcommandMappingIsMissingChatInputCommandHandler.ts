@@ -6,7 +6,7 @@ import {
 	type SubcommandMappingMethod,
 } from '@sapphire/plugin-subcommands';
 import type { CacheType, Interaction } from 'discord.js';
-import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
+import { handleCommandErrorAndSendToUser } from '#utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: SubcommandPluginEvents.SubcommandMappingIsMissingChatInputCommandHandler })
 export class ChatInputSubcommandErrorEvent extends Listener<

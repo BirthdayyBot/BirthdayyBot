@@ -1,0 +1,25 @@
+{
+  "guideDescription": "Aveți nevoie de un Ghid de configurare rapidă! Nu-ți face griji, asta te va ajuta!",
+  "guideName": "ghid",
+  "embedConfigField": {},
+  "embedImportantField": {},
+  "embedStartedField": {},
+  "embed": {
+    "description": "{{emoji.exclamation}} Tastând **/help** în chat, puteți verifica toate funcțiile mele și comenzile disponibile.",
+    "title": "Ghid pentru {{emoji.heart}} {{name}}!",
+    "fields": [
+      {
+        "name": "Configurați ziua de naștere",
+        "value": "{{emoji}} Asigurați-vă că setați **configurațiile serverului** cu **/config <config>**!\n{{emoji}} Folosiți {{comandă}} pentru a vedea setarea de configurare curentă."
+      },
+      {
+        "name": "Important",
+        "value": "{{emojis.exclamation}} Rolul meu **cel mai înalt** trebuie să fie **deasupra** rolului de copil de naștere.\n{{emojis.arrowRight}} Alăturați-vă [Birthdayy HQ]({{invite}}) pentru a-l cunoaște pe Dezvoltator și pentru a ajuta la îmbunătățirea Birthdayy {{emojis.cake}}\n{{emojis.heart}} Vă place **Birthdayy**? \nLuați în considerare [invitarea]({{invite}}) și [votarea]({{vot}}) pentru mine!\n{{emojis.plus}} Doriți acces la funcțiile beta? \n[Sprijină-ne pe Patreon]({{premium}})"
+      },
+      {
+        "name": "Incepe",
+        "value": "{{emoji}} Înregistrează-ți ziua de naștere cu {{command}}\n{{emoji}} Găsiți mai multe pe [Documentare]({{url}})"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
 
 @ApplyOptions<Command.Options>({
 	description: 'ping pong',

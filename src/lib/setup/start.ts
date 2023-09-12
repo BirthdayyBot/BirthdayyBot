@@ -2,6 +2,9 @@
 process.env.NODE_ENV ??= 'development';
 
 import '@devtomio/plugin-botlist/register';
+import '@kaname-png/plugin-sentry';
+import '@kaname-png/plugin-sentry/register';
+import '@kaname-png/plugin-influxdb/register';
 import '@kaname-png/plugin-subcommands-advanced/register';
 import '@sapphire/plugin-api/register';
 import '@sapphire/plugin-editable-commands/register';

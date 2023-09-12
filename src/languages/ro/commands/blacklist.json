@@ -1,0 +1,27 @@
+{
+  "add": {
+    "alReadyBlacklisted": "{{user}} este deja pe lista neagră.",
+    "success": "{{user}} a fost inclus cu succes pe lista neagră",
+    "userDescription": "Utilizatorul de adăugat pe lista neagră",
+    "userName": "utilizator",
+    "cannotBlacklistSelf": "Nu vă puteți lista neagră"
+  },
+  "addDescription": "Adăugați un utilizator pe lista neagră",
+  "addName": "adăuga",
+  "blacklistDescription": "Lista neagră a comenzilor de gestionare a utilizatorilor",
+  "blacklistName": "listavneagră",
+  "list": {
+    "title": "Utilizator pe lista neagră",
+    "empty": "Nu există utilizatori pe lista neagră momentan."
+  },
+  "listDescription": "Listați toți utilizatorii de pe lista neagră",
+  "listName": "listă",
+  "remove": {
+    "notFound": "{{user}} nu este pe lista neagră",
+    "success": "{{user}} a fost eliminat cu succes din lista neagră",
+    "userDescription": "Utilizatorul de eliminat din lista neagră",
+    "userName": "utilizator"
+  },
+  "removeDescription": "Eliminați un utilizator din lista neagră",
+  "removeName": "elimina"
+}

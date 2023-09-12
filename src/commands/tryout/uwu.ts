@@ -1,12 +1,12 @@
+import { UwUCMD } from '#lib/commands';
+import { generateDefaultEmbed } from '#utils/embed';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import type { Args } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { UwUCMD } from '../../lib/commands/uwu';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Subcommand.Options>({
 	description: 'send uwus',

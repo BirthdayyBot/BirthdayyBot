@@ -1,23 +1,18 @@
+import { getGuildInformation } from '#lib/discord';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { PermissionLevels } from '#lib/types/Enums';
+import { generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
 import { bold, inlineCode } from 'discord.js';
-import { getCommandGuilds } from '../../helpers';
-import { reply } from '../../helpers/send/response';
-import { getGuildInformation } from '../../lib/discord';
-import thinking from '../../lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem } from '../../lib/utils/embed';
-import { isNotCustom } from '../../lib/utils/env';
 
-@ApplyOptions<Command.Options>({
-	name: 'toggle-premium',
+@ApplyOptions<CustomCommand.Options>({
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	preconditions: ['AdminOnly'],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	permissionLevel: PermissionLevels.Administrator,
 })
-export class TogglePremiumCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
+export class TogglePremiumCommand extends CustomCommand {
+	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) =>
 				builder
@@ -38,14 +33,13 @@ export class TogglePremiumCommand extends Command {
 		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		const toggle = interaction.options.getBoolean('toggle', true);
 		const guildId = interaction.options.getString('guild-id', true);
 		// check if guild exists if not send error message
 		const guild = await getGuildInformation(guildId);
-		await thinking(interaction, true);
 		if (!guild) {
-			return reply(interaction, interactionProblem(`Guild ${inlineCode(guildId)} not found`, true));
+			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);

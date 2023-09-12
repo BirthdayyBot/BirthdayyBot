@@ -1,0 +1,70 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Å... ser ut til at jeg ikke kan sende en melding i dette rommet. Kan du ta en titt?",
+    "channelDescription": "Hvilken salong skal jeg sende kunngjøringsmeldingen til?",
+    "channelName": "kanal",
+    "success": "Kunngjøringsrommet er definert på {{channel}}."
+  },
+  "announcementChannelDescription": "Rom hvor jeg ville sendt en melding når det er en brukers bursdag",
+  "announcementChannelName": "kunngjøringskanal",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "beskjed",
+    "requirePremium": "Denne funksjonen er for øyeblikket i __Beta Stage__ og **Birthdayy Premium Only**.\nHvis du er interessert i å bruke denne og fremtidige funksjoner nå allerede, kan du støtte utviklingen på [Patreon]({{url}}).`),",
+    "success": "Kunngjøringsmeldingen er endret.\n\n{{beskjed}}"
+  },
+  "announcementMessageDescription": "Melding jeg ville sendt på en brukers bursdag.",
+  "announcementMessageName": "kunngjøring-melding",
+  "birthdayRole": {
+    "highestBotRole": "Å, jeg kan ikke tildele denne rollen... Ser ut som den er høyere enn min høyeste rolle.",
+    "roleDescription": "Rolle som vil bli tildelt brukeren på fødselsdagen",
+    "roleName": "rolle",
+    "success": "Bursdagsrollen er satt til {{role}}."
+  },
+  "birthdayRoleDescription": "Rolle tildelt brukeren på fødselsdagen",
+  "birthdayRoleName": "bursdagsrolle",
+  "listName": "liste",
+  "listDescription": "List alle bursdager på serveren",
+  "overviewChannel": {
+    "cannotPermissions": "Jeg har ikke tillatelse til å sende meldinger på {{channel}}.",
+    "channelDescription": "Rom som oversikten skal sendes og oppdateres på",
+    "channelName": "kanal",
+    "success": "Forhåndsvisningskanalen er satt til {{kanal}} og den nye [meldingen]({{melding}})."
+  },
+  "overviewChannelDescription": "Rom som viser alle serverbursdager",
+  "overviewChannelName": "oversikt-kanal",
+  "pingRole": {
+    "roleName": "rolle",
+    "success": "Omtalerollen er satt til {{role}}.",
+    "roleDescription": "Hvilken rolle skal jeg nevne i kunngjøringsmeldingen?"
+  },
+  "pingRoleDescription": "Nevn en rolle på noens bursdag",
+  "pingRoleName": "ping-rolle",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Kunngjøringskanal",
+      "birthdayRole": "Bursdagsrolle",
+      "birthdayPingRole": "Bursdagsping-rolle",
+      "overviewChannel": "Oversiktskanal",
+      "overviewMessage": "Oversiktsmelding",
+      "logChannel": "Logg kanal",
+      "timezone": "Tidssone",
+      "announcementMessage": "Kunngjøringsmelding"
+    },
+    "configDescription": "Konfigurasjonen du vil tilbakestille",
+    "configName": "konfig",
+    "error": "Det oppstod en feil under forsøk på å tilbakestille {{config}}-konfigurasjonen.",
+    "success": "{{config}}-konfigurasjonen har blitt tilbakestilt."
+  },
+  "resetDescription": "Tilbakestill serverkonfigurasjonsinnstillingene",
+  "resetName": "nullstille",
+  "timezone": {
+    "success": "**tidssonen** er satt til {{tidssone}}.",
+    "timezoneDescription": "Hvilken tidssone er du i?",
+    "timezoneName": "tidssone"
+  },
+  "timezoneName": "tidssone",
+  "timezoneDescription": "Endre tidssone når Birthdayy ønsker gratulerer med dagen.",
+  "configDescription": "Konfigurere serverinnstillinger",
+  "configName": "konfig"
+}

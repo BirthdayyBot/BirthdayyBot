@@ -1,8 +1,6 @@
-import type { APIEmbed, BaseMessageOptions, InteractionReplyOptions } from 'discord.js';
-import { BOT_AVATAR, BOT_COLOR, BOT_NAME, BirthdayyEmojis, IS_CUSTOM_BOT } from '../../helpers/provide/environment';
-
-type UniversalMessageOptions = Omit<BaseMessageOptions, 'flags'>;
-type UniversalInteractionOptions = Omit<InteractionReplyOptions, 'flags'>;
+import { replyToInteraction } from '#lib/discord/interaction';
+import { BOT_AVATAR, BOT_COLOR, BOT_NAME, IS_CUSTOM_BOT } from '#utils/environment';
+import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
@@ -22,54 +20,26 @@ export function defaultEmbed(): APIEmbed {
 	};
 }
 
-export type APIEmbedWithoutDefault = Omit<APIEmbed, 'timestamp' | 'footer'>;
-
-export function success(description: string): APIEmbed {
-	return {
-		...defaultEmbed(),
-		title: `${BirthdayyEmojis.Success} Success`,
-		description: `${BirthdayyEmojis.ArrowRight} ${description}`,
-	};
-}
-
-export function messageSuccess(message: string): UniversalMessageOptions {
-	return {
-		content: '',
-		embeds: [success(message)],
-		components: [],
-	};
-}
-
-export function interactionSuccess(message: string, ephemeral = true): UniversalInteractionOptions {
-	return {
-		content: '',
-		embeds: [success(message)],
-		components: [],
+export function interactionSuccess(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
+	return replyToInteraction(interaction, {
 		ephemeral,
-	};
+		embeds: [
+			{
+				color: Colors.Green,
+				description: `${description}`,
+			},
+		],
+	});
 }
 
-export function problem(description: string): APIEmbed {
-	return {
-		...defaultEmbed(),
-		title: `${BirthdayyEmojis.Fail} Failure`,
-		description: `${BirthdayyEmojis.ArrowRight} ${description}`,
-	};
-}
-
-export function messageProblem(message: string): UniversalMessageOptions {
-	return {
-		content: '',
-		embeds: [problem(message)],
-		components: [],
-	};
-}
-
-export function interactionProblem(message: string, ephemeral = true): UniversalInteractionOptions {
-	return {
-		content: '',
-		embeds: [problem(message)],
-		components: [],
+export function interactionProblem(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
+	return replyToInteraction(interaction, {
 		ephemeral,
-	};
+		embeds: [
+			{
+				color: Colors.Red,
+				description: `${description}`,
+			},
+		],
+	});
 }

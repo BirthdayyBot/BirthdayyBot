@@ -1,0 +1,27 @@
+diff --git a/dist/lib/Subcommand.d.ts b/dist/lib/Subcommand.d.ts
+index c1e66deacb3c817a31824b4cde3326eca7a69235..ec2a3c1d0b63fe7b9eee343c17fe0eeda2aa5317 100644
+--- a/dist/lib/Subcommand.d.ts
++++ b/dist/lib/Subcommand.d.ts
+@@ -1,5 +1,5 @@
+ import { Command, PreconditionContainerArray, type Args, type ChatInputCommand, type MessageCommand, type PieceContext } from '@sapphire/framework';
+-import type { CacheType, Message } from 'discord.js';
++import type { CacheType, Message } from 'discord.js';
+ import type { SubcommandMappingArray } from './SubcommandMappings';
+ /**
+  * The class to extends for commands that have subcommands.
+@@ -44,13 +44,13 @@ export declare class Subcommand<PreParseReturn extends Args = Args, O extends Su
+      *
+      * **DO NOT** override this in your implementation of a subcommand!
+      */
+-    messageRun(message: Message, args: PreParseReturn, context: MessageCommand.RunContext): Promise<void>;
++    messageRun(message: Message, args: PreParseReturn, context: MessageCommand.RunContext): Awaited<unknown>;
+     /**
+      * The method that is ran when a chat input based subcommand is ran.
+      *
+      * **DO NOT** override this in your implementation of a subcommand!
+      */
+-    chatInputRun(interaction: ChatInputCommand.Interaction, context: ChatInputCommand.RunContext): Promise<void>;
++    chatInputRun(interaction: ChatInputCommand.Interaction, context: ChatInputCommand.RunContext): Awaited<unknown>;
+ }
+ export interface SubcommandOptions extends Command.Options {
+     subcommands?: SubcommandMappingArray;

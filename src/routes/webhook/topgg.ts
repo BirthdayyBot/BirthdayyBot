@@ -1,120 +1,92 @@
+import { authenticated } from '#lib/api/utils';
+import { remindMeButtonBuilder } from '#lib/components/button';
+import { getGuildInformation } from '#lib/discord/guild';
+import { sendDMMessage, sendMessage } from '#lib/discord/message';
+import { addRoleToUser } from '#lib/discord/role';
+import { getUserInfo } from '#lib/discord/user';
+import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
+import { BirthdayyBotId } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
+import { BOT_NAME, Emojis, VOTE_CHANNEL_ID, VOTE_ROLE_ID, WEBSITE_URL } from '#utils/environment';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/pieces';
-import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
+import { s } from '@sapphire/shapeshift';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import { ActionRowBuilder, ButtonBuilder, type User } from 'discord.js';
-import { BirthdayyEmojis, BOT_NAME, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
-import { authenticated } from '../../lib/api/utils';
-import { remindMeButtonBuilder } from '../../lib/components/button';
-import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
-import type { VoteProvider } from '../../lib/types/VoteProvider.type';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
+import { ActionRowBuilder, ButtonBuilder, Guild, User } from 'discord.js';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
+	private provider = {
+		name: 'TopGG',
+		url: `${WEBSITE_URL}/topgg/vote`,
+	};
+
 	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		container.logger.debug(request.body);
+		const data = s.object({
+			user: s.string,
+			type: s.enum('test', 'upvote'),
+			query: s.string,
+			bot: s.string,
+		});
 
-		const { type, user } = request.body as APIWebhookTopGG;
-		switch (type) {
-			case 'test':
-				container.logger.info('topgg webhook test');
-				break;
-			case 'upvote':
-				await this.voteProcess('topgg', user);
-				break;
-			default:
-				return response.badRequest({ error: 'Bad Request' });
+		const body = data.parse(request.body);
+
+		if (!body || body.type !== 'upvote') {
+			return response.end();
 		}
-		return response.end();
+
+		try {
+			const user = await getUserInfo(body.user);
+			const guild = await getGuildInformation(BirthdayyBotId.Birthdayy);
+
+			if (!user || !guild) return response.end();
+
+			const payload = {
+				memberId: user.id,
+				guildId: guild.id,
+				roleId: VOTE_ROLE_ID,
+			};
+
+			await this.addRoleAndCreateTask(payload);
+			await this.sendThankYouDM(user, guild);
+			await this.sendVoteNotification(user);
+
+			return response.ok();
+		} catch (error) {
+			return response.end();
+		}
 	}
 
-	private async voteProcess(provider: VoteProvider, userId: string) {
-		const providerInfo = this.getProviderInfo(provider);
-
-		const guild = await getGuildInformation(GuildIDEnum.BIRTHDAYY_HQ);
-		if (!guild) return;
-
-		const user = await getUserInfo(userId);
-		if (!user) return;
-
-		const member = await getGuildMember(guild?.id, userId);
-		if (!member) return;
-
-		const role = guild.roles.cache.get(VOTE_ROLE_ID);
-		if (!role) return;
-
-		// 1. Send DM
-		await this.sendVoteDM(providerInfo, userId);
-		// 2. Message To Server
-		await this.sendVoteAnnouncement(providerInfo, user);
-		// 3. Update role
-
-		const addRole = await member.roles.add(VOTE_ROLE_ID).catch(() => null);
-		if (!addRole) return;
-
-		// 4. Schedule role removal
-		await this.scheduleRoleRemoval({ memberId: userId, guildId: guild.id, roleId: role.id });
-	}
-
-	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
-		const dmEmbed = {
-			title: `${BirthdayyEmojis.Success} You voted for Birthdayy on ${providerInfo.name}`,
-			description: `Thank you so much for supporting me, you're the best ${BirthdayyEmojis.Heart}`,
-		};
-		const dmEmbedObj = generateDefaultEmbed(dmEmbed);
-
-		const button = await remindMeButtonBuilder(await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ));
-		const components = new ActionRowBuilder<ButtonBuilder>().setComponents(button).toJSON();
-
-		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [components] });
-	}
-
-	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
-		const { username, discriminator } = user;
-
-		return sendMessage(VOTE_CHANNEL_ID, {
-			embeds: [
-				generateDefaultEmbed({
-					title: `${BirthdayyEmojis.Exclamation} New Vote on ${providerInfo.name}`,
-					description: `\`${username}#${discriminator}\` has **voted** for ${
-						container.client.user?.username ?? BOT_NAME
-					}!
-				  Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-					thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
-				}),
-			],
+	private async addRoleAndCreateTask(payload: RoleRemovePayload) {
+		await addRoleToUser(payload.memberId, payload.roleId, BirthdayyBotId.Birthdayy);
+		await this.container.tasks.create('BirthdayRoleRemoverTask', payload, {
+			repeated: false,
+			delay: Time.Hour * 12,
 		});
 	}
 
-	private async scheduleRoleRemoval(options: RoleRemovePayload) {
-		await container.tasks.create('BirthdayRoleRemoverTask', options, { repeated: false, delay: Time.Hour * 12 });
+	private async sendThankYouDM(user: User, guild: Guild) {
+		const embed = generateDefaultEmbed({
+			title: `${Emojis.Success} You voted for Birthdayy on ${this.provider.name}`,
+			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`,
+		});
+
+		const components = [new ActionRowBuilder<ButtonBuilder>().setComponents(await remindMeButtonBuilder(guild))];
+
+		await sendDMMessage(user.id, { embeds: [embed], components });
 	}
 
-	private getProviderInfo(provider: VoteProvider) {
-		switch (provider) {
-			case 'topgg':
-				return {
-					name: 'TopGG',
-					url: 'https://birthdayy.xyz/topgg/vote',
-				};
+	private async sendVoteNotification(user: User) {
+		const embed = generateDefaultEmbed({
+			title: `${Emojis.Exclamation} New Vote on ${this.provider.name}`,
+			description: `\`${user.username}#${user.discriminator}\` has **voted** for ${
+				this.container.client.user?.username ?? BOT_NAME
+			}! Use \`/vote\` or vote [here](${this.provider.url}) directly.`,
+			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
+		});
 
-			case 'discordbotlist':
-				return {
-					name: 'Discord Bot List',
-					url: 'https://birthdayy.xyz/discord-botlist/vote',
-				};
-
-			case 'discordlist':
-				return {
-					name: 'Discord List',
-					url: 'https://birthdayy.xyz/discordlist/vote',
-				};
-		}
+		await sendMessage(VOTE_CHANNEL_ID, { embeds: [embed] });
 	}
 }

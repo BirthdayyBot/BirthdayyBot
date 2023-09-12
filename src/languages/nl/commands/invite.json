@@ -1,0 +1,8 @@
+{
+  "inviteDescription": "Nodig Birthdayy uit op je Discord Server!",
+  "inviteName": "uitnodiging",
+  "embed": {
+    "title": "{{boek}} Nodig {{name}} uit",
+    "description": "{{arrowRight}} Klik op de onderstaande knop om {{name}} uit te nodigen voor uw Discord Server!"
+  }
+}

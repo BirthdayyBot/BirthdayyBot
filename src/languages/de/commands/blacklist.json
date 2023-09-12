@@ -1,0 +1,27 @@
+{
+  "add": {
+    "success": "{{user}} wurde erfolgreich auf die schwarze Liste gesetzt",
+    "userDescription": "Der Benutzer, der zur Blacklist hinzugefügt werden soll",
+    "userName": "benutzer",
+    "cannotBlacklistSelf": "Sie können sich nicht selbst auf die schwarze Liste setzen",
+    "alReadyBlacklisted": "{{user}} ist bereits auf der schwarzen Liste."
+  },
+  "addDescription": "Fügen Sie einen Benutzer zur Blacklist hinzu",
+  "addName": "hinzufügen",
+  "blacklistDescription": "Benutzerverwaltungsbefehle auf die schwarze Liste setzen",
+  "blacklistName": "schwarze-liste",
+  "list": {
+    "title": "Benutzer auf der schwarzen Liste",
+    "empty": "Derzeit gibt es keine Benutzer auf der schwarzen Liste."
+  },
+  "listDescription": "Listen Sie alle Benutzer auf der Blacklist auf",
+  "listName": "liste",
+  "remove": {
+    "notFound": "{{user}} steht nicht auf der schwarzen Liste",
+    "success": "{{user}} wurde erfolgreich von der Blacklist entfernt",
+    "userDescription": "Der Benutzer, der aus der Blacklist entfernt werden soll",
+    "userName": "benutzer"
+  },
+  "removeDescription": "Entfernen Sie einen Benutzer aus der Blacklist",
+  "removeName": "entfernen"
+}

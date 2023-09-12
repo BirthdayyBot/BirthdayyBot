@@ -1,0 +1,8 @@
+{
+  "inviteDescription": "Lade Birthdayy auf deinen Discord-Server ein!",
+  "inviteName": "einladen",
+  "embed": {
+    "title": "{{book}} {{name}} einladen",
+    "description": "{{arrowRight}} Klicken Sie auf die Schaltfläche unten, um {{name}} auf Ihren Discord-Server einzuladen!"
+  }
+}

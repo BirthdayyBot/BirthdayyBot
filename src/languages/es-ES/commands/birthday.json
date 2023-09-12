@@ -3,71 +3,52 @@
   "birthdayName": "cumpleaños",
   "listDescription": "Listar todos los cumpleaños registrados",
   "listName": "lista",
-  "registerDescription": "Registra tu cumpleaños",
-  "registerName": "registro",
   "removeDescription": "quitar tu cumpleaños",
   "removeName": "eliminar",
   "showDescription": "muestra tu cumpleaños",
   "showName": "espectáculo",
   "testDescription": "Pruebe sus configuraciones de cumpleaños actuales",
   "testName": "prueba",
-  "updateDescription": "Actualiza tu cumpleaños",
-  "updateName": "actualizar",
-  "register": {
-    "alreadyRegistered_author": "Tu cumpleaños ya está registrado. \nSi desea cambiarlo, use {{command}}",
-    "alreadyRegistered_target": "El cumpleaños de este usuario ya está registrado. \nSi desea cambiarlo, use {{command}}",
-    "dayDescription": "el dia del cumpleaños",
-    "dayName": "día",
-    "hasNotPermissionManagesRoles": "No tienes permiso para registrar cumpleaños.",
-    "hasNotPermissionToManageThisUser": "No tienes permiso para registrar el cumpleaños de este usuario.",
-    "monthDescription": "El mes del cumpleaños",
-    "monthName": "mes",
-    "notCreated": "No se pudo crear el cumpleaños. \nPor favor, inténtelo de nuevo más tarde.",
-    "success_author": "Tu cumpleaños fue creado con éxito.",
-    "success_target": "El cumpleaños de {{target}} se creó correctamente.",
-    "userDescription": "El usuario para el que se crea el cumpleaños: SOLO ADMINISTRADOR.",
-    "userName": "usuario",
-    "yearDescription": "el año del cumpleaños",
-    "yearName": "año"
-  },
   "remove": {
     "hasNotPermissionManagesRoles": "No tienes permiso para eliminar cumpleaños.",
     "hasNotPermissionToManageThisUser": "No tienes permiso para quitar el cumpleaños de este usuario.",
-    "notRegistered_author": "Tu cumpleaños no está registrado.",
     "notRegistered_target": "El cumpleaños de {{target}} no está registrado.",
-    "success_author": "Tu cumpleaños fue eliminado con éxito.",
     "success_target": "El cumpleaños de {target}} se eliminó con éxito.",
     "userDescription": "Eliminar un cumpleaños para una persona - SOLO ADMINISTRADOR",
-    "userName": "usuario"
+    "userName": "usuario",
+    "notRegistered": "Tu cumpleaños no está registrado. Usa {{comando}} para registrarlo.",
+    "notRegistered_target-manager": "El cumpleaños de {{target}} no está registrado. \nUsa {{comando}} para registrarlo.",
+    "success": "Tu cumpleaños fue eliminado con éxito."
   },
   "show": {
-    "description_author": "{{emoji}}Tu cumpleaños es el {{date}}.",
     "description_target": "El cumpleaños de {{emoji}} {{target}} es el {{date}}.",
-    "notRegistered_author": "Tu cumpleaños no está registrado. \nUsa {{comando}} para registrarlo.",
     "notRegistered_target": "El cumpleaños de {{target}} no está registrado.",
     "title": "{{emoji}} Cumpleaños",
     "userDescription": "Mostrar el cumpleaños de una persona - SOLO ADMINISTRADOR",
-    "userName": "usuario"
+    "userName": "usuario",
+    "description": "{{emoji}} Tu cumpleaños es el {{date}}.",
+    "description_target-manager": "El cumpleaños de {{emoji}} {{target}} es el {{date}}. \nSi desea cambiarlo, use {{command}}.",
+    "notRegistered_target-manager": "El cumpleaños de {{target}} no está registrado. \nUsa {{comando}} para registrarlo.",
+    "notRegistered": "Tu cumpleaños no está registrado. \nUsa {{comando}} para registrarlo."
   },
   "test": {
     "userDescription": "Probar un cumpleaños para una persona - SOLO ADMINISTRADOR",
     "userName": "usuario"
   },
-  "update": {
-    "dayDescription": "el dia del cumpleaños",
+  "set": {
+    "hasNotPermissionManagesRoles": "No tienes permiso para gestionar los cumpleaños de otros usuarios.",
+    "hasNotPermissionToManageThisUser": "No puedes gestionar los cumpleaños de los usuarios superiores a ti de forma jerárquica.",
+    "dayDescription": "¿Qué día naciste?",
     "dayName": "día",
-    "hasNotPermissionToManageThisUser": "No tienes permiso para actualizar el cumpleaños de este usuario.",
-    "monthDescription": "El mes del cumpleaños",
+    "monthDescription": "¿Cuál es el mes de tu cumpleaños?",
     "monthName": "mes",
-    "notRegistered_author": "Tu cumpleaños no está registrado. \nUsa {{comando}} para registrarlo.",
-    "notRegistered_target": "El cumpleaños de {{target}} no está registrado.",
-    "notUpdated": "No se pudo actualizar el cumpleaños. \nPor favor, inténtelo de nuevo más tarde.",
-    "success_author": "Tu cumpleaños se actualizó con éxito el {{date}}.",
-    "success_target": "El cumpleaños de {{target}} se actualizó correctamente el {{date}}.",
-    "userDescription": "El usuario para el que se actualiza el cumpleaños: SOLO ADMINISTRADOR.",
+    "success": "Su cumpleaños se ha establecido en {{date}} en este servidor.",
+    "success_target": "El cumpleaños de {{target}} se estableció en el {{date}} en este servidor",
+    "userDescription": "¿Para qué usuario desea establecer la fecha de nacimiento? - SOLO GERENTE.",
     "userName": "usuario",
-    "yearDescription": "el año del cumpleaños",
-    "yearName": "año",
-    "hasNotPermissionManagesRoles": "No tienes permiso para actualizar los cumpleaños."
-  }
+    "yearDescription": "¿En qué año naciste?",
+    "yearName": "año"
+  },
+  "setDescription": "Establezca su fecha de cumpleaños en el servidor.",
+  "setName": "definir"
 }

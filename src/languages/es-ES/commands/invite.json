@@ -1,0 +1,13 @@
+{
+  "inviteDescription": "¡Invita a Birthdayy a tu servidor de Discord!",
+  "inviteName": "invitar",
+  "embed": {
+    "title": "{{book}} Invitar a {{name}}",
+    "description": "{{arrowRight}} ¡Haz clic en el botón a continuación para invitar a {{name}} a tu servidor de Discord!",
+    "fields": [
+      {},
+      {},
+      {}
+    ]
+  }
+}

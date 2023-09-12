@@ -1,30 +1,25 @@
+import { PrismaErrorCodeEnum } from '#utils/constants';
+import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Precondition } from '@sapphire/framework';
-import type { CommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';
-import { PREMIUM_URL } from '../helpers';
+import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 
-export class IsPremiumPrecondition extends Precondition {
-	#message = `This command is a premium only command. Visit ${PREMIUM_URL}.`; // TODO: Adjust Premium Message
-
-	public override async chatInputRun(interaction: CommandInteraction) {
-		return this.premiumCheck(interaction.guildId);
+export class UserPrecondition extends Precondition {
+	public override async chatInputRun(interaction: ChatInputCommandInteraction<'cached'>) {
+		const result = await this.handler(interaction);
+		return result;
 	}
 
-	public override async contextMenuRun(interaction: ContextMenuCommandInteraction) {
-		return this.premiumCheck(interaction.guildId);
+	public override async contextMenuRun(interaction: ContextMenuCommandInteraction<'cached'>) {
+		const result = await this.handler(interaction);
+		return result;
 	}
 
-	public override async messageRun(message: Message) {
-		return this.premiumCheck(message.guildId);
-	}
+	private async handler({ guildId }: CommandInteraction<'cached'>) {
+		const result = await resolveOnErrorCodesPrisma(
+			this.container.prisma.guild.findFirstOrThrow({ where: { guildId } }),
+			PrismaErrorCodeEnum.NotFound,
+		);
 
-	private premiumCheck(guildId: CommandInteraction['guildId']) {
-		return guildId
-			? this.container.prisma.guild
-					.findUnique({
-						where: { guildId },
-					})
-					.then((guild) => (guild?.premium ? this.ok() : this.error({ message: this.#message })))
-					.catch(() => this.error({ message: this.#message }))
-			: this.error({ identifier: 'GuildNotPremium', message: this.#message });
+		return result?.premium === true ? this.ok() : this.error({ identifier: 'preconditions:guildPremium' });
 	}
 }

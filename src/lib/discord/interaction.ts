@@ -26,7 +26,7 @@ export async function replyToButtonInteraction(
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
-export async function editInteractionResponse(
+export function editInteractionResponse(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | ButtonInteraction,
 	options: string | MessagePayload | InteractionReplyOptions,
 ) {

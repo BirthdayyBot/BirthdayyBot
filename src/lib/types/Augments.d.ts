@@ -1,15 +1,13 @@
+import type { Birthday, Blacklist, Guild, User } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
-import type { Birthday } from '../../utilities/db/Birthday';
-import type { Blacklist } from '../../utilities/db/Blacklist';
-import type { Guild } from '../../utilities/db/Guild';
-import type { User } from '../../utilities/db/User';
+import type { Events } from './Enums.js';
+import type { WritePrecisionType } from '@influxdata/influxdb-client';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
 		// Environment
-		NODE_ENV: 'development' | 'production';
 		APP_ENV: 'dev' | 'tst' | 'prd';
 		DEBUG: BooleanString;
 
@@ -62,6 +60,17 @@ declare module '@skyra/env-utilities' {
 		// Webhooks
 		DISCORD_ERROR_WEBHOOK_ID?: string;
 		DISCORD_ERROR_WEBHOOK_TOKEN?: string;
+
+		// Influx
+		INFLUX_OPTIONS_STRING?: string;
+		INFLUX_URL: string;
+		INFLUX_HEADERS: string;
+		INFLUX_PROXY_URL: string;
+		INFLUX_TIMEOUT: `${number}`;
+		INFLUX_TOKEN: string;
+		INFLUX_ORG: string;
+		INFLUX_WRITE_BUCKET: string;
+		INFLUX_WRITE_PRECISION: WritePrecisionType;
 	}
 }
 
@@ -74,11 +83,17 @@ declare module '@sapphire/pieces' {
 
 declare module '@sapphire/framework' {
 	interface Preconditions {
+		Administrator: never;
+		BotOwner: never;
+		Everyone: never;
 		GuildPremium: never;
-		BotOwnerOnly: never;
-		AdminOnly: never;
-		CanManageRoles: never;
-		IsNotBlacklisted: never;
+		Moderator: never;
+		NotBlacklisted: never;
+		ServerOwner: never;
+	}
+
+	interface SapphireClient {
+		emit(event: Events.PostStatsSuccess): boolean;
 	}
 }
 

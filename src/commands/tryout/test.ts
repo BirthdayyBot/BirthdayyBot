@@ -1,12 +1,9 @@
+import thinking from '#lib/discord/thinking';
+import { APP_ENV, generateDefaultEmbed, isCustom, isProduction, reply } from '#utils';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import { APP_ENV, reply } from '../../helpers';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../../lib/discord/thinking';
-import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isCustom, isProduction } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
@@ -43,9 +40,7 @@ export class TestCommand extends Command {
 		if (toggle.isCustomBotCheck) fields.push({ name: 'IsCustomBot', value: inlineCode(String(isCustom)) });
 		if (toggle.appEnv) fields.push({ name: 'APP ENV', value: inlineCode(APP_ENV) });
 		if (toggle.appEnv) fields.push({ name: 'isProduction', value: inlineCode(isProduction ? 'true' : 'false') });
-		const testEmbedObj: EmbedInformationModel = { title: 'test', fields };
-		const testEmbed = generateDefaultEmbed(testEmbedObj);
 
-		return reply(interaction, { embeds: [testEmbed] });
+		return reply(interaction, { embeds: [generateDefaultEmbed({ title: 'test', fields })] });
 	}
 }

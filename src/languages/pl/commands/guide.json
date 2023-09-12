@@ -1,0 +1,25 @@
+{
+  "guideDescription": "Potrzebujesz szybkiej instrukcji konfiguracji! Nie martw się, to Ci pomoże!",
+  "guideName": "przewodnik",
+  "embedConfigField": {},
+  "embedImportantField": {},
+  "embedStartedField": {},
+  "embed": {
+    "description": "{{emoji.exclamation}} Wpisując **/help** na czacie, możesz sprawdzić wszystkie moje funkcje i dostępne polecenia.",
+    "title": "Przewodnik {{emoji.heart}} {{name}}!",
+    "fields": [
+      {
+        "name": "Skonfiguruj urodziny",
+        "value": "{{emoji}} Pamiętaj, aby ustawić **konfiguracje serwera** za pomocą **/config <config>**!\n{{emoji}} Użyj {{command}}, aby zobaczyć swoje aktualne ustawienia konfiguracyjne."
+      },
+      {
+        "name": "Ważny",
+        "value": "{{emojis.exclamation}} Moja **najwyższa** rola musi być **wyższa** niż rola dziecka urodzinowego.\n{{emojis.arrowRight}} Dołącz do [siedziby urodzinowej]({{invite}}), aby spotkać się z programistą i pomóc w ulepszeniu urodzinowego {{emojis.cake}}\n{{emojis.heart}} Podoba Ci się **Urodziny**? \nRozważ [zaproszenie]({{invite}}) i [głosowanie]({{vote}}) w moim imieniu!\n{{emojis.plus}} Chcesz uzyskać dostęp do funkcji w wersji beta? \n[Wspomóż nas na Patreonie]({{premium}})"
+      },
+      {
+        "name": "Zaczynaj",
+        "value": "{{emoji}} Zarejestruj swoje urodziny za pomocą {{command}}\n{{emoji}} Znajdź więcej w [Dokumentacji]({{url}})"
+      }
+    ]
+  }
+}

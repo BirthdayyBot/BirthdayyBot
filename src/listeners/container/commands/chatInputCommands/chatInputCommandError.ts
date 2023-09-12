@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, type ChatInputCommandErrorPayload } from '@sapphire/framework';
-import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
+import { handleCommandErrorAndSendToUser } from '#utils/functions/errorHandling';
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandError })
 export class ChatInputCommandErrorEvent extends Listener<typeof Events.ChatInputCommandError> {

@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "@sapphire/ts-config",
+        "@sapphire/ts-config/extra-strict",
+        "@sapphire/ts-config/decorators",
+        "@sapphire/ts-config/verbatim",
+    ],
+    "compilerOptions": {
+        "tsBuildInfoFile": "dist/.tsbuildinfo",
+        "skipLibCheck": true,
+        "removeComments": true
+    }
+}

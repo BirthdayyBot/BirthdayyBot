@@ -1,0 +1,25 @@
+{
+  "guideDescription": "Hai bisogno di una guida di configurazione rapida! Non preoccuparti, questo ti aiuterà!",
+  "guideName": "guida",
+  "embedConfigField": {},
+  "embedImportantField": {},
+  "embedStartedField": {},
+  "embed": {
+    "description": "{{emoji.exclamation}} Digitando **/help** nella chat, puoi controllare tutte le mie funzionalità e i comandi disponibili.",
+    "title": "Guida a {{emoji.heart}} {{name}}!",
+    "fields": [
+      {
+        "name": "Configura Compleanno",
+        "value": "{{emoji}} Assicurati di impostare le tue **configurazioni server** con **/config <config>**!\n{{emoji}} Usa {{command}} per vedere le tue attuali impostazioni di configurazione."
+      },
+      {
+        "name": "Importante",
+        "value": "{{emojis.exclamation}} Il mio ruolo **più alto** deve essere **sopra** il ruolo del bambino che compie gli anni.\n{{emojis.arrowRight}} Unisciti al [Birthdayy HQ]({{invite}}) per incontrare lo sviluppatore e contribuire a migliorare Birthdayy {{emojis.cake}}\n{{emojis.heart}} Ti piace **Compleanno**? \nConsidera l'idea di [invitare]({{invite}}) e [votare]({{vote}}) per me!\n{{emojis.plus}} Vuoi accedere alle funzionalità beta? \n[Sostienici su Patreon]({{premium}})"
+      },
+      {
+        "name": "Iniziare",
+        "value": "{{emoji}} Registra il tuo compleanno con {{command}}\n{{emoji}} Scopri di più su [Documentazione]({{url}})"
+      }
+    ]
+  }
+}

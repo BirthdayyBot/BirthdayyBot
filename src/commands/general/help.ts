@@ -1,27 +1,15 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { reply } from '../../helpers/send/response';
-import { HelpCMD } from '../../lib/commands';
-import thinking from '../../lib/discord/thinking';
-import { HelpEmbed } from '../../lib/embeds';
-import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '../../lib/components/button';
+import { HelpCMD } from '#lib/commands';
+import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
+import { HelpEmbed } from '#lib/embeds';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { generateDefaultEmbed, reply } from '#utils';
 
-@ApplyOptions<Command.Options>({
-	name: 'help',
-	description: 'Need help with my Commands?',
-	enabled: true,
-	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
-})
-export class HelpCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+export class HelpCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(HelpCMD());
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		const embed = generateDefaultEmbed(HelpEmbed);
 		await reply(interaction, {
 			embeds: [embed],

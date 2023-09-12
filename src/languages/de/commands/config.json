@@ -1,0 +1,70 @@
+{
+  "announcementChannel": {
+    "cannotPermissions": "Oh... es sieht so aus, als ob ich in diesem Raum keine Nachricht senden kann. Kannst du dir das mal ansehen?",
+    "channelDescription": "An welchen Salon soll ich die Ankündigungsnachricht senden?",
+    "channelName": "kanal",
+    "success": "Der Ankündigungskanal wurde erfolgreich auf {{channel}} eingestellt."
+  },
+  "announcementChannelDescription": "Raum, in dem ich eine Nachricht senden würde, wenn ein Benutzer Geburtstag hat",
+  "announcementChannelName": "ankündigungskanal",
+  "announcementMessage": {
+    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
+    "messageName": "nachricht",
+    "requirePremium": "Diese Funktion ist derzeit in der __Beta-Phase__ und **Nur für Birthdayy Premium** verfügbar.\nWenn Sie bereits jetzt daran interessiert sind, diese und zukünftige Funktionen zu nutzen, können Sie die Entwicklung auf [Patreon]({{url}}).` unterstützen.",
+    "success": "Die Ankündigungsnachricht wurde geändert.\n\n{{Nachricht}}"
+  },
+  "announcementMessageDescription": "Nachricht, die ich zum Geburtstag eines Benutzers senden würde.",
+  "announcementMessageName": "ankündigungsnachricht",
+  "birthdayRole": {
+    "highestBotRole": "Oh, ich kann diese Rolle nicht zuweisen ... Sieht aus, als wäre sie höher als meine höchste Rolle.",
+    "roleDescription": "Rolle, die dem Benutzer an seinem Geburtstag zugewiesen wird",
+    "roleName": "rolle",
+    "success": "Die Geburtstagsrolle wurde erfolgreich auf {{role}} festgelegt."
+  },
+  "birthdayRoleDescription": "Dem Benutzer an seinem Geburtstag zugewiesene Rolle",
+  "birthdayRoleName": "geburtstagsrolle",
+  "listName": "liste",
+  "listDescription": "Listen Sie alle Geburtstage auf dem Server auf",
+  "overviewChannel": {
+    "cannotPermissions": "Ich habe keine Berechtigung zum Senden von Nachrichten auf {{channel}}.",
+    "channelDescription": "Raum, an den die Übersicht gesendet und aktualisiert werden soll",
+    "channelName": "kanal",
+    "success": "Der Vorschaukanal wurde auf {{channel}} und die neue [Nachricht]({{message}}) eingestellt."
+  },
+  "overviewChannelDescription": "Raum, der alle Servergeburtstage auflistet",
+  "overviewChannelName": "übersichtskanal",
+  "pingRole": {
+    "roleName": "rolle",
+    "success": "Die Erwähnungsrolle wurde auf {{role}} festgelegt.",
+    "roleDescription": "Welche Rolle sollte ich in der Ankündigungsnachricht erwähnen?"
+  },
+  "pingRoleDescription": "Erwähnen Sie eine Rolle am Geburtstag einer Person",
+  "pingRoleName": "ping-rolle",
+  "reset": {
+    "choices": {
+      "announcementChannel": "Ankündigungskanal",
+      "birthdayRole": "Geburtstagsrolle",
+      "birthdayPingRole": "Geburtstags-Ping-Rolle",
+      "overviewChannel": "Übersichtskanal",
+      "overviewMessage": "Übersichtsnachricht",
+      "logChannel": "Protokollkanal",
+      "timezone": "Zeitzone",
+      "announcementMessage": "Ankündigungsnachricht"
+    },
+    "configDescription": "Konfiguration, die Sie zurücksetzen möchten",
+    "configName": "config",
+    "error": "Beim Versuch, die {{config}}-Konfiguration zurückzusetzen, ist ein Fehler aufgetreten.",
+    "success": "Die {{config}}-Konfiguration wurde erfolgreich zurückgesetzt."
+  },
+  "resetDescription": "Setzen Sie Ihre Serverkonfigurationseinstellungen zurück",
+  "resetName": "zurücksetzen",
+  "timezone": {
+    "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt.",
+    "timezoneDescription": "In welcher Zeitzone befinden Sie sich?",
+    "timezoneName": "zeitzone"
+  },
+  "timezoneName": "zeitzone",
+  "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht.",
+  "configDescription": "Konfigurieren der Servereinstellungen",
+  "configName": "config"
+}

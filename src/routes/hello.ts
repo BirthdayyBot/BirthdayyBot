@@ -1,6 +1,6 @@
-import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
-import { sendMessage } from '../lib/discord';
+import { sendMessage } from '#lib/discord/message';
 import { ApplyOptions } from '@sapphire/decorators';
+import { Route, methods, type ApiRequest, type ApiResponse } from '@sapphire/plugin-api';
 
 @ApplyOptions<Route.Options>({ name: 'hello', route: 'hello' })
 export class UserRoute extends Route {

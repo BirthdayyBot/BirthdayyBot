@@ -1,4 +1,2 @@
-export * from './guide';
-export * from './help';
-export * from './invite';
-export * from './vote';
+export * from './help.js';
+export * from './vote.js';

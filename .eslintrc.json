@@ -1,16 +1,8 @@
 {
     "extends": [
         "@sapphire",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        "plugin:@sapphire/result/recommended"
     ],
-    "ignorePatterns": [
-        "dist/"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2021,
-        "sourceType": "module"
-    },
     "rules": {
         "radix": [
             "warn",
@@ -20,5 +12,18 @@
             "error",
             "smart-tabs"
         ]
-    }
+    },
+    "parserOptions": {
+        "warnOnUnsupportedTypeScriptVersion": false
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/commands/**/*.ts"
+            ],
+            "rules": {
+                "@typescript-eslint/require-await": 0
+            }
+        }
+    ]
 }

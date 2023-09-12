@@ -1,33 +1,26 @@
+import { StatsCMD } from '#lib/commands';
+import thinking from '#lib/discord/thinking';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { Emojis, generateDefaultEmbed, isDevelopment } from '#utils';
+import { getCurrentOffset } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import os from 'os';
-import { reply } from '../../helpers/send/response';
-import { getCurrentOffset } from '../../helpers/utils/date';
-import { StatsCMD } from '../../lib/commands';
-import thinking from '../../lib/discord/thinking';
-import type { EmbedInformationModel } from '../../lib/model';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isDevelopment } from '../../lib/utils/env';
-import { BirthdayyEmojis } from '../../helpers';
+import type { APIEmbed } from 'discord.js';
+import { totalmem } from 'os';
 
-@ApplyOptions<Command.Options>({
+@ApplyOptions<CustomCommand.Options>({
 	name: 'stats',
 	description: 'Stats Command',
-	// TODO: Enable this when #71 is done
 	enabled: isDevelopment,
-	runIn: ['GUILD_TEXT'],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
 })
-export class StatsCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
+export class StatsCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(StatsCMD());
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		await thinking(interaction);
 		const currentOffset = getCurrentOffset();
-		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / os.totalmem()) * 100);
+		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / totalmem()) * 100);
 		const stats = {
 			date: currentOffset.dateFormatted,
 			offset: currentOffset?.utcOffset,
@@ -37,12 +30,12 @@ export class StatsCommand extends Command {
 			memory: {
 				usage: memoryUsageInPercent,
 				used: process.memoryUsage().heapUsed,
-				total: os.totalmem(),
+				total: totalmem(),
 			},
 		};
 		const date = Date.now();
-		const embedRaw: EmbedInformationModel = {
-			title: `${BirthdayyEmojis.Ping} Current Stats`,
+		const embedRaw: APIEmbed = {
+			title: `${Emojis.Ping} Current Stats`,
 			description: "This is the overview of the bot's current stats.",
 			fields: [
 				{
@@ -105,6 +98,6 @@ export class StatsCommand extends Command {
 			],
 		};
 		const embed = generateDefaultEmbed(embedRaw);
-		return reply(interaction, { embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

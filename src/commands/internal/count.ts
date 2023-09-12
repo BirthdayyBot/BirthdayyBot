@@ -1,28 +1,29 @@
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { defaultUserPermissions } from '#lib/types';
+import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { CountCMD } from '../../lib/commands/count';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isNotCustom } from '../../lib/utils/env';
-import { BOT_COLOR } from '../../helpers';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 
-@ApplyOptions<Command.Options>({
+@ApplyOptions<CustomCommand.Options>({
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	preconditions: [['DMOnly', 'GuildTextOnly']],
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
 })
-export class CountCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(CountCMD(), {
-			guildIds: await getCommandGuilds('admin'),
-		});
+export class CountCommand extends CustomCommand {
+	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
+		registry.registerChatInputCommand(
+			(builder) =>
+				applyLocalizedBuilder(builder, 'commands/count:count')
+					.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
+					.setDMPermission(true),
+			{
+				guildIds: await getCommandGuilds('admin'),
+			},
+		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		await reply(interaction, {
 			embeds: [
 				{

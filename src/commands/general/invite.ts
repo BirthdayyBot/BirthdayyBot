@@ -1,35 +1,32 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { InviteCMD } from '../../lib/commands';
-import { inviteBirthdayyButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { InviteEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { inviteBirthdayyButton } from '#lib/components/button';
+import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { defaultUserPermissions } from '#lib/types/permissions';
+import { BOT_AVATAR, BOT_NAME, Emojis } from '#utils';
+import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { ActionRowBuilder, ButtonBuilder, type APIEmbed } from 'discord.js';
 
-@ApplyOptions<Command.Options>({
-	name: 'invite',
-	description: 'Invite Birthdayy to your Discord Server!',
-	enabled: true,
-	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
-})
-export class GuideCommand extends Command {
-	public override registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(InviteCMD());
+export class GuideCommand extends CustomCommand {
+	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+		registry.registerChatInputCommand((builder) =>
+			applyLocalizedBuilder(builder, 'commands/invite:invite')
+				.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
+				.setDMPermission(true),
+		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		await thinking(interaction);
-		const embed = generateDefaultEmbed(InviteEmbed);
-		await reply(interaction, {
-			embeds: [embed],
-			components: [
-				{
-					type: 1,
-					components: [await inviteBirthdayyButton(interaction)],
-				},
-			],
-		});
+	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+		const embed = (await resolveKey(interaction, 'commands/invite:embed', {
+			returnObjects: true,
+			book: Emojis.Book,
+			arrowRight: Emojis.ArrowRight,
+			name: BOT_NAME,
+			avatar: BOT_AVATAR,
+		})) as APIEmbed;
+		const embeds = [embed];
+		const components = [
+			new ActionRowBuilder<ButtonBuilder>().addComponents(await inviteBirthdayyButton(interaction)),
+		];
+
+		return interaction.reply({ embeds, components });
 	}
 }

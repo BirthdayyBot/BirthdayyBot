@@ -1,0 +1,22 @@
+{
+  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
+  "guideName": "guide",
+  "embed": {
+    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
+    "title": "{{emoji.heart}} {{name}} Guide!",
+    "fields": [
+      {
+        "name": "Configure Birthdayy",
+        "value": "{{emoji}} Make sure to set your **Serverconfigurations** with **/config <config>**!\n{{emoji}} Use {{command}} to see your current config setting."
+      },
+      {
+        "name": "Important",
+        "value": "{{emojis.exclamation}} My **highest** Role needs to be **above** the birthday child role.\n{{emojis.arrowRight}} Join the [Birthdayy HQ]({{invite}}) to meet the Developer and help improving Birthdayy {{emojis.cake}} \n{{emojis.heart}} Like **Birthdayy**? Consider [inviting]({{invite}}) and [voting]({{vote}}) for me!\n{{emojis.plus}} Want access to beta features? [Support us on Patreon]({{premium}})"
+      },
+      {
+        "name": "Get Started",
+        "value": "{{emoji}} Set your Birthday with {{command}}\n{{emoji}} Find more on [Documentation]({{url}})"
+      }
+    ]
+  }
+}
