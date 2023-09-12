@@ -91,7 +91,7 @@
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^5.0.2",
     "@sapphire/ts-config": "^5.0.0",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
