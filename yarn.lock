@@ -852,15 +852,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-i18next@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@sapphire/plugin-i18next@npm:6.0.0"
+"@sapphire/plugin-i18next@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@sapphire/plugin-i18next@npm:6.0.1"
   dependencies:
     "@sapphire/utilities": ^3.13.0
     "@skyra/i18next-backend": ^2.0.4
     chokidar: ^3.5.3
-    i18next: ^23.4.9
-  checksum: a6e4d05aeffc44afb4921e29e6fed885f3e6c4d793d4b751bd5a9742b8cfbf8a9ba07613308937d429b26d8eb589ca710f6509cd93431a2e1ab14fdd5944758e
+    i18next: ^23.5.1
+  checksum: 82c482cb6ad26c5bf1b5dae00c27f1026a73a091b7a7349afa573e2283f35cbbeae519fb7c9988a67d52b8c4efbfa14326b0151f89ca29c5e9e7b0e9a2880d9b
   languageName: node
   linkType: hard
 
@@ -1792,7 +1792,7 @@ __metadata:
     "@sapphire/plugin-api": ^5.1.1
     "@sapphire/plugin-editable-commands": ^3.0.3
     "@sapphire/plugin-hmr": ^2.0.2
-    "@sapphire/plugin-i18next": ^6.0.0
+    "@sapphire/plugin-i18next": ^6.0.1
     "@sapphire/plugin-logger": ^3.0.6
     "@sapphire/plugin-scheduled-tasks": ^7.1.2
     "@sapphire/plugin-subcommands": ^4.2.1
@@ -3532,6 +3532,15 @@ __metadata:
   dependencies:
     "@babel/runtime": ^7.22.5
   checksum: 46ac2415dc817c0e25e1c5e64332249825cd63b5fb9a5d42e3a2329d4ecd098c0f15a243f56b53e03db02e2e9931ca9bb4447370b2436f9ad6556de40ce981cf
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^23.5.1":
+  version: 23.5.1
+  resolution: "i18next@npm:23.5.1"
+  dependencies:
+    "@babel/runtime": ^7.22.5
+  checksum: 4be043bd72287bfae9777a3252b9458d2e3f5e9a97ea62cf434e6e3767b45df4365d8780d0dd14efd4e9da5eb0f90534510b138f1372d1cb9012000a69bbedaf
   languageName: node
   linkType: hard
 
