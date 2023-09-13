@@ -51,7 +51,7 @@
     "@kaname-png/plugin-influxdb": "^1.2.0",
     "@kaname-png/plugin-sentry": "^1.2.0",
     "@kaname-png/plugin-subcommands-advanced": "^2.3.0",
-    "@prisma/client": "^5.2.0",
+    "@prisma/client": "^5.3.0",
     "@sapphire/cron": "^1.1.1",
     "@sapphire/decorators": "^6.0.2",
     "@sapphire/discord.js-utilities": "^7.0.2",
@@ -82,7 +82,7 @@
     "discord-api-types": "^0.37.56",
     "discord.js": "^14.13.0",
     "i18next": "^23.5.1",
-    "prisma": "^5.2.0",
+    "prisma": "^5.3.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
