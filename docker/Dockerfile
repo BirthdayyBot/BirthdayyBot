@@ -21,7 +21,7 @@ FROM base as builder
 
 ENV NODE_ENV="development"
 
-COPY --chown=node:node tsconfig.json .
+COPY --chown=node:node tsconfig.base.json .
 COPY --chown=node:node ./src ./src
 COPY --chown=node:node ./prisma ./prisma
 
