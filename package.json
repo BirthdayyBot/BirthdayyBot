@@ -110,7 +110,7 @@
     "typescript": "^5.2.2"
   },
   "engines": {
-    "node": "18.17.x",
+    "node": "18.18.x",
     "npm": "^9.8.1"
   },
   "repository": {
@@ -127,7 +127,7 @@
   },
   "packageManager": "yarn@3.6.3",
   "volta": {
-    "node": "18.17.1",
+    "node": "18.18.0",
     "yarn": "4.0.0-rc.51"
   },
   "resolutions": {
