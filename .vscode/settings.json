@@ -27,5 +27,8 @@
     "turboConsoleLog.wrapLogMessage": false,
     "turboConsoleLog.includeFileNameAndLineNum": false,
     "turboConsoleLog.addSemicolonInTheEnd": true,
-    "i18n-ally.sourceLanguage": "en-US"
+    "i18n-ally.sourceLanguage": "en-US",
+    "i18n-ally.localesPaths": [
+        "src/languages"
+    ]
 }
