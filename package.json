@@ -77,7 +77,7 @@
     "@skyra/env-utilities": "^1.2.1",
     "bullmq": "^4.11.0",
     "colorette": "^2.0.20",
-    "dayjs": "^1.11.9",
+    "dayjs": "^1.11.10",
     "discord-api-types": "^0.37.56",
     "discord.js": "^14.13.0",
     "i18next": "^23.5.1",
