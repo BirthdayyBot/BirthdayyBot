@@ -90,6 +90,7 @@ declare module '@sapphire/framework' {
 		Moderator: never;
 		NotBlacklisted: never;
 		ServerOwner: never;
+		RoleHigher: never;
 	}
 
 	interface SapphireClient {

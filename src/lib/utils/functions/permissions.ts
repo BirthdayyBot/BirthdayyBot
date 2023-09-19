@@ -1,5 +1,5 @@
-import { PermissionsBitField, type GuildMember } from 'discord.js';
 import { OWNERS } from '#root/config';
+import { PermissionFlagsBits, type GuildMember } from 'discord.js';
 
 export function isModerator(member: GuildMember) {
 	return isGuildOwner(member) || checkModerator(member) || checkAdministrator(member);
@@ -18,9 +18,9 @@ export function isOwner(member: GuildMember) {
 }
 
 function checkModerator(member: GuildMember) {
-	return member.permissions.has(PermissionsBitField.Flags.BanMembers);
+	return member.permissions.has(PermissionFlagsBits.BanMembers);
 }
 
 function checkAdministrator(member: GuildMember) {
-	return member.permissions.has(PermissionsBitField.Flags.ManageGuild);
+	return member.permissions.has(PermissionFlagsBits.ManageGuild);
 }

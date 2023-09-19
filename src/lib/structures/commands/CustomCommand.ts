@@ -101,8 +101,8 @@ function sharedPreconditionPermissionsLevel(command: CustomCommand | CustomSubCo
 		return;
 	}
 
-	const container = new PreconditionContainerArray(['BotOwner'], command.preconditions);
-	switch (options.permissionLevel ?? PermissionLevels.Everyone) {
+	const container = new PreconditionContainerArray([], command.preconditions);
+	switch (options.permissionLevel || PermissionLevels.Everyone) {
 		case PermissionLevels.Everyone:
 			container.append('Everyone');
 			break;

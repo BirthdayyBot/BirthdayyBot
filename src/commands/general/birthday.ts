@@ -1,7 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
-import { RequiresUserPermissionsIfTargetIsNotAuthor } from '#lib/structures';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultUserPermissions } from '#lib/types';
+import { defaultUserPermissions } from '#lib/types/permissions';
 import {
 	Emojis,
 	PrismaErrorCodeEnum,
@@ -25,10 +24,13 @@ import {
 } from 'discord.js';
 
 @ApplyOptions<CustomSubCommand.Options>({
-	subcommands: createSubcommandMappings('list', 'set', 'remove', 'show', {
-		name: 'test',
-		preconditions: ['Moderator'],
-	}),
+	subcommands: createSubcommandMappings(
+		'list',
+		{ name: 'set', preconditions: ['RoleHigher'] },
+		{ name: 'remove', preconditions: ['RoleHigher'] },
+		'show',
+		{ name: 'test', preconditions: ['Moderator'] },
+	),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 })
 export class BirthdayCommand extends CustomSubCommand {
@@ -41,7 +43,6 @@ export class BirthdayCommand extends CustomSubCommand {
 		return ctx.reply({ components, embeds: [generateDefaultEmbed(embed)] });
 	}
 
-	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/birthday:set', defaultUserPermissions.add('ManageGuild'))
 	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const birthday = getDateFromInteraction(ctx);
@@ -56,7 +57,6 @@ export class BirthdayCommand extends CustomSubCommand {
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:set.success', { ...options }));
 	}
 
-	@RequiresUserPermissionsIfTargetIsNotAuthor('commands/birthday:remove', defaultUserPermissions.add('ManageRoles'))
 	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const data = { userId_guildId: { guildId: ctx.guildId, userId: user.id } };

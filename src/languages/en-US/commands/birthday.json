@@ -15,7 +15,7 @@
     "success": "Your birthday has been set to {{date}} on this server.",
     "success_target": "{{target}}'s birthday was set to {{date}} on this server",
     "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
-    "hasNotPermissionToManageThisUser": "You cannot manage the birthdays of users above you hierarchically."
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
   "listName": "list",
   "listDescription": "List all registered birthdays",
@@ -28,9 +28,8 @@
     "success_target": "{target}}'s birthday was successfully removed.",
     "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
     "notRegistered_target": "{{target}}'s birthday is not registered.",
-    "notRegistered_target-manager": "{{target}}'s birthday is not registered. Use {{command}} to set it.",
     "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
-    "hasNotPermissionToManageThisUser": "You do not have permission to delete this user's birthday."
+    "target": "You do not have permission to delete this user's birthday."
   },
   "showName": "show",
   "showDescription": "Show your birthday",
