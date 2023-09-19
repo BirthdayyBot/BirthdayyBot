@@ -514,16 +514,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kaname-png/plugin-subcommands-advanced@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@kaname-png/plugin-subcommands-advanced@npm:2.3.0"
-  dependencies:
-    "@sapphire/decorators": ^6.0.2
-    tslib: ^2.6.2
-  checksum: 1839bf8884b7eb52096b5d7a92fe9a0b7aa3308ddf838881f91768397a1b83d98e60e695f8d955b4b70680ac23e06a17f63b0f51a90cbe4299072117aa1d4037
-  languageName: node
-  linkType: hard
-
 "@microsoft/tsdoc-config@npm:0.16.2":
   version: 0.16.2
   resolution: "@microsoft/tsdoc-config@npm:0.16.2"
@@ -1773,7 +1763,6 @@ __metadata:
     "@influxdata/influxdb-client": ^1.33.2
     "@kaname-png/plugin-influxdb": ^1.2.0
     "@kaname-png/plugin-sentry": ^1.2.0
-    "@kaname-png/plugin-subcommands-advanced": ^2.3.0
     "@prisma/client": ^5.3.1
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.1
