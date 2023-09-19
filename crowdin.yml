@@ -1,3 +1,20 @@
+'project_id': '615539'
+'base_path': './src/languages'
+
 files:
-  - source: src/languages/en-US
-    translation: src/languages
+  - 'source': '/en-US/*.json'
+    'translation': '/%locale%/%original_file_name%'
+    'languages_mapping':
+      'locale':
+        'de': 'de'
+        'en-GB': 'en-GB'
+        'es-ES': 'es-ES'
+        'fr': 'fr'
+        'it': 'it'
+        'lt': 'lt'
+        'nl': 'nl'
+        'no': 'no'
+        'pl': 'pl'
+        'pt-BR': 'pt-BR'
+        'ro': 'ro'
+        'sv-SE': 'sv-SE'
