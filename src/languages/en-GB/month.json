@@ -1,14 +1,14 @@
 {
-  "april": "4. April",
-  "august": "9. August",
-  "december": "12. December",
-  "february": "2. February",
   "january": "1. January",
-  "july": "7. July",
-  "june": "6. June",
+  "february": "2. February",
   "march": "3. March",
+  "april": "4. April",
   "may": "5. May",
-  "november": "11. November",
+  "june": "6. June",
+  "july": "7. July",
+  "august": "9. August",
+  "september": "9. September",
   "october": "10. October",
-  "september": "9. September"
+  "november": "11. November",
+  "december": "12. December"
 }
