@@ -1,0 +1,27 @@
+{
+  "blacklistName": "blacklist",
+  "blacklistDescription": "Blacklist user management commands",
+  "addName": "add",
+  "addDescription": "Add a user to the blacklist",
+  "add": {
+    "userName": "user",
+    "userDescription": "The user to add to the blacklist",
+    "success": "{{user}} has been successfully blacklisted",
+    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
+    "cannotBlacklistSelf": "You can't blacklist yourself"
+  },
+  "listName": "list",
+  "listDescription": "List all users on the blacklist",
+  "list": {
+    "empty": "There are no blacklisted users at the moment.",
+    "title": "Blacklisted user"
+  },
+  "removeName": "remove",
+  "removeDescription": "Remove a user from the blacklist",
+  "remove": {
+    "userName": "user",
+    "userDescription": "The user to remove from the blacklist",
+    "success": "{{user}} has been successfully removed from the blacklist",
+    "notFound": "{{user}} is not blacklisted."
+  }
+}
