@@ -34,5 +34,13 @@
     "i18n-ally.keystyle": "nested",
     "i18n-ally.enabledFrameworks": [
         "sapphire-i18next"
-    ]
+    ],
+    "i18n-ally.dirStructure": "auto",
+    "i18n-ally.editor.preferEditor": true,
+    "i18n-ally.extract.autoDetect": true,
+    "i18n-ally.fullReloadOnChanged": true,
+    "i18n-ally.sortKeys": true,
+    "i18n-ally.translate.deepl.useFreeApiEntry": false,
+    "i18n-ally.defaultNamespace": "en-US",
+    "i18n-ally.extract.targetPickingStrategy": "most-similar"
 }
