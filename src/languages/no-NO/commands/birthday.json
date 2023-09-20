@@ -1,0 +1,52 @@
+{
+  "birthdayDescription": "Bursdagsledelse kommandoer",
+  "birthdayName": "fødselsdag",
+  "listDescription": "Liste over alle registrerte bursdager",
+  "listName": "liste",
+  "register": {
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å fjerne fødselsdager",
+    "notRegistered": "Bursdagen din er ikke registrert. Bruk {{command}} for å registrere den.",
+    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
+    "success": "Fødselsdagen din ble fjernet.",
+    "success_target": "Fødselsdagen til {target}} ble fjernet.",
+    "userDescription": "Fjern en bursdag for en person - KUN MANAGER",
+    "userName": "bruker"
+  },
+  "removeDescription": "Fjern bursdagen din",
+  "removeName": "fjerne",
+  "set": {
+    "dayDescription": "Hvilken dag ble du født?",
+    "dayName": "dag",
+    "hasNotPermissionManagesRoles": "Du har ikke lov til å administrere andre brukeres fødselsdager.",
+    "monthDescription": "Hva er bursdagsmåneden din?",
+    "monthName": "måned",
+    "roleHigher": "Det valgte medlemmet har en rolleposisjon som er høyere enn eller lik din",
+    "success": "Fødselsdagen din er satt til {{date}} på denne serveren.",
+    "success_target": "{{target}}s fødselsdag ble satt til {{date}} på denne serveren",
+    "userDescription": "Hvilken bruker vil du angi fødselsdato for? - KUN LEDER.",
+    "userName": "bruker",
+    "yearDescription": "Hvilket år er du født?",
+    "yearName": "år"
+  },
+  "setDescription": "Still inn bursdagsdatoen din på serveren.",
+  "setName": "definere",
+  "show": {
+    "notRegistered": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den.",
+    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
+    "title": "{{emoji}} Bursdag",
+    "userDescription": "Vis en bursdag for en person - KUN LEDER",
+    "userName": "bruker"
+  },
+  "showDescription": "Vis bursdagen din",
+  "showName": "forestilling",
+  "test": {
+    "userDescription": "Test en bursdag for en person - KUN MANAGER",
+    "userName": "bruker"
+  },
+  "testDescription": "Test dine nåværende bursdagskonfigurasjoner",
+  "testName": "test",
+  "update": {
+  }
+}

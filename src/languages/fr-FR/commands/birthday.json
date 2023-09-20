@@ -1,0 +1,49 @@
+{
+  "birthdayDescription": "Commandes de gestion d’anniversaire",
+  "birthdayName": "anniversaire",
+  "listDescription": "Lister tous les anniversaires enregistrés",
+  "listName": "liste",
+  "remove": {
+    "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de supprimer des anniversaires",
+    "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
+    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
+    "success": "Votre anniversaire a été supprimé avec succès.",
+    "success_target": "L'anniversaire de {{target}} à bien été supprimé.",
+    "target": "Vous n'êtes pas autorisé à supprimer l'anniversaire de cet utilisateur.",
+    "userDescription": "Supprimer l'anniversaire pour cette utilisateur - MANAGER ONLY",
+    "userName": "user"
+  },
+  "removeDescription": "Supprimer votre anniversaire",
+  "removeName": "retirer",
+  "set": {
+    "dayDescription": "Quel jour es-tu née ?",
+    "dayName": "jour",
+    "hasNotPermissionManagesRoles": "Tu n'est pas autorisé à gérer les anniversaires d'autres utilisateurs.",
+    "monthDescription": "Quel est votre mois d'anniversaire ?",
+    "monthName": "mois",
+    "roleHigher": "Le membre sélectionné occupe un poste supérieur ou égal au vôtre",
+    "success": "Votre anniversaire a bien été défini au {{date}} sur ce serveur.",
+    "success_target": "L'anniversaire de {{target}} a bien été défini au {{date}} sur ce serveur",
+    "userDescription": "De quel utilisateur veux-tu définir la date de naissance ? - MANAGER ONLY.",
+    "userName": "utilisateur",
+    "yearDescription": "En quelle année es-tu né ?",
+    "yearName": "année"
+  },
+  "setDescription": "Définir votre date d'anniversaire sur le serveur.",
+  "setName": "definir",
+  "show": {
+    "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
+    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
+    "title": "{{emoji}} Anniversaire",
+    "userDescription": "Montrer l'anniversaire de cette utilisateur - MANAGER ONLY",
+    "userName": "utilisateur"
+  },
+  "showDescription": "Montrer votre anniversaire",
+  "showName": "montrer",
+  "test": {
+    "userDescription": "Tester l'anniversaire de cet utilisateur - MANAGER ONLY",
+    "userName": "utilisateur"
+  },
+  "testDescription": "Testez votre configuration d’anniversaire actuelle",
+  "testName": "test"
+}

@@ -1,0 +1,48 @@
+{
+  "birthdayDescription": "Polecenia zarządzania urodzinami",
+  "birthdayName": "urodziny",
+  "listDescription": "Lista wszystkich zarejestrowanych urodzin",
+  "listName": "lista",
+  "remove": {
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do usuwania urodzin",
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. Użyj {{command}}, aby go zarejestrować.",
+    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
+    "success": "Twoje urodziny zostały pomyślnie usunięte.",
+    "success_target": "Urodziny użytkownika {target}} zostały pomyślnie usunięte.",
+    "userDescription": "Usuń urodziny dla osoby — TYLKO MENEDŻER",
+    "userName": "użytkownik"
+  },
+  "removeDescription": "Usuń swoje urodziny",
+  "removeName": "usunąć",
+  "set": {
+    "dayDescription": "Którego dnia się urodziłeś?",
+    "dayName": "dzień",
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do zarządzania urodzinami innych użytkowników.",
+    "monthDescription": "Jaki jest Twój miesiąc urodzin?",
+    "monthName": "miesiąc",
+    "roleHigher": "Wybrany członek ma pozycję wyższą lub równą Twojej",
+    "success": "Twoje urodziny zostały ustawione na {{date}} na tym serwerze.",
+    "success_target": "Data urodzin {{target}} została pomyślnie ustawiona na {{date}} na tym serwerze",
+    "userDescription": "Dla jakiego użytkownika chcesz ustawić datę urodzenia? - TYLKO MENEDŻER.",
+    "userName": "użytkownik",
+    "yearDescription": "W którym roku się urodziłeś?",
+    "yearName": "rok"
+  },
+  "setDescription": "Ustaw datę swoich urodzin na serwerze.",
+  "setName": "definiować",
+  "show": {
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
+    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
+    "title": "{{emoji}} Urodziny",
+    "userDescription": "Pokaż urodziny dla osoby – TYLKO MENEDŻER",
+    "userName": "użytkownik"
+  },
+  "showDescription": "Pokaż swoje urodziny",
+  "showName": "pokazywać",
+  "test": {
+    "userDescription": "Przetestuj Urodziny dla Osoby - TYLKO MENEDŻER",
+    "userName": "użytkownik"
+  },
+  "testDescription": "Przetestuj swoje aktualne konfiguracje urodzinowe",
+  "testName": "test"
+}

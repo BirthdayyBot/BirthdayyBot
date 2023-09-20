@@ -3,46 +3,24 @@
   "birthdayName": "födelsedag",
   "listDescription": "Lista alla registrerade födelsedagar",
   "listName": "lista",
-  "removeDescription": "Ta bort din födelsedag",
-  "removeName": "avlägsna",
-  "showDescription": "Visa din födelsedag",
-  "showName": "show",
-  "testDescription": "Testa dina nuvarande födelsedagskonfigurationer",
-  "testName": "testa",
   "remove": {
     "hasNotPermissionManagesRoles": "Du har inte behörighet att ta bort födelsedagar",
-    "hasNotPermissionToManageThisUser": "Du har inte behörighet att ta bort den här användarens födelsedag.",
+    "notRegistered": "Din födelsedag är inte registrerad. Använd {{command}} för att registrera det.",
     "notRegistered_target": "{{target}}s födelsedag är inte registrerad.",
+    "success": "Din födelsedag har tagits bort.",
     "success_target": "{target}}s födelsedag har tagits bort.",
     "userDescription": "Ta bort en födelsedag för en person - ENDAST MANAGER",
-    "userName": "användare",
-    "notRegistered": "Din födelsedag är inte registrerad. Använd {{command}} för att registrera det.",
-    "notRegistered_target-manager": "{{target}}s födelsedag är inte registrerad. \nAnvänd {{command}} för att registrera det.",
-    "success": "Din födelsedag har tagits bort."
-  },
-  "show": {
-    "description_target": "{{emoji}} {{target}} fyller år den {{date}}.",
-    "notRegistered_target": "{{target}}s födelsedag är inte registrerad.",
-    "title": "{{emoji}} Födelsedag",
-    "userDescription": "Visa en födelsedag för en person - ENDAST MANAGER",
-    "userName": "användare",
-    "description": "{{emoji}} Din födelsedag är den {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}} fyller år den {{date}}. \nOm du vill ändra det, använd {{kommando}}.",
-    "notRegistered_target-manager": "{{target}}s födelsedag är inte registrerad. \nAnvänd {{command}} för att registrera det.",
-    "notRegistered": "Din födelsedag är inte registrerad. \nAnvänd {{command}} för att registrera det."
-  },
-  "test": {
-    "userDescription": "Testa en födelsedag för en person - ENDAST MANAGER",
     "userName": "användare"
   },
-  "update": {},
+  "removeDescription": "Ta bort din födelsedag",
+  "removeName": "avlägsna",
   "set": {
-    "hasNotPermissionManagesRoles": "Du får inte hantera andra användares födelsedagar.",
-    "hasNotPermissionToManageThisUser": "Du kan inte hantera födelsedagar för användare ovanför dig hierarkiskt.",
     "dayDescription": "Vilken dag föddes du?",
     "dayName": "dag",
+    "hasNotPermissionManagesRoles": "Du får inte hantera andra användares födelsedagar.",
     "monthDescription": "Vilken är din födelsedag?",
     "monthName": "månad",
+    "roleHigher": "Den valda medlemmen har en rollposition som är högre än eller lika med din",
     "success": "Din födelsedag har ställts in på {{date}} på den här servern.",
     "success_target": "{{target}}s födelsedag var inställd på {{date}} på den här servern",
     "userDescription": "Vilken användare vill du ställa in födelsedatum för? - ENDAST MANAGER.",
@@ -51,5 +29,22 @@
     "yearName": "år"
   },
   "setDescription": "Ställ in din födelsedag på servern.",
-  "setName": "definiera"
+  "setName": "definiera",
+  "show": {
+    "notRegistered": "Din födelsedag är inte registrerad. \nAnvänd {{command}} för att registrera det.",
+    "notRegistered_target": "{{target}}s födelsedag är inte registrerad.",
+    "title": "{{emoji}} Födelsedag",
+    "userDescription": "Visa en födelsedag för en person - ENDAST MANAGER",
+    "userName": "användare"
+  },
+  "showDescription": "Visa din födelsedag",
+  "showName": "show",
+  "test": {
+    "userDescription": "Testa en födelsedag för en person - ENDAST MANAGER",
+    "userName": "användare"
+  },
+  "testDescription": "Testa dina nuvarande födelsedagskonfigurationer",
+  "testName": "testa",
+  "update": {
+  }
 }

@@ -1,0 +1,53 @@
+{
+  "birthdayDescription": "Comandi per la gestione dei compleanni",
+  "birthdayName": "compleanno",
+  "listDescription": "Elenca tutti i compleanni registrati",
+  "listName": "elenco",
+  "register": {
+  },
+  "remove": {
+    "hasNotPermissionManagesRoles": "Non sei autorizzato a rimuovere i compleanni",
+    "notRegistered": "Il tuo compleanno non è registrato. Usa {{command}} per registrarlo.",
+    "notRegistered_target": "Il compleanno di {{target}} non è registrato.",
+    "success": "Il tuo compleanno è stato rimosso con successo.",
+    "success_target": "Il compleanno di {target}} è stato rimosso con successo.",
+    "target": "Non hai l'autorizzazione per eliminare la data di nascita di questo utente.",
+    "userDescription": "Rimuovere un compleanno per una persona - SOLO MANAGER",
+    "userName": "utente"
+  },
+  "removeDescription": "Rimuovi il tuo compleanno",
+  "removeName": "rimuovere",
+  "set": {
+    "dayDescription": "Che giorno sei nato?",
+    "dayName": "giorno",
+    "hasNotPermissionManagesRoles": "Non sei autorizzato a gestire i compleanni di altri utenti.",
+    "monthDescription": "Qual è il mese del tuo compleanno?",
+    "monthName": "mese",
+    "roleHigher": "Il membro selezionato ha una posizione di ruolo superiore o uguale alla tua",
+    "success": "La tua data di nascita è stata impostata correttamente su {{date}} su questo server.",
+    "success_target": "Il compleanno di {{target}} è stato impostato su {{date}} su questo server",
+    "userDescription": "Per quale utente vuoi impostare la data di nascita? - SOLO RESPONSABILE.",
+    "userName": "utente",
+    "yearDescription": "In che anno sei nato?",
+    "yearName": "anno"
+  },
+  "setDescription": "Imposta la data del tuo compleanno sul server.",
+  "setName": "definire",
+  "show": {
+    "notRegistered": "Il tuo compleanno non è registrato. \nUsa {{command}} per registrarlo.",
+    "notRegistered_target": "Il compleanno di {{target}} non è registrato.",
+    "title": "{{emoji}} Compleanno",
+    "userDescription": "Mostra un compleanno per una persona - SOLO MANAGER",
+    "userName": "utente"
+  },
+  "showDescription": "Mostra il tuo compleanno",
+  "showName": "spettacolo",
+  "test": {
+    "userDescription": "Prova un compleanno per una persona - SOLO MANAGER",
+    "userName": "utente"
+  },
+  "testDescription": "Metti alla prova le tue attuali configurazioni di compleanno",
+  "testName": "test",
+  "update": {
+  }
+}

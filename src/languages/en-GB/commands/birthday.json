@@ -3,46 +3,25 @@
   "birthdayName": "birthday",
   "listDescription": "List all registered birthdays",
   "listName": "list",
-  "removeDescription": "Remove your birthday",
-  "removeName": "remove",
-  "showDescription": "Show your birthday",
-  "showName": "show",
-  "testDescription": "Test your current birthday configurations",
-  "testName": "test",
   "remove": {
     "hasNotPermissionManagesRoles": "You don't have permission to remove birthdays",
-    "hasNotPermissionToManageThisUser": "You don't have permission to remove this user's birthday.",
-    "notRegistered_target": "{{target}}'s birthday is not registered.",
-    "success_target": "{target}}'s birthday was successfully removed.",
-    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
-    "userName": "user",
     "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
-    "notRegistered_target-manager": "{{target}}'s birthday is not registered. Use {{command}} to set it.",
-    "success": "Your birthday was successfully removed."
-  },
-  "show": {
-    "description_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
     "notRegistered_target": "{{target}}'s birthday is not registered.",
-    "title": "{{emoji}} Birthday",
-    "userDescription": "Show a Birthday for a Person - MANAGER ONLY",
-    "userName": "user",
-    "description": "{{emoji}} Your birthday is at the {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}}'s birthday is at the {{date}}. If you want to change it, use {{command}}.",
-    "notRegistered_target-manager": "{{target}}'s birthday is not registered. Use {{command}} to set it.",
-    "notRegistered": "Your birthday is not registered. Use {{command}} to set it."
-  },
-  "test": {
-    "userDescription": "Test a Birthday for a Person - MANAGER ONLY",
+    "success": "Your birthday was successfully removed.",
+    "success_target": "{target}}'s birthday was successfully removed.",
+    "target": "You do not have permission to delete this user's birthday.",
+    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
     "userName": "user"
   },
-  "update": {},
+  "removeDescription": "Remove your birthday",
+  "removeName": "remove",
   "set": {
-    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
-    "hasNotPermissionToManageThisUser": "You cannot manage the birthdays of users above you hierarchically.",
     "dayDescription": "What day were you born?",
     "dayName": "day",
+    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
     "monthDescription": "What is your birthday month?",
     "monthName": "month",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours",
     "success": "Your birthday has been set to {{date}} on this server.",
     "success_target": "{{target}}'s birthday was set to {{date}} on this server",
     "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
@@ -51,5 +30,22 @@
     "yearName": "year"
   },
   "setDescription": "Set your birthday date on the server.",
-  "setName": "set"
+  "setName": "set",
+  "show": {
+    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered.",
+    "title": "{{emoji}} Birthday",
+    "userDescription": "Show a Birthday for a Person - MANAGER ONLY",
+    "userName": "user"
+  },
+  "showDescription": "Show your birthday",
+  "showName": "show",
+  "test": {
+    "userDescription": "Test a Birthday for a Person - MANAGER ONLY",
+    "userName": "user"
+  },
+  "testDescription": "Test your current birthday configurations",
+  "testName": "test",
+  "update": {
+  }
 }

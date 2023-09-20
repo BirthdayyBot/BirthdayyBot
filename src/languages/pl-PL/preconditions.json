@@ -1,0 +1,18 @@
+{
+	"clientPermissions": "",
+	"cooldown": "",
+	"dmOnly": "",
+	"guildNewsOnly": "",
+	"guildNewsThreadOnly": "",
+	"guildOnly": "",
+	"guildPrivateThreadOnly": "",
+	"guildPublicThreadOnly": "",
+	"guildTextOnly": "",
+	"nsfw": "",
+	"threadOnly": "",
+	"userPermissions": "",
+	"administrator": "",
+	"moderator": "",
+	"serverOwner": "",
+    "roleHigher": ""
+}

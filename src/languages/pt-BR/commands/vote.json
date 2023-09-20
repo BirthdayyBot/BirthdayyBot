@@ -1,0 +1,19 @@
+{
+    "voteName": "",
+    "voteDescription": "",
+    "voteEmbed": {
+      "title": "",
+      "fields": [
+        {
+          "name": "",
+          "value": "",
+          "inline": false
+        },
+        {
+          "name": "",
+          "value": "",
+          "inline": false
+        }
+      ]
+    }
+  }
