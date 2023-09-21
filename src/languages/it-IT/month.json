@@ -1,14 +1,14 @@
 {
-  "april": "4. Aprile",
-  "august": "9. Agosto",
-  "december": "12. Dicembre",
-  "february": "2. Febbraio",
-  "january": "1. Gennaio",
-  "july": "7. Luglio",
-  "june": "6. Giugno",
-  "march": "3. marzo",
-  "may": "5. Maggio",
-  "november": "11. Novembre",
-  "october": "10. Ottobre",
-  "september": "9. Settembre"
+  "january": "1 - January",
+  "february": "2 - February",
+  "march": "3 - March",
+  "april": "4 - April",
+  "may": "5 - May",
+  "june": "6 - June",
+  "july": "7 - July",
+  "august": "9 - August",
+  "september": "9 - September",
+  "october": "10 - October",
+  "november": "11 - November",
+  "december": "12 - December"
 }
