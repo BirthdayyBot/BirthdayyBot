@@ -1,10 +1,39 @@
 {
-  "configName": "config",
-  "configDescription": "Configuration des paramètres du serveur",
+  "timezone": {
+    "choices": {
+      "0": "Greenwich Mean Time | GMT | UTC +0",
+      "1": "Central European Time | CET | UTC +1",
+      "2": "Eastern European Time | EET | UTC +2",
+      "3": "Moscow Standard Time | MSK | UTC +3",
+      "4": "Gulf Standard Time | GST | UTC +4",
+      "5": "Pakistan Standard Time | PKT | UTC +5",
+      "6": "Bangladesh Standard Time | BST | UTC  6",
+      "7": "Indochina Time | ICT | UTC  7",
+      "8": "China Standard Time | CST | UTC +8",
+      "9": "Japan Standard Time | JST | UTC +9",
+      "10": "Australian Eastern Standard Time | AEST | UTC +10",
+      "11": "Solomon Island Time | SBT | UTC +11",
+      "12": "New Zealand Standard Time | NZST | UTC +12",
+      "-1": "Azores Time | AZOT | UTC -1",
+      "-2": "Fernando de Noronha Time | FNT | UTC -2",
+      "-3": "Amazon Time Zone | AMT | UTC -3",
+      "-4": "Atlantic Standard Time | AST | UTC -4",
+      "-5": "Eastern Standard Time | EST | UTC -5",
+      "-6": "Central Standard Time | CST | UTC -6",
+      "-7": "Mountain Standard Time | MST | UTC -7",
+      "-8": "Pacific Standard Time | PST | UTC -8",
+      "-9": "Alaska Standard Time | AKST | UTC -9",
+      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
+      "-11": "Niue Time | NUT | UTC -11"
+    },
+    "timezoneDescription": "Dans quel fuseau horaire êtes-vous ?",
+    "timezoneName": "fuseau-horaire",
+    "success": "Le **fuseau horaire** a été défini sur {{timezone}}."
+  },
   "announcementChannel": {
     "cannotPermissions": "Oh... on dirait que je ne peux pas envoyer de message dans ce salon. Tu peux jeter un oeil?",
-    "channelDescription": "Dans quel salon doit-je envoyer le message d'annonce?",
     "channelName": "salon",
+    "channelDescription": "Dans quel salon doit-je envoyer le message d'annonce?",
     "success": "Le salon d'annonce à bien été defini sur {{channel}}."
   },
   "announcementChannelDescription": "Salon où j'enverrais un message quand ce sera l'anniversaire d'un utilisateur",
@@ -25,8 +54,8 @@
   },
   "birthdayRoleDescription": "Rôle attribué à l'utilisateur le jour de son anniversaire",
   "birthdayRoleName": "role-anniversaire",
-  "listName": "list",
   "listDescription": "Liste tous les anniversaires sur le serveur",
+  "listName": "list",
   "overviewChannel": {
     "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
     "channelDescription": "Salon sur lequel l'aperçu doit être envoyé et mis à jour",
@@ -36,8 +65,8 @@
   "overviewChannelDescription": "Salon qui répertorie tous les anniversaires du serveur",
   "overviewChannelName": "salon-apercu",
   "pingRole": {
-    "roleName": "role",
     "roleDescription": "Quel rôle doit-je mentionner dans le message d'annonce ?",
+    "roleName": "role",
     "success": "Le rôle de mention a bien été defini sur {{role}}."
   },
   "pingRoleDescription": "Mentionne un rôle le jour de l'anniversaire de quelqu'un",
@@ -45,26 +74,23 @@
   "reset": {
     "choices": {
       "announcementChannel": "Salon d'annonce",
-      "announcementMessage": "Message d'annonce",
-      "birthdayRole": "Rôle d'anniversaire",
       "birthdayPingRole": "Rôle de mention",
+      "birthdayRole": "Rôle d'anniversaire",
+      "logChannel": "Salon de journal",
       "overviewChannel": "Salon d'apercu",
       "overviewMessage": "Message d'apercu",
-      "logChannel": "Salon de journal",
-      "timezone": "Fuseau horaire"
+      "timezone": "Fuseau horaire",
+      "announcementMessage": "Message d'annonce"
     },
     "configDescription": "Configuration que vous souhaitez réinitialisez",
     "configName": "configuration",
     "error": "Une erreur s'est produite lors de la tentative de réinitialisation de la configuration {{config}}.",
     "success": "La configuration {{config}} a bien été réinitialisée."
   },
+  "timezoneDescription": "Changez le fuseau horaire lorsque Birthdayy souhaite un joyeux anniversaire.",
+  "timezoneName": "fuseau-horaire",
   "resetDescription": "Réinitialiser les paramètres de la configuration de votre serveur",
   "resetName": "reinitialiser",
-  "timezone": {
-    "success": "Le **fuseau horaire** a été défini sur {{timezone}}.",
-    "timezoneDescription": "Dans quel fuseau horaire êtes-vous ?",
-    "timezoneName": "fuseau-horaire"
-  },
-  "timezoneDescription": "Changez le fuseau horaire lorsque Birthdayy souhaite un joyeux anniversaire.",
-  "timezoneName": "fuseau-horaire"
+  "configDescription": "Configuration des paramètres du serveur",
+  "configName": "config"
 }
