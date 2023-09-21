@@ -1,8 +1,8 @@
 {
-  "supportName": "support",
-  "supportDescription": "Need help? Join my Support Discord Server!",
+  "supportName": "wsparcie",
+  "supportDescription": "Potrzebuję pomocy? Dołącz do mojego serwera Discord wsparcia!",
   "supportEmbed": {
-    "title": "{{emoji}} Birthdayy Support",
-    "description": "{{arrow}} Join my discord server [Support]({{support}}) \n{{link}} Check out the [documentation]({{docs}})"
+    "title": "{{emoji}} Urodzinowe wsparcie",
+    "description": "{{arrow}} Dołącz do mojego serwera Discord [Wsparcie]({{support}})\n{{link}} Sprawdź [dokumentację]({{docs}})"
   }
 }
