@@ -1,49 +1,51 @@
 {
-  "birthdayDescription": "Comandos de gestión de cumpleaños",
   "birthdayName": "cumpleaños",
-  "listDescription": "Listar todos los cumpleaños registrados",
-  "listName": "lista",
-  "remove": {
-    "hasNotPermissionManagesRoles": "No tienes permiso para eliminar cumpleaños.",
-    "notRegistered": "Tu cumpleaños no está registrado. Usa {{comando}} para registrarlo.",
-    "notRegistered_target": "El cumpleaños de {{target}} no está registrado.",
-    "success": "Tu cumpleaños fue eliminado con éxito.",
-    "success_target": "El cumpleaños de {target}} se eliminó con éxito.",
-    "target": "No tienes permiso para eliminar el cumpleaños de este usuario.",
-    "userDescription": "Eliminar un cumpleaños para una persona - SOLO ADMINISTRADOR",
-    "userName": "usuario"
-  },
-  "removeDescription": "quitar tu cumpleaños",
-  "removeName": "eliminar",
+  "birthdayDescription": "Comandos de gestión de cumpleaños",
+  "setName": "definir",
+  "setDescription": "Establezca su fecha de cumpleaños en el servidor.",
   "set": {
-    "dayDescription": "¿Qué día naciste?",
     "dayName": "día",
-    "hasNotPermissionManagesRoles": "No tienes permiso para gestionar los cumpleaños de otros usuarios.",
-    "monthDescription": "¿Cuál es el mes de tu cumpleaños?",
+    "dayDescription": "¿Qué día naciste?",
     "monthName": "mes",
-    "roleHigher": "El miembro seleccionado tiene una posición de rol superior o igual a la suya.",
+    "monthDescription": "¿Cuál es el mes de tu cumpleaños?",
+    "yearName": "año",
+    "yearDescription": "¿En qué año naciste?",
+    "userName": "usuario",
+    "userDescription": "¿Para qué usuario desea establecer la fecha de nacimiento? - SOLO GERENTE.",
     "success": "Su cumpleaños se ha establecido en {{date}} en este servidor.",
     "success_target": "El cumpleaños de {{target}} se estableció en el {{date}} en este servidor",
-    "userDescription": "¿Para qué usuario desea establecer la fecha de nacimiento? - SOLO GERENTE.",
+    "hasNotPermissionManagesRoles": "No tienes permiso para gestionar los cumpleaños de otros usuarios.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+  },
+  "listName": "lista",
+  "listDescription": "Listar todos los cumpleaños registrados",
+  "removeName": "eliminar",
+  "removeDescription": "quitar tu cumpleaños",
+  "remove": {
     "userName": "usuario",
-    "yearDescription": "¿En qué año naciste?",
-    "yearName": "año"
-  },
-  "setDescription": "Establezca su fecha de cumpleaños en el servidor.",
-  "setName": "definir",
-  "show": {
-    "notRegistered": "Tu cumpleaños no está registrado. \nUsa {{comando}} para registrarlo.",
+    "userDescription": "Eliminar un cumpleaños para una persona - SOLO ADMINISTRADOR",
+    "success": "Tu cumpleaños fue eliminado con éxito.",
+    "success_target": "El cumpleaños de {target}} se eliminó con éxito.",
+    "notRegistered": "Tu cumpleaños no está registrado. Usa {{comando}} para registrarlo.",
     "notRegistered_target": "El cumpleaños de {{target}} no está registrado.",
-    "title": "{{emoji}} Cumpleaños",
-    "userDescription": "Mostrar el cumpleaños de una persona - SOLO ADMINISTRADOR",
-    "userName": "usuario"
+    "hasNotPermissionManagesRoles": "No tienes permiso para eliminar cumpleaños.",
+    "target": "You do not have permission to delete this user's birthday."
   },
-  "showDescription": "muestra tu cumpleaños",
   "showName": "espectáculo",
-  "test": {
-    "userDescription": "Probar un cumpleaños para una persona - SOLO ADMINISTRADOR",
-    "userName": "usuario"
+  "showDescription": "muestra tu cumpleaños",
+  "show": {
+    "userName": "usuario",
+    "userDescription": "Mostrar el cumpleaños de una persona - SOLO ADMINISTRADOR",
+    "title": "{{emoji}} Cumpleaños",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Tu cumpleaños no está registrado. \nUsa {{comando}} para registrarlo.",
+    "notRegistered_target": "El cumpleaños de {{target}} no está registrado."
   },
+  "testName": "prueba",
   "testDescription": "Pruebe sus configuraciones de cumpleaños actuales",
-  "testName": "prueba"
+  "test": {
+    "userName": "usuario",
+    "userDescription": "Probar un cumpleaños para una persona - SOLO ADMINISTRADOR"
+  }
 }
