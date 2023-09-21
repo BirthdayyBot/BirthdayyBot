@@ -1,8 +1,39 @@
 {
+  "timezone": {
+    "choices": {
+      "0": "Greenwich Mean Time | GMT | UTC +0",
+      "1": "Central European Time | CET | UTC +1",
+      "2": "Eastern European Time | EET | UTC +2",
+      "3": "Moscow Standard Time | MSK | UTC +3",
+      "4": "Gulf Standard Time | GST | UTC +4",
+      "5": "Pakistan Standard Time | PKT | UTC +5",
+      "6": "Bangladesh Standard Time | BST | UTC  6",
+      "7": "Indochina Time | ICT | UTC  7",
+      "8": "China Standard Time | CST | UTC +8",
+      "9": "Japan Standard Time | JST | UTC +9",
+      "10": "Australian Eastern Standard Time | AEST | UTC +10",
+      "11": "Solomon Island Time | SBT | UTC +11",
+      "12": "New Zealand Standard Time | NZST | UTC +12",
+      "-1": "Azores Time | AZOT | UTC -1",
+      "-2": "Fernando de Noronha Time | FNT | UTC -2",
+      "-3": "Amazon Time Zone | AMT | UTC -3",
+      "-4": "Atlantic Standard Time | AST | UTC -4",
+      "-5": "Eastern Standard Time | EST | UTC -5",
+      "-6": "Central Standard Time | CST | UTC -6",
+      "-7": "Mountain Standard Time | MST | UTC -7",
+      "-8": "Pacific Standard Time | PST | UTC -8",
+      "-9": "Alaska Standard Time | AKST | UTC -9",
+      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
+      "-11": "Niue Time | NUT | UTC -11"
+    },
+    "timezoneDescription": "In welcher Zeitzone befinden Sie sich?",
+    "timezoneName": "zeitzone",
+    "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt."
+  },
   "announcementChannel": {
     "cannotPermissions": "Oh... es sieht so aus, als ob ich in diesem Raum keine Nachricht senden kann. Kannst du dir das mal ansehen?",
-    "channelDescription": "An welchen Salon soll ich die Ankündigungsnachricht senden?",
     "channelName": "kanal",
+    "channelDescription": "An welchen Salon soll ich die Ankündigungsnachricht senden?",
     "success": "Der Ankündigungskanal wurde erfolgreich auf {{channel}} eingestellt."
   },
   "announcementChannelDescription": "Raum, in dem ich eine Nachricht senden würde, wenn ein Benutzer Geburtstag hat",
@@ -23,8 +54,8 @@
   },
   "birthdayRoleDescription": "Dem Benutzer an seinem Geburtstag zugewiesene Rolle",
   "birthdayRoleName": "geburtstagsrolle",
-  "listName": "liste",
   "listDescription": "Listen Sie alle Geburtstage auf dem Server auf",
+  "listName": "liste",
   "overviewChannel": {
     "cannotPermissions": "Ich habe keine Berechtigung zum Senden von Nachrichten auf {{channel}}.",
     "channelDescription": "Raum, an den die Übersicht gesendet und aktualisiert werden soll",
@@ -34,20 +65,20 @@
   "overviewChannelDescription": "Raum, der alle Servergeburtstage auflistet",
   "overviewChannelName": "übersichtskanal",
   "pingRole": {
+    "roleDescription": "Welche Rolle sollte ich in der Ankündigungsnachricht erwähnen?",
     "roleName": "rolle",
-    "success": "Die Erwähnungsrolle wurde auf {{role}} festgelegt.",
-    "roleDescription": "Welche Rolle sollte ich in der Ankündigungsnachricht erwähnen?"
+    "success": "Die Erwähnungsrolle wurde auf {{role}} festgelegt."
   },
   "pingRoleDescription": "Erwähnen Sie eine Rolle am Geburtstag einer Person",
   "pingRoleName": "ping-rolle",
   "reset": {
     "choices": {
       "announcementChannel": "Ankündigungskanal",
-      "birthdayRole": "Geburtstagsrolle",
       "birthdayPingRole": "Geburtstags-Ping-Rolle",
+      "birthdayRole": "Geburtstagsrolle",
+      "logChannel": "Protokollkanal",
       "overviewChannel": "Übersichtskanal",
       "overviewMessage": "Übersichtsnachricht",
-      "logChannel": "Protokollkanal",
       "timezone": "Zeitzone",
       "announcementMessage": "Ankündigungsnachricht"
     },
@@ -56,15 +87,10 @@
     "error": "Beim Versuch, die {{config}}-Konfiguration zurückzusetzen, ist ein Fehler aufgetreten.",
     "success": "Die {{config}}-Konfiguration wurde erfolgreich zurückgesetzt."
   },
+  "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht.",
+  "timezoneName": "zeitzone",
   "resetDescription": "Setzen Sie Ihre Serverkonfigurationseinstellungen zurück",
   "resetName": "zurücksetzen",
-  "timezone": {
-    "success": "Die **Zeitzone** wurde auf {{timezone}} eingestellt.",
-    "timezoneDescription": "In welcher Zeitzone befinden Sie sich?",
-    "timezoneName": "zeitzone"
-  },
-  "timezoneName": "zeitzone",
-  "timezoneDescription": "Ändern Sie die Zeitzone, wenn Birthdayy alles Gute zum Geburtstag wünscht.",
   "configDescription": "Konfigurieren der Servereinstellungen",
   "configName": "config"
 }
