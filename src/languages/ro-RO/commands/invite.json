@@ -1,8 +1,11 @@
 {
-  "inviteDescription": "Invită Birthdayy pe serverul tău Discord!",
   "inviteName": "invita",
+  "inviteDescription": "Invită Birthdayy pe serverul tău Discord!",
   "embed": {
     "title": "{{book}} Invită pe {{name}}",
-    "description": "{{arrowRight}} Faceți clic pe butonul de mai jos pentru a-l invita pe {{name}} la serverul dvs. Discord!"
+    "description": "{{arrowRight}} Faceți clic pe butonul de mai jos pentru a-l invita pe {{name}} la serverul dvs. Discord!",
+    "thumbnail": {
+      "url": "{{avatar}}"
+    }
   }
 }
