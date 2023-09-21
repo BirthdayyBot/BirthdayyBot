@@ -1,27 +1,27 @@
 {
+  "blacklistName": "zwarte-lijst",
+  "blacklistDescription": "Opdrachten voor gebruikersbeheer op de zwarte lijst zetten",
+  "addName": "toevoegen",
+  "addDescription": "Voeg een gebruiker toe aan de zwarte lijst",
   "add": {
-    "alReadyBlacklisted": "{{user}} staat al op de zwarte lijst.",
-    "success": "{{user}} is met succes op de zwarte lijst gezet",
-    "userDescription": "De gebruiker die aan de zwarte lijst moet worden toegevoegd",
     "userName": "gebruiker",
+    "userDescription": "De gebruiker die aan de zwarte lijst moet worden toegevoegd",
+    "success": "{{user}} is met succes op de zwarte lijst gezet",
+    "alReadyBlacklisted": "{{user}} staat al op de zwarte lijst.",
     "cannotBlacklistSelf": "Je kunt jezelf niet op de zwarte lijst zetten"
   },
-  "addDescription": "Voeg een gebruiker toe aan de zwarte lijst",
-  "addName": "toevoegen",
-  "blacklistDescription": "Opdrachten voor gebruikersbeheer op de zwarte lijst zetten",
-  "blacklistName": "zwarte-lijst",
-  "list": {
-    "title": "Gebruiker op de zwarte lijst",
-    "empty": "Er zijn momenteel geen gebruikers op de zwarte lijst."
-  },
-  "listDescription": "Maak een lijst van alle gebruikers op de zwarte lijst",
   "listName": "lijst",
-  "remove": {
-    "notFound": "{{user}} staat niet op de zwarte lijst",
-    "success": "{{user}} is met succes verwijderd van de zwarte lijst",
-    "userDescription": "De gebruiker die van de zwarte lijst moet worden verwijderd",
-    "userName": "gebruiker"
+  "listDescription": "Maak een lijst van alle gebruikers op de zwarte lijst",
+  "list": {
+    "empty": "Er zijn momenteel geen gebruikers op de zwarte lijst.",
+    "title": "Gebruiker op de zwarte lijst"
   },
+  "removeName": "verwijderen",
   "removeDescription": "Verwijder een gebruiker van de zwarte lijst",
-  "removeName": "verwijderen"
+  "remove": {
+    "userName": "gebruiker",
+    "userDescription": "De gebruiker die van de zwarte lijst moet worden verwijderd",
+    "success": "{{user}} is met succes verwijderd van de zwarte lijst",
+    "notFound": "{{user}} staat niet op de zwarte lijst"
+  }
 }
