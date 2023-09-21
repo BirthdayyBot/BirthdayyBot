@@ -15,7 +15,7 @@
     "success": "Votre anniversaire a bien été défini au {{date}} sur ce serveur.",
     "success_target": "L'anniversaire de {{target}} a bien été défini au {{date}} sur ce serveur",
     "hasNotPermissionManagesRoles": "Tu n'est pas autorisé à gérer les anniversaires d'autres utilisateurs.",
-    "hasNotPermissionToManageThisUser": "Tu ne peut pas gérer les anniversaires des utilisateurs de situant au dessus de toi hiérarchiquement."
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
   "listName": "liste",
   "listDescription": "Lister tous les anniversaires enregistrés",
@@ -24,13 +24,12 @@
   "remove": {
     "userName": "user",
     "userDescription": "Supprimer l'anniversaire pour cette utilisateur - MANAGER ONLY",
+    "success": "Votre anniversaire a été supprimé avec succès.",
     "success_target": "L'anniversaire de {{target}} à bien été supprimé.",
+    "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
     "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
     "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de supprimer des anniversaires",
-    "hasNotPermissionToManageThisUser": "Vous n'avez pas la permission de supprimer l'anniversaire de cet utilisateur.",
-    "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
-    "notRegistered_target-manager": "L'anniversaire de {{target}} n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
-    "success": "Votre anniversaire a été supprimé avec succès."
+    "target": "Vous n'êtes pas autorisé à supprimer l'anniversaire de cet utilisateur."
   },
   "showName": "montrer",
   "showDescription": "Montrer votre anniversaire",
@@ -38,12 +37,10 @@
     "userName": "utilisateur",
     "userDescription": "Montrer l'anniversaire de cette utilisateur - MANAGER ONLY",
     "title": "{{emoji}} Anniversaire",
-    "description_target": "{{emoji}} L'anniversaire de {{target}} est le {{date}}.",
-    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
-    "description": "{{emoji}} Votre anniversaire est le {{date}}.",
-    "description_target-manager": "L'anniversaire de {{emoji}} {{target}} est le {{date}}. \nSi vous voulez le changer, utilisez {{command}}.",
-    "notRegistered_target-manager": "L'anniversaire de {{target}} n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
-    "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer."
+    "success": "{{emoji}} Votre anniversaire est défini sûr {{date}}.",
+    "success_target": "{{emoji}} L'anniversaire de {{target}} est défini sûr {{date}}.",
+    "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
+    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré."
   },
   "testName": "test",
   "testDescription": "Testez votre configuration d’anniversaire actuelle",
