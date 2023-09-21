@@ -1,10 +1,10 @@
 {
-  "birthdayyList": "Bursdagsliste",
-  "discordInfo": "Discord info",
+  "supportDiscord": "Støtt Discord",
   "docsBirthday": "Dokumentasjon",
-  "guildConfig": "Guild Config",
   "inviteBithdayy": "Inviter bursdag",
   "remindeMe": "⏰ Påminn meg om 12 timer",
-  "supportDiscord": "Støtt Discord",
-  "website": "Nettsted"
+  "website": "Nettsted",
+  "birthdayyList": "Bursdagsliste",
+  "guildConfig": "Guild Config",
+  "discordInfo": "Discord info"
 }
