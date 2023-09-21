@@ -1,12 +1,9 @@
 {
-  "guideDescription": "Trenger en rask oppsettguide! Ikke bekymre deg, dette vil hjelpe deg!",
   "guideName": "guide",
-  "embedConfigField": {},
-  "embedImportantField": {},
-  "embedStartedField": {},
+  "guideDescription": "Trenger en rask oppsettguide! Ikke bekymre deg, dette vil hjelpe deg!",
   "embed": {
-    "description": "{{emoji.exclamation}} Ved å skrive **/help** i chatten kan du sjekke ut alle funksjonene mine og tilgjengelige kommandoer.",
     "title": "{{emoji.heart}} {{name}} Veiledning!",
+    "description": "{{emoji.exclamation}} Ved å skrive **/help** i chatten kan du sjekke ut alle funksjonene mine og tilgjengelige kommandoer.",
     "fields": [
       {
         "name": "Konfigurer Birthdayy",
