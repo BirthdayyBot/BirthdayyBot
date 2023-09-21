@@ -1,27 +1,27 @@
 {
-  "blacklistName": "blacklist",
-  "blacklistDescription": "Blacklist user management commands",
-  "addName": "add",
-  "addDescription": "Add a user to the blacklist",
+  "blacklistName": "czarna-lista",
+  "blacklistDescription": "Czarna lista poleceń zarządzania użytkownikami",
+  "addName": "dodać",
+  "addDescription": "Dodaj użytkownika do czarnej listy",
   "add": {
-    "userName": "user",
-    "userDescription": "The user to add to the blacklist",
-    "success": "{{user}} has been successfully blacklisted",
-    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
-    "cannotBlacklistSelf": "You can't blacklist yourself"
+    "userName": "użytkownik",
+    "userDescription": "Użytkownik, który ma zostać dodany do czarnej listy",
+    "success": "{{user}} został pomyślnie umieszczony na czarnej liście",
+    "alReadyBlacklisted": "{{user}} jest już na czarnej liście.",
+    "cannotBlacklistSelf": "Nie możesz wpisywać siebie na czarną listę"
   },
-  "listName": "list",
-  "listDescription": "List all users on the blacklist",
+  "listName": "lista",
+  "listDescription": "Umieść wszystkich użytkowników na czarnej liście",
   "list": {
-    "empty": "There are no blacklisted users at the moment.",
-    "title": "Blacklisted user"
+    "empty": "W tej chwili nie ma żadnych użytkowników na czarnej liście.",
+    "title": "Użytkownik na czarnej liście"
   },
-  "removeName": "remove",
-  "removeDescription": "Remove a user from the blacklist",
+  "removeName": "usunąć",
+  "removeDescription": "Usuń użytkownika z czarnej listy",
   "remove": {
-    "userName": "user",
-    "userDescription": "The user to remove from the blacklist",
-    "success": "{{user}} has been successfully removed from the blacklist",
-    "notFound": "{{user}} is not blacklisted."
+    "userName": "użytkownik",
+    "userDescription": "Użytkownik do usunięcia z czarnej listy",
+    "success": "{{user}} został pomyślnie usunięty z czarnej listy",
+    "notFound": "{{user}} nie znajduje się na czarnej liście"
   }
 }
