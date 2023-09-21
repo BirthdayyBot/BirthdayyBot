@@ -1,9 +1,9 @@
 {
-  "guideDescription": "Sie brauchen eine schnelle Anleitung zur Einrichtung! Keine Sorge, dies wird Ihnen helfen!",
   "guideName": "fuhrung",
+  "guideDescription": "Sie brauchen eine schnelle Anleitung zur Einrichtung! Keine Sorge, dies wird Ihnen helfen!",
   "embed": {
-    "description": "{{emoji.exclamation}} Wenn Sie im Chat **/help** eingeben, können Sie sich alle meine Funktionen und verfügbaren Befehle ansehen.",
     "title": "{{emoji.heart}} {{name}} Leitfaden!",
+    "description": "{{emoji.exclamation}} Wenn Sie im Chat **/help** eingeben, können Sie sich alle meine Funktionen und verfügbaren Befehle ansehen.",
     "fields": [
       {
         "name": "Konfigurieren Sie Birthdayy",
