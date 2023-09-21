@@ -26,71 +26,71 @@
       "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
       "-11": "Niue Time | NUT | UTC -11"
     },
-    "timezoneDescription": "What timezone are you in ?",
-    "timezoneName": "timezone",
-    "success": "The **timezone** has been set to {{timezone}}."
+    "timezoneDescription": "Hvilken tidssone er du i?",
+    "timezoneName": "tidssone",
+    "success": "**tidssonen** er satt til {{tidssone}}."
   },
   "announcementChannel": {
-    "cannotPermissions": "Oh... looks like I can't send a message in this channel. Can you take a look?",
-    "channelName": "channel",
-    "channelDescription": "Which salon should I send the announcement message to?",
-    "success": "The announcement channel has been defined on {{channel}}."
+    "cannotPermissions": "Å... ser ut til at jeg ikke kan sende en melding i dette rommet. Kan du ta en titt?",
+    "channelName": "kanal",
+    "channelDescription": "Hvilken salong skal jeg sende kunngjøringsmeldingen til?",
+    "success": "Kunngjøringsrommet er definert på {{channel}}."
   },
-  "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
-  "announcementChannelName": "announcement-channel",
+  "announcementChannelDescription": "Rom hvor jeg ville sendt en melding når det er en brukers bursdag",
+  "announcementChannelName": "kunngjøringskanal",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
-    "messageName": "message",
-    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium only**.\nIf you already want to use this feature and future ones, you can support development on [Patreon]({{url}}).`),",
-    "success": "The announcement message has been modified.\n\n{{message}}"
+    "messageName": "beskjed",
+    "requirePremium": "Denne funksjonen er for øyeblikket i __Beta Stage__ og **Birthdayy Premium Only**.\nHvis du er interessert i å bruke denne og fremtidige funksjoner nå allerede, kan du støtte utviklingen på [Patreon]({{url}}).`),",
+    "success": "Kunngjøringsmeldingen er endret.\n\n{{beskjed}}"
   },
-  "announcementMessageDescription": "Message I would send on a user's birthday.",
-  "announcementMessageName": "announcement-message",
+  "announcementMessageDescription": "Melding jeg ville sendt på en brukers bursdag.",
+  "announcementMessageName": "kunngjøring-melding",
   "birthdayRole": {
-    "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
-    "roleDescription": "Role that will be assigned to the user on their birthday",
-    "roleName": "role",
-    "success": "The birthday role has been set to {{role}}."
+    "highestBotRole": "Å, jeg kan ikke tildele denne rollen... Ser ut som den er høyere enn min høyeste rolle.",
+    "roleDescription": "Rolle som vil bli tildelt brukeren på fødselsdagen",
+    "roleName": "rolle",
+    "success": "Bursdagsrollen er satt til {{role}}."
   },
-  "birthdayRoleDescription": "Role assigned to the user on their birthday",
-  "birthdayRoleName": "birthday-role",
-  "listDescription": "List all birthdays on the server",
-  "listName": "list",
+  "birthdayRoleDescription": "Rolle tildelt brukeren på fødselsdagen",
+  "birthdayRoleName": "bursdagsrolle",
+  "listDescription": "List alle bursdager på serveren",
+  "listName": "liste",
   "overviewChannel": {
-    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
-    "channelDescription": "Channel where the preview should be sent and updated",
-    "channelName": "channel",
-    "success": "Overview channel successfully set to {{channel}} and new [message]({{message}})."
+    "cannotPermissions": "Jeg har ikke tillatelse til å sende meldinger på {{channel}}.",
+    "channelDescription": "Rom som oversikten skal sendes og oppdateres på",
+    "channelName": "kanal",
+    "success": "Forhåndsvisningskanalen er satt til {{kanal}} og den nye [meldingen]({{melding}})."
   },
-  "overviewChannelDescription": "Channel that lists all server birthdays",
-  "overviewChannelName": "overview-channel",
+  "overviewChannelDescription": "Rom som viser alle serverbursdager",
+  "overviewChannelName": "oversikt-kanal",
   "pingRole": {
-    "roleDescription": "What role should I mention in the announcement message?",
-    "roleName": "role",
-    "success": "The ping role has been set to {{role}}."
+    "roleDescription": "Hvilken rolle skal jeg nevne i kunngjøringsmeldingen?",
+    "roleName": "rolle",
+    "success": "Omtalerollen er satt til {{role}}."
   },
-  "pingRoleDescription": "Mention a role on someone's birthday",
-  "pingRoleName": "ping-role",
+  "pingRoleDescription": "Nevn en rolle på noens bursdag",
+  "pingRoleName": "ping-rolle",
   "reset": {
     "choices": {
-      "announcementChannel": "Announcement channel",
-      "birthdayPingRole": "Birthday Ping Role",
-      "birthdayRole": "Birthday role",
-      "logChannel": "News channel",
-      "overviewChannel": "Presentation channel",
-      "overviewMessage": "Introductory message",
-      "timezone": "Timezone",
-      "announcementMessage": "Announcement message"
+      "announcementChannel": "Kunngjøringskanal",
+      "birthdayPingRole": "Bursdagsping-rolle",
+      "birthdayRole": "Bursdagsrolle",
+      "logChannel": "Logg kanal",
+      "overviewChannel": "Oversiktskanal",
+      "overviewMessage": "Oversiktsmelding",
+      "timezone": "Tidssone",
+      "announcementMessage": "Kunngjøringsmelding"
     },
-    "configDescription": "Configuration you want to reset",
-    "configName": "config",
-    "error": "An error occurred while trying to reset the {{config}} configuration.",
-    "success": "The configuration {{config}} has been successfully reset."
+    "configDescription": "Konfigurasjonen du vil tilbakestille",
+    "configName": "konfig",
+    "error": "Det oppstod en feil under forsøk på å tilbakestille {{config}}-konfigurasjonen.",
+    "success": "{{config}}-konfigurasjonen har blitt tilbakestilt."
   },
-  "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
-  "timezoneName": "timezone",
-  "resetDescription": "Reset your server configuration settings",
-  "resetName": "reset",
-  "configDescription": "Configuring server settings",
-  "configName": "config"
+  "timezoneDescription": "Endre tidssone når Birthdayy ønsker gratulerer med dagen.",
+  "timezoneName": "tidssone",
+  "resetDescription": "Tilbakestill serverkonfigurasjonsinnstillingene",
+  "resetName": "nullstille",
+  "configDescription": "Konfigurere serverinnstillinger",
+  "configName": "konfig"
 }
