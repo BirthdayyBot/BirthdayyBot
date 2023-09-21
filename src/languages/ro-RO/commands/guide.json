@@ -1,21 +1,21 @@
 {
-  "guideName": "guide",
-  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
+  "guideName": "ghid",
+  "guideDescription": "Aveți nevoie de un Ghid de configurare rapidă! Nu-ți face griji, asta te va ajuta!",
   "embed": {
-    "title": "{{emoji.heart}} {{name}} Guide!",
-    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
+    "title": "Ghid pentru {{emoji.heart}} {{name}}!",
+    "description": "{{emoji.exclamation}} Tastând **/help** în chat, puteți verifica toate funcțiile mele și comenzile disponibile.",
     "fields": [
       {
-        "name": "Get Started",
-        "value": "{{emoji.exclamation}} Set your Birthday with {{command.set}}\n{{emoji.arrowRight}} Find more on [Documentation]({{quickstart}})"
-      },
-      {
-        "name": "Configure Birthdayy",
-        "value": "{{emoji.exclamation}} Make sure to set your **Serverconfigurations** with **/config <config>**!\n{{emoji.arrowRight}} Use {{command.list}} to see your current config setting."
+        "name": "Configurați ziua de naștere",
+        "value": "{{emoji}} Asigurați-vă că setați **configurațiile serverului** cu **/config <config>**!\n{{emoji}} Folosiți {{comandă}} pentru a vedea setarea de configurare curentă."
       },
       {
         "name": "Important",
-        "value": "{{emojis.exclamation}} My **highest** Role needs to be **above** the birthday child role.\n{{emojis.arrowRight}} Join the [Birthdayy HQ]({{invite}}) to meet the Developer and help improving Birthdayy {{emojis.cake}} \n{{emojis.heart}} Like **Birthdayy**? Consider [inviting]({{invite}}) and [voting]({{vote}}) for me!\n{{emojis.plus}} Want access to beta features? [Support us on Patreon]({{premium}})"
+        "value": "{{emojis.exclamation}} Rolul meu **cel mai înalt** trebuie să fie **deasupra** rolului de copil de naștere.\n{{emojis.arrowRight}} Alăturați-vă [Birthdayy HQ]({{invite}}) pentru a-l cunoaște pe Dezvoltator și pentru a ajuta la îmbunătățirea Birthdayy {{emojis.cake}}\n{{emojis.heart}} Vă place **Birthdayy**? \nLuați în considerare [invitarea]({{invite}}) și [votarea]({{vot}}) pentru mine!\n{{emojis.plus}} Doriți acces la funcțiile beta? \n[Sprijină-ne pe Patreon]({{premium}})"
+      },
+      {
+        "name": "Incepe",
+        "value": "{{emoji}} Înregistrează-ți ziua de naștere cu {{command}}\n{{emoji}} Găsiți mai multe pe [Documentare]({{url}})"
       }
     ]
   }
