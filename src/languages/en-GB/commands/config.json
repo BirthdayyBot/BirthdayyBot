@@ -1,8 +1,39 @@
 {
+  "timezone": {
+    "choices": {
+      "0": "Greenwich Mean Time | GMT | UTC +0",
+      "1": "Central European Time | CET | UTC +1",
+      "2": "Eastern European Time | EET | UTC +2",
+      "3": "Moscow Standard Time | MSK | UTC +3",
+      "4": "Gulf Standard Time | GST | UTC +4",
+      "5": "Pakistan Standard Time | PKT | UTC +5",
+      "6": "Bangladesh Standard Time | BST | UTC  6",
+      "7": "Indochina Time | ICT | UTC  7",
+      "8": "China Standard Time | CST | UTC +8",
+      "9": "Japan Standard Time | JST | UTC +9",
+      "10": "Australian Eastern Standard Time | AEST | UTC +10",
+      "11": "Solomon Island Time | SBT | UTC +11",
+      "12": "New Zealand Standard Time | NZST | UTC +12",
+      "-1": "Azores Time | AZOT | UTC -1",
+      "-2": "Fernando de Noronha Time | FNT | UTC -2",
+      "-3": "Amazon Time Zone | AMT | UTC -3",
+      "-4": "Atlantic Standard Time | AST | UTC -4",
+      "-5": "Eastern Standard Time | EST | UTC -5",
+      "-6": "Central Standard Time | CST | UTC -6",
+      "-7": "Mountain Standard Time | MST | UTC -7",
+      "-8": "Pacific Standard Time | PST | UTC -8",
+      "-9": "Alaska Standard Time | AKST | UTC -9",
+      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
+      "-11": "Niue Time | NUT | UTC -11"
+    },
+    "timezoneDescription": "What timezone are you in ?",
+    "timezoneName": "timezone",
+    "success": "The **Timezone** has been set to {{timezone}}."
+  },
   "announcementChannel": {
     "cannotPermissions": "Oh... looks like I can't send a message in this room. Can you take a look?",
-    "channelDescription": "Which salon should I send the announcement message to?",
     "channelName": "channel",
+    "channelDescription": "Which salon should I send the announcement message to?",
     "success": "The announcement channel has been defined on {{channel}}."
   },
   "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
@@ -24,6 +55,7 @@
   "birthdayRoleDescription": "Role assigned to the user on their birthday",
   "birthdayRoleName": "birthday-role",
   "listDescription": "List all birthdays on the server",
+  "listName": "list",
   "overviewChannel": {
     "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
     "channelDescription": "Channel where the preview should be sent and updated",
@@ -33,20 +65,20 @@
   "overviewChannelDescription": "Channel that lists all server birthdays",
   "overviewChannelName": "overview-channel",
   "pingRole": {
+    "roleDescription": "What role should I mention in the announcement message?",
     "roleName": "role",
-    "success": "The ping role has been set to {{role}}.",
-    "roleDescription": "What role should I mention in the announcement message?"
+    "success": "The ping role has been set to {{role}}."
   },
   "pingRoleDescription": "Mention a role on someone's birthday",
   "pingRoleName": "ping-role",
   "reset": {
     "choices": {
       "announcementChannel": "Announcement Channel",
-      "birthdayRole": "Birthday Role",
       "birthdayPingRole": "Birthday Ping Role",
+      "birthdayRole": "Birthday Role",
+      "logChannel": "Log Channel",
       "overviewChannel": "Overview Channel",
       "overviewMessage": "Overview Message",
-      "logChannel": "Log Channel",
       "timezone": "Timezone",
       "announcementMessage": "Announcement message"
     },
@@ -55,16 +87,10 @@
     "error": "An error occurred while trying to reset the {{config}} config.",
     "success": "The configuration {{config}} has been successfully reset."
   },
+  "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday.",
+  "timezoneName": "timezone",
   "resetDescription": "Reset your server configuration settings",
   "resetName": "reset",
-  "timezone": {
-    "success": "The **Timezone** has been set to {{timezone}}.",
-    "timezoneDescription": "What timezone are you in ?",
-    "timezoneName": "timezone"
-  },
-  "timezoneName": "timezone",
-  "timezoneDescription": "Change the Timezone when Birthdayy wishes Happy Birthday.",
   "configDescription": "Configuring server settings",
-  "configName": "config",
-  "listName": "list"
+  "configName": "config"
 }
