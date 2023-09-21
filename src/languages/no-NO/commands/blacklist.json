@@ -1,27 +1,27 @@
 {
-  "blacklistName": "blacklist",
-  "blacklistDescription": "Blacklist user management commands",
-  "addName": "add",
-  "addDescription": "Add a user to the blacklist",
+  "blacklistName": "svarte-liste",
+  "blacklistDescription": "Svarteliste brukeradministrasjonskommandoer",
+  "addName": "legg-til",
+  "addDescription": "Legg til en bruker på svartelisten",
   "add": {
-    "userName": "user",
-    "userDescription": "The user to add to the blacklist",
-    "success": "{{user}} has been successfully blacklisted",
-    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
-    "cannotBlacklistSelf": "You can't blacklist yourself"
+    "userName": "bruker",
+    "userDescription": "Brukeren som skal legges til på svartelisten",
+    "success": "{{user}} har blitt svartelistet",
+    "alReadyBlacklisted": "{{user}} er allerede på svartelisten.",
+    "cannotBlacklistSelf": "Du kan ikke svarteliste deg selv"
   },
-  "listName": "list",
-  "listDescription": "List all users on the blacklist",
+  "listName": "liste",
+  "listDescription": "List alle brukere på svartelisten",
   "list": {
-    "empty": "There are no blacklisted users at the moment.",
-    "title": "Blacklisted user"
+    "empty": "Det er ingen svartelistede brukere for øyeblikket.",
+    "title": "Svartelistet bruker"
   },
-  "removeName": "remove",
-  "removeDescription": "Remove a user from the blacklist",
+  "removeName": "fjerne",
+  "removeDescription": "Fjern en bruker fra svartelisten",
   "remove": {
-    "userName": "user",
-    "userDescription": "The user to remove from the blacklist",
-    "success": "{{user}} has been successfully removed from the blacklist",
-    "notFound": "{{user}} is not blacklisted."
+    "userName": "bruker",
+    "userDescription": "Brukeren som skal fjernes fra svartelisten",
+    "success": "{{user}} har blitt fjernet fra svartelisten",
+    "notFound": "{{user}} er ikke på svartelisten"
   }
 }
