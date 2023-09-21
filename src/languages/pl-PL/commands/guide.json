@@ -1,12 +1,9 @@
 {
-  "guideDescription": "Potrzebujesz szybkiej instrukcji konfiguracji! Nie martw się, to Ci pomoże!",
   "guideName": "przewodnik",
-  "embedConfigField": {},
-  "embedImportantField": {},
-  "embedStartedField": {},
+  "guideDescription": "Potrzebujesz szybkiej instrukcji konfiguracji! Nie martw się, to Ci pomoże!",
   "embed": {
-    "description": "{{emoji.exclamation}} Wpisując **/help** na czacie, możesz sprawdzić wszystkie moje funkcje i dostępne polecenia.",
     "title": "Przewodnik {{emoji.heart}} {{name}}!",
+    "description": "{{emoji.exclamation}} Wpisując **/help** na czacie, możesz sprawdzić wszystkie moje funkcje i dostępne polecenia.",
     "fields": [
       {
         "name": "Skonfiguruj urodziny",

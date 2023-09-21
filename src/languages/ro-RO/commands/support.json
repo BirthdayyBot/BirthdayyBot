@@ -1,7 +1,6 @@
 {
   "supportName": "a-sustine",
   "supportDescription": "Nevoie de ajutor? Alăturați-vă serverului meu de asistență Discord!",
-  "invite": {},
   "supportEmbed": {
     "title": "{{emoji}} Asistență pentru ziua de naștere",
     "description": "{{săgeată}} Alăturați-vă serverului meu Discord [Asistență]({{support}})\n{{link}} Consultați [documentația]({{docs}})"

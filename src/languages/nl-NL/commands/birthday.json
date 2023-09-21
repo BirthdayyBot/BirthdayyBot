@@ -1,54 +1,51 @@
 {
-  "birthdayDescription": "Commando's voor verjaardagsbeheer",
   "birthdayName": "verjaardag",
-  "listDescription": "Maak een lijst van alle geregistreerde verjaardagen",
-  "listName": "lijst",
-  "removeDescription": "Verwijder je verjaardag",
-  "removeName": "verwijderen",
-  "showDescription": "Toon je verjaardag",
-  "showName": "show",
-  "testDescription": "Test uw huidige verjaardagsconfiguraties",
-  "testName": "test",
-  "remove": {
-    "hasNotPermissionManagesRoles": "U heeft geen rechten om verjaardagen te verwijderen",
-    "hasNotPermissionToManageThisUser": "U heeft geen rechten om de verjaardag van deze gebruiker te verwijderen.",
-    "notRegistered_target": "{{target}}'s verjaardag is niet geregistreerd.",
-    "success_target": "De verjaardag van {target}} is succesvol verwijderd.",
-    "userDescription": "Verwijder een verjaardag voor een persoon - ALLEEN MANAGER",
-    "userName": "gebruiker",
-    "notRegistered": "Je verjaardag is niet geregistreerd. Gebruik {{command}} om het te registreren.",
-    "notRegistered_target-manager": "{{target}}'s verjaardag is niet geregistreerd. \nGebruik {{command}} om het te registreren.",
-    "success": "Je geboortedatum is succesvol verwijderd."
-  },
-  "show": {
-    "description_target": "{{emoji}} {{target}} is jarig op {{date}}.",
-    "notRegistered_target": "{{target}}'s verjaardag is niet geregistreerd.",
-    "title": "{{emoji}} Verjaardag",
-    "userDescription": "Toon een verjaardag voor een persoon - ALLEEN MANAGER",
-    "userName": "gebruiker",
-    "description": "{{emoji}} Je bent jarig op {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}} is jarig op {{date}}. \nGebruik {{command}} als je het wilt wijzigen.",
-    "notRegistered_target-manager": "{{target}}'s verjaardag is niet geregistreerd. \nGebruik {{command}} om het te registreren.",
-    "notRegistered": "Je verjaardag is niet geregistreerd. \nGebruik {{command}} om het te registreren."
-  },
-  "test": {
-    "userDescription": "Test een verjaardag voor een persoon - ALLEEN MANAGER",
-    "userName": "gebruiker"
-  },
+  "birthdayDescription": "Commando's voor verjaardagsbeheer",
+  "setName": "definiëren",
+  "setDescription": "Stel uw verjaardagsdatum in op de server.",
   "set": {
-    "hasNotPermissionManagesRoles": "U mag de verjaardagen van andere gebruikers niet beheren.",
-    "hasNotPermissionToManageThisUser": "U kunt de verjaardagen van gebruikers boven u niet hiërarchisch beheren.",
-    "dayDescription": "Op welke dag ben je geboren?",
     "dayName": "dag",
-    "monthDescription": "Wat is je verjaardagsmaand?",
+    "dayDescription": "Op welke dag ben je geboren?",
     "monthName": "maand",
+    "monthDescription": "Wat is je verjaardagsmaand?",
+    "yearName": "jaar",
+    "yearDescription": "Welk jaar ben je geboren?",
+    "userName": "gebruiker",
+    "userDescription": "Voor welke gebruiker wilt u de geboortedatum instellen? - ALLEEN BEHEERDER.",
     "success": "Je verjaardag is op deze server ingesteld op {{date}}.",
     "success_target": "De verjaardag van {{target}} is op deze server succesvol ingesteld op {{date}}",
-    "userDescription": "Voor welke gebruiker wilt u de geboortedatum instellen? - ALLEEN BEHEERDER.",
-    "userName": "gebruiker",
-    "yearDescription": "Welk jaar ben je geboren?",
-    "yearName": "jaar"
+    "hasNotPermissionManagesRoles": "U mag de verjaardagen van andere gebruikers niet beheren.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Stel uw verjaardagsdatum in op de server.",
-  "setName": "definiëren"
+  "listName": "lijst",
+  "listDescription": "Maak een lijst van alle geregistreerde verjaardagen",
+  "removeName": "verwijderen",
+  "removeDescription": "Verwijder je verjaardag",
+  "remove": {
+    "userName": "gebruiker",
+    "userDescription": "Verwijder een verjaardag voor een persoon - ALLEEN MANAGER",
+    "success": "Je geboortedatum is succesvol verwijderd.",
+    "success_target": "De verjaardag van {target}} is succesvol verwijderd.",
+    "notRegistered": "Je verjaardag is niet geregistreerd. Gebruik {{command}} om het te registreren.",
+    "notRegistered_target": "{{target}}'s verjaardag is niet geregistreerd.",
+    "hasNotPermissionManagesRoles": "U heeft geen rechten om verjaardagen te verwijderen",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "show",
+  "showDescription": "Toon je verjaardag",
+  "show": {
+    "userName": "gebruiker",
+    "userDescription": "Toon een verjaardag voor een persoon - ALLEEN MANAGER",
+    "title": "{{emoji}} Verjaardag",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Je verjaardag is niet geregistreerd. \nGebruik {{command}} om het te registreren.",
+    "notRegistered_target": "{{target}}'s verjaardag is niet geregistreerd."
+  },
+  "testName": "test",
+  "testDescription": "Test uw huidige verjaardagsconfiguraties",
+  "test": {
+    "userName": "gebruiker",
+    "userDescription": "Test een verjaardag voor een persoon - ALLEEN MANAGER"
+  }
 }

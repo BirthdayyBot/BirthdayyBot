@@ -1,9 +1,9 @@
 {
-  "guideDescription": "¡Necesita una guía de configuración rápida! \n¡No te preocupes, esto te ayudará!",
   "guideName": "guía",
+  "guideDescription": "¡Necesita una guía de configuración rápida! \n¡No te preocupes, esto te ayudará!",
   "embed": {
-    "description": "{{emoji.exclamation}} Al escribir **/ayuda** en el chat, puedes consultar todas mis funciones y comandos disponibles.",
     "title": "{{emoji.heart}} {{name}} ¡Guía!",
+    "description": "{{emoji.exclamation}} Al escribir **/ayuda** en el chat, puedes consultar todas mis funciones y comandos disponibles.",
     "fields": [
       {
         "name": "Configurar cumpleaños",

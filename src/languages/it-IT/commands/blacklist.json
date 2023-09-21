@@ -1,27 +1,27 @@
 {
+  "blacklistName": "listavnera",
+  "blacklistDescription": "Comandi di gestione degli utenti della lista nera",
+  "addName": "aggiungere",
+  "addDescription": "Aggiungi un utente alla lista nera",
   "add": {
-    "alReadyBlacklisted": "{{user}} è già nella lista nera.",
-    "success": "{{user}} è stato correttamente inserito nella blacklist",
-    "userDescription": "L'utente da aggiungere alla lista nera",
     "userName": "utente",
+    "userDescription": "L'utente da aggiungere alla lista nera",
+    "success": "{{user}} è stato correttamente inserito nella blacklist",
+    "alReadyBlacklisted": "{{user}} è già nella lista nera.",
     "cannotBlacklistSelf": "Non puoi inserire te stesso nella lista nera"
   },
-  "addDescription": "Aggiungi un utente alla lista nera",
-  "addName": "aggiungere",
-  "blacklistDescription": "Comandi di gestione degli utenti della lista nera",
-  "blacklistName": "listavnera",
-  "list": {
-    "title": "Utente nella lista nera",
-    "empty": "Al momento non ci sono utenti nella lista nera."
-  },
-  "listDescription": "Elenca tutti gli utenti nella lista nera",
   "listName": "elenco",
-  "remove": {
-    "notFound": "{{user}} non è nella lista nera",
-    "success": "{{user}} è stato rimosso con successo dalla lista nera",
-    "userDescription": "L'utente da rimuovere dalla lista nera",
-    "userName": "utente"
+  "listDescription": "Elenca tutti gli utenti nella lista nera",
+  "list": {
+    "empty": "Al momento non ci sono utenti nella lista nera.",
+    "title": "Utente nella lista nera"
   },
+  "removeName": "rimuovere",
   "removeDescription": "Rimuovi un utente dalla lista nera",
-  "removeName": "rimuovere"
+  "remove": {
+    "userName": "utente",
+    "userDescription": "L'utente da rimuovere dalla lista nera",
+    "success": "{{user}} è stato rimosso con successo dalla lista nera",
+    "notFound": "{{user}} non è nella lista nera"
+  }
 }

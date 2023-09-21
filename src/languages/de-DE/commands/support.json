@@ -1,7 +1,6 @@
 {
   "supportName": "unterstützung",
   "supportDescription": "Brauchen Sie Hilfe? Treten Sie meinem Support-Discord-Server bei!",
-  "invite": {},
   "supportEmbed": {
     "title": "{{emoji}} Geburtstagsunterstützung",
     "description": "{{arrow}} Treten Sie meinem Discord-Server bei [Support]({{support}})\n{{link}} Schauen Sie sich die [Dokumentation] an ({{docs}})"

@@ -1,14 +1,14 @@
 {
+  "january": "1. ianuarie",
+  "february": "2. februarie",
+  "march": "3. martie",
   "april": "4. Aprilie",
   "may": "5. Mai",
   "june": "6. Iunie",
   "july": "7. Iulie",
   "august": "9. August",
-  "december": "12. Decembrie",
-  "november": "11. Noiembrie",
-  "october": "10. Octombrie",
   "september": "9. Septembrie",
-  "february": "2. februarie",
-  "january": "1. ianuarie",
-  "march": "3. martie"
+  "october": "10. Octombrie",
+  "november": "11. Noiembrie",
+  "december": "12. Decembrie"
 }

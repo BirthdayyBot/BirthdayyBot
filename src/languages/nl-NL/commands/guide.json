@@ -1,12 +1,9 @@
 {
-  "guideDescription": "Een snelle installatiegids nodig! Maak je geen zorgen, dit zal je helpen!",
   "guideName": "gids",
-  "embedConfigField": {},
-  "embedImportantField": {},
-  "embedStartedField": {},
+  "guideDescription": "Een snelle installatiegids nodig! Maak je geen zorgen, dit zal je helpen!",
   "embed": {
-    "description": "{{emoji.exclamation}} Door **/help** in de chat te typen, kun je al mijn functies en beschikbare opdrachten bekijken.",
     "title": "{{emoji.heart}} {{name}} Gids!",
+    "description": "{{emoji.exclamation}} Door **/help** in de chat te typen, kun je al mijn functies en beschikbare opdrachten bekijken.",
     "fields": [
       {
         "name": "Configureer Verjaardag",

@@ -1,54 +1,51 @@
 {
-  "birthdayDescription": "Polecenia zarządzania urodzinami",
   "birthdayName": "urodziny",
-  "listDescription": "Lista wszystkich zarejestrowanych urodzin",
-  "listName": "lista",
-  "removeDescription": "Usuń swoje urodziny",
-  "removeName": "usunąć",
-  "showDescription": "Pokaż swoje urodziny",
-  "showName": "pokazywać",
-  "testDescription": "Przetestuj swoje aktualne konfiguracje urodzinowe",
-  "testName": "test",
-  "remove": {
-    "hasNotPermissionManagesRoles": "Nie masz uprawnień do usuwania urodzin",
-    "hasNotPermissionToManageThisUser": "Nie masz uprawnień do usunięcia urodzin tego użytkownika.",
-    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
-    "success_target": "Urodziny użytkownika {target}} zostały pomyślnie usunięte.",
-    "userDescription": "Usuń urodziny dla osoby — TYLKO MENEDŻER",
-    "userName": "użytkownik",
-    "notRegistered": "Twoje urodziny nie są zarejestrowane. Użyj {{command}}, aby go zarejestrować.",
-    "notRegistered_target-manager": "Urodziny {{target}} nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
-    "success": "Twoje urodziny zostały pomyślnie usunięte."
-  },
-  "show": {
-    "description_target": "{{emoji}} {{target}} obchodzi urodziny {{date}}.",
-    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
-    "title": "{{emoji}} Urodziny",
-    "userDescription": "Pokaż urodziny dla osoby – TYLKO MENEDŻER",
-    "userName": "użytkownik",
-    "description": "{{emoji}} Twoje urodziny są {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}} obchodzi urodziny {{date}}. \nJeśli chcesz to zmienić, użyj {{command}}.",
-    "notRegistered_target-manager": "Urodziny {{target}} nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
-    "notRegistered": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować."
-  },
-  "test": {
-    "userDescription": "Przetestuj Urodziny dla Osoby - TYLKO MENEDŻER",
-    "userName": "użytkownik"
-  },
+  "birthdayDescription": "Polecenia zarządzania urodzinami",
+  "setName": "definiować",
+  "setDescription": "Ustaw datę swoich urodzin na serwerze.",
   "set": {
-    "hasNotPermissionManagesRoles": "Nie masz uprawnień do zarządzania urodzinami innych użytkowników.",
-    "hasNotPermissionToManageThisUser": "Nie możesz hierarchicznie zarządzać datami urodzin użytkowników znajdujących się nad Tobą.",
-    "dayDescription": "Którego dnia się urodziłeś?",
     "dayName": "dzień",
-    "monthDescription": "Jaki jest Twój miesiąc urodzin?",
+    "dayDescription": "Którego dnia się urodziłeś?",
     "monthName": "miesiąc",
+    "monthDescription": "Jaki jest Twój miesiąc urodzin?",
+    "yearName": "rok",
+    "yearDescription": "W którym roku się urodziłeś?",
+    "userName": "użytkownik",
+    "userDescription": "Dla jakiego użytkownika chcesz ustawić datę urodzenia? - TYLKO MENEDŻER.",
     "success": "Twoje urodziny zostały ustawione na {{date}} na tym serwerze.",
     "success_target": "Data urodzin {{target}} została pomyślnie ustawiona na {{date}} na tym serwerze",
-    "userDescription": "Dla jakiego użytkownika chcesz ustawić datę urodzenia? - TYLKO MENEDŻER.",
-    "userName": "użytkownik",
-    "yearDescription": "W którym roku się urodziłeś?",
-    "yearName": "rok"
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do zarządzania urodzinami innych użytkowników.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Ustaw datę swoich urodzin na serwerze.",
-  "setName": "definiować"
+  "listName": "lista",
+  "listDescription": "Lista wszystkich zarejestrowanych urodzin",
+  "removeName": "usunąć",
+  "removeDescription": "Usuń swoje urodziny",
+  "remove": {
+    "userName": "użytkownik",
+    "userDescription": "Usuń urodziny dla osoby — TYLKO MENEDŻER",
+    "success": "Twoje urodziny zostały pomyślnie usunięte.",
+    "success_target": "Urodziny użytkownika {target}} zostały pomyślnie usunięte.",
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. Użyj {{command}}, aby go zarejestrować.",
+    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
+    "hasNotPermissionManagesRoles": "Nie masz uprawnień do usuwania urodzin",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "pokazywać",
+  "showDescription": "Pokaż swoje urodziny",
+  "show": {
+    "userName": "użytkownik",
+    "userDescription": "Pokaż urodziny dla osoby – TYLKO MENEDŻER",
+    "title": "{{emoji}} Urodziny",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
+    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane."
+  },
+  "testName": "test",
+  "testDescription": "Przetestuj swoje aktualne konfiguracje urodzinowe",
+  "test": {
+    "userName": "użytkownik",
+    "userDescription": "Przetestuj Urodziny dla Osoby - TYLKO MENEDŻER"
+  }
 }

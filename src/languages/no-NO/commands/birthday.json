@@ -1,56 +1,51 @@
 {
-  "birthdayDescription": "Bursdagsledelse kommandoer",
   "birthdayName": "fødselsdag",
-  "listDescription": "Liste over alle registrerte bursdager",
-  "listName": "liste",
-  "removeDescription": "Fjern bursdagen din",
-  "removeName": "fjerne",
-  "showDescription": "Vis bursdagen din",
-  "showName": "forestilling",
-  "testDescription": "Test dine nåværende bursdagskonfigurasjoner",
-  "testName": "test",
-  "register": {},
-  "remove": {
-    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å fjerne fødselsdager",
-    "hasNotPermissionToManageThisUser": "Du har ikke tillatelse til å fjerne denne brukerens fødselsdag.",
-    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
-    "success_target": "Fødselsdagen til {target}} ble fjernet.",
-    "userDescription": "Fjern en bursdag for en person - KUN MANAGER",
-    "userName": "bruker",
-    "notRegistered": "Bursdagen din er ikke registrert. Bruk {{command}} for å registrere den.",
-    "notRegistered_target-manager": "{{target}}s fødselsdag er ikke registrert. \nBruk {{command}} for å registrere den.",
-    "success": "Fødselsdagen din ble fjernet."
-  },
-  "show": {
-    "description_target": "{{emoji}} {{target}} har bursdag {{date}}.",
-    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
-    "title": "{{emoji}} Bursdag",
-    "userDescription": "Vis en bursdag for en person - KUN LEDER",
-    "userName": "bruker",
-    "description": "{{emoji}} Bursdagen din er {{date}}.",
-    "description_target-manager": "{{emoji}} {{target}} har bursdag {{date}}. \nHvis du vil endre det, bruk {{kommando}}.",
-    "notRegistered_target-manager": "{{target}}s fødselsdag er ikke registrert. \nBruk {{command}} for å registrere den.",
-    "notRegistered": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den."
-  },
-  "test": {
-    "userDescription": "Test en bursdag for en person - KUN MANAGER",
-    "userName": "bruker"
-  },
-  "update": {},
+  "birthdayDescription": "Bursdagsledelse kommandoer",
+  "setName": "definere",
+  "setDescription": "Still inn bursdagsdatoen din på serveren.",
   "set": {
-    "hasNotPermissionManagesRoles": "Du har ikke lov til å administrere andre brukeres fødselsdager.",
-    "hasNotPermissionToManageThisUser": "Du kan ikke administrere bursdagene til brukere over deg hierarkisk.",
-    "dayDescription": "Hvilken dag ble du født?",
     "dayName": "dag",
-    "monthDescription": "Hva er bursdagsmåneden din?",
+    "dayDescription": "Hvilken dag ble du født?",
     "monthName": "måned",
+    "monthDescription": "Hva er bursdagsmåneden din?",
+    "yearName": "år",
+    "yearDescription": "Hvilket år er du født?",
+    "userName": "bruker",
+    "userDescription": "Hvilken bruker vil du angi fødselsdato for? - KUN LEDER.",
     "success": "Fødselsdagen din er satt til {{date}} på denne serveren.",
     "success_target": "{{target}}s fødselsdag ble satt til {{date}} på denne serveren",
-    "userDescription": "Hvilken bruker vil du angi fødselsdato for? - KUN LEDER.",
-    "userName": "bruker",
-    "yearDescription": "Hvilket år er du født?",
-    "yearName": "år"
+    "hasNotPermissionManagesRoles": "Du har ikke lov til å administrere andre brukeres fødselsdager.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Still inn bursdagsdatoen din på serveren.",
-  "setName": "definere"
+  "listName": "liste",
+  "listDescription": "Liste over alle registrerte bursdager",
+  "removeName": "fjerne",
+  "removeDescription": "Fjern bursdagen din",
+  "remove": {
+    "userName": "bruker",
+    "userDescription": "Fjern en bursdag for en person - KUN MANAGER",
+    "success": "Fødselsdagen din ble fjernet.",
+    "success_target": "Fødselsdagen til {target}} ble fjernet.",
+    "notRegistered": "Bursdagen din er ikke registrert. Bruk {{command}} for å registrere den.",
+    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert.",
+    "hasNotPermissionManagesRoles": "Du har ikke tillatelse til å fjerne fødselsdager",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "forestilling",
+  "showDescription": "Vis bursdagen din",
+  "show": {
+    "userName": "bruker",
+    "userDescription": "Vis en bursdag for en person - KUN LEDER",
+    "title": "{{emoji}} Bursdag",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Bursdagen din er ikke registrert. \nBruk {{command}} for å registrere den.",
+    "notRegistered_target": "{{target}}s fødselsdag er ikke registrert."
+  },
+  "testName": "test",
+  "testDescription": "Test dine nåværende bursdagskonfigurasjoner",
+  "test": {
+    "userName": "bruker",
+    "userDescription": "Test en bursdag for en person - KUN MANAGER"
+  }
 }
