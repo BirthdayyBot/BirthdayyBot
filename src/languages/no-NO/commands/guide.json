@@ -1,21 +1,21 @@
 {
   "guideName": "guide",
-  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
+  "guideDescription": "Trenger en rask oppsettguide! Ikke bekymre deg, dette vil hjelpe deg!",
   "embed": {
-    "title": "{{emoji.heart}} {{name}} Guide!",
-    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
+    "title": "{{emoji.heart}} {{name}} Veiledning!",
+    "description": "{{emoji.exclamation}} Ved å skrive **/help** i chatten kan du sjekke ut alle funksjonene mine og tilgjengelige kommandoer.",
     "fields": [
       {
-        "name": "Get Started",
-        "value": "{{emoji.exclamation}} Set your Birthday with {{command.set}}\n{{emoji.arrowRight}} Find more on [Documentation]({{quickstart}})"
+        "name": "Konfigurer Birthdayy",
+        "value": "{{emoji}} Sørg for å angi **serverkonfigurasjonene** med **/config <config>**!\n{{emoji}} Bruk {{kommando}} for å se gjeldende konfigurasjonsinnstilling."
       },
       {
-        "name": "Configure Birthdayy",
-        "value": "{{emoji.exclamation}} Make sure to set your **Serverconfigurations** with **/config <config>**!\n{{emoji.arrowRight}} Use {{command.list}} to see your current config setting."
+        "name": "Viktig",
+        "value": "{{emojis.exclamation}} Min **høyeste** rolle må være **over** bursdagsbarnrollen.\n{{emojis.arrowRight}} Bli med i [Birthdayy HQ]({{invite}}) for å møte utvikleren og hjelpe til med å forbedre Birthdayy {{emojis.cake}}\n{{emojis.heart}} Liker du **bursdag**? \nVurder å [invitere]({{invitere}}) og [stemme]({{stemme}}) for meg!\n{{emojis.plus}} Vil du ha tilgang til betafunksjoner? \n[Støtt oss på Patreon]({{premium}})"
       },
       {
-        "name": "Important",
-        "value": "{{emojis.exclamation}} My **highest** Role needs to be **above** the birthday child role.\n{{emojis.arrowRight}} Join the [Birthdayy HQ]({{invite}}) to meet the Developer and help improving Birthdayy {{emojis.cake}} \n{{emojis.heart}} Like **Birthdayy**? Consider [inviting]({{invite}}) and [voting]({{vote}}) for me!\n{{emojis.plus}} Want access to beta features? [Support us on Patreon]({{premium}})"
+        "name": "Kom i gang",
+        "value": "{{emoji}} Registrer bursdagen din med {{command}}\n{{emoji}} Finn mer på [Dokumentasjon]({{url}})"
       }
     ]
   }
