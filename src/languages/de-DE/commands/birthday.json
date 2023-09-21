@@ -1,49 +1,51 @@
 {
-  "birthdayDescription": "Befehle zur Geburtstagsverwaltung",
-  "birthdayName": "geburtstag",
-  "listDescription": "Listen Sie alle registrierten Geburtstage auf",
-  "listName": "liste",
-  "remove": {
-    "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu entfernen",
-    "notRegistered": "Ihr Geburtstag ist nicht registriert. Verwenden Sie {{command}}, um es zu registrieren.",
-    "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
-    "success": "Ihr Geburtstag wurde erfolgreich entfernt.",
-    "success_target": "Der Geburtstag von {target}} wurde erfolgreich entfernt.",
-    "target": "Sie sind nicht berechtigt, den Geburtstag dieses Benutzers zu löschen.",
-    "userDescription": "Entfernen Sie einen Geburtstag für eine Person – NUR MANAGER",
-    "userName": "benutzer"
-  },
-  "removeDescription": "Entfernen Sie Ihren Geburtstag",
-  "removeName": "entfernen",
+  "birthdayName": "birthday",
+  "birthdayDescription": "Birthday Management Commands",
+  "setName": "set",
+  "setDescription": "Set your birthday date on the server.",
   "set": {
-    "dayDescription": "An welchem ​​Tag wurdest du geboren?",
-    "dayName": "tag",
-    "hasNotPermissionManagesRoles": "Es ist Ihnen nicht gestattet, die Geburtstage anderer Benutzer zu verwalten.",
-    "monthDescription": "Was ist dein Geburtstagsmonat?",
-    "monthName": "monat",
-    "roleHigher": "Das ausgewählte Mitglied hat eine Rollenposition, die höher oder gleich Ihrer ist",
-    "success": "Ihr Geburtstag wurde auf diesem Server auf den {{date}} gesetzt.",
-    "success_target": "Der Geburtstag von {{target}} wurde auf diesem Server auf {{date}} gesetzt",
-    "userDescription": "Für welchen Benutzer möchten Sie das Geburtsdatum festlegen? - NUR MANAGER.",
-    "userName": "benutzer",
-    "yearDescription": "In welchem ​​Jahr bist du geboren?",
-    "yearName": "jahr"
+    "dayName": "day",
+    "dayDescription": "What day were you born?",
+    "monthName": "month",
+    "monthDescription": "What is your birthday month?",
+    "yearName": "year",
+    "yearDescription": "Which year are you born ?",
+    "userName": "user",
+    "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
+    "success": "Your birthday has been set to {{date}} on this server.",
+    "success_target": "{{target}}'s birthday was set to {{date}} on this server",
+    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Legen Sie Ihr Geburtstagsdatum auf dem Server fest.",
-  "setName": "definieren",
+  "listName": "list",
+  "listDescription": "List all registered birthdays",
+  "removeName": "remove",
+  "removeDescription": "Remove your birthday",
+  "remove": {
+    "userName": "user",
+    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
+    "success": "Your birthday was successfully removed.",
+    "success_target": "{target}}'s birthday was successfully removed.",
+    "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered.",
+    "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "show",
+  "showDescription": "Show your birthday",
   "show": {
-    "notRegistered": "Ihr Geburtstag ist nicht registriert. \nVerwenden Sie {{command}}, um es zu registrieren.",
-    "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
-    "title": "{{emoji}} Geburtstag",
-    "userDescription": "Zeigen Sie einen Geburtstag für eine Person an – NUR FÜR MANAGER",
-    "userName": "benutzer"
+    "userName": "user",
+    "userDescription": "Show this user's birthday - MANAGER ONLY",
+    "title": "{{emoji}} Birthday",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered."
   },
-  "showDescription": "Zeigen Sie Ihren Geburtstag",
-  "showName": "zeigen",
+  "testName": "test",
+  "testDescription": "Test your current birthday setup",
   "test": {
-    "userDescription": "Testen Sie einen Geburtstag für eine Person – NUR MANAGER",
-    "userName": "benutzer"
-  },
-  "testDescription": "Testen Sie Ihre aktuellen Geburtstagskonfigurationen",
-  "testName": "prüfen"
+    "userName": "user",
+    "userDescription": "Test this user's birthday - MANAGER ONLY"
+  }
 }
