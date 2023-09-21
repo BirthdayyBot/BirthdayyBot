@@ -1,49 +1,51 @@
 {
-  "birthdayDescription": "Commandes de gestion d’anniversaire",
-  "birthdayName": "anniversaire",
-  "listDescription": "Lister tous les anniversaires enregistrés",
-  "listName": "liste",
-  "remove": {
-    "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de supprimer des anniversaires",
-    "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
-    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
-    "success": "Votre anniversaire a été supprimé avec succès.",
-    "success_target": "L'anniversaire de {{target}} à bien été supprimé.",
-    "target": "Vous n'êtes pas autorisé à supprimer l'anniversaire de cet utilisateur.",
-    "userDescription": "Supprimer l'anniversaire pour cette utilisateur - MANAGER ONLY",
-    "userName": "user"
-  },
-  "removeDescription": "Supprimer votre anniversaire",
-  "removeName": "retirer",
+  "birthdayName": "birthday",
+  "birthdayDescription": "Birthday Management Commands",
+  "setName": "set",
+  "setDescription": "Set your birthday date on the server.",
   "set": {
-    "dayDescription": "Quel jour es-tu née ?",
-    "dayName": "jour",
-    "hasNotPermissionManagesRoles": "Tu n'est pas autorisé à gérer les anniversaires d'autres utilisateurs.",
-    "monthDescription": "Quel est votre mois d'anniversaire ?",
-    "monthName": "mois",
-    "roleHigher": "Le membre sélectionné occupe un poste supérieur ou égal au vôtre",
-    "success": "Votre anniversaire a bien été défini au {{date}} sur ce serveur.",
-    "success_target": "L'anniversaire de {{target}} a bien été défini au {{date}} sur ce serveur",
-    "userDescription": "De quel utilisateur veux-tu définir la date de naissance ? - MANAGER ONLY.",
-    "userName": "utilisateur",
-    "yearDescription": "En quelle année es-tu né ?",
-    "yearName": "année"
+    "dayName": "day",
+    "dayDescription": "What day were you born?",
+    "monthName": "month",
+    "monthDescription": "What is your birthday month?",
+    "yearName": "year",
+    "yearDescription": "Which year are you born ?",
+    "userName": "user",
+    "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
+    "success": "Your birthday has been set to {{date}} on this server.",
+    "success_target": "{{target}}'s birthday was set to {{date}} on this server",
+    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Définir votre date d'anniversaire sur le serveur.",
-  "setName": "definir",
+  "listName": "list",
+  "listDescription": "List all registered birthdays",
+  "removeName": "remove",
+  "removeDescription": "Remove your birthday",
+  "remove": {
+    "userName": "user",
+    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
+    "success": "Your birthday was successfully removed.",
+    "success_target": "{target}}'s birthday was successfully removed.",
+    "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered.",
+    "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "show",
+  "showDescription": "Show your birthday",
   "show": {
-    "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
-    "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
-    "title": "{{emoji}} Anniversaire",
-    "userDescription": "Montrer l'anniversaire de cette utilisateur - MANAGER ONLY",
-    "userName": "utilisateur"
+    "userName": "user",
+    "userDescription": "Show this user's birthday - MANAGER ONLY",
+    "title": "{{emoji}} Birthday",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered."
   },
-  "showDescription": "Montrer votre anniversaire",
-  "showName": "montrer",
+  "testName": "test",
+  "testDescription": "Test your current birthday setup",
   "test": {
-    "userDescription": "Tester l'anniversaire de cet utilisateur - MANAGER ONLY",
-    "userName": "utilisateur"
-  },
-  "testDescription": "Testez votre configuration d’anniversaire actuelle",
-  "testName": "test"
+    "userName": "user",
+    "userDescription": "Test this user's birthday - MANAGER ONLY"
+  }
 }
