@@ -1,21 +1,21 @@
 {
   "guideName": "guide",
-  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
+  "guideDescription": "Besoin d'un guide d'installation rapide ! Ne vous inquiétez pas, cela vous aidera !",
   "embed": {
-    "title": "{{emoji.heart}} {{name}} Guide!",
-    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
+    "title": "{{emoji.heart}} {{name}} Guide !",
+    "description": "{{emoji.exclamation}} En tapant **/help** dans le chat, vous pouvez consulter toutes mes fonctionnalités et commandes disponibles.",
     "fields": [
       {
-        "name": "Get Started",
-        "value": "{{emoji.exclamation}} Set your Birthday with {{command.set}}\n{{emoji.arrowRight}} Find more on [Documentation]({{quickstart}})"
-      },
-      {
-        "name": "Configure Birthdayy",
-        "value": "{{emoji.exclamation}} Make sure to set your **Serverconfigurations** with **/config <config>**!\n{{emoji.arrowRight}} Use {{command.list}} to see your current config setting."
+        "name": "Configurer l'anniversaire",
+        "value": "{{emoji}} Assurez-vous de définir vos **configurations de serveur** avec **/config <config>** !\n{{emoji}} Utilisez {{command}} pour voir votre paramètre de configuration actuel."
       },
       {
         "name": "Important",
-        "value": "{{emojis.exclamation}} My **highest** Role needs to be **above** the birthday child role.\n{{emojis.arrowRight}} Join the [Birthdayy HQ]({{invite}}) to meet the Developer and help improving Birthdayy {{emojis.cake}} \n{{emojis.heart}} Like **Birthdayy**? Consider [inviting]({{invite}}) and [voting]({{vote}}) for me!\n{{emojis.plus}} Want access to beta features? [Support us on Patreon]({{premium}})"
+        "value": "{{emojis.exclamation}} Mon rôle **le plus élevé** doit être **au-dessus** du rôle de l'enfant fêté.\n{{emojis.arrowRight}} Rejoignez le [Birthdayy HQ]({{invite}}) pour rencontrer le développeur et contribuer à l'amélioration de Birthdayy {{emojis.cake}}\n{{emojis.heart}} Vous aimez **Anniversaire** ? \nPensez à [inviter]({{invite}}) et [voter]({{vote}}) pour moi !\n{{emojis.plus}} Vous voulez accéder aux fonctionnalités bêta ? \n[Soutenez-nous sur Patreon]({{premium}})"
+      },
+      {
+        "name": "Commencer",
+        "value": "{{emoji}} Enregistrez votre anniversaire avec {{command}}\n{{emoji}} En savoir plus sur [Documentation]({{url}})"
       }
     ]
   }
