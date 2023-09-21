@@ -1,10 +1,10 @@
 {
-  "birthdayyList": "Liste d'anniversaire",
-  "discordInfo": "Informations sur le serveur",
+  "supportDiscord": "Support Discord",
   "docsBirthday": "Documentation",
-  "guildConfig": "Configuration du serveur",
-  "inviteBithdayy": "Inviter Birthdayy",
-  "remindeMe": "⏰ Rappelez-moi dans 12 heures",
-  "supportDiscord": "Discord de soutien",
-  "website": "Site Internet"
+  "inviteBithdayy": "Invite Birthdayy",
+  "remindeMe": "⏰ Remind Me in 12hrs",
+  "website": "Website",
+  "birthdayyList": "Birthdayy List",
+  "guildConfig": "Guild Config",
+  "discordInfo": "Discord Info"
 }
