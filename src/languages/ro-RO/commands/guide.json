@@ -1,12 +1,9 @@
 {
-  "guideDescription": "Aveți nevoie de un Ghid de configurare rapidă! Nu-ți face griji, asta te va ajuta!",
   "guideName": "ghid",
-  "embedConfigField": {},
-  "embedImportantField": {},
-  "embedStartedField": {},
+  "guideDescription": "Aveți nevoie de un Ghid de configurare rapidă! Nu-ți face griji, asta te va ajuta!",
   "embed": {
-    "description": "{{emoji.exclamation}} Tastând **/help** în chat, puteți verifica toate funcțiile mele și comenzile disponibile.",
     "title": "Ghid pentru {{emoji.heart}} {{name}}!",
+    "description": "{{emoji.exclamation}} Tastând **/help** în chat, puteți verifica toate funcțiile mele și comenzile disponibile.",
     "fields": [
       {
         "name": "Configurați ziua de naștere",
