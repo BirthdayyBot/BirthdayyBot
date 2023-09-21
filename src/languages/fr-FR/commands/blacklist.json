@@ -1,27 +1,27 @@
 {
+  "blacklistName": "blacklist",
+  "blacklistDescription": "Blacklist user management commands",
+  "addName": "add",
+  "addDescription": "Add a user to the blacklist",
   "add": {
-    "alReadyBlacklisted": "{{user}} est déjà sur la liste noire.",
-    "success": "{{user}} a été mis sur liste noire avec succès",
-    "userDescription": "L'utilisateur à ajouter à la liste noire",
-    "userName": "utilisateur",
-    "cannotBlacklistSelf": "Vous ne pouvez pas vous mettre sur liste noire"
+    "userName": "user",
+    "userDescription": "The user to add to the blacklist",
+    "success": "{{user}} has been successfully blacklisted",
+    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
+    "cannotBlacklistSelf": "You can't blacklist yourself"
   },
-  "addDescription": "Ajouter un utilisateur à la liste noire",
-  "addName": "ajouter",
-  "blacklistDescription": "Commandes de gestion des utilisateurs de la liste noire",
-  "blacklistName": "liste-noire",
+  "listName": "list",
+  "listDescription": "List all users on the blacklist",
   "list": {
-    "title": "Utilisateur sur liste noire",
-    "empty": "Il n’y a aucun utilisateur sur liste noire pour le moment."
+    "empty": "There are no blacklisted users at the moment.",
+    "title": "Blacklisted user"
   },
-  "listDescription": "Lister tous les utilisateurs sur la liste noire",
-  "listName": "liste",
+  "removeName": "remove",
+  "removeDescription": "Remove a user from the blacklist",
   "remove": {
-    "notFound": "{{user}} n'est pas sur la liste noire",
-    "success": "{{user}} a été supprimé avec succès de la liste noire",
-    "userDescription": "L'utilisateur à supprimer de la liste noire",
-    "userName": "utilisateur"
-  },
-  "removeDescription": "Supprimer un utilisateur de la liste noire",
-  "removeName": "retirer"
+    "userName": "user",
+    "userDescription": "The user to remove from the blacklist",
+    "success": "{{user}} has been successfully removed from the blacklist",
+    "notFound": "{{user}} is not blacklisted."
+  }
 }
