@@ -1,27 +1,27 @@
 {
+  "blacklistName": "blacklist",
+  "blacklistDescription": "Blacklist user management commands",
+  "addName": "add",
+  "addDescription": "Add a user to the blacklist",
   "add": {
-    "alReadyBlacklisted": "{{user}} staat al op de zwarte lijst.",
-    "success": "{{user}} is met succes op de zwarte lijst gezet",
-    "userDescription": "De gebruiker die aan de zwarte lijst moet worden toegevoegd",
-    "userName": "gebruiker",
-    "cannotBlacklistSelf": "Je kunt jezelf niet op de zwarte lijst zetten"
+    "userName": "user",
+    "userDescription": "The user to add to the blacklist",
+    "success": "{{user}} has been successfully blacklisted",
+    "alReadyBlacklisted": "{{user}} is already on the blacklist.",
+    "cannotBlacklistSelf": "You can't blacklist yourself"
   },
-  "addDescription": "Voeg een gebruiker toe aan de zwarte lijst",
-  "addName": "toevoegen",
-  "blacklistDescription": "Opdrachten voor gebruikersbeheer op de zwarte lijst zetten",
-  "blacklistName": "zwarte-lijst",
+  "listName": "list",
+  "listDescription": "List all users on the blacklist",
   "list": {
-    "title": "Gebruiker op de zwarte lijst",
-    "empty": "Er zijn momenteel geen gebruikers op de zwarte lijst."
+    "empty": "There are no blacklisted users at the moment.",
+    "title": "Blacklisted user"
   },
-  "listDescription": "Maak een lijst van alle gebruikers op de zwarte lijst",
-  "listName": "lijst",
+  "removeName": "remove",
+  "removeDescription": "Remove a user from the blacklist",
   "remove": {
-    "notFound": "{{user}} staat niet op de zwarte lijst",
-    "success": "{{user}} is met succes verwijderd van de zwarte lijst",
-    "userDescription": "De gebruiker die van de zwarte lijst moet worden verwijderd",
-    "userName": "gebruiker"
-  },
-  "removeDescription": "Verwijder een gebruiker van de zwarte lijst",
-  "removeName": "verwijderen"
+    "userName": "user",
+    "userDescription": "The user to remove from the blacklist",
+    "success": "{{user}} has been successfully removed from the blacklist",
+    "notFound": "{{user}} is not blacklisted."
+  }
 }
