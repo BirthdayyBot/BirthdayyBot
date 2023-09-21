@@ -1,70 +1,96 @@
 {
-  "announcementChannel": {
-    "cannotPermissions": "Oh... sembra che non riesca a inviare un messaggio in questa stanza. Puoi dare un'occhiata?",
-    "channelDescription": "A quale salone devo inviare il messaggio di annuncio?",
-    "channelName": "canale",
-    "success": "La stanza degli annunci è stata definita su {{channel}}."
+  "timezone": {
+    "choices": {
+      "0": "Greenwich Mean Time | GMT | UTC +0",
+      "1": "Central European Time | CET | UTC +1",
+      "2": "Eastern European Time | EET | UTC +2",
+      "3": "Moscow Standard Time | MSK | UTC +3",
+      "4": "Gulf Standard Time | GST | UTC +4",
+      "5": "Pakistan Standard Time | PKT | UTC +5",
+      "6": "Bangladesh Standard Time | BST | UTC  6",
+      "7": "Indochina Time | ICT | UTC  7",
+      "8": "China Standard Time | CST | UTC +8",
+      "9": "Japan Standard Time | JST | UTC +9",
+      "10": "Australian Eastern Standard Time | AEST | UTC +10",
+      "11": "Solomon Island Time | SBT | UTC +11",
+      "12": "New Zealand Standard Time | NZST | UTC +12",
+      "-1": "Azores Time | AZOT | UTC -1",
+      "-2": "Fernando de Noronha Time | FNT | UTC -2",
+      "-3": "Amazon Time Zone | AMT | UTC -3",
+      "-4": "Atlantic Standard Time | AST | UTC -4",
+      "-5": "Eastern Standard Time | EST | UTC -5",
+      "-6": "Central Standard Time | CST | UTC -6",
+      "-7": "Mountain Standard Time | MST | UTC -7",
+      "-8": "Pacific Standard Time | PST | UTC -8",
+      "-9": "Alaska Standard Time | AKST | UTC -9",
+      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
+      "-11": "Niue Time | NUT | UTC -11"
+    },
+    "timezoneDescription": "What timezone are you in ?",
+    "timezoneName": "timezone",
+    "success": "The **timezone** has been set to {{timezone}}."
   },
-  "announcementChannelDescription": "Stanza in cui invierei un messaggio quando è il compleanno di un utente",
-  "announcementChannelName": "canale-di-annunci",
+  "announcementChannel": {
+    "cannotPermissions": "Oh... looks like I can't send a message in this channel. Can you take a look?",
+    "channelName": "channel",
+    "channelDescription": "Which salon should I send the announcement message to?",
+    "success": "The announcement channel has been defined on {{channel}}."
+  },
+  "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
+  "announcementChannelName": "announcement-channel",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
-    "messageName": "messaggio",
-    "requirePremium": "Questa funzione è attualmente nella __Fase Beta__ e **Solo Birthday Premium**.\nSe sei interessato a utilizzare questa e le funzionalità future già adesso, puoi supportare lo sviluppo su [Patreon]({{url}}).`),",
-    "success": "Il messaggio di annuncio è stato modificato.\n\n{{Messaggio}}"
+    "messageName": "message",
+    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium only**.\nIf you already want to use this feature and future ones, you can support development on [Patreon]({{url}}).`),",
+    "success": "The announcement message has been modified.\n\n{{message}}"
   },
-  "announcementMessageDescription": "Messaggio che invierei il giorno del compleanno di un utente.",
-  "announcementMessageName": "messaggio-annuncio",
+  "announcementMessageDescription": "Message I would send on a user's birthday.",
+  "announcementMessageName": "announcement-message",
   "birthdayRole": {
-    "highestBotRole": "Oh, non posso assegnare questo ruolo... Sembra che sia più alto del mio ruolo più alto.",
-    "roleDescription": "Ruolo che verrà assegnato all'utente nel giorno del suo compleanno",
-    "roleName": "ruolo",
-    "success": "Il ruolo del compleanno è stato impostato su {{role}}."
+    "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
+    "roleDescription": "Role that will be assigned to the user on their birthday",
+    "roleName": "role",
+    "success": "The birthday role has been set to {{role}}."
   },
-  "birthdayRoleDescription": "Ruolo assegnato all'utente nel giorno del suo compleanno",
-  "birthdayRoleName": "ruolo-di-compleanno",
-  "listName": "elenco",
-  "listDescription": "Elenca tutti i compleanni sul server",
+  "birthdayRoleDescription": "Role assigned to the user on their birthday",
+  "birthdayRoleName": "birthday-role",
+  "listDescription": "List all birthdays on the server",
+  "listName": "list",
   "overviewChannel": {
-    "cannotPermissions": "Non ho il permesso di postare su {{channel}}.",
-    "channelDescription": "Stanza su cui deve essere inviata e aggiornata la panoramica",
-    "channelName": "canale",
-    "success": "Imposta correttamente il canale di panoramica su {{channel}} e il [messaggio]({{message}})."
+    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
+    "channelDescription": "Channel where the preview should be sent and updated",
+    "channelName": "channel",
+    "success": "Overview channel successfully set to {{channel}} and new [message]({{message}})."
   },
-  "overviewChannelDescription": "Stanza in cui sono elencati i compleanni di tutti i server",
-  "overviewChannelName": "canale-panoramica",
+  "overviewChannelDescription": "Channel that lists all server birthdays",
+  "overviewChannelName": "overview-channel",
   "pingRole": {
-    "roleName": "ruolo",
-    "success": "Il ruolo della menzione è stato impostato su {{role}}.",
-    "roleDescription": "Quale ruolo devo menzionare nel messaggio di annuncio?"
+    "roleDescription": "What role should I mention in the announcement message?",
+    "roleName": "role",
+    "success": "The ping role has been set to {{role}}."
   },
-  "pingRoleDescription": "Menziona un ruolo nel giorno del compleanno di qualcuno",
-  "pingRoleName": "ruolo-ping",
+  "pingRoleDescription": "Mention a role on someone's birthday",
+  "pingRoleName": "ping-role",
   "reset": {
     "choices": {
-      "announcementChannel": "Canale di annunci",
-      "birthdayRole": "Ruolo del compleanno",
-      "birthdayPingRole": "Ruolo Ping Compleanno",
-      "overviewChannel": "Canale Panoramica",
-      "overviewMessage": "Messaggio di panoramica",
-      "logChannel": "Registra canale",
-      "timezone": "Fuso orario",
-      "announcementMessage": "Messaggio di annuncio"
+      "announcementChannel": "Announcement channel",
+      "birthdayPingRole": "Birthday Ping Role",
+      "birthdayRole": "Birthday role",
+      "logChannel": "News channel",
+      "overviewChannel": "Presentation channel",
+      "overviewMessage": "Introductory message",
+      "timezone": "Timezone",
+      "announcementMessage": "Announcement message"
     },
-    "configDescription": "Configurazione che desideri reimpostare",
+    "configDescription": "Configuration you want to reset",
     "configName": "config",
-    "error": "Si è verificato un errore durante il tentativo di reimpostare la configurazione di {{config}}.",
-    "success": "La configurazione {{config}} è stata reimpostata con successo."
+    "error": "An error occurred while trying to reset the {{config}} configuration.",
+    "success": "The configuration {{config}} has been successfully reset."
   },
-  "resetDescription": "Ripristina le impostazioni di configurazione del server",
-  "resetName": "ripristina",
-  "timezone": {
-    "success": "Il **fuso orario** è stato impostato su {{timezone}}.",
-    "timezoneDescription": "In che fuso orario ti trovi?",
-    "timezoneName": "fuso-orario"
-  },
-  "timezoneName": "fuso-orario",
-  "timezoneDescription": "Cambia il fuso orario quando Birthdayy augura buon compleanno.",
-  "configDescription": "Configurazione delle impostazioni del server",
+  "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
+  "timezoneName": "timezone",
+  "resetDescription": "Reset your server configuration settings",
+  "resetName": "reset",
+  "configDescription": "Configuring server settings",
   "configName": "config"
 }
