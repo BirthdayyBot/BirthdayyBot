@@ -1,8 +1,11 @@
 {
-  "inviteDescription": "Invita Birthdayy sul tuo server Discord!",
-  "inviteName": "invitare",
+  "inviteName": "invite",
+  "inviteDescription": "Invite Birthdayy to your Discord Server!",
   "embed": {
-    "title": "{{libro}} Invita {{nome}}",
-    "description": "{{arrowRight}} Fai clic sul pulsante in basso per invitare {{name}} sul tuo server Discord!"
+    "title": "{{book}} Invite {{name}}",
+    "description": "{{arrowRight}} Click on the Button below, to invite {{name}} to your Discord Server!",
+    "thumbnail": {
+      "url": "{{avatar}}"
+    }
   }
 }
