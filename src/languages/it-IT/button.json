@@ -1,10 +1,10 @@
 {
-  "birthdayyList": "Elenco dei compleanni",
-  "discordInfo": "Informazioni sulla discordia",
+  "supportDiscord": "Sostieni Discordia",
   "docsBirthday": "Documentazione",
-  "guildConfig": "Configurazione Gilda",
   "inviteBithdayy": "Invito compleanno",
   "remindeMe": "⏰ Ricordamelo tra 12 ore",
-  "supportDiscord": "Sostieni Discordia",
-  "website": "Sito web"
+  "website": "Sito web",
+  "birthdayyList": "Elenco dei compleanni",
+  "guildConfig": "Configurazione Gilda",
+  "discordInfo": "Informazioni sulla discordia"
 }
