@@ -26,71 +26,71 @@
       "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
       "-11": "Niue Time | NUT | UTC -11"
     },
-    "timezoneDescription": "What timezone are you in ?",
-    "timezoneName": "timezone",
-    "success": "The **timezone** has been set to {{timezone}}."
+    "timezoneDescription": "Dans quel fuseau horaire êtes-vous ?",
+    "timezoneName": "fuseau-horaire",
+    "success": "Le **fuseau horaire** a été défini sur {{timezone}}."
   },
   "announcementChannel": {
-    "cannotPermissions": "Oh... looks like I can't send a message in this channel. Can you take a look?",
-    "channelName": "channel",
-    "channelDescription": "Which salon should I send the announcement message to?",
-    "success": "The announcement channel has been defined on {{channel}}."
+    "cannotPermissions": "Oh... on dirait que je ne peux pas envoyer de message dans ce salon. Tu peux jeter un oeil?",
+    "channelName": "salon",
+    "channelDescription": "Dans quel salon doit-je envoyer le message d'annonce?",
+    "success": "Le salon d'annonce à bien été defini sur {{channel}}."
   },
-  "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
-  "announcementChannelName": "announcement-channel",
+  "announcementChannelDescription": "Salon où j'enverrais un message quand ce sera l'anniversaire d'un utilisateur",
+  "announcementChannelName": "salon-annonce",
   "announcementMessage": {
     "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
     "messageName": "message",
-    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium only**.\nIf you already want to use this feature and future ones, you can support development on [Patreon]({{url}}).`),",
-    "success": "The announcement message has been modified.\n\n{{message}}"
+    "requirePremium": "Cette fonctionnalité est actuellement en __Beta Stage__ et **Birthdayy Premium uniquement**.\nSi vous souhaitez déjà utiliser cette fonctionnalité et les futures, vous pouvez prendre en charge le développement sur [Patreon]({{url}}).`),",
+    "success": "Le message d'annonce à bien été modifier.\n{{message}}"
   },
-  "announcementMessageDescription": "Message I would send on a user's birthday.",
-  "announcementMessageName": "announcement-message",
+  "announcementMessageDescription": "Message que j'enverrais à l'anniversaire d'un utilisateur.",
+  "announcementMessageName": "message-annonce",
   "birthdayRole": {
-    "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
-    "roleDescription": "Role that will be assigned to the user on their birthday",
+    "highestBotRole": "Oh je ne peux pas attribuer ce rôle... On dirait qu'il est plus haut que mon rôle le plus haut.",
+    "roleDescription": "Rôle qui sera attribué à l'utilisateur le jour de son anniversaire",
     "roleName": "role",
-    "success": "The birthday role has been set to {{role}}."
+    "success": "Le rôle d'anniversaire a bien été defini sur {{role}}."
   },
-  "birthdayRoleDescription": "Role assigned to the user on their birthday",
-  "birthdayRoleName": "birthday-role",
-  "listDescription": "List all birthdays on the server",
+  "birthdayRoleDescription": "Rôle attribué à l'utilisateur le jour de son anniversaire",
+  "birthdayRoleName": "role-anniversaire",
+  "listDescription": "Liste tous les anniversaires sur le serveur",
   "listName": "list",
   "overviewChannel": {
-    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
-    "channelDescription": "Channel where the preview should be sent and updated",
-    "channelName": "channel",
-    "success": "Overview channel successfully set to {{channel}} and new [message]({{message}})."
+    "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
+    "channelDescription": "Salon sur lequel l'aperçu doit être envoyé et mis à jour",
+    "channelName": "salon",
+    "success": "Le salon d'apercu a bien été defini sur {{channel}} et le nouveau [message]({{message}})."
   },
-  "overviewChannelDescription": "Channel that lists all server birthdays",
-  "overviewChannelName": "overview-channel",
+  "overviewChannelDescription": "Salon qui répertorie tous les anniversaires du serveur",
+  "overviewChannelName": "salon-apercu",
   "pingRole": {
-    "roleDescription": "What role should I mention in the announcement message?",
+    "roleDescription": "Quel rôle doit-je mentionner dans le message d'annonce ?",
     "roleName": "role",
-    "success": "The ping role has been set to {{role}}."
+    "success": "Le rôle de mention a bien été defini sur {{role}}."
   },
-  "pingRoleDescription": "Mention a role on someone's birthday",
-  "pingRoleName": "ping-role",
+  "pingRoleDescription": "Mentionne un rôle le jour de l'anniversaire de quelqu'un",
+  "pingRoleName": "role-mention",
   "reset": {
     "choices": {
-      "announcementChannel": "Announcement channel",
-      "birthdayPingRole": "Birthday Ping Role",
-      "birthdayRole": "Birthday role",
-      "logChannel": "News channel",
-      "overviewChannel": "Presentation channel",
-      "overviewMessage": "Introductory message",
-      "timezone": "Timezone",
-      "announcementMessage": "Announcement message"
+      "announcementChannel": "Salon d'annonce",
+      "birthdayPingRole": "Rôle de mention",
+      "birthdayRole": "Rôle d'anniversaire",
+      "logChannel": "Salon de journal",
+      "overviewChannel": "Salon d'apercu",
+      "overviewMessage": "Message d'apercu",
+      "timezone": "Fuseau horaire",
+      "announcementMessage": "Message d'annonce"
     },
-    "configDescription": "Configuration you want to reset",
-    "configName": "config",
-    "error": "An error occurred while trying to reset the {{config}} configuration.",
-    "success": "The configuration {{config}} has been successfully reset."
+    "configDescription": "Configuration que vous souhaitez réinitialisez",
+    "configName": "configuration",
+    "error": "Une erreur s'est produite lors de la tentative de réinitialisation de la configuration {{config}}.",
+    "success": "La configuration {{config}} a bien été réinitialisée."
   },
-  "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
-  "timezoneName": "timezone",
-  "resetDescription": "Reset your server configuration settings",
-  "resetName": "reset",
-  "configDescription": "Configuring server settings",
+  "timezoneDescription": "Changez le fuseau horaire lorsque Birthdayy souhaite un joyeux anniversaire.",
+  "timezoneName": "fuseau-horaire",
+  "resetDescription": "Réinitialiser les paramètres de la configuration de votre serveur",
+  "resetName": "reinitialiser",
+  "configDescription": "Configuration des paramètres du serveur",
   "configName": "config"
 }
