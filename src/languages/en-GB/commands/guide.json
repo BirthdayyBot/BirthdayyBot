@@ -1,9 +1,9 @@
 {
-  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
   "guideName": "guide",
+  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
   "embed": {
-    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
     "title": "{{emoji.heart}} {{name}} Guide!",
+    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
     "fields": [
       {
         "name": "Configure Birthdayy",
