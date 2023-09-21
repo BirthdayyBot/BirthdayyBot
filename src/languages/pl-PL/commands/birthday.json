@@ -1,48 +1,51 @@
 {
-  "birthdayDescription": "Polecenia zarządzania urodzinami",
-  "birthdayName": "urodziny",
-  "listDescription": "Lista wszystkich zarejestrowanych urodzin",
-  "listName": "lista",
-  "remove": {
-    "hasNotPermissionManagesRoles": "Nie masz uprawnień do usuwania urodzin",
-    "notRegistered": "Twoje urodziny nie są zarejestrowane. Użyj {{command}}, aby go zarejestrować.",
-    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
-    "success": "Twoje urodziny zostały pomyślnie usunięte.",
-    "success_target": "Urodziny użytkownika {target}} zostały pomyślnie usunięte.",
-    "userDescription": "Usuń urodziny dla osoby — TYLKO MENEDŻER",
-    "userName": "użytkownik"
-  },
-  "removeDescription": "Usuń swoje urodziny",
-  "removeName": "usunąć",
+  "birthdayName": "birthday",
+  "birthdayDescription": "Birthday Management Commands",
+  "setName": "set",
+  "setDescription": "Set your birthday date on the server.",
   "set": {
-    "dayDescription": "Którego dnia się urodziłeś?",
-    "dayName": "dzień",
-    "hasNotPermissionManagesRoles": "Nie masz uprawnień do zarządzania urodzinami innych użytkowników.",
-    "monthDescription": "Jaki jest Twój miesiąc urodzin?",
-    "monthName": "miesiąc",
-    "roleHigher": "Wybrany członek ma pozycję wyższą lub równą Twojej",
-    "success": "Twoje urodziny zostały ustawione na {{date}} na tym serwerze.",
-    "success_target": "Data urodzin {{target}} została pomyślnie ustawiona na {{date}} na tym serwerze",
-    "userDescription": "Dla jakiego użytkownika chcesz ustawić datę urodzenia? - TYLKO MENEDŻER.",
-    "userName": "użytkownik",
-    "yearDescription": "W którym roku się urodziłeś?",
-    "yearName": "rok"
+    "dayName": "day",
+    "dayDescription": "What day were you born?",
+    "monthName": "month",
+    "monthDescription": "What is your birthday month?",
+    "yearName": "year",
+    "yearDescription": "Which year are you born ?",
+    "userName": "user",
+    "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
+    "success": "Your birthday has been set to {{date}} on this server.",
+    "success_target": "{{target}}'s birthday was set to {{date}} on this server",
+    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
+    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
   },
-  "setDescription": "Ustaw datę swoich urodzin na serwerze.",
-  "setName": "definiować",
+  "listName": "list",
+  "listDescription": "List all registered birthdays",
+  "removeName": "remove",
+  "removeDescription": "Remove your birthday",
+  "remove": {
+    "userName": "user",
+    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
+    "success": "Your birthday was successfully removed.",
+    "success_target": "{target}}'s birthday was successfully removed.",
+    "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered.",
+    "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
+    "target": "You do not have permission to delete this user's birthday."
+  },
+  "showName": "show",
+  "showDescription": "Show your birthday",
   "show": {
-    "notRegistered": "Twoje urodziny nie są zarejestrowane. \nUżyj {{command}}, aby go zarejestrować.",
-    "notRegistered_target": "Urodziny {{target}} nie są zarejestrowane.",
-    "title": "{{emoji}} Urodziny",
-    "userDescription": "Pokaż urodziny dla osoby – TYLKO MENEDŻER",
-    "userName": "użytkownik"
+    "userName": "user",
+    "userDescription": "Show this user's birthday - MANAGER ONLY",
+    "title": "{{emoji}} Birthday",
+    "success": "{{emoji}} Your birthday is at the {{date}}.",
+    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+    "notRegistered_target": "{{target}}'s birthday is not registered."
   },
-  "showDescription": "Pokaż swoje urodziny",
-  "showName": "pokazywać",
+  "testName": "test",
+  "testDescription": "Test your current birthday setup",
   "test": {
-    "userDescription": "Przetestuj Urodziny dla Osoby - TYLKO MENEDŻER",
-    "userName": "użytkownik"
-  },
-  "testDescription": "Przetestuj swoje aktualne konfiguracje urodzinowe",
-  "testName": "test"
+    "userName": "user",
+    "userDescription": "Test this user's birthday - MANAGER ONLY"
+  }
 }
