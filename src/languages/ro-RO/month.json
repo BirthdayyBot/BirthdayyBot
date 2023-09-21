@@ -1,14 +1,14 @@
 {
-  "april": "4. Aprilie",
-  "may": "5. Mai",
-  "june": "6. Iunie",
-  "july": "7. Iulie",
-  "august": "9. August",
-  "december": "12. Decembrie",
-  "november": "11. Noiembrie",
-  "october": "10. Octombrie",
-  "september": "9. Septembrie",
-  "february": "2. februarie",
-  "january": "1. ianuarie",
-  "march": "3. martie"
+  "january": "1 - January",
+  "february": "2 - February",
+  "march": "3 - March",
+  "april": "4 - April",
+  "may": "5 - May",
+  "june": "6 - June",
+  "july": "7 - July",
+  "august": "9 - August",
+  "september": "9 - September",
+  "october": "10 - October",
+  "november": "11 - November",
+  "december": "12 - December"
 }
