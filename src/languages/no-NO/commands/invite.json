@@ -1,9 +1,9 @@
 {
-  "inviteName": "invite",
-  "inviteDescription": "Invite Birthdayy to your Discord Server!",
+  "inviteName": "invitere",
+  "inviteDescription": "Inviter Birthdayy til Discord-serveren din!",
   "embed": {
-    "title": "{{book}} Invite {{name}}",
-    "description": "{{arrowRight}} Click on the Button below, to invite {{name}} to your Discord Server!",
+    "title": "{{bok}} Inviter {{name}}",
+    "description": "{{arrowRight}} Klikk på knappen nedenfor for å invitere {{name}} til Discord-serveren din!",
     "thumbnail": {
       "url": "{{avatar}}"
     }
