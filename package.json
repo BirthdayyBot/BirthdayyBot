@@ -78,7 +78,7 @@
     "bullmq": "^4.11.4",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.10",
-    "discord-api-types": "^0.37.56",
+    "discord-api-types": "^0.37.57",
     "discord.js": "^14.13.0",
     "i18next": "^23.5.1",
     "prisma": "^5.3.1",
