@@ -27,7 +27,7 @@
     "success": "Your birthday was successfully removed.",
     "success_target": "{target}}'s birthday was successfully removed.",
     "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
-    "notRegistered_target": "{{target}}'s birthday is not registered.",
+    "notRegistered_target": "{{target}}'s birthday is not yet registered.",
     "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
     "target": "You do not have permission to delete this user's birthday."
   },
