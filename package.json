@@ -85,7 +85,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
+    "@commitlint/cli": "^17.7.2",
     "@commitlint/config-conventional": "^17.7.0",
     "@sapphire/cli": "^1.6.1",
     "@sapphire/eslint-config": "^5.0.2",
