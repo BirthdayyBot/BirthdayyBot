@@ -1811,7 +1811,7 @@ __metadata:
     "@types/ws": ^8.5.6
     "@typescript-eslint/eslint-plugin": ^6.7.3
     "@typescript-eslint/parser": ^6.7.3
-    bullmq: ^4.11.4
+    bullmq: ^4.12.0
     colorette: ^2.0.20
     dayjs: ^1.11.10
     discord-api-types: ^0.37.58
@@ -1888,9 +1888,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^4.11.4":
-  version: 4.11.4
-  resolution: "bullmq@npm:4.11.4"
+"bullmq@npm:^4.12.0":
+  version: 4.12.0
+  resolution: "bullmq@npm:4.12.0"
   dependencies:
     cron-parser: ^4.6.0
     glob: ^8.0.3
@@ -1901,7 +1901,7 @@ __metadata:
     semver: ^7.5.4
     tslib: ^2.0.0
     uuid: ^9.0.0
-  checksum: 71c2a7e37c0a1003c81f3e3bed461778b841b3ce000601e6427cacd6da65c7ac936d5f42d37c86099c1f6534ffc7773d6ffdf3e23a927c3e427a4f5f4a53428f
+  checksum: 0be9608c032648d7025b0497ba86bc8be699387f28c710f5a0ff1e755fae604fd43d278f433ffb028fbaf9077726e55de7c94eae5cdc40a43711e577f104217a
   languageName: node
   linkType: hard
 
