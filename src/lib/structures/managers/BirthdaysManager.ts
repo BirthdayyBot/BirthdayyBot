@@ -3,10 +3,11 @@ import { Emojis } from '#utils/constants';
 import { defaultEmbed } from '#utils/embed';
 import { IMG_CAKE } from '#utils/environment';
 import { getSettings } from '#utils/functions/guilds';
+import { floatPromise } from '#utils/functions/promises';
 import { CollectionConstructor } from '@discordjs/collection';
-import { Birthday, Prisma } from '@prisma/client';
+import { Birthday, Guild, Prisma } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
-import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
+import { canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { Time } from '@sapphire/time-utilities';
 import { cast, isNullish } from '@sapphire/utilities';
@@ -14,7 +15,6 @@ import dayjs from 'dayjs';
 import {
 	Collection,
 	EmbedBuilder,
-	Guild,
 	Guild as GuildDiscord,
 	GuildMember,
 	MessageCreateOptions,
@@ -66,17 +66,31 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async announcedTodayBirthday() {
 		const birthdays = await this.findTodayBirthday();
 
-		return birthdays.forEach((birthday) => this.process(birthday));
+		for (const birthday of birthdays) floatPromise(this.announcedBirthday(birthday));
 	}
 
-	public async process(birthday: Birthday) {
+	public async announcedBirthday(birthday: Birthday) {
 		await this.annoncementQueue.wait();
 		try {
-			const options = await this.createOptionsMessageForAnnoncementChannel(birthday.userId);
-			await this.announcedTheBirthdayInChannel(options);
+			const settings = await getSettings(this.guild).fetch();
+			const member = await this.guild.members.fetch(birthday.userId);
+			const options = this.createOptionsMessageForAnnoncementChannel(settings, member);
+			await this.announceBirthdayInChannel(options, member);
+			await this.addCurrentBirthdayChildRole(settings, member);
 		} finally {
 			this.annoncementQueue.shift();
 		}
+	}
+
+	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
+		return birthdays.sort((firstBirthday, secondBirthday) => {
+			const firstBirthdayDate = dayjs(firstBirthday.birthday);
+			const secondBirthdayDate = dayjs(secondBirthday.birthday);
+
+			return firstBirthdayDate.month() === secondBirthdayDate.month()
+				? firstBirthdayDate.date() - secondBirthdayDate.date()
+				: firstBirthdayDate.month() - secondBirthdayDate.month();
+		});
 	}
 
 	public async create(data: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
@@ -142,7 +156,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return cast<CollectionConstructor>(Collection);
 	}
 
-	private formatBirthdayMessage(message: string, member: GuildMember, guild: Guild) {
+	private formatBirthdayMessage(message: string, member: GuildMember, guild: GuildDiscord) {
 		const placeholders = {
 			'{USERNAME}': member.user.username,
 			'{DISCRIMINATOR}': member.user.discriminator,
@@ -161,9 +175,10 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return formattedMessage;
 	}
 
-	private async createOptionsMessageForAnnoncementChannel(userId: string): Promise<MessageCreateOptions> {
-		const { announcementMessage, birthdayPingRole } = await getSettings(this.guild).fetch();
-		const member = await this.guild.members.fetch(userId);
+	private createOptionsMessageForAnnoncementChannel(
+		{ announcementMessage, birthdayPingRole }: Guild,
+		member: GuildMember,
+	): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
 			.setDescription(this.formatBirthdayMessage(announcementMessage, member, this.guild))
@@ -172,15 +187,62 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
 	}
 
-	private async announcedTheBirthdayInChannel(options: MessageCreateOptions) {
+	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
 		const { announcementChannel } = await getSettings(this.guild).fetch();
 
-		if (isNullish(announcementChannel)) return null;
+		if (isNullish(announcementChannel)) {
+			return container.logger.info(
+				`Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`,
+			);
+		}
 
-		const channel = this.guild.channels.resolve(announcementChannel);
+		try {
+			const channel = await this.guild.channels.fetch(announcementChannel);
 
-		if (isNullish(channel)) return null;
+			if (!channel) {
+				return container.logger.error(`Announcement channel (${announcementChannel}) does not exist.`);
+			}
 
-		return isGuildBasedChannel(channel) ? channel.send(options) : null;
+			if (isGuildBasedChannel(channel) && canSendEmbeds(channel)) {
+				const message = await channel.send(options);
+				container.logger.info(
+					`Birthday message for [${member.id}]${member.displayName} sent in channel ${message.channelId}.`,
+				);
+			} else {
+				container.logger.warn(`Cannot send a message with embeds in channel ${channel.id}.`);
+			}
+		} catch (error) {
+			container.logger.error(
+				`Error while announcing birthday for [${member.id}] ${member.displayName}: ${error}`,
+			);
+		}
+	}
+
+	private async addCurrentBirthdayChildRole(guild: Guild, member: GuildMember) {
+		const { birthdayRole } = guild;
+
+		if (isNullish(birthdayRole)) {
+			container.logger.info(`Birthday role is empty, so i can't`);
+			return;
+		}
+
+		try {
+			if (member.roles.cache.has(birthdayRole)) {
+				container.logger.info(`The user already has the role, so i can't `);
+			}
+
+			await member.roles.add(birthdayRole);
+			container.logger.info(`The Birthday Role ${birthdayRole} has been added to the member ${member.id} `);
+		} finally {
+			floatPromise(this.addRemoveBirthdayRoleTask(member, guild, birthdayRole));
+		}
+	}
+
+	private async addRemoveBirthdayRoleTask(member: GuildMember, guild: Guild, roleId: string) {
+		return container.tasks.create('BirthdayRoleRemoverTask', {
+			memberId: member.id,
+			guildId: guild.guildId,
+			roleId,
+		});
 	}
 }

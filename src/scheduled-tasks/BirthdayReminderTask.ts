@@ -4,6 +4,7 @@ import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG, Emojis, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
 import { logAll } from '#utils/functions/config';
+import { getBirthdays } from '#utils/functions/guilds';
 import { resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
@@ -13,21 +14,22 @@ import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import {
 	AttachmentBuilder,
+	codeBlock,
 	DiscordAPIError,
 	Guild,
 	GuildMember,
+	inlineCode,
 	RESTJSONErrorCodes,
 	Role,
-	ThreadAutoArchiveDuration,
-	codeBlock,
-	inlineCode,
 	roleMention,
+	ThreadAutoArchiveDuration,
 	userMention,
 	type APIEmbed,
 	type EmbedField,
 	type Snowflake,
 } from 'discord.js';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
+
 export interface BirthdayEventInfoModel {
 	userId: string;
 	guildId: string;
@@ -39,7 +41,19 @@ export interface BirthdayEventInfoModel {
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
-	public async run(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
+	public async run() {
+		const guilds = await container.client.guilds.fetch();
+		const announcements = [];
+
+		for (const [, guild] of guilds) {
+			const birthdays = getBirthdays(guild.id);
+			announcements.push(birthdays.announcedTodayBirthday());
+		}
+
+		await Promise.all(announcements);
+	}
+
+	public async runs(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
 		container.logger.debug('[BirthdayTask] Started');
 		if (birthdayEvent && Object.keys(birthdayEvent).length !== 0) {
 			if (birthdayEvent?.isTest) container.logger.debug('[BirthdayTask] Test Birthday Event run');

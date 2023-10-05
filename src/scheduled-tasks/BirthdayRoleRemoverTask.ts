@@ -10,9 +10,9 @@ export interface RoleRemovePayload {
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayRoleRemoverTask', bullJobsOptions: { removeOnComplete: true } })
 export class BirthdayRoleRemoverTask extends ScheduledTask {
-	public async run({ memberId: userId, guildId, roleId }: RoleRemovePayload) {
+	public async run({ memberId, guildId, roleId }: RoleRemovePayload) {
 		const guild = await this.container.client.guilds.fetch(guildId);
-		const member = await guild.members.fetch(userId);
+		const member = await guild.members.fetch(memberId);
 
 		return member.roles.remove(roleId, 'Birthday Role Removal');
 	}
