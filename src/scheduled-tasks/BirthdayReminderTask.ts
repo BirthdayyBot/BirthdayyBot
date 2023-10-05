@@ -1,11 +1,12 @@
-import { getGuildInformation, getGuildMember } from '#lib/discord/guild';
 import { sendMessage } from '#lib/discord/message';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG, Emojis, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
 import { logAll } from '#utils/functions/config';
+import { resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
+import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
@@ -15,6 +16,7 @@ import {
 	DiscordAPIError,
 	Guild,
 	GuildMember,
+	RESTJSONErrorCodes,
 	Role,
 	ThreadAutoArchiveDuration,
 	codeBlock,
@@ -26,7 +28,6 @@ import {
 	type Snowflake,
 } from 'discord.js';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
-import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 export interface BirthdayEventInfoModel {
 	userId: string;
 	guildId: string;
@@ -139,7 +140,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (birthdayPingRole) content = roleMention(birthdayPingRole);
 		if (birthdayPingRole === guildId) content = '@everyone';
 
-		const guild = await getGuildInformation(guildId);
+		const guild = await resolveOnErrorCodesDiscord(
+			container.client.guilds.fetch(guildId),
+			RESTJSONErrorCodes.UnknownGuild,
+		);
+
 		if (!guild) {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
@@ -153,7 +158,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			}
 			return eventInfo;
 		}
-		const member = await getGuildMember(guildId, userId);
+		const member = await resolveOnErrorCodesDiscord(guild.members.fetch(userId), RESTJSONErrorCodes.UnknownMember);
+
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {

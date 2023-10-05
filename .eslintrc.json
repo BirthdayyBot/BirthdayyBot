@@ -1,29 +1,19 @@
 {
-    "extends": [
-        "@sapphire",
-        "plugin:@sapphire/result/recommended"
-    ],
-    "rules": {
-        "radix": [
-            "warn",
-            "as-needed"
-        ],
-        "no-mixed-spaces-and-tabs": [
-            "error",
-            "smart-tabs"
-        ]
-    },
-    "parserOptions": {
-        "warnOnUnsupportedTypeScriptVersion": false
-    },
-    "overrides": [
-        {
-            "files": [
-                "src/commands/**/*.ts"
-            ],
-            "rules": {
-                "@typescript-eslint/require-await": 0
-            }
-        }
-    ]
+  "extends": ["@sapphire", "plugin:@sapphire/result/recommended"],
+  "rules": {
+    "@typescript-eslint/no-base-to-string": 0,
+    "@typescript-eslint/no-throw-literal": 0,
+    "no-catch-shadow": 0
+  },
+  "parserOptions": {
+    "warnOnUnsupportedTypeScriptVersion": false
+  },
+  "overrides": [
+    {
+      "files": ["src/commands/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/require-await": 0
+      }
+    }
+  ]
 }

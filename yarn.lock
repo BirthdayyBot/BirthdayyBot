@@ -1780,6 +1780,7 @@ __metadata:
     "@kaname-png/plugin-influxdb": ^1.2.0
     "@kaname-png/plugin-sentry": ^1.2.0
     "@prisma/client": ^5.3.1
+    "@sapphire/async-queue": ^1.5.0
     "@sapphire/cli": ^1.6.1
     "@sapphire/cron": ^1.1.1
     "@sapphire/decorators": ^6.0.2

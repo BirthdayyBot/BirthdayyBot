@@ -1,32 +1,43 @@
+import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
+import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { container } from '@sapphire/pieces';
-import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { DiscordAPIError, Guild, GuildMember, Role, type Snowflake } from 'discord.js';
+import { Guild, GuildResolvable } from 'discord.js';
 
-export async function getGuildInformation(guildId: Snowflake): Promise<Guild | null> {
-	return container.client.guilds.fetch(guildId).catch((error) => {
-		if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownGuild) return null;
-		container.logger.error(`Error fetching guild with id ${guildId}:`, error);
-		return null;
-	});
+interface GuildUtilities {
+	readonly guild: Guild;
+	readonly settings: SettingsManager;
+	readonly birthdays: BirthdaysManager;
 }
 
-export async function getGuildMember(guildId: Snowflake, userId: Snowflake): Promise<GuildMember | null> {
-	const guild = await getGuildInformation(guildId);
-	if (isNullOrUndefinedOrEmpty(guild) || isNullOrUndefinedOrEmpty(userId)) return null;
-	return guild.members.fetch(userId).catch((error) => {
-		if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMember) return null;
-		container.logger.error(`Error fetching guild member with id ${userId}:`, error);
-		return null;
-	});
+const cache = new WeakMap<Guild, GuildUtilities>();
+
+export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
+	const guild = resolveGuild(resolvable);
+	const previous = cache.get(guild);
+	if (previous !== undefined) return previous;
+
+	const entry: GuildUtilities = {
+		guild,
+		settings: new SettingsManager(guild),
+		birthdays: new BirthdaysManager(guild),
+	};
+
+	cache.set(guild, entry);
+
+	return entry;
 }
 
-export async function getGuildRole(guildId: Snowflake, roleId: Snowflake): Promise<Role | null> {
-	const guild = await getGuildInformation(guildId);
-	if (isNullOrUndefinedOrEmpty(guild)) return null;
-	return guild.roles.fetch(roleId).catch((error) => {
-		if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownRole) return null;
-		container.logger.error(`Error fetching guild role with id ${roleId}:`, error);
-		return null;
-	});
+export const getGuild = getProperty('guild');
+export const getSettings = getProperty('settings');
+export const getBirthdays = getProperty('birthdays');
+
+function getProperty<K extends keyof GuildUtilities>(property: K) {
+	return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];
+}
+
+function resolveGuild(resolvable: GuildResolvable): Guild {
+	const guild = container.client.guilds.resolve(resolvable);
+	if (guild === null) throw new TypeError(`${resolvable} resolved to null.`);
+
+	return guild;
 }

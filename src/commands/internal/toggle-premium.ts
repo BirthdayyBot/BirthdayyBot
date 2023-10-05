@@ -1,10 +1,9 @@
-import { getGuildInformation } from '#lib/discord';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
 import { generateDefaultEmbed, isNotCustom, reply } from '#utils';
-import { getCommandGuilds } from '#utils/functions';
+import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { bold, inlineCode } from 'discord.js';
+import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({
 	description: 'The current count of Guilds, Birthdays and Users',
@@ -37,7 +36,10 @@ export class TogglePremiumCommand extends CustomCommand {
 		const toggle = interaction.options.getBoolean('toggle', true);
 		const guildId = interaction.options.getString('guild-id', true);
 		// check if guild exists if not send error message
-		const guild = await getGuildInformation(guildId);
+		const guild = await resolveOnErrorCodesDiscord(
+			this.container.client.guilds.fetch(guildId),
+			RESTJSONErrorCodes.UnknownGuild,
+		);
 		if (!guild) {
 			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
 		}

@@ -1,38 +1,30 @@
 {
-    "editor.formatOnSave": true,
-    "[javascript]": {
-        "editor.formatOnSave": false
-    },
-    "editor.formatOnSaveMode": "file",
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "[json]": {
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    },
-    "[json]": {
-        "editor.codeActionsOnSave": {
-            "source.fixAll": false,
-            "source.fixAll.eslint": true
-        }
-    },
-    "files.eol": "\n",
-    "editor.detectIndentation": false,
-    "conventionalCommits.emojiFormat": "emoji",
-    "conventionalCommits.scopes": [
-        "bot",
-        "api",
-        "ci/cd"
-    ],
-    "turboConsoleLog.logFunction": "container.logger.info",
-    "turboConsoleLog.logMessagePrefix": "",
-    "turboConsoleLog.quote": "'",
-    "turboConsoleLog.wrapLogMessage": false,
-    "turboConsoleLog.includeFileNameAndLineNum": false,
-    "turboConsoleLog.addSemicolonInTheEnd": true,
-    "i18n-ally.sourceLanguage": "en-US",
-    "i18n-ally.localesPaths": [
-        "src/languages"
-    ],
-    "i18n-ally.keystyle": "nested",
-    "i18n-ally.enabledFrameworks": [
-        "sapphire-i18next"
-    ]
+      "source.fixAll": false,
+      "source.fixAll.eslint": true
+    }
+  },
+  "files.eol": "\n",
+  "editor.detectIndentation": false,
+  "conventionalCommits.emojiFormat": "emoji",
+  "conventionalCommits.scopes": ["bot", "api", "ci/cd"],
+  "turboConsoleLog.logFunction": "container.logger.info",
+  "turboConsoleLog.logMessagePrefix": "",
+  "turboConsoleLog.quote": "'",
+  "turboConsoleLog.wrapLogMessage": false,
+  "turboConsoleLog.includeFileNameAndLineNum": false,
+  "turboConsoleLog.addSemicolonInTheEnd": true,
+  "i18n-ally.sourceLanguage": "en-US",
+  "i18n-ally.localesPaths": ["src/languages"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.enabledFrameworks": ["sapphire-i18next"]
 }

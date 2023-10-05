@@ -51,6 +51,7 @@
     "@kaname-png/plugin-influxdb": "^1.2.0",
     "@kaname-png/plugin-sentry": "^1.2.0",
     "@prisma/client": "^5.3.1",
+    "@sapphire/async-queue": "^1.5.0",
     "@sapphire/cron": "^1.1.1",
     "@sapphire/decorators": "^6.0.2",
     "@sapphire/discord.js-utilities": "^7.0.2",

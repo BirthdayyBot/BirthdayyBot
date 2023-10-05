@@ -1,31 +1,18 @@
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "allowJs": true,
-        "outDir": "../dist",
-        "rootDir": ".",
-        "baseUrl": ".",
-        "paths": {
-            "#utils/*": [
-                "lib/utils/*.js"
-            ],
-            "#lib/*": [
-                "lib/*.js"
-            ],
-            "#languages": [
-                "languages/index.js"
-            ],
-            "#root/*": [
-                "*.js"
-            ]
-        },
-        "composite": true
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "../dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "#utils/*": ["lib/utils/*.js"],
+      "#lib/*": ["lib/*.js"],
+      "#languages": ["languages/index.js"],
+      "#root/*": ["*.js"]
     },
-    "include": [
-        ".",
-        "./**/*.json"
-    ],
-    "exclude": [
-        "./tsconfig.json"
-    ]
+    "composite": true
+  },
+  "include": [".", "./**/*.json"],
+  "exclude": ["./tsconfig.json"]
 }

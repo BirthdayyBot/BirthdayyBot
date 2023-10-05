@@ -1,7 +1,6 @@
-import { getGuildMember, getGuildRole } from '#lib/discord/guild';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import type { Snowflake } from 'discord.js';
+import { type Snowflake } from 'discord.js';
 
 export interface RoleRemovePayload {
 	memberId: Snowflake;
@@ -12,25 +11,9 @@ export interface RoleRemovePayload {
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayRoleRemoverTask', bullJobsOptions: { removeOnComplete: true } })
 export class BirthdayRoleRemoverTask extends ScheduledTask {
 	public async run({ memberId: userId, guildId, roleId }: RoleRemovePayload) {
-		const member = await getGuildMember(guildId, userId);
-		const role = await getGuildRole(guildId, roleId);
+		const guild = await this.container.client.guilds.fetch(guildId);
+		const member = await guild.members.fetch(userId);
 
-		if (!member)
-			this.container.logger.warn(`[BirthdayRoleRemoverTask]: Member undefined: ${JSON.stringify(member)}`);
-		if (!guildId)
-			this.container.logger.warn(`[BirthdayRoleRemoverTask]: GuildId undefined: ${JSON.stringify(guildId)}`);
-		if (!role) this.container.logger.warn(`[BirthdayRoleRemoverTask]: Role undefined: ${JSON.stringify(role)}`);
-		if (!member || !guildId || !role) return;
-		if (!member?.roles?.cache.has(roleId)) {
-			return this.container.logger.info(
-				`[BirthdayRoleRemoverTask]: Role ${roleId} not found on member ${userId}`,
-			);
-		}
-
-		await member.roles.remove(role, 'Birthday Role Removal').catch(() => null);
-		this.container.logger.debug(
-			`[BirthdayRoleRemoverTask]: Removed role ${roleId} from user ${userId}in guild ${guildId}`,
-		);
-		this.container.logger.info(`[BirthdayRoleRemoverTask] Removed role ${role.name} from user ${member.user.id}`);
+		return member.roles.remove(roleId, 'Birthday Role Removal');
 	}
 }

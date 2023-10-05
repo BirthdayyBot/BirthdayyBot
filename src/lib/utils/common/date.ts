@@ -1,9 +1,9 @@
-import { container } from '@sapphire/pieces';
+import { container } from '@sapphire/framework';
+import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
-import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
-import { addZeroToSingleDigitNumber, checkIfLengthIsTwo } from '#utils/common';
-import dayjs from 'dayjs';
+import { ChatInputCommandInteraction, Locale, TimestampStylesString, time } from 'discord.js';
+import { addZeroToSingleDigitNumber } from './string.js';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
@@ -15,27 +15,13 @@ export interface TimezoneObject {
 	timezone?: typeof TIMEZONE_VALUES;
 }
 
-/**
- * Get the current date in the specified timezone.
- * @param timezone - The timezone to use.
- * @returns  The date.
- */
-export function getCurrentDate(timezone = 'UTC'): import('dayjs').Dayjs {
-	const today = dayjs();
-	const date = dayjs.tz(today, timezone);
-	return date;
+export function getCurrentDateInLocaleTimezone(locale: Locale) {
+	const timezone = TimezoneWithLocale[locale];
+	return dayjs().tz(timezone);
 }
 
-/**
- * Get the current formatted date in the specified timezone.
- * @param timezone - The timezone to use.
- * @returns  The formatted date.
- */
-export function getCurrentDateFormatted(timezone = 'UTC'): string {
-	const today = dayjs();
-	const todayUTC = dayjs.tz(today, timezone);
-	const formattedDate = todayUTC.format('YYYY-MM-DD');
-	return formattedDate;
+export function getCurrentDateFormatted(date: Dayjs): string {
+	return date.format('YYYY-MM-DD');
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -67,26 +53,37 @@ export function numberToMonthName(number: number) {
 	return months[number];
 }
 
-export function getStringDate(date: import('dayjs').Dayjs) {
-	const day = date.date();
-	const month = date.month() + 1;
-	const year = date.year();
-	const formattedDay = checkIfLengthIsTwo(`${day}`);
-	const formattedMonth = checkIfLengthIsTwo(`${month}`);
+export function parseInputDate(date: string | Date): Date {
+	let inputDate: Date;
 
-	return `${year}-${formattedMonth}-${formattedDay}`;
+	if (typeof date === 'string') {
+		// Ensure the input date string is in 'XXXX-MM-DD' format
+		if (!/^(\d{4}-\d{2}-\d{2})$/.test(date)) {
+			throw new Error('Invalid date format. Please use "XXXX-MM-DD".');
+		}
+
+		// Replace 'XXXX' with '2000' and parse as Date
+		inputDate = new Date(date.replace('XXXX', '2000'));
+	} else if (date instanceof Date) {
+		// Use the provided Date object
+		inputDate = date;
+	} else {
+		throw new Error('Invalid input type. Please provide a string in "XXXX-MM-DD" format or a Date object.');
+	}
+
+	return inputDate;
 }
 
-export function extractDayAndMonth(inputDate: string) {
-	inputDate = inputDate.replace('XXXX', '2000');
-	const d = new Date(inputDate);
-	const day = d.getDate();
-	const dayString = day.toString().length === 1 ? '0'.concat(day.toString()) : day.toString();
-	let month = d.getMonth();
-	month += 1;
-	const monthString = month.toString().length === 1 ? '0'.concat(month.toString()) : month.toString();
-	const str = `-${monthString}-${dayString}`;
-	return str;
+export function formatMonthWithLeadingZero(month: number) {
+	const monthString = month.toString().padStart(2, '0');
+	return `-${monthString}-`;
+}
+
+export function formatDateWithMonthAndDay(date: string | Date) {
+	const inputDate = parseInputDate(date);
+	const dayString = inputDate.getDate().toString().padStart(2, '0');
+	const monthString = (inputDate.getMonth() + 1).toString().padStart(2, '0');
+	return `-${monthString}-${dayString}`;
 }
 
 export function isDateString(date: string): boolean {
@@ -120,28 +117,6 @@ export const TIMEZONE_VALUES: Record<number, string> = {
 	11: 'Pacific/Noumea',
 	12: 'Pacific/Fiji',
 };
-
-/**
- * It creates an array of timezone objects, then finds the one where the hour is 0
- * @returns The timezone offset of the current timezone.
- */
-export function getCurrentOffsetOld() {
-	const allZones = createTimezoneObjects();
-	return allZones.find(({ date }) => date.hour() === 0) ?? null;
-}
-/**
- * It creates an array of objects, each of which contains a date and a timezone
- * @returns An array of objects with the timezone and date.
- */
-
-export function createTimezoneObjects(): TimezoneObject[] {
-	const allZones = Object.entries(TIMEZONE_VALUES).map(([utcOffset, tzString]) => {
-		const date = getCurrentDate(tzString);
-		const dateFormatted = getCurrentDateFormatted(tzString);
-		return { date, dateFormatted, timezone: tzString, utcOffset: Number(utcOffset) };
-	});
-	return allZones;
-}
 
 export function getCurrentOffset(): TimezoneObject {
 	let timezoneObject: TimezoneObject;
@@ -183,3 +158,37 @@ export function getDateFromInteraction(interaction: ChatInputCommandInteraction)
 
 	return `${year}-${month}-${day}`;
 }
+
+export const TimezoneWithLocale: Record<Locale, string> = {
+	[Locale.EnglishUS]: ' America/Chicago',
+	[Locale.Greek]: 'Europe/Athens',
+	[Locale.Korean]: 'Asia/Seoul',
+	[Locale.Hungarian]: 'Europe/Budapest',
+	[Locale.Russian]: 'Europe/Moscow',
+	[Locale.French]: 'Europe/Paris',
+	[Locale.EnglishGB]: 'Europe/London',
+	[Locale.Indonesian]: 'Asia/Makassar',
+	[Locale.Bulgarian]: 'Europe/Sofia',
+	[Locale.ChineseCN]: 'Asia/Chongqing',
+	[Locale.ChineseTW]: 'Asia/Taipei',
+	[Locale.Croatian]: 'Europe/Zagreb',
+	[Locale.Czech]: 'Europe/Prague',
+	[Locale.Danish]: 'Europe/Copenhagen',
+	[Locale.Dutch]: 'Europe/Berlin',
+	[Locale.Finnish]: 'Europe/Helsinki',
+	[Locale.German]: 'Europe/Isle_of_Man',
+	[Locale.Hindi]: 'Africa/Lagos',
+	[Locale.Italian]: 'Europe/Rome',
+	[Locale.Japanese]: 'Asia/Tokyo',
+	[Locale.Lithuanian]: 'Europe/Vilnius',
+	[Locale.Norwegian]: 'Europe/Berlin',
+	[Locale.Polish]: 'Europe/Kyiv',
+	[Locale.PortugueseBR]: 'Europe/Lisbon',
+	[Locale.Romanian]: 'Europe/Chisinau',
+	[Locale.SpanishES]: 'Europe/Madrid',
+	[Locale.Swedish]: 'Europe/Berlin',
+	[Locale.Thai]: 'Asia/Bangkok',
+	[Locale.Turkish]: 'Asia/Istanbul',
+	[Locale.Ukrainian]: 'Europe/Simferopol',
+	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh',
+};

@@ -1,4 +1,3 @@
-import { getGuildInformation } from '#lib/discord/guild';
 import { Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import type { Guild as PrismaGuild } from '@prisma/client';
@@ -13,7 +12,7 @@ interface ConfigListOptions {
 
 export default async function generateConfigList(guildId: Snowflake, options: ConfigListOptions): Promise<APIEmbed> {
 	const embedFields = await generateFields(guildId);
-	const guildInfo: Guild | null = options.guild ? options.guild : await getGuildInformation(guildId);
+	const guildInfo: Guild | null = options.guild ? options.guild : await container.client.guilds.fetch(guildId);
 	if (!guildInfo) {
 		return {
 			title: `Config List - ${guildId}`,

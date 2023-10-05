@@ -1,11 +1,11 @@
 {
-    "recommendations": [
-        "prisma.prisma",
-        "editorconfig.editorconfig",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "vivaxy.vscode-conventional-commits",
-        "mzato0001.sapphire-i18n-ally",
-        "doppler.doppler-vscode"
-    ]
+  "recommendations": [
+    "prisma.prisma",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "vivaxy.vscode-conventional-commits",
+    "mzato0001.sapphire-i18n-ally",
+    "doppler.doppler-vscode"
+  ]
 }

@@ -1,6 +1,6 @@
 import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
 import { PrismaClient } from '@prisma/client';
-import { container, SapphireClient } from '@sapphire/framework';
+import { SapphireClient, container } from '@sapphire/framework';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
 

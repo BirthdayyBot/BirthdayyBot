@@ -1,6 +1,5 @@
 import { authenticated } from '#lib/api/utils';
 import { remindMeButtonBuilder } from '#lib/components/button';
-import { getGuildInformation } from '#lib/discord/guild';
 import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { addRoleToUser } from '#lib/discord/role';
 import { getUserInfo } from '#lib/discord/user';
@@ -39,7 +38,7 @@ export class UserRoute extends Route {
 
 		try {
 			const user = await getUserInfo(body.user);
-			const guild = await getGuildInformation(BirthdayyBotId.Birthdayy);
+			const guild = await this.container.client.guilds.fetch(BirthdayyBotId.Birthdayy);
 
 			if (!user || !guild) return response.end();
 
