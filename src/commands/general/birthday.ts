@@ -4,7 +4,6 @@ import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types/permissions';
 import {
 	Emojis,
-	PrismaErrorCodeEnum,
 	createSubcommandMappings,
 	generateDefaultEmbed,
 	interactionProblem,
@@ -14,7 +13,6 @@ import {
 import { generateBirthdayList, updateBirthdayOverview } from '#utils/birthday';
 import { formatDateForDisplay, getDateFromInteraction } from '#utils/common/date';
 import { getBirthdays } from '#utils/functions/guilds';
-import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
@@ -62,20 +60,20 @@ export class BirthdayCommand extends CustomSubCommand {
 
 	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
-		const data = { userId_guildId: { guildId: ctx.guildId, userId: user.id } };
-		const result = await resolveOnErrorCodesPrisma(
-			this.container.prisma.birthday.delete({ where: data }),
-			PrismaErrorCodeEnum.NotFound,
-		);
+		const result = await getBirthdays(ctx.guildId).remove(user.id);
 
 		if (!result) {
 			return interactionProblem(
 				ctx,
-				await resolveKey(ctx, await resolveKey(ctx, 'commands/birthday:remove.notRegistered', { ...options })),
+				await resolveKey(
+					ctx,
+					await resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
+						command: BirthdayApplicationCommandMentions.Set,
+					}),
+				),
 			);
 		}
 
-		getBirthdays(ctx.guildId).delete(user.id);
 		await updateBirthdayOverview(ctx.guildId);
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}

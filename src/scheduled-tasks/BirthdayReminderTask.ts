@@ -5,7 +5,7 @@ import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG, Emojis, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
 import { logAll } from '#utils/functions/config';
 import { getBirthdays } from '#utils/functions/guilds';
-import { resolveOnErrorCodesDiscord } from '#utils/functions/promises';
+import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { Time } from '@sapphire/cron';
@@ -42,20 +42,15 @@ export interface BirthdayEventInfoModel {
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(payload?: { userId: string; guildId: string; isTest: boolean }) {
-		const guilds = await container.client.guilds.fetch();
-		const announcements = [];
-
 		if (payload) {
-			const manager = getBirthdays(payload.guildId);
-			return manager.announcedBirthday(await manager.fetch(payload.userId));
+			const birthdays = getBirthdays(payload.guildId);
+			return birthdays.announcedBirthday(await birthdays.fetch(payload.userId));
 		}
 
-		for (const [, guild] of guilds) {
-			const birthdays = getBirthdays(guild.id);
-			announcements.push(birthdays.announcedTodayBirthday());
+		for (const [, guild] of await container.client.guilds.fetch()) {
+			floatPromise(getBirthdays(guild.id).announcedTodayBirthday());
 		}
-
-		return Promise.all(announcements);
+		return null;
 	}
 
 	public async runs(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {

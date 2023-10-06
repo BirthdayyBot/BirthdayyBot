@@ -1,25 +1,20 @@
+import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateWithMonthAndDay } from '#utils/common/index';
 import { Emojis } from '#utils/constants';
 import { defaultEmbed } from '#utils/embed';
 import { IMG_CAKE } from '#utils/environment';
-import { getSettings } from '#utils/functions/guilds';
 import { floatPromise } from '#utils/functions/promises';
 import { CollectionConstructor } from '@discordjs/collection';
-import { Birthday, Guild, Prisma } from '@prisma/client';
+import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
-import { canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
+import { GuildTextBasedChannelTypes, canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { Time } from '@sapphire/time-utilities';
 import { cast, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
-import {
-	Collection,
-	EmbedBuilder,
-	Guild as GuildDiscord,
-	GuildMember,
-	MessageCreateOptions,
-	roleMention,
-} from 'discord.js';
+import { Collection, EmbedBuilder, Guild, GuildMember, Message, MessageCreateOptions, roleMention } from 'discord.js';
+import { SettingsManager } from './SettingsManager.js';
+import { getSettings } from '#lib/discord/guild';
 
 enum CacheActions {
 	None,
@@ -28,10 +23,14 @@ enum CacheActions {
 }
 
 export class BirthdaysManager extends Collection<string, Birthday> {
+	public guildId: string;
+
 	/**
 	 * The Guild instance that manages this manager
 	 */
-	public guild: GuildDiscord;
+	public guild: Guild;
+
+	public settings: SettingsManager;
 
 	private annoncementQueue = new AsyncQueue();
 
@@ -45,9 +44,11 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	private _timer: NodeJS.Timeout | null = null;
 
-	public constructor(guild: GuildDiscord) {
+	public constructor(guild: Guild) {
 		super();
 		this.guild = guild;
+		this.guildId = guild.id;
+		this.settings = getSettings(guild);
 	}
 
 	public currentDate(format?: boolean) {
@@ -61,24 +62,22 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
 	}
 
-	public async announcedTodayBirthday() {
-		const birthdays = await this.findTodayBirthday();
-
-		for (const birthday of birthdays) floatPromise(this.announcedBirthday(birthday));
+	public async *announcedTodayBirthday() {
+		for (const birthday of await this.findTodayBirthday()) {
+			yield this.announcedBirthday(birthday);
+		}
 	}
 
 	public async announcedBirthday(birthday: Birthday) {
 		if (isNullish(birthday)) return;
-		const settings = await getSettings(this.guild).fetch();
 		const member = this.guild.members.resolve(birthday.userId);
-
 		if (!member) return;
 
 		container.logger.debug(member.toJSON());
 
-		const options = this.createOptionsMessageForAnnoncementChannel(settings, member);
+		const options = this.createOptionsMessageForAnnoncementChannel(await this.settings.fetch(), member);
 		const message = await this.announceBirthdayInChannel(options, member);
-		const role = await this.addCurrentBirthdayChildRole(settings, member);
+		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
 
 		this.annoncementQueue.shift();
 		return { message, role };
@@ -96,14 +95,29 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
-		return this._cache(
-			await container.prisma.birthday.upsert({
-				where: { userId_guildId: { guildId: this.guild.id, userId: args.userId } },
-				create: { ...args, guildId: this.guild.id },
-				update: args,
-			}),
-			CacheActions.Insert,
-		);
+		const birthday = await container.prisma.birthday.upsert({
+			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } },
+			create: { ...args, guildId: this.guildId },
+			update: args,
+		});
+		await this.updateBirthdayOverview();
+		return this._cache(birthday, CacheActions.Insert);
+	}
+
+	public async remove(userId: string) {
+		const birthday = await container.prisma.birthday.delete({
+			where: {
+				userId_guildId: {
+					guildId: this.guildId,
+					userId,
+				},
+			},
+		});
+
+		if (isNullish(birthday)) return false;
+
+		await this.updateBirthdayOverview();
+		return super.delete(userId);
 	}
 
 	public async fetch(id?: string): Promise<Birthday>;
@@ -112,7 +126,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | this | null> {
 		if (Array.isArray(id)) {
 			return this._cache(
-				await container.prisma.birthday.findMany({ where: { guildId: this.guild.id, userId: { in: id } } }),
+				await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: { in: id } } }),
 				CacheActions.None,
 			);
 		}
@@ -121,7 +135,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			return this._cache(
 				await container.prisma.birthday.findFirstOrThrow({
 					where: {
-						guildId: this.guild.id,
+						guildId: this.guildId,
 						userId: id,
 					},
 				}),
@@ -131,15 +145,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		if (super.size !== this._count && id) {
 			this._cache(
-				await container.prisma.birthday.findMany({ where: { guildId: this.guild.id, userId: id } }),
+				await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: id } }),
 				CacheActions.Fetch,
 			);
 		}
 
-		this._cache(
-			await container.prisma.birthday.findMany({ where: { guildId: this.guild.id } }),
-			CacheActions.Fetch,
-		);
+		this._cache(await container.prisma.birthday.findMany({ where: { guildId: this.guildId } }), CacheActions.Fetch);
 
 		return this;
 	}
@@ -182,8 +193,15 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return cast<CollectionConstructor>(Collection);
 	}
 
+	private async fetchOverviewMessage(
+		channel: GuildTextBasedChannelTypes,
+		overviewMessage?: string | null,
+	): Promise<Message<boolean>> {
+		return channel.messages.resolve(overviewMessage ?? '') ?? channel.send({});
+	}
+
 	private createOptionsMessageForAnnoncementChannel(
-		{ announcementMessage, birthdayPingRole }: Guild,
+		{ announcementMessage, birthdayPingRole }: Settings,
 		member: GuildMember,
 	): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
@@ -195,8 +213,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
-		const { announcementChannel } = await getSettings(this.guild).fetch();
-
+		const { announcementChannel } = await this.settings.fetch();
 		if (isNullish(announcementChannel)) {
 			return `Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`;
 		}
@@ -219,7 +236,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 	}
 
-	private async addCurrentBirthdayChildRole(guild: Guild, member: GuildMember) {
+	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
 		const { birthdayRole } = guild;
 
 		if (isNullish(birthdayRole)) return `Birthday role for ths member is empty, so i can't`;
@@ -233,18 +250,33 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			} catch {
 				return 'An error occurred when adding the role to this member ';
 			} finally {
-				floatPromise(this.addRemoveBirthdayRoleTask(member, guild, birthdayRole));
+				floatPromise(
+					container.tasks.create('BirthdayRoleRemoverTask', {
+						memberId: member.id,
+						guildId: member.guild.id,
+						birthdayRole,
+					}),
+				);
 			}
 		}
 
 		return `I cannot modify this member because his position is equal or superior to me. `;
 	}
 
-	private async addRemoveBirthdayRoleTask(member: GuildMember, guild: Guild, roleId: string) {
-		return container.tasks.create('BirthdayRoleRemoverTask', {
-			memberId: member.id,
-			guildId: guild.guildId,
-			roleId,
-		});
+	private async updateBirthdayOverview() {
+		const { overviewChannel, overviewMessage } = await this.settings.fetch();
+		const birthdayList = await generateBirthdayList(1, this.guild);
+
+		if (isNullish(overviewChannel)) return null;
+
+		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
+
+		const channel = await this.guild.channels.fetch(overviewChannel);
+
+		if (isNullish(channel) || !isGuildBasedChannel(channel)) return null;
+
+		const message = await this.fetchOverviewMessage(channel, overviewMessage);
+
+		return message.editable ? message.edit(options) : null;
 	}
 }

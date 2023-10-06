@@ -46,7 +46,6 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const guild = resolveGuild(resolvable);
 	const previous = cache.get(guild);
 	if (previous !== undefined) return previous;
-
 	const entry: GuildUtilities = {
 		settings: new SettingsManager(guild),
 		birthdays: new BirthdaysManager(guild),
