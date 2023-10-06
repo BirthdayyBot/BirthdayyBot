@@ -50,7 +50,7 @@
     "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
     "roleDescription": "Role that will be assigned to the user on their birthday",
     "roleName": "role",
-    "success": "The birthday role has been set to {{role}}."
+    "success": "The birthday role has been set to {{role}} ."
   },
   "birthdayRoleDescription": "Role assigned to the user on their birthday",
   "birthdayRoleName": "birthday-role",
