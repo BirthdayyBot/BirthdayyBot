@@ -1,4 +1,4 @@
-import { TimezoneWithLocale, formatDateWithMonthAndDay } from '#utils/common/index';
+import { TimezoneWithLocale, formatBirthdayMessage, formatDateWithMonthAndDay } from '#utils/common/index';
 import { Emojis } from '#utils/constants';
 import { defaultEmbed } from '#utils/embed';
 import { IMG_CAKE } from '#utils/environment';
@@ -19,7 +19,6 @@ import {
 	GuildMember,
 	MessageCreateOptions,
 	roleMention,
-	userMention,
 } from 'discord.js';
 
 enum CacheActions {
@@ -52,9 +51,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public currentDate(format?: boolean) {
-		return dayjs()
-			.tz(TimezoneWithLocale[this.guild.preferredLocale])
-			.format(format ? ' YYYY-MM-DD' : '');
+		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
+		return format ? date.format('YYYY-MM-DD') : date.toDate();
 	}
 
 	public async findTodayBirthday() {
@@ -70,16 +68,20 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public async announcedBirthday(birthday: Birthday) {
-		await this.annoncementQueue.wait();
-		try {
-			const settings = await getSettings(this.guild).fetch();
-			const member = await this.guild.members.fetch(birthday.userId);
-			const options = this.createOptionsMessageForAnnoncementChannel(settings, member);
-			await this.announceBirthdayInChannel(options, member);
-			await this.addCurrentBirthdayChildRole(settings, member);
-		} finally {
-			this.annoncementQueue.shift();
-		}
+		if (isNullish(birthday)) return;
+		const settings = await getSettings(this.guild).fetch();
+		const member = this.guild.members.resolve(birthday.userId);
+
+		if (!member) return;
+
+		container.logger.debug(member.toJSON());
+
+		const options = this.createOptionsMessageForAnnoncementChannel(settings, member);
+		const message = await this.announceBirthdayInChannel(options, member);
+		const role = await this.addCurrentBirthdayChildRole(settings, member);
+
+		this.annoncementQueue.shift();
+		return { message, role };
 	}
 
 	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
@@ -93,9 +95,15 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		});
 	}
 
-	public async create(data: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
-		const guild = await container.prisma.birthday.create({ data: { ...data, guildId: this.guild.id } });
-		return guild;
+	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
+		return this._cache(
+			await container.prisma.birthday.upsert({
+				where: { userId_guildId: { guildId: this.guild.id, userId: args.userId } },
+				create: { ...args, guildId: this.guild.id },
+				update: args,
+			}),
+			CacheActions.Insert,
+		);
 	}
 
 	public async fetch(id?: string): Promise<Birthday>;
@@ -109,12 +117,29 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			);
 		}
 
+		if (typeof id === 'string') {
+			return this._cache(
+				await container.prisma.birthday.findFirstOrThrow({
+					where: {
+						guildId: this.guild.id,
+						userId: id,
+					},
+				}),
+				CacheActions.None,
+			);
+		}
+
 		if (super.size !== this._count && id) {
 			this._cache(
-				await container.prisma.birthday.findMany({ where: { guildId: this.guild.id } }),
+				await container.prisma.birthday.findMany({ where: { guildId: this.guild.id, userId: id } }),
 				CacheActions.Fetch,
 			);
 		}
+
+		this._cache(
+			await container.prisma.birthday.findMany({ where: { guildId: this.guild.id } }),
+			CacheActions.Fetch,
+		);
 
 		return this;
 	}
@@ -149,30 +174,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		if (Array.isArray(entries)) {
 			return new Collection<string, Birthday>(entries.map((entry) => [entry.userId, entry]));
 		}
+
 		return entries;
 	}
 
 	public static get [Symbol.species]() {
 		return cast<CollectionConstructor>(Collection);
-	}
-
-	private formatBirthdayMessage(message: string, member: GuildMember, guild: GuildDiscord) {
-		const placeholders = {
-			'{USERNAME}': member.user.username,
-			'{DISCRIMINATOR}': member.user.discriminator,
-			'{NEW_LINE}': '\n',
-			'{GUILD_NAME}': guild.name,
-			'{GUILD_ID}': guild.id,
-			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name,
-		};
-
-		let formattedMessage = message;
-		for (const [placeholder, value] of Object.entries(placeholders)) {
-			formattedMessage = formattedMessage.replace(new RegExp(placeholder, 'gi'), value);
-		}
-
-		return formattedMessage;
 	}
 
 	private createOptionsMessageForAnnoncementChannel(
@@ -181,7 +188,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(this.formatBirthdayMessage(announcementMessage, member, this.guild))
+			.setDescription(formatBirthdayMessage(announcementMessage, member))
 			.setThumbnail(IMG_CAKE);
 
 		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
@@ -191,51 +198,46 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const { announcementChannel } = await getSettings(this.guild).fetch();
 
 		if (isNullish(announcementChannel)) {
-			return container.logger.info(
-				`Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`,
-			);
+			return `Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`;
 		}
 
 		try {
 			const channel = await this.guild.channels.fetch(announcementChannel);
 
 			if (!channel) {
-				return container.logger.error(`Announcement channel (${announcementChannel}) does not exist.`);
+				return `Announcement channel (${announcementChannel}) does not exist.`;
 			}
 
 			if (isGuildBasedChannel(channel) && canSendEmbeds(channel)) {
 				const message = await channel.send(options);
-				container.logger.info(
-					`Birthday message for [${member.id}]${member.displayName} sent in channel ${message.channelId}.`,
-				);
-			} else {
-				container.logger.warn(`Cannot send a message with embeds in channel ${channel.id}.`);
+				return `This Birthday has been announced in the [message](${message.url}).`;
 			}
+
+			return `Cannot send a message with embeds in channel ${channel.id}.`;
 		} catch (error) {
-			container.logger.error(
-				`Error while announcing birthday for [${member.id}] ${member.displayName}: ${error}`,
-			);
+			return `Error while announcing birthday for [${member.id}] ${member.displayName}: ${error}`;
 		}
 	}
 
 	private async addCurrentBirthdayChildRole(guild: Guild, member: GuildMember) {
 		const { birthdayRole } = guild;
 
-		if (isNullish(birthdayRole)) {
-			container.logger.info(`Birthday role is empty, so i can't`);
-			return;
-		}
+		if (isNullish(birthdayRole)) return `Birthday role for ths member is empty, so i can't`;
 
-		try {
-			if (member.roles.cache.has(birthdayRole)) {
-				container.logger.info(`The user already has the role, so i can't `);
+		if (member.roles.cache.has(birthdayRole)) return `The user already has the role, so i can't `;
+
+		if (member.manageable) {
+			try {
+				await member.roles.add(birthdayRole);
+				return `The Birthday Role ${birthdayRole} has been added to the member ${member.id}`;
+			} catch {
+				return 'An error occurred when adding the role to this member ';
+			} finally {
+				floatPromise(this.addRemoveBirthdayRoleTask(member, guild, birthdayRole));
 			}
-
-			await member.roles.add(birthdayRole);
-			container.logger.info(`The Birthday Role ${birthdayRole} has been added to the member ${member.id} `);
-		} finally {
-			floatPromise(this.addRemoveBirthdayRoleTask(member, guild, birthdayRole));
 		}
+
+		return `I cannot modify this member because his position is equal or superior to me. `;
 	}
 
 	private async addRemoveBirthdayRoleTask(member: GuildMember, guild: Guild, roleId: string) {

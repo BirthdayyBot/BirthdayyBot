@@ -43,14 +43,43 @@ export class SettingsManager extends Collection<string, Guild> {
 		return guild;
 	}
 
-	public async fetch() {
-		return (
-			super.get(this.guild.id) ||
-			this._cache(
-				await container.prisma.guild.findUniqueOrThrow({ where: { guildId: this.guild.id } }),
+	public async fetch(id: string): Promise<Guild | null>;
+	public async fetch(id: string[]): Promise<Collection<string, Guild>>;
+	public async fetch(id?: null): Promise<this>;
+	public async fetch(id?: string | string[] | null): Promise<Guild | Collection<string, Guild> | this | null> {
+		// Case number
+		if (typeof id === 'string') {
+			return (
+				super.get(id) ||
+				this._cache(
+					await container.prisma.guild.findFirstOrThrow({ where: { guildId: id } }),
+					CacheActions.None,
+				)
+			);
+		}
+
+		if (Array.isArray(id) && id.length) {
+			return this._cache(
+				await container.prisma.guild.findMany({ where: { guildId: { in: id } } }),
 				CacheActions.None,
-			)
-		);
+			);
+		}
+
+		if (super.size !== this._count) {
+			this._cache(await container.prisma.guild.findMany({}), CacheActions.Fetch);
+		}
+
+		return this;
+	}
+
+	public async update(args: Prisma.GuildUpdateArgs) {
+		const settings = await container.prisma.guild.update(args);
+		return this._cache(settings, CacheActions.Insert);
+	}
+
+	public async upsert(args: Prisma.GuildUpsertArgs) {
+		const settings = await container.prisma.guild.upsert(args);
+		return this._cache(settings, CacheActions.Insert);
 	}
 
 	public insert(data: Guild): Guild;
@@ -88,7 +117,7 @@ export class SettingsManager extends Collection<string, Guild> {
 
 		if (!this._timer) {
 			this._timer = setInterval(() => {
-				super.sweep(() => Date.now() > Date.now() + Time.Minute * 15);
+				super.sweep(() => Date.now() > Time.Minute * 15);
 				if (!super.size) this._timer = null;
 			}, 1000);
 		}

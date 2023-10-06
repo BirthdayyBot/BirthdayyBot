@@ -1,17 +1,19 @@
+import { formatBirthdayMessage } from '#utils/common/string';
 import { Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import type { Guild as PrismaGuild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { objectEntries } from '@sapphire/utilities';
-import type { APIEmbed, Guild, Snowflake } from 'discord.js';
+import type { APIEmbed, Guild, GuildMember, Snowflake } from 'discord.js';
 import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
 
 interface ConfigListOptions {
+	member: GuildMember;
 	guild?: Guild;
 }
 
 export default async function generateConfigList(guildId: Snowflake, options: ConfigListOptions): Promise<APIEmbed> {
-	const embedFields = await generateFields(guildId);
+	const embedFields = await generateFields(guildId, options.member);
 	const guildInfo: Guild | null = options.guild ? options.guild : await container.client.guilds.fetch(guildId);
 	if (!guildInfo) {
 		return {
@@ -25,8 +27,8 @@ export default async function generateConfigList(guildId: Snowflake, options: Co
 		fields: embedFields,
 	});
 }
-async function generateFields(guildId: string): Promise<APIEmbedField[]> {
-	let config = await container.prisma.guild.upsert({
+async function generateFields(guildId: string, member: GuildMember): Promise<APIEmbedField[]> {
+	const config = await container.prisma.guild.upsert({
 		create: { guildId },
 		where: { guildId },
 		update: { guildId },
@@ -42,10 +44,8 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 		},
 	});
 
-	if (!config) config = await container.utilities.guild.create({ guildId });
-
 	return objectEntries(config).map(([name, value]) => {
-		const valueString = getValueString(name, value);
+		const valueString = getValueString(name, value, member);
 		const nameString = getNameString(name);
 		return {
 			name: nameString,
@@ -54,7 +54,7 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 		};
 	});
 
-	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null) {
+	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null, member: GuildMember) {
 		if (value === null) {
 			return `${Emojis.ArrowRight} not set`;
 		} else if (name === 'timezone' && typeof value === 'number') {
@@ -65,6 +65,8 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 			return `${Emojis.ArrowRight} ${roleMention(value)}`;
 		} else if (name.includes('User') && typeof value === 'string') {
 			return `${Emojis.ArrowRight} ${userMention(value)}`;
+		} else if (name === 'announcementMessage' && typeof value === 'string') {
+			return `${Emojis.ArrowRight} ${formatBirthdayMessage(value, member)}`;
 		}
 		return `${Emojis.ArrowRight} ${value.toString()}`;
 	}

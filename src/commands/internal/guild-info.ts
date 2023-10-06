@@ -22,37 +22,37 @@ export class GuildInfoCommand extends Command {
 
 	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
 		const guildId = interaction.options.getString('guild-id', true);
-		const guildDatabase = await this.container.utilities.guild.get.GuildById(guildId).catch(() => null);
-		const guildDiscord = await this.container.client.guilds.fetch(guildId).catch(() => null);
+		const settings = await this.container.utilities.guild.get.GuildById(guildId).catch(() => null);
+		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
-		if (!guildDatabase || !guildDiscord) return reply(interaction, 'Guild Infos not found');
+		if (!settings || !guild) return reply(interaction, 'Guild Infos not found');
 
 		const embed = generateDefaultEmbed({
 			fields: [
 				{
 					name: 'GuildId',
-					value: guildDatabase.guildId,
+					value: settings.guildId,
 					inline: true,
 				},
 				{
 					name: 'GuildName',
-					value: guildDiscord.name,
+					value: guild.name,
 					inline: true,
 				},
 				{
 					name: 'Description',
-					value: guildDiscord.description ?? 'No Description',
+					value: guild.description ?? 'No Description',
 					inline: true,
 				},
 				{
 					name: 'GuildShard',
-					value: `Shard ${guildDiscord.shardId + 1}`,
+					value: `Shard ${guild.shardId + 1}`,
 					inline: true,
 				},
 				{
 					name: 'MemberCount',
-					value: guildDiscord.memberCount.toString(),
+					value: guild.memberCount.toString(),
 					inline: true,
 				},
 				{
@@ -63,53 +63,55 @@ export class GuildInfoCommand extends Command {
 
 				{
 					name: 'GuildOwner',
-					value: guildDiscord.ownerId,
+					value: guild.ownerId,
 					inline: true,
 				},
 				{
 					name: 'IsPartnered',
 					inline: true,
-					value: String(guildDiscord.partnered),
+					value: `${guild.partnered}`,
 				},
 				{
 					name: 'Premium Tier',
-					value: guildDiscord.premiumTier.toString(),
+					value: `${guild.premiumTier}`,
 					inline: true,
 				},
 				{
 					name: 'GuildCreated',
-					value: getFormattedTimestamp(guildDiscord.createdTimestamp, 'f'),
+					value: getFormattedTimestamp(guild.createdTimestamp, 'f'),
 					inline: true,
 				},
 				{
 					name: 'GuildJoined',
-					value: getFormattedTimestamp(guildDiscord.joinedTimestamp, 'f'),
+					value: getFormattedTimestamp(guild.joinedTimestamp, 'f'),
 					inline: true,
 				},
 				{
 					name: 'GuildServed',
-					value: getFormattedTimestamp(guildDiscord.joinedTimestamp, 'R'),
+					value: getFormattedTimestamp(guild.joinedTimestamp, 'R'),
 					inline: true,
 				},
 				{
 					name: 'Guild Permissions',
 					value:
-						guildDiscord.members?.me?.permissions
+						guild.members.me?.permissions
 							.toArray()
 							.map((permission: string) => `**\`${permission}\`**`)
 							.join(' • ') ?? 'No Permissions',
 				},
 			],
 			thumbnail: {
-				url: guildDiscord.iconURL({ extension: 'png' }) ?? 'No Image',
+				url: guild.iconURL({ extension: 'png' }) ?? 'No Image',
 			},
 			title: 'GuildInfos',
 		});
 
-		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));
+		const configEmbed = generateDefaultEmbed(
+			await generateConfigList(guildId, { member: interaction.member, guild }),
+		);
 
 		return reply(interaction, {
-			content: `GuildInfos for ${guildDiscord.name}`,
+			content: `GuildInfos for ${guild.name}`,
 			embeds: [embed, configEmbed],
 		});
 	}

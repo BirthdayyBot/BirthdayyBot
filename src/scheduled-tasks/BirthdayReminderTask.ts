@@ -41,16 +41,21 @@ export interface BirthdayEventInfoModel {
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
-	public async run() {
+	public async run(payload?: { userId: string; guildId: string; isTest: boolean }) {
 		const guilds = await container.client.guilds.fetch();
 		const announcements = [];
+
+		if (payload) {
+			const manager = getBirthdays(payload.guildId);
+			return manager.announcedBirthday(await manager.fetch(payload.userId));
+		}
 
 		for (const [, guild] of guilds) {
 			const birthdays = getBirthdays(guild.id);
 			announcements.push(birthdays.announcedTodayBirthday());
 		}
 
-		await Promise.all(announcements);
+		return Promise.all(announcements);
 	}
 
 	public async runs(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {

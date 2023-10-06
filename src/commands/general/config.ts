@@ -61,7 +61,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateConfig(
 			{ announcementChannel },
 			interaction,
-			await resolveKey(interaction, 'commands/config:announcementChannel', options),
+			await resolveKey(interaction, 'commands/config:announcementChannel.success', options),
 		);
 	}
 
@@ -81,18 +81,18 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateConfig(
 			{ announcementMessage },
 			interaction,
-			await resolveKey(interaction, 'commands/config:announcementMessage', {
+			await resolveKey(interaction, 'commands/config:announcementMessage.success', {
 				message: announcementMessage,
 			}),
 		);
 	}
 
 	public async birthdayRole(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { id: birthdayRole, position } = interaction.options.getRole('role', true);
+		const role = interaction.options.getRole('role', true);
 		const bot = await interaction.guild.members.fetchMe();
 		const highestBotRole = bot.roles.highest;
 
-		if (highestBotRole.position <= position) {
+		if (highestBotRole.position <= role.position) {
 			return interactionProblem(
 				interaction,
 				await resolveKey(interaction, 'commands/config.birthdayRole.highestBotRole'),
@@ -100,14 +100,18 @@ export class ConfigCommand extends CustomSubCommand {
 		}
 
 		return this.updateConfig(
-			{ birthdayRole },
+			{ birthdayRole: role.id },
 			interaction,
-			await resolveKey(interaction, 'commands/config:birthdayRole', { role: roleMention(birthdayRole) }),
+			await resolveKey(interaction, 'commands/config:birthdayRole.success', { role }),
 		);
 	}
 
 	public async list(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const configEmbed = await generateConfigList(interaction.guildId, { guild: interaction.guild });
+		await thinking(interaction);
+		const configEmbed = await generateConfigList(interaction.guildId, {
+			guild: interaction.guild,
+			member: interaction.member,
+		});
 
 		return reply(interaction, { embeds: [generateDefaultEmbed(configEmbed)] });
 	}
@@ -136,7 +140,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateConfig(
 			{ overviewMessage: message.id, overviewChannel: channel.id },
 			interaction,
-			await resolveKey(interaction, 'commands/config:overviewChannel', {
+			await resolveKey(interaction, 'commands/config:overviewChannel.success', {
 				channel: channelMention(channel.id),
 			}),
 		);
@@ -148,7 +152,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateConfig(
 			{ birthdayPingRole: role.id },
 			interaction,
-			await resolveKey(interaction, 'commands/config:pingRole', { role: roleMention(role.id) }),
+			await resolveKey(interaction, 'commands/config:pingRole.success', { role: roleMention(role.id) }),
 		);
 	}
 
@@ -188,7 +192,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateConfig(
 			{ timezone },
 			interaction,
-			await resolveKey(interaction, 'commands/config:timezone', {
+			await resolveKey(interaction, 'commands/config:timezone.success', {
 				timezone,
 			}),
 		);

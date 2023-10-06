@@ -160,7 +160,7 @@ export function getDateFromInteraction(interaction: ChatInputCommandInteraction)
 }
 
 export const TimezoneWithLocale: Record<Locale, string> = {
-	[Locale.EnglishUS]: ' America/Chicago',
+	[Locale.EnglishUS]: ' America/New_York',
 	[Locale.Greek]: 'Europe/Athens',
 	[Locale.Korean]: 'Asia/Seoul',
 	[Locale.Hungarian]: 'Europe/Budapest',

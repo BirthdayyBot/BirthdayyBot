@@ -92,12 +92,9 @@ function getGuildInfo(guild: Guild | null) {
 }
 
 export function resolveTarget(interaction: ChatInputCommandInteraction) {
-	let context: string | undefined;
 	const user = interaction.options.getUser('user') ?? interaction.user;
 	const target = userMention(user.id);
-	const targetIsNotAuthor = user !== interaction.user;
-	if (targetIsNotAuthor) context = 'target';
-	return { user, options: { target, context } };
+	return { user, options: { target, context: user === interaction.user ? '' : 'target' } };
 }
 
 /**
@@ -117,7 +114,7 @@ export interface Mapps {
 
 export function createSubcommandMappings(...subcommands: Array<string | Mapps>): SubcommandMappingArray {
 	return subcommands.map((subcommand) => {
-		if (typeof subcommand === 'string') return { name: subcommand, chatInputRun: subcommand };
+		if (typeof subcommand === 'string') return { name: subcommand, chatInputRun: snakeToCamel(subcommand) };
 		return {
 			name: subcommand.name,
 			preconditions: subcommand.preconditions,

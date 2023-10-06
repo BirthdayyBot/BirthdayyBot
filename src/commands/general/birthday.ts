@@ -1,4 +1,5 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
+import thinking from '#lib/discord/thinking';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types/permissions';
 import {
@@ -12,10 +13,12 @@ import {
 } from '#utils';
 import { generateBirthdayList, updateBirthdayOverview } from '#utils/birthday';
 import { formatDateForDisplay, getDateFromInteraction } from '#utils/common/date';
+import { getBirthdays } from '#utils/functions/guilds';
 import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
 import {
 	bold,
 	chatInputApplicationCommandMention,
@@ -44,17 +47,17 @@ export class BirthdayCommand extends CustomSubCommand {
 	}
 
 	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user, options } = resolveTarget(ctx);
+		await thinking(ctx);
+		const target = resolveTarget(ctx);
 		const birthday = getDateFromInteraction(ctx);
 
-		await this.container.prisma.birthday.upsert({
-			create: { birthday, guildId: ctx.guildId, userId: user.id },
-			where: { userId_guildId: { guildId: ctx.guildId, userId: user.id } },
-			update: { birthday },
-		});
+		await getBirthdays(ctx.guildId).create({ birthday, userId: target.user.id });
 
 		await updateBirthdayOverview(ctx.guildId);
-		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:set.success', { ...options }));
+		return interactionSuccess(
+			ctx,
+			await resolveKey(ctx, 'commands/birthday:set.success', { date: formatDateForDisplay(birthday) }),
+		);
 	}
 
 	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
@@ -72,40 +75,42 @@ export class BirthdayCommand extends CustomSubCommand {
 			);
 		}
 
+		getBirthdays(ctx.guildId).delete(user.id);
 		await updateBirthdayOverview(ctx.guildId);
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}
 
 	public async show(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
-		const where = { guildId: ctx.guildId, userId: user.id };
-		const result = await resolveOnErrorCodesPrisma(
-			this.container.prisma.birthday.findFirstOrThrow({ where }),
-			PrismaErrorCodeEnum.NotFound,
-		);
+		const birthday = getBirthdays(ctx.guild).get(user.id);
 
-		if (!result) return interactionProblem(ctx, await resolveKey(ctx, 'commands/birthday:show.notRegistered'));
+		if (isNullOrUndefined(birthday)) {
+			return interactionProblem(ctx, await resolveKey(ctx, 'commands/birthday:show.notRegistered'));
+		}
 
-		await updateBirthdayOverview(ctx.guildId);
 		return interactionSuccess(
 			ctx,
-			await resolveKey(ctx, 'commands/birthday:show.description', {
-				date: bold(formatDateForDisplay(result.birthday)),
+			await resolveKey(ctx, 'commands/birthday:show.success', {
+				date: bold(formatDateForDisplay(birthday.birthday)),
 				emoji: Emojis.ArrowRight,
 				...options,
 			}),
 		);
 	}
 
-	public async test(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user } = resolveTarget(interaction);
+	public async test(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const { user } = resolveTarget(ctx);
+		const birthay = getBirthdays(ctx.guild).get(user.id);
 
-		await this.container.tasks.run('BirthdayReminderTask', {
-			guildId: interaction.guildId,
-			isTest: true,
-			userId: user.id,
-		});
-		return interaction.reply({ content: 'Birthday Test Run' });
+		if (isNullOrUndefined(birthay)) {
+			return interactionProblem(ctx, 'This user has not yet registered his birthday ');
+		}
+
+		const result = await getBirthdays(ctx.guild).announcedBirthday(birthay);
+
+		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
+
+		return interactionSuccess(ctx, content);
 	}
 }
 
