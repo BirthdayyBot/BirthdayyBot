@@ -1,11 +1,6 @@
 import { isAdmin } from '#utils/functions/permissions';
 import { Precondition } from '@sapphire/framework';
-import type {
-	ChatInputCommandInteraction,
-	CommandInteraction,
-	ContextMenuCommandInteraction,
-	Message,
-} from 'discord.js';
+import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 
 export class UserPermissionsPrecondition extends Precondition {
 	public override async chatInputRun(interaction: ChatInputCommandInteraction<'cached'>): Precondition.AsyncResult {
@@ -20,7 +15,7 @@ export class UserPermissionsPrecondition extends Precondition {
 		return result;
 	}
 
-	private async handler(interaction: CommandInteraction<'cached'> | Message<true>) {
-		return isAdmin(interaction.member!) ? this.ok() : this.error({ identifier: 'preconditions:administrator' });
+	private async handler(interaction: CommandInteraction<'cached'>) {
+		return isAdmin(interaction.member) ? this.ok() : this.error({ identifier: 'preconditions:administrator' });
 	}
 }

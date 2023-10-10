@@ -25,7 +25,7 @@ export function interactionSuccess(interaction: ChatInputCommandInteraction, des
 		ephemeral,
 		embeds: [
 			{
-				color: Colors.Green,
+				color: BOT_COLOR,
 				description: `${description}`,
 			},
 		],

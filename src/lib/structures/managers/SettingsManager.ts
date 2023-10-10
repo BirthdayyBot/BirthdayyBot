@@ -1,8 +1,10 @@
+import { BOT_COLOR, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { CollectionConstructor } from '@discordjs/collection';
 import { Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { Nullish, cast } from '@sapphire/utilities';
-import { Collection, Guild as GuildDiscord } from 'discord.js';
+import { APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
 	/**
@@ -12,6 +14,16 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 	public guildId: string;
 
+	public defaultKey = {
+		announcementChannel: null,
+		announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
+		birthdayPingRole: null,
+		birthdayRole: null,
+		logChannel: null,
+		overviewChannel: null,
+		timezone: 0,
+	};
+
 	public constructor(guild: GuildDiscord) {
 		super();
 		this.guild = guild;
@@ -19,19 +31,16 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	}
 
 	public async create(args?: SettingsManagerCreateData): SettingsManagerReturnAsyncData {
-		return container.prisma.guild.upsert({
+		const settings = await container.prisma.guild.upsert({
 			create: { ...args, guildId: this.guildId },
 			where: { guildId: this.guildId },
 			update: { ...args },
 		});
+		return this.insert(settings);
 	}
 
 	public async fetch(): SettingsManagerReturnAsyncData {
 		return super.get(this.guildId) ?? this.create();
-	}
-
-	public override get(key: string): SettingsManagerReturnData | undefined {
-		return super.get(key);
 	}
 
 	public insert(entry: Nullish): null;
@@ -47,6 +56,27 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		return this.insert(settings);
 	}
 
+	// Create new Embed for list of settings
+	public async embedList() {
+		const settings = await this.fetch();
+		const t = await fetchT(this.guild);
+		const embed = t('commands/config:list.embedList', {
+			returnObjects: true,
+			defaultValue: 'null',
+			lng: this.guild.preferredLocale,
+			guild: this.guild,
+			settings,
+		}) satisfies APIEmbed;
+
+		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));
+
+		return new EmbedBuilder(embed).setColor(BOT_COLOR);
+	}
+
+	public async resetKey(key: SettingsDefaultKey): SettingsManagerReturnAsyncData {
+		return this.update({ [key]: this.defaultKey[key] });
+	}
+
 	public static get [Symbol.species]() {
 		return cast<CollectionConstructor>(Collection);
 	}
@@ -58,3 +88,13 @@ export type SettingsManagerReturnAsyncData = Promise<SettingsManagerReturnData>;
 
 export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'guildId'>;
 export type SettingsManagerUpdateData = SettingsManagerCreateData;
+export type SettingsDefaultKey = keyof Pick<
+	Prisma.GuildCreateInput,
+	| 'announcementChannel'
+	| 'announcementMessage'
+	| 'birthdayRole'
+	| 'birthdayPingRole'
+	| 'overviewChannel'
+	| 'logChannel'
+	| 'timezone'
+>;

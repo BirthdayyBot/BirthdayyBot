@@ -1,4 +1,4 @@
-import { sendMessage } from '#lib/discord';
+import { getSettings, sendMessage } from '#lib/discord';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, DEBUG, Emojis, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
@@ -8,20 +8,20 @@ import { Guild, time } from 'discord.js';
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
 	public async run(guild: Guild) {
-		const guild_id = guild.id;
+		const guildId = guild.id;
 
 		if (!container.client.isReady()) return;
 
-		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild_id})`);
+		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guildId})`);
 		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild.toString()}`) : null;
 
 		await this.leaveServerLog(guild);
-		await container.utilities.guild.update.DisableGuildAndBirthdays(guild_id, true);
+		await getSettings(guildId).update({ disabled: true, inviter: null });
 	}
 
 	private async leaveServerLog(guild: Guild) {
 		container.logger.info('Removed from Guild');
-		const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
+		const { id: guildId, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
 		const joinedAgo = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
 		const joinedDate = time(Math.floor(rawJoinedTimestamp / 1000), 'R');
 		const timeServed = new DurationFormatter().format(Date.now() - rawJoinedTimestamp);
@@ -29,7 +29,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guild_id}`,
+				value: `${guildId}`,
 			},
 		];
 

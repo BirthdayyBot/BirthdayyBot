@@ -2,16 +2,13 @@ import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/compone
 import thinking from '#lib/discord/thinking';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types/permissions';
+import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import {
-	Emojis,
-	createSubcommandMappings,
-	generateDefaultEmbed,
-	interactionProblem,
-	interactionSuccess,
-	resolveTarget,
-} from '#utils';
-import { generateBirthdayList, updateBirthdayOverview } from '#utils/birthday';
-import { formatDateForDisplay, getDateFromInteraction } from '#utils/common/date';
+	TimezoneWithLocale,
+	formatDateForDisplay,
+	getDateFromInteraction,
+	numberToMonthName,
+} from '#utils/common/date';
 import { getBirthdays } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
@@ -40,21 +37,39 @@ export class BirthdayCommand extends CustomSubCommand {
 	}
 
 	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { embed, components } = await generateBirthdayList(1, ctx.guild);
-		return ctx.reply({ components, embeds: [generateDefaultEmbed(embed)] });
+		const birthdayManager = getBirthdays(ctx.guild);
+		await getBirthdays(ctx.guild).fetch();
+		const month = ctx.options.getString('month');
+
+		const birthdays = month
+			? await birthdayManager.findBirthdayWithMonth(Number(month))
+			: birthdayManager.findTeenNextBirthday();
+
+		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
+
+		const title = month
+			? await resolveKey(ctx, 'commands/birthday:list.title.month', options)
+			: await resolveKey(ctx, 'commands/birthday:list.title.next');
+
+		return birthdayManager.sendListBirthdays(ctx, birthdays, title);
 	}
 
 	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		await thinking(ctx);
-		const target = resolveTarget(ctx);
+		const { options, user } = resolveTarget(ctx);
 		const birthday = getDateFromInteraction(ctx);
 
-		await getBirthdays(ctx.guildId).create({ birthday, userId: target.user.id });
+		await getBirthdays(ctx.guildId).create({ birthday, userId: user.id });
 
-		await updateBirthdayOverview(ctx.guildId);
 		return interactionSuccess(
 			ctx,
-			await resolveKey(ctx, 'commands/birthday:set.success', { date: formatDateForDisplay(birthday) }),
+			await resolveKey(ctx, 'commands/birthday:set.success', {
+				birthday: Intl.DateTimeFormat(ctx.guild.preferredLocale, {
+					dateStyle: 'full',
+					timeZone: TimezoneWithLocale[ctx.guild.preferredLocale],
+				}).format(new Date(birthday.replaceAll('-', '/'))),
+				...options,
+			}),
 		);
 	}
 
@@ -63,18 +78,12 @@ export class BirthdayCommand extends CustomSubCommand {
 		const result = await getBirthdays(ctx.guildId).remove(user.id);
 
 		if (!result) {
-			return interactionProblem(
-				ctx,
-				await resolveKey(
-					ctx,
-					await resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
-						command: BirthdayApplicationCommandMentions.Set,
-					}),
-				),
-			);
+			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
+				command: BirthdayApplicationCommandMentions.Set,
+				...options,
+			});
 		}
 
-		await updateBirthdayOverview(ctx.guildId);
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}
 
@@ -140,7 +149,9 @@ function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 }
 
 function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:list');
+	return applyLocalizedBuilder(builder, 'commands/birthday:list').addStringOption((option) =>
+		monthOptions(option, 'commands/birthday:list.month').setRequired(false),
+	);
 }
 
 function removeBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {

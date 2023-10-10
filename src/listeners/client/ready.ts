@@ -1,5 +1,6 @@
 import { sendMessage } from '#lib/discord';
 import { BOT_ADMIN_LOG, isDevelopment } from '#utils';
+import { floatPromise } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, Store, container } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
@@ -11,8 +12,8 @@ export class UserEvent extends Listener {
 	public async run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		await sendMessage(BOT_ADMIN_LOG, { content: 'online' });
-		await this.container.tasks.run('PostStats', {});
+		floatPromise(await sendMessage(BOT_ADMIN_LOG, { content: 'online' }));
+		floatPromise(this.container.tasks.run('PostStats', {}));
 	}
 
 	private printBanner() {

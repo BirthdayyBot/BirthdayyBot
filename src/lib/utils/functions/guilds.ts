@@ -1,11 +1,11 @@
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
-import { isNotCustom, isDevelopment, isCustom } from '#utils/env';
+import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
 import { MAIN_DISCORD } from '#utils/environment';
+import { Guild as Settings } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import type { Guild, GuildResolvable } from 'discord.js';
-import { Guild as Settings } from '@prisma/client';
 
 export async function getCommandGuilds(
 	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
@@ -46,9 +46,11 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const guild = resolveGuild(resolvable);
 	const previous = cache.get(guild);
 	if (previous !== undefined) return previous;
+
+	const settings = new SettingsManager(guild);
 	const entry: GuildUtilities = {
-		settings: new SettingsManager(guild),
-		birthdays: new BirthdaysManager(guild),
+		settings,
+		birthdays: new BirthdaysManager(guild, settings),
 		guild,
 	};
 	cache.set(guild, entry);

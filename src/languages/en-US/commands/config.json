@@ -56,6 +56,53 @@
   "birthdayRoleName": "birthday-role",
   "listDescription": "List all birthdays on the server",
   "listName": "list",
+  "list": {
+    "embedList": {
+        "title": "Birthdays on {{guild.name}}",
+        "description": "Here is the list of settings on this server.",
+        "footer": {
+            "text": "Use /config <setting> <value> to change any setting",
+            "url": "{{guild.icon}}"
+        },
+        "fields": [
+            {
+                "name": "Announcement Channel",
+                "value": "{{settings.announcementChannel, channel}}",
+                "inline": true
+            },
+            {
+                "name": "Overview Channel",
+                "value": "{{settings.overviewChannel, channel}}",
+                "inline": true
+            },
+            {
+                "name": "Birthday Role",
+                "value": "{{settings.birthdayRole, role}}",
+                "inline": true
+            },
+            {
+                "name": "Mention Role",
+                "value": "{{settings.birthdayPingRole, role}}",
+                "inline": true
+            },
+            {
+                "name": "Language/Timezone",
+                "value": "{{guild.preferredLocale, language}} / {{guild.preferredLocale, timezone}}",
+                "inline": true
+            },
+            {
+                "name": "Log Channel",
+                "value": "{{settings.logChannel, channel}}",
+                "inline": true
+            },
+            {
+                "name": "{{Plus}} Birthday Message",
+                "value": "{{settings.announcementMessage, birthdayMessage}}",
+                "inline": false
+            }
+        ]
+    }
+  },
   "overviewChannel": {
     "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
     "channelDescription": "Channel where the preview should be sent and updated",

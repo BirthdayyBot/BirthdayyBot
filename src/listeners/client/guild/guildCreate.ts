@@ -1,6 +1,7 @@
 import { getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
 import { resolveEmbed } from '#root/commands/general/guide';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
+import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, DiscordAPIError, Events, Guild, PermissionFlagsBits, time, type Snowflake } from 'discord.js';
@@ -12,19 +13,12 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		container.logger.debug(`[GuildCreate] - ${guild.id} ${guild.name}`);
 		const guildId = guild.id;
 		const inviterId = await getBotInviter(guild);
+
 		if (IS_CUSTOM_BOT) {
 			// TODO: #26 Create a nice welcome message for custom bot servers
 		}
 
-		const guildData = await this.container.utilities.guild.get.GuildById(guildId);
-
-		if (guildData) {
-			// When Guild is already in the database, update the disabled status
-			await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, false);
-		} else {
-			// When Guild is not in the database, create a new entry
-			await this.container.utilities.guild.create({ guildId, inviter: inviterId });
-		}
+		await getSettings(guildId).update({ disabled: false, inviter: inviterId });
 
 		if (inviterId) {
 			await sendGuide(inviterId);
@@ -51,7 +45,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			try {
 				const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
 				const entry = auditLogs.entries.first();
-				const userId = entry!.executor!.id;
+				const userId = entry?.executor?.id;
 				container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
 				return userId;
 			} catch (error) {

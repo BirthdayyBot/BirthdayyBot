@@ -56,6 +56,25 @@
   "birthdayRoleName": "role-anniversaire",
   "listDescription": "Liste tous les anniversaires sur le serveur",
   "listName": "list",
+  "list": {
+    "embed": {
+      "title": "Configuration de {{guild.name}}",
+      "fields": [
+        {
+          "name": "Role d'anniversaire",
+          "value": "{{ArrowRight}} {{settings.role}}"
+        },
+        {
+          "name": "Role a mentionner",
+          "value": "{{ArrowRight}} {{settings.pingRole}}"
+        },
+        {
+            "name": "Salon d'annonce",
+            "value": "{{ArrowRight}} {{settings.announcementChannel}}"
+        }
+      ]
+    }
+  },
   "overviewChannel": {
     "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
     "channelDescription": "Salon sur lequel l'aperçu doit être envoyé et mis à jour",

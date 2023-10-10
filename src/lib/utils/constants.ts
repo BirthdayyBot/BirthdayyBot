@@ -7,7 +7,7 @@ export const rootFolder = join(mainFolder, '..');
 export const ZeroWidthSpace = '\u200B';
 export const LongWidthSpace = '\u3000';
 
-export const enum Emojis {
+export enum Emojis {
 	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
 	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
 	ArrowRight = '<:arrow_right_birthdayy:1102221944016875650>',
@@ -34,7 +34,17 @@ export const enum Emojis {
 	Tools = '<:tools_birthdayy:1102222421651623936>',
 }
 
-export const enum BrandingColors {
+export const enum LanguageFormatters {
+	Message = 'message',
+	Channel = 'channel',
+	Role = 'role',
+	Language = 'language',
+	Timezone = 'timezone',
+	replaceNull = 'replaceNull',
+	BirthdayMessage = 'birthdayMessage',
+}
+
+export enum BrandingColors {
 	Birthdayy = 0x78c2ad,
 	BirthdayyDev = 0xf3969a,
 	BirthdayyTest = 0xb34bd1,
@@ -45,31 +55,31 @@ export const enum BrandingColors {
  * @description A collection of error codes
  * @link https://www.prisma.io/docs/reference/api-reference/error-reference#error-codes
  */
-export const enum PrismaErrorCodeEnum {
+export enum PrismaErrorCodeEnum {
 	UniqueConstraintFailed = 'P2002',
 	NotFound = 'P2025',
 }
 
-export const enum BirthdayyBotId {
+export enum BirthdayyBotId {
 	Birthdayy = '916434908728164372',
 	BirthdayyDev = '945106657527078952',
 	BirthdayyTest = '1063411719906529323',
 }
 
-export const enum GuildIDEnum {
+export enum GuildIDEnum {
 	Birthdayy = '934467365389893704',
 	ChilliHQ = '766707453994729532',
 	ChilliAttackV2 = '768556541439377438',
 	BirthdayyTesting = '980559116076470272',
 }
 
-export const enum OwnerID {
+export enum OwnerID {
 	Chillihero = '267614892821970945',
 	Nikolai = '531458441382985729',
 	Swiizyy = '696324357940838492',
 }
 
-export const enum APIErrorCode {
+export enum APIErrorCode {
 	DuplicateEntr = 'duplicate_entry',
 	UnknownError = 'unknown_error',
 	InvalidDateFormat = 'invalid_date_format',

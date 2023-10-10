@@ -21,7 +21,7 @@ export function getCurrentDateInLocaleTimezone(locale: Locale) {
 }
 
 export function getCurrentDateFormatted(date: Dayjs): string {
-	return date.format('YYYY-MM-DD');
+	return date.format('YYYY/MM/DD');
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -29,28 +29,32 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	return `${day}. ${numberToMonthName(Number(month))} ${year.includes('XXXX') ? '' : year}`;
 }
 
-function getMonths() {
-	// TODO: Add Translation
-	return [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
+export function splitDateString(date: string, separator = '-') {
+	const [year, month, day] = date.split(separator);
+	return { year, month, day };
 }
 
+export const months = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+] as const;
+
 export function numberToMonthName(number: number) {
-	const months = getMonths();
-	number -= 1;
-	return months[number];
+	return months[number - 1];
+}
+
+export function monthNameToNumber(month: string) {
+	return months.indexOf(month as any) + 1;
 }
 
 export function parseInputDate(date: string | Date): Date {
@@ -58,7 +62,7 @@ export function parseInputDate(date: string | Date): Date {
 
 	if (typeof date === 'string') {
 		// Ensure the input date string is in 'XXXX-MM-DD' format
-		if (!/^(\d{4}-\d{2}-\d{2})$/.test(date)) {
+		if (!/^(\d{4}\/\d{2}\/\d{2})$/.test(date)) {
 			throw new Error('Invalid date format. Please use "XXXX-MM-DD".');
 		}
 
@@ -129,7 +133,7 @@ export function getCurrentOffset(): TimezoneObject {
 		if (hourWithHourZero === 0) {
 			timezoneObject = {
 				date: today,
-				dateFormatted: today.format('YYYY-MM-DD'),
+				dateFormatted: today.format('YYYY/MM/DD'),
 				utcOffset: offset,
 				timezone: TIMEZONE_VALUES[offset],
 			};
@@ -139,7 +143,7 @@ export function getCurrentOffset(): TimezoneObject {
 	container.logger.warn('getCurrentOffset ~ Could not find timezone offset');
 	timezoneObject = {
 		date: dayjs(),
-		dateFormatted: dayjs().format('YYYY-MM-DD'),
+		dateFormatted: dayjs().format('YYYY/MM/DD'),
 		utcOffset: 0,
 		timezone: 'UTC',
 	};
@@ -160,7 +164,7 @@ export function getDateFromInteraction(interaction: ChatInputCommandInteraction)
 }
 
 export const TimezoneWithLocale: Record<Locale, string> = {
-	[Locale.EnglishUS]: ' America/New_York',
+	[Locale.EnglishUS]: 'America/New_York',
 	[Locale.Greek]: 'Europe/Athens',
 	[Locale.Korean]: 'Asia/Seoul',
 	[Locale.Hungarian]: 'Europe/Budapest',
