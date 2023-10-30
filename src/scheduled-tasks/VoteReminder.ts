@@ -10,7 +10,7 @@ interface VoteReminderTaskPayload {
 	memberId: Snowflake;
 }
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'VoteReminderTask', bullJobsOptions: { removeOnComplete: true } })
+@ApplyOptions<ScheduledTask.Options>({ name: 'VoteReminderTask', customJobOptions: { removeOnComplete: true } })
 export class VoteReminderTask extends ScheduledTask {
 	public async run(payload: VoteReminderTaskPayload) {
 		const { memberId } = payload;
