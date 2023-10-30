@@ -63,7 +63,7 @@
     "@sapphire/plugin-hmr": "^2.0.2",
     "@sapphire/plugin-i18next": "^6.0.1",
     "@sapphire/plugin-logger": "^3.0.6",
-    "@sapphire/plugin-scheduled-tasks": "^7.1.2",
+    "@sapphire/plugin-scheduled-tasks": "^8.0.0",
     "@sapphire/plugin-subcommands": "^4.3.0",
     "@sapphire/plugin-utilities-store": "^1.0.2",
     "@sapphire/result": "^2.6.4",
