@@ -8,7 +8,7 @@ export interface RoleRemovePayload {
 	roleId: Snowflake;
 }
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayRoleRemoverTask', bullJobsOptions: { removeOnComplete: true } })
+@ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayRoleRemoverTask', customJobOptions: { removeOnComplete: true } })
 export class BirthdayRoleRemoverTask extends ScheduledTask {
 	public async run({ memberId, guildId, roleId }: RoleRemovePayload) {
 		const guild = await this.container.client.guilds.fetch(guildId);

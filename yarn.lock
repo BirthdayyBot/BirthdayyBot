@@ -836,27 +836,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-scheduled-tasks@npm:7.1.2":
-  version: 7.1.2
-  resolution: "@sapphire/plugin-scheduled-tasks@npm:7.1.2"
+"@sapphire/plugin-scheduled-tasks@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sapphire/plugin-scheduled-tasks@npm:8.0.0"
   dependencies:
     "@sapphire/stopwatch": ^1.5.0
     "@sapphire/utilities": ^3.13.0
     bullmq: 3.15.8
     tslib: ^2.6.2
-  checksum: c1423bf7583cbdc95d042415cfe438d294131f37cac2081bfbc7cfe03c4aff7de18e2d894013c164b114601f8b730794d32f5d3c85a9d542425f6666a824d510
-  languageName: node
-  linkType: hard
-
-"@sapphire/plugin-scheduled-tasks@patch:@sapphire/plugin-scheduled-tasks@npm%3A7.1.2#./.yarn/patches/@sapphire-plugin-scheduled-tasks-npm-7.1.2-0f4a31b068.patch::locator=birthdayy-discord-bot%40workspace%3A.":
-  version: 7.1.2
-  resolution: "@sapphire/plugin-scheduled-tasks@patch:@sapphire/plugin-scheduled-tasks@npm%3A7.1.2#./.yarn/patches/@sapphire-plugin-scheduled-tasks-npm-7.1.2-0f4a31b068.patch::version=7.1.2&hash=3a8647&locator=birthdayy-discord-bot%40workspace%3A."
-  dependencies:
-    "@sapphire/stopwatch": ^1.5.0
-    "@sapphire/utilities": ^3.13.0
-    bullmq: 3.15.8
-    tslib: ^2.6.2
-  checksum: a3f3942f92caa2643bf75e3872c4ed43103a03d82e7cc0ee8938570651a8ab9dc93b2f7f34846d54ecf004e6c69899b027d99249c6c835c920b534c3db2bcb7c
+  checksum: d0703ce80444f978726fbd37f6ef614ba179496d391104d8e29f6e9db25c220d00986b2b25dfe8a7170333e41dcc20b58194046c4720aa3f68fdcf5a25baf1d1
   languageName: node
   linkType: hard
 
@@ -1603,7 +1591,7 @@ __metadata:
     "@sapphire/plugin-hmr": ^2.0.2
     "@sapphire/plugin-i18next": ^6.0.1
     "@sapphire/plugin-logger": ^3.0.6
-    "@sapphire/plugin-scheduled-tasks": ^7.1.2
+    "@sapphire/plugin-scheduled-tasks": ^8.0.0
     "@sapphire/plugin-subcommands": ^5.0.0
     "@sapphire/plugin-utilities-store": ^1.0.2
     "@sapphire/result": ^2.6.4
