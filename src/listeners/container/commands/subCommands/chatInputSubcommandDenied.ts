@@ -5,8 +5,8 @@ import { interactionProblem } from '#utils/embed';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { SubcommandPluginEvents, type ChatInputSubcommandDeniedPayload } from '@sapphire/plugin-subcommands';
 
-@ApplyOptions<Listener.Options>({ event: SubcommandPluginEvents.ChatInputSubCommandDenied })
-export class ChatInputSubcommandErrorEvent extends Listener<typeof SubcommandPluginEvents.ChatInputSubCommandDenied> {
+@ApplyOptions<Listener.Options>({ event: SubcommandPluginEvents.ChatInputSubcommandDenied })
+export class ChatInputSubcommandErrorEvent extends Listener<typeof SubcommandPluginEvents.ChatInputSubcommandDenied> {
 	public async run(
 		{ context, identifier }: UserError,
 		{ interaction, command, matchedSubcommandMapping }: ChatInputSubcommandDeniedPayload,
