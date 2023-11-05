@@ -76,7 +76,7 @@
     "@sentry/node": "^7.77.0",
     "@sentry/tracing": "^7.77.0",
     "@skyra/env-utilities": "^1.2.1",
-    "bullmq": "^4.12.8",
+    "bullmq": "^4.12.9",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.10",
     "discord-api-types": "^0.37.62",
