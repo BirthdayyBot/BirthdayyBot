@@ -796,12 +796,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-editable-commands@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@sapphire/plugin-editable-commands@npm:3.0.3"
+"@sapphire/plugin-editable-commands@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@sapphire/plugin-editable-commands@npm:4.0.1"
   dependencies:
     "@skyra/editable-commands": ^3.0.1
-  checksum: c4b6953df71447eb74f4b2e36709f04897e63798ac4bab6237da210dfe59b5cdbfd8f5eb31ca83367c2de69957b49a83d1a663de06825a534bcd039788456019
+  checksum: 1f9fd0146fd71c7a469387f4cf8cb5636b3eab6719001878e56defe4793782e19560ab9a0279e753b981873343d8833e3722c78ff1383c0699d96fe99588562a
   languageName: node
   linkType: hard
 
@@ -1587,7 +1587,7 @@ __metadata:
     "@sapphire/fetch": ^2.4.1
     "@sapphire/framework": ^4.7.2
     "@sapphire/plugin-api": ^5.1.2
-    "@sapphire/plugin-editable-commands": ^3.0.3
+    "@sapphire/plugin-editable-commands": ^4.0.1
     "@sapphire/plugin-hmr": ^2.0.2
     "@sapphire/plugin-i18next": ^6.0.1
     "@sapphire/plugin-logger": ^3.0.6
