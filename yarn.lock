@@ -784,15 +784,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^5.1.2":
-  version: 5.1.2
-  resolution: "@sapphire/plugin-api@npm:5.1.2"
+"@sapphire/plugin-api@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@sapphire/plugin-api@npm:6.0.1"
   dependencies:
-    "@types/ws": ^8.5.8
-    tldts: ^6.0.17
+    "@types/ws": ^8.5.10
+    tldts: ^6.1.0
     tslib: ^2.6.2
-    undici: ^5.26.5
-  checksum: 3e4836e3cb9ecaf290ff00fcd8337f41763d3db0a6e0ed531a698d47abdd5b8c8728246d8e7ae01570f2439be80468098439a71eb9f7c437816c75932f6f0ec9
+    undici: ^5.28.2
+  checksum: 0c9174794b14d432a7656d2ba93a23dd74e41463ce89d13a2756e37db4d988b92bdc1d6b8b19e6f3e192908cbb67bd4469291c864e3197b51d45e12b00366638
   languageName: node
   linkType: hard
 
@@ -1116,12 +1116,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^8.5.5, @types/ws@npm:^8.5.8, @types/ws@npm:^8.5.9":
-  version: 8.5.9
-  resolution: "@types/ws@npm:8.5.9"
+"@types/ws@npm:^8.5.10, @types/ws@npm:^8.5.5, @types/ws@npm:^8.5.9":
+  version: 8.5.10
+  resolution: "@types/ws@npm:8.5.10"
   dependencies:
     "@types/node": "*"
-  checksum: 83f436b731d2cdc49a45ced31a0a65cdd2e39c24d7b882776c26efa190dad6553e266d624c7a7089f36ad3ed471e02e729f3219282c80689b435f665df4a2b0b
+  checksum: 3ec416ea2be24042ebd677932a462cf16d2080393d8d7d0b1b3f5d6eaa4a7387aaf0eefb99193c0bfd29444857cf2e0c3ac89899e130550dc6c14ada8a46d25e
   languageName: node
   linkType: hard
 
@@ -1586,7 +1586,7 @@ __metadata:
     "@sapphire/eslint-plugin-result": ^2.0.1
     "@sapphire/fetch": ^2.4.1
     "@sapphire/framework": ^4.7.2
-    "@sapphire/plugin-api": ^5.1.2
+    "@sapphire/plugin-api": ^6.0.1
     "@sapphire/plugin-editable-commands": ^4.0.1
     "@sapphire/plugin-hmr": ^2.0.2
     "@sapphire/plugin-i18next": ^6.0.1
@@ -5914,21 +5914,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tldts-core@npm:^6.0.17":
-  version: 6.0.17
-  resolution: "tldts-core@npm:6.0.17"
-  checksum: 9d976fb84d7754d0fdd133d13484fe22b2e6b6ca4b5f73abb1943656e82d26214cb339a32c39114af219f0b791ff21733520376400bb4e750eb848bbdf6a631b
+"tldts-core@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "tldts-core@npm:6.1.0"
+  checksum: e7cb17397effe5d345c55ee61774edf2b2e90cb235ed712c9143382d9361ca773385c554594ae42c9b45cec5a30afa507e63ee1dce1814d5d12f0b5ba307da7e
   languageName: node
   linkType: hard
 
-"tldts@npm:^6.0.17":
-  version: 6.0.17
-  resolution: "tldts@npm:6.0.17"
+"tldts@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "tldts@npm:6.1.0"
   dependencies:
-    tldts-core: ^6.0.17
+    tldts-core: ^6.1.0
   bin:
     tldts: bin/cli.js
-  checksum: 97d59cb4b5ccd95e1d1e3665b390e004bffb58c5590e7badc1ffe97d718c8cd29bfd9ced1e9f4df0926a319ca378fad0ac807437a5eec065439b8a1b6d120a47
+  checksum: 5542eb949b63d7a1e164466e5532534916a7be36a96728f28dca8f3549bb1077817e8a6218b086b0d8e0ae812f0fa9caa4ec3484298b66bea0fabdecef8fc091
   languageName: node
   linkType: hard
 
@@ -6163,12 +6163,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^5.16.0, undici@npm:^5.26.5":
-  version: 5.27.0
-  resolution: "undici@npm:5.27.0"
+"undici@npm:^5.16.0, undici@npm:^5.28.2":
+  version: 5.28.2
+  resolution: "undici@npm:5.28.2"
   dependencies:
     "@fastify/busboy": ^2.0.0
-  checksum: 3acad25bfe5957aa5edc24eb160b5da7a9c67a5061e2e001929bef4bafed07d93a2accb36d407179c35b3ae56adbe89b49e1dd80d8cea9fdc44dca2037174330
+  checksum: f9e9335803f962fff07c3c11c6d50bbc76248bacf97035047155adb29c3622a65bd6bff23a22218189740133149d22e63b68131d8c40e78ac6cb4b6d686a6dfa
   languageName: node
   linkType: hard
 
