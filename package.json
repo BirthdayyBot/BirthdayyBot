@@ -60,7 +60,7 @@
     "@sapphire/framework": "^4.7.2",
     "@sapphire/plugin-api": "^5.1.2",
     "@sapphire/plugin-editable-commands": "^4.0.1",
-    "@sapphire/plugin-hmr": "^2.0.2",
+    "@sapphire/plugin-hmr": "^3.0.0",
     "@sapphire/plugin-i18next": "^6.0.1",
     "@sapphire/plugin-logger": "^3.0.6",
     "@sapphire/plugin-scheduled-tasks": "^8.0.0",

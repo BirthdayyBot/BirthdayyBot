@@ -805,12 +805,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-hmr@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@sapphire/plugin-hmr@npm:2.0.2"
+"@sapphire/plugin-hmr@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@sapphire/plugin-hmr@npm:3.0.0"
   dependencies:
     chokidar: ^3.5.3
-  checksum: c9b19e3567e0b8ccb2f8353db867f364e4b4ee9f366a504ea452ffddab6986ee80f917660515a0d9afdd8323f146465b8050d2f6cb60769e6130384b265e4ce4
+  checksum: 2fcadf165910e2d065545d8b89269911843af00817727a7de15274e4211c908da203a52541b3327cbb669a6d450edcd3d511bfb7ad7e6ac198f52ab8247f414f
   languageName: node
   linkType: hard
 
@@ -1588,7 +1588,7 @@ __metadata:
     "@sapphire/framework": ^4.7.2
     "@sapphire/plugin-api": ^5.1.2
     "@sapphire/plugin-editable-commands": ^4.0.1
-    "@sapphire/plugin-hmr": ^2.0.2
+    "@sapphire/plugin-hmr": ^3.0.0
     "@sapphire/plugin-i18next": ^6.0.1
     "@sapphire/plugin-logger": ^3.0.6
     "@sapphire/plugin-scheduled-tasks": ^8.0.0
