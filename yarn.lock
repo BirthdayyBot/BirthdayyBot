@@ -836,15 +836,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-scheduled-tasks@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@sapphire/plugin-scheduled-tasks@npm:8.0.0"
+"@sapphire/plugin-scheduled-tasks@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "@sapphire/plugin-scheduled-tasks@npm:9.1.0"
   dependencies:
-    "@sapphire/stopwatch": ^1.5.0
-    "@sapphire/utilities": ^3.13.0
+    "@sapphire/stopwatch": ^1.5.1
+    "@sapphire/utilities": ^3.14.0
     bullmq: 3.15.8
     tslib: ^2.6.2
-  checksum: d0703ce80444f978726fbd37f6ef614ba179496d391104d8e29f6e9db25c220d00986b2b25dfe8a7170333e41dcc20b58194046c4720aa3f68fdcf5a25baf1d1
+  checksum: a028ef4ae5e03688053bf7a2f7ab6c100cbea05cd5b9a1b4f19dd3086cbe5be8706770a377b1119795dfc4fdd3aa70fd804e1351e07432d156fca1ea489ec491
   languageName: node
   linkType: hard
 
@@ -896,12 +896,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/stopwatch@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@sapphire/stopwatch@npm:1.5.0"
+"@sapphire/stopwatch@npm:^1.5.0, @sapphire/stopwatch@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@sapphire/stopwatch@npm:1.5.1"
   dependencies:
-    tslib: ^2.4.0
-  checksum: 23c013598d87d2fcc797efe5d2409ae6836b9221d79eacc10b7c2a95f9d694b562b7ad027dc49e9e8125095417199385a15317520fec371bdb8cc7622085e3af
+    tslib: ^2.6.2
+  checksum: b91c8843b973515c5f71889ce0ebdd84ead2da369126e60d9e91f36efa6281e8c36c1f57e63b34b982241958943a35c75087ff4aa7b82f4248fccb3aa5a038d7
   languageName: node
   linkType: hard
 
@@ -1591,7 +1591,7 @@ __metadata:
     "@sapphire/plugin-hmr": ^3.0.0
     "@sapphire/plugin-i18next": ^7.0.1
     "@sapphire/plugin-logger": ^4.0.1
-    "@sapphire/plugin-scheduled-tasks": ^8.0.0
+    "@sapphire/plugin-scheduled-tasks": ^9.1.0
     "@sapphire/plugin-subcommands": ^6.0.1
     "@sapphire/plugin-utilities-store": ^1.0.2
     "@sapphire/result": ^2.6.4
@@ -6006,7 +6006,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.5.0, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
+"tslib@npm:^2.0.0, tslib@npm:^2.5.0, tslib@npm:^2.6.0, tslib@npm:^2.6.1, tslib@npm:^2.6.2":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
