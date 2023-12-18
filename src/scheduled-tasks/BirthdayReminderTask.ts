@@ -71,7 +71,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 					}),
 				],
 			});
-			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+			return container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
@@ -81,34 +81,31 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (isCustom) {
 			container.logger.info('[BirthdayTask] Custom Bot task');
-			const guildOffset = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
+			const guildOffset = await container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
 				return container.logger.debug(
 					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
 				);
 			}
-			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
+			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
 				utcOffset,
 				MAIN_DISCORD,
 			);
 		} else {
-			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
-				todaysDate,
-				utcOffset,
-			);
+			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
 		}
 
 		if (!currentBirthdays.length) {
 			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
-			return this.container.logger.info(
+			return container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
 			);
 		}
 
-		this.container.logger.debug(
+		container.logger.debug(
 			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
 		);
 
@@ -123,7 +120,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const eventInfos = [];
 		for (const birthday of birthdays) {
 			if (DEBUG)
-				this.container.logger.debug(
+				container.logger.debug(
 					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
 				);
 			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
@@ -137,7 +134,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			userId,
 			guildId,
 		};
-		const config = await this.container.utilities.guild.get.GuildConfig(guildId);
+		const config = await container.utilities.guild.get.GuildConfig(guildId);
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
@@ -163,10 +160,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
 				// TODO: Clean up in #407
-				await this.container.utilities.guild.update
+				await container.utilities.guild.update
 					.DisableGuildAndBirthdays(guildId, true)
 					.catch((error: PrismaClientUnknownRequestError) => {
-						this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+						container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
 					});
 				eventInfo.error += ' - Guild & Birthdays disabled';
 			}
@@ -177,10 +174,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {
-				await this.container.utilities.birthday.delete
+				await container.utilities.birthday.delete
 					.ByGuildAndUser(guildId, userId)
 					.catch((error: PrismaClientUnknownRequestError) => {
-						this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
+						container.logger.error('[BirthdayTask] Error deleting birthday', error);
 					});
 				eventInfo.error += ' - Birthday deleted';
 			}
@@ -209,9 +206,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!announcementChannel) {
-			this.container.logger.debug(
-				`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`,
-			);
+			container.logger.debug(`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`);
 			eventInfo.announcement.message = 'Announcement Channel not set';
 			return eventInfo;
 		}
@@ -262,12 +257,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
-					await this.container.utilities.guild.reset.BirthdayRole(guildId);
+					await container.utilities.guild.reset.BirthdayRole(guildId);
 					returnData.message = 'Missing Permissions';
 				} else {
 					returnData.message = error.message;
 				}
-				this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
+				container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
 			}
 			return returnData;
 		}
@@ -298,11 +293,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
 					// send Log to user and remove channel from config
 					returnData.message = 'Missing Permissions';
-					await this.container.utilities.guild.reset.AnnouncementChannel(guildId);
+					await container.utilities.guild.reset.AnnouncementChannel(guildId);
 				} else if (error.message.includes('Unknown Channel')) {
 					// send Log to user and remove channel from config
 					returnData.message = 'Unknown Channel';
-					await this.container.utilities.guild.reset.AnnouncementChannel(guildId);
+					await container.utilities.guild.reset.AnnouncementChannel(guildId);
 				} else {
 					returnData.message = error.message;
 				}

@@ -16,7 +16,7 @@ import { inlineCode } from 'discord.js';
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		if (IS_CUSTOM_BOT) return;
-		this.container.logger.debug('[CleaningTask] Started');
+		container.logger.debug('[CleaningTask] Started');
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
@@ -39,8 +39,8 @@ export class CleanDatabaseTask extends ScheduledTask {
 			],
 		});
 
-		this.container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
+		container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
 
-		this.container.logger.debug('[CleaningTask] Done');
+		container.logger.debug('[CleaningTask] Done');
 	}
 }
