@@ -1,6 +1,6 @@
 import { applyLocalizedBuilder, createLocalizedChoice } from '@sapphire/plugin-i18next';
 import dayjs from 'dayjs';
-import type { SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from 'discord.js';
+import type { SlashCommandIntegerOption, SlashCommandStringOption, SlashCommandUserOption } from '@discordjs/builders';
 
 export function dayOptions(option: SlashCommandIntegerOption, key: string) {
 	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);

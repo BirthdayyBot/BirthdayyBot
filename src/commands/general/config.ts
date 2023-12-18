@@ -12,14 +12,14 @@ import { CommandOptionsRunTypeEnum, type ApplicationCommandRegistry } from '@sap
 import { applyLocalizedBuilder, createLocalizedChoice, resolveKey } from '@sapphire/plugin-i18next';
 import {
 	ChannelType,
-	SlashCommandBuilder,
-	SlashCommandSubcommandBuilder,
 	bold,
 	channelMention,
 	chatInputApplicationCommandMention,
 	roleMention,
 	type PermissionResolvable,
 } from 'discord.js';
+
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "@discordjs/builders";
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(
