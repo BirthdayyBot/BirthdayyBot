@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import type { Dayjs } from 'dayjs';
 import type { User } from 'discord.js';
@@ -48,7 +49,7 @@ export class Birthday extends Utility {
 			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } }),
 	};
 
-	private prisma = this.container.prisma;
+	private prisma = container.prisma;
 
 	public constructor(context: Utility.Context, options: Utility.Options) {
 		super(context, {

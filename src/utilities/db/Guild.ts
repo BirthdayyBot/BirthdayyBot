@@ -1,6 +1,7 @@
 import { sendMessage } from '#lib/discord/message';
 import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
+import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { codeBlock } from '@sapphire/utilities';
 import type { Snowflake } from 'discord.js';
@@ -185,7 +186,7 @@ export class Guild extends Utility {
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: null } }),
 	};
 
-	private prisma = this.container.prisma;
+	private prisma = container.prisma;
 
 	public constructor(context: Utility.Context, options: Utility.Options) {
 		super(context, {

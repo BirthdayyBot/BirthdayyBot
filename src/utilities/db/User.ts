@@ -1,3 +1,4 @@
+import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 
 export class User extends Utility {
@@ -6,7 +7,7 @@ export class User extends Utility {
 		UserCount: () => this.prisma.user.count(),
 	};
 
-	private prisma = this.container.prisma;
+	private prisma = container.prisma;
 
 	public constructor(context: Utility.Context, options: Utility.Options) {
 		super(context, {
