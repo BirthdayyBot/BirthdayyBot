@@ -125,7 +125,7 @@
   "lint-staged": {
     "*.{mjs,js,ts}": "eslint --fix --ext mjs,js,ts"
   },
-  "packageManager": "yarn@3.7.0",
+  "packageManager": "yarn@4.0.2",
   "volta": {
     "node": "18.19.0",
     "yarn": "4.0.2"
