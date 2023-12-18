@@ -1,14 +1,14 @@
 import { PermissionLevels } from '#lib/types/Enums';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
 import { BOT_OWNER } from '#utils/environment';
-import { Command, PreconditionContainerArray, UserError, type PieceContext } from '@sapphire/framework';
+import { Command, PreconditionContainerArray, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { CacheType } from 'discord.js';
 
 export class CustomCommand extends Command {
 	public readonly permissionLevel: PermissionLevels;
 
-	public constructor(context: PieceContext, options: CustomCommand.Options) {
+	public constructor(context: Command.LoaderContext, options: CustomCommand.Options) {
 		super(context, sharedCommandOptions(options));
 
 		this.permissionLevel =
@@ -30,7 +30,7 @@ export class CustomCommand extends Command {
 export class CustomSubCommand extends Subcommand {
 	public readonly permissionLevel: PermissionLevels;
 
-	public constructor(context: PieceContext, options: CustomCommand.Options) {
+	public constructor(context: Subcommand.LoaderContext, options: CustomCommand.Options) {
 		super(context, sharedCommandOptions(options));
 
 		this.permissionLevel =
@@ -60,7 +60,7 @@ export namespace CustomCommand {
 	export type Options = Command['options'] & {
 		permissionLevel?: PermissionLevels | keyof typeof PermissionLevels;
 	};
-	export type Context = Command.Context;
+	export type LoaderContext = Command.LoaderContext;
 	export type Registry = Command.Registry;
 	export type ChatInputCommandInteraction<Cached extends CacheType = CacheType> =
 		Command.ChatInputCommandInteraction<Cached>;
@@ -75,7 +75,7 @@ export namespace CustomSubCommand {
 	export type Options = Subcommand['options'] & {
 		permissionLevel?: PermissionLevels | keyof typeof PermissionLevels;
 	};
-	export type Context = Subcommand.Context;
+	export type LoaderContext = Subcommand.LoaderContext;
 	export type Registry = Subcommand.Registry;
 	export type ChatInputCommandInteraction<Cached extends CacheType = CacheType> =
 		Subcommand.ChatInputCommandInteraction<Cached>;

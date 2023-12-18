@@ -4,6 +4,7 @@ import type { ArrayString, BooleanString, IntegerString, NumberString } from '@s
 import type { WebhookClient } from 'discord.js';
 import type { Events } from './Enums.js';
 import type { WritePrecisionType } from '@influxdata/influxdb-client';
+import { BotList } from '@devtomio/plugin-botlist';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -78,6 +79,7 @@ declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
 		webhook: WebhookClient | null;
+		botList: BotList;
 	}
 }
 
