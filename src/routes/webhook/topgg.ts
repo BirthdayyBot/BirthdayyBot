@@ -9,6 +9,7 @@ import { generateDefaultEmbed } from '#utils/embed';
 import { BOT_NAME, Emojis, VOTE_CHANNEL_ID, VOTE_ROLE_ID, WEBSITE_URL } from '#utils/environment';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
 import { s } from '@sapphire/shapeshift';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
@@ -38,7 +39,7 @@ export class UserRoute extends Route {
 
 		try {
 			const user = await getUserInfo(body.user);
-			const guild = await this.container.client.guilds.fetch(BirthdayyBotId.Birthdayy);
+			const guild = await container.client.guilds.fetch(BirthdayyBotId.Birthdayy);
 
 			if (!user || !guild) return response.end();
 
@@ -60,7 +61,7 @@ export class UserRoute extends Route {
 
 	private async addRoleAndCreateTask(payload: RoleRemovePayload) {
 		await addRoleToUser(payload.memberId, payload.roleId, BirthdayyBotId.Birthdayy);
-		await this.container.tasks.create('BirthdayRoleRemoverTask', payload, {
+		await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 			repeated: false,
 			delay: Time.Hour * 12,
 		});
@@ -81,7 +82,7 @@ export class UserRoute extends Route {
 		const embed = generateDefaultEmbed({
 			title: `${Emojis.Exclamation} New Vote on ${this.provider.name}`,
 			description: `\`${user.username}#${user.discriminator}\` has **voted** for ${
-				this.container.client.user?.username ?? BOT_NAME
+				container.client.user?.username ?? BOT_NAME
 			}! Use \`/vote\` or vote [here](${this.provider.url}) directly.`,
 			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
 		});

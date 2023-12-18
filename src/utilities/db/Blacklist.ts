@@ -1,4 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 
 @ApplyOptions<Utility.Options>({
@@ -19,5 +20,5 @@ export class Blacklist extends Utility {
 			this.prisma.blacklist.delete({ where: { userId_guildId: { userId, guildId } } }),
 	};
 
-	private prisma = this.container.prisma;
+	private prisma = container.prisma;
 }

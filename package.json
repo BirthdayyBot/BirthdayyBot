@@ -58,7 +58,7 @@
     "@sapphire/eslint-plugin-result": "^2.0.1",
     "@sapphire/fetch": "^2.4.1",
     "@sapphire/framework": "^4.7.2",
-    "@sapphire/plugin-api": "^5.1.2",
+    "@sapphire/plugin-api": "^6.0.1",
     "@sapphire/plugin-editable-commands": "^4.0.1",
     "@sapphire/plugin-hmr": "^3.0.0",
     "@sapphire/plugin-i18next": "^7.0.1",
