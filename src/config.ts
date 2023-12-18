@@ -12,7 +12,6 @@ import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tas
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
 import { envIsDefined, envParseArray, envParseNumber, envParseString } from '@skyra/env-utilities';
-import type { QueueOptions } from 'bullmq';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -135,7 +134,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 	};
 }
 
-function parseBullOptions(): QueueOptions {
+function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 	return {
 		connection: {
 			port: envParseNumber('REDIS_PORT'),

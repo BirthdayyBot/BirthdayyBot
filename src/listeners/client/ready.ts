@@ -2,7 +2,7 @@ import { sendMessage } from '#lib/discord';
 import { BOT_ADMIN_LOG, isDevelopment } from '#utils';
 import { floatPromise } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, Piece, PieceOptions, Store, container } from '@sapphire/framework';
+import { Events, Listener, Store, container } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
