@@ -826,13 +826,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-logger@npm:^3.0.6":
-  version: 3.0.6
-  resolution: "@sapphire/plugin-logger@npm:3.0.6"
+"@sapphire/plugin-logger@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@sapphire/plugin-logger@npm:4.0.1"
   dependencies:
-    "@sapphire/timestamp": ^1.0.1
+    "@sapphire/timestamp": ^1.0.2
     colorette: ^2.0.20
-  checksum: 18bb5726a52595aaae7bcd07ec367d5c7ba78fc9eb38c45f84427f67efd2c8066c64f06a67af483489d0dd6866cb7b75a16ad37ceee10d76b30c47fe117fb351
+  checksum: 7345dd314750c17bd4da4d5d351f479b154b4131d1603045cd386e21cf7ed558d820d3894efdc886ef24e174a140fb09374799761c9e035007b8104378b732aa
   languageName: node
   linkType: hard
 
@@ -924,10 +924,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/timestamp@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@sapphire/timestamp@npm:1.0.1"
-  checksum: 40320946cb8fcbbb610b94019882eb39c900b9af87e4a2d173299efaa062921662d950780c273fd44f4ec9877983d725d28f0b999314f338f3bfc0ab3c45a8cb
+"@sapphire/timestamp@npm:^1.0.1, @sapphire/timestamp@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@sapphire/timestamp@npm:1.0.2"
+  checksum: 183798db61544ac8f28f11f2caffc7ef81005d67910ff96e02c6cd0caba08d14b740df312130b7845114a4d2532c3364ef0e45c8ad63d156694174e37db3ce0c
   languageName: node
   linkType: hard
 
@@ -1590,7 +1590,7 @@ __metadata:
     "@sapphire/plugin-editable-commands": ^4.0.1
     "@sapphire/plugin-hmr": ^2.0.2
     "@sapphire/plugin-i18next": ^6.0.1
-    "@sapphire/plugin-logger": ^3.0.6
+    "@sapphire/plugin-logger": ^4.0.1
     "@sapphire/plugin-scheduled-tasks": ^8.0.0
     "@sapphire/plugin-subcommands": ^5.0.0
     "@sapphire/plugin-utilities-store": ^1.0.2
