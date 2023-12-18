@@ -61,7 +61,7 @@
     "@sapphire/plugin-api": "^5.1.2",
     "@sapphire/plugin-editable-commands": "^4.0.1",
     "@sapphire/plugin-hmr": "^3.0.0",
-    "@sapphire/plugin-i18next": "^6.0.1",
+    "@sapphire/plugin-i18next": "^7.0.1",
     "@sapphire/plugin-logger": "^4.0.1",
     "@sapphire/plugin-scheduled-tasks": "^8.0.0",
     "@sapphire/plugin-subcommands": "^6.0.1",
