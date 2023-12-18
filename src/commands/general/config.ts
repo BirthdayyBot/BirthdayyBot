@@ -19,7 +19,7 @@ import {
 	type PermissionResolvable,
 } from 'discord.js';
 
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "@discordjs/builders";
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(

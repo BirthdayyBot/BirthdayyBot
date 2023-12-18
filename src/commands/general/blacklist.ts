@@ -11,15 +11,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedFieldMessageEmbed } from '@sapphire/discord.js-utilities';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import {
-	EmbedBuilder,
-	chatInputApplicationCommandMention,
-	time,
-	userMention,
-} from 'discord.js';
+import { EmbedBuilder, chatInputApplicationCommandMention, time, userMention } from 'discord.js';
 
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "@discordjs/builders";
-
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings('add', 'list', 'remove'),
