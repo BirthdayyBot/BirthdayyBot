@@ -1658,6 +1658,7 @@ __metadata:
     "@sapphire/plugin-scheduled-tasks": "npm:^9.1.0"
     "@sapphire/plugin-subcommands": "npm:^6.0.1"
     "@sapphire/plugin-utilities-store": "npm:^2.0.1"
+    "@sapphire/ratelimits": "npm:^2.4.8"
     "@sapphire/result": "npm:^2.6.5"
     "@sapphire/shapeshift": "npm:^3.9.5"
     "@sapphire/stopwatch": "npm:^1.5.1"

@@ -1,58 +1,134 @@
+import { isAdmin } from '#utils/functions/permissions';
+import { Time } from '@sapphire/cron';
 import { createFunctionPrecondition } from '@sapphire/decorators';
-import type { ApiResponse } from '@sapphire/plugin-api';
+import { container } from '@sapphire/framework';
+import { ApiRequest, HttpCodes, LoginData, type ApiResponse } from '@sapphire/plugin-api';
+import { RateLimitManager } from '@sapphire/ratelimits';
+import { sleep } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
-import type { ApiRequest } from './types.js';
+import { PermissionFlagsBits, RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
+import { Client, Guild, GuildMember, PermissionsBitField } from 'discord.js';
+import { flattenGuild } from './ApiTransformers.js';
+import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
+
+export const authenticated = (token = envParseString('API_SECRET')) =>
+	createFunctionPrecondition(
+		(request: ApiRequest) => Boolean(request.auth?.token) ?? request.headers.authorization === token,
+		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized),
+	);
 
 /**
- * It returns a function that takes a request and returns a response
- * @param token - The token to check against. Defaults to the API_SECRET environment variable.
- * @returns A function that takes a request and a response and returns a boolean.
+ * @param time The amount of milliseconds for the ratelimits from this manager to expire.
+ * @param limit The amount of times a {@link RateLimit} can drip before it's limited.
+ * @param auth Whether or not this should be auth-limited
  */
-export function authenticated(token = envParseString('API_SECRET')) {
+export function ratelimit(time: number, limit = 1, auth = false) {
+	const manager = new RateLimitManager(time, limit);
+	const xRateLimitLimit = time;
 	return createFunctionPrecondition(
-		(req: ApiRequest) => req.headers.authorization === token,
-		(_req: ApiRequest, res: ApiResponse) => res.unauthorized(),
+		(request: ApiRequest, response: ApiResponse) => {
+			const id = (
+				auth ? request.auth!.id : request.headers['x-forwarded-for'] || request.socket.remoteAddress
+			) as string;
+			const bucket = manager.acquire(id);
+
+			response.setHeader('Date', new Date().toUTCString());
+			if (bucket.limited) {
+				response.setHeader('Retry-After', bucket.remainingTime.toString());
+				return false;
+			}
+
+			try {
+				bucket.consume();
+			} catch {}
+
+			response.setHeader('X-RateLimit-Limit', xRateLimitLimit);
+			response.setHeader('X-RateLimit-Remaining', bucket.remaining.toString());
+			response.setHeader('X-RateLimit-Reset', bucket.remainingTime.toString());
+
+			return true;
+		},
+		(_request: ApiRequest, response: ApiResponse) => {
+			response.error(HttpCodes.TooManyRequests);
+		},
 	);
 }
 
-type ValidQueryParams<T = string | string[]> = Array<keyof T> | undefined;
+export async function canManage(guild: Guild, member: GuildMember): Promise<boolean> {
+	await sleep(Time.Second * 3);
+	if (guild.ownerId === member.id) return true;
+	return isAdmin(member);
+}
 
-/**
- * `validateParams` is a function that takes a list of required query parameters and returns a function
- * that takes an API request and returns a boolean indicating whether or not the request has all of the
- * required parameters
- * @param requiredParams - An optional list of parameters that are required. If not provided, all
- * parameters are required.
- * @returns A function that takes a request and a response and returns a boolean.
- */
-export function validateParams<QueryParams extends Record<string, string | string[]>>(
-	requiredParams?: ValidQueryParams<QueryParams>,
-) {
-	const paramsToValidate = requiredParams ?? Object.keys({} as QueryParams);
-	const missingParams: string[] = [];
-	const invalidParams: Array<{ key: string; receivedType: unknown; expectedType: unknown }> = [];
+async function getManageable(
+	id: string,
+	oauthGuild: RESTAPIPartialCurrentUserGuild,
+	guild: Guild | undefined,
+): Promise<boolean> {
+	if (oauthGuild.owner) return true;
+	if (typeof guild === 'undefined')
+		return new PermissionsBitField(BigInt(oauthGuild.permissions)).has(PermissionFlagsBits.ManageGuild);
 
-	return createFunctionPrecondition(
-		(req: ApiRequest<QueryParams>) => {
-			for (const param of paramsToValidate) {
-				/* It's checking if the parameter is in the query. */
-				if (!(param in req.query)) {
-					missingParams.push(param as string);
-					/* It's checking if the type of the parameter is the same as the type of the query parameter. */
-				} else if (typeof req.query[param as string] !== (typeof {} as QueryParams[typeof param])) {
-					invalidParams.push({
-						key: param as string,
-						receivedType: typeof req.query[param],
-						expectedType: typeof {} as QueryParams[typeof param],
-					});
+	const member = await guild.members.fetch(id).catch(() => null);
+	if (!member) return false;
+
+	return canManage(guild, member);
+}
+
+async function transformGuild(
+	client: Client,
+	userId: string,
+	data: RESTAPIPartialCurrentUserGuild,
+): Promise<OauthFlattenedGuild> {
+	const guild = client.guilds.cache.get(data.id);
+	const serialized: PartialOauthFlattenedGuild =
+		typeof guild === 'undefined'
+			? {
+					afkChannelId: null,
+					afkTimeout: 0,
+					applicationId: null,
+					approximateMemberCount: null,
+					approximatePresenceCount: null,
+					available: true,
+					banner: null,
+					channels: [],
+					defaultMessageNotifications: 'ONLY_MENTIONS',
+					description: null,
+					widgetEnabled: false,
+					explicitContentFilter: 'DISABLED',
+					icon: data.icon,
+					id: data.id,
+					joinedTimestamp: null,
+					mfaLevel: 'NONE',
+					name: data.name,
+					ownerId: data.owner ? userId : null,
+					partnered: false,
+					preferredLocale: 'en-US',
+					premiumSubscriptionCount: null,
+					premiumTier: 'NONE',
+					roles: [],
+					splash: null,
+					systemChannelId: null,
+					vanityURLCode: null,
+					verificationLevel: 'NONE',
+					verified: false,
 				}
-			}
-			return missingParams.length === 0 && invalidParams.length === 0;
-		},
-		(_req: ApiRequest<QueryParams>, res: ApiResponse) =>
-			res.badRequest({
-				missing: missingParams.length > 0 ? `Missing Parameter(s) - ${missingParams.join(', ')}` : undefined,
-				invalid: invalidParams.length > 0 ? `Invalid Parameter(s) - ${invalidParams.join(', ')}` : undefined,
-			}),
-	);
+			: flattenGuild(guild);
+
+	return {
+		...serialized,
+		permissions: data.permissions,
+		manageable: await getManageable(userId, data, guild),
+		botIsIn: typeof guild !== 'undefined',
+	};
+}
+
+export async function transformOauthGuildsAndUser({ user, guilds }: LoginData): Promise<TransformedLoginData> {
+	if (!user || !guilds) return { user, guilds };
+
+	const { client } = container;
+	const userId = user.id;
+
+	const transformedGuilds = await Promise.all(guilds.map((guild) => transformGuild(client, userId, guild)));
+	return { user, transformedGuilds };
 }
