@@ -20,7 +20,6 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
-import type { QueueOptions } from 'bullmq';
 import { OAuth2Scopes } from 'discord-api-types/v10';
 import {
 	ActivityType,
@@ -161,7 +160,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 	};
 }
 
-function parseBullOptions(): QueueOptions {
+function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 	return {
 		connection: {
 			port: envParseNumber('REDIS_PORT'),
