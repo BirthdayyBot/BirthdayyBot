@@ -1,3 +1,4 @@
+import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { TimezoneWithLocale } from '#utils/common/date';
 import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from '#utils/constants';
 import { isProduction } from '#utils/env';
@@ -6,12 +7,21 @@ import { getGuild } from '#utils/functions/guilds';
 import type { BotList } from '@devtomio/plugin-botlist';
 import type { InfluxOptions } from '@kaname-png/plugin-influxdb';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
-import type { ServerOptions } from '@sapphire/plugin-api';
+import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
-import { envIsDefined, envParseArray, envParseNumber, envParseString } from '@skyra/env-utilities';
+import {
+	envIsDefined,
+	envParseArray,
+	envParseBoolean,
+	envParseInteger,
+	envParseNumber,
+	envParseString,
+} from '@skyra/env-utilities';
+import type { QueueOptions } from 'bullmq';
+import { OAuth2Scopes } from 'discord-api-types/v10';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -25,16 +35,33 @@ import {
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
-import { FormatFunction, InterpolationOptions } from 'i18next';
-import { join } from 'path';
+import type { FormatFunction, InterpolationOptions } from 'i18next';
+import { join } from 'node:path';
 
 export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
 
-function parseApi(): ServerOptions {
+function parseApiAuth(): ServerOptionsAuth | undefined {
+	if (!process.env.OAUTH_SECRET) return undefined;
+
 	return {
-		prefix: envParseString('API_EXTENSION', ''),
-		origin: '*',
-		listenOptions: { port: envParseNumber('API_PORT', 4000) },
+		id: envParseString('CLIENT_ID', '266624760782258186'),
+		secret: envParseString('OAUTH_SECRET'),
+		cookie: envParseString('OAUTH_COOKIE', 'BIRTHDAYY_AUTH'),
+		redirect: envParseString('OAUTH_REDIRECT_URI', 'http://127.0.0.1:3000/oauth/callback'),
+		scopes: envParseArray('OAUTH_SCOPE') as OAuth2Scopes[],
+		transformers: [transformOauthGuildsAndUser],
+		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE', '127.0.0.1'),
+	};
+}
+
+function parseApi(): ServerOptions | undefined {
+	if (!envParseBoolean('API_ENABLED', false)) return undefined;
+
+	return {
+		auth: parseApiAuth(),
+		prefix: envParseString('API_PREFIX', '/'),
+		origin: envParseString('API_ORIGIN', 'http://127.0.0.1:3000'),
+		listenOptions: { port: envParseInteger('API_PORT', 3000) },
 		automaticallyConnect: false,
 	};
 }
@@ -134,7 +161,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 	};
 }
 
-function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
+function parseBullOptions(): QueueOptions {
 	return {
 		connection: {
 			port: envParseNumber('REDIS_PORT'),
@@ -192,12 +219,12 @@ export function parseAnalytics(): InfluxOptions {
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
+	api: parseApi(),
 	analytics: parseAnalytics(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: true,
 	logger: parseLoggerOptions(),
 	shards: 'auto',
-	api: parseApi(),
 	botList: parseBotListOptions(),
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),

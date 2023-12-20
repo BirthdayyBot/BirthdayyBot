@@ -1,5 +1,5 @@
 import type { LoginData } from '@sapphire/plugin-api';
-import type { FlattenedGuild, FlattenedUser } from './ApiTransformers';
+import type { FlattenedGuild, FlattenedUser } from './ApiTransformers.js';
 
 export interface PartialOauthFlattenedGuild extends Omit<FlattenedGuild, 'joinedTimestamp' | 'ownerId' | 'features'> {
 	joinedTimestamp: FlattenedGuild['joinedTimestamp'] | null;
