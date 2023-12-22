@@ -20,17 +20,19 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
-import { OAuth2Scopes } from 'discord-api-types/v10';
 import {
 	ActivityType,
 	GatewayIntentBits,
 	Locale,
 	PermissionFlagsBits,
-	PermissionsString,
 	PresenceUpdateStatus,
+	type OAuth2Scopes,
+} from 'discord-api-types/v10';
+import {
 	channelMention,
 	roleMention,
 	type ClientOptions,
+	type PermissionsString,
 	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';

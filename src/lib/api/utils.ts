@@ -2,18 +2,27 @@ import { isAdmin } from '#utils/functions/permissions';
 import { Time } from '@sapphire/cron';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
-import { ApiRequest, HttpCodes, LoginData, type ApiResponse } from '@sapphire/plugin-api';
+import { ApiRequest, HttpCodes, type ApiResponse, type LoginData } from '@sapphire/plugin-api';
 import { RateLimitManager } from '@sapphire/ratelimits';
 import { sleep } from '@sapphire/utilities';
-import { envParseString } from '@skyra/env-utilities';
-import { PermissionFlagsBits, RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
-import { Client, Guild, GuildMember, PermissionsBitField } from 'discord.js';
+import { Locale, PermissionFlagsBits, type RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
+import {
+	Client,
+	Guild,
+	GuildDefaultMessageNotifications,
+	GuildExplicitContentFilter,
+	GuildMFALevel,
+	GuildMember,
+	GuildPremiumTier,
+	GuildVerificationLevel,
+	PermissionsBitField,
+} from 'discord.js';
 import { flattenGuild } from './ApiTransformers.js';
 import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
 
-export const authenticated = (token = envParseString('API_SECRET')) =>
+export const authenticated = (token?: string) =>
 	createFunctionPrecondition(
-		(request: ApiRequest) => Boolean(request.auth?.token) ?? request.headers.authorization === token,
+		(request: ApiRequest) => (token ? request.headers.authorization === token : Boolean(request.auth?.token)),
 		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized),
 	);
 
@@ -92,25 +101,25 @@ async function transformGuild(
 					available: true,
 					banner: null,
 					channels: [],
-					defaultMessageNotifications: 'ONLY_MENTIONS',
+					defaultMessageNotifications: GuildDefaultMessageNotifications.OnlyMentions,
 					description: null,
 					widgetEnabled: false,
-					explicitContentFilter: 'DISABLED',
+					explicitContentFilter: GuildExplicitContentFilter.Disabled,
 					icon: data.icon,
 					id: data.id,
 					joinedTimestamp: null,
-					mfaLevel: 'NONE',
+					mfaLevel: GuildMFALevel.None,
 					name: data.name,
 					ownerId: data.owner ? userId : null,
 					partnered: false,
-					preferredLocale: 'en-US',
+					preferredLocale: Locale.EnglishUS,
 					premiumSubscriptionCount: null,
-					premiumTier: 'NONE',
+					premiumTier: GuildPremiumTier.None,
 					roles: [],
 					splash: null,
 					systemChannelId: null,
 					vanityURLCode: null,
-					verificationLevel: 'NONE',
+					verificationLevel: GuildVerificationLevel.None,
 					verified: false,
 				}
 			: flattenGuild(guild);
