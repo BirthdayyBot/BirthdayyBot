@@ -4,8 +4,8 @@ import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from 
 import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
-import type { BotList } from '@devtomio/plugin-botlist';
-import type { InfluxOptions } from '@kaname-png/plugin-influxdb';
+import type { BotList } from '@swiizyy/plugin-botlist';
+import type { InfluxOptions } from '@swiizyy/plugin-influxdb';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';

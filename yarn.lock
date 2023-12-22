@@ -244,28 +244,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devtomio/plugin-botlist@npm:1.3.0":
-  version: 1.3.0
-  resolution: "@devtomio/plugin-botlist@npm:1.3.0"
-  dependencies:
-    tiny-typed-emitter: "npm:^2.1.0"
-    tslib: "npm:^2.5.0"
-    undici: "npm:^5.16.0"
-  checksum: 6d4479598e7b37a2d191c914cad55ddc13383830f6bfb69840e3717ad8a9119509426ba088f375d097b628e6ae7235a99fec609dc78f1a15c6a6dd88cc8b609d
-  languageName: node
-  linkType: hard
-
-"@devtomio/plugin-botlist@patch:@devtomio/plugin-botlist@npm%3A1.3.0#./.yarn/patches/@devtomio-plugin-botlist-npm-1.3.0-56fce49f49.patch::locator=birthdayy-discord-bot%40workspace%3A.":
-  version: 1.3.0
-  resolution: "@devtomio/plugin-botlist@patch:@devtomio/plugin-botlist@npm%3A1.3.0#./.yarn/patches/@devtomio-plugin-botlist-npm-1.3.0-56fce49f49.patch::version=1.3.0&hash=ef6265&locator=birthdayy-discord-bot%40workspace%3A."
-  dependencies:
-    tiny-typed-emitter: "npm:^2.1.0"
-    tslib: "npm:^2.5.0"
-    undici: "npm:^5.16.0"
-  checksum: 6163bef6bfb1ec1c176487eed00c39d7531c126730575cfe8c32ddc83eb1b859a805d1d0c2a3fb4d345ba9c3c51e132003556d61033f100bd61d66f9e6577104
-  languageName: node
-  linkType: hard
-
 "@discordjs/builders@npm:^1.7.0":
   version: 1.7.0
   resolution: "@discordjs/builders@npm:1.7.0"
@@ -472,15 +450,6 @@ __metadata:
     wrap-ansi: "npm:^8.1.0"
     wrap-ansi-cjs: "npm:wrap-ansi@^7.0.0"
   checksum: b1bf42535d49f11dc137f18d5e4e63a28c5569de438a221c369483731e9dac9fb797af554e8bf02b6192d1e5eba6e6402cf93900c3d0ac86391d00d04876789e
-  languageName: node
-  linkType: hard
-
-"@kaname-png/plugin-influxdb@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@kaname-png/plugin-influxdb@npm:1.3.0"
-  dependencies:
-    tslib: "npm:^2.6.2"
-  checksum: f535f3141c7a41e206531d9bbe74224dea85757eaa906f21fd14ace71296c2e3518c2f98b1d70e98025ad120f67af440c623008ece59c65787c9ff30bcc88bf4
   languageName: node
   linkType: hard
 
@@ -1121,6 +1090,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@swiizyy/plugin-botlist@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@swiizyy/plugin-botlist@npm:1.1.0"
+  dependencies:
+    tiny-typed-emitter: "npm:^2.1.0"
+    tslib: "npm:^2.5.0"
+    undici: "npm:^5.16.0"
+  checksum: 21fa126a9f87fd866f0153c3b79d83712bd0c1d831b5f1f7fec5e76040f582fae58d9b81aa38b477c6d2ff210f00f3a3eff99fe6e0991c5f8307fb633a7e1c70
+  languageName: node
+  linkType: hard
+
+"@swiizyy/plugin-influxdb@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@swiizyy/plugin-influxdb@npm:1.4.0"
+  dependencies:
+    "@influxdata/influxdb-client": "npm:^1.33.2"
+    tslib: "npm:^2.6.2"
+  checksum: ccb15d37630f49cfe4711401b6989af2a6481c13708ce1221c4ac03c1553a91d2c8f0823475b845d0cf92630ba6341e6d724afb9739ac5caaf55b2730158f0ca
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.12":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -1636,9 +1626,6 @@ __metadata:
   dependencies:
     "@commitlint/cli": "npm:^18.4.3"
     "@commitlint/config-conventional": "npm:^18.4.3"
-    "@devtomio/plugin-botlist": "npm:^1.3.0"
-    "@influxdata/influxdb-client": "npm:^1.33.2"
-    "@kaname-png/plugin-influxdb": "npm:^1.3.0"
     "@kaname-png/plugin-sentry": "npm:^1.3.0"
     "@prisma/client": "npm:^5.7.0"
     "@sapphire/async-queue": "npm:^1.5.1"
@@ -1670,6 +1657,8 @@ __metadata:
     "@sentry/node": "npm:^7.88.0"
     "@sentry/tracing": "npm:^7.88.0"
     "@skyra/env-utilities": "npm:^1.2.2"
+    "@swiizyy/plugin-botlist": "npm:^1.1.0"
+    "@swiizyy/plugin-influxdb": "npm:^1.4.0"
     "@types/node": "npm:^20.10.5"
     "@types/ws": "npm:^8.5.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.14.0"
