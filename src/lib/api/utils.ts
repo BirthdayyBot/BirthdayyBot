@@ -128,7 +128,7 @@ async function transformGuild(
 		...serialized,
 		permissions: data.permissions,
 		manageable: await getManageable(userId, data, guild),
-		botIsIn: typeof guild !== 'undefined',
+		isBotAdded: typeof guild !== 'undefined',
 	};
 }
 
