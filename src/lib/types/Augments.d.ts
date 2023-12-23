@@ -13,11 +13,17 @@ declare module '@skyra/env-utilities' {
 		DEBUG: BooleanString;
 
 		// API
-		API_URL: string;
-		API_BASE_URL: string;
+		API_ENABLED: BooleanString;
+		API_ORIGIN: string;
+		API_PORT: IntegerString;
+		API_PREFIX: string;
 		API_SECRET: string;
-		API_EXTENSION?: string;
-		API_PORT: NumberString;
+
+		OAUTH_COOKIE: string;
+		OAUTH_DOMAIN_OVERWRITE: string;
+		OAUTH_REDIRECT_URI: string;
+		OAUTH_SCOPE: ArrayString;
+		OAUTH_SECRET: string;
 
 		// Discord
 		DISCORD_TOKEN: string;

@@ -1,10 +1,10 @@
 // Unless explicitly defined, set NODE_ENV as development:
 process.env.NODE_ENV ??= 'development';
 
-import '@devtomio/plugin-botlist/register';
+import '@swiizyy/plugin-botlist/register';
 import '@kaname-png/plugin-sentry';
 import '@kaname-png/plugin-sentry/register';
-import '@kaname-png/plugin-influxdb/register';
+import '@swiizyy/plugin-influxdb/register';
 import '@sapphire/plugin-api/register';
 import '@sapphire/plugin-editable-commands/register';
 import '@sapphire/plugin-hmr/register';

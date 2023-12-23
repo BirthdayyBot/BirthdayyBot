@@ -1,9 +1,10 @@
 {
-  "extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators"],
-  "compilerOptions": {
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
-    "skipLibCheck": true,
-    "removeComments": true,
-    "moduleResolution": "Node16"
-  }
+	"extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators"],
+	"compilerOptions": {
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ESNext",
+		"removeComments": true,
+        "skipLibCheck": true
+	}
 }

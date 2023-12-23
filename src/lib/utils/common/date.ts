@@ -2,7 +2,7 @@ import { container } from '@sapphire/framework';
 import dayjs, { Dayjs } from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
-import { ChatInputCommandInteraction, Locale, TimestampStylesString, time } from 'discord.js';
+import { ChatInputCommandInteraction, Locale, time, type TimestampStylesString } from 'discord.js';
 import { addZeroToSingleDigitNumber } from './string.js';
 
 dayjs.extend(utc);
@@ -34,7 +34,7 @@ export function splitDateString(date: string, separator = '-') {
 	return { year, month, day };
 }
 
-export const months = [
+const months = [
 	'January',
 	'February',
 	'March',
