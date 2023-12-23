@@ -215,7 +215,10 @@ function parseSentryOptions() {
 
 export function parseAnalytics(): InfluxOptions {
 	return {
-		loadDefaultListeners: true,
+		url: envParseString('INFLUX_URL'),
+		token: envParseString('INFLUX_TOKEN'),
+		org: envParseString('INFLUX_ORG'),
+		writeBucket: envParseString('INFLUX_WRITE_BUCKET'),
 	};
 }
 
@@ -231,6 +234,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
 	sentry: parseSentryOptions(),
+	loadInfluxDefaultListeners: true,
 };
 
 function parseWebhookError(): WebhookClientData | null {
