@@ -5,7 +5,6 @@ import type { WebhookClient } from 'discord.js';
 import type { Events } from './Enums.js';
 import type { WritePrecisionType } from '@influxdata/influxdb-client';
 import { BotList } from '@devtomio/plugin-botlist';
-import { OAuth2Scopes } from 'discord-api-types/v10';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
