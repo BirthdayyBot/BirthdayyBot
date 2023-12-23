@@ -1101,13 +1101,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swiizyy/plugin-influxdb@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@swiizyy/plugin-influxdb@npm:1.4.0"
+"@swiizyy/plugin-influxdb@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@swiizyy/plugin-influxdb@npm:1.4.1"
   dependencies:
     "@influxdata/influxdb-client": "npm:^1.33.2"
     tslib: "npm:^2.6.2"
-  checksum: ccb15d37630f49cfe4711401b6989af2a6481c13708ce1221c4ac03c1553a91d2c8f0823475b845d0cf92630ba6341e6d724afb9739ac5caaf55b2730158f0ca
+  checksum: 33c465e4afaf6b810253a2a8660505d037aa8cce1bef25475dc93926f9b5d20bc5407828cea5def1ceb532be54083a935ed2d318b95e908cb56e3c45fedc24ee
   languageName: node
   linkType: hard
 
@@ -1658,7 +1658,7 @@ __metadata:
     "@sentry/tracing": "npm:^7.88.0"
     "@skyra/env-utilities": "npm:^1.2.2"
     "@swiizyy/plugin-botlist": "npm:^1.1.0"
-    "@swiizyy/plugin-influxdb": "npm:^1.4.0"
+    "@swiizyy/plugin-influxdb": "npm:^1.4.1"
     "@types/node": "npm:^20.10.5"
     "@types/ws": "npm:^8.5.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.14.0"

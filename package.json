@@ -75,7 +75,7 @@
     "@sentry/tracing": "^7.88.0",
     "@skyra/env-utilities": "^1.2.2",
     "@swiizyy/plugin-botlist": "^1.1.0",
-    "@swiizyy/plugin-influxdb": "^1.4.0",
+    "@swiizyy/plugin-influxdb": "^1.4.1",
     "bullmq": "^4.15.4",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.10",
