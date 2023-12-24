@@ -158,13 +158,15 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 }
 
 function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
+	const { REDIS_USERNAME, REDIS_PASSWORD } = process.env;
+
 	return {
 		connection: {
-			port: envParseNumber('REDIS_PORT'),
-			password: envParseString('REDIS_PASSWORD'),
-			host: envParseString('REDIS_HOST'),
+			port: envParseNumber('REDIS_PORT', 6379),
+			password: REDIS_PASSWORD,
+			host: envParseString('REDIS_HOST', 'localhost'),
 			db: envParseNumber('REDIS_DB'),
-			username: envParseString('REDIS_USERNAME'),
+			username: REDIS_USERNAME,
 		},
 	};
 }
