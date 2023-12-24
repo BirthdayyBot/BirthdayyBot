@@ -1,11 +1,9 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { TimezoneWithLocale } from '#utils/common/date';
-import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from '#utils/constants';
+import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID } from '#utils/constants';
 import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
-import type { BotList } from '@swiizyy/plugin-botlist';
-import type { InfluxOptions } from '@swiizyy/plugin-influxdb';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
@@ -20,6 +18,8 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
+import type { BotList } from '@swiizyy/plugin-botlist';
+import type { InfluxOptions } from '@swiizyy/plugin-influxdb';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -37,7 +37,6 @@ import {
 	type WebhookClientData,
 } from 'discord.js';
 import type { FormatFunction, InterpolationOptions } from 'i18next';
-import { join } from 'node:path';
 
 export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
 
