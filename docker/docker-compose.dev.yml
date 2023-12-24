@@ -14,7 +14,24 @@ services:
     ports:
       - '4003:4000'
     depends_on:
+      - mysql
       - redis
+    networks:
+      - global_dev
+
+  mysql:
+    container_name: birthdayy-dev-mysql
+    image: mysql:latest
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+      - MYSQL_DATABASE=birthdayy
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
     networks:
       - global_dev
 
@@ -26,6 +43,10 @@ services:
       - '6379:6379'
     networks:
       - global_dev
+
+volumes:
+  mysql-data:
+    external: true
 
 networks:
   global_dev:

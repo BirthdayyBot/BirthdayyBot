@@ -1,6 +1,6 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { TimezoneWithLocale } from '#utils/common/date';
-import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID } from '#utils/constants';
+import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from '#utils/constants';
 import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
@@ -37,6 +37,7 @@ import {
 	type WebhookClientData,
 } from 'discord.js';
 import type { FormatFunction, InterpolationOptions } from 'i18next';
+import { join } from 'node:path';
 
 export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
 
@@ -81,6 +82,9 @@ function parseBotListOptions(): BotList.Options {
 		},
 	};
 }
+
+export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'src');
+export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'languages');
 
 function parseInternationalizationDefaultVariablesPermissions() {
 	const keys = Object.keys(PermissionFlagsBits) as readonly PermissionsString[];
@@ -136,6 +140,7 @@ function parseInternationalizationInterpolation(): InterpolationOptions {
 
 function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
+		defaultLanguageDirectory: LANGUAGE_ROOT,
 		fetchLanguage: ({ guild }) => {
 			if (!guild) return 'en-US';
 
@@ -211,6 +216,8 @@ function parseSentryOptions() {
 }
 
 export function parseAnalytics(): InfluxOptions {
+	if (!envParseBoolean('INFLUX_ENABLED', false)) return {};
+
 	return {
 		url: envParseString('INFLUX_URL'),
 		token: envParseString('INFLUX_TOKEN'),

@@ -12,29 +12,21 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node .yarn/ .yarn/
+COPY --chown=node:node ./tsconfig.base.json .
 
-RUN sed -i 's/"postinstall": "husky install .github\/husky"/"postinstall": ""/' ./package.json
+RUN yarn install
 
-ENTRYPOINT ["dumb-init", "--"]
-
-FROM base as builder
-
-ENV NODE_ENV="development"
-
-COPY --chown=node:node tsconfig.base.json .
 COPY --chown=node:node ./src ./src
 COPY --chown=node:node ./prisma ./prisma
-
-RUN yarn install --immutable
+COPY --chown=node:node .env .
 
 RUN npx prisma generate
-RUN npx tsc -b src
 
-FROM base as production
+ENV NODE_ENV="development"
 
 ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=4096"
 
 EXPOSE 4000
 
 ENTRYPOINT ["doppler", "run", "--"]
-CMD npx tsc-watch --onSuccess "node dist/index.js"
+CMD npx tsc-watch -b src  --onSuccess "node dist/index.js"
