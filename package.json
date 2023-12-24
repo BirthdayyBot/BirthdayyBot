@@ -76,7 +76,7 @@
     "@skyra/env-utilities": "^1.2.2",
     "@swiizyy/plugin-botlist": "^1.1.0",
     "@swiizyy/plugin-influxdb": "^1.4.1",
-    "bullmq": "^4.15.4",
+    "bullmq": "^5.0.0",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.10",
     "discord-api-types": "^0.37.66",
