@@ -758,12 +758,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/fetch@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "@sapphire/fetch@npm:2.4.2"
-  dependencies:
-    cross-fetch: "npm:^4.0.0"
-  checksum: 090484a0c8fb3e6d09b3c8e4efb55dfef7540dc6432ed04048937a4fb672ae6d872c0cc4f508fa78a26b45dfbe4bf20cf13ee04663a8c10247f2a6e6743c104b
+"@sapphire/fetch@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@sapphire/fetch@npm:3.0.1"
+  checksum: 2bda94d0dc7fa56716b234ec84407fb9ee4ea39acc536ed6f6c303cfc84282feeb323bd89fbbf9f665ece466477cd83e6970264fa89aaa6dbd6ad1e32180cc65
   languageName: node
   linkType: hard
 
@@ -1635,7 +1633,7 @@ __metadata:
     "@sapphire/discord.js-utilities": "npm:^7.1.4"
     "@sapphire/eslint-config": "npm:^5.0.3"
     "@sapphire/eslint-plugin-result": "npm:^2.0.2"
-    "@sapphire/fetch": "npm:^2.4.2"
+    "@sapphire/fetch": "npm:^3.0.1"
     "@sapphire/framework": "npm:^5.0.4"
     "@sapphire/plugin-api": "npm:^6.0.1"
     "@sapphire/plugin-editable-commands": "npm:^4.0.1"
@@ -2067,15 +2065,6 @@ __metadata:
   dependencies:
     luxon: "npm:^3.2.1"
   checksum: 348622bdcd1a15695b61fc33af8a60133e5913a85cf99f6344367579e7002896514ba3b0a9d6bb569b02667d6b06836722bf2295fcd101b3de378f71d37bed0b
-  languageName: node
-  linkType: hard
-
-"cross-fetch@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "cross-fetch@npm:4.0.0"
-  dependencies:
-    node-fetch: "npm:^2.6.12"
-  checksum: 386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
   languageName: node
   linkType: hard
 
@@ -4552,7 +4541,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.12, node-fetch@npm:^2.6.7":
+"node-fetch@npm:^2.6.7":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
