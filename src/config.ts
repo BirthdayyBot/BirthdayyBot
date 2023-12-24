@@ -83,9 +83,6 @@ function parseBotListOptions(): BotList.Options {
 	};
 }
 
-export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'dist');
-export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'languages');
-
 function parseInternationalizationDefaultVariablesPermissions() {
 	const keys = Object.keys(PermissionFlagsBits) as readonly PermissionsString[];
 	const entries = keys.map((key) => [key, key] as const);
