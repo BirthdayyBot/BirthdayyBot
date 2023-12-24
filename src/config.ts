@@ -140,7 +140,6 @@ function parseInternationalizationInterpolation(): InterpolationOptions {
 
 function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
-		defaultLanguageDirectory: LANGUAGE_ROOT,
 		fetchLanguage: ({ guild }) => {
 			if (!guild) return 'en-US';
 
