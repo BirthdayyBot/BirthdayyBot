@@ -34,6 +34,17 @@ services:
       - '3306:3306'
     networks:
       - global_dev
+  influx:
+    command: 'influxd run --bolt-path /var/lib/influxdb2/influxd.bolt --engine-path /var/lib/influxdb2/engine --store bolt'
+    container_name: birthdayy-dev-influxdb
+    image: 'influxdb:2.7-alpine'
+    networks:
+      - global_dev
+    ports:
+      - '8285:8086'
+    restart: always
+    volumes:
+      - 'influx-data:/var/lib/influxdb2'
 
   redis:
     container_name: birthdayy-dev-redis
@@ -47,6 +58,7 @@ services:
 volumes:
   mysql-data:
     external: true
-
+  influx-data:
+    external: true
 networks:
   global_dev:
