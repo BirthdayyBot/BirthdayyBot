@@ -1,4 +1,4 @@
-import type { Birthday, Blacklist, Guild, User } from '#root/utilities/db/index';
+import type { Birthday, Guild, User } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
@@ -97,7 +97,6 @@ declare module '@sapphire/framework' {
 		Everyone: never;
 		GuildPremium: never;
 		Moderator: never;
-		NotBlacklisted: never;
 		ServerOwner: never;
 		RoleHigher: never;
 	}
@@ -123,6 +122,5 @@ declare module '@sapphire/plugin-utilities-store' {
 		guild: Guild;
 		birthday: Birthday;
 		user: User;
-		blacklist: Blacklist;
 	}
 }
