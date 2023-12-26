@@ -1,10 +1,17 @@
+import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
 import type { Birthday, Blacklist, Guild, User } from '#root/utilities/db/index';
+import { BotList } from '@devtomio/plugin-botlist';
+import type { WritePrecisionType } from '@influxdata/influxdb-client';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
 import type { Events } from './Enums.js';
-import type { WritePrecisionType } from '@influxdata/influxdb-client';
-import { BotList } from '@devtomio/plugin-botlist';
+
+declare module 'discord.js' {
+	interface Client {
+		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
+	}
+}
 
 declare module '@skyra/env-utilities' {
 	interface Env {

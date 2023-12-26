@@ -3,8 +3,13 @@ import { PrismaClient } from '@prisma/client';
 import { SapphireClient, container } from '@sapphire/framework';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
+import { GuildMemberFetchQueue } from '#lib/discord';
+import { Enumerable } from '@sapphire/decorators';
 
 export class BirthdayyClient extends SapphireClient {
+	@Enumerable(false)
+	public override readonly guildMemberFetchQueue = new GuildMemberFetchQueue();
+
 	public constructor() {
 		super(CLIENT_OPTIONS);
 		this.initailizeDB_URL();

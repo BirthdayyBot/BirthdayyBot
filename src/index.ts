@@ -22,6 +22,7 @@ async function main() {
 		}
 	} catch (error) {
 		container.logger.error(error);
+		container.client.guildMemberFetchQueue.destroy();
 		await container.prisma.$disconnect();
 		await client.destroy();
 		process.exit(1);

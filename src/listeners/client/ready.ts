@@ -14,6 +14,7 @@ export class UserEvent extends Listener {
 		this.printStoreDebugInformation();
 		floatPromise(await sendMessage(BOT_ADMIN_LOG, { content: 'online' }));
 		floatPromise(this.container.tasks.run('PostStats', {}));
+		return container.client.guildMemberFetchQueue.fetch();
 	}
 
 	private printBanner() {

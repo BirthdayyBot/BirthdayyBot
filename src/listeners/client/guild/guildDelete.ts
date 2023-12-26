@@ -1,5 +1,5 @@
-import { getSettings, sendMessage } from '#lib/discord';
-import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, DEBUG, Emojis, generateDefaultEmbed } from '#utils';
+import { sendMessage } from '#lib/discord';
+import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
@@ -8,15 +8,11 @@ import { Guild, time } from 'discord.js';
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
 	public async run(guild: Guild) {
-		const guildId = guild.id;
+		if (guild.available) return;
 
-		if (!container.client.isReady()) return;
-
-		this.container.logger.debug(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guildId})`);
-		DEBUG ? container.logger.debug(`[GuildDelete] - ${guild.toString()}`) : null;
-
+		this.container.client.guildMemberFetchQueue.remove(guild.shardId, guild.id);
 		await this.leaveServerLog(guild);
-		await getSettings(guildId).update({ disabled: true, inviter: null });
+		await container.prisma.guild.delete({ where: { guildId: guild.id } });
 	}
 
 	private async leaveServerLog(guild: Guild) {

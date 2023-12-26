@@ -9,6 +9,8 @@ import { AuditLogEvent, DiscordAPIError, Events, Guild, PermissionFlagsBits, tim
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
 	public async run(guild: Guild) {
+		this.container.client.guildMemberFetchQueue.add(guild.shardId, guild.id);
+
 		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
 		container.logger.debug(`[GuildCreate] - ${guild.id} ${guild.name}`);
 		const guildId = guild.id;
