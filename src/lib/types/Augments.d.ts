@@ -1,5 +1,5 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
-import type { Birthday, Blacklist, Guild, User } from '#root/utilities/db/index';
+import type { Birthday, Guild, User } from '#root/utilities/db/index';
 import { BotList } from '@devtomio/plugin-botlist';
 import type { WritePrecisionType } from '@influxdata/influxdb-client';
 import type { PrismaClient } from '@prisma/client';
@@ -28,7 +28,6 @@ declare module '@sapphire/framework' {
 		Everyone: never;
 		GuildPremium: never;
 		Moderator: never;
-		NotBlacklisted: never;
 		ServerOwner: never;
 		RoleHigher: never;
 	}
@@ -54,7 +53,6 @@ declare module '@sapphire/plugin-utilities-store' {
 		guild: Guild;
 		birthday: Birthday;
 		user: User;
-		blacklist: Blacklist;
 	}
 }
 
