@@ -1,7 +1,7 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BirthdayApplicationCommandMentions } from '#root/commands/General/birthday';
-import { ConfigApplicationCommandMentions } from '#root/commands/General/config';
+import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
+import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { BOT_NAME, Emojis, defaultEmbed } from '#utils';
 import { container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
