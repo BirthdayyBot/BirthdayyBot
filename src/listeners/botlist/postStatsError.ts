@@ -16,7 +16,7 @@ export class postStatsErrorEvent extends Listener {
 				Sentry.captureException(error);
 			});
 
-		if (envIsDefined('SENTRY_DSN')) return SendErrorToSentry;
+		if (envIsDefined('SENTRY_URL')) return SendErrorToSentry;
 
 		return logErrorToContainer({ error, loggerSeverityLevel: 'error' });
 	}

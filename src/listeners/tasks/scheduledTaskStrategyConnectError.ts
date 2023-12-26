@@ -10,7 +10,7 @@ export class ScheduledTaskStrategyConnectErrorEvent extends Listener<
 	typeof ScheduledTaskEvents.ScheduledTaskStrategyConnectError
 > {
 	public run(error: Error) {
-		if (envIsDefined('SENTRY_DSN')) {
+		if (envIsDefined('SENTRY_URL')) {
 			withScope((scope) => {
 				scope.setLevel('error');
 				scope.setFingerprint([error.name]);

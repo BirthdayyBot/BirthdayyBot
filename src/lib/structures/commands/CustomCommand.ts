@@ -1,6 +1,6 @@
 import { PermissionLevels } from '#lib/types/Enums';
 import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
-import { BOT_OWNER } from '#utils/environment';
+import { OWNERS } from '#root/config';
 import { Command, PreconditionContainerArray, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { CacheType } from 'discord.js';
@@ -88,7 +88,7 @@ function sharedCommandOptions(options: CustomCommand.Options | CustomSubCommand.
 	return {
 		cooldownDelay: 10_000,
 		cooldownLimit: 2,
-		cooldownFilteredUsers: BOT_OWNER,
+		cooldownFilteredUsers: OWNERS,
 		requiredClientPermissions: defaultClientPermissions.add(requiredClientPermissions),
 		requiredUserPermissions: defaultUserPermissions.add(requiredUserPermissions),
 		...options,

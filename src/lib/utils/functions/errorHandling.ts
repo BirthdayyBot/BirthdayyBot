@@ -80,7 +80,7 @@ export function handleCommandErrorAndSendToUser({
 	loggerSeverityLevel,
 	sentrySeverityLevel,
 }: ErrorHandlerOptions) {
-	if (envIsDefined('SENTRY_DSN')) captureCommandErrorToSentry({ error, interaction, sentrySeverityLevel });
+	if (envIsDefined('SENTRY_URL')) captureCommandErrorToSentry({ error, interaction, sentrySeverityLevel });
 	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return sendErrorMessageToUser({ error, interaction });
 }
@@ -92,7 +92,7 @@ export function handleRouteApiError({
 	loggerSeverityLevel,
 	sentrySeverityLevel,
 }: RouteApiErrorHandler): void {
-	if (envIsDefined('SENTRY_DSN')) captureRouteApiErrorToSentry({ error, request, sentrySeverityLevel });
+	if (envIsDefined('SENTRY_URL')) captureRouteApiErrorToSentry({ error, request, sentrySeverityLevel });
 	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return response.status(500).json({ error: error.message });
 }

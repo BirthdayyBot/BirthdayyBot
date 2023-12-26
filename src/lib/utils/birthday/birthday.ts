@@ -4,7 +4,6 @@ import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
-import { envParseNumber } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import { Guild, userMention, type APIEmbed } from 'discord.js';
 
@@ -16,7 +15,7 @@ export async function generateBirthdayList(page_id: number, guild: Guild) {
 	// sort all birthdays by day and month
 	const sortedBirthdays = sortByDayAndMonth(birthdays);
 	// split the sorted birthdays into multiple lists
-	const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
+	const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, 80);
 	// get the birthdays for the current page
 	const birthdaySplitted = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
 	// TODO: Should only contain the birthdays for the current page (80 birthdays)

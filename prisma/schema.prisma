@@ -9,7 +9,7 @@ generator studio-client {
 
 datasource db {
     provider     = "mysql"
-    url          = env("DB_URL")
+    url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
 

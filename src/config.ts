@@ -1,6 +1,6 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { TimezoneWithLocale } from '#utils/common/date';
-import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from '#utils/constants';
+import { BirthdayyBotId, Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { isProduction } from '#utils/env';
 import { DEBUG, ROOT_DIR } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
@@ -39,7 +39,7 @@ import {
 import type { FormatFunction, InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
-export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
+export const OWNERS = envParseArray('CLIENT_OWNERS');
 
 function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
@@ -68,18 +68,13 @@ function parseApi(): ServerOptions | undefined {
 }
 
 function parseBotListOptions(): BotList.Options {
+	const { DISCORD_BOT_LIST_TOKEN, DISCORD_LIST_GG_TOKEN, TOP_GG_TOKEN } = process.env;
 	return {
 		clientId: BirthdayyBotId.Birthdayy,
 		debug: DEBUG,
 		shard: true,
-		autoPost: {
-			enabled: isProduction,
-		},
-		keys: {
-			topGG: envParseString('TOPGG_TOKEN', ''),
-			discordListGG: envParseString('DISCORDLIST_TOKEN', ''),
-			discordBotList: envParseString('DISCORDBOTLIST_TOKEN', ''),
-		},
+		autoPost: { enabled: isProduction },
+		keys: { topGG: TOP_GG_TOKEN, discordListGG: DISCORD_LIST_GG_TOKEN, discordBotList: DISCORD_BOT_LIST_TOKEN },
 	};
 }
 
@@ -170,7 +165,7 @@ function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 			port: envParseNumber('REDIS_PORT', 6379),
 			password: REDIS_PASSWORD,
 			host: envParseString('REDIS_HOST', 'localhost'),
-			db: envParseNumber('REDIS_DB'),
+			db: envParseInteger('REDIS_DB'),
 			username: REDIS_USERNAME,
 		},
 	};
@@ -222,7 +217,7 @@ export function parseAnalytics(): InfluxOptions {
 		url: envParseString('INFLUX_URL'),
 		token: envParseString('INFLUX_TOKEN'),
 		org: envParseString('INFLUX_ORG'),
-		writeBucket: envParseString('INFLUX_WRITE_BUCKET'),
+		writeBucket: envParseString('INFLUX_ORG_ANALYTICS_BUCKET'),
 	};
 }
 
@@ -242,11 +237,11 @@ export const CLIENT_OPTIONS: ClientOptions = {
 };
 
 function parseWebhookError(): WebhookClientData | null {
-	if (!envIsDefined('DISCORD_ERROR_WEBHOOK_ID', 'DISCORD_ERROR_WEBHOOK_TOKEN')) return null;
+	if (!envIsDefined('WEBHOOK_ERROR_ID', 'WEBHOOK_ERROR_TOKEN')) return null;
 
 	return {
-		id: envParseString('DISCORD_ERROR_WEBHOOK_ID'),
-		token: envParseString('DISCORD_ERROR_WEBHOOK_TOKEN'),
+		id: envParseString('WEBHOOK_ERROR_ID'),
+		token: envParseString('WEBHOOK_ERROR_TOKEN'),
 	};
 }
 

@@ -1,8 +1,8 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { defaultUserPermissions } from '#lib/types/permissions';
-import { BirthdayApplicationCommandMentions } from '#root/commands/general/birthday';
-import { ConfigApplicationCommandMentions } from '#root/commands/general/config';
+import { BirthdayApplicationCommandMentions } from '#root/commands/General/birthday';
+import { ConfigApplicationCommandMentions } from '#root/commands/General/config';
 import { BOT_NAME, Emojis, defaultEmbed } from '#utils';
 import { container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
