@@ -1,7 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import thinking from '#lib/discord/thinking';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultUserPermissions } from '#lib/types/permissions';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import {
 	TimezoneWithLocale,
@@ -128,7 +127,6 @@ export const BirthdayApplicationCommandMentions = {
 
 function registerBirthdayCommand(builder: SlashCommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:birthday')
-		.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
 		.setDMPermission(false)
 		.addSubcommand((builder) => registerBirthdaySubCommand(builder))
 		.addSubcommand((builder) => listBirthdaySubCommand(builder))

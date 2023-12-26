@@ -3,14 +3,12 @@ import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { Emojis, defaultEmbed } from '#utils';
 import { Command } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 
 export class SupportCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/support:support')
-				.setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel)
-				.setDMPermission(true),
+			applyLocalizedBuilder(builder, 'commands/support:support').setDMPermission(true),
 		);
 	}
 

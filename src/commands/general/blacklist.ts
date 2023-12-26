@@ -1,6 +1,5 @@
 import { userOptions } from '#lib/components/builder';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultUserPermissions } from '#lib/types';
 import { PermissionLevels } from '#lib/types/Enums';
 import { PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
@@ -14,6 +13,7 @@ import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, chatInputApplicationCommandMention, time, userMention } from 'discord.js';
 
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings('add', 'list', 'remove'),
@@ -99,7 +99,7 @@ export const BlacklistApplicationCommandMentions = {
 
 export function registerBlacklistCommand(builder: SlashCommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/blacklist:blacklist')
-		.setDefaultMemberPermissions(defaultUserPermissions.add('ManageRoles').bitfield)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
 		.addSubcommand((builder) => addBlacklistSubCommand(builder))
 		.addSubcommand((builder) => removeBlacklistSubCommand(builder))

@@ -1,5 +1,4 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultUserPermissions } from '#lib/types';
 import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -13,10 +12,7 @@ import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 export class CountCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(
-			(builder) =>
-				applyLocalizedBuilder(builder, 'commands/count:count')
-					.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
-					.setDMPermission(true),
+			(builder) => applyLocalizedBuilder(builder, 'commands/count:count').setDMPermission(true),
 			{
 				guildIds: await getCommandGuilds('admin'),
 			},

@@ -1,5 +1,4 @@
 import { PermissionLevels } from '#lib/types/Enums';
-import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
 import { OWNERS } from '#root/config';
 import { Command, PreconditionContainerArray, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
@@ -84,13 +83,10 @@ export namespace CustomSubCommand {
 }
 
 function sharedCommandOptions(options: CustomCommand.Options | CustomSubCommand.Options) {
-	const { requiredClientPermissions = [], requiredUserPermissions = [] } = options;
 	return {
 		cooldownDelay: 10_000,
 		cooldownLimit: 2,
 		cooldownFilteredUsers: OWNERS,
-		requiredClientPermissions: defaultClientPermissions.add(requiredClientPermissions),
-		requiredUserPermissions: defaultUserPermissions.add(requiredUserPermissions),
 		...options,
 	};
 }

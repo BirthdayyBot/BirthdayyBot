@@ -1,6 +1,5 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { defaultUserPermissions } from '#lib/types/permissions';
 import { BirthdayApplicationCommandMentions } from '#root/commands/General/birthday';
 import { ConfigApplicationCommandMentions } from '#root/commands/General/config';
 import { BOT_NAME, Emojis, defaultEmbed } from '#utils';
@@ -11,9 +10,7 @@ import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 export class GuideCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/guide:guide')
-				.setDefaultMemberPermissions(defaultUserPermissions.bitfield)
-				.setDMPermission(true),
+			applyLocalizedBuilder(builder, 'commands/guide:guide').setDMPermission(true),
 		);
 	}
 

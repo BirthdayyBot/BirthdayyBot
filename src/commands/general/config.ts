@@ -1,10 +1,10 @@
 import type { ConfigName } from '#lib/database/types';
 import { CustomCommand, CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { defaultUserPermissions, hasBotChannelPermissions } from '#lib/types/permissions';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays, getSettings } from '#utils/functions/guilds';
 import { createSubcommandMappings, reply } from '#utils/utils';
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { Prisma } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
@@ -12,14 +12,12 @@ import { CommandOptionsRunTypeEnum, type ApplicationCommandRegistry } from '@sap
 import { applyLocalizedBuilder, createLocalizedChoice, resolveKey } from '@sapphire/plugin-i18next';
 import {
 	ChannelType,
+	PermissionFlagsBits,
 	bold,
 	channelMention,
 	chatInputApplicationCommandMention,
 	roleMention,
-	type PermissionResolvable,
 } from 'discord.js';
-
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(
@@ -43,11 +41,10 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	public async announcementChannel(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const announcementChannel = interaction.options.getChannel('channel', true, [ChannelType.GuildText]).id;
-		const permissions: PermissionResolvable[] = ['ViewChannel', 'SendMessages'];
-		const options = { channel: channelMention(announcementChannel) };
+		const announcementChannel = interaction.options.getChannel('channel', true, [ChannelType.GuildText]);
+		const options = { channel: channelMention(announcementChannel.id) };
 
-		if (!hasBotChannelPermissions({ interaction, channel: announcementChannel, permissions })) {
+		if (!canSendEmbeds(announcementChannel)) {
 			return interactionProblem(
 				interaction,
 				await resolveKey(interaction, 'commands/config:announcementChannel.cannotPermissions', options),
@@ -55,7 +52,7 @@ export class ConfigCommand extends CustomSubCommand {
 		}
 
 		return this.updateConfig(
-			{ announcementChannel },
+			{ announcementChannel: announcementChannel.id },
 			interaction,
 			await resolveKey(interaction, 'commands/config:announcementChannel.success', options),
 		);
@@ -199,7 +196,7 @@ export const ConfigApplicationCommandMentions = {
 
 function registerConfigCommand(builder: SlashCommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/config:config')
-		.setDefaultMemberPermissions(defaultUserPermissions.add('ManageRoles').bitfield)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
 		.addSubcommand((builder) => announcementChannelConfigSubCommand(builder))
 		.addSubcommand((builder) => annoncementMessageConfigSubCommand(builder))
