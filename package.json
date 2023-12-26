@@ -53,7 +53,7 @@
     "@sapphire/decorators": "^6.0.3",
     "@sapphire/discord.js-utilities": "^7.1.4",
     "@sapphire/eslint-plugin-result": "^2.0.2",
-    "@sapphire/fetch": "^2.4.2",
+    "@sapphire/fetch": "^3.0.1",
     "@sapphire/framework": "^5.0.4",
     "@sapphire/plugin-api": "^6.0.1",
     "@sapphire/plugin-editable-commands": "^4.0.1",
