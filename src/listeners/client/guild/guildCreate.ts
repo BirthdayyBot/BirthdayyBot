@@ -1,5 +1,5 @@
 import { getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
-import { resolveEmbed } from '#root/commands/General/guide';
+import { resolveEmbed } from '#root/commands/Misc/guide';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
 import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
