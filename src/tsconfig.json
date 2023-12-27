@@ -8,7 +8,7 @@
     "tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
     "paths": {
       "#utils/*": ["lib/utils/*.js"],
-      "#lib/*": ["lib/*.js"],
+      "#lib/*": ["lib/*"],
       "#languages": ["languages/index.js"],
       "#root/*": ["*.js"]
     }

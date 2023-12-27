@@ -69,7 +69,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 }
 
 function sendErrorMessageToAdmin(embed: APIEmbed) {
-	const { webhook } = container;
+	const webhook = container.client.webhookError;
 	if (webhook === null) return;
 	return webhook.send({ embeds: [embed] });
 }

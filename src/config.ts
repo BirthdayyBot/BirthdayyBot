@@ -1,10 +1,11 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
+import { minutes } from '#lib/utils/common/times';
 import { TimezoneWithLocale } from '#utils/common/date';
-import { BirthdayyBotId, Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
-import { isProduction } from '#utils/env';
-import { DEBUG, ROOT_DIR } from '#utils/environment';
+import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
+import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
-import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
+import { ConnectionOptions } from '@influxdata/influxdb-client';
+import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
@@ -18,8 +19,6 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
-import type { BotList } from '@swiizyy/plugin-botlist';
-import type { InfluxOptions } from '@swiizyy/plugin-influxdb';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -31,6 +30,7 @@ import {
 import {
 	channelMention,
 	roleMention,
+	Options,
 	type ClientOptions,
 	type PermissionsString,
 	type PresenceData,
@@ -64,17 +64,6 @@ function parseApi(): ServerOptions | undefined {
 		origin: envParseString('API_ORIGIN', 'http://127.0.0.1:3000'),
 		listenOptions: { port: envParseInteger('API_PORT', 3000) },
 		automaticallyConnect: false,
-	};
-}
-
-function parseBotListOptions(): BotList.Options {
-	const { DISCORD_BOT_LIST_TOKEN, DISCORD_LIST_GG_TOKEN, TOP_GG_TOKEN } = process.env;
-	return {
-		clientId: BirthdayyBotId.Birthdayy,
-		debug: DEBUG,
-		shard: true,
-		autoPost: { enabled: isProduction },
-		keys: { topGG: TOP_GG_TOKEN, discordListGG: DISCORD_LIST_GG_TOKEN, discordBotList: DISCORD_BOT_LIST_TOKEN },
 	};
 }
 
@@ -190,50 +179,41 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
-function parseLoggerOptions(): ClientLoggerOptions {
-	return {
-		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
-		instance: container.logger,
-	};
-}
-
 export const SENTRY_OPTIONS: NodeOptions = {
 	debug: DEBUG,
 	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
 };
 
-function parseSentryOptions() {
-	return {
-		loadSentryErrorListeners: true,
-		root: ROOT_DIR,
-		options: SENTRY_OPTIONS,
-	};
-}
-
-export function parseAnalytics(): InfluxOptions {
-	if (!envParseBoolean('INFLUX_ENABLED', false)) return {};
+export function parseAnalytics(): ConnectionOptions {
+	const url = envParseString('INFLUX_URL');
+	const token = envParseString('INFLUX_TOKEN');
 
 	return {
-		url: envParseString('INFLUX_URL'),
-		token: envParseString('INFLUX_TOKEN'),
-		org: envParseString('INFLUX_ORG'),
-		writeBucket: envParseString('INFLUX_ORG_ANALYTICS_BUCKET'),
+		url,
+		token,
 	};
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
+	allowedMentions: { users: [], roles: [] },
 	api: parseApi(),
-	analytics: parseAnalytics(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
-	loadDefaultErrorListeners: true,
-	logger: parseLoggerOptions(),
+	loadDefaultErrorListeners: false,
+	logger: {
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
+	},
 	shards: 'auto',
-	botList: parseBotListOptions(),
+	makeCache: Options.cacheEverything(),
+	sweepers: {
+		...Options.DefaultSweeperSettings,
+		messages: {
+			interval: minutes.toSeconds(3),
+			lifetime: minutes.toSeconds(15),
+		},
+	},
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
-	sentry: parseSentryOptions(),
-	loadInfluxDefaultListeners: true,
 };
 
 function parseWebhookError(): WebhookClientData | null {

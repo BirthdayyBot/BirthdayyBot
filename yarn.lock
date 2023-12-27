@@ -1099,16 +1099,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swiizyy/plugin-influxdb@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@swiizyy/plugin-influxdb@npm:1.4.1"
-  dependencies:
-    "@influxdata/influxdb-client": "npm:^1.33.2"
-    tslib: "npm:^2.6.2"
-  checksum: 33c465e4afaf6b810253a2a8660505d037aa8cce1bef25475dc93926f9b5d20bc5407828cea5def1ceb532be54083a935ed2d318b95e908cb56e3c45fedc24ee
-  languageName: node
-  linkType: hard
-
 "@types/json-schema@npm:^7.0.12":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -1624,6 +1614,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": "npm:^18.4.3"
     "@commitlint/config-conventional": "npm:^18.4.3"
+    "@influxdata/influxdb-client": "npm:^1.33.2"
     "@kaname-png/plugin-sentry": "npm:^1.3.0"
     "@prisma/client": "npm:^5.7.0"
     "@sapphire/async-queue": "npm:^1.5.1"
@@ -1656,7 +1647,6 @@ __metadata:
     "@sentry/tracing": "npm:^7.88.0"
     "@skyra/env-utilities": "npm:^1.2.2"
     "@swiizyy/plugin-botlist": "npm:^1.1.0"
-    "@swiizyy/plugin-influxdb": "npm:^1.4.1"
     "@types/node": "npm:^20.10.5"
     "@types/ws": "npm:^8.5.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.14.0"

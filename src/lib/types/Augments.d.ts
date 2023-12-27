@@ -9,14 +9,16 @@ import type { Events } from './Enums.js';
 
 declare module 'discord.js' {
 	interface Client {
+		readonly dev: boolean;
+		readonly analytics: AnalyticsData | null;
 		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
+		readonly webhookError: WebhookClient | null;
 	}
 }
 
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
-		webhook: WebhookClient | null;
 		botList: BotList;
 	}
 }
@@ -33,7 +35,9 @@ declare module '@sapphire/framework' {
 	}
 
 	interface SapphireClient {
+		emit(event: Events.Error, error: Error): boolean;
 		emit(event: Events.PostStatsSuccess): boolean;
+		emit(event: string | symbol, ...args: any[]): boolean;
 	}
 }
 

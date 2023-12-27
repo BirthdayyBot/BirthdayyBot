@@ -1,6 +1,12 @@
 export enum Events {
+	AnalyticsSync = 'analyticsSync',
+	CommandUsageAnalytics = 'commandUsageAnalytics',
 	PostStatsError = 'postStatsError',
 	PostStatsSuccess = 'postStatsSuccess',
+	MessageCreate = 'messageCreate',
+	GuildCreate = 'guildCreate',
+	GuildDelete = 'guildDelete',
+	ResourceAnalyticsSync = 'resourceAnalyticsSync',
 }
 
 export enum PermissionLevels {
