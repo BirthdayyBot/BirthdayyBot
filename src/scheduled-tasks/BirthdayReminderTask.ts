@@ -8,7 +8,6 @@ import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
-import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -29,6 +28,7 @@ import {
 	type Snowflake,
 } from 'discord.js';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
+import { Time } from '@sapphire/duration';
 
 export interface BirthdayEventInfoModel {
 	userId: string;

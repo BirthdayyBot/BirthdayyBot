@@ -1,5 +1,5 @@
 import { isAdmin } from '#utils/functions/permissions';
-import { Time } from '@sapphire/cron';
+import { Time } from '@sapphire/duration';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ApiRequest, HttpCodes, type ApiResponse, type LoginData } from '@sapphire/plugin-api';

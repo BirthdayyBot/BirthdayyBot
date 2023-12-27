@@ -6,8 +6,8 @@ import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemove
 import { BirthdayyBotId } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { BOT_NAME, Emojis, VOTE_CHANNEL_ID, VOTE_ROLE_ID, WEBSITE_URL } from '#utils/environment';
-import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
+import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
 import { s } from '@sapphire/shapeshift';

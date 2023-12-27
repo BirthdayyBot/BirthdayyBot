@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import { Time } from '@sapphire/time-utilities';
+import { Time } from '@sapphire/duration';
 
 /**
  * Represents a {@link GuildMemberFetchQueue.shards} entry.

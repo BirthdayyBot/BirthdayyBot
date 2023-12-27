@@ -2,7 +2,7 @@ import { sendMessage } from '#lib/discord';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
-import { DurationFormatter } from '@sapphire/time-utilities';
+import { DurationFormatter } from '@sapphire/duration';
 import { Guild, time } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
