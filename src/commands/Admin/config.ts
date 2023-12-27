@@ -1,11 +1,10 @@
-import type { ConfigName } from '#lib/database/types';
 import { CustomCommand, CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { SettingsDefaultKey } from '#lib/structures/managers/SettingsManager';
 import { PermissionLevels } from '#lib/types/Enums';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays, getSettings } from '#utils/functions/guilds';
 import { createSubcommandMappings, reply } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import { Prisma } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import { CommandOptionsRunTypeEnum, type ApplicationCommandRegistry } from '@sapphire/framework';
@@ -51,8 +50,8 @@ export class ConfigCommand extends CustomSubCommand {
 			);
 		}
 
-		return this.updateConfig(
-			{ announcementChannel: announcementChannel.id },
+		await getSettings(interaction.guild).update({ announcementChannel: announcementChannel.id });
+		return interactionSuccess(
 			interaction,
 			await resolveKey(interaction, 'commands/config:announcementChannel.success', options),
 		);
@@ -149,7 +148,7 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	public async reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const settings = interaction.options.getString('config', true) as ConfigName;
+		const settings = interaction.options.getString('config', true) as SettingsDefaultKey;
 		const config = bold(await resolveKey(interaction, `commands/config:reset.choices.${settings}`));
 
 		await getSettings(interaction.guild).resetKey(settings);
@@ -171,15 +170,6 @@ export class ConfigCommand extends CustomSubCommand {
 				timezone,
 			}),
 		);
-	}
-
-	public async updateConfig(
-		update: Omit<Prisma.XOR<Prisma.GuildCreateInput, Prisma.GuildUncheckedCreateInput>, 'guildId'>,
-		interaction: CustomCommand.ChatInputCommandInteraction<'cached'>,
-		description: string,
-	) {
-		await getSettings(interaction.guild).update(update);
-		return interactionSuccess(interaction, description);
 	}
 }
 

@@ -1,4 +1,3 @@
-import { getUserInfo } from '#lib/discord/user';
 import { VoteEmbed } from '#lib/embeds/vote';
 import { generateDefaultEmbed } from '#utils/embed';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -13,7 +12,7 @@ interface VoteReminderTaskPayload {
 export class VoteReminderTask extends ScheduledTask {
 	public async run(payload: VoteReminderTaskPayload) {
 		const { memberId } = payload;
-		const user = await getUserInfo(memberId);
+		const user = await this.container.client.users.fetch(memberId).catch(() => null);
 		if (!user) return;
 		await user.send({
 			content: `Hi, you can vote for Birthdayy again!`,

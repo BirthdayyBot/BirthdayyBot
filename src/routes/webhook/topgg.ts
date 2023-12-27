@@ -2,7 +2,6 @@ import { authenticated } from '#lib/api/utils';
 import { remindMeButtonBuilder } from '#lib/components/button';
 import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { addRoleToUser } from '#lib/discord/role';
-import { getUserInfo } from '#lib/discord/user';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { BirthdayyBotId } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
@@ -38,7 +37,7 @@ export class UserRoute extends Route {
 		}
 
 		try {
-			const user = await getUserInfo(body.user);
+			const user = await container.client.users.fetch(body.user).catch(() => null);
 			const guild = await container.client.guilds.fetch(BirthdayyBotId.Birthdayy);
 
 			if (!user || !guild) return response.end();

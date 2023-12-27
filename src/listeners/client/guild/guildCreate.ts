@@ -1,4 +1,4 @@
-import { getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
+import { sendDMMessage, sendMessage } from '#lib/discord';
 import { resolveEmbed } from '#root/commands/General/guide';
 import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
 import { getSettings } from '#utils/functions/guilds';
@@ -71,8 +71,8 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			},
 		];
 
-		const ownerInfo = await getUserInfo(ownerId);
-		const inviterInfo = inviterId ? await getUserInfo(inviterId) : undefined;
+		const ownerInfo = await container.client.users.fetch(ownerId).catch(() => null);
+		const inviterInfo = inviterId ? await container.client.users.fetch(inviterId).catch(() => null) : undefined;
 
 		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
 		if (memberCount) fields.push({ name: 'GuildMemberCount', value: `${memberCount}` });
