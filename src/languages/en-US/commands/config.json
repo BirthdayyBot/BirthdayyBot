@@ -58,49 +58,49 @@
   "listName": "list",
   "list": {
     "embedList": {
-        "title": "Birthdays on {{guild.name}}",
-        "description": "Here is the list of settings on this server.",
-        "footer": {
-            "text": "Use /config <setting> <value> to change any setting",
-            "url": "{{guild.icon}}"
+      "title": "Birthdays on {{guild.name}}",
+      "description": "Here is the list of settings on this server.",
+      "footer": {
+        "text": "Use /config <setting> <value> to change any setting",
+        "url": "{{guild.icon}}"
+      },
+      "fields": [
+        {
+          "name": "Announcement Channel",
+          "value": "{{settings.announcementChannel, channel}}",
+          "inline": true
         },
-        "fields": [
-            {
-                "name": "Announcement Channel",
-                "value": "{{settings.announcementChannel, channel}}",
-                "inline": true
-            },
-            {
-                "name": "Overview Channel",
-                "value": "{{settings.overviewChannel, channel}}",
-                "inline": true
-            },
-            {
-                "name": "Birthday Role",
-                "value": "{{settings.birthdayRole, role}}",
-                "inline": true
-            },
-            {
-                "name": "Mention Role",
-                "value": "{{settings.birthdayPingRole, role}}",
-                "inline": true
-            },
-            {
-                "name": "Language/Timezone",
-                "value": "{{guild.preferredLocale, language}} / {{guild.preferredLocale, timezone}}",
-                "inline": true
-            },
-            {
-                "name": "Log Channel",
-                "value": "{{settings.logChannel, channel}}",
-                "inline": true
-            },
-            {
-                "name": "{{Plus}} Birthday Message",
-                "value": "{{settings.announcementMessage, birthdayMessage}}",
-                "inline": false
-            }
-        ]
+        {
+          "name": "Overview Channel",
+          "value": "{{settings.overviewChannel, channel}}",
+          "inline": true
+        },
+        {
+          "name": "Birthday Role",
+          "value": "{{settings.birthdayRole, role}}",
+          "inline": true
+        },
+        {
+          "name": "Mention Role",
+          "value": "{{settings.birthdayPingRole, role}}",
+          "inline": true
+        },
+        {
+          "name": "Language/Timezone",
+          "value": "{{guild.preferredLocale, language}} / {{guild.preferredLocale, timezone}}",
+          "inline": true
+        },
+        {
+          "name": "Log Channel",
+          "value": "{{settings.logChannel, channel}}",
+          "inline": true
+        },
+        {
+          "name": "{{Plus}} Birthday Message",
+          "value": "{{settings.announcementMessage, birthdayMessage}}",
+          "inline": false
+        }
+      ]
     }
   },
   "overviewChannel": {
@@ -139,5 +139,18 @@
   "resetDescription": "Reset your server configuration settings",
   "resetName": "reset",
   "configDescription": "Configuring server settings",
-  "configName": "config"
+  "configName": "config",
+  "view": {
+    "fields": {
+      "announcementChannel": "Announcement channel",
+      "announcementMessage": "Announcement message",
+      "birthdayPingRole": "Birthday Ping Role",
+      "birthdayRole": "Birthday role",
+      "logChannel": "News channel",
+      "overviewChannel": "Overview channel",
+      "overviewMessage": "Overview message",
+      "timezone": "Timezone",
+      "premium": "Premium"
+    }
+  }
 }

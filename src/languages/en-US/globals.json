@@ -1,4 +1,9 @@
 {
-    "default": "{{key}} has not been localized for en-US yet.",
-    "none": "None"
+  "default": "{{key}} has not been localized for en-US yet.",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "none": "None",
+  "unset": "Unset",
+  "yes": "Yes",
+  "no": "No"
 }

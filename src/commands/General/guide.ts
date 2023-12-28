@@ -39,7 +39,7 @@ export async function resolveEmbed(target: Target) {
 		},
 		command: {
 			set: BirthdayApplicationCommandMentions.Set,
-			list: ConfigApplicationCommandMentions.List,
+			list: ConfigApplicationCommandMentions.View,
 		},
 		vote: WebsiteUrl('vote'),
 		invite: WebsiteUrl('invite'),
