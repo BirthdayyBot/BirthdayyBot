@@ -4,7 +4,7 @@ import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, genera
 import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';
-import { AuditLogEvent, DiscordAPIError, Events, Guild, PermissionFlagsBits, time, type Snowflake } from 'discord.js';
+import { AuditLogEvent, Events, Guild, PermissionFlagsBits, time, type Snowflake } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
@@ -12,7 +12,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		this.container.client.guildMemberFetchQueue.add(guild.shardId, guild.id);
 
 		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
-		container.logger.debug(`[GuildCreate] - ${guild.id} ${guild.name}`);
+
 		const guildId = guild.id;
 		const inviterId = await getBotInviter(guild);
 
@@ -22,15 +22,9 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		await getSettings(guildId).update({ disabled: false, inviter: inviterId });
 
-		if (inviterId) {
-			await sendGuide(inviterId);
-		}
+		if (inviterId) await sendDMMessage(inviterId, { embeds: await resolveEmbed(guild) });
 
 		await this.joinServerLog(guild, inviterId);
-
-		async function sendGuide(userId: string) {
-			return sendDMMessage(userId, { embeds: await resolveEmbed(guild) });
-		}
 
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
 			if (
@@ -44,19 +38,11 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 				return undefined;
 			}
 
-			try {
-				const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
-				const entry = auditLogs.entries.first();
-				const userId = entry?.executor?.id;
-				container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
-				return userId;
-			} catch (error) {
-				if (error instanceof DiscordAPIError) {
-					container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error.message}`);
-					return undefined;
-				}
-				return undefined;
-			}
+			const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
+			const entry = auditLogs.entries.first();
+			const userId = entry?.executor?.id;
+			container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
+			return userId;
 		}
 	}
 
