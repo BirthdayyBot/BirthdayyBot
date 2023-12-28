@@ -1,35 +1,29 @@
-import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { Emojis, defaultEmbed } from '#utils';
+import { BrandingColors } from '#utils';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
+import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { EmbedBuilder } from 'discord.js';
 
+@ApplyOptions<CustomCommand.Options>({
+	description: 'commands/system:supportDescription',
+	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
+})
 export class SupportCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/support:support').setDMPermission(true),
+			applyDescriptionLocalizedBuilder(builder, this.description).setName('support').setDMPermission(true),
 		);
 	}
 
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const embed = await resolveKey(interaction, 'commands/support:supportEmbed', {
-			returnObjects: true,
-			support: WebsiteUrl('discord'),
-			docs: WebsiteUrl('docs'),
-			arrow: Emojis.ArrowRight,
-			link: Emojis.Link,
-			emoji: Emojis.Compass,
-		});
+		const t = await fetchT(interaction);
+		const embed = new EmbedBuilder()
+			.setTitle(t('commands/system:supportEmbedTitle', { username: interaction.user.displayName }))
+			.setDescription(t('commands/system:supportEmbedDescription'))
+			.setColor(BrandingColors.Birthdayy);
 
-		const embeds = [new EmbedBuilder({ ...defaultEmbed(), ...embed })];
-		const components = [
-			new ActionRowBuilder<ButtonBuilder>().setComponents(
-				await inviteSupportDicordButton(interaction),
-				await docsButtonBuilder(interaction),
-			),
-		];
-
-		return interaction.reply({ embeds, components });
+		return interaction.reply({ embeds: [embed] });
 	}
 }

@@ -91,6 +91,7 @@ function parseInternationalizationDefaultVariables() {
 		SUCCESS: Emojis.Success,
 		FAIL: Emojis.Fail,
 		PLUS: Emojis.Plus,
+		HEART: Emojis.Heart,
 		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
 		CLIENT_ID: process.env.CLIENT_ID,
 		...parseInternationalizationDefaultVariablesPermissions(),
