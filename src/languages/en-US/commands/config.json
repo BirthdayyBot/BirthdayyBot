@@ -1,156 +1,66 @@
 {
-  "timezone": {
-    "choices": {
-      "0": "Greenwich Mean Time | GMT | UTC +0",
-      "1": "Central European Time | CET | UTC +1",
-      "2": "Eastern European Time | EET | UTC +2",
-      "3": "Moscow Standard Time | MSK | UTC +3",
-      "4": "Gulf Standard Time | GST | UTC +4",
-      "5": "Pakistan Standard Time | PKT | UTC +5",
-      "6": "Bangladesh Standard Time | BST | UTC  6",
-      "7": "Indochina Time | ICT | UTC  7",
-      "8": "China Standard Time | CST | UTC +8",
-      "9": "Japan Standard Time | JST | UTC +9",
-      "10": "Australian Eastern Standard Time | AEST | UTC +10",
-      "11": "Solomon Island Time | SBT | UTC +11",
-      "12": "New Zealand Standard Time | NZST | UTC +12",
-      "-1": "Azores Time | AZOT | UTC -1",
-      "-2": "Fernando de Noronha Time | FNT | UTC -2",
-      "-3": "Amazon Time Zone | AMT | UTC -3",
-      "-4": "Atlantic Standard Time | AST | UTC -4",
-      "-5": "Eastern Standard Time | EST | UTC -5",
-      "-6": "Central Standard Time | CST | UTC -6",
-      "-7": "Mountain Standard Time | MST | UTC -7",
-      "-8": "Pacific Standard Time | PST | UTC -8",
-      "-9": "Alaska Standard Time | AKST | UTC -9",
-      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
-      "-11": "Niue Time | NUT | UTC -11"
+  "name": "config",
+  "description": "Manage the configuration for this server",
+  "viewName": "view",
+  "viewDescription": "View the current configuration",
+  "viewTitleEmbed": "**Current settings**:",
+  "viewFieldsEmbed": [
+    {
+      "name": "Announcement Channel",
+      "value": "{{announcementChannel}}",
+      "inline": true
     },
-    "timezoneDescription": "What timezone are you in ?",
-    "timezoneName": "timezone",
-    "success": "The **timezone** has been set to {{timezone}}."
-  },
-  "announcementChannel": {
-    "cannotPermissions": "Oh... looks like I can't send a message in this channel. Can you take a look?",
-    "channelName": "channel",
-    "channelDescription": "Which salon should I send the announcement message to?",
-    "success": "The announcement channel has been defined on {{channel}}."
-  },
-  "announcementChannelDescription": "Channel where I would send a message when it is a user's birthday",
-  "announcementChannelName": "announcement-channel",
-  "announcementMessage": {
-    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
-    "messageName": "message",
-    "requirePremium": "This feature is currently in __Beta Stage__ and **Birthdayy Premium only**.\nIf you already want to use this feature and future ones, you can support development on [Patreon]({{url}}).`),",
-    "success": "The announcement message has been modified.\n\n{{message}}"
-  },
-  "announcementMessageDescription": "Message I would send on a user's birthday.",
-  "announcementMessageName": "announcement-message",
-  "birthdayRole": {
-    "highestBotRole": "Oh I can't assign this role... Looks like it's higher than my highest role.",
-    "roleDescription": "Role that will be assigned to the user on their birthday",
-    "roleName": "role",
-    "success": "The birthday role has been set to {{role}} ."
-  },
-  "birthdayRoleDescription": "Role assigned to the user on their birthday",
-  "birthdayRoleName": "birthday-role",
-  "listDescription": "List all birthdays on the server",
-  "listName": "list",
-  "list": {
-    "embedList": {
-      "title": "Birthdays on {{guild.name}}",
-      "description": "Here is the list of settings on this server.",
-      "footer": {
-        "text": "Use /config <setting> <value> to change any setting",
-        "url": "{{guild.icon}}"
-      },
-      "fields": [
-        {
-          "name": "Announcement Channel",
-          "value": "{{settings.announcementChannel, channel}}",
-          "inline": true
-        },
-        {
-          "name": "Overview Channel",
-          "value": "{{settings.overviewChannel, channel}}",
-          "inline": true
-        },
-        {
-          "name": "Birthday Role",
-          "value": "{{settings.birthdayRole, role}}",
-          "inline": true
-        },
-        {
-          "name": "Mention Role",
-          "value": "{{settings.birthdayPingRole, role}}",
-          "inline": true
-        },
-        {
-          "name": "Language/Timezone",
-          "value": "{{guild.preferredLocale, language}} / {{guild.preferredLocale, timezone}}",
-          "inline": true
-        },
-        {
-          "name": "Log Channel",
-          "value": "{{settings.logChannel, channel}}",
-          "inline": true
-        },
-        {
-          "name": "{{Plus}} Birthday Message",
-          "value": "{{settings.announcementMessage, birthdayMessage}}",
-          "inline": false
-        }
-      ]
+    {
+      "name": "Birthday Role",
+      "value": "{{birthdayRole}}",
+      "inline": true
+    },
+    {
+      "name": "Mention Role",
+      "value": "{{birthdayPingRole}}",
+      "inline": true
+    },
+    {
+      "name": "Overview Channel",
+      "value": "{{overviewChannel}}",
+      "inline": true
+    },
+    {
+      "name": "Timezone",
+      "value": "{{timezone}}",
+      "inline": true
+    },
+    {
+      "name": "{{PLUS}} Birthday Message",
+      "value": "{{announcementMessage}}",
+      "inline": false
     }
-  },
-  "overviewChannel": {
-    "cannotPermissions": "I do not have permission to send messages on {{channel}}.",
-    "channelDescription": "Channel where the preview should be sent and updated",
-    "channelName": "channel",
-    "success": "Overview channel successfully set to {{channel}} and new [message]({{message}})."
-  },
-  "overviewChannelDescription": "Channel that lists all server birthdays",
-  "overviewChannelName": "overview-channel",
-  "pingRole": {
-    "roleDescription": "What role should I mention in the announcement message?",
-    "roleName": "role",
-    "success": "The ping role has been set to {{role}}."
-  },
-  "pingRoleDescription": "Mention a role on someone's birthday",
-  "pingRoleName": "ping-role",
-  "reset": {
-    "choices": {
-      "announcementChannel": "Announcement channel",
-      "birthdayPingRole": "Birthday Ping Role",
-      "birthdayRole": "Birthday role",
-      "logChannel": "News channel",
-      "overviewChannel": "Presentation channel",
-      "overviewMessage": "Introductory message",
-      "timezone": "Timezone",
-      "announcementMessage": "Announcement message"
-    },
-    "configDescription": "Configuration you want to reset",
-    "configName": "config",
-    "error": "An error occurred while trying to reset the {{config}} configuration.",
-    "success": "The configuration {{config}} has been successfully reset."
-  },
-  "timezoneDescription": "Change time zone when Birthdayy wishes happy birthday.",
-  "timezoneName": "timezone",
-  "resetDescription": "Reset your server configuration settings",
+  ],
+  "viewMessageRequiredPremimAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+  "editName": "edit",
+  "editDescription": "Edit the configuration for this server",
+  "editSuccess": "Successfully edited the configuration for this server.",
+  "editFailure": "I wasn't able to save your changes, sorry 😦",
+  "editOptionsAnnoucementChannelDescription": "If set, the channel to post birthday announcements in",
+  "editOptionsAnnoucementMessageDescription": "If set, the message to post when someone has a birthday",
+  "editOptionsBirthdayRoleDescription": "If set, the role to give to people on their birthday",
+  "editOptionsBirthdayPingRoleDescription": "If set, the role to ping when someone has a birthday",
+  "editOptionsOverviewChannelDescription": "If set, the channel to post the birthday overview in",
+  "editOptionsTimezoneDescription": "The timezone to use for birthdays",
+  "editChannelCanSendEmbeds": "I need the permission to send embeds in {{channel}} to be able to post the birthday announcement there.",
+  "editMessageTooLong": "The message is too long, please shorten it to {{maxLength}} characters.",
+  "editMessagePremiumRequired": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+  "editRoleHigher": "I need the role {{role}} to be higher than the birthday role to be able to give it to people on their birthday.",
+  "editRoleNotMentionnable": "I need the role {{role}} to be mentionnable to be able to ping it when someone has a birthday.",
   "resetName": "reset",
-  "configDescription": "Configuring server settings",
-  "configName": "config",
-  "view": {
-    "fields": {
-      "announcementChannel": "Announcement channel",
-      "announcementMessage": "Announcement message",
-      "birthdayPingRole": "Birthday Ping Role",
-      "birthdayRole": "Birthday role",
-      "logChannel": "News channel",
-      "overviewChannel": "Overview channel",
-      "overviewMessage": "Overview message",
-      "timezone": "Timezone",
-      "premium": "Premium"
-    }
-  }
+  "resetDescription": "Reset a configuration option to its default setting",
+  "resetOptionsKeyName": "key",
+  "resetOptionsKeyDescription": "The option to reset",
+  "resetOptionsKeyChoicesAll": "all",
+  "keyAnnouncementChannel": "announcement-channel",
+  "keyAnnouncementMessage": "announcement-message",
+  "keyBirthdayRole": "birthday-role",
+  "keyBirthdayPingRole": "birthday-ping-role",
+  "keyOverviewChannel": "overview-channel",
+  "keyTimezone": "timezone"
 }

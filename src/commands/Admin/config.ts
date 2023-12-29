@@ -1,7 +1,9 @@
+import { BIRTHDAYY_CUPCAKE } from '#lib/components/images';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { TIMEZONE_VALUES } from '#lib/utils/common/date';
+import { formatBirthdayMessage } from '#lib/utils/common/string';
+import { BrandingColors } from '#lib/utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
@@ -15,13 +17,13 @@ import {
 	Channel,
 	ChannelType,
 	EmbedBuilder,
+	EmbedField,
 	PermissionFlagsBits,
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
 	hyperlink,
 	inlineCode,
-	messageLink,
 	roleMention,
 } from 'discord.js';
 
@@ -31,6 +33,8 @@ type ConfigDefault = Omit<
 >;
 
 @ApplyOptions<CustomSubCommand.Options>({
+	name: 'config',
+	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Administrator,
@@ -48,7 +52,7 @@ export class ConfigCommand extends CustomSubCommand {
 		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
 		if (!isNullish(announcementChannel)) {
-			const result = await this.parseAnnouncementChannel(interaction, announcementChannel);
+			const result = await this.parseChannel(interaction, announcementChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['announcementChannel', result.unwrap()]);
@@ -63,37 +67,32 @@ export class ConfigCommand extends CustomSubCommand {
 			entries.push(['announcementMessage', result.unwrap()]);
 		}
 
-		const birthdayRole = interaction.options.getRole('birthday-role');
+		const birthdayRole = interaction.options.getRole('birthdayRole');
 		if (!isNullish(birthdayRole)) {
-			const result = await this.parseBirthdayRole(interaction, birthdayRole);
+			const result = await this.parseRole(interaction, birthdayRole, false);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['birthdayRole', result.unwrap()]);
 		}
 
-		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
+		const birthdayPingRole = interaction.options.getRole('birthdayPingRole');
 		if (!isNullish(birthdayPingRole)) {
-			const result = await this.parseBirthdayPingRole(interaction, birthdayPingRole);
+			const result = await this.parseRole(interaction, birthdayPingRole, true);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['birthdayPingRole', result.unwrap()]);
 		}
 
-		const overviewChannel = interaction.options.getChannel('overview-channel');
+		const overviewChannel = interaction.options.getChannel('overviewChannel');
 		if (!isNullish(overviewChannel)) {
-			const result = await this.parseOverviewChannel(interaction, overviewChannel);
+			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['overviewChannel', result.unwrap()]);
 		}
 
 		const timezone = interaction.options.getInteger('timezone');
-		if (!isNullish(timezone)) {
-			const result = await this.parseTimezone(interaction, timezone);
-			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
-
-			entries.push(['timezone', result.unwrap()]);
-		}
+		if (!isNullish(timezone)) entries.push(['timezone', timezone]);
 
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
@@ -107,7 +106,7 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	public reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		switch (interaction.options.data[0].name) {
+		switch (interaction.options.getString('key', true)) {
 			case 'all': {
 				const data: ConfigDefault = {
 					announcementChannel: null,
@@ -130,53 +129,70 @@ export class ConfigCommand extends CustomSubCommand {
 				return this.updateDatabase(interaction, { birthdayPingRole: null });
 			case 'overviewChannel':
 				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
+			case 'overviewMessage':
+				return this.updateDatabase(interaction, { overviewMessage: null });
 			case 'timezone':
 				return this.updateDatabase(interaction, { timezone: 0 });
-			default: {
-				return this.updateDatabase(interaction, {});
-			}
+			default:
+				return interaction.reply({ content: 'Something went wrong', ephemeral: true });
 		}
 	}
 
+	public override async autocompleteRun(interaction: Command.AutocompleteInteraction<'cached'>) {
+		if (interaction.commandName !== 'config') return interaction.respond([]);
+		const focusedOption = interaction.options.getFocused(true);
+		if (focusedOption?.name !== 'timezone') return interaction.respond([]);
+
+		const results = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value: Number(value) }));
+		this.container.logger.debug(JSON.stringify(results));
+		return interaction.respond(results);
+	}
+
 	private async viewGenerateContent(
-		interaction: Command.ChatInputCommandInteraction,
+		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null,
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
 
-		const embed = new EmbedBuilder().setTitle(t('commands/config:view.title'));
-
-		const yesNo = [inlineCode(t('globals:no')), inlineCode(t('globals:yes'))];
+		const embed = new EmbedBuilder()
+			.setTitle(t('commands/config:viewTitleEmbed'))
+			.setColor(BrandingColors.Birthdayy)
+			.setThumbnail(BIRTHDAYY_CUPCAKE);
 
 		const announcementChannel = settings.announcementChannel
-			? hyperlink('Here', channelMention(settings.announcementChannel))
+			? channelMention(settings.announcementChannel)
+			: t('globals:unset');
+
+		let announcementMessage = settings.announcementMessage
+			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
 			: inlineCode(t('globals:unset'));
-		const announcementMessage =
-			settings.announcementMessage && settings.announcementChannel
-				? messageLink(settings.announcementChannel, settings.announcementMessage)
-				: inlineCode(t('globals:unset'));
-		const birthdayRole = settings.birthdayRole
-			? roleMention(settings.birthdayRole)
-			: inlineCode(t('globals:unset'));
+
+		if (!settings.premium) {
+			const content = await resolveKey(interaction, 'commands/config:viewMessageRequiredPremimAlert');
+
+			announcementMessage += `\n\n${content}`;
+		}
+
+		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
 		const birthdayPingRole = settings.birthdayPingRole
 			? roleMention(settings.birthdayPingRole)
-			: inlineCode(t('globals:unset'));
+			: t('globals:unset');
 		const overviewChannel = settings.overviewChannel
 			? channelMention(settings.overviewChannel)
-			: inlineCode(t('globals:unset'));
-		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : inlineCode(t('globals:unset'));
+			: t('globals:unset');
+		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : t('globals:unset');
 
-		const premium = yesNo[Number(settings.premium ?? false)];
-
-		return embed.addFields(
-			{ name: t('commands/config:view.fields.channel'), value: announcementChannel, inline: true },
-			{ name: t('commands/config:view.fields.message'), value: announcementMessage, inline: true },
-			{ name: t('commands/config:view.fields.birthdayRole'), value: birthdayRole, inline: true },
-			{ name: t('commands/config:view.fields.birthdayPingRole'), value: birthdayPingRole },
-			{ name: t('commands/config:view.fields.overviewChannel'), value: overviewChannel },
-			{ name: t('commands/config:view.fields.timezone'), value: timezone },
-			{ name: t('commands/config:view.fields.premium'), value: premium },
+		return embed.setFields(
+			...(t('commands/config:viewFieldsEmbed', {
+				returnObjects: true,
+				announcementChannel,
+				announcementMessage,
+				birthdayRole,
+				birthdayPingRole,
+				overviewChannel,
+				timezone,
+			}) as EmbedField[]),
 		);
 	}
 
@@ -192,88 +208,73 @@ export class ConfigCommand extends CustomSubCommand {
 		);
 
 		const content = await result.match({
-			ok: () => resolveKey(interaction, 'commands/config:reset.success'),
+			ok: () => resolveKey(interaction, 'commands/config:editSuccess'),
 			err: (error) => {
 				this.container.logger.error(error);
-				return resolveKey(interaction, 'commands/config:reset.error');
+				return resolveKey(interaction, 'commands/config:editFailure');
 			},
 		});
 
 		return interaction.reply({ content, ephemeral: true });
 	}
 
-	private async parseAnnouncementChannel(
-		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		announcementChannel: Channel,
-	) {
-		if (announcementChannel.type !== ChannelType.GuildText) {
-			return Result.err(await resolveKey(interaction, 'commands/config:announcementChannel.error'));
+	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {
+		if (!canSendEmbeds(channel)) {
+			return Result.err(
+				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
+					channel: channelMention(channel.id),
+				}),
+			);
 		}
 
-		// Check if the bot can send messages in the channel:
-		if (!canSendEmbeds(announcementChannel)) {
-			return Result.err(await resolveKey(interaction, 'commands/config:announcementChannel.error'));
-		}
-
-		return Result.ok(announcementChannel.id);
+		return Result.ok(channel.id);
 	}
 
 	private async parseAnnouncementMessage(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		announcementMessage: string,
 	) {
+		const settings = await this.container.prisma.guild.findUnique({ where: { guildId: interaction.guildId } });
+
+		if (!settings?.premium && announcementMessage !== DEFAULT_ANNOUNCEMENT_MESSAGE) {
+			await this.container.prisma.guild.update({
+				where: { guildId: interaction.guildId },
+				data: { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE },
+			});
+
+			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
+		}
+
 		if (announcementMessage.length > 512) {
-			return Result.err(await resolveKey(interaction, 'commands/config:announcementMessage.error'));
+			return Result.err(
+				await resolveKey(interaction, 'commands/config:editMessageTooLong', {
+					maxLength: 512,
+				}),
+			);
 		}
 
 		return Result.ok(announcementMessage);
 	}
 
-	private async parseBirthdayRole(interaction: Command.ChatInputCommandInteraction<'cached'>, birthdayRole: Role) {
+	private async parseRole(interaction: Command.ChatInputCommandInteraction<'cached'>, role: Role, mention: boolean) {
+		if (role.position >= interaction.guild.members.me!.roles.highest.position) {
+			return Result.err(
+				await resolveKey(interaction, 'commands/config:editRoleHigher', {
+					role: roleMention(role.id),
+				}),
+			);
+		}
+
 		// Check if the bot has permissions to add the role to the user:
-		if (!birthdayRole.editable) {
-			return Result.err(await resolveKey(interaction, 'commands/config:birthdayRole.error'));
+		if (mention && !role.mentionable) {
+			return Result.err(
+				await resolveKey(interaction, 'commands/config:editRoleNotMentionnable', {
+					role: roleMention(role.id),
+				}),
+			);
 		}
 
-		return Result.ok(birthdayRole.id);
-	}
-
-	private async parseBirthdayPingRole(
-		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		birthdayPingRole: Role,
-	) {
-		// Check if the bot has permissions to add the role to the user:
-		if (!birthdayPingRole.editable) {
-			return Result.err(await resolveKey(interaction, 'commands/config:birthdayPingRole.error'));
-		}
-
-		return Result.ok(birthdayPingRole.id);
-	}
-
-	private async parseOverviewChannel(
-		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		overviewChannel: Channel,
-	) {
-		if (overviewChannel.type !== ChannelType.GuildText) {
-			return Result.err(await resolveKey(interaction, 'commands/config:overviewChannel.error'));
-		}
-
-		// Check if the bot can send messages in the channel:
-		if (!canSendEmbeds(overviewChannel)) {
-			return Result.err(await resolveKey(interaction, 'commands/config:overviewChannel.error'));
-		}
-
-		await updateBirthdayOverview(interaction.guildId);
-
-		return Result.ok(overviewChannel.id);
-	}
-
-	private async parseTimezone(interaction: Command.ChatInputCommandInteraction<'cached'>, timezone: number) {
-		if (!TIMEZONE_VALUES[timezone]) {
-			return Result.err(await resolveKey(interaction, 'commands/config:timezone.error'));
-		}
-
-		return Result.ok(timezone);
+		return Result.ok(role.id);
 	}
 }
 
@@ -284,7 +285,7 @@ export const ConfigApplicationCommandMentions = {
 } as const;
 
 function registerConfigCommand(builder: SlashCommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:config')
+	return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.setDMPermission(false)
 		.addSubcommand((builder) => editConfigSubCommand(builder))
@@ -295,80 +296,74 @@ function registerConfigCommand(builder: SlashCommandBuilder) {
 function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/config:edit')
 		.addChannelOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:announcementChannel.channel')
-				.addChannelTypes(ChannelType.GuildText)
-				.setRequired(true),
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyAnnouncementChannel',
+				'commands/config:editOptionsAnnoucementChannelDescription',
+			).addChannelTypes(ChannelType.GuildText),
 		)
 		.addStringOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:announcementMessage.message')
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyAnnouncementMessage',
+				'commands/config:editOptionsAnnoucementMessageDescription',
+			)
 				.setMinLength(1)
-				.setMaxLength(512)
-				.setRequired(true),
+				.setMaxLength(512),
 		)
 		.addRoleOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:birthdayRole.role').setRequired(true),
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyBirthdayRole',
+				'commands/config:editOptionsBirthdayRoleDescription',
+			),
 		)
-		.addRoleOption((builder) => applyLocalizedBuilder(builder, 'commands/config:pingRole.role').setRequired(true))
+		.addRoleOption((builder) =>
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyBirthdayPingRole',
+				'commands/config:editOptionsBirthdayPingRoleDescription',
+			),
+		)
 		.addChannelOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:overviewChannel.channel')
-				.addChannelTypes(ChannelType.GuildText)
-				.setRequired(true),
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyOverviewChannel',
+				'commands/config:editOptionsOverviewChannelDescription',
+			).addChannelTypes(ChannelType.GuildText),
 		)
 		.addIntegerOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:timezone.timezone')
-				.addChoices(
-					createLocalizedChoice('commands/config:timezone.choices.-11', { value: -11 }),
-					createLocalizedChoice('commands/config:timezone.choices.-10', { value: -10 }),
-					createLocalizedChoice('commands/config:timezone.choices.-9', { value: -9 }),
-					createLocalizedChoice('commands/config:timezone.choices.-8', { value: -8 }),
-					createLocalizedChoice('commands/config:timezone.choices.-7', { value: -7 }),
-					createLocalizedChoice('commands/config:timezone.choices.-6', { value: -6 }),
-					createLocalizedChoice('commands/config:timezone.choices.-5', { value: -5 }),
-					createLocalizedChoice('commands/config:timezone.choices.-4', { value: -4 }),
-					createLocalizedChoice('commands/config:timezone.choices.-3', { value: -3 }),
-					createLocalizedChoice('commands/config:timezone.choices.-2', { value: -2 }),
-					createLocalizedChoice('commands/config:timezone.choices.-1', { value: -1 }),
-					createLocalizedChoice('commands/config:timezone.choices.0', { value: 0 }),
-					createLocalizedChoice('commands/config:timezone.choices.1', { value: 1 }),
-					createLocalizedChoice('commands/config:timezone.choices.2', { value: 2 }),
-					createLocalizedChoice('commands/config:timezone.choices.3', { value: 3 }),
-					createLocalizedChoice('commands/config:timezone.choices.4', { value: 4 }),
-					createLocalizedChoice('commands/config:timezone.choices.5', { value: 5 }),
-					createLocalizedChoice('commands/config:timezone.choices.6', { value: 6 }),
-					createLocalizedChoice('commands/config:timezone.choices.7', { value: 7 }),
-					createLocalizedChoice('commands/config:timezone.choices.8', { value: 8 }),
-					createLocalizedChoice('commands/config:timezone.choices.9', { value: 9 }),
-					createLocalizedChoice('commands/config:timezone.choices.10', { value: 10 }),
-					createLocalizedChoice('commands/config:timezone.choices.11', { value: 11 }),
-					createLocalizedChoice('commands/config:timezone.choices.12', { value: 12 }),
-				)
-				.setRequired(true),
+			applyLocalizedBuilder(
+				builder,
+				'commands/config:keyTimezone',
+				'commands/config:editOptionsTimezoneDescription',
+			).setAutocomplete(true),
 		);
 }
 
 function viewConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:list');
+	return applyLocalizedBuilder(builder, 'commands/config:view');
 }
 
 function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/config:reset').addStringOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:reset.options.key')
+		applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
 			.addChoices(
-				createLocalizedChoice('commands/config:reset.options.key.all', { value: 'all' }),
-				createLocalizedChoice('commands/config:reset.options.key.announcementChannel', {
+				createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
+				createLocalizedChoice('commands/config:keyAnnouncementChannel', {
 					value: 'announcementChannel',
 				}),
-				createLocalizedChoice('commands/config:reset.options.key.announcementMessage', {
+				createLocalizedChoice('commands/config:keyAnnouncementMessage', {
 					value: 'announcementMessage',
 				}),
-				createLocalizedChoice('commands/config:reset.options.key.birthdayRole', { value: 'birthdayRole' }),
-				createLocalizedChoice('commands/config:reset.options.key.birthdayPingRole', {
+				createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
+				createLocalizedChoice('commands/config:keyBirthdayPingRole', {
 					value: 'birthdayPingRole',
 				}),
-				createLocalizedChoice('commands/config:reset.options.key.overviewChannel', {
+				createLocalizedChoice('commands/config:keyOverviewChannel', {
 					value: 'overviewChannel',
 				}),
-				createLocalizedChoice('commands/config:reset.options.key.timezone', { value: 'timezone' }),
+				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' }),
 			)
 			.setRequired(true),
 	);
