@@ -12,7 +12,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { isNullish } from '@sapphire/utilities';
+import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
 import {
 	Channel,
 	ChannelType,
@@ -22,7 +22,6 @@ import {
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
-	inlineCode,
 	roleMention,
 } from 'discord.js';
 
@@ -48,7 +47,6 @@ export class ConfigCommand extends CustomSubCommand {
 	public async edit(interaction: Command.ChatInputCommandInteraction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
-		// Reactions have an extra validation step, so it will run the first to prevent needless processing:
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
 		if (!isNullish(announcementChannel)) {
 			const result = await this.parseChannel(interaction, announcementChannel);
@@ -66,7 +64,7 @@ export class ConfigCommand extends CustomSubCommand {
 			entries.push(['announcementMessage', result.unwrap()]);
 		}
 
-		const birthdayRole = interaction.options.getRole('birthdayRole');
+		const birthdayRole = interaction.options.getRole('birthday-role');
 		if (!isNullish(birthdayRole)) {
 			const result = await this.parseRole(interaction, birthdayRole, false);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -74,7 +72,7 @@ export class ConfigCommand extends CustomSubCommand {
 			entries.push(['birthdayRole', result.unwrap()]);
 		}
 
-		const birthdayPingRole = interaction.options.getRole('birthdayPingRole');
+		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
 		if (!isNullish(birthdayPingRole)) {
 			const result = await this.parseRole(interaction, birthdayPingRole, true);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -82,7 +80,7 @@ export class ConfigCommand extends CustomSubCommand {
 			entries.push(['birthdayPingRole', result.unwrap()]);
 		}
 
-		const overviewChannel = interaction.options.getChannel('overviewChannel');
+		const overviewChannel = interaction.options.getChannel('overview-channel');
 		if (!isNullish(overviewChannel)) {
 			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -91,7 +89,7 @@ export class ConfigCommand extends CustomSubCommand {
 		}
 
 		const timezone = interaction.options.getInteger('timezone');
-		if (!isNullish(timezone)) entries.push(['timezone', timezone]);
+		if (!isNullish(timezone)) entries.push(['timezone', Number(timezone)]);
 
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
@@ -105,7 +103,8 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	public reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		switch (interaction.options.getString('key', true)) {
+		const key = interaction.options.getString('key', true) as ResetConfig;
+		switch (key) {
 			case 'all': {
 				const data: ConfigDefault = {
 					announcementChannel: null,
@@ -132,8 +131,6 @@ export class ConfigCommand extends CustomSubCommand {
 				return this.updateDatabase(interaction, { overviewMessage: null });
 			case 'timezone':
 				return this.updateDatabase(interaction, { timezone: 0 });
-			default:
-				return interaction.reply({ content: 'Something went wrong', ephemeral: true });
 		}
 	}
 
@@ -142,20 +139,22 @@ export class ConfigCommand extends CustomSubCommand {
 		const focusedOption = interaction.options.getFocused(true);
 		if (focusedOption?.name !== 'timezone') return interaction.respond([]);
 
-		const results = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value: Number(value) }));
-		this.container.logger.debug(JSON.stringify(results));
+		const results = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value }));
 		return interaction.respond(results);
 	}
 
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null,
+		modified = false,
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
 
+		this.container.logger.debug(settings);
+
 		const embed = new EmbedBuilder()
-			.setTitle(t('commands/config:viewTitleEmbed'))
+			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))
 			.setColor(BrandingColors.Birthdayy)
 			.setThumbnail(BIRTHDAYY_CUPCAKE);
 
@@ -163,15 +162,11 @@ export class ConfigCommand extends CustomSubCommand {
 			? channelMention(settings.announcementChannel)
 			: t('globals:unset');
 
-		let announcementMessage = settings.announcementMessage
+		const announcementMessage = settings.announcementMessage
 			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-			: inlineCode(t('globals:unset'));
+			: t('globals:unset');
 
-		if (!settings.premium) {
-			const content = await resolveKey(interaction, 'commands/config:viewMessageRequiredPremimAlert');
-
-			announcementMessage += `\n\n${content}`;
-		}
+		if (!settings.premium) embed.setDescription(t('commands/config:viewMessageRequiredPremimAlert'));
 
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
 		const birthdayPingRole = settings.birthdayPingRole
@@ -180,9 +175,9 @@ export class ConfigCommand extends CustomSubCommand {
 		const overviewChannel = settings.overviewChannel
 			? channelMention(settings.overviewChannel)
 			: t('globals:unset');
-		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : t('globals:unset');
+		const timezone = isNullOrUndefined(settings.timezone) ? t('globals:unset') : TIMEZONE_VALUES[settings.timezone];
 
-		return embed.setFields(
+		embed.setFields(
 			...(t('commands/config:viewFieldsEmbed', {
 				returnObjects: true,
 				announcementChannel,
@@ -191,8 +186,10 @@ export class ConfigCommand extends CustomSubCommand {
 				birthdayPingRole,
 				overviewChannel,
 				timezone,
-			}) as EmbedField[]),
+			}) satisfies EmbedField[]),
 		);
+
+		return embed;
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
@@ -207,14 +204,17 @@ export class ConfigCommand extends CustomSubCommand {
 		);
 
 		const content = await result.match({
-			ok: () => resolveKey(interaction, 'commands/config:editSuccess'),
+			ok: async (settings) =>
+				this.viewGenerateContent(interaction, settings, !isNullOrUndefinedOrEmpty(objectEntries(data))),
 			err: (error) => {
 				this.container.logger.error(error);
 				return resolveKey(interaction, 'commands/config:editFailure');
 			},
 		});
 
-		return interaction.reply({ content, ephemeral: true });
+		const options = typeof content === 'string' ? { content } : { embeds: [content] };
+
+		return interaction.reply({ ...options, ephemeral: true });
 	}
 
 	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {
@@ -367,3 +367,5 @@ function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 			.setRequired(true),
 	);
 }
+
+type ResetConfig = 'all' | keyof ConfigDefault;

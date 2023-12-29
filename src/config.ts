@@ -28,9 +28,9 @@ import {
 	type OAuth2Scopes,
 } from 'discord-api-types/v10';
 import {
+	Options,
 	channelMention,
 	roleMention,
-	Options,
 	type ClientOptions,
 	type PermissionsString,
 	type PresenceData,

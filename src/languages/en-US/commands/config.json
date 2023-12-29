@@ -4,6 +4,7 @@
   "viewName": "view",
   "viewDescription": "View the current configuration",
   "viewTitleEmbed": "**Current settings**:",
+  "viewTitleEmbedModified": "**Modified settings**:",
   "viewFieldsEmbed": [
     {
       "name": "Announcement Channel",
