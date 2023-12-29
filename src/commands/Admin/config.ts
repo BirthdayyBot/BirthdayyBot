@@ -22,7 +22,6 @@ import {
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
-	hyperlink,
 	inlineCode,
 	roleMention,
 } from 'discord.js';
