@@ -1,11 +1,8 @@
 {
-  "inviteName": "invite",
-  "inviteDescription": "Invite Birthdayy to your Discord Server!",
-  "embed": {
-    "title": "{{book}} Invite {{name}}",
-    "description": "{{arrowRight}} Click on the Button below, to invite {{name}} to your Discord Server!",
-    "thumbnail": {
-      "url": "{{avatar}}"
-    }
-  }
+  "description": "Shows the invite link to add Birthdayy to your server.",
+  "inviteOptionsPermissionsName": "Not Permission",
+  "inviteOptionsPermissionsDescription": "If you want to get a link on which Skyra will not ask for permissions.",
+  "invitePermissionInviteText": "Invite Birthdayy to your server",
+  "invitePermissionsDescription": "Don't be afraid to uncheck some permissions, I will let you know if you're trying to run a command without permissions.",
+  "invitePermissionSupportServerText": "Join Support Server"
 }
