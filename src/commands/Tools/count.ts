@@ -1,5 +1,5 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BOT_COLOR, generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { BrandingColors, generateDefaultEmbed, isNotCustom, reply } from '#utils';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
@@ -24,7 +24,7 @@ export class CountCommand extends CustomCommand {
 			embeds: [
 				{
 					title: 'Discord Information',
-					color: BOT_COLOR,
+					color: BrandingColors.Primary,
 					fields: [
 						{
 							inline: true,

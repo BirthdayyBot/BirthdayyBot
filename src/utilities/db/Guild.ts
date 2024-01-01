@@ -1,5 +1,5 @@
 import { sendMessage } from '#lib/discord/message';
-import { BOT_ADMIN_LOG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
+import { BOT_ADMIN_LOG } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
@@ -165,13 +165,6 @@ export class Guild extends Utility {
 	public reset = {
 		AnnouncementChannel: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { announcementChannel: null } }),
-		AnnouncementMessage: (guildId: Snowflake) =>
-			this.prisma.guild.update({
-				where: { guildId },
-				data: {
-					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
-				},
-			}),
 		OverviewChannel: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { overviewChannel: null } }),
 		OverviewMessage: (guildId: Snowflake) =>

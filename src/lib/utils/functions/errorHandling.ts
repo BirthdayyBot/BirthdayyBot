@@ -1,5 +1,4 @@
 import { type ErrorDefaultSentryScope, type ErrorHandlerOptions, type RouteApiErrorHandler } from '#lib/types';
-import { BrandingColors } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isDevelopment } from '#utils/env';
 import { DEBUG } from '#utils/environment';
@@ -7,7 +6,7 @@ import { reply } from '#utils/utils';
 import { container } from '@sapphire/framework';
 import { captureException, withScope } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
-import { codeBlock, type APIEmbed } from 'discord.js';
+import { Colors, codeBlock, type APIEmbed } from 'discord.js';
 
 export function logErrorToContainer({
 	error,
@@ -56,7 +55,7 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 	if (error.stack && isDevelopment) errorString += `Stack: ${JSON.stringify(error.stack)}`;
 
 	const errorMessageEmbed = generateDefaultEmbed({
-		color: BrandingColors.BirthdayyDev,
+		color: Colors.Red,
 		description: `${codeBlock(`js`, errorString)}`,
 		title: 'An error has occured',
 	});

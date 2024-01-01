@@ -2,7 +2,7 @@ import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/c
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BOT_NAME, Emojis, defaultEmbed } from '#utils';
+import { CLIENT_NAME, Emojis, defaultEmbed } from '#utils';
 import { container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
@@ -45,7 +45,7 @@ export async function resolveEmbed(target: Target) {
 		invite: WebsiteUrl('invite'),
 		premium: WebsiteUrl('premium'),
 		quickstart: WebsiteUrl('docs/quickstart'),
-		name: BOT_NAME || container.client.user!.username,
+		name: CLIENT_NAME || container.client.user!.username,
 	});
 	return [new EmbedBuilder({ ...defaultEmbed(), ...embed })];
 }

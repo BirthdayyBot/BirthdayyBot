@@ -6,9 +6,8 @@ import {
 	formatDateWithMonthAndDay,
 	splitDateString,
 } from '#utils/common/index';
-import { Emojis, PrismaErrorCodeEnum } from '#utils/constants';
+import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
-import { BOT_COLOR, IMG_CAKE } from '#utils/environment';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { CollectionConstructor } from '@discordjs/collection';
 import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
@@ -19,9 +18,9 @@ import {
 	canSendEmbeds,
 	isGuildBasedChannel,
 } from '@sapphire/discord.js-utilities';
+import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { TOptions, resolveKey } from '@sapphire/plugin-i18next';
-import { Time } from '@sapphire/duration';
 import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
@@ -109,7 +108,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			returnObjects: true,
 		})) satisfies APIEmbed;
 
-		const embed = new EmbedBuilder(translateEmbed).setColor(BOT_COLOR);
+		const embed = new EmbedBuilder(translateEmbed).setColor(BrandingColors.Primary);
 
 		return img ? embed : embed.setThumbnail(null);
 	}
@@ -282,7 +281,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
 			.setDescription(formatBirthdayMessage(announcementMessage, member))
-			.setThumbnail(IMG_CAKE);
+			.setThumbnail(CdnUrls.Cake);
 
 		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
 	}

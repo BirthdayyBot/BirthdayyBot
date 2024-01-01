@@ -1,6 +1,6 @@
 import { sendDMMessage, sendMessage } from '#lib/discord';
 import { resolveEmbed } from '#root/commands/General/guide';
-import { BOT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, IS_CUSTOM_BOT, generateDefaultEmbed } from '#utils';
+import { CLIENT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, generateDefaultEmbed } from '#utils';
 import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';
@@ -15,10 +15,6 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		const guildId = guild.id;
 		const inviterId = await getBotInviter(guild);
-
-		if (IS_CUSTOM_BOT) {
-			// TODO: #26 Create a nice welcome message for custom bot servers
-		}
 
 		await getSettings(guildId).update({ disabled: false, inviter: inviterId });
 
@@ -68,10 +64,10 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
 
 		const embed = generateDefaultEmbed({
-			title: `${Emojis.Success} ${BOT_NAME} got added to a Guild`,
+			title: `${Emojis.Success} ${CLIENT_NAME} got added to a Guild`,
 			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
-			color: BrandingColors.Birthdayy,
+			color: BrandingColors.Primary,
 			thumbnail: { url: guild.iconURL() ?? '' },
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });

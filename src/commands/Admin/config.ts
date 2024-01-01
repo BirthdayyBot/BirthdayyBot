@@ -1,9 +1,9 @@
-import { BIRTHDAYY_CUPCAKE } from '#lib/components/images';
+import { getSettings } from '#lib/discord/guild';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES } from '#lib/utils/common/date';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
-import { BrandingColors } from '#lib/utils/constants';
+import { BrandingColors, CdnUrls } from '#lib/utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
@@ -155,8 +155,8 @@ export class ConfigCommand extends CustomSubCommand {
 
 		const embed = new EmbedBuilder()
 			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))
-			.setColor(BrandingColors.Birthdayy)
-			.setThumbnail(BIRTHDAYY_CUPCAKE);
+			.setColor(BrandingColors.Primary)
+			.setThumbnail(CdnUrls.CupCake);
 
 		const announcementChannel = settings.announcementChannel
 			? channelMention(settings.announcementChannel)
@@ -233,12 +233,14 @@ export class ConfigCommand extends CustomSubCommand {
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		announcementMessage: string,
 	) {
-		const settings = await this.container.prisma.guild.findUnique({ where: { guildId: interaction.guildId } });
+		const settingsManager = getSettings(interaction.guildId);
+		const settings = await settingsManager.fetch();
+		const defaultAnnouncementMessage = settingsManager.defaultKey.announcementMessage;
 
-		if (!settings?.premium && announcementMessage !== DEFAULT_ANNOUNCEMENT_MESSAGE) {
+		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
 			await this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE },
+				data: { announcementMessage: defaultAnnouncementMessage },
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));

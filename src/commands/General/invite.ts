@@ -38,7 +38,7 @@ export class UserCommand extends CustomCommand {
 		);
 
 		return new EmbedBuilder() //
-			.setColor(BrandingColors.Birthdayy)
+			.setColor(BrandingColors.Primary)
 			.setDescription(
 				[
 					[embeddedInviteLink, embeddedJoinLink].join(' | '),

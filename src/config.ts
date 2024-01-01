@@ -45,7 +45,7 @@ function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
 
 	return {
-		id: envParseString('CLIENT_ID', '266624760782258186'),
+		id: envParseString('CLIENT_ID'),
 		secret: envParseString('OAUTH_SECRET'),
 		cookie: envParseString('OAUTH_COOKIE', 'BIRTHDAYY_AUTH'),
 		redirect: envParseString('OAUTH_REDIRECT_URI', 'http://127.0.0.1:3000/oauth/callback'),

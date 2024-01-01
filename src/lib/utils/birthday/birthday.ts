@@ -1,4 +1,4 @@
-import { Emojis, GuildIDEnum, IMG_CAKE, generateDefaultEmbed } from '#utils';
+import { CdnUrls, Emojis, GuildIDEnum, generateDefaultEmbed } from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
@@ -59,7 +59,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${Emojis.ArrowRight}Set your Birthday with\n\`/birthday set <day> <month> [year]\``,
 		fields: [],
-		thumbnail: { url: IMG_CAKE },
+		thumbnail: { url: CdnUrls.Cake },
 	};
 
 	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);

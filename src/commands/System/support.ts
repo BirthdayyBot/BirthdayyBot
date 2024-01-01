@@ -22,7 +22,7 @@ export class SupportCommand extends CustomCommand {
 		const embed = new EmbedBuilder()
 			.setTitle(t('commands/system:supportEmbedTitle', { username: interaction.user.displayName }))
 			.setDescription(t('commands/system:supportEmbedDescription'))
-			.setColor(BrandingColors.Birthdayy);
+			.setColor(BrandingColors.Primary);
 
 		return interaction.reply({ embeds: [embed] });
 	}

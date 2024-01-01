@@ -1,6 +1,6 @@
-import { BirthdayyBotId, BrandingColors, Emojis, GuildIDEnum, OwnerID } from '#utils/constants';
-import { isCustom, isProduction } from '#utils/env';
-import { envParseBoolean, envParseNumber, envParseString } from '@skyra/env-utilities';
+import { Emojis } from '#utils/constants';
+import { isProduction } from '#utils/env';
+import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { PermissionsBitField } from 'discord.js';
 import { join, resolve } from 'path';
 
@@ -12,22 +12,7 @@ export const DEBUG = envParseBoolean('DEBUG', true);
 export const APP_ENV = envParseString('APP_ENV');
 
 // GENERIC
-export const { BOT_ID, BOT_NAME, BOT_AVATAR } = process.env;
-export const IMG_CAKE =
-	process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
-export const IMG_BLOCK =
-	process.env.IMG_BLOCK ??
-	'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
-export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env
-	.BOT_ID!}&permissions=8&scope=bot`;
-export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=${
-	isCustom ? BirthdayyBotId.Birthdayy : BOT_ID || BirthdayyBotId.Birthdayy
-}&permissions=525529836753&scope=bot`;
-export const BOT_COLOR = envParseNumber('CLIENT_COLOR', BrandingColors.Birthdayy);
-export const WEBSITE_URL = 'https://birthdayy.xyz';
-export const DOCS_URL = 'https://birthdayy.xyz/docs';
-export const PREMIUM_URL = 'https://birthdayy.xyz/premium';
-export const IS_CUSTOM_BOT = envParseBoolean('CUSTOM_BOT');
+export const { CLIENT_NAME, BOT_AVATAR } = process.env;
 
 // Values
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');
@@ -36,8 +21,6 @@ export const DISCORD_INVITE = 'https://discord.birthdayy.xyz';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
 export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`;
-export const MAIN_DISCORD = envParseString('CLIENT_MAIN_GUILD', GuildIDEnum['Birthdayy']);
-export const BOT_ADMINS: string[] = [OwnerID.Chillihero, OwnerID.Swiizyy];
 
 export const Permission_Bits = [
 	PermissionsBitField.Flags.AddReactions,
@@ -67,4 +50,3 @@ export const Permission_Bits = [
 	PermissionsBitField.Flags.UseExternalEmojis,
 	PermissionsBitField.Flags.UseExternalStickers,
 ];
-export { Emojis };
