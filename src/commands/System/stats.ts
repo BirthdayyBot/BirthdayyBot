@@ -24,7 +24,11 @@ export class StatsCommand extends CustomCommand {
 		const stats = {
 			date: currentOffset.dateFormatted,
 			offset: currentOffset?.utcOffset,
-			servercount: await this.container.botList.computeGuilds(),
+			servercount:
+				(await this.container.client.shard?.broadcastEval((client) => client.guilds.cache.size))?.reduce(
+					(acc, val) => acc + val,
+					0,
+				) ?? this.container.client.guilds.cache.size,
 			ping: interaction.client.ws.ping,
 			cpu: process.cpuUsage(),
 			memory: {

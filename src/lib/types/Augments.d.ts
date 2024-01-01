@@ -1,6 +1,5 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
 import type { Birthday, Guild, User } from '#root/utilities/db/index';
-import { BotList } from '@devtomio/plugin-botlist';
 import type { WritePrecisionType } from '@influxdata/influxdb-client';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
@@ -13,13 +12,14 @@ declare module 'discord.js' {
 		readonly analytics: AnalyticsData | null;
 		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
 		readonly webhookError: WebhookClient | null;
+		computeGuilds(): Promise<number>;
+		computeUsers(): Promise<number>;
 	}
 }
 
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
-		botList: BotList;
 	}
 }
 

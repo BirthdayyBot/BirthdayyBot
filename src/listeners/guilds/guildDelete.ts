@@ -37,7 +37,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 		const embed = generateDefaultEmbed({
 			title: `${Emojis.Fail} ${BOT_NAME} got removed from a Guild`,
-			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
+			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
 			color: BrandingColors.BirthdayyDev,
 		});

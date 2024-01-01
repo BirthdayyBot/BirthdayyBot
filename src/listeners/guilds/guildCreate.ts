@@ -69,7 +69,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 
 		const embed = generateDefaultEmbed({
 			title: `${Emojis.Success} ${BOT_NAME} got added to a Guild`,
-			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
+			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
 			color: BrandingColors.Birthdayy,
 			thumbnail: { url: guild.iconURL() ?? '' },

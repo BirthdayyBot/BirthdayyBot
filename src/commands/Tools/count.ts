@@ -29,7 +29,7 @@ export class CountCommand extends CustomCommand {
 						{
 							inline: true,
 							name: 'Guilds',
-							value: (await this.container.botList.computeGuilds()).toString(),
+							value: (await this.container.client.computeGuilds()).toString(),
 						},
 						{
 							inline: true,
@@ -39,7 +39,7 @@ export class CountCommand extends CustomCommand {
 						{
 							inline: true,
 							name: 'Users',
-							value: (await this.container.botList.computeUsers()).toString(),
+							value: (await this.container.client.computeUsers()).toString(),
 						},
 					],
 				},

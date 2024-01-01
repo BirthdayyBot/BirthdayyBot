@@ -1,5 +1,4 @@
 import { Events } from '#lib/types/Enums';
-import { isProduction } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { FetchResultTypes, QueryError, fetch } from '@sapphire/fetch';
 import { MimeTypes } from '@sapphire/plugin-api';
@@ -17,7 +16,6 @@ enum Lists {
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
-	enabled: isProduction,
 	pattern: '*/10 * * * *',
 })
 export class PostStats extends ScheduledTask {
