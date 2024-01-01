@@ -4,7 +4,6 @@ import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
-import { logAll } from '#utils/functions/config';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
@@ -194,7 +193,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			added: false,
 			message: 'Not set',
 		};
-		logAll(config);
+
+		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
+		this.container.logger.debug(`[BirthdayTask] Member: ${member.id} [${member.user.tag}]`);
 
 		if (birthdayRole) {
 			const role = await guild.roles.fetch(birthdayRole);

@@ -1,22 +1,23 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import * as Sentry from '@sentry/node';
-import { envIsDefined } from '@skyra/env-utilities';
-import { logErrorToContainer } from '#utils/functions/errorHandling';
+import { Listener } from '@sapphire/framework';
+import { DiscordAPIError, HTTPError } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: Events.Error })
-export class ErrorEvent extends Listener<typeof Events.Error> {
+const NEWLINE = '\n';
+
+export class UserListener extends Listener {
 	public run(error: Error) {
-		const SendErrorToSentry = () =>
-			Sentry.withScope((scope) => {
-				scope.setLevel('error');
-				scope.setFingerprint([error.name]);
-				scope.setTransactionName('ErrorEvent');
-				Sentry.captureException(error);
-			});
-
-		if (envIsDefined('SENTRY_URL')) return SendErrorToSentry;
-
-		return logErrorToContainer({ error, loggerSeverityLevel: 'error' });
+		const { logger } = this.container;
+		if (error instanceof DiscordAPIError) {
+			logger.warn(
+				`[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`,
+			);
+			logger.fatal(error.stack);
+		} else if (error instanceof HTTPError) {
+			logger.warn(
+				`[HTTP ERROR] [CODE: ${error.status}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`,
+			);
+			logger.fatal(error.stack);
+		} else {
+			logger.error(error);
+		}
 	}
 }
