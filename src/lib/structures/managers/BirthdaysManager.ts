@@ -1,11 +1,5 @@
 import { generateBirthdayList } from '#utils/birthday/birthday';
-import {
-	TimezoneWithLocale,
-	formatBirthdayMessage,
-	formatDateForDisplay,
-	formatDateWithMonthAndDay,
-	splitDateString,
-} from '#utils/common/index';
+import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, splitDateString } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
@@ -73,13 +67,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		this.settings = settings;
 	}
 
-	public currentDate(format?: boolean) {
+	public currentDate() {
 		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
-		return format ? date.format('YYYY/MM/DD') : date.toDate();
+		return date;
 	}
 
 	public async findTodayBirthday() {
-		const contains = formatDateWithMonthAndDay(this.currentDate(true));
+		const contains = this.currentDate().format('MM-DD');
 		await this.fetch();
 		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
 	}

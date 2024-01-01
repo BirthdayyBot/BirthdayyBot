@@ -1,6 +1,6 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { minutes } from '#lib/utils/common/times';
-import { TimezoneWithLocale } from '#utils/common/date';
+import { TimezoneWithLocale } from '#lib/utils/common/timezone';
 import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';

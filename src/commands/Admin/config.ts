@@ -1,8 +1,8 @@
 import { getSettings } from '#lib/discord/guild';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { TIMEZONE_VALUES } from '#lib/utils/common/date';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
+import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
 import { BrandingColors, CdnUrls } from '#lib/utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
