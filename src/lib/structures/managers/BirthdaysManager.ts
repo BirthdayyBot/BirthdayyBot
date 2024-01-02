@@ -258,9 +258,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	private async fetchOverviewMessage(
 		channel: GuildTextBasedChannelTypes,
-		overviewMessage: string | null,
-	): Promise<Message<boolean>> {
-		return (overviewMessage ? channel.messages.resolve(overviewMessage) : null) ?? channel.send({});
+		overviewMessage: string,
+	): Promise<Message<boolean> | null> {
+		return channel.messages.fetch(overviewMessage);
 	}
 
 	private createOptionsMessageForAnnoncementChannel(
@@ -329,20 +329,25 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	private async updateBirthdayOverview() {
 		const settings = await this.settings.fetch();
 
-		const { overviewChannel, overviewMessage = '' } = settings;
+		const { overviewChannel, overviewMessage } = settings;
 		const birthdayList = await generateBirthdayList(1, this.guild);
 
 		if (isNullish(overviewChannel)) return null;
 
 		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
 
-		const channel = await this.guild.channels.fetch(overviewChannel);
+		const channel = await container.client.channels.fetch(overviewChannel).catch(() => null);
 
 		if (isNullish(channel) || !isGuildBasedChannel(channel)) return null;
 
-		const message = await this.fetchOverviewMessage(channel, overviewMessage);
+		const message = overviewMessage ? await this.fetchOverviewMessage(channel, overviewMessage) : null;
 
-		return message.editable ? message.edit(options) : null;
+		container.logger.info(`Updated Overview Message in guild: ${this.guildId}`);
+		container.logger.debug(message);
+
+		if (message) return message.edit(options);
+
+		return channel.send(options);
 	}
 
 	private formatItems = (birthday: Birthday) => {

@@ -1,14 +1,14 @@
 {
-  "january": "1 - January",
-  "february": "2 - February",
-  "march": "3 - March",
-  "april": "4 - April",
-  "may": "5 - May",
-  "june": "6 - June",
-  "july": "7 - July",
-  "august": "9 - August",
-  "september": "9 - September",
-  "october": "10 - October",
-  "november": "11 - November",
-  "december": "12 - December"
+  "1": "January",
+  "2": "February",
+  "3": "March",
+  "4": "April",
+  "5": "May",
+  "6": "June",
+  "7": "July",
+  "8": "August",
+  "9": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December"
 }
