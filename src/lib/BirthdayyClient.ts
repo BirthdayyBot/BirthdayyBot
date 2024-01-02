@@ -37,7 +37,6 @@ export class BirthdayyClient extends SapphireClient {
 
 	public override async login(token?: string) {
 		const loginResponse = await super.login(token);
-		this.guildMemberFetchQueue.fetch();
 		return loginResponse;
 	}
 

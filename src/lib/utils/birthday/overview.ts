@@ -1,6 +1,7 @@
 import { editMessage, sendMessage } from '#lib/discord';
 import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
+import { isPrivateMessage } from '../common/guards.js';
 import { generateBirthdayList } from './birthday.js';
 
 export async function updateBirthdayOverview(guild_id: string) {
@@ -54,6 +55,6 @@ export async function updateBirthdayOverview(guild_id: string) {
 
 async function generateNewOverviewMessage(channel_id: string, birthdayList: MessageCreateOptions | MessagePayload) {
 	const message = await sendMessage(channel_id, birthdayList);
-	if (!message?.inGuild()) return;
+	if (!message || isPrivateMessage(message)) return;
 	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
 }

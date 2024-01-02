@@ -1,3 +1,4 @@
+import { Events as CustomEvents } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
 	Command,
@@ -12,7 +13,6 @@ import type { Logger } from '@sapphire/plugin-logger';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { cyan } from 'colorette';
 import { APIUser, Guild, User } from 'discord.js';
-import { Events as CustomEvents } from '#lib/types/Enums';
 
 @ApplyOptions<Listener.Options>({
 	event: Events.ChatInputCommandSuccess,

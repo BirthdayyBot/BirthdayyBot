@@ -1,5 +1,5 @@
 import { generateBirthdayList } from '#utils/birthday/birthday';
-import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, splitDateString } from '#utils/common/index';
+import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
@@ -84,13 +84,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 	}
 
-	public async findBirthdayWithMonth(month: number) {
-		await this.fetch();
-		return this.filter(({ birthday }) => {
-			splitDateString(birthday);
-			const date = splitDateString(birthday);
-			return Number(date.month) === month;
-		}).toJSON();
+	public findBirthdayWithMonth(month: number) {
+		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
 	}
 
 	public findTeenNextBirthday() {

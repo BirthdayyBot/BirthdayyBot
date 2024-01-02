@@ -1,16 +1,15 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
-import thinking from '#lib/discord/thinking';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
-import { formatDateForDisplay, getDateFromInteraction, numberToMonthName } from '#utils/common/date';
+import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import { getBirthdays } from '#utils/functions/guilds';
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
 import { bold, chatInputApplicationCommandMention } from 'discord.js';
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import { TimezoneWithLocale } from '#lib/utils/common/timezone';
 
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(
@@ -30,11 +29,9 @@ export class BirthdayCommand extends CustomSubCommand {
 	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const birthdayManager = getBirthdays(ctx.guild);
 		await getBirthdays(ctx.guild).fetch();
-		const month = ctx.options.getString('month');
+		const month = ctx.options.getInteger('month');
 
-		const birthdays = month
-			? await birthdayManager.findBirthdayWithMonth(Number(month))
-			: birthdayManager.findTeenNextBirthday();
+		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
@@ -46,19 +43,18 @@ export class BirthdayCommand extends CustomSubCommand {
 	}
 
 	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		await thinking(ctx);
 		const { options, user } = resolveTarget(ctx);
-		const birthday = getDateFromInteraction(ctx);
+		const day = addZeroToSingleDigitNumber(ctx.options.getInteger('day', true));
+		const month = addZeroToSingleDigitNumber(ctx.options.getInteger('month', true));
+		const year = ctx.options.getInteger('year') ?? 'XXXX';
+		const birthday = `${year}-${month}-${day}`;
 
 		await getBirthdays(ctx.guildId).create({ birthday, userId: user.id });
 
 		return interactionSuccess(
 			ctx,
 			await resolveKey(ctx, 'commands/birthday:set.success', {
-				birthday: Intl.DateTimeFormat(ctx.guild.preferredLocale, {
-					dateStyle: 'full',
-					timeZone: TimezoneWithLocale[ctx.guild.preferredLocale],
-				}).format(new Date(birthday.replaceAll('-', '/'))),
+				birthday: bold(formatDateForDisplay(birthday)),
 				...options,
 			}),
 		);
@@ -133,13 +129,13 @@ function registerBirthdayCommand(builder: SlashCommandBuilder) {
 function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:set')
 		.addIntegerOption((option) => dayOptions(option, 'commands/birthday:set.day'))
-		.addStringOption((option) => monthOptions(option, 'commands/birthday:set.month'))
+		.addIntegerOption((option) => monthOptions(option, 'commands/birthday:set.month'))
 		.addIntegerOption((option) => yearOptions(option, 'commands/birthday:set.year'))
 		.addUserOption((option) => userOptions(option, 'commands/birthday:set.user'));
 }
 
 function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:list').addStringOption((option) =>
+	return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
 		monthOptions(option, 'commands/birthday:list.month').setRequired(false),
 	);
 }

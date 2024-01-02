@@ -23,7 +23,7 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 
 export function splitDateString(date: string, separator = '-') {
 	const [year, month, day] = date.split(separator);
-	return { year, month, day };
+	return { year, month: Number(month), day };
 }
 
 const months = [
