@@ -134,15 +134,6 @@ export class ConfigCommand extends CustomSubCommand {
 		}
 	}
 
-	public override async autocompleteRun(interaction: Command.AutocompleteInteraction<'cached'>) {
-		if (interaction.commandName !== 'config') return interaction.respond([]);
-		const focusedOption = interaction.options.getFocused(true);
-		if (focusedOption?.name !== 'timezone') return interaction.respond([]);
-
-		const results = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value }));
-		return interaction.respond(results);
-	}
-
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null,
