@@ -1,4 +1,2 @@
+src/languages/**/*.json
 dist/
-node_modules/
-.yarn/
-examples/*/dist/

@@ -1,24 +1,19 @@
 {
-    "extends": [
-        "@sapphire",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
-    "ignorePatterns": [
-        "dist/"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2021,
-        "sourceType": "module"
-    },
-    "rules": {
-        "radix": [
-            "warn",
-            "as-needed"
-        ],
-        "no-mixed-spaces-and-tabs": [
-            "error",
-            "smart-tabs"
-        ]
-    }
+	"extends": "@sapphire",
+	"rules": {
+		"@typescript-eslint/no-base-to-string": 0,
+		"@typescript-eslint/no-throw-literal": 0,
+		"no-catch-shadow": 0
+	},
+	"parserOptions": {
+		"warnOnUnsupportedTypeScriptVersion": false
+	},
+	"overrides": [
+		{
+			"files": ["src/commands/**/*.ts", "**/jest.config.ts"],
+			"rules": {
+				"@typescript-eslint/require-await": 0
+			}
+		}
+	]
 }

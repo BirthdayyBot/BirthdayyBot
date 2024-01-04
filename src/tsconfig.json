@@ -1,0 +1,22 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"outDir": "../dist",
+		"rootDir": ".",
+		"baseUrl": ".",
+		"paths": {
+			"#lib/database": ["lib/database/index.js"],
+			"#lib/discord": ["lib/discord/index.js"],
+			"#lib/setup": ["lib/setup/index.js"],
+			"#lib/types": ["lib/types/index.js"],
+			"#lib/*": ["lib/*"],
+			"#languages": ["languages/index.js"],
+			"#utils/*": ["lib/util/*"],
+			"#root/*": ["*"]
+		},
+		"composite": true
+	},
+	"include": [".", "./**/*.json"],
+	"exclude": ["./tsconfig.json"]
+}
