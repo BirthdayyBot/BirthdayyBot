@@ -21,17 +21,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@devtomio/plugin-botlist@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@devtomio/plugin-botlist@npm:1.3.0"
-  dependencies:
-    tiny-typed-emitter: "npm:^2.1.0"
-    tslib: "npm:^2.5.0"
-    undici: "npm:^5.16.0"
-  checksum: 8f7e3264ce072b2e678cf8a4afc43a1669b606a5aefa1284c2ffdd59482e683016692351669be32a656f37e4cbda37e9eccea620536e93170e8afc8950df138f
-  languageName: node
-  linkType: hard
-
 "@discordjs/builders@npm:^1.6.3":
   version: 1.6.3
   resolution: "@discordjs/builders@npm:1.6.3"
@@ -1303,7 +1292,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "birthdayy-discord-bot@workspace:."
   dependencies:
-    "@devtomio/plugin-botlist": "npm:^1.3.0"
     "@kaname-png/plugin-subcommands-advanced": "npm:^2.2.3"
     "@prisma/client": "npm:^4.16.2"
     "@sapphire/cli": "npm:^1.6.1"
