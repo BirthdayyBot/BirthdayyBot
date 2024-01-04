@@ -8,7 +8,7 @@ export class CanManageRolesPrecondition extends AllFlowsPrecondition {
 	public constructor(context: Piece.Context, options: AllFlowsPrecondition.Options) {
 		super(context, {
 			...options,
-			position: 20,
+			position: 20
 		});
 	}
 
@@ -29,9 +29,7 @@ export class CanManageRolesPrecondition extends AllFlowsPrecondition {
 
 	private async isBlacklisted(guildId: Snowflake | null, userId: Snowflake) {
 		if (guildId === null) return this.ok();
-		const isUserBlacklisted = await Result.fromAsync(
-			this.container.prisma.blacklist.findFirstOrThrow({ where: { guildId, userId } }),
-		);
+		const isUserBlacklisted = await Result.fromAsync(this.container.prisma.blacklist.findFirstOrThrow({ where: { guildId, userId } }));
 
 		// SQL query failed, therefore no userid with guildid was found, therefore the guild is not banned.
 		if (isUserBlacklisted.isErr()) return this.ok();

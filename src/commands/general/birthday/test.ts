@@ -6,7 +6,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 	builder
 		.setName('test')
 		.setDescription('Test your current birthday configurations')
-		.addUserOption((option) => option.setName('user').setDescription('The user to test the birthday for')),
+		.addUserOption((option) => option.setName('user').setDescription('The user to test the birthday for'))
 )
 export class TestCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -21,7 +21,7 @@ export class TestCommand extends Command {
 		await this.container.tasks.run('BirthdayReminderTask', {
 			userId: target.id,
 			guildId: interaction.guildId,
-			isTest: true,
+			isTest: true
 		});
 
 		return reply(interaction, interactionSuccess('Birthday Test Run!'));

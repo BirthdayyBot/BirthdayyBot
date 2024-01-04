@@ -19,10 +19,10 @@ export class ListCommand extends Command {
 					title: 'Blacklisted Users',
 					description: blackListFormatted,
 					thumbnail: {
-						url: IMG_BLOCK,
-					},
-				}),
-			],
+						url: IMG_BLOCK
+					}
+				})
+			]
 		});
 
 		function processBlacklistedUsers(users: Blacklist[]): string {

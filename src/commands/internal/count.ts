@@ -13,12 +13,12 @@ import { isNotCustom } from '../../lib/utils/env';
 	enabled: isNotCustom,
 	preconditions: [['DMOnly', 'GuildTextOnly']],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class CountCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(CountCMD(), {
-			guildIds: await getCommandGuilds('admin'),
+			guildIds: await getCommandGuilds('admin')
 		});
 	}
 
@@ -31,9 +31,9 @@ export class CountCommand extends Command {
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Count Information',
-					fields,
-				}),
-			],
+					fields
+				})
+			]
 		});
 	}
 
@@ -41,28 +41,28 @@ export class CountCommand extends Command {
 		return [
 			{
 				name: 'Discord Guilds',
-				value: await this.container.botList.computeGuilds(),
+				value: await this.container.botList.computeGuilds()
 			},
 			{
 				name: 'Discord Shards',
-				value: this.container.client.shard?.count?.toString() ?? 1,
+				value: this.container.client.shard?.count?.toString() ?? 1
 			},
 			{
 				name: 'Discord Users',
-				value: await this.container.botList.computeUsers(),
+				value: await this.container.botList.computeUsers()
 			},
 			{
 				name: 'Guilds',
-				value: await this.container.utilities.guild.get.GuildAvailableCount(),
+				value: await this.container.utilities.guild.get.GuildAvailableCount()
 			},
 			{
 				name: 'Birthdays',
-				value: await this.container.utilities.birthday.get.BirthdayAvailableCount(),
+				value: await this.container.utilities.birthday.get.BirthdayAvailableCount()
 			},
 			{
 				name: 'Users',
-				value: await this.container.utilities.user.get.UserCount(),
-			},
+				value: await this.container.utilities.user.get.UserCount()
+			}
 		];
 	}
 }

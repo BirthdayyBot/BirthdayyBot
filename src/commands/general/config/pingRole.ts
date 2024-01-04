@@ -10,9 +10,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 	builder
 		.setName('ping-role')
 		.setDescription('Ping a role on someones birthday')
-		.addRoleOption((option) =>
-			option.setName('role').setDescription('Role that should get pinged on someones birthday').setRequired(true),
-		),
+		.addRoleOption((option) => option.setName('role').setDescription('Role that should get pinged on someones birthday').setRequired(true))
 )
 export class PingRoleCommand extends Command {
 	@RequiresClientPermissions(['ManageRoles'])
@@ -28,17 +26,14 @@ export class PingRoleCommand extends Command {
 		const result = await Result.fromAsync(() =>
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { birthdayPingRole: role.id },
-			}),
+				data: { birthdayPingRole: role.id }
+			})
 		);
 
 		if (result.isErr()) {
 			return reply(interaction, interactionProblem('An error occurred while trying to update the config.'));
 		}
 
-		return reply(
-			interaction,
-			interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`),
-		);
+		return reply(interaction, interactionSuccess(`Successfully set the birthday ping role to ${roleMention(role.id)}`));
 	}
 }

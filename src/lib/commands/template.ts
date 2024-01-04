@@ -1,9 +1,4 @@
-import {
-	ApplicationCommandOptionType,
-	ApplicationCommandType,
-	PermissionFlagsBits,
-	type ChatInputApplicationCommandData,
-} from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, PermissionFlagsBits, type ChatInputApplicationCommandData } from 'discord.js';
 
 /*
     Permission Documentation: https://discord.js.org/#/docs/discord.js/v13/typedef/PermissionResolvable
@@ -21,8 +16,8 @@ export function TemplateCMD(): ChatInputApplicationCommandData {
 			{
 				type: ApplicationCommandOptionType.Subcommand,
 				name: 'template',
-				description: 'its a template',
-			},
-		],
+				description: 'its a template'
+			}
+		]
 	};
 }

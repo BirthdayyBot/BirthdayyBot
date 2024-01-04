@@ -21,7 +21,7 @@ export class IsPremiumPrecondition extends Precondition {
 		return guildId
 			? this.container.prisma.guild
 					.findUnique({
-						where: { guildId },
+						where: { guildId }
 					})
 					.then((guild) => (guild?.premium ? this.ok() : this.error({ message: this.#message })))
 					.catch(() => this.error({ message: this.#message }))

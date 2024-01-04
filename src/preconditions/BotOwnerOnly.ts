@@ -18,8 +18,6 @@ export class OwnerOwnlyPrecondition extends Precondition {
 	}
 
 	private doOwnerCheck(userId: Snowflake) {
-		return BOT_OWNER.includes(userId)
-			? this.ok()
-			: this.error({ identifier: 'IsNotOwner', message: this.#message });
+		return BOT_OWNER.includes(userId) ? this.ok() : this.error({ identifier: 'IsNotOwner', message: this.#message });
 	}
 }

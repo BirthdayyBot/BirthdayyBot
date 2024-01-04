@@ -7,6 +7,6 @@ export function CountCMD(): ChatInputApplicationCommandData {
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
 		dmPermission: true,
-		options: [],
+		options: []
 	};
 }

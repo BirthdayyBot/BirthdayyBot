@@ -17,7 +17,7 @@ import { isDevelopment } from '../../lib/utils/env';
 	enabled: isDevelopment,
 	runIn: ['GUILD_TEXT'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class StatsCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -37,8 +37,8 @@ export class StatsCommand extends Command {
 			memory: {
 				usage: memoryUsageInPercent,
 				used: process.memoryUsage().heapUsed,
-				total: os.totalmem(),
-			},
+				total: os.totalmem()
+			}
 		};
 		const date = Date.now();
 		const embedRaw: EmbedInformationModel = {
@@ -48,61 +48,61 @@ export class StatsCommand extends Command {
 				{
 					name: 'Date',
 					value: `${stats.date}`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Offset',
 					value: `${stats.offset ?? 'Unknown'}`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Next Offset',
 					value: `${stats.offset === -11 ? 12 : stats.offset! - 1}`,
-					inline: true,
+					inline: true
 				},
 
 				{
 					name: 'Servercount',
 					value: `${stats.servercount}`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Uptime',
 					value: `${process.uptime().toFixed(2)}s`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Bot Ping',
 					value: `${stats.ping}ms`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'API Ping #TODO',
 					value: `${date - interaction.createdTimestamp}ms`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'CPU Usage #TODO',
 					value: `${stats.cpu.system.toLocaleString()}%`,
-					inline: true,
+					inline: true
 				},
 				{ name: 'Birthdays registered #TODO', value: '0', inline: true },
 				{
 					name: 'RAM Usage',
 					value: `${stats.memory.usage}%`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'RAM Used',
 					value: `${(stats.memory.used / 1024 / 1024).toFixed(2)}MB`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'RAM Total',
 					value: `${(stats.memory.total / 1024 / 1024).toFixed(2)}MB`,
-					inline: true,
-				},
-			],
+					inline: true
+				}
+			]
 		};
 		const embed = generateDefaultEmbed(embedRaw);
 		return reply(interaction, { embeds: [embed] });

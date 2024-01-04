@@ -10,9 +10,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 	builder
 		.setName('birthday-role')
 		.setDescription('List all Birthdays in this Discord server')
-		.addRoleOption((option) =>
-			option.setName('role').setDescription('Role that should get assigned on a birthday').setRequired(true),
-		),
+		.addRoleOption((option) => option.setName('role').setDescription('Role that should get assigned on a birthday').setRequired(true))
 )
 export class ListCommand extends Command {
 	@RequiresClientPermissions(['ManageRoles'])
@@ -24,8 +22,8 @@ export class ListCommand extends Command {
 		const guildResult = await Result.fromAsync(() =>
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { birthdayRole: role.id },
-			}),
+				data: { birthdayRole: role.id }
+			})
 		);
 
 		if (guildResult.isErr()) {

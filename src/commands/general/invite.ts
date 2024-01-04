@@ -12,7 +12,7 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	description: 'Invite Birthdayy to your Discord Server!',
 	enabled: true,
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuideCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -27,9 +27,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [inviteButton],
-				},
-			],
+					components: [inviteButton]
+				}
+			]
 		});
 	}
 }

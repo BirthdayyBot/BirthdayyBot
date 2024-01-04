@@ -4,9 +4,7 @@ import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { isCustom, isDevelopment, isNotCustom } from '../../lib/utils/env';
 import { MAIN_DISCORD } from '../provide';
 
-export async function getCommandGuilds(
-	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
-): Promise<string[] | undefined> {
+export async function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin'): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.CHILLI_HQ, GuildIDEnum.CHILLI_ATTACK_V2, GuildIDEnum.BIRTHDAYY_TESTING];
 	const adminGuilds = [GuildIDEnum.BIRTHDAYY_HQ, GuildIDEnum.BIRTHDAYY_TESTING];
 	const customGuild = [MAIN_DISCORD];

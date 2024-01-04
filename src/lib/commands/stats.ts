@@ -6,6 +6,6 @@ export function StatsCMD(): ChatInputApplicationCommandData {
 		description: 'Status Command',
 		type: ApplicationCommandType.ChatInput,
 		defaultMemberPermissions: [PermissionFlagsBits.ViewChannel],
-		dmPermission: false,
+		dmPermission: false
 	};
 }

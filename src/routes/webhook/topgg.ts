@@ -62,34 +62,32 @@ export class UserRoute extends Route {
 		await this.scheduleRoleRemoval({ memberId: userId, guildId: guild.id, roleId: role.id });
 	}
 
-	private async sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
+	private sendVoteDM(providerInfo: { name: string; url: string }, user_id: string) {
 		const dmEmbed = {
 			title: `${SUCCESS} You voted for Birthdayy on ${providerInfo.name}`,
-			description: `Thank you so much for supporting me, you're the best ${HEART}`,
+			description: `Thank you so much for supporting me, you're the best ${HEART}`
 		};
 		const dmEmbedObj = generateDefaultEmbed(dmEmbed);
 		const component = {
 			type: 1,
-			components: [remindMeButton],
+			components: [remindMeButton]
 		};
 
 		return sendDMMessage(user_id, { embeds: [dmEmbedObj], components: [component] });
 	}
 
-	private async sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
+	private sendVoteAnnouncement(providerInfo: { name: string; url: string }, user: User) {
 		const { username, discriminator } = user;
 
 		return sendMessage(VOTE_CHANNEL_ID, {
 			embeds: [
 				generateDefaultEmbed({
 					title: `${EXCLAMATION} New Vote on ${providerInfo.name}`,
-					description: `\`${username}#${discriminator}\` has **voted** for ${
-						container.client.user?.username ?? BOT_NAME
-					}!
+					description: `\`${username}#${discriminator}\` has **voted** for ${container.client.user?.username ?? BOT_NAME}!
 				  Use \`/vote\` or vote [here](${providerInfo.url}) directly.`,
-					thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
-				}),
-			],
+					thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL }
+				})
+			]
 		});
 	}
 
@@ -102,19 +100,19 @@ export class UserRoute extends Route {
 			case 'topgg':
 				return {
 					name: 'TopGG',
-					url: 'https://birthdayy.xyz/topgg/vote',
+					url: 'https://birthdayy.xyz/topgg/vote'
 				};
 
 			case 'discordbotlist':
 				return {
 					name: 'Discord Bot List',
-					url: 'https://birthdayy.xyz/discord-botlist/vote',
+					url: 'https://birthdayy.xyz/discord-botlist/vote'
 				};
 
 			case 'discordlist':
 				return {
 					name: 'Discord List',
-					url: 'https://birthdayy.xyz/discordlist/vote',
+					url: 'https://birthdayy.xyz/discordlist/vote'
 				};
 		}
 	}

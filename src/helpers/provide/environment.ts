@@ -14,13 +14,9 @@ export const APP_ENV = envParseString('APP_ENV');
 
 // GENERIC
 export const { BOT_ID, BOT_NAME, BOT_AVATAR } = process.env;
-export const IMG_CAKE =
-	process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
-export const IMG_BLOCK =
-	process.env.IMG_BLOCK ??
-	'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
-export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env
-	.BOT_ID!}&permissions=8&scope=bot`;
+export const IMG_CAKE = process.env.IMG_CAKE ?? 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png';
+export const IMG_BLOCK = process.env.IMG_BLOCK ?? 'https://media.discordapp.net/attachments/931273194160160829/1036939867805990912/blocked.png';
+export const BOT_INVITE = `https://discord.com/oauth2/authorize?client_id=${process.env.BOT_ID!}&permissions=8&scope=bot`;
 export const BIRTHDAYY_INVITE = `https://discord.com/oauth2/authorize?client_id=${
 	isCustom ? UserIDEnum.BIRTHDAYY : BOT_ID || UserIDEnum.BIRTHDAYY
 }&permissions=525529836753&scope=bot`;

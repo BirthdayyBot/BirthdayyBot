@@ -13,28 +13,28 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	subcommands: [
 		{
 			name: 'once',
-			chatInputRun: 'runOnce',
+			chatInputRun: 'runOnce'
 		},
 		{
 			name: 'times',
-			chatInputRun: 'runTimes',
+			chatInputRun: 'runTimes'
 		},
 		{
 			name: 'random',
-			chatInputRun: 'runRandom',
+			chatInputRun: 'runRandom'
 		},
 		{
 			name: 'fetch',
-			chatInputRun: 'runFetch',
-		},
-	],
+			chatInputRun: 'runFetch'
+		}
+	]
 })
 export class UwuCommand extends Subcommand {
 	// private readonly _uwuString = 'UwU';
 
 	public override async registerApplicationCommands(registry: Subcommand.Registry) {
 		registry.registerChatInputCommand(UwUCMD(), {
-			guildIds: await getCommandGuilds('testing'),
+			guildIds: await getCommandGuilds('testing')
 		});
 	}
 
@@ -71,13 +71,10 @@ export class UwuCommand extends Subcommand {
 		}
 
 		// Fetch the data. No need to call `.json()` after making the request!
-		const data = await fetch<JsonPlaceholderResponse>(
-			'https://jsonplaceholder.typicode.com/todos/1',
-			FetchResultTypes.JSON,
-		);
+		const data = await fetch<JsonPlaceholderResponse>('https://jsonplaceholder.typicode.com/todos/1', FetchResultTypes.JSON);
 		const embed = generateDefaultEmbed({
 			title: 'UwU Fetch',
-			description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\``,
+			description: `UwU \n\`\`\`json${JSON.stringify(data, null, '\t')}\`\`\``
 		});
 		return interaction.reply({ embeds: [embed] });
 	}

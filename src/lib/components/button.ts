@@ -11,8 +11,8 @@ export const discordButton: APIButtonComponent = {
 	emoji: {
 		id: '931267038574432308',
 		name: 'people',
-		animated: false,
-	},
+		animated: false
+	}
 };
 
 export const docsButton: APIButtonComponent = {
@@ -24,8 +24,8 @@ export const docsButton: APIButtonComponent = {
 	emoji: {
 		id: '931267038662504508',
 		name: 'book',
-		animated: false,
-	},
+		animated: false
+	}
 };
 
 export const inviteButton: APIButtonComponent = {
@@ -37,8 +37,8 @@ export const inviteButton: APIButtonComponent = {
 	emoji: {
 		id: '931267039094534175',
 		name: 'gift',
-		animated: false,
-	},
+		animated: false
+	}
 };
 
 export const remindMeButton: APIButtonComponent = {
@@ -46,12 +46,12 @@ export const remindMeButton: APIButtonComponent = {
 	style: ButtonStyle.Success,
 	label: '⏰ Remind Me in 12hrs',
 	custom_id: CustomButtonIdEnum.VOTE_REMINDER,
-	disabled: false,
+	disabled: false
 };
 
 export const remindMeButtonDisabled: APIButtonComponent = {
 	...remindMeButton,
-	disabled: true,
+	disabled: true
 };
 
 export const websiteButton: APIButtonComponent = {
@@ -63,8 +63,8 @@ export const websiteButton: APIButtonComponent = {
 	emoji: {
 		id: '931267039019020340',
 		name: 'link',
-		animated: false,
-	},
+		animated: false
+	}
 };
 
 export const birthdayListChoice: APIButtonComponent = {
@@ -74,8 +74,8 @@ export const birthdayListChoice: APIButtonComponent = {
 	custom_id: CustomButtonIdEnum.CHOICE_BIRTHDAY_LIST,
 	disabled: false,
 	emoji: {
-		name: '🎂',
-	},
+		name: '🎂'
+	}
 };
 
 export const guildConfigChoice: APIButtonComponent = {
@@ -85,8 +85,8 @@ export const guildConfigChoice: APIButtonComponent = {
 	custom_id: CustomButtonIdEnum.CHOICE_GUILD_CONFIG,
 	disabled: false,
 	emoji: {
-		name: '⚙️',
-	},
+		name: '⚙️'
+	}
 };
 
 export const discordInformationChoice: APIButtonComponent = {
@@ -96,6 +96,6 @@ export const discordInformationChoice: APIButtonComponent = {
 	custom_id: CustomButtonIdEnum.CHOICE_DISCORD_INFORMATION,
 	disabled: false,
 	emoji: {
-		name: 'ℹ️',
-	},
+		name: 'ℹ️'
+	}
 };

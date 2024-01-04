@@ -9,9 +9,7 @@ import { catchToNull } from '../../../lib/utils/promises';
 	builder
 		.setName('show')
 		.setDescription('Show the Birthday of you or a other person')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('Show the birthday of a specific User').setRequired(false),
-		),
+		.addUserOption((option) => option.setName('user').setDescription('Show the birthday of a specific User').setRequired(false))
 )
 export class ShowCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -22,16 +20,13 @@ export class ShowCommand extends Command {
 			this.container.prisma.birthday.findFirst({
 				where: {
 					userId: targetUser.id,
-					guildId: interaction.guildId,
-				},
-			}),
+					guildId: interaction.guildId
+				}
+			})
 		);
 
 		if (!birthday) {
-			return reply(
-				interaction,
-				interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}.`),
-			);
+			return reply(interaction, interactionProblem(`This user doesn't have a birthday added. Register it with ${BIRTHDAY_REGISTER}.`));
 		}
 
 		return reply(interaction, {
@@ -39,11 +34,11 @@ export class ShowCommand extends Command {
 				{
 					...defaultEmbed(),
 					title: `${BOOK} Birthday`,
-					description: `${ARROW_RIGHT} ${
-						TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'
-					} birthday is at the ${bold(formatDateForDisplay(birthday.birthday))}.`,
-				},
-			],
+					description: `${ARROW_RIGHT} ${TargetIsNotUser ? `${userMention(targetUser.id)}'s` : 'Your'} birthday is at the ${bold(
+						formatDateForDisplay(birthday.birthday)
+					)}.`
+				}
+			]
 		});
 	}
 }

@@ -9,9 +9,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 	builder
 		.setName('add')
 		.setDescription('Add a user to the blacklist')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('User to add to the blacklist').setRequired(true),
-		),
+		.addUserOption((option) => option.setName('user').setDescription('User to add to the blacklist').setRequired(true))
 )
 export class AddCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -24,10 +22,7 @@ export class AddCommand extends Command {
 		} catch (error: any) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
 				if (error.code === PrismaErrorCodeEnum.UNIQUE_CONSTRAINT_FAILED) {
-					return reply(
-						interaction,
-						interactionProblem(`${userMention(blacklistUser.id)} is already on the blacklist.`, true),
-					);
+					return reply(interaction, interactionProblem(`${userMention(blacklistUser.id)} is already on the blacklist.`, true));
 				}
 			}
 		}

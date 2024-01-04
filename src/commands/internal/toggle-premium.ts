@@ -14,7 +14,7 @@ import { isNotCustom } from '../../lib/utils/env';
 	enabled: isNotCustom,
 	preconditions: ['AdminOnly'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class TogglePremiumCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
@@ -23,18 +23,11 @@ export class TogglePremiumCommand extends Command {
 				builder
 					.setName(this.name)
 					.setDescription(this.description)
-					.addStringOption((option) =>
-						option
-							.setName('guild-id')
-							.setDescription('The guild id to toggle premium for')
-							.setRequired(true),
-					)
-					.addBooleanOption((option) =>
-						option.setName('toggle').setDescription('The toggle value').setRequired(true),
-					),
+					.addStringOption((option) => option.setName('guild-id').setDescription('The guild id to toggle premium for').setRequired(true))
+					.addBooleanOption((option) => option.setName('toggle').setDescription('The toggle value').setRequired(true)),
 			{
-				guildIds: await getCommandGuilds('admin'),
-			},
+				guildIds: await getCommandGuilds('admin')
+			}
 		);
 	}
 
@@ -53,11 +46,9 @@ export class TogglePremiumCommand extends Command {
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Toggle Premium',
-					description: `Toggled premium for guild ${bold(guild.name)} [${inlineCode(
-						guildId,
-					)}] to ${inlineCode(toggle.toString())}`,
-				}),
-			],
+					description: `Toggled premium for guild ${bold(guild.name)} [${inlineCode(guildId)}] to ${inlineCode(toggle.toString())}`
+				})
+			]
 		});
 	}
 }

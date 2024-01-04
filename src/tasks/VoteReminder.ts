@@ -18,7 +18,7 @@ export class VoteReminderTask extends ScheduledTask {
 		if (!user) return;
 		await user.send({
 			content: `Hi, you can vote for ${envParseString('BOT_NAME')} again!`,
-			embeds: [generateDefaultEmbed(VoteEmbed)],
+			embeds: [generateDefaultEmbed(VoteEmbed)]
 		});
 	}
 }

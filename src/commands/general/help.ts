@@ -14,7 +14,7 @@ import { HelpEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class HelpCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -29,9 +29,9 @@ export class HelpCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [websiteButton, docsButton, discordButton],
-				},
-			],
+					components: [websiteButton, docsButton, discordButton]
+				}
+			]
 		});
 	}
 }

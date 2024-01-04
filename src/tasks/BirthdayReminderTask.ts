@@ -16,7 +16,7 @@ import {
 	userMention,
 	type APIEmbed,
 	type EmbedField,
-	type Snowflake,
+	type Snowflake
 } from 'discord.js';
 import { logAll } from '../helpers/provide/config';
 import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
@@ -44,16 +44,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 				embeds: [
 					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
-						description: 'No Current Offset could be generated',
-					}),
-				],
+						description: 'No Current Offset could be generated'
+					})
+				]
 			});
 			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
-			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
+			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true }
 		];
 
 		if (isCustom) {
@@ -62,47 +62,35 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
 				return container.logger.debug(
-					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
+					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`
 				);
 			}
-			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
-				todaysDate,
-				utcOffset,
-				MAIN_DISCORD,
-			);
+			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(todaysDate, utcOffset, MAIN_DISCORD);
 		} else {
-			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(
-				todaysDate,
-				utcOffset,
-			);
+			currentBirthdays = await this.container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
 		}
 
 		if (!currentBirthdays.length) {
 			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
-			return this.container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
-			);
+			return this.container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`);
 		}
 
 		this.container.logger.debug(
-			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
+			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`
 		);
 
 		const eventInfos = await this.birthdayReminderLoop(currentBirthdays);
 		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, currentBirthdays.length, current);
 		return container.logger.debug(
-			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
+			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`
 		);
 	}
 
 	private async birthdayReminderLoop(birthdays: Birthday[]): Promise<BirthdayEventInfoModel[]> {
 		const eventInfos = [];
 		for (const birthday of birthdays) {
-			if (DEBUG)
-				this.container.logger.debug(
-					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
-				);
+			if (DEBUG) this.container.logger.debug(`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`);
 			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 			eventInfos.push(eventInfo);
 		}
@@ -112,20 +100,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
-			guildId,
+			guildId
 		};
 		const config = await this.container.utilities.guild.get.GuildConfig(guildId);
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const {
-			announcementChannel,
-			birthdayRole,
-			birthdayPingRole,
-			announcementMessage,
-			premium: guildIsPremium,
-		} = config;
+		const { announcementChannel, birthdayRole, birthdayPingRole, announcementMessage, premium: guildIsPremium } = config;
 
 		const guild = await getGuildInformation(guildId);
 		if (!guild) {
@@ -153,11 +135,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		eventInfo.announcement = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		eventInfo.birthday_role = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		logAll(config);
 
@@ -173,9 +155,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!announcementChannel) {
-			this.container.logger.debug(
-				`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`,
-			);
+			this.container.logger.debug(`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`);
 			eventInfo.announcement.message = 'Announcement Channel not set';
 			return eventInfo;
 		}
@@ -184,19 +164,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 			title: `${NEWS} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail: {
-				url: IMG_CAKE,
-			},
+				url: IMG_CAKE
+			}
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);
 
 		const content = birthdayPingRole ? roleMention(birthdayPingRole) : '';
 
-		const announcementInfo = await this.sendBirthdayAnnouncement(
-			guildId,
-			content,
-			announcementChannel,
-			birthdayEmbed,
-		);
+		const announcementInfo = await this.sendBirthdayAnnouncement(guildId, content, announcementChannel, birthdayEmbed);
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;
 	}
@@ -205,7 +180,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		member: GuildMember,
 		guildId: Snowflake,
 		role: Role,
-		isTest: boolean,
+		isTest: boolean
 	): Promise<{
 		added: boolean;
 		message: string;
@@ -213,14 +188,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 			await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: isTest ? Time.Minute / 6 : Time.Day,
+				delay: isTest ? Time.Minute / 6 : Time.Day
 			});
 			returnData.added = true;
 			returnData.message = 'Success';
@@ -243,16 +218,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 		guildId: Snowflake,
 		content: string,
 		channel_id: Snowflake,
-		birthdayEmbed: APIEmbed,
+		birthdayEmbed: APIEmbed
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		try {
 			await sendMessage(channel_id, {
 				content,
-				embeds: [birthdayEmbed],
+				embeds: [birthdayEmbed]
 			});
 			container.logger.debug('Sent Birthday Announcement');
 			returnData.sent = true;
@@ -272,10 +247,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				} else {
 					returnData.message = error.message;
 				}
-				container.logger.warn(
-					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
-					error.message,
-				);
+				container.logger.warn("COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n", error.message);
 			}
 
 			return returnData;
@@ -290,7 +262,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			'{GUILD_NAME}': guild.name,
 			'{GUILD_ID}': guild.id,
 			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name,
+			'{SERVERNAME}': guild.name
 		};
 
 		let formattedMessage = message;
@@ -305,7 +277,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		eventInfos: BirthdayEventInfoModel[],
 		dateFields: EmbedField[],
 		birthdayCount: number,
-		current: TimezoneObject,
+		current: TimezoneObject
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
 		eventInfos.map((eventInfo) => {
@@ -317,10 +289,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			}
 			return eventInfo;
 		});
-		const embedFields = [
-			...dateFields,
-			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
-		];
+		const embedFields = [...dateFields, { name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true }];
 		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
 		// const reportDescription =
 		// 	codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
@@ -342,11 +311,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
 			name: embedTitle,
-			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
 		});
 		const reportFile = new AttachmentBuilder(Buffer.from(reportContent), {
 			name: `${embedTitle}.json`,
-			description: 'Scheduler Report File',
+			description: 'Scheduler Report File'
 		});
 
 		if (!schedulerLogThread) {
@@ -356,24 +325,24 @@ export class BirthdayReminderTask extends ScheduledTask {
 			embeds: [
 				generateDefaultEmbed({
 					title: embedTitle,
-					description: `Guilds:\n${codeBlock(guildIdsString)}`,
-				}),
-			],
+					description: `Guilds:\n${codeBlock(guildIdsString)}`
+				})
+			]
 		});
 
 		return schedulerLogThread.send({
-			files: [reportFile],
+			files: [reportFile]
 		});
 
-		async function sendReport() {
+		function sendReport() {
 			return sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateDefaultEmbed({
 						title: embedTitle,
 						description: embedDescription,
-						fields: embedFields,
-					}),
-				],
+						fields: embedFields
+					})
+				]
 			});
 		}
 	}

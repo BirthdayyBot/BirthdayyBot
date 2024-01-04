@@ -14,12 +14,12 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	enabled: false,
 	preconditions: ['GuildPremium'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuideCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(ReminderCMD(), {
-			guildIds: await getCommandGuilds('testing'),
+			guildIds: await getCommandGuilds('testing')
 		});
 	}
 
@@ -31,9 +31,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [inviteButton],
-				},
-			],
+					components: [inviteButton]
+				}
+			]
 		});
 	}
 }

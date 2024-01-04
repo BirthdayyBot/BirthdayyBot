@@ -8,13 +8,11 @@ interface DateResult {
 	message: string;
 }
 
-export function getDateFromInteraction(
-	interaction: Command.ChatInputCommandInteraction | Subcommand.ChatInputCommandInteraction,
-): DateResult {
+export function getDateFromInteraction(interaction: Command.ChatInputCommandInteraction | Subcommand.ChatInputCommandInteraction): DateResult {
 	const result: DateResult = {
 		isValidDate: false,
 		date: '',
-		message: 'Something went wrong while validating the date.',
+		message: 'Something went wrong while validating the date.'
 	};
 
 	const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));

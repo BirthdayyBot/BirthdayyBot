@@ -11,7 +11,7 @@ import { generateDefaultEmbed } from '../../lib/utils/embed';
 	description: 'Vote for Birthdayy <3',
 	enabled: true,
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class VoteCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -22,7 +22,7 @@ export class VoteCommand extends Command {
 		await thinking(interaction);
 		const embed = generateDefaultEmbed(VoteEmbed);
 		await reply(interaction, {
-			embeds: [embed],
+			embeds: [embed]
 		});
 	}
 }

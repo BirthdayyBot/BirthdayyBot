@@ -39,19 +39,13 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		async function sendGuide(userId: string) {
 			const embed = generateDefaultEmbed(GuideEmbed);
 			await sendDMMessage(userId, {
-				embeds: [embed],
+				embeds: [embed]
 			});
 		}
 
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
-			if (
-				!(await guild.members.fetchMe()).permissions.has(
-					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator,
-				)
-			) {
-				container.logger.debug(
-					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`,
-				);
+			if (!(await guild.members.fetchMe()).permissions.has(PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator)) {
+				container.logger.debug(`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`);
 				return undefined;
 			}
 
@@ -78,8 +72,8 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guild_id}`,
-			},
+				value: `${guild_id}`
+			}
 		];
 
 		const ownerInfo = await getUserInfo(ownerId);
@@ -88,8 +82,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
 		if (memberCount) fields.push({ name: 'GuildMemberCount', value: `${memberCount}` });
 		if (ownerId) fields.push({ name: 'GuildOwner', value: this.generateInfoString(ownerId, ownerInfo?.username) });
-		if (inviterId)
-			fields.push({ name: 'Inviter', value: this.generateInfoString(inviterId, inviterInfo?.username) });
+		if (inviterId) fields.push({ name: 'Inviter', value: this.generateInfoString(inviterId, inviterInfo?.username) });
 		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
 
 		const embedObj: EmbedInformationModel = {
@@ -97,7 +90,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
 			color: BotColorEnum.BIRTHDAYY,
-			thumbnail_url: guild.iconURL() ?? undefined,
+			thumbnail_url: guild.iconURL() ?? undefined
 		};
 		const embed = generateDefaultEmbed(embedObj);
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });

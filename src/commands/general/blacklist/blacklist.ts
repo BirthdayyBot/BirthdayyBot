@@ -6,7 +6,7 @@ import { getCommandGuilds } from '../../../helpers';
 
 @ApplyOptions<Subcommand.Options>({
 	name: 'blacklist',
-	description: 'Blacklist Command',
+	description: 'Blacklist Command'
 })
 export class BlacklistCommand extends Subcommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -20,8 +20,8 @@ export class BlacklistCommand extends Subcommand {
 					.setDMPermission(false);
 			},
 			{
-				guildIds: await getCommandGuilds('premium'),
-			},
+				guildIds: await getCommandGuilds('premium')
+			}
 		);
 	}
 }

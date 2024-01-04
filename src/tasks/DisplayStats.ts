@@ -7,7 +7,7 @@ import { isCustom, isProduction } from '../lib/utils/env';
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'DisplayStats',
 	enabled: isProduction,
-	pattern: '0 * * * *',
+	pattern: '0 * * * *'
 })
 export class DisplayStats extends ScheduledTask {
 	public async run() {

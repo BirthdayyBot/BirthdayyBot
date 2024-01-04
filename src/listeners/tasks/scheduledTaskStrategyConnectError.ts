@@ -6,9 +6,7 @@ import { logErrorToContainer } from '../../lib/utils/errorHandling';
 import { envIsDefined } from '@skyra/env-utilities';
 
 @ApplyOptions<Listener.Options>({ event: ScheduledTaskEvents.ScheduledTaskStrategyConnectError })
-export class ScheduledTaskStrategyConnectErrorEvent extends Listener<
-	typeof ScheduledTaskEvents.ScheduledTaskStrategyConnectError
-> {
+export class ScheduledTaskStrategyConnectErrorEvent extends Listener<typeof ScheduledTaskEvents.ScheduledTaskStrategyConnectError> {
 	public run(error: Error) {
 		if (envIsDefined('SENTRY_DSN')) {
 			Sentry.withScope((scope) => {

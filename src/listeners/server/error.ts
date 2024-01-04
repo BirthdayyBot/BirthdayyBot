@@ -11,7 +11,7 @@ export class ServerErrorEvent extends Listener {
 			request,
 			response,
 			loggerSeverityLevel: 'error',
-			sentrySeverityLevel: 'error',
+			sentrySeverityLevel: 'error'
 		});
 	}
 }

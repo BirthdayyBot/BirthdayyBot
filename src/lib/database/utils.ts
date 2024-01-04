@@ -8,12 +8,12 @@ export const configNameExtended: Record<ConfigName, string> = {
 	overviewChannel: 'Overview Channel',
 	overviewMessage: 'Overview Message',
 	timezone: 'Timezone',
-	logChannel: 'Log Channel',
+	logChannel: 'Log Channel'
 };
 
 export const configChoices = Object.entries(configNameExtended)
 	.map(([name, value]) => ({
 		name: value,
-		value: name,
+		value: name
 	}))
 	.sort((a, b) => a.name.localeCompare(b.name));

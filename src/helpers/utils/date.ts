@@ -39,20 +39,7 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 
 function getMonths() {
 	// TODO: Add Translation
-	return [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
+	return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 }
 
 export function numberToMonthName(number: number) {
@@ -112,7 +99,7 @@ export const TIMEZONE_VALUES: Record<number, string> = {
 	9: 'Asia/Tokyo',
 	10: 'Australia/Brisbane',
 	11: 'Pacific/Noumea',
-	12: 'Pacific/Fiji',
+	12: 'Pacific/Fiji'
 };
 
 /**
@@ -150,7 +137,7 @@ export function getCurrentOffset(): TimezoneObject {
 				date: today,
 				dateFormatted: today.format('YYYY-MM-DD'),
 				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset],
+				timezone: TIMEZONE_VALUES[offset]
 			};
 			return timezoneObject;
 		}
@@ -160,7 +147,7 @@ export function getCurrentOffset(): TimezoneObject {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY-MM-DD'),
 		utcOffset: 0,
-		timezone: 'UTC',
+		timezone: 'UTC'
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;

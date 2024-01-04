@@ -6,7 +6,7 @@ import { PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<Subcommand.Options>({
 	name: 'birthday',
-	description: 'Birthday Command',
+	description: 'Birthday Command'
 })
 export class BirthdayCommand extends Subcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

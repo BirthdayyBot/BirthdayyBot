@@ -14,7 +14,7 @@ import { GuideEmbed } from '../../lib/embeds';
 	// runIn: ['GUILD_TEXT', 'DM'], CURRENTLY BROKEN
 	preconditions: [['DMOnly', 'GuildTextOnly'] /* any other preconditions here */],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuideCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
@@ -29,9 +29,9 @@ export class GuideCommand extends Command {
 			components: [
 				{
 					type: 1,
-					components: [docsButton, discordButton],
-				},
-			],
+					components: [docsButton, discordButton]
+				}
+			]
 		});
 	}
 }

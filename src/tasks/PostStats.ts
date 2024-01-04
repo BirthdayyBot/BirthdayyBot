@@ -6,7 +6,7 @@ import { isProduction } from '../lib/utils/env';
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
 	enabled: isProduction,
-	pattern: '0 * * * *',
+	pattern: '0 * * * *'
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
@@ -15,7 +15,7 @@ export class PostStats extends ScheduledTask {
 
 		return result.match({
 			ok: () => this.container.logger.info('Successfully posted stats to bot lists.'),
-			err: (error) => this.container.logger.error('[PostStatsError]', error),
+			err: (error) => this.container.logger.error('[PostStatsError]', error)
 		});
 	}
 }

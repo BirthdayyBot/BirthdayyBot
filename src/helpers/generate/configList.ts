@@ -18,13 +18,13 @@ export default async function generateConfigList(guildId: Snowflake, options: Co
 	if (!guildInfo) {
 		return {
 			title: `Config List - ${guildId}`,
-			description: 'Guild Not Found, please report this to the developer',
+			description: 'Guild Not Found, please report this to the developer'
 		};
 	}
 	return generateDefaultEmbed({
 		title: `Config List - ${guildInfo.name}`,
 		description: 'Use /config `<setting>` `<value>` to change any setting',
-		fields: embedFields,
+		fields: embedFields
 	});
 }
 async function generateFields(guildId: string): Promise<APIEmbedField[]> {
@@ -38,8 +38,8 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 			overviewChannel: true,
 			timezone: true,
 			language: true,
-			premium: true,
-		},
+			premium: true
+		}
 	});
 
 	if (!config) config = await container.utilities.guild.create({ guildId });
@@ -50,7 +50,7 @@ async function generateFields(guildId: string): Promise<APIEmbedField[]> {
 		return {
 			name: nameString,
 			value: valueString,
-			inline: false,
+			inline: false
 		};
 	});
 

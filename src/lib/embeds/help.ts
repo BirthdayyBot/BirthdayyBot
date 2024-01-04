@@ -1,15 +1,5 @@
 import type { APIEmbed } from 'discord-api-types/v9';
-import {
-	ARROW_RIGHT,
-	BOOK,
-	BOT_NAME,
-	DOCS_URL,
-	LINK,
-	PLUS,
-	PREMIUM_URL,
-	SIGN,
-	SUPPORT,
-} from '../../helpers/provide/environment';
+import { ARROW_RIGHT, BOOK, BOT_NAME, DOCS_URL, LINK, PLUS, PREMIUM_URL, SIGN, SUPPORT } from '../../helpers/provide/environment';
 
 export const HelpEmbed: APIEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,
@@ -30,7 +20,7 @@ export const HelpEmbed: APIEmbed = {
   ${ARROW_RIGHT}/status
   ${ARROW_RIGHT}/vote
         `,
-			inline: true,
+			inline: true
 		},
 
 		{
@@ -42,7 +32,7 @@ export const HelpEmbed: APIEmbed = {
   ${ARROW_RIGHT}remove \`<user>\`
   ${ARROW_RIGHT}show \`[user]\`
       `,
-			inline: true,
+			inline: true
 		},
 		{
 			name: '/config',
@@ -55,7 +45,7 @@ export const HelpEmbed: APIEmbed = {
   ${ARROW_RIGHT}timezone\`<zone>\`
   ${ARROW_RIGHT}announcement-message\`<message>\` ${PLUS}
       `,
-			inline: true,
-		},
-	],
+			inline: true
+		}
+	]
 };

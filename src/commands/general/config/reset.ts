@@ -15,8 +15,8 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 				.setName('config')
 				.setDescription('Config that you want to remove')
 				.addChoices(...configChoices)
-				.setRequired(true),
-		),
+				.setRequired(true)
+		)
 )
 export class ResetCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -27,10 +27,7 @@ export class ResetCommand extends Command {
 		const result = await Result.fromAsync(() => setDefaultConfig(config, interaction.guildId));
 
 		if (result.isErr()) {
-			return reply(
-				interaction,
-				interactionProblem(`An error occurred while trying to reset the ${configName} config.`),
-			);
+			return reply(interaction, interactionProblem(`An error occurred while trying to reset the ${configName} config.`));
 		}
 
 		return reply(interaction, interactionSuccess(`Successfully reset the ${configName} config.`));

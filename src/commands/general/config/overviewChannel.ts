@@ -16,8 +16,8 @@ import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '..
 				.setName('channel')
 				.setDescription('Channel where the overview should get sent and updated in')
 				.addChannelTypes(ChannelType.GuildText)
-				.setRequired(true),
-		),
+				.setRequired(true)
+		)
 )
 export class OverviewChannelCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -26,14 +26,11 @@ export class OverviewChannelCommand extends Command {
 		const hasWritingPermissionsInChannel = await hasBotChannelPermissions({
 			interaction,
 			channel,
-			permissions: ['ViewChannel', 'SendMessages'],
+			permissions: ['ViewChannel', 'SendMessages']
 		});
 
 		if (!hasWritingPermissionsInChannel) {
-			return reply(
-				interaction,
-				interactionProblem(`I don't have permission to send messages in ${channelMention(channel.id)}.`),
-			);
+			return reply(interaction, interactionProblem(`I don't have permission to send messages in ${channelMention(channel.id)}.`));
 		}
 
 		const birthdayList = await generateBirthdayList(1, interaction.guild);
@@ -41,30 +38,23 @@ export class OverviewChannelCommand extends Command {
 
 		const message = await channel.send({
 			embeds: [birthdayListEmbed],
-			components: birthdayList.components,
+			components: birthdayList.components
 		});
 
 		const result = await Result.fromAsync(() =>
 			this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { overviewMessage: message.id, overviewChannel: channel.id },
-			}),
+				data: { overviewMessage: message.id, overviewChannel: channel.id }
+			})
 		);
 
 		if (result.isErr()) {
-			return reply(
-				interaction,
-				interactionProblem(`An error occurred while trying to update the config. Please try again later.`),
-			);
+			return reply(interaction, interactionProblem(`An error occurred while trying to update the config. Please try again later.`));
 		}
 
 		return reply(
 			interaction,
-			interactionSuccess(
-				`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${
-					message.url
-				}.`,
-			),
+			interactionSuccess(`Successfully set the overview channel to ${channelMention(channel.id)} and the message to ${message.url}.`)
 		);
 	}
 }

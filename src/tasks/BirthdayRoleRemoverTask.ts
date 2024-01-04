@@ -15,22 +15,16 @@ export class BirthdayRoleRemoverTask extends ScheduledTask {
 		const member = await getGuildMember(guildId, userId);
 		const role = await getGuildRole(guildId, roleId);
 
-		if (!member)
-			this.container.logger.warn(`[BirthdayRoleRemoverTask]: Member undefined: ${JSON.stringify(member)}`);
-		if (!guildId)
-			this.container.logger.warn(`[BirthdayRoleRemoverTask]: GuildId undefined: ${JSON.stringify(guildId)}`);
+		if (!member) this.container.logger.warn(`[BirthdayRoleRemoverTask]: Member undefined: ${JSON.stringify(member)}`);
+		if (!guildId) this.container.logger.warn(`[BirthdayRoleRemoverTask]: GuildId undefined: ${JSON.stringify(guildId)}`);
 		if (!role) this.container.logger.warn(`[BirthdayRoleRemoverTask]: Role undefined: ${JSON.stringify(role)}`);
 		if (!member || !guildId || !role) return;
 		if (!member?.roles?.cache.has(roleId)) {
-			return this.container.logger.info(
-				`[BirthdayRoleRemoverTask]: Role ${roleId} not found on member ${userId}`,
-			);
+			return this.container.logger.info(`[BirthdayRoleRemoverTask]: Role ${roleId} not found on member ${userId}`);
 		}
 
 		await member.roles.remove(role, 'Birthday Role Removal').catch(() => null);
-		this.container.logger.debug(
-			`[BirthdayRoleRemoverTask]: Removed role ${roleId} from user ${userId}in guild ${guildId}`,
-		);
+		this.container.logger.debug(`[BirthdayRoleRemoverTask]: Removed role ${roleId} from user ${userId}in guild ${guildId}`);
 		this.container.logger.info(`[BirthdayRoleRemoverTask] Removed role ${role.name} from user ${member.user.id}`);
 	}
 }

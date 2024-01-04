@@ -14,12 +14,12 @@ import { isCustom } from '../../lib/utils/env';
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	preconditions: ['AdminOnly'],
 	requiredUserPermissions: ['ViewChannel'],
-	requiredClientPermissions: ['SendMessages'],
+	requiredClientPermissions: ['SendMessages']
 })
 export class GuildInfoCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(GuildInfoCMD(), {
-			guildIds: await getCommandGuilds('admin'),
+			guildIds: await getCommandGuilds('admin')
 		});
 	}
 
@@ -37,69 +37,69 @@ export class GuildInfoCommand extends Command {
 		const embed = generateDefaultEmbed({
 			title: 'GuildInfos',
 			thumbnail: {
-				url: guildDiscord.iconURL({ extension: 'png' }) ?? 'No Image',
+				url: guildDiscord.iconURL({ extension: 'png' }) ?? 'No Image'
 			},
 			fields: [
 				{
 					name: 'GuildId',
 					value: guildDatabase.guildId,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'GuildName',
 					value: guildDiscord.name,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Description',
 					value: guildDiscord.description ?? 'No Description',
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'GuildShard',
 					value: `Shard ${guildDiscord.shardId + 1}`,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'MemberCount',
 					value: guildDiscord.memberCount.toString(),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'BirthdayCount',
 					value: guildBirthdayCount.toString(),
-					inline: true,
+					inline: true
 				},
 
 				{
 					name: 'GuildOwner',
 					value: guildDiscord.ownerId,
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'IsPartnered',
 					value: String(guildDiscord.partnered),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Premium Tier',
 					value: guildDiscord.premiumTier.toString(),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'GuildCreated',
 					value: getFormattedTimestamp(guildDiscord.createdTimestamp, 'f'),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'GuildJoined',
 					value: getFormattedTimestamp(guildDiscord.joinedTimestamp, 'f'),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'GuildServed',
 					value: getFormattedTimestamp(guildDiscord.joinedTimestamp, 'R'),
-					inline: true,
+					inline: true
 				},
 				{
 					name: 'Guild Permissions',
@@ -107,16 +107,16 @@ export class GuildInfoCommand extends Command {
 						guildDiscord.members?.me?.permissions
 							.toArray()
 							.map((permission: string) => `**\`${permission}\`**`)
-							.join(' • ') ?? 'No Permissions',
-				},
-			],
+							.join(' • ') ?? 'No Permissions'
+				}
+			]
 		});
 
 		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { guild: guildDiscord }));
 
 		return reply(interaction, {
 			content: `GuildInfos for ${guildDiscord.name}`,
-			embeds: [embed, configEmbed],
+			embeds: [embed, configEmbed]
 		});
 	}
 }

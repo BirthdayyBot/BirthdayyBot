@@ -15,27 +15,18 @@ const minYear = currentYear - 100;
 	builder
 		.setName('update')
 		.setDescription('Update your birthday - MANAGER ONLY')
-		.addIntegerOption((option) =>
-			option.setName('day').setDescription('Day of birthday').setMinValue(1).setMaxValue(31).setRequired(true),
-		)
+		.addIntegerOption((option) => option.setName('day').setDescription('Day of birthday').setMinValue(1).setMaxValue(31).setRequired(true))
 		.addStringOption((option) =>
 			option
 				.setName('month')
 				.setDescription('Month of birthday')
 				.addChoices(...monthChoices)
-				.setRequired(true),
+				.setRequired(true)
 		)
-		.addUserOption((option) =>
-			option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY').setRequired(false),
-		)
+		.addUserOption((option) => option.setName('user').setDescription('Update a Birthday for a Person - MANAGER ONLY').setRequired(false))
 		.addIntegerOption((option) =>
-			option
-				.setName('year')
-				.setDescription('Year of birthday')
-				.setMinValue(minYear)
-				.setMaxValue(currentYear)
-				.setRequired(false),
-		),
+			option.setName('year').setDescription('Year of birthday').setMinValue(minYear).setMaxValue(currentYear).setRequired(false)
+		)
 )
 export class UpdateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -45,10 +36,7 @@ export class UpdateCommand extends Command {
 		const authorIsTarget = interaction.user.id === targetUser.id;
 
 		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
-			return reply(
-				interaction,
-				interactionProblem("You don't have the permission to update other users birthdays."),
-			);
+			return reply(interaction, interactionProblem("You don't have the permission to update other users birthdays."));
 		}
 
 		const birthday = await container.utilities.birthday.get.BirthdayByUserAndGuild(guildId, targetUser.id);
@@ -56,11 +44,7 @@ export class UpdateCommand extends Command {
 		if (!birthday) {
 			return reply(
 				interaction,
-				interactionProblem(
-					`I couldn't find a birthday for ${userMention(
-						targetUser.id,
-					)}. Use ${BIRTHDAY_REGISTER} to register a birthday.`,
-				),
+				interactionProblem(`I couldn't find a birthday for ${userMention(targetUser.id)}. Use ${BIRTHDAY_REGISTER} to register a birthday.`)
 			);
 		}
 
@@ -70,18 +54,14 @@ export class UpdateCommand extends Command {
 			return reply(interaction, interactionProblem('Please provide a valid date'));
 		}
 
-		const updateBirthday = await container.utilities.birthday.update
-			.BirthdayByUserAndGuild(guildId, targetUser.id, date.date)
-			.catch(() => null);
+		const updateBirthday = await container.utilities.birthday.update.BirthdayByUserAndGuild(guildId, targetUser.id, date.date).catch(() => null);
 
 		if (!updateBirthday) {
 			return reply(
 				interaction,
 				interactionProblem(
-					`I couldn't update the birthday for ${userMention(targetUser.id)} to the ${bold(
-						formatDateForDisplay(date.date),
-					)}.`,
-				),
+					`I couldn't update the birthday for ${userMention(targetUser.id)} to the ${bold(formatDateForDisplay(date.date))}.`
+				)
 			);
 		}
 
@@ -89,10 +69,8 @@ export class UpdateCommand extends Command {
 		return reply(
 			interaction,
 			interactionSuccess(
-				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been updated to the ${bold(
-					formatDateForDisplay(date.date),
-				)}.`,
-			),
+				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been updated to the ${bold(formatDateForDisplay(date.date))}.`
+			)
 		);
 	}
 }

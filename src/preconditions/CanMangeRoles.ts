@@ -1,12 +1,6 @@
 import { Precondition } from '@sapphire/framework';
 
-import type {
-	CommandInteraction,
-	ContextMenuCommandInteraction,
-	Message,
-	PermissionsBitField,
-	Snowflake,
-} from 'discord.js';
+import type { CommandInteraction, ContextMenuCommandInteraction, Message, PermissionsBitField, Snowflake } from 'discord.js';
 import { isBotAdmin } from '../lib/utils/helper';
 import { canManageRoles } from '../lib/utils/precondition';
 

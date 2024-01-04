@@ -10,18 +10,18 @@ import { isCustom, isProduction } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',
-	description: 'test things',
+	description: 'test things'
 })
 export class TestCommand extends Command {
 	public override async registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
-				description: this.description,
+				description: this.description
 			},
 			{
-				guildIds: await getCommandGuilds('testing'),
-			},
+				guildIds: await getCommandGuilds('testing')
+			}
 		);
 	}
 
@@ -31,7 +31,7 @@ export class TestCommand extends Command {
 			displayStats: true,
 			reminder: true,
 			isCustomBotCheck: true,
-			appEnv: true,
+			appEnv: true
 		};
 		const fields: APIEmbedField[] = [{ name: 'test', value: 'Test Test' }];
 

@@ -6,9 +6,6 @@ import type { CommandInteraction, InteractionReplyOptions, MessagePayload } from
  * @param  options - The options to pass to the reply method.
  * @returns A promise that resolves to the message that was sent.
  */
-export async function reply(
-	interaction: CommandInteraction,
-	options: string | MessagePayload | InteractionReplyOptions,
-) {
+export async function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }

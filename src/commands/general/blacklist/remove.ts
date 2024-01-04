@@ -9,9 +9,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 	builder
 		.setName('remove')
 		.setDescription('Remove a blacklisted user from the blacklist')
-		.addUserOption((option) =>
-			option.setName('user').setDescription('User to remove from the blacklist').setRequired(true),
-		),
+		.addUserOption((option) => option.setName('user').setDescription('User to remove from the blacklist').setRequired(true))
 )
 export class RemoveCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
@@ -21,16 +19,10 @@ export class RemoveCommand extends Command {
 		} catch (error: any) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
 				if (error.code === PrismaErrorCodeEnum.NOT_FOUND) {
-					return reply(
-						interaction,
-						interactionProblem(`${userMention(blacklistUser.id)} is not blacklisted.`, true),
-					);
+					return reply(interaction, interactionProblem(`${userMention(blacklistUser.id)} is not blacklisted.`, true));
 				}
 			}
 		}
-		return reply(
-			interaction,
-			interactionSuccess(`Removed ${userMention(blacklistUser.id)} from the blacklist.`, true),
-		);
+		return reply(interaction, interactionSuccess(`Removed ${userMention(blacklistUser.id)} from the blacklist.`, true));
 	}
 }

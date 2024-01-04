@@ -32,8 +32,8 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guild_id}`,
-			},
+				value: `${guild_id}`
+			}
 		];
 
 		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
@@ -45,7 +45,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			title: `${FAIL} ${BOT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.botList.computeGuilds()}\` guilds`,
 			fields,
-			color: BotColorEnum.BIRTHDAYY_DEV,
+			color: BotColorEnum.BIRTHDAYY_DEV
 		};
 
 		const embed = generateDefaultEmbed(embedObj);

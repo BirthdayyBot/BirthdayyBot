@@ -14,46 +14,42 @@ const currentYear = dayjs().year();
 const minYear = currentYear - 100;
 
 @RegisterSubCommand('birthday', (builder) => {
-	return applyLocalizedBuilder(
-		builder,
-		'commands/birthday:subcommand.register.name',
-		'commands/birthday:subcommand.register.description',
-	)
+	return applyLocalizedBuilder(builder, 'commands/birthday:subcommand.register.name', 'commands/birthday:subcommand.register.description')
 		.addIntegerOption((option) =>
 			applyLocalizedBuilder(
 				option,
 				'commands/birthday:subcommand.register.options.day.name',
-				'commands/birthday:subcommand.register.options.day.description',
+				'commands/birthday:subcommand.register.options.day.description'
 			)
 				.setRequired(true)
 				.setMinValue(1)
-				.setMaxValue(31),
+				.setMaxValue(31)
 		)
 		.addStringOption((option) =>
 			applyLocalizedBuilder(
 				option,
 				'commands/birthday:subcommand.register.options.month.name',
-				'commands/birthday:subcommand.register.options.month.description',
+				'commands/birthday:subcommand.register.options.month.description'
 			)
 				.setRequired(true)
-				.addChoices(...monthChoices),
+				.addChoices(...monthChoices)
 		)
 		.addIntegerOption((option) =>
 			applyLocalizedBuilder(
 				option,
 				'commands/birthday:subcommand.register.options.year.name',
-				'commands/birthday:subcommand.register.options.year.description',
+				'commands/birthday:subcommand.register.options.year.description'
 			)
 				.setMinValue(minYear)
 				.setMaxValue(currentYear)
-				.setRequired(false),
+				.setRequired(false)
 		)
 		.addUserOption((option) =>
 			applyLocalizedBuilder(
 				option,
 				'commands/birthday:subcommand.register.options.user.name',
-				'commands/birthday:subcommand.register.options.user.description',
-			).setRequired(false),
+				'commands/birthday:subcommand.register.options.user.description'
+			).setRequired(false)
 		);
 })
 export class ListCommand extends Command {
@@ -64,10 +60,7 @@ export class ListCommand extends Command {
 		const authorIsTarget = interaction.user.id === targetUser.id;
 
 		if (!authorIsTarget && !memberPermissions.has('ManageRoles')) {
-			return reply(
-				interaction,
-				interactionProblem("You don't have the permission to register other users birthdays."),
-			);
+			return reply(interaction, interactionProblem("You don't have the permission to register other users birthdays."));
 		}
 
 		const date = getDateFromInteraction(interaction);
@@ -78,17 +71,15 @@ export class ListCommand extends Command {
 			container.prisma.birthday.findFirst({
 				where: {
 					userId: targetUser.id,
-					guildId,
-				},
-			}),
+					guildId
+				}
+			})
 		);
 
 		if (memberBirthday) {
 			return reply(
 				interaction,
-				interactionProblem(
-					`This user's birthday is already registered. If you want to change it, use ${BIRTHDAY_UPDATE}`,
-				),
+				interactionProblem(`This user's birthday is already registered. If you want to change it, use ${BIRTHDAY_UPDATE}`)
 			);
 		}
 
@@ -97,9 +88,9 @@ export class ListCommand extends Command {
 				data: {
 					userId: targetUser.id,
 					guildId,
-					birthday: date.date,
-				},
-			}),
+					birthday: date.date
+				}
+			})
 		);
 
 		if (!birthday) {
@@ -110,10 +101,8 @@ export class ListCommand extends Command {
 		return reply(
 			interaction,
 			interactionSuccess(
-				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been registered on ${bold(
-					formatDateForDisplay(date.date),
-				)}.`,
-			),
+				`${authorIsTarget ? 'Your' : `${targetUser.username}'s`} birthday has been registered on ${bold(formatDateForDisplay(date.date))}.`
+			)
 		);
 	}
 }
