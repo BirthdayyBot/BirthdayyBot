@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [18.16.0]
+        node: [20]
 
     steps:
       - name: Checkout 🛎
@@ -41,4 +41,4 @@ jobs:
         run: yarn lint
 
       - name: Run typescript build 🏗️
-        run: npx tsc
+        run: npx tsc -b src

@@ -1,4 +1,4 @@
-FROM node:18.16.1-alpine as base
+FROM node:20-bullseye as base
 WORKDIR /app
 
 ENV HUSKY=0
