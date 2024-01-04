@@ -1,10 +1,9 @@
+import thinking from '#lib/discord/thinking';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply, IMG_BLOCK, ARROW_RIGHT } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import type { Blacklist } from '@prisma/client';
 import { time, userMention } from 'discord.js';
-import { ARROW_RIGHT, IMG_BLOCK } from '../../../helpers';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('blacklist', (builder) => builder.setName('list').setDescription('List all Users on the blacklist'))
 export class ListCommand extends Command {

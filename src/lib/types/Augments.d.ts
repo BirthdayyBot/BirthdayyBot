@@ -1,15 +1,14 @@
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import type { WebhookClient } from 'discord.js';
-import type { Birthday } from '../../utilities/db/Birthday';
-import type { Blacklist } from '../../utilities/db/Blacklist';
-import type { Guild } from '../../utilities/db/Guild';
-import type { User } from '../../utilities/db/User';
+import type { Birthday } from '#root/utilities/db/Birthday';
+import type { Blacklist } from '#root/utilities/db/Blacklist';
+import type { Guild } from '#root/utilities/db/Guild';
+import type { User } from '#root/utilities/db/User';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
 		// Environment
-		NODE_ENV: 'development' | 'production';
 		APP_ENV: 'dev' | 'tst' | 'prd';
 		DEBUG: BooleanString;
 

@@ -1,5 +1,5 @@
+import type { TIMEZONE_VALUES } from '#root/helpers/utils/date';
 import type { Dayjs } from 'dayjs';
-import type { TIMEZONE_VALUES } from '../../helpers/utils/date';
 
 export interface TimezoneObject {
 	date: Dayjs;

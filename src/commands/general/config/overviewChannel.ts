@@ -1,11 +1,9 @@
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, generateDefaultEmbed, interactionSuccess } from '#lib/utils/embed';
+import { hasBotChannelPermissions, reply, generateBirthdayList } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
 import { channelMention, ChannelType } from 'discord.js';
-import { generateBirthdayList } from '../../../helpers/generate/birthdayList';
-import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder

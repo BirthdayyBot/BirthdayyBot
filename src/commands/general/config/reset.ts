@@ -1,10 +1,9 @@
+import { configChoices, type ConfigName, configNameExtended } from '#lib/database';
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { setDefaultConfig, reply } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
-import { setDefaultConfig } from '../../../helpers/provide/config';
-import { reply } from '../../../helpers/send/response';
-import { type ConfigName, configNameExtended, configChoices } from '../../../lib/database';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder

@@ -1,7 +1,7 @@
+import { logSuccessCommand } from '#root/helpers/utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, LogLevel, container, type ChatInputCommandSuccessPayload } from '@sapphire/framework';
 import type { Logger } from '@sapphire/plugin-logger';
-import { logSuccessCommand } from '../../../../helpers/utils/utils';
 
 @ApplyOptions<Listener.Options>({
 	event: Events.ChatInputCommandSuccess,

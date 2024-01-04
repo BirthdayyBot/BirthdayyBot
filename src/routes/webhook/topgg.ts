@@ -1,18 +1,18 @@
+import { authenticated } from '#lib/api/utils';
+import { remindMeButton } from '#lib/components/button';
+import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '#lib/discord';
+import { GuildIDEnum } from '#lib/enum/GuildID.enum';
+import type { APIWebhookTopGG } from '#lib/model/APIWebhookTopGG.model';
+import type { VoteProvider } from '#lib/types/VoteProvider.type';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { BOT_NAME, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '#root/helpers/provide/environment';
+import type { RoleRemovePayload } from '#root/tasks/BirthdayRoleRemoverTask';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/pieces';
-import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 import type { User } from 'discord.js';
-import { BOT_NAME, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
-import { authenticated } from '../../lib/api/utils';
-import { remindMeButton } from '../../lib/components/button';
-import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
-import type { VoteProvider } from '../../lib/types/VoteProvider.type';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {

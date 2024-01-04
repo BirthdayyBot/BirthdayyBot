@@ -1,12 +1,12 @@
+import { sendMessage } from '#lib/discord';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isProduction } from '#lib/utils/env';
+import { IS_CUSTOM_BOT, BOT_ADMIN_LOG } from '#root/helpers/provide/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
-import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '../helpers/provide/environment';
-import { sendMessage } from '../lib/discord';
-import { generateDefaultEmbed } from '../lib/utils/embed';
-import { isProduction } from '../lib/utils/env';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',

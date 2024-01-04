@@ -1,12 +1,12 @@
+import { sendMessage } from '#lib/discord';
+import { BotColorEnum } from '#lib/enum/BotColor.enum';
+import type { EmbedInformationModel } from '#lib/model/EmbedInformation.model';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { BOT_NAME, BOT_SERVER_LOG, DEBUG, FAIL } from '#root/helpers/provide/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { Guild, time } from 'discord.js';
-import { BOT_NAME, BOT_SERVER_LOG, DEBUG, FAIL } from '../../../helpers';
-import { sendMessage } from '../../../lib/discord';
-import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
-import type { EmbedInformationModel } from '../../../lib/model';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {

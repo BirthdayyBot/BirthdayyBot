@@ -12,7 +12,7 @@ import '@kaname-png/plugin-subcommands-advanced/register';
 import '@sapphire/plugin-i18next/register';
 import '@sapphire/plugin-scheduled-tasks/register';
 import '@sapphire/plugin-utilities-store/register';
-import '@devtomio/plugin-botlist/register';
+import '@swiizyy/plugin-botlist/register';
 
 import * as colorette from 'colorette';
 import { inspect } from 'util';

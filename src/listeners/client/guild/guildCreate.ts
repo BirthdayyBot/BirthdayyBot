@@ -1,13 +1,13 @@
+import { sendDMMessage, getUserInfo, sendMessage } from '#lib/discord';
+import { GuideEmbed } from '#lib/embeds';
+import { BotColorEnum } from '#lib/enum/BotColor.enum';
+import type { EmbedInformationModel } from '#lib/model/EmbedInformation.model';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { IS_CUSTOM_BOT, SUCCESS, BOT_NAME, BOT_SERVER_LOG } from '#root/helpers/provide/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import { AuditLogEvent, PermissionFlagsBits } from 'discord-api-types/v9';
 import { DiscordAPIError, Guild, time, type Snowflake } from 'discord.js';
-import { BOT_NAME, BOT_SERVER_LOG, IS_CUSTOM_BOT, SUCCESS } from '../../../helpers/provide/environment';
-import { getUserInfo, sendDMMessage, sendMessage } from '../../../lib/discord';
-import { GuideEmbed } from '../../../lib/embeds';
-import { BotColorEnum } from '../../../lib/enum/BotColor.enum';
-import type { EmbedInformationModel } from '../../../lib/model';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {

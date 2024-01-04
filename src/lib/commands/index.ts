@@ -1,13 +1,13 @@
 import { chatInputApplicationCommandMention } from 'discord.js';
 
-export * from './birthday';
-export * from './guide';
-export * from './help';
-export * from './invite';
-export * from './stats';
-export * from './support';
-export * from './template';
-export * from './uwu';
+export * from '#lib/commands/birthday';
+export * from '#lib/commands//guide';
+export * from '#lib/commands/help';
+export * from '#lib/commands/invite';
+export * from '#lib/commands/stats';
+export * from '#lib/commands/support';
+export * from '#lib/commands/template';
+export * from '#lib/commands/uwu';
 
 // BIRTHDAY
 export const BIRTHDAY_UPDATE = chatInputApplicationCommandMention('birthday', 'update', '935174192389840896');

@@ -1,14 +1,12 @@
+import { StatsCMD } from '#lib/commands/stats';
+import thinking from '#lib/discord/thinking';
+import type { EmbedInformationModel } from '#lib/model/EmbedInformation.model';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isDevelopment } from '#lib/utils/env';
+import { getCurrentOffset, PING, reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import os from 'os';
-import { PING } from '../../helpers/provide/environment';
-import { reply } from '../../helpers/send/response';
-import { getCurrentOffset } from '../../helpers/utils/date';
-import { StatsCMD } from '../../lib/commands';
-import thinking from '../../lib/discord/thinking';
-import type { EmbedInformationModel } from '../../lib/model';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isDevelopment } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'stats',

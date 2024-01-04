@@ -4,9 +4,9 @@ import type { APIEmbed, Guild, Snowflake } from 'discord.js';
 
 import { objectEntries } from '@sapphire/utilities';
 import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
-import { getGuildInformation } from '../../lib/discord';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { ARROW_RIGHT, PLUS } from '../provide';
+import { getGuildInformation } from '#lib/discord';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { ARROW_RIGHT, PLUS } from '../index.js';
 
 interface ConfigListOptions {
 	guild?: Guild;

@@ -1,6 +1,6 @@
+import { canManageRoles } from '#lib/utils/precondition';
 import { AllFlowsPrecondition, Piece, Result } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
-import { canManageRoles } from '../lib/utils/precondition';
 
 export class CanManageRolesPrecondition extends AllFlowsPrecondition {
 	#message = 'You are blacklisted from using Birthdayy on this.';

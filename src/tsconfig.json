@@ -8,11 +8,13 @@
 		"paths": {
 			"#lib/database": ["lib/database/index.js"],
 			"#lib/discord": ["lib/discord/index.js"],
+			"#lib/embeds": ["lib/embeds/index.js"],
 			"#lib/setup": ["lib/setup/index.js"],
 			"#lib/types": ["lib/types/index.js"],
 			"#lib/*": ["lib/*"],
 			"#languages": ["languages/index.js"],
 			"#utils/*": ["lib/util/*"],
+			"#root/helpers/*": ["helpers/*/index.js"],
 			"#root/*": ["*"]
 		},
 		"composite": true

@@ -1,6 +1,6 @@
+import { handleCommandErrorAndSendToUser } from '#lib/utils/errorHandling';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
 
 import { SubcommandPluginEvents, type ChatInputSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
 

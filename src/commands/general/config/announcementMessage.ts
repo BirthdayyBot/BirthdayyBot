@@ -1,8 +1,8 @@
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { reply, PREMIUM_URL } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { EmbedLimits } from '@sapphire/discord.js-utilities';
-import { PREMIUM_URL, reply } from '../../../helpers';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder

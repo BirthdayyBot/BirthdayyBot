@@ -1,5 +1,5 @@
+import { COMPASS, ARROW_RIGHT, DISCORD_INVITE, LINK, DOCS_URL } from '#root/helpers/provide/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { ARROW_RIGHT, COMPASS, DISCORD_INVITE, DOCS_URL, LINK } from '../../helpers/provide/environment';
 
 export const SupportEmbed: APIEmbed = {
 	title: `${COMPASS} Birthdayy Support`,

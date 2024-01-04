@@ -1,14 +1,17 @@
+import { monthChoices } from '#lib/commands/birthday';
+import { BIRTHDAY_UPDATE } from '#lib/commands/index';
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { catchToNull } from '#lib/utils/promises';
+import { reply } from '#root/helpers/send/response';
+import updateBirthdayOverview from '#root/helpers/update/overview';
+import { formatDateForDisplay } from '#root/helpers/utils/date';
+import { getDateFromInteraction } from '#root/helpers/utils/getDateFromInteraction';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import dayjs from 'dayjs';
 import { bold } from 'discord.js';
-import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
-import updateBirthdayOverview from '../../../helpers/update/overview';
-import { BIRTHDAY_UPDATE, monthChoices } from '../../../lib/commands';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
-import { catchToNull } from '../../../lib/utils/promises';
 
 const currentYear = dayjs().year();
 const minYear = currentYear - 100;

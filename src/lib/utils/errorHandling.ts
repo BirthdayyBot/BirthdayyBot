@@ -1,13 +1,13 @@
+import { BotColorEnum } from '#lib/enum/BotColor.enum';
+import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '#lib/types/errorHandling';
+import { DEBUG } from '#root/helpers/provide/environment';
 import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
 import type { APIEmbed } from 'discord.js';
-import { DEBUG } from '../../helpers/provide/environment';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { BotColorEnum } from '../enum/BotColor.enum';
-import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
-import { isDevelopment } from './env';
+import { generateDefaultEmbed } from './embed.js';
+import { isDevelopment } from './env.js';
 
 export function logErrorToContainer({ error, loggerSeverityLevel }: Pick<ErrorHandlerOptions, 'error' | 'loggerSeverityLevel'>): void {
 	container.logger[loggerSeverityLevel](error);

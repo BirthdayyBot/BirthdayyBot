@@ -1,12 +1,11 @@
+import { SupportCMD } from '#lib/commands/support';
+import { discordButton, docsButton } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
+import { SupportEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { SupportCMD } from '../../lib/commands';
-import { discordButton, docsButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { SupportEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-
 @ApplyOptions<Command.Options>({
 	name: 'support',
 	description: 'Need help? Join my Support Discord Server!',

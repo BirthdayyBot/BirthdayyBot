@@ -1,5 +1,5 @@
+import { HEART, BOT_NAME, ARROW_RIGHT, EXCLAMATION, DISCORD_INVITE, CAKE, BOT_INVITE, PLUS, PREMIUM_URL } from '#root/helpers/provide/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { ARROW_RIGHT, BOT_INVITE, BOT_NAME, CAKE, DISCORD_INVITE, EXCLAMATION, HEART, PLUS, PREMIUM_URL } from '../../helpers/provide/environment';
 
 export const GuideEmbed: APIEmbed = {
 	title: `${HEART} ${BOT_NAME} Guide!`,

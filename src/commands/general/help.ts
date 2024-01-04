@@ -1,11 +1,11 @@
+import { HelpCMD } from '#lib/commands/help';
+import { websiteButton, docsButton, discordButton } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
+import { HelpEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { reply } from '../../helpers/send/response';
-import { HelpCMD } from '../../lib/commands';
-import { discordButton, docsButton, websiteButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { HelpEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'help',

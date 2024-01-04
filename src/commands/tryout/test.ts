@@ -1,12 +1,11 @@
+import thinking from '#lib/discord/thinking';
+import type { EmbedInformationModel } from '#lib/model/EmbedInformation.model';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isProduction, isCustom } from '#lib/utils/env';
+import { getCommandGuilds, APP_ENV, reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import { APP_ENV, reply } from '../../helpers';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import thinking from '../../lib/discord/thinking';
-import type { EmbedInformationModel } from '../../lib/model/EmbedInformation.model';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isCustom, isProduction } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'test',

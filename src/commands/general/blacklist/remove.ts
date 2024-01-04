@@ -1,9 +1,9 @@
+import { PrismaErrorCodeEnum } from '#lib/enum/PrismaErrorCode.enum';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Prisma } from '@prisma/client';
 import { userMention } from 'discord.js';
-import { reply } from '../../../helpers/send/response';
-import { PrismaErrorCodeEnum } from '../../../lib/enum/PrismaErrorCode.enum';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('blacklist', (builder) =>
 	builder

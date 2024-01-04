@@ -520,16 +520,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-editable-commands@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@sapphire/plugin-editable-commands@npm:3.0.2"
-  dependencies:
-    "@skyra/editable-commands": "npm:^3.0.1"
-    tslib: "npm:^2.5.0"
-  checksum: 3b2890f2b39d74f33d29a0b0a3572660687367d8579910d86fe8dd42b74dcf578da55f40c97adb912edec11641df8356675979c6f7fcfe3b4d8c2ff44b307ed0
-  languageName: node
-  linkType: hard
-
 "@sapphire/plugin-hmr@npm:^2.0.1":
   version: 2.0.1
   resolution: "@sapphire/plugin-hmr@npm:2.0.1"
@@ -775,13 +765,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@skyra/editable-commands@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@skyra/editable-commands@npm:3.0.1"
-  checksum: 1ce649569e95b51dfa228e76e9f9c93afcfb990237a9337878a2d6158b5638abc192a3435c8c2a1d5af5fd74ca2465aa44f30b65aac45ef11730e9738af5758d
-  languageName: node
-  linkType: hard
-
 "@skyra/env-utilities@npm:^1.2.1":
   version: 1.2.1
   resolution: "@skyra/env-utilities@npm:1.2.1"
@@ -798,6 +781,17 @@ __metadata:
   dependencies:
     tslib: "npm:^2.5.0"
   checksum: 53dffc804fd46101bf33c706da478a1e80d663a917a72c37981fa351012819d06a6f6cf1274f1923a11ed1ca3b7554b2b4b579f9daf672e4fd61477f3bbe2f38
+  languageName: node
+  linkType: hard
+
+"@swiizyy/plugin-botlist@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@swiizyy/plugin-botlist@npm:1.1.0"
+  dependencies:
+    tiny-typed-emitter: "npm:^2.1.0"
+    tslib: "npm:^2.5.0"
+    undici: "npm:^5.16.0"
+  checksum: e1b99acdc7fcbcdd028ba805d6867557527f4528f2d589513b9275ea501824e6a042e1fbe6b1ef4d72a811beb66c3c7f13fe2b4886fde710e4969d32807cf972
   languageName: node
   linkType: hard
 
@@ -1320,7 +1314,6 @@ __metadata:
     "@sapphire/fetch": "npm:^2.4.1"
     "@sapphire/framework": "npm:^4.5.0"
     "@sapphire/plugin-api": "npm:^5.1.0"
-    "@sapphire/plugin-editable-commands": "npm:^3.0.2"
     "@sapphire/plugin-hmr": "npm:^2.0.1"
     "@sapphire/plugin-i18next": "npm:^5.0.3"
     "@sapphire/plugin-logger": "npm:^3.0.4"
@@ -1338,6 +1331,7 @@ __metadata:
     "@sentry/node": "npm:^7.57.0"
     "@sentry/tracing": "npm:^7.57.0"
     "@skyra/env-utilities": "npm:^1.2.1"
+    "@swiizyy/plugin-botlist": "npm:^1.1.0"
     "@types/node": "npm:^20.4.1"
     "@types/ws": "npm:^8.5.5"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"

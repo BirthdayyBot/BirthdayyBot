@@ -1,6 +1,6 @@
+import { CustomButtonIdEnum } from '#lib/enum/CustomButtonId.enum';
+import { DISCORD_INVITE, DOCS_URL, BIRTHDAYY_INVITE, WEBSITE_URL } from '#root/helpers/provide/environment';
 import { ButtonStyle, ComponentType, type APIButtonComponent } from 'discord.js';
-import { BIRTHDAYY_INVITE, DISCORD_INVITE, DOCS_URL, WEBSITE_URL } from '../../helpers/provide/environment';
-import { CustomButtonIdEnum } from '../enum/CustomButtonId.enum';
 
 export const discordButton: APIButtonComponent = {
 	type: ComponentType.Button,

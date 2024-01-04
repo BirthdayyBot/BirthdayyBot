@@ -1,4 +1,6 @@
-import type { BotList } from '@devtomio/plugin-botlist';
+import { UserIDEnum } from '#lib/enum/UserID.enum';
+import { isProduction } from '#lib/utils/env';
+import type { BotList } from '@swiizyy/plugin-botlist';
 import type { PluginSubcommandOptions } from '@kaname-png/plugin-subcommands-advanced';
 import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
 import type { ServerOptions } from '@sapphire/plugin-api';
@@ -9,10 +11,7 @@ import * as Sentry from '@sentry/node';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import type { QueueOptions } from 'bullmq';
 import { ActivityType, GatewayIntentBits, PresenceUpdateStatus, type ClientOptions, type PresenceData, type WebhookClientData } from 'discord.js';
-import { getGuildLanguage } from './helpers/provide/config';
-import { DEBUG, ROOT_DIR } from './helpers/provide/environment';
-import { UserIDEnum } from './lib/enum/UserID.enum';
-import { isProduction } from './lib/utils/env';
+import { DEBUG, getGuildLanguage, ROOT_DIR } from './helpers/index.js';
 
 function parseApi(): ServerOptions {
 	return {

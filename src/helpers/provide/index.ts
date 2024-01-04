@@ -1,3 +1,3 @@
-export * from './config';
-export * from './environment';
-export * from './permission';
+export * from '#root/helpers/provide/config';
+export * from '#root/helpers/provide/environment';
+export * from '#root/helpers/provide/permission';

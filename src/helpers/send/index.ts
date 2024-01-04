@@ -1,1 +1,1 @@
-export * from './response';
+export * from '#root/helpers/send/response';

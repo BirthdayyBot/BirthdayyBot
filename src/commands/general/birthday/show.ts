@@ -1,9 +1,9 @@
+import { BIRTHDAY_REGISTER } from '#lib/commands/index';
+import { interactionProblem, defaultEmbed } from '#lib/utils/embed';
+import { catchToNull } from '#lib/utils/promises';
+import { reply, BOOK, ARROW_RIGHT, formatDateForDisplay } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { bold, userMention } from 'discord.js';
-import { ARROW_RIGHT, BOOK, formatDateForDisplay, reply } from '../../../helpers';
-import { BIRTHDAY_REGISTER } from '../../../lib/commands';
-import { defaultEmbed, interactionProblem } from '../../../lib/utils/embed';
-import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder

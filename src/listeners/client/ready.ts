@@ -1,9 +1,9 @@
+import { sendMessage } from '#lib/discord';
+import { isDevelopment } from '#lib/utils/env';
+import { BOT_ADMIN_LOG } from '#root/helpers/provide/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, Store } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { BOT_ADMIN_LOG } from '../../helpers/provide/environment';
-import { sendMessage } from '../../lib/discord/message';
-import { isDevelopment } from '../../lib/utils/env';
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {

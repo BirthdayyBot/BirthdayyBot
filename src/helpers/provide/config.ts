@@ -1,9 +1,9 @@
+import type { ConfigName } from '#lib/database';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/helpers/provide';
 import type { Prisma } from '@prisma/client';
 import { fetch, FetchMethods, FetchResultTypes } from '@sapphire/fetch';
 import { container } from '@sapphire/framework';
-import type { ConfigName } from '../../lib/database';
 import { envParseString } from '@skyra/env-utilities';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from './environment';
 
 export async function setCompleteConfig(data: Prisma.GuildUpdateInput, guildId: string) {
 	await container.prisma.guild.update({

@@ -1,10 +1,10 @@
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { catchToNull } from '#lib/utils/promises';
+import { reply } from '#root/helpers/index';
+import updateBirthdayOverview from '#root/helpers/update/overview';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/pieces';
 import { userMention } from 'discord.js';
-import { reply } from '../../../helpers';
-import updateBirthdayOverview from '../../../helpers/update/overview';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
-import { catchToNull } from '../../../lib/utils/promises';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder

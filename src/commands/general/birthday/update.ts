@@ -1,12 +1,13 @@
+import { monthChoices } from '#lib/commands/birthday';
+import { BIRTHDAY_REGISTER } from '#lib/commands/index';
+import thinking from '#lib/discord/thinking';
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { reply, getDateFromInteraction, formatDateForDisplay } from '#root/helpers/index';
+import updateBirthdayOverview from '#root/helpers/update/overview';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { container } from '@sapphire/framework';
 import dayjs from 'dayjs';
 import { bold, userMention } from 'discord.js';
-import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
-import updateBirthdayOverview from '../../../helpers/update/overview';
-import { BIRTHDAY_REGISTER, monthChoices } from '../../../lib/commands';
-import thinking from '../../../lib/discord/thinking';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 const currentYear = dayjs().year();
 const minYear = currentYear - 100;

@@ -1,6 +1,6 @@
+import { interactionProblem, interactionSuccess } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import { reply } from '../../../helpers';
-import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('birthday', (builder) =>
 	builder

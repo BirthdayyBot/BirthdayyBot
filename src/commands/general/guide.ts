@@ -1,11 +1,11 @@
+import { GuideCMD } from '#lib/commands/guide';
+import { docsButton, discordButton } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
+import { GuideEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { reply } from '../../helpers/send/response';
-import { GuideCMD } from '../../lib/commands';
-import { discordButton, docsButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { GuideEmbed } from '../../lib/embeds';
 
 @ApplyOptions<Command.Options>({
 	name: 'guide',

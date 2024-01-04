@@ -1,8 +1,8 @@
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { generateBirthdayList } from '#root/helpers/generate/birthdayList';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';
-import { generateBirthdayList } from '../helpers';
-import { generateDefaultEmbed } from '../lib/utils/embed';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class ExampleParseMethod extends InteractionHandler {

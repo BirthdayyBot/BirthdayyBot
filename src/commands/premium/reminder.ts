@@ -1,12 +1,11 @@
+import { ReminderCMD } from '#lib/commands/reminder';
+import { inviteButton } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
+import { InviteEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { getCommandGuilds, reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { ReminderCMD } from '../../lib/commands/reminder';
-import { inviteButton } from '../../lib/components/button';
-import thinking from '../../lib/discord/thinking';
-import { InviteEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'reminder',

@@ -1,6 +1,6 @@
+import { PREMIUM_URL } from '#root/helpers/provide/environment';
 import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message } from 'discord.js';
-import { PREMIUM_URL } from '../helpers';
 
 export class IsPremiumPrecondition extends Precondition {
 	#message = `This command is a premium only command. Visit ${PREMIUM_URL}.`; // TODO: Adjust Premium Message

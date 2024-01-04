@@ -1,3 +1,11 @@
+import { getGuildInformation, getGuildMember, sendMessage } from '#lib/discord';
+import type { BirthdayEventInfoModel } from '#lib/model/EventInfo.model';
+import type { TimezoneObject } from '#lib/model/Timezone.model';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isCustom } from '#lib/utils/env';
+import { logAll } from '#root/helpers/provide/config';
+import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '#root/helpers/provide/environment';
+import { getCurrentOffset } from '#root/helpers/utils/date';
 import type { Birthday } from '@prisma/client';
 import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -18,15 +26,7 @@ import {
 	type EmbedField,
 	type Snowflake
 } from 'discord.js';
-import { logAll } from '../helpers/provide/config';
-import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
-import { getCurrentOffset } from '../helpers/utils/date';
-import { getGuildInformation, getGuildMember } from '../lib/discord';
-import { sendMessage } from '../lib/discord/message';
-import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
-import { generateDefaultEmbed } from '../lib/utils/embed';
-import { isCustom } from '../lib/utils/env';
-import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
+import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
 export class BirthdayReminderTask extends ScheduledTask {
@@ -114,7 +114,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
 				// TODO: Clean up in #407
-				await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error) => {
+				await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error: Error) => {
 					this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
 				});
 				eventInfo.error += ' - Guild & Birthdays disabled';
@@ -125,7 +125,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {
-				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
+				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error: Error) => {
 					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
 				});
 				eventInfo.error += ' - Birthday deleted';

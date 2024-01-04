@@ -1,11 +1,11 @@
+import { GuildInfoCMD } from '#lib/commands/guildInfo';
+import thinking from '#lib/discord/thinking';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isCustom } from '#lib/utils/env';
+import generateConfigList from '#root/helpers/generate/configList';
+import { getCommandGuilds, reply, getFormattedTimestamp } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { getCommandGuilds, getFormattedTimestamp, reply } from '../../helpers';
-import generateConfigList from '../../helpers/generate/configList';
-import { GuildInfoCMD } from '../../lib/commands/guildInfo';
-import thinking from '../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isCustom } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'guild-info',

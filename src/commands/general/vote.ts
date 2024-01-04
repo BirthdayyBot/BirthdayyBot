@@ -1,10 +1,10 @@
+import { VoteCMD } from '#lib/commands/vote';
+import thinking from '#lib/discord/thinking';
+import { VoteEmbed } from '#lib/embeds';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
-import { reply } from '../../helpers/send/response';
-import { VoteCMD } from '../../lib/commands/vote';
-import thinking from '../../lib/discord/thinking';
-import { VoteEmbed } from '../../lib/embeds';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
 
 @ApplyOptions<Command.Options>({
 	name: 'vote',

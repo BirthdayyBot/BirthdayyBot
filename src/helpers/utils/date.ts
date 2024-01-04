@@ -1,10 +1,10 @@
+import type { TimezoneObject } from '#lib/model/Timezone.model';
+import { checkIfLengthIsTwo } from '#root/helpers/index';
 import { container } from '@sapphire/pieces';
 import dayjs, { Dayjs } from 'dayjs';
-import dayjstimezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import dayjstimezone from 'dayjs/plugin/timezone.js';
+import utc from 'dayjs/plugin/utc.js';
 import { time, type TimestampStylesString } from 'discord.js';
-import type { TimezoneObject } from '../../lib/model';
-import { checkIfLengthIsTwo } from './string';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);

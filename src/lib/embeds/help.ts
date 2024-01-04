@@ -1,5 +1,5 @@
+import { ARROW_RIGHT, BOOK, BOT_NAME, DOCS_URL, LINK, PLUS, PREMIUM_URL, SIGN, SUPPORT } from '#root/helpers/provide/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
-import { ARROW_RIGHT, BOOK, BOT_NAME, DOCS_URL, LINK, PLUS, PREMIUM_URL, SIGN, SUPPORT } from '../../helpers/provide/environment';
 
 export const HelpEmbed: APIEmbed = {
 	title: `${BOOK} ${BOT_NAME} Help`,

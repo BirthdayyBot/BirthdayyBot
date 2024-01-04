@@ -1,11 +1,10 @@
+import { CountCMD } from '#lib/commands/count';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import { isNotCustom } from '#lib/utils/env';
+import { getCommandGuilds, reply } from '#root/helpers/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { inlineCode, type APIEmbedField } from 'discord.js';
-import { reply } from '../../helpers/send/response';
-import { getCommandGuilds } from '../../helpers/utils/guilds';
-import { CountCMD } from '../../lib/commands/count';
-import { generateDefaultEmbed } from '../../lib/utils/embed';
-import { isNotCustom } from '../../lib/utils/env';
 
 @ApplyOptions<Command.Options>({
 	name: 'count',

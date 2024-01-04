@@ -1,8 +1,8 @@
+import { getCommandGuilds } from '#root/helpers/index';
 import { Subcommand } from '@kaname-png/plugin-subcommands-advanced';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { ApplicationCommandRegistry } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord.js';
-import { getCommandGuilds } from '../../../helpers';
 
 @ApplyOptions<Subcommand.Options>({
 	name: 'blacklist',

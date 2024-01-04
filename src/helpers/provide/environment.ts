@@ -1,9 +1,9 @@
+import { BotColorEnum } from '#lib/enum/BotColor.enum';
+import { GuildIDEnum } from '#lib/enum/GuildID.enum';
+import { UserIDEnum } from '#lib/enum/UserID.enum';
+import { isCustom, isProduction } from '#lib/utils/env';
 import { envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import { join } from 'path';
-import { BotColorEnum } from '../../lib/enum/BotColor.enum';
-import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
-import { UserIDEnum } from '../../lib/enum/UserID.enum';
-import { isCustom, isProduction } from '../../lib/utils/env';
 
 // DIRECTORY
 export const ROOT_DIR = join(__dirname, '..', '..', '..');

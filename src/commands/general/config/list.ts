@@ -1,8 +1,8 @@
+import thinking from '#lib/discord/thinking';
+import { generateDefaultEmbed } from '#lib/utils/embed';
+import generateConfigList from '#root/helpers/generate/configList';
+import { reply } from '#root/helpers/index';
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
-import generateConfigList from '../../../helpers/generate/configList';
-import { reply } from '../../../helpers/send/response';
-import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) => builder.setName('list').setDescription('List all Birthdays in this Discord server'))
 export class ListCommand extends Command {

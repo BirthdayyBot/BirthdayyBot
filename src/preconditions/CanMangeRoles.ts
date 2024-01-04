@@ -1,8 +1,8 @@
+import { isBotAdmin } from '#lib/utils/helper';
+import { canManageRoles } from '#lib/utils/precondition';
 import { Precondition } from '@sapphire/framework';
 
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, PermissionsBitField, Snowflake } from 'discord.js';
-import { isBotAdmin } from '../lib/utils/helper';
-import { canManageRoles } from '../lib/utils/precondition';
 
 export class CanManageRolesPrecondition extends Precondition {
 	#message = 'You need to have the `Manage Roles` permission to use this command.';

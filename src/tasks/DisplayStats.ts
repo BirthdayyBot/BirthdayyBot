@@ -1,9 +1,8 @@
+import { getVoiceChannel } from '#lib/discord';
+import { ChannelIdEnum } from '#lib/enum/ChannelId.enum';
+import { isProduction, isCustom } from '#lib/utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import { getVoiceChannel } from '../lib/discord';
-import { ChannelIdEnum } from '../lib/enum/ChannelId.enum';
-import { isCustom, isProduction } from '../lib/utils/env';
-
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'DisplayStats',
 	enabled: isProduction,

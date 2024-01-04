@@ -1,1 +1,1 @@
-export * from './overview';
+export * from '#root/helpers/update/overview';
