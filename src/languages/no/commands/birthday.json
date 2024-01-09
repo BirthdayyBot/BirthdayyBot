@@ -15,7 +15,7 @@
     "success": "Fødselsdagen din er satt til {{date}} på denne serveren.",
     "success_target": "{{target}}s fødselsdag ble satt til {{date}} på denne serveren",
     "hasNotPermissionManagesRoles": "Du har ikke lov til å administrere andre brukeres fødselsdager.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "liste",
   "listDescription": "Liste over alle registrerte bursdager",

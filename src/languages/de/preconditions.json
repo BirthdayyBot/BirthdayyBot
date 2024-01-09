@@ -14,5 +14,6 @@
   "administrator": "You need administrator privileges to run the command `{{commandName}}`!",
   "moderator": "You need moderator privileges to run the command `{{commandName}}`!",
   "serverOwner": "You need to be the server's owner to run the command `{{commandName}}`!",
-  "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+  "manager": "You need the manage server permission to run the command `{{commandName}}`!",
+  "roleHigher": "You cannot execute this command on someone with a higher role than you!"
 }

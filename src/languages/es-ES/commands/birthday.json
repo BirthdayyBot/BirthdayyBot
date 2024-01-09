@@ -15,7 +15,7 @@
     "success": "Su cumpleaños se ha establecido en {{date}} en este servidor.",
     "success_target": "El cumpleaños de {{target}} se estableció en el {{date}} en este servidor",
     "hasNotPermissionManagesRoles": "No tienes permiso para gestionar los cumpleaños de otros usuarios.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "lista",
   "listDescription": "Listar todos los cumpleaños registrados",

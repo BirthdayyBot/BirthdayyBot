@@ -15,7 +15,7 @@
     "success": "Twoje urodziny zostały ustawione na {{date}} na tym serwerze.",
     "success_target": "Data urodzin {{target}} została pomyślnie ustawiona na {{date}} na tym serwerze",
     "hasNotPermissionManagesRoles": "Nie masz uprawnień do zarządzania urodzinami innych użytkowników.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "lista",
   "listDescription": "Lista wszystkich zarejestrowanych urodzin",

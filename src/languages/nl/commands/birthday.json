@@ -15,7 +15,7 @@
     "success": "Je verjaardag is op deze server ingesteld op {{date}}.",
     "success_target": "De verjaardag van {{target}} is op deze server succesvol ingesteld op {{date}}",
     "hasNotPermissionManagesRoles": "U mag de verjaardagen van andere gebruikers niet beheren.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "lijst",
   "listDescription": "Maak een lijst van alle geregistreerde verjaardagen",

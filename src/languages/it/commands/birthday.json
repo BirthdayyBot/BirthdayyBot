@@ -15,7 +15,7 @@
     "success": "La tua data di nascita è stata impostata correttamente su {{date}} su questo server.",
     "success_target": "Il compleanno di {{target}} è stato impostato su {{date}} su questo server",
     "hasNotPermissionManagesRoles": "Non sei autorizzato a gestire i compleanni di altri utenti.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "elenco",
   "listDescription": "Elenca tutti i compleanni registrati",
