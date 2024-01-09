@@ -14,10 +14,10 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 @ApplyOptions<CustomSubCommand.Options>({
 	subcommands: createSubcommandMappings(
 		'list',
-		{ name: 'set', preconditions: ['RoleHigher'] },
-		{ name: 'remove', preconditions: ['RoleHigher'] },
+		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
+		{ name: 'remove', preconditions: ['Manager', 'RoleHigher'] },
 		'show',
-		{ name: 'test', preconditions: ['Moderator'] },
+		{ name: 'test', preconditions: ['Manager'] },
 	),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 })

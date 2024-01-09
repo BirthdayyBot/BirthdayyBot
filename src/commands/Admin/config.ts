@@ -35,7 +35,7 @@ type ConfigDefault = Omit<
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Administrator,
+	permissionLevel: PermissionLevels.Manager,
 })
 export class ConfigCommand extends CustomSubCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

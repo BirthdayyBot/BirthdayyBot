@@ -1,15 +1,19 @@
 import { OWNERS } from '#root/config';
 import { PermissionFlagsBits, type GuildMember } from 'discord.js';
 
+export function isGuildManager(member: GuildMember) {
+	return isGuildModerator(member) || canManageGuild(member);
+}
+
 export function isGuildModerator(member: GuildMember) {
-	return isGuildOwner(member) || canBanMember(member) || canManageRoles(member) || canManageGuild(member);
+	return canBanMember(member) || canManageRoles(member);
 }
 
 export function isGuildOwner(member: GuildMember) {
 	return member.id === member.guild.ownerId;
 }
 
-export function isGuildAdmin(member: GuildMember) {
+export function isGuildAdministrator(member: GuildMember) {
 	return member.permissions.has(PermissionFlagsBits.Administrator);
 }
 

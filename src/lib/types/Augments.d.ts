@@ -1,9 +1,8 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
 import type { Birthday, Guild, User } from '#root/utilities/db/index';
-import type { WritePrecisionType } from '@influxdata/influxdb-client';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
-import type { WebhookClient } from 'discord.js';
+import 'discord.js';
 import type { Events } from './Enums.js';
 
 declare module 'discord.js' {
@@ -32,6 +31,7 @@ declare module '@sapphire/framework' {
 		Moderator: never;
 		ServerOwner: never;
 		RoleHigher: never;
+		Manager: never;
 	}
 
 	interface SapphireClient {

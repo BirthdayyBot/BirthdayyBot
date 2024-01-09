@@ -111,6 +111,9 @@ function sharedPreconditionPermissionsLevel(command: CustomCommand | CustomSubCo
 		case PermissionLevels.ServerOwner:
 			container.append('ServerOwner');
 			break;
+		case PermissionLevels.Manager:
+			container.append('Manager');
+			break;
 		default:
 			throw new Error(
 				`SkyraCommand[${command.name}]: "permissionLevel" was specified as an invalid permission level (${options.permissionLevel}).`,
