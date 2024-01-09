@@ -2,14 +2,9 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator studio-client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native"]
-}
-
 datasource db {
     provider     = "mysql"
-    url          = env("DB_URL")
+    url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
 

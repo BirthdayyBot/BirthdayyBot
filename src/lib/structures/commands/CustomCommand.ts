@@ -1,6 +1,5 @@
 import { PermissionLevels } from '#lib/types/Enums';
-import { defaultClientPermissions, defaultUserPermissions } from '#lib/types/permissions';
-import { BOT_OWNER } from '#utils/environment';
+import { OWNERS } from '#root/config';
 import { Command, PreconditionContainerArray, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { CacheType } from 'discord.js';
@@ -84,13 +83,10 @@ export namespace CustomSubCommand {
 }
 
 function sharedCommandOptions(options: CustomCommand.Options | CustomSubCommand.Options) {
-	const { requiredClientPermissions = [], requiredUserPermissions = [] } = options;
 	return {
 		cooldownDelay: 10_000,
 		cooldownLimit: 2,
-		cooldownFilteredUsers: BOT_OWNER,
-		requiredClientPermissions: defaultClientPermissions.add(requiredClientPermissions),
-		requiredUserPermissions: defaultUserPermissions.add(requiredUserPermissions),
+		cooldownFilteredUsers: OWNERS,
 		...options,
 	};
 }
@@ -114,6 +110,9 @@ function sharedPreconditionPermissionsLevel(command: CustomCommand | CustomSubCo
 			break;
 		case PermissionLevels.ServerOwner:
 			container.append('ServerOwner');
+			break;
+		case PermissionLevels.Manager:
+			container.append('Manager');
 			break;
 		default:
 			throw new Error(

@@ -1,24 +1,13 @@
-import {
-	Command,
-	container,
-	type ChatInputCommandSuccessPayload,
-	type ContextMenuCommandSuccessPayload,
-	type MessageCommandSuccessPayload,
-	type PreconditionEntryResolvable,
-} from '@sapphire/framework';
+import { type PreconditionEntryResolvable } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
-import { cyan } from 'colorette';
 import {
 	ChatInputCommandInteraction,
 	CommandInteraction,
 	EmbedBuilder,
-	Guild,
 	Message,
 	MessagePayload,
-	User,
 	userMention,
-	type APIUser,
 	type InteractionReplyOptions,
 } from 'discord.js';
 
@@ -42,53 +31,6 @@ export function sendLoadingMessage(message: Message): Promise<typeof message> {
 	return send(message, {
 		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')],
 	});
-}
-
-export function logSuccessCommand(
-	payload: ContextMenuCommandSuccessPayload | ChatInputCommandSuccessPayload | MessageCommandSuccessPayload,
-): void {
-	let successLoggerData: ReturnType<typeof getSuccessLoggerData>;
-
-	if ('interaction' in payload) {
-		successLoggerData = getSuccessLoggerData(payload.interaction.guild, payload.interaction.user, payload.command);
-	} else {
-		successLoggerData = getSuccessLoggerData(payload.message.guild, payload.message.author, payload.command);
-	}
-
-	container.logger.debug(
-		`${successLoggerData.shard} - ${successLoggerData.commandName} ${successLoggerData.author} ${successLoggerData.sentAt}`,
-	);
-}
-
-export function getSuccessLoggerData(guild: Guild | null, user: User, command: Command) {
-	const shard = getShardInfo(guild?.shardId ?? 0);
-	const commandName = getCommandInfo(command);
-	const author = getAuthorInfo(user);
-	const sentAt = getGuildInfo(guild);
-
-	return { shard, commandName, author, sentAt };
-}
-
-export function parseBoolean(bool: string | boolean): boolean {
-	if (typeof bool === 'boolean') return bool;
-	return ['true', 't', '1', 'yes', 'y'].includes(bool.toLowerCase());
-}
-
-function getShardInfo(id: number) {
-	return `[${cyan(id.toString())}]`;
-}
-
-function getCommandInfo(command: Command) {
-	return cyan(command.name);
-}
-
-function getAuthorInfo(author: User | APIUser) {
-	return `${author.username}[${cyan(author.id)}]`;
-}
-
-function getGuildInfo(guild: Guild | null) {
-	if (guild === null) return 'Direct Messages';
-	return `${guild.name}[${cyan(guild.id)}]`;
 }
 
 export function resolveTarget(interaction: ChatInputCommandInteraction) {

@@ -1,10 +1,11 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
-import { TimezoneWithLocale } from '#utils/common/date';
-import { BirthdayyBotId, Emojis, LanguageFormatters, OwnerID, rootFolder } from '#utils/constants';
-import { isProduction } from '#utils/env';
-import { DEBUG, ROOT_DIR } from '#utils/environment';
+import { minutes } from '#lib/utils/common/times';
+import { TimezoneWithLocale } from '#lib/utils/common/timezone';
+import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
+import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
-import { LogLevel, container, type ClientLoggerOptions } from '@sapphire/framework';
+import { ConnectionOptions } from '@influxdata/influxdb-client';
+import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
@@ -18,8 +19,6 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
-import type { BotList } from '@swiizyy/plugin-botlist';
-import type { InfluxOptions } from '@swiizyy/plugin-influxdb';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -29,6 +28,7 @@ import {
 	type OAuth2Scopes,
 } from 'discord-api-types/v10';
 import {
+	Options,
 	channelMention,
 	roleMention,
 	type ClientOptions,
@@ -39,13 +39,13 @@ import {
 import type { FormatFunction, InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
-export const OWNERS = envParseArray('BOT_OWNER', [OwnerID.Chillihero, OwnerID.Swiizyy]);
+export const OWNERS = envParseArray('CLIENT_OWNERS');
 
 function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
 
 	return {
-		id: envParseString('CLIENT_ID', '266624760782258186'),
+		id: envParseString('CLIENT_ID'),
 		secret: envParseString('OAUTH_SECRET'),
 		cookie: envParseString('OAUTH_COOKIE', 'BIRTHDAYY_AUTH'),
 		redirect: envParseString('OAUTH_REDIRECT_URI', 'http://127.0.0.1:3000/oauth/callback'),
@@ -64,22 +64,6 @@ function parseApi(): ServerOptions | undefined {
 		origin: envParseString('API_ORIGIN', 'http://127.0.0.1:3000'),
 		listenOptions: { port: envParseInteger('API_PORT', 3000) },
 		automaticallyConnect: false,
-	};
-}
-
-function parseBotListOptions(): BotList.Options {
-	return {
-		clientId: BirthdayyBotId.Birthdayy,
-		debug: DEBUG,
-		shard: true,
-		autoPost: {
-			enabled: isProduction,
-		},
-		keys: {
-			topGG: envParseString('TOPGG_TOKEN', ''),
-			discordListGG: envParseString('DISCORDLIST_TOKEN', ''),
-			discordBotList: envParseString('DISCORDBOTLIST_TOKEN', ''),
-		},
 	};
 }
 
@@ -107,6 +91,7 @@ function parseInternationalizationDefaultVariables() {
 		SUCCESS: Emojis.Success,
 		FAIL: Emojis.Fail,
 		PLUS: Emojis.Plus,
+		HEART: Emojis.Heart,
 		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
 		CLIENT_ID: process.env.CLIENT_ID,
 		...parseInternationalizationDefaultVariablesPermissions(),
@@ -170,7 +155,7 @@ function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 			port: envParseNumber('REDIS_PORT', 6379),
 			password: REDIS_PASSWORD,
 			host: envParseString('REDIS_HOST', 'localhost'),
-			db: envParseNumber('REDIS_DB'),
+			db: envParseInteger('REDIS_DB'),
 			username: REDIS_USERNAME,
 		},
 	};
@@ -195,58 +180,49 @@ function parsePresenceOptions(): PresenceData {
 	};
 }
 
-function parseLoggerOptions(): ClientLoggerOptions {
-	return {
-		level: DEBUG ? LogLevel.Debug : LogLevel.Info,
-		instance: container.logger,
-	};
-}
-
 export const SENTRY_OPTIONS: NodeOptions = {
 	debug: DEBUG,
 	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
 };
 
-function parseSentryOptions() {
-	return {
-		loadSentryErrorListeners: true,
-		root: ROOT_DIR,
-		options: SENTRY_OPTIONS,
-	};
-}
-
-export function parseAnalytics(): InfluxOptions {
-	if (!envParseBoolean('INFLUX_ENABLED', false)) return {};
+export function parseAnalytics(): ConnectionOptions {
+	const url = envParseString('INFLUX_URL');
+	const token = envParseString('INFLUX_TOKEN');
 
 	return {
-		url: envParseString('INFLUX_URL'),
-		token: envParseString('INFLUX_TOKEN'),
-		org: envParseString('INFLUX_ORG'),
-		writeBucket: envParseString('INFLUX_WRITE_BUCKET'),
+		url,
+		token,
 	};
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
+	allowedMentions: { users: [], roles: [] },
 	api: parseApi(),
-	analytics: parseAnalytics(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
-	loadDefaultErrorListeners: true,
-	logger: parseLoggerOptions(),
+	loadDefaultErrorListeners: false,
+	logger: {
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
+	},
 	shards: 'auto',
-	botList: parseBotListOptions(),
+	makeCache: Options.cacheEverything(),
+	sweepers: {
+		...Options.DefaultSweeperSettings,
+		messages: {
+			interval: minutes.toSeconds(3),
+			lifetime: minutes.toSeconds(15),
+		},
+	},
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
 	presence: parsePresenceOptions(),
-	sentry: parseSentryOptions(),
-	loadInfluxDefaultListeners: true,
 };
 
 function parseWebhookError(): WebhookClientData | null {
-	if (!envIsDefined('DISCORD_ERROR_WEBHOOK_ID', 'DISCORD_ERROR_WEBHOOK_TOKEN')) return null;
+	if (!envIsDefined('WEBHOOK_ERROR_ID', 'WEBHOOK_ERROR_TOKEN')) return null;
 
 	return {
-		id: envParseString('DISCORD_ERROR_WEBHOOK_ID'),
-		token: envParseString('DISCORD_ERROR_WEBHOOK_TOKEN'),
+		id: envParseString('WEBHOOK_ERROR_ID'),
+		token: envParseString('WEBHOOK_ERROR_TOKEN'),
 	};
 }
 

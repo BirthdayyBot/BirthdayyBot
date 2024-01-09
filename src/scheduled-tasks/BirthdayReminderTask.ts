@@ -1,28 +1,29 @@
 import { sendMessage } from '#lib/discord/message';
+import { CdnUrls, Emojis } from '#lib/utils/constants';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
-import { BOT_ADMIN_LOG, DEBUG, Emojis, IMG_CAKE, MAIN_DISCORD } from '#utils/environment';
-import { logAll } from '#utils/functions/config';
+import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
-import { Time } from '@sapphire/cron';
 import { ApplyOptions } from '@sapphire/decorators';
+import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
+import { envParseString } from '@skyra/env-utilities';
 import {
 	AttachmentBuilder,
-	codeBlock,
 	DiscordAPIError,
 	Guild,
 	GuildMember,
-	inlineCode,
 	RESTJSONErrorCodes,
 	Role,
-	roleMention,
 	ThreadAutoArchiveDuration,
+	codeBlock,
+	inlineCode,
+	roleMention,
 	userMention,
 	type APIEmbed,
 	type EmbedField,
@@ -81,7 +82,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (isCustom) {
 			container.logger.info('[BirthdayTask] Custom Bot task');
-			const guildOffset = await container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
+			const guildOffset = await container.utilities.guild.get.GuildTimezone(envParseString('CLIENT_MAIN_GUILD'));
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
 				return container.logger.debug(
@@ -91,7 +92,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
 				utcOffset,
-				MAIN_DISCORD,
+				envParseString('CLIENT_MAIN_GUILD'),
 			);
 		} else {
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
@@ -192,7 +193,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			added: false,
 			message: 'Not set',
 		};
-		logAll(config);
+
+		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
+		this.container.logger.debug(`[BirthdayTask] Member: ${member.id} [${member.user.tag}]`);
 
 		if (birthdayRole) {
 			const role = await guild.roles.fetch(birthdayRole);
@@ -215,7 +218,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			title: `${Emojis.News} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail: {
-				url: IMG_CAKE,
+				url: CdnUrls.Cake,
 			},
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);

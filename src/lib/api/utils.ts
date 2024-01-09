@@ -1,10 +1,8 @@
-import { isAdmin } from '#utils/functions/permissions';
-import { Time } from '@sapphire/cron';
+import { canManageGuild } from '#utils/functions/permissions';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ApiRequest, HttpCodes, type ApiResponse, type LoginData } from '@sapphire/plugin-api';
 import { RateLimitManager } from '@sapphire/ratelimits';
-import { sleep } from '@sapphire/utilities';
 import { Locale, PermissionFlagsBits, type RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
 import {
 	Client,
@@ -63,10 +61,9 @@ export function ratelimit(time: number, limit = 1, auth = false) {
 	);
 }
 
-export async function canManage(guild: Guild, member: GuildMember): Promise<boolean> {
-	await sleep(Time.Second * 3);
+export function canManage(guild: Guild, member: GuildMember): boolean {
 	if (guild.ownerId === member.id) return true;
-	return isAdmin(member);
+	return canManageGuild(member);
 }
 
 async function getManageable(

@@ -1,3 +1,4 @@
+import { DMMessage, GuildMessage } from '#lib/types/Discord';
 import type { Message } from 'discord.js';
 
 /**
@@ -5,7 +6,7 @@ import type { Message } from 'discord.js';
  * @param message The message to check.
  * @returns Whether the message was sent in a guild.
  */
-export function isGuildMessage(message: Message): message is Message<true> {
+export function isGuildMessage(message: Message): message is GuildMessage {
 	return message.guild !== null;
 }
 
@@ -14,6 +15,6 @@ export function isGuildMessage(message: Message): message is Message<true> {
  * @param message The message to check.
  * @returns Whether the message was sent in a DM channel.
  */
-export function isPrivateMessage(message: Message): message is Message<false> {
+export function isPrivateMessage(message: Message): message is DMMessage {
 	return message.guild === null;
 }
