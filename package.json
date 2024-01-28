@@ -74,7 +74,7 @@
     "dayjs": "^1.11.10",
     "discord-api-types": "^0.37.67",
     "discord.js": "^14.14.1",
-    "i18next": "^23.7.20",
+    "i18next": "^23.8.0",
     "prisma": "^5.8.1",
     "reflect-metadata": "^0.2.1"
   },
@@ -85,7 +85,7 @@
     "@sapphire/eslint-config": "^5.0.3",
     "@sapphire/eslint-plugin-result": "^2.0.2",
     "@sapphire/ts-config": "^5.0.0",
-    "@types/node": "^20.11.8",
+    "@types/node": "^20.11.9",
     "@types/ws": "^8.5.10",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
