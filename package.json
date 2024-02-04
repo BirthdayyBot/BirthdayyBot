@@ -97,7 +97,7 @@
     "husky": "^9.0.10",
     "lint-staged": "^15.2.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "prettier-plugin-packagejson": "^2.4.10",
     "prettier-plugin-prisma": "^5.0.0",
     "tsc-watch": "^6.0.4",
