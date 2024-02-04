@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@influxdata/influxdb-client": "^1.33.2",
-    "@prisma/client": "^5.8.1",
+    "@prisma/client": "^5.9.1",
     "@sapphire/async-queue": "^1.5.2",
     "@sapphire/decorators": "^6.0.4",
     "@sapphire/discord.js-utilities": "^7.1.6",
@@ -65,17 +65,17 @@
     "@sapphire/ratelimits": "^2.4.9",
     "@sapphire/shapeshift": "^3.9.6",
     "@sapphire/utilities": "^3.15.3",
-    "@sentry/integrations": "^7.98.0",
-    "@sentry/node": "^7.98.0",
-    "@sentry/tracing": "^7.98.0",
+    "@sentry/integrations": "^7.99.0",
+    "@sentry/node": "^7.99.0",
+    "@sentry/tracing": "^7.99.0",
     "@skyra/env-utilities": "^1.3.0",
-    "bullmq": "^5.1.5",
+    "bullmq": "^5.1.8",
     "colorette": "^2.0.20",
     "dayjs": "^1.11.10",
     "discord-api-types": "^0.37.67",
     "discord.js": "^14.14.1",
-    "i18next": "^23.8.0",
-    "prisma": "^5.8.1",
+    "i18next": "^23.8.2",
+    "prisma": "^5.9.1",
     "reflect-metadata": "^0.2.1"
   },
   "devDependencies": {
@@ -85,20 +85,20 @@
     "@sapphire/eslint-config": "^5.0.3",
     "@sapphire/eslint-plugin-result": "^2.0.2",
     "@sapphire/ts-config": "^5.0.0",
-    "@types/node": "^20.11.9",
+    "@types/node": "^20.11.16",
     "@types/ws": "^8.5.10",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "husky": "^9.0.6",
-    "lint-staged": "^15.2.0",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.2.4",
-    "prettier-plugin-packagejson": "^2.4.9",
+    "prettier-plugin-packagejson": "^2.4.10",
     "prettier-plugin-prisma": "^5.0.0",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.3.3"
@@ -119,9 +119,9 @@
   "lint-staged": {
     "*.{mjs,js,ts}": "eslint --fix --ext mjs,js,ts"
   },
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "yarn@4.1.0",
   "volta": {
     "node": "18.19.0",
-    "yarn": "4.0.2"
+    "yarn": "4.1.0"
   }
 }
