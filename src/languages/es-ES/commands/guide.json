@@ -1,21 +1,21 @@
 {
-  "guideName": "guía",
-  "guideDescription": "¡Necesita una guía de configuración rápida! \n¡No te preocupes, esto te ayudará!",
+  "guideName": "guide",
+  "guideDescription": "Need a quick setup Guide! Don't worry, this will help you!",
   "embed": {
-    "title": "{{emoji.heart}} {{name}} ¡Guía!",
-    "description": "{{emoji.exclamation}} Al escribir **/ayuda** en el chat, puedes consultar todas mis funciones y comandos disponibles.",
+    "title": "{{emoji.heart}} {{name}} Guide!",
+    "description": "{{emoji.exclamation}} By typing **/help** in chat, you can check out all my features and available commands.",
     "fields": [
       {
-        "name": "Configurar cumpleaños",
-        "value": "{{emoji}} ¡Asegúrate de configurar tus **Configuraciones del servidor** con **/config <config>**!\n{{emoji}} Utilice {{command}} para ver su configuración actual."
+        "name": "Get Started",
+        "value": "{{emoji.exclamation}} Set your Birthday with {{command.set}}\n{{emoji.arrowRight}} Find more on [Documentation]({{quickstart}})"
       },
       {
-        "name": "Importante",
-        "value": "{{emojis.exclamation}} Mi rol **más alto** debe estar **por encima** del rol del niño que cumple años.\n{{emojis.arrowRight}} Únete a [Birthdayy HQ]({{invite}}) para conocer al desarrollador y ayudar a mejorar Birthdayy {{emojis.cake}}\n{{emojis.heart}} ¿Te gusta **Cumpleaños**? \n¡Considera [invitar]({{invite}}) y [votar]({{vote}}) por mí!\n{{emojis.plus}} ¿Quieres acceder a las funciones beta? \n[Apóyanos en Patreon]({{premium}})"
+        "name": "Configure Birthdayy",
+        "value": "{{emoji.exclamation}} Make sure to set your **Serverconfigurations** with **/config <config>**!\n{{emoji.arrowRight}} Use {{command.list}} to see your current config setting."
       },
       {
-        "name": "Empezar",
-        "value": "{{emoji}} Registra tu cumpleaños con {{command}}\n{{emoji}} Encuentre más en [Documentación]({{url}})"
+        "name": "Important",
+        "value": "{{emojis.exclamation}} My **highest** Role needs to be **above** the birthday child role.\n{{emojis.arrowRight}} Join the [Birthdayy HQ]({{invite}}) to meet the Developer and help improving Birthdayy {{emojis.cake}} \n{{emojis.heart}} Like **Birthdayy**? Consider [inviting]({{invite}}) and [voting]({{vote}}) for me!\n{{emojis.plus}} Want access to beta features? [Support us on Patreon]({{premium}})"
       }
     ]
   }
