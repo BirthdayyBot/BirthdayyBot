@@ -1,0 +1,8 @@
+{
+  "description": "Shows the invite link to add Birthdayy to your server.",
+  "inviteOptionsPermissionsName": "not-permissions",
+  "inviteOptionsPermissionsDescription": "If you want to get a link on which Skyra will not ask for permissions.",
+  "invitePermissionInviteText": "Invite Birthdayy to your server",
+  "invitePermissionsDescription": "Don't be afraid to uncheck some permissions, I will let you know if you're trying to run a command without permissions.",
+  "invitePermissionSupportServerText": "Join Support Server"
+}
