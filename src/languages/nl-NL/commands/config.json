@@ -1,0 +1,67 @@
+{
+    "name": "config",
+    "description": "Manage the configuration for this server",
+    "viewName": "view",
+    "viewDescription": "View the current configuration",
+    "viewTitleEmbed": "**Current settings**:",
+    "viewTitleEmbedModified": "**Modified settings**:",
+    "viewFieldsEmbed": [
+        {
+            "name": "Announcement Channel",
+            "value": "{{announcementChannel}}",
+            "inline": false
+        },
+        {
+            "name": "Birthday Role",
+            "value": "{{birthdayRole}}",
+            "inline": false
+        },
+        {
+            "name": "Mention Role",
+            "value": "{{birthdayPingRole}}",
+            "inline": false
+        },
+        {
+            "name": "Overview Channel",
+            "value": "{{overviewChannel}}",
+            "inline": false
+        },
+        {
+            "name": "Timezone",
+            "value": "{{timezone}}",
+            "inline": false
+        },
+        {
+            "name": "{{PLUS}} Birthday Message",
+            "value": "{{announcementMessage}}",
+            "inline": false
+        }
+    ],
+    "viewMessageRequiredPremimAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+    "editName": "edit",
+    "editDescription": "Edit the configuration for this server",
+    "editSuccess": "Successfully edited the configuration for this server.",
+    "editFailure": "I wasn't able to save your changes, sorry 😦",
+    "editOptionsAnnoucementChannelDescription": "If set, the channel to post birthday announcements in",
+    "editOptionsAnnoucementMessageDescription": "If set, the message to post when someone has a birthday",
+    "editOptionsBirthdayRoleDescription": "If set, the role to give to people on their birthday",
+    "editOptionsBirthdayPingRoleDescription": "If set, the role to ping when someone has a birthday",
+    "editOptionsOverviewChannelDescription": "If set, the channel to post the birthday overview in",
+    "editOptionsTimezoneDescription": "The timezone to use for birthdays",
+    "editChannelCanSendEmbeds": "I need the permission to send embeds in {{channel}} to be able to post the birthday announcement there.",
+    "editMessageTooLong": "The message is too long, please shorten it to {{maxLength}} characters.",
+    "editMessagePremiumRequired": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+    "editRoleHigher": "I need the role {{role}} to be higher than the birthday role to be able to give it to people on their birthday.",
+    "editRoleNotMentionnable": "I need the role {{role}} to be mentionnable to be able to ping it when someone has a birthday.",
+    "resetName": "reset",
+    "resetDescription": "Reset a configuration option to its default setting",
+    "resetOptionsKeyName": "key",
+    "resetOptionsKeyDescription": "The option to reset",
+    "resetOptionsKeyChoicesAll": "all",
+    "keyAnnouncementChannel": "announcement-channel",
+    "keyAnnouncementMessage": "announcement-message",
+    "keyBirthdayRole": "birthday-role",
+    "keyBirthdayPingRole": "birthday-ping-role",
+    "keyOverviewChannel": "overview-channel",
+    "keyTimezone": "timezone"
+}
