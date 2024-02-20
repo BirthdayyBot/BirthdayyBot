@@ -1,96 +1,67 @@
 {
-  "timezone": {
-    "choices": {
-      "0": "Greenwich Mean Time | GMT | UTC +0",
-      "1": "Central European Time | CET | UTC +1",
-      "2": "Eastern European Time | EET | UTC +2",
-      "3": "Moscow Standard Time | MSK | UTC +3",
-      "4": "Gulf Standard Time | GST | UTC +4",
-      "5": "Pakistan Standard Time | PKT | UTC +5",
-      "6": "Bangladesh Standard Time | BST | UTC  6",
-      "7": "Indochina Time | ICT | UTC  7",
-      "8": "China Standard Time | CST | UTC +8",
-      "9": "Japan Standard Time | JST | UTC +9",
-      "10": "Australian Eastern Standard Time | AEST | UTC +10",
-      "11": "Solomon Island Time | SBT | UTC +11",
-      "12": "New Zealand Standard Time | NZST | UTC +12",
-      "-1": "Azores Time | AZOT | UTC -1",
-      "-2": "Fernando de Noronha Time | FNT | UTC -2",
-      "-3": "Amazon Time Zone | AMT | UTC -3",
-      "-4": "Atlantic Standard Time | AST | UTC -4",
-      "-5": "Eastern Standard Time | EST | UTC -5",
-      "-6": "Central Standard Time | CST | UTC -6",
-      "-7": "Mountain Standard Time | MST | UTC -7",
-      "-8": "Pacific Standard Time | PST | UTC -8",
-      "-9": "Alaska Standard Time | AKST | UTC -9",
-      "-10": "Hawaii-Aleutian Standard Time | HST | UTC -10",
-      "-11": "Niue Time | NUT | UTC -11"
-    },
-    "timezoneDescription": "En qué zona horaria se encuentra ?",
-    "timezoneName": "zona-horaria",
-    "success": "La **Zona horaria** se ha establecido en {{timezone}}."
-  },
-  "announcementChannel": {
-    "cannotPermissions": "Oh... parece que no puedo enviar mensajes de texto en esta sala. ¿Puedes echar un vistazo?",
-    "channelName": "canal",
-    "channelDescription": "¿A qué salón debo enviar el mensaje de anuncio?",
-    "success": "El canal de anuncios se ha configurado correctamente en {{channel}}."
-  },
-  "announcementChannelDescription": "Sala donde enviaría un mensaje cuando es el cumpleaños de un usuario.",
-  "announcementChannelName": "canal-de-anuncios",
-  "announcementMessage": {
-    "messageDescription": "{MENTION}, {USERNAME}, {DISCRIMINATOR}, {NEW_LINE}, {SERVERNAME}",
-    "messageName": "mensaje",
-    "requirePremium": "Esta función se encuentra actualmente en __Etapa Beta__ y **Solo Cumpleaños Premium**.\nSi ya está interesado en utilizar esta y futuras funciones, puede apoyar el desarrollo en [Patreon]({{url}}).`),",
-    "success": "El mensaje del anuncio ha sido modificado.\n\n{{mensaje}}"
-  },
-  "announcementMessageDescription": "Mensaje que enviaría en el cumpleaños de un usuario.",
-  "announcementMessageName": "mensaje-anuncio",
-  "birthdayRole": {
-    "highestBotRole": "Oh, no puedo asignar este rol... Parece que es más alto que mi rol más alto.",
-    "roleDescription": "Rol que se asignará al usuario en su cumpleaños",
-    "roleName": "role",
-    "success": "La función de cumpleaños se ha establecido correctamente en {{role}}."
-  },
-  "birthdayRoleDescription": "Rol asignado al usuario en su cumpleaños",
-  "birthdayRoleName": "papel-de-cumpleaños",
-  "listDescription": "Listar todos los cumpleaños en el servidor.",
-  "listName": "lista",
-  "overviewChannel": {
-    "cannotPermissions": "No tengo permiso para enviar mensajes en {{channel}}.",
-    "channelDescription": "Canal donde se debe enviar y actualizar la vista previa",
-    "channelName": "canal",
-    "success": "El canal de vista previa se ha configurado en {{canal}} y el nuevo [mensaje]({{mensaje}})."
-  },
-  "overviewChannelDescription": "Sala que enumera todos los cumpleaños del servidor.",
-  "overviewChannelName": "overview-channel",
-  "pingRole": {
-    "roleDescription": "¿Qué función debo mencionar en el mensaje de anuncio?",
-    "roleName": "role",
-    "success": "La función de mención se estableció correctamente en {{role}}."
-  },
-  "pingRoleDescription": "Mencionar un papel en el cumpleaños de alguien",
-  "pingRoleName": "rol-de-ping",
-  "reset": {
-    "choices": {
-      "announcementChannel": "Canal de anuncios",
-      "birthdayPingRole": "Función de ping de cumpleaños",
-      "birthdayRole": "Papel de cumpleaños",
-      "logChannel": "Canal de registro",
-      "overviewChannel": "Canal de descripción general",
-      "overviewMessage": "Mensaje de descripción general",
-      "timezone": "Zona horaria",
-      "announcementMessage": "Mensaje de anuncio"
-    },
-    "configDescription": "Configuración que desea restablecer",
-    "configName": "configuración",
-    "error": "Se produjo un error al intentar restablecer la configuración {{config}}.",
-    "success": "La configuración {{config}} se ha restablecido correctamente."
-  },
-  "timezoneDescription": "Cambie la zona horaria cuando Birthdayy desee feliz cumpleaños.",
-  "timezoneName": "zona-horaria",
-  "resetDescription": "Restablezca los ajustes de configuración de su servidor",
-  "resetName": "reiniciar",
-  "configDescription": "Configurar los ajustes del servidor",
-  "configName": "configuración"
+    "name": "config",
+    "description": "Manage the configuration for this server",
+    "viewName": "view",
+    "viewDescription": "View the current configuration",
+    "viewTitleEmbed": "**Current settings**:",
+    "viewTitleEmbedModified": "**Modified settings**:",
+    "viewFieldsEmbed": [
+        {
+            "name": "Announcement Channel",
+            "value": "{{announcementChannel}}",
+            "inline": false
+        },
+        {
+            "name": "Birthday Role",
+            "value": "{{birthdayRole}}",
+            "inline": false
+        },
+        {
+            "name": "Mention Role",
+            "value": "{{birthdayPingRole}}",
+            "inline": false
+        },
+        {
+            "name": "Overview Channel",
+            "value": "{{overviewChannel}}",
+            "inline": false
+        },
+        {
+            "name": "Timezone",
+            "value": "{{timezone}}",
+            "inline": false
+        },
+        {
+            "name": "{{PLUS}} Birthday Message",
+            "value": "{{announcementMessage}}",
+            "inline": false
+        }
+    ],
+    "viewMessageRequiredPremimAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+    "editName": "edit",
+    "editDescription": "Edit the configuration for this server",
+    "editSuccess": "Successfully edited the configuration for this server.",
+    "editFailure": "I wasn't able to save your changes, sorry 😦",
+    "editOptionsAnnoucementChannelDescription": "If set, the channel to post birthday announcements in",
+    "editOptionsAnnoucementMessageDescription": "If set, the message to post when someone has a birthday",
+    "editOptionsBirthdayRoleDescription": "If set, the role to give to people on their birthday",
+    "editOptionsBirthdayPingRoleDescription": "If set, the role to ping when someone has a birthday",
+    "editOptionsOverviewChannelDescription": "If set, the channel to post the birthday overview in",
+    "editOptionsTimezoneDescription": "The timezone to use for birthdays",
+    "editChannelCanSendEmbeds": "I need the permission to send embeds in {{channel}} to be able to post the birthday announcement there.",
+    "editMessageTooLong": "The message is too long, please shorten it to {{maxLength}} characters.",
+    "editMessagePremiumRequired": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+    "editRoleHigher": "I need the role {{role}} to be higher than the birthday role to be able to give it to people on their birthday.",
+    "editRoleNotMentionnable": "I need the role {{role}} to be mentionnable to be able to ping it when someone has a birthday.",
+    "resetName": "reset",
+    "resetDescription": "Reset a configuration option to its default setting",
+    "resetOptionsKeyName": "key",
+    "resetOptionsKeyDescription": "The option to reset",
+    "resetOptionsKeyChoicesAll": "all",
+    "keyAnnouncementChannel": "announcement-channel",
+    "keyAnnouncementMessage": "announcement-message",
+    "keyBirthdayRole": "birthday-role",
+    "keyBirthdayPingRole": "birthday-ping-role",
+    "keyOverviewChannel": "overview-channel",
+    "keyTimezone": "timezone"
 }
