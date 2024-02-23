@@ -1,7 +1,7 @@
 FROM node:18.19.0-alpine as base
 WORKDIR /app
 
-ENV HUSKY=0
+ENV YARN_DISABLE_GIT_HOOKS=1
 ENV CI=true
 
 RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' -O /etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub && \
@@ -12,8 +12,6 @@ COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node .yarn/ .yarn/
-
-RUN sed -i 's/"postinstall": "husky install .github\/husky"/"postinstall": ""/' ./package.json
 
 ENTRYPOINT ["dumb-init", "--"]
 
