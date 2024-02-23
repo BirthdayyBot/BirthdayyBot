@@ -3,7 +3,7 @@ import '#lib/setup/start';
 import { BirthdayyClient } from '#lib/BirthdayyClient';
 import { rootFolder } from '#lib/utils/constants';
 import { container } from '@sapphire/pieces';
-import { RewriteFrames } from '@sentry/integrations';
+import { rewriteFramesIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 
 const client = new BirthdayyClient();
@@ -19,7 +19,7 @@ async function main() {
 				new Sentry.Integrations.LinkedErrors(),
 				new Sentry.Integrations.Console(),
 				new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
-				new RewriteFrames({ root: rootFolder }),
+				rewriteFramesIntegration({ root: rootFolder }),
 			],
 		});
 	}
