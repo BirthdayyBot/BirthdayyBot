@@ -1,4 +1,4 @@
-FROM node:18.19.0-alpine as base
+FROM node:18.20.0-alpine as base
 WORKDIR /app
 
 ENV YARN_DISABLE_GIT_HOOKS=1
