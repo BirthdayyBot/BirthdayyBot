@@ -1,4 +1,4 @@
-import { Emojis, PREMIUM_URL } from '#utils/environment';
+import { Emojis } from '#lib/utils/constants';
 import type { APIEmbed } from 'discord.js';
 
 // ! Currently not working??
@@ -29,7 +29,7 @@ export const VoteEmbed: APIEmbed = {
 		},
 		{
 			name: 'Birthdayy Premium',
-			value: `${Emojis.ArrowRight} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](${PREMIUM_URL})`,
+			value: `${Emojis.ArrowRight} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](https://www.patreon.com/birthdayy)`,
 			inline: false,
 		},
 	],

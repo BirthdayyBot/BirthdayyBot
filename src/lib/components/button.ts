@@ -1,4 +1,5 @@
-import { Emojis, Permission_Bits } from '#utils/environment';
+import { Emojis } from '#lib/utils/constants';
+import { Permission_Bits } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ButtonBuilder, ButtonStyle, ComponentType, OAuth2Scopes, type ButtonComponentData } from 'discord.js';

@@ -1,9 +1,10 @@
 import { container } from '@sapphire/framework';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
-import { ChatInputCommandInteraction, Locale, time, type TimestampStylesString } from 'discord.js';
+import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
 import { addZeroToSingleDigitNumber } from './string.js';
+import { TIMEZONE_VALUES } from './timezone.js';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
@@ -15,15 +16,6 @@ export interface TimezoneObject {
 	timezone?: typeof TIMEZONE_VALUES;
 }
 
-export function getCurrentDateInLocaleTimezone(locale: Locale) {
-	const timezone = TimezoneWithLocale[locale];
-	return dayjs().tz(timezone);
-}
-
-export function getCurrentDateFormatted(date: Dayjs): string {
-	return date.format('YYYY/MM/DD');
-}
-
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	const [year, month, day] = date.split(fromHumanFormat ? '.' : '-');
 	return `${day}. ${numberToMonthName(Number(month))} ${year.includes('XXXX') ? '' : year}`;
@@ -31,7 +23,7 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 
 export function splitDateString(date: string, separator = '-') {
 	const [year, month, day] = date.split(separator);
-	return { year, month, day };
+	return { year, month: Number(month), day };
 }
 
 const months = [
@@ -51,10 +43,6 @@ const months = [
 
 export function numberToMonthName(number: number) {
 	return months[number - 1];
-}
-
-export function monthNameToNumber(month: string) {
-	return months.indexOf(month as any) + 1;
 }
 
 export function parseInputDate(date: string | Date): Date {
@@ -77,50 +65,6 @@ export function parseInputDate(date: string | Date): Date {
 
 	return inputDate;
 }
-
-export function formatMonthWithLeadingZero(month: number) {
-	const monthString = month.toString().padStart(2, '0');
-	return `-${monthString}-`;
-}
-
-export function formatDateWithMonthAndDay(date: string | Date) {
-	const inputDate = parseInputDate(date);
-	const dayString = inputDate.getDate().toString().padStart(2, '0');
-	const monthString = (inputDate.getMonth() + 1).toString().padStart(2, '0');
-	return `-${monthString}-${dayString}`;
-}
-
-export function isDateString(date: string): boolean {
-	const regex = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-	return regex.test(date);
-}
-
-export const TIMEZONE_VALUES: Record<number, string> = {
-	'-11': 'Pacific/Samoa',
-	'-10': 'Pacific/Honolulu',
-	'-9': 'America/Anchorage',
-	'-8': 'America/Los_Angeles',
-	'-7': 'America/Denver',
-	'-6': 'America/Chicago',
-	'-5': 'America/New_York',
-	'-4': 'America/Caracas',
-	'-3': 'America/Argentina/Buenos_Aires',
-	'-2': 'Atlantic/South_Georgia',
-	'-1': 'Atlantic/Azores',
-	0: 'Europe/London',
-	1: 'Europe/Paris',
-	2: 'Europe/Berlin',
-	3: 'Europe/Moscow',
-	4: 'Asia/Dubai',
-	5: 'Asia/Karachi',
-	6: 'Asia/Dhaka',
-	7: 'Asia/Jakarta',
-	8: 'Asia/Shanghai',
-	9: 'Asia/Tokyo',
-	10: 'Australia/Brisbane',
-	11: 'Pacific/Noumea',
-	12: 'Pacific/Fiji',
-};
 
 export function getCurrentOffset(): TimezoneObject {
 	let timezoneObject: TimezoneObject;
@@ -162,37 +106,3 @@ export function getDateFromInteraction(interaction: ChatInputCommandInteraction)
 
 	return `${year}-${month}-${day}`;
 }
-
-export const TimezoneWithLocale: Record<Locale, string> = {
-	[Locale.EnglishUS]: 'America/New_York',
-	[Locale.Greek]: 'Europe/Athens',
-	[Locale.Korean]: 'Asia/Seoul',
-	[Locale.Hungarian]: 'Europe/Budapest',
-	[Locale.Russian]: 'Europe/Moscow',
-	[Locale.French]: 'Europe/Paris',
-	[Locale.EnglishGB]: 'Europe/London',
-	[Locale.Indonesian]: 'Asia/Makassar',
-	[Locale.Bulgarian]: 'Europe/Sofia',
-	[Locale.ChineseCN]: 'Asia/Chongqing',
-	[Locale.ChineseTW]: 'Asia/Taipei',
-	[Locale.Croatian]: 'Europe/Zagreb',
-	[Locale.Czech]: 'Europe/Prague',
-	[Locale.Danish]: 'Europe/Copenhagen',
-	[Locale.Dutch]: 'Europe/Berlin',
-	[Locale.Finnish]: 'Europe/Helsinki',
-	[Locale.German]: 'Europe/Isle_of_Man',
-	[Locale.Hindi]: 'Africa/Lagos',
-	[Locale.Italian]: 'Europe/Rome',
-	[Locale.Japanese]: 'Asia/Tokyo',
-	[Locale.Lithuanian]: 'Europe/Vilnius',
-	[Locale.Norwegian]: 'Europe/Berlin',
-	[Locale.Polish]: 'Europe/Kyiv',
-	[Locale.PortugueseBR]: 'Europe/Lisbon',
-	[Locale.Romanian]: 'Europe/Chisinau',
-	[Locale.SpanishES]: 'Europe/Madrid',
-	[Locale.Swedish]: 'Europe/Berlin',
-	[Locale.Thai]: 'Asia/Bangkok',
-	[Locale.Turkish]: 'Asia/Istanbul',
-	[Locale.Ukrainian]: 'Europe/Simferopol',
-	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh',
-};

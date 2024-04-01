@@ -15,25 +15,25 @@
     "success": "Your birthday has been set to {{birthday}} on this server.",
     "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
     "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "list",
   "listDescription": "List all registered birthdays",
   "list": {
     "embedList": {
-        "title": "Upcoming birthdays on the server!",
-        "thumbnail" : {
-            "url": "https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png"
-        },
-        "footer": {
-            "text": "Manage your Birthday with /birthday set|remove"
-        }
+      "title": "Upcoming birthdays on the server!",
+      "thumbnail": {
+        "url": "https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png"
+      },
+      "footer": {
+        "text": "Manage your Birthday with /birthday set|remove"
+      }
     },
     "title": {
-        "month": "Birthdays in {{month}}",
-        "month_empty": "There are no birthdays for this month ({{month}}).",
-        "next": "Here is the list of the next 10 birthdays:",
-        "next_empty": "There are no birthdays on this server."
+      "month": "Birthdays in {{month}}",
+      "month_empty": "There are no birthdays for this month ({{month}}).",
+      "next": "Here is the list of the next 10 birthdays:",
+      "next_empty": "There are no birthdays on this server."
     },
     "monthName": "month",
     "monthDescription": "Which month do you want the birthday list for?",

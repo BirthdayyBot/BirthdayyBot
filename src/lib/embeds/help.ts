@@ -1,12 +1,14 @@
-import { Emojis, BOT_NAME, DOCS_URL, PREMIUM_URL } from '#utils/environment';
+import { WebsiteUrl } from '#lib/components/button';
+import { Emojis } from '#lib/utils/constants';
+import { CLIENT_NAME } from '#utils/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
 
 export const HelpEmbed: APIEmbed = {
-	title: `${Emojis.Book} ${BOT_NAME} Help`,
+	title: `${Emojis.Book} ${CLIENT_NAME} Help`,
 	description: `
   ${Emojis.Support} Confused what each command does?
-  ${Emojis.Link} Check out our docs: [Birthdayy Docs](${DOCS_URL})
-  ${Emojis.Plus} Unlock Beta / Premium Features: [Birthdayy Patreon](${PREMIUM_URL})\n
+  ${Emojis.Link} Check out our docs: [Birthdayy Docs](${WebsiteUrl('docs')})
+  ${Emojis.Plus} Unlock Beta / Premium Features: [Birthdayy Patreon](${WebsiteUrl('premium')})\n
   ${Emojis.Sign} \`<>\` required
   ${Emojis.Sign} \`[]\` optional
     `,

@@ -1,5 +1,5 @@
 import { getVoiceChannel } from '#lib/discord/channel';
-import { isProduction, isCustom, isDevelopment } from '#utils/env';
+import { isCustom, isDevelopment, isProduction } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -12,8 +12,8 @@ import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 export class DisplayStats extends ScheduledTask {
 	public async run() {
 		if (isCustom || isDevelopment) return container.logger.error('DisplayStats task is disabled.');
-		const guilds = await container.botList.computeGuilds();
-		const users = await container.botList.computeUsers();
+		const guilds = await container.client.computeGuilds();
+		const users = await container.client.computeUsers();
 		const serverCountChannel = await getVoiceChannel('951246486279172106');
 		const userCountChannel = await getVoiceChannel('1103307353320865832');
 

@@ -2,14 +2,9 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator studio-client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native"]
-}
-
 datasource db {
     provider     = "mysql"
-    url          = env("DB_URL")
+    url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
 
@@ -60,19 +55,6 @@ model User {
 
     @@index([username], map: "index_user_birthday")
     @@map("user")
-}
-
-model Blacklist {
-    id       BigInt   @id @default(autoincrement())
-    guildId  String   @map("guild_id") @db.VarChar(32)
-    userId   String   @map("user_id") @db.VarChar(32)
-    addedAt  DateTime @default(now()) @map("added_at") @db.Timestamp(0)
-    disabled Boolean  @default(false)
-
-    @@unique([userId, guildId], map: "unique_user_guild_blacklist")
-    @@index([guildId], map: "index_guild_id_blacklist")
-    @@index([userId], map: "index_user_id_blacklist")
-    @@map("blacklist")
 }
 
 model Premium {

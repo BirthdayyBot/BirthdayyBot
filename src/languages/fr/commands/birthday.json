@@ -15,7 +15,7 @@
     "success": "Votre anniversaire a bien été défini au {{birthday}} sur ce serveur.",
     "success_target": "L'anniversaire de {{target}} a bien été défini au {{birthday}} sur ce serveur",
     "hasNotPermissionManagesRoles": "Tu n'est pas autorisé à gérer les anniversaires d'autres utilisateurs.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "liste",
   "listDescription": "Lister tous les anniversaires enregistrés",

@@ -15,7 +15,7 @@
     "success": "Ihr Geburtstag wurde auf diesem Server auf den {{date}} gesetzt.",
     "success_target": "Der Geburtstag von {{target}} wurde auf diesem Server auf {{date}} gesetzt",
     "hasNotPermissionManagesRoles": "Es ist Ihnen nicht gestattet, die Geburtstage anderer Benutzer zu verwalten.",
-    "roleHigher": "The selected member has a role position that is higher than or equal to yours"
+    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "liste",
   "listDescription": "Listen Sie alle registrierten Geburtstage auf",

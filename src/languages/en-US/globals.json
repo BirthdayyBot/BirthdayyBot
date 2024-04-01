@@ -1,4 +1,10 @@
 {
-    "default": "{{key}} has not been localized for en-US yet.",
-    "none": "None"
+  "default": "{{key}} has not been localized for en-US yet.",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "none": "None",
+  "unset": "Not set",
+  "yes": "Yes",
+  "no": "No",
+  "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 }

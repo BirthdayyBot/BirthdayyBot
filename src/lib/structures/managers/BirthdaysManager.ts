@@ -1,14 +1,7 @@
 import { generateBirthdayList } from '#utils/birthday/birthday';
-import {
-	TimezoneWithLocale,
-	formatBirthdayMessage,
-	formatDateForDisplay,
-	formatDateWithMonthAndDay,
-	splitDateString,
-} from '#utils/common/index';
-import { Emojis, PrismaErrorCodeEnum } from '#utils/constants';
+import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
-import { BOT_COLOR, IMG_CAKE } from '#utils/environment';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { CollectionConstructor } from '@discordjs/collection';
 import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
@@ -19,9 +12,9 @@ import {
 	canSendEmbeds,
 	isGuildBasedChannel,
 } from '@sapphire/discord.js-utilities';
+import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { TOptions, resolveKey } from '@sapphire/plugin-i18next';
-import { Time } from '@sapphire/time-utilities';
 import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
@@ -74,13 +67,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		this.settings = settings;
 	}
 
-	public currentDate(format?: boolean) {
+	public currentDate() {
 		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
-		return format ? date.format('YYYY/MM/DD') : date.toDate();
+		return date;
 	}
 
 	public async findTodayBirthday() {
-		const contains = formatDateWithMonthAndDay(this.currentDate(true));
+		const contains = this.currentDate().format('MM-DD');
 		await this.fetch();
 		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
 	}
@@ -91,13 +84,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 	}
 
-	public async findBirthdayWithMonth(month: number) {
-		await this.fetch();
-		return this.filter(({ birthday }) => {
-			splitDateString(birthday);
-			const date = splitDateString(birthday);
-			return Number(date.month) === month;
-		}).toJSON();
+	public findBirthdayWithMonth(month: number) {
+		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
 	}
 
 	public findTeenNextBirthday() {
@@ -109,7 +97,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			returnObjects: true,
 		})) satisfies APIEmbed;
 
-		const embed = new EmbedBuilder(translateEmbed).setColor(BOT_COLOR);
+		const embed = new EmbedBuilder(translateEmbed).setColor(BrandingColors.Primary);
 
 		return img ? embed : embed.setThumbnail(null);
 	}
@@ -270,9 +258,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	private async fetchOverviewMessage(
 		channel: GuildTextBasedChannelTypes,
-		overviewMessage: string | null,
-	): Promise<Message<boolean>> {
-		return (overviewMessage ? channel.messages.resolve(overviewMessage) : null) ?? channel.send({});
+		overviewMessage: string,
+	): Promise<Message<boolean> | null> {
+		return channel.messages.fetch(overviewMessage);
 	}
 
 	private createOptionsMessageForAnnoncementChannel(
@@ -282,7 +270,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
 			.setDescription(formatBirthdayMessage(announcementMessage, member))
-			.setThumbnail(IMG_CAKE);
+			.setThumbnail(CdnUrls.Cake);
 
 		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
 	}
@@ -341,20 +329,25 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	private async updateBirthdayOverview() {
 		const settings = await this.settings.fetch();
 
-		const { overviewChannel, overviewMessage = '' } = settings;
+		const { overviewChannel, overviewMessage } = settings;
 		const birthdayList = await generateBirthdayList(1, this.guild);
 
 		if (isNullish(overviewChannel)) return null;
 
 		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
 
-		const channel = await this.guild.channels.fetch(overviewChannel);
+		const channel = await container.client.channels.fetch(overviewChannel).catch(() => null);
 
 		if (isNullish(channel) || !isGuildBasedChannel(channel)) return null;
 
-		const message = await this.fetchOverviewMessage(channel, overviewMessage);
+		const message = overviewMessage ? await this.fetchOverviewMessage(channel, overviewMessage) : null;
 
-		return message.editable ? message.edit(options) : null;
+		container.logger.info(`Updated Overview Message in guild: ${this.guildId}`);
+		container.logger.debug(message);
+
+		if (message) return message.edit(options);
+
+		return channel.send(options);
 	}
 
 	private formatItems = (birthday: Birthday) => {

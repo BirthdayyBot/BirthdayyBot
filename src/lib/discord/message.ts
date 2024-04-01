@@ -1,6 +1,6 @@
+import { isTextChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/pieces';
 import type { MessageCreateOptions, MessageEditOptions, MessagePayload } from 'discord.js';
-import { getTextChannel } from './channel.js';
 
 export async function fetchMessage(channel_id: string, message_id: string) {
 	const channel = await container.client.channels.fetch(channel_id);
@@ -8,9 +8,9 @@ export async function fetchMessage(channel_id: string, message_id: string) {
 	return channel.messages.fetch(message_id);
 }
 
-export async function sendMessage(channel_id: string, options: string | MessagePayload | MessageCreateOptions) {
-	const channel = await getTextChannel(channel_id);
-	if (!channel?.isTextBased() || channel.isDMBased()) return null;
+export function sendMessage(channel_id: string, options: string | MessagePayload | MessageCreateOptions) {
+	const channel = container.client.channels.resolve(channel_id);
+	if (!isTextChannel(channel)) return null;
 	return channel.send(options);
 }
 

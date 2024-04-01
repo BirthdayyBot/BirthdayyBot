@@ -1,9 +1,0 @@
-{
-  "supportName": "stöd",
-  "supportDescription": "Behövs hjälp? Gå med i min Support Discord Server!",
-  "invite": {},
-  "supportEmbed": {
-    "title": "{{emoji}} Födelsedagssupport",
-    "description": "{{arrow}} Gå med i min discord-server [Support]({{support}})\n{{link}} Kolla in [dokumentationen]({{docs}})"
-  }
-}

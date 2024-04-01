@@ -1,33 +1,40 @@
-import './lib/setup/start.js';
+import '#lib/setup/start';
 
 import { BirthdayyClient } from '#lib/BirthdayyClient';
+import { rootFolder } from '#lib/utils/constants';
 import { container } from '@sapphire/pieces';
-import { floatPromise } from '#utils/functions/promises';
-import { getGuildUtilities } from '#utils/functions/guilds';
+import { rewriteFramesIntegration } from '@sentry/integrations';
+import * as Sentry from '@sentry/node';
 
 const client = new BirthdayyClient();
 
 async function main() {
-	try {
-		await container.prisma.$connect();
-		await client.login();
-		const guilds = await client.guilds.fetch();
+	// Load in Sentry for error logging
+	if (process.env.SENTRY_URL) {
+		Sentry.init({
+			dsn: process.env.SENTRY_URL,
+			integrations: [
+				new Sentry.Integrations.Modules(),
+				new Sentry.Integrations.FunctionToString(),
+				new Sentry.Integrations.LinkedErrors(),
+				new Sentry.Integrations.Console(),
+				new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
+				rewriteFramesIntegration({ root: rootFolder }),
+			],
+		});
+	}
 
-		for (const guild of guilds.values()) {
-			const { settings, birthdays } = getGuildUtilities(guild.id);
-			container.logger.debug(`[Guild Settings] Fetching settings for ${guild.name} (${guild.id})`);
-			floatPromise(settings.fetch());
-			container.logger.debug(`[Guild Birthdays] Fetching birthdays for ${guild.name} (${guild.id})`);
-			floatPromise(birthdays.fetch());
-		}
+	try {
+		// Connect to the Database
+		await container.prisma.$connect();
+
+		// Login to the Discord gateway
+		await client.login();
 	} catch (error) {
 		container.logger.error(error);
-		await container.prisma.$disconnect();
 		await client.destroy();
 		process.exit(1);
 	}
 }
 
-main().catch((error) => {
-	container.logger.error(error);
-});
+main().catch(container.logger.error.bind(container.logger));

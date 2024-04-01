@@ -1,3 +1,3 @@
-export * from './errorHandling.js';
-export * from './permissions.js';
-export * from './VoteProvider.type.js';
+export * from '#lib/types/AnalyticsSchema';
+export * from '#lib/types/Discord';
+export * from '#lib/types/Enums';

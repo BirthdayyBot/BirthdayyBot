@@ -1,10 +1,11 @@
 import { sendMessage } from '#lib/discord/message';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isProduction } from '#utils/env';
-import { BOT_ADMIN_LOG, IS_CUSTOM_BOT } from '#utils/environment';
+import { BOT_ADMIN_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
+import { envParseBoolean } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import { inlineCode } from 'discord.js';
 
@@ -15,7 +16,7 @@ import { inlineCode } from 'discord.js';
 })
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
-		if (IS_CUSTOM_BOT) return;
+		if (envParseBoolean('CUSTOM_BOT', false)) return;
 		container.logger.debug('[CleaningTask] Started');
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 

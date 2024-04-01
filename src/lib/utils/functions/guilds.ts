@@ -2,9 +2,9 @@ import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
 import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
-import { MAIN_DISCORD } from '#utils/environment';
 import { Guild as Settings } from '@prisma/client';
 import { container } from '@sapphire/framework';
+import { envParseString } from '@skyra/env-utilities';
 import type { Guild, GuildResolvable } from 'discord.js';
 
 export async function getCommandGuilds(
@@ -12,7 +12,7 @@ export async function getCommandGuilds(
 ): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.ChilliHQ, GuildIDEnum.ChilliAttackV2, GuildIDEnum.BirthdayyTesting];
 	const adminGuilds = [GuildIDEnum.Birthdayy, GuildIDEnum.BirthdayyTesting];
-	const customGuild = [MAIN_DISCORD];
+	const customGuild = [envParseString('CLIENT_MAIN_GUILD')];
 	if (isNotCustom) adminGuilds.push(GuildIDEnum.ChilliHQ);
 	if (isDevelopment) return testingGuilds;
 	switch (commandLevel) {

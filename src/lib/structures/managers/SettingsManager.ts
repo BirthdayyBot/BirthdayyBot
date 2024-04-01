@@ -1,4 +1,4 @@
-import { BOT_COLOR, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
+import { BrandingColors, Emojis } from '#lib/utils/constants';
 import { CollectionConstructor } from '@discordjs/collection';
 import { Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
@@ -16,7 +16,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 	public defaultKey = {
 		announcementChannel: null,
-		announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
+		announcementMessage: `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`,
 		birthdayPingRole: null,
 		birthdayRole: null,
 		logChannel: null,
@@ -70,7 +70,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));
 
-		return new EmbedBuilder(embed).setColor(BOT_COLOR);
+		return new EmbedBuilder(embed).setColor(BrandingColors.Primary);
 	}
 
 	public async resetKey(key: SettingsDefaultKey): SettingsManagerReturnAsyncData {

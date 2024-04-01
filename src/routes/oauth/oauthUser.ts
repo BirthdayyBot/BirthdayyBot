@@ -3,7 +3,7 @@ import { minutes } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
 import { ApiRequest, ApiResponse, HttpCodes, methods, MimeTypes, Route, RouteOptions } from '@sapphire/plugin-api';
-import { Time } from '@sapphire/time-utilities';
+import { Time } from '@sapphire/duration';
 import { OAuth2Routes, RESTPostOAuth2AccessTokenResult } from 'discord-api-types/v9';
 import { stringify } from 'node:querystring';
 
