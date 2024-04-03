@@ -8,6 +8,7 @@ import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 @ApplyOptions<CustomCommand.Options>({
+	name: 'guild-info',
 	description: 'Get Infos about a Guild',
 	enabled: !isCustom,
 	permissionLevel: PermissionLevels.Administrator,

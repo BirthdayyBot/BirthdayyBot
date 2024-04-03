@@ -1,5 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
@@ -12,6 +13,8 @@ import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
 import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<CustomSubCommand.Options>({
+	name: 'birthday',
+	description: 'commands/birthday:birthdayDescription',
 	subcommands: createSubcommandMappings(
 		'list',
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
@@ -20,6 +23,7 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 		{ name: 'test', preconditions: ['Manager'] },
 	),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	requiredClientPermissions: DEFAULT_REQUIRED_CLIENT_PERMISSIONS,
 })
 export class BirthdayCommand extends CustomSubCommand {
 	public override registerApplicationCommands(registry: CustomSubCommand.Registry) {

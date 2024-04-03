@@ -1,5 +1,6 @@
 import { getSettings } from '#lib/discord/guild';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
 import { PermissionLevels } from '#lib/types/Enums';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
@@ -35,6 +36,7 @@ type ConfigDefault = Omit<
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	requiredClientPermissions: DEFAULT_REQUIRED_CLIENT_PERMISSIONS,
 	permissionLevel: PermissionLevels.Manager,
 })
 export class ConfigCommand extends CustomSubCommand {

@@ -6,6 +6,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({
+	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
 	permissionLevel: PermissionLevels.Administrator,

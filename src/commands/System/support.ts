@@ -1,14 +1,15 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
 import { BrandingColors } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({
+	name: 'support',
 	description: 'commands/system:supportDescription',
-	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
+	requiredClientPermissions: DEFAULT_REQUIRED_CLIENT_PERMISSIONS,
 })
 export class SupportCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
