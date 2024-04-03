@@ -1,74 +1,56 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Birthday {
-  id       BigInt  @id @default(autoincrement())
-  userId   String  @map("user_id") @db.VarChar(32)
-  guildId  String  @map("guild_id") @db.VarChar(32)
-  birthday String  @db.VarChar(10)
-  disabled Boolean @default(false)
-  user     User    @relation(fields: [userId], references: [userId])
-  guild    Guild   @relation(fields: [guildId], references: [guildId])
+    userId        String   @map("user_id") @db.VarChar(19)
+    user          User     @relation(fields: [userId], references: [id])
+    guildId       String   @map("guild_id") @db.VarChar(19)
+    guild         Guild    @relation(fields: [guildId], references: [id])
+    birthday      String   @db.VarChar(10)
+    inDeleteQueue Boolean  @default(false) @map("in_delete_queue")
+    createdAt     DateTime @default(now()) @map("created_at")
+    updatedAt     DateTime @updatedAt() @map("updated_at")
 
-  @@unique([userId, guildId], map: "unique_user_guild")
-  @@index([birthday], map: "index_birthday_birthday")
-  @@index([guildId], map: "index_guild_id_birthday")
-  @@index([userId], map: "index_user_id_birthday")
-  @@map("birthday")
+    @@unique([userId, guildId])
+    @@map("birthday")
 }
 
 model Guild {
-  guildId             String     @id @map("guild_id") @db.VarChar(32)
-  inviter             String?    @db.VarChar(20)
-  announcementChannel String?    @map("announcement_channel") @db.VarChar(20)
-  announcementMessage String     @default("<:arrow_right_birthdayy:1102221944016875650> Today is a special Day!{NEW_LINE}<:gift:931267039094534175> Please wish {MENTION} a happy Birthday <3") @map("announcement_message") @db.VarChar(512)
-  overviewChannel     String?    @map("overview_channel") @db.VarChar(20)
-  overviewMessage     String?    @map("overview_message") @db.VarChar(20)
-  birthdayRole        String?    @map("birthday_role") @db.VarChar(20)
-  birthdayPingRole    String?    @map("birthday_ping_role") @db.VarChar(20)
-  logChannel          String?    @map("log_channel") @db.VarChar(20)
-  timezone            Int        @default(0)
-  premium             Boolean    @default(false)
-  language            String     @default("en-US") @db.VarChar(5)
-  lastUpdated         DateTime?  @default(now()) @map("last_updated") @db.Timestamp(0)
-  disabled            Boolean    @default(false)
-  birthday            Birthday[]
+    id                   String     @id @db.VarChar(19)
+    inviter              String?    @db.VarChar(20)
+    channelsAnnouncement String?    @map("channels.announcement") @db.VarChar(19)
+    channelsOverview     String?    @map("channels.overview") @db.VarChar(19)
+    channelsLogs         String?    @map("channels.logs") @db.VarChar(19)
+    messagesAnnouncement String?    @map("messages.announcement") @db.VarChar(200)
+    messagesOverview     String?    @map("messages.overview") @db.VarChar(19)
+    rolesBirthday        String?    @map("roles.birthday") @db.VarChar(19)
+    rolesNotified        String[]   @default([]) @map("roles.notified") @db.VarChar(19)
+    timezone             Int        @default(0)
+    premium              Boolean    @default(false)
+    language             String     @default("en-US") @db.VarChar(5)
+    createdAt            DateTime   @default(now()) @map("created_at")
+    updatedAt            DateTime   @updatedAt() @map("updated_at")
+    inDeleteQueue        Boolean    @default(false) @map("in_delete_queue")
+    birthday             Birthday[]
 
-  @@index([lastUpdated], map: "index_last_updated_guild")
-  @@map("guild")
+    @@map("guild")
 }
 
 model User {
-  userId        String     @id @map("user_id") @db.VarChar(32)
-  username      String?    @db.VarChar(32)
-  discriminator String?    @db.VarChar(4)
-  premium       Boolean    @default(false)
-  lastUpdated   DateTime   @default(now()) @map("last_updated") @db.Timestamp(0)
-  birthday      Birthday[]
+    id            String     @id @db.VarChar(19)
+    username      String?    @db.VarChar(32)
+    discriminator String?    @db.VarChar(4)
+    premium       Boolean    @default(false)
+    createdAt     DateTime   @default(now()) @map("created_at")
+    updatedAt     DateTime   @updatedAt() @map("updated_at")
+    birthday      Birthday[]
 
-  @@index([username], map: "index_user_birthday")
-  @@map("user")
-}
-
-model Premium {
-  id      Int     @id @default(autoincrement())
-  userId  String  @map("user_id") @db.VarChar(32)
-  guildId String? @map("guild_id") @db.VarChar(32)
-  tier    Boolean @default(true)
-
-  @@map("premium")
-}
-
-model Tiers {
-  id          Int      @id @default(autoincrement())
-  name        String?  @db.VarChar(512)
-  lastUpdated DateTime @default(now()) @map("last_updated") @db.Timestamp(0)
-
-  @@map("tiers")
+    @@map("user")
 }

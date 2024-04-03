@@ -3,7 +3,7 @@ import { Utility } from '@sapphire/plugin-utilities-store';
 
 export class User extends Utility {
 	public get = {
-		UserById: (userId: string) => this.prisma.user.findUnique({ where: { userId } }),
+		UserById: (id: string) => this.prisma.user.findUnique({ where: { id } }),
 		UserCount: () => this.prisma.user.count(),
 	};
 

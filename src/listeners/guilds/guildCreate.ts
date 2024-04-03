@@ -16,7 +16,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		const guildId = guild.id;
 		const inviterId = await getBotInviter(guild);
 
-		await getSettings(guildId).update({ disabled: false, inviter: inviterId });
+		await getSettings(guildId).update({ inDeleteQueue: false, inviter: inviterId });
 
 		if (inviterId) await sendDMMessage(inviterId, { embeds: await resolveEmbed(guild) });
 

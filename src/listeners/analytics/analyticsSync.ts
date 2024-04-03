@@ -7,7 +7,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 export class UserAnalyticsEvent extends AnalyticsListener {
 	public async run(guilds: number, users: number) {
 		const dbSet = this.container.prisma;
-		const birthdayCount = await dbSet.birthday.count({ where: { disabled: false } });
+		const birthdayCount = await dbSet.birthday.count({ where: { inDeleteQueue: false } });
 
 		this.writePoints([
 			this.syncGuilds(guilds),

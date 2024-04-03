@@ -15,12 +15,12 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	public guildId: string;
 
 	public defaultKey = {
-		announcementChannel: null,
-		announcementMessage: `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`,
-		birthdayPingRole: null,
-		birthdayRole: null,
-		logChannel: null,
-		overviewChannel: null,
+		channelsAnnouncement: null,
+		messagesAnnouncement: `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`,
+		rolesBirthday: null,
+		rolesNotified: [],
+		channelsLogs: null,
+		channelsOverview: null,
 		timezone: 0,
 	};
 
@@ -32,8 +32,8 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 	public async create(args?: SettingsManagerCreateData): SettingsManagerReturnAsyncData {
 		const settings = await container.prisma.guild.upsert({
-			create: { ...args, guildId: this.guildId },
-			where: { guildId: this.guildId },
+			create: { ...args, id: this.guildId },
+			where: { id: this.guildId },
 			update: { ...args },
 		});
 		return this.insert(settings);
@@ -83,18 +83,12 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 }
 
 export type SettingsManagerReturnData = Guild;
-export type SettingsManagerFetchData = SettingsManagerReturnData['guildId'];
+export type SettingsManagerFetchData = SettingsManagerReturnData['id'];
 export type SettingsManagerReturnAsyncData = Promise<SettingsManagerReturnData>;
 
-export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'guildId'>;
+export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'id'>;
 export type SettingsManagerUpdateData = SettingsManagerCreateData;
 export type SettingsDefaultKey = keyof Pick<
 	Prisma.GuildCreateInput,
-	| 'announcementChannel'
-	| 'announcementMessage'
-	| 'birthdayRole'
-	| 'birthdayPingRole'
-	| 'overviewChannel'
-	| 'logChannel'
-	| 'timezone'
+	'timezone' | 'channelsAnnouncement' | 'channelsOverview' | 'channelsLogs' | 'rolesBirthday' | 'rolesNotified'
 >;

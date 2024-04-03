@@ -24,7 +24,7 @@ export async function getCommandGuilds(
 		case 'premium': {
 			if (isCustom) return customGuild;
 			const guilds: Settings[] = await container.utilities.guild.get.PremiumGuilds();
-			const guildIds: string[] = guilds.map((guild) => guild.guildId);
+			const guildIds: string[] = guilds.map((guild) => guild.id);
 			return guildIds;
 		}
 		case 'admin':

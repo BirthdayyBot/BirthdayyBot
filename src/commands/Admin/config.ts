@@ -28,7 +28,7 @@ import {
 
 type ConfigDefault = Omit<
 	Required<Guild>,
-	'guildId' | 'logChannel' | 'inviter' | 'language' | 'lastUpdated' | 'disabled' | 'premium'
+	'id' | 'channelsLogs' | 'inviter' | 'language' | 'updatedAt' | 'inDeleteQueue' | 'premium' | 'createdAt'
 >;
 
 @ApplyOptions<CustomSubCommand.Options>({
@@ -54,7 +54,7 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseChannel(interaction, announcementChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['announcementChannel', result.unwrap()]);
+			entries.push(['channelsAnnouncement', result.unwrap()]);
 		}
 
 		const announcementMessage = interaction.options.getString('announcement-message');
@@ -63,7 +63,7 @@ export class ConfigCommand extends CustomSubCommand {
 
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['announcementMessage', result.unwrap()]);
+			entries.push(['messagesAnnouncement', result.unwrap()]);
 		}
 
 		const birthdayRole = interaction.options.getRole('birthday-role');
@@ -71,7 +71,7 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseRole(interaction, birthdayRole, false);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['birthdayRole', result.unwrap()]);
+			entries.push(['rolesBirthday', result.unwrap()]);
 		}
 
 		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
@@ -79,7 +79,7 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseRole(interaction, birthdayPingRole, true);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['birthdayPingRole', result.unwrap()]);
+			entries.push(['rolesNotified', result.unwrap()]);
 		}
 
 		const overviewChannel = interaction.options.getChannel('overview-channel');
@@ -87,7 +87,7 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['overviewChannel', result.unwrap()]);
+			entries.push(['channelsOverview', result.unwrap()]);
 		}
 
 		const timezone = interaction.options.getInteger('timezone');
@@ -97,8 +97,8 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	public async view(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { guildId } = interaction;
-		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
+		const { id } = interaction.guild;
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		const embed = await this.viewGenerateContent(interaction, settings);
 		return interaction.reply({ embeds: [embed], ephemeral: true });
@@ -109,28 +109,28 @@ export class ConfigCommand extends CustomSubCommand {
 		switch (key) {
 			case 'all': {
 				const data: ConfigDefault = {
-					announcementChannel: null,
-					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
-					birthdayRole: null,
-					birthdayPingRole: null,
-					overviewChannel: null,
-					overviewMessage: null,
+					channelsAnnouncement: null,
+					messagesAnnouncement: DEFAULT_ANNOUNCEMENT_MESSAGE,
+					rolesBirthday: null,
+					rolesNotified: [],
+					channelsOverview: null,
+					messagesOverview: null,
 					timezone: 0,
 				};
 				return this.updateDatabase(interaction, data);
 			}
-			case 'announcementChannel':
-				return this.updateDatabase(interaction, { announcementChannel: null });
-			case 'announcementMessage':
-				return this.updateDatabase(interaction, { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE });
-			case 'birthdayRole':
-				return this.updateDatabase(interaction, { birthdayRole: null });
-			case 'birthdayPingRole':
-				return this.updateDatabase(interaction, { birthdayPingRole: null });
-			case 'overviewChannel':
-				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
-			case 'overviewMessage':
-				return this.updateDatabase(interaction, { overviewMessage: null });
+			case 'channelsAnnouncement':
+				return this.updateDatabase(interaction, { channelsAnnouncement: null });
+			case 'messagesAnnouncement':
+				return this.updateDatabase(interaction, { messagesAnnouncement: DEFAULT_ANNOUNCEMENT_MESSAGE });
+			case 'rolesBirthday':
+				return this.updateDatabase(interaction, { rolesBirthday: null });
+			case 'rolesNotified':
+				return this.updateDatabase(interaction, { rolesNotified: [] });
+			case 'channelsOverview':
+				return this.updateDatabase(interaction, { channelsOverview: null, messagesOverview: null });
+			case 'messagesOverview':
+				return this.updateDatabase(interaction, { messagesOverview: null });
 			case 'timezone':
 				return this.updateDatabase(interaction, { timezone: 0 });
 		}
@@ -151,22 +151,23 @@ export class ConfigCommand extends CustomSubCommand {
 			.setColor(BrandingColors.Primary)
 			.setThumbnail(CdnUrls.CupCake);
 
-		const announcementChannel = settings.announcementChannel
-			? channelMention(settings.announcementChannel)
+		const announcementChannel = settings.channelsAnnouncement
+			? channelMention(settings.channelsAnnouncement)
 			: t('globals:unset');
 
-		const announcementMessage = settings.announcementMessage
-			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
+		const announcementMessage = settings.messagesAnnouncement
+			? formatBirthdayMessage(settings.messagesAnnouncement, interaction.member)
 			: t('globals:unset');
 
 		if (!settings.premium) embed.setDescription(t('commands/config:viewMessageRequiredPremimAlert'));
 
-		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
-		const birthdayPingRole = settings.birthdayPingRole
-			? roleMention(settings.birthdayPingRole)
-			: t('globals:unset');
-		const overviewChannel = settings.overviewChannel
-			? channelMention(settings.overviewChannel)
+		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : t('globals:unset');
+		const birthdayPingRole =
+			settings.rolesNotified && settings.rolesNotified.length > 0
+				? settings.rolesNotified?.map((id) => roleMention(id))
+				: t('globals:unset');
+		const overviewChannel = settings.channelsOverview
+			? channelMention(settings.channelsOverview)
 			: t('globals:unset');
 		const timezone = isNullOrUndefined(settings.timezone) ? t('globals:unset') : TIMEZONE_VALUES[settings.timezone];
 
@@ -186,11 +187,11 @@ export class ConfigCommand extends CustomSubCommand {
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
-		const { guildId } = interaction;
+		const { id } = interaction.guild;
 		const result = await Result.fromAsync(
 			this.container.prisma.guild.upsert({
-				where: { guildId },
-				create: { guildId, ...data },
+				where: { id },
+				create: { id, ...data },
 				update: data,
 				select: null,
 			}),
@@ -228,12 +229,12 @@ export class ConfigCommand extends CustomSubCommand {
 	) {
 		const settingsManager = getSettings(interaction.guildId);
 		const settings = await settingsManager.fetch();
-		const defaultAnnouncementMessage = settingsManager.defaultKey.announcementMessage;
+		const defaultAnnouncementMessage = settingsManager.defaultKey.messagesAnnouncement;
 
 		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
 			await this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { announcementMessage: defaultAnnouncementMessage },
+				where: { id: interaction.guildId },
+				data: { messagesAnnouncement: defaultAnnouncementMessage },
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));

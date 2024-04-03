@@ -27,17 +27,17 @@ export default async function generateConfigList(guildId: Snowflake, options: Co
 		fields: embedFields,
 	});
 }
-async function generateFields(guildId: string, member: GuildMember): Promise<APIEmbedField[]> {
+async function generateFields(id: string, member: GuildMember): Promise<APIEmbedField[]> {
 	const config = await container.prisma.guild.upsert({
-		create: { guildId },
-		where: { guildId },
-		update: { guildId },
+		create: { id },
+		where: { id },
+		update: { id },
 		select: {
-			birthdayRole: true,
-			birthdayPingRole: true,
-			announcementChannel: true,
-			announcementMessage: true,
-			overviewChannel: true,
+			rolesBirthday: true,
+			rolesNotified: true,
+			channelsAnnouncement: true,
+			messagesAnnouncement: true,
+			channelsOverview: true,
 			timezone: true,
 			language: true,
 			premium: true,
@@ -54,7 +54,7 @@ async function generateFields(guildId: string, member: GuildMember): Promise<API
 		};
 	});
 
-	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null, member: GuildMember) {
+	function getValueString(name: keyof PrismaGuild, value: any, member: GuildMember) {
 		if (value === null) {
 			return `${Emojis.ArrowRight} not set`;
 		} else if (name === 'timezone' && typeof value === 'number') {
@@ -65,27 +65,30 @@ async function generateFields(guildId: string, member: GuildMember): Promise<API
 			return `${Emojis.ArrowRight} ${roleMention(value)}`;
 		} else if (name.includes('User') && typeof value === 'string') {
 			return `${Emojis.ArrowRight} ${userMention(value)}`;
-		} else if (name === 'announcementMessage' && typeof value === 'string') {
+		} else if (name === 'messagesAnnouncement' && typeof value === 'string') {
 			return `${Emojis.ArrowRight} ${formatBirthdayMessage(value, member)}`;
+		} else if (name === 'rolesNotified' && Array.isArray(value)) {
+			return `${Emojis.ArrowRight} ${value.map((role) => roleMention(role)).join(', ')}`;
 		}
+
 		return `${Emojis.ArrowRight} ${value.toString()}`;
 	}
 
 	function getNameString(name: keyof PrismaGuild): string {
 		switch (name) {
-			case 'announcementChannel':
+			case 'channelsAnnouncement':
 				return 'Announcement Channel';
-			case 'overviewChannel':
+			case 'channelsOverview':
 				return 'Overview Channel';
-			case 'birthdayRole':
+			case 'rolesBirthday':
 				return 'Birthday Role';
-			case 'birthdayPingRole':
-				return 'Birthday Ping Role';
-			case 'logChannel':
+			case 'rolesNotified':
+				return 'Notified Role';
+			case 'channelsLogs':
 				return 'Log Channel';
 			case 'timezone':
 				return 'Timezone';
-			case 'announcementMessage':
+			case 'messagesAnnouncement':
 				return `${Emojis.Plus} Birthday Message`;
 			case 'premium':
 				return 'Premium';

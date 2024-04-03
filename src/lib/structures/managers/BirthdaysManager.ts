@@ -31,6 +31,7 @@ import {
 	userMention,
 } from 'discord.js';
 import { SettingsManager } from './SettingsManager.js';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 
 enum CacheActions {
 	None,
@@ -264,28 +265,28 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	private createOptionsMessageForAnnoncementChannel(
-		{ announcementMessage, birthdayPingRole }: Settings,
+		{ messagesAnnouncement, rolesNotified }: Settings,
 		member: GuildMember,
 	): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(announcementMessage, member))
+			.setDescription(formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member))
 			.setThumbnail(CdnUrls.Cake);
 
-		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
+		return { content: rolesNotified ? rolesNotified.map((id) => roleMention(id)).join(' ') : '', embeds: [embed] };
 	}
 
 	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
-		const { announcementChannel } = await this.settings.fetch();
-		if (isNullish(announcementChannel)) {
+		const { channelsAnnouncement } = await this.settings.fetch();
+		if (isNullish(channelsAnnouncement)) {
 			return `Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`;
 		}
 
 		try {
-			const channel = await this.guild.channels.fetch(announcementChannel);
+			const channel = await this.guild.channels.fetch(channelsAnnouncement);
 
 			if (!channel) {
-				return `Announcement channel (${announcementChannel}) does not exist.`;
+				return `Announcement channel (${channelsAnnouncement}) does not exist.`;
 			}
 
 			if (isGuildBasedChannel(channel) && canSendEmbeds(channel)) {
@@ -300,16 +301,16 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
-		const { birthdayRole } = guild;
+		const { rolesBirthday } = guild;
 
-		if (isNullish(birthdayRole)) return `Birthday role for ths member is empty, so i can't`;
+		if (isNullish(rolesBirthday)) return `Birthday role for ths member is empty, so i can't`;
 
-		if (member.roles.cache.has(birthdayRole)) return `The user already has the role, so i can't `;
+		if (member.roles.cache.has(rolesBirthday)) return `The user already has the role, so i can't `;
 
 		if (member.manageable) {
 			try {
-				await member.roles.add(birthdayRole);
-				return `The Birthday Role ${birthdayRole} has been added to the member ${member.id}`;
+				await member.roles.add(rolesBirthday);
+				return `The Birthday Role ${rolesBirthday} has been added to the member ${member.id}`;
 			} catch {
 				return 'An error occurred when adding the role to this member ';
 			} finally {
@@ -317,7 +318,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 					container.tasks.create('BirthdayRoleRemoverTask', {
 						memberId: member.id,
 						guildId: member.guild.id,
-						birthdayRole,
+						rolesBirthday,
 					}),
 				);
 			}
@@ -329,18 +330,18 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	private async updateBirthdayOverview() {
 		const settings = await this.settings.fetch();
 
-		const { overviewChannel, overviewMessage } = settings;
+		const { channelsOverview, messagesOverview } = settings;
 		const birthdayList = await generateBirthdayList(1, this.guild);
 
-		if (isNullish(overviewChannel)) return null;
+		if (isNullish(channelsOverview)) return null;
 
 		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
 
-		const channel = await container.client.channels.fetch(overviewChannel).catch(() => null);
+		const channel = await container.client.channels.fetch(channelsOverview).catch(() => null);
 
 		if (isNullish(channel) || !isGuildBasedChannel(channel)) return null;
 
-		const message = overviewMessage ? await this.fetchOverviewMessage(channel, overviewMessage) : null;
+		const message = messagesOverview ? await this.fetchOverviewMessage(channel, messagesOverview) : null;
 
 		container.logger.info(`Updated Overview Message in guild: ${this.guildId}`);
 		container.logger.debug(message);

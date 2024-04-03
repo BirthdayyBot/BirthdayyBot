@@ -3,7 +3,7 @@ import { CdnUrls, Emojis } from '#lib/utils/constants';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
-import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
+import { BOT_ADMIN_LOG, DEBUG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
@@ -140,17 +140,15 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const {
-			announcementChannel,
-			birthdayRole,
-			birthdayPingRole,
-			announcementMessage,
+		let {
+			channelsAnnouncement,
+			messagesAnnouncement,
+			rolesBirthday,
+			rolesNotified,
 			premium: guildIsPremium,
 		} = config;
 
-		let content: string | undefined;
-		if (birthdayPingRole) content = roleMention(birthdayPingRole);
-		if (birthdayPingRole === guildId) content = '@everyone';
+		messagesAnnouncement ??= DEFAULT_ANNOUNCEMENT_MESSAGE;
 
 		const guild = await resolveOnErrorCodesDiscord(
 			container.client.guilds.fetch(guildId),
@@ -197,8 +195,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
 		this.container.logger.debug(`[BirthdayTask] Member: ${member.id} [${member.user.tag}]`);
 
-		if (birthdayRole) {
-			const role = await guild.roles.fetch(birthdayRole);
+		if (rolesBirthday) {
+			const role = await guild.roles.fetch(rolesBirthday);
 			if (role) {
 				const birthdayChildInfo = await this.addCurrentBirthdayChildRole(member, guildId, role, isTest);
 				eventInfo.birthday_role = birthdayChildInfo;
@@ -208,7 +206,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			}
 		}
 
-		if (!announcementChannel) {
+		if (!channelsAnnouncement) {
 			container.logger.debug(`[BirthdayTask] Announcement Channel not set for guild ${guild.id} [${guild.name}]`);
 			eventInfo.announcement.message = 'Announcement Channel not set';
 			return eventInfo;
@@ -216,7 +214,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const embed: APIEmbed = {
 			title: `${Emojis.News} Birthday Announcement!`,
-			description: this.formatBirthdayMessage(announcementMessage, member, guild),
+			description: this.formatBirthdayMessage(messagesAnnouncement, member, guild),
 			thumbnail: {
 				url: CdnUrls.Cake,
 			},
@@ -225,9 +223,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,
-			announcementChannel,
+			channelsAnnouncement,
 			birthdayEmbed,
-			content,
+			rolesNotified.map((role) => roleMention(role)).join(' '),
 		);
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;

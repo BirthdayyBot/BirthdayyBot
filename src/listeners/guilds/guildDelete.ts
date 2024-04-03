@@ -12,7 +12,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 		this.container.client.guildMemberFetchQueue.remove(guild.shardId, guild.id);
 		await this.leaveServerLog(guild);
-		await container.prisma.guild.delete({ where: { guildId: guild.id } });
+		await container.prisma.guild.delete({ where: { id: guild.id } });
 	}
 
 	private async leaveServerLog(guild: Guild) {

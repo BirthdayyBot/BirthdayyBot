@@ -16,9 +16,9 @@ export class UserRoute extends Route {
 		const member = await guild.members.fetch(request.auth!.id).catch(() => null);
 		if (!member) return response.error(HttpCodes.BadRequest);
 
-		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
+		if (!canManage(guild, member)) return response.error(HttpCodes.Forbidden);
 
-		return this.container.prisma.guild.findUnique({ where: { guildId } });
+		return this.container.prisma.guild.findUnique({ where: { id: guildId } });
 	}
 
 	@authenticated()
@@ -40,13 +40,13 @@ export class UserRoute extends Route {
 		const member = await guild.members.fetch(request.auth!.id).catch(() => null);
 		if (!member) return response.status(HttpCodes.BadRequest).json(['Member not found.']);
 
-		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
+		if (!canManage(guild, member)) return response.error(HttpCodes.Forbidden);
 
 		const entries = requestBody.data;
 
 		try {
 			const settings = await this.container.prisma.guild.update({
-				where: { guildId: requestBody.guild_id },
+				where: { id: requestBody.guild_id },
 				data: {
 					...entries.map((entry) => ({ [entry[0]]: entry[1] })),
 				},

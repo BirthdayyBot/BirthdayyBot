@@ -33,7 +33,7 @@ export class GuildInfoCommand extends Command {
 			fields: [
 				{
 					name: 'GuildId',
-					value: settings.guildId,
+					value: settings.id,
 					inline: true,
 				},
 				{
