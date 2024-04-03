@@ -1,12 +1,12 @@
 import { getSettings } from '#lib/discord/guild';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
 import { BrandingColors, CdnUrls } from '#lib/utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
-import { createSubcommandMappings } from '#utils/utils';
+import { createSubcommandMappings } from '#lib/utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -79,7 +79,7 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseRole(interaction, birthdayPingRole, true);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			entries.push(['rolesNotified', result.unwrap()]);
+			entries.push(['rolesNotified', [result.unwrap()]]);
 		}
 
 		const overviewChannel = interaction.options.getChannel('overview-channel');

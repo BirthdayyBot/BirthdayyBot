@@ -1,6 +1,6 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
-import { BrandingColors } from '#utils';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils';
+import { BrandingColors } from '#lib/utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';

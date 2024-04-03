@@ -2,10 +2,12 @@ import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/c
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { CLIENT_NAME, Emojis, defaultEmbed } from '#utils';
 import { container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
+import { Emojis } from '#lib/utils/constants';
+import { CLIENT_NAME } from '#lib/utils/environment';
+import { defaultEmbed } from '#lib/utils/embed';
 
 export class GuideCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {

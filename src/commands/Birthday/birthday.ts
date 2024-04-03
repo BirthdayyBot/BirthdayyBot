@@ -1,6 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
+import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures';
 import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
