@@ -1,6 +1,7 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures/commands/utils.js';
+import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
@@ -55,6 +56,8 @@ export class BirthdayCommand extends CustomSubCommand {
 
 		await getBirthdays(ctx.guildId).create({ birthday, userId: user.id });
 
+		await updateBirthdayOverview(ctx.guildId);
+
 		return interactionSuccess(
 			ctx,
 			await resolveKey(ctx, 'commands/birthday:set.success', {
@@ -74,6 +77,8 @@ export class BirthdayCommand extends CustomSubCommand {
 				...options,
 			});
 		}
+
+		await updateBirthdayOverview(ctx.guildId);
 
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}
