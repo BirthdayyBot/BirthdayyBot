@@ -4,6 +4,7 @@ import { floatPromise } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, Store, container } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
+import { stripIndents } from 'common-tags';
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {
@@ -28,20 +29,11 @@ export class UserEvent extends Listener {
 		const llc = isDevelopment ? magentaBright : white;
 		const blc = isDevelopment ? magenta : blue;
 
-		const line01 = llc('');
-		const line02 = llc('');
-		const line03 = llc('');
-
-		// Offset Pad
-		const pad = ' '.repeat(7);
-
-		container.logger.info(
-			String.raw`
-${line01} ${pad}${blc('1.0.0')}
-${line02} ${pad}[${success}] Gateway
-${line03}${isDevelopment ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
-		`.trim(),
-		);
+		container.logger.info(stripIndents`
+			{blc(process.env.CLIENT_VERSION)}
+			[${success}] Gateway
+			${isDevelopment ? `${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
+		`);
 	}
 
 	private printStoreDebugInformation() {

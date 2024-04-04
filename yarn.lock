@@ -1011,6 +1011,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/common-tags@npm:^1.8.4":
+  version: 1.8.4
+  resolution: "@types/common-tags@npm:1.8.4"
+  checksum: 10c0/899c887785812e1805e9bdd6f1110811b01384888f9a8e539174b49484e40f29f99cd66659c0c4865339338eee59b16821b9b728b98efc7c1118767192f199d2
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.12":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -1505,12 +1512,14 @@ __metadata:
     "@sentry/node": "npm:^7.99.0"
     "@sentry/tracing": "npm:^7.99.0"
     "@skyra/env-utilities": "npm:^1.3.0"
+    "@types/common-tags": "npm:^1.8.4"
     "@types/node": "npm:^20.11.16"
     "@types/ws": "npm:^8.5.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.20.0"
     "@typescript-eslint/parser": "npm:^6.20.0"
     bullmq: "npm:^5.1.8"
     colorette: "npm:^2.0.20"
+    common-tags: "npm:^1.8.2"
     dayjs: "npm:^1.11.10"
     discord-api-types: "npm:^0.37.67"
     discord.js: "npm:^14.14.1"
@@ -1790,6 +1799,13 @@ __metadata:
   version: 11.1.0
   resolution: "commander@npm:11.1.0"
   checksum: 10c0/13cc6ac875e48780250f723fb81c1c1178d35c5decb1abb1b628b3177af08a8554e76b2c0f29de72d69eef7c864d12613272a71fabef8047922bc622ab75a179
+  languageName: node
+  linkType: hard
+
+"common-tags@npm:^1.8.2":
+  version: 1.8.2
+  resolution: "common-tags@npm:1.8.2"
+  checksum: 10c0/23efe47ff0a1a7c91489271b3a1e1d2a171c12ec7f9b35b29b2fce51270124aff0ec890087e2bc2182c1cb746e232ab7561aaafe05f1e7452aea733d2bfe3f63
   languageName: node
   linkType: hard
 
