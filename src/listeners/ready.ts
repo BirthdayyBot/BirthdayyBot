@@ -14,7 +14,7 @@ export class UserEvent extends Listener {
 		this.printBanner();
 		this.printStoreDebugInformation();
 		floatPromise(await sendMessage(BOT_ADMIN_LOG, { content: 'online' }));
-		floatPromise(this.container.tasks.run('PostStats', {}));
+		floatPromise(this.container.tasks.run({ name: 'PostStats' }));
 
 		for (const [guildID, guild] of await this.container.client.guilds.fetch()) {
 			this.container.client.guildMemberFetchQueue.add((await guild.fetch()).shardId, guildID);

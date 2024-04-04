@@ -87,3 +87,9 @@ export class PostStats extends ScheduledTask {
 		this.container.client.emit(Events.AnalyticsSync, guilds, users);
 	}
 }
+
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface ScheduledTasks {
+		PostStats: never;
+	}
+}

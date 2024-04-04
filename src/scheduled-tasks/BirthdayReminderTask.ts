@@ -248,10 +248,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
-			await container.tasks.create('BirthdayRoleRemoverTask', payload, {
-				repeated: false,
-				delay: isTest ? Time.Minute / 6 : Time.Day,
-			});
+			await container.tasks.create(
+				{
+					name: 'BirthdayRoleRemoverTask',
+					payload,
+				},
+				{
+					repeated: false,
+					delay: isTest ? Time.Minute / 6 : Time.Day,
+				},
+			);
 			returnData.added = true;
 			returnData.message = 'Success';
 			return returnData;
@@ -406,5 +412,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 				],
 			});
 		}
+	}
+}
+
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface ScheduledTasks {
+		BirthdayReminderTask: { userId: string; guildId: string; isTest: boolean } | undefined;
 	}
 }

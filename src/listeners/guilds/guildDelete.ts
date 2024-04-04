@@ -1,4 +1,5 @@
 import { sendMessage } from '#lib/discord';
+import { checkGuildDeleteQueue, createGuildDeleteQueue, deleteTaskById } from '#lib/utils/functions/tasks';
 import { CLIENT_NAME, BOT_SERVER_LOG, Emojis, generateDefaultEmbed } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { DurationFormatter } from '@sapphire/duration';
@@ -12,7 +13,10 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 		this.container.client.guildMemberFetchQueue.remove(guild.shardId, guild.id);
 		await this.leaveServerLog(guild);
-		await container.prisma.guild.delete({ where: { id: guild.id } });
+
+		const taskID = await checkGuildDeleteQueue(guild.id);
+		if (taskID) await deleteTaskById(taskID);
+		await createGuildDeleteQueue(guild.id);
 	}
 
 	private async leaveServerLog(guild: Guild) {

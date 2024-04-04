@@ -57,10 +57,13 @@ export class UserRoute extends Route {
 
 	private async addRoleAndCreateTask(payload: RoleRemovePayload) {
 		await addRoleToUser(payload.memberId, payload.roleId, payload.guildId);
-		await container.tasks.create('BirthdayRoleRemoverTask', payload, {
-			repeated: false,
-			delay: Time.Hour * 12,
-		});
+		await container.tasks.create(
+			{ name: 'VoteReminderTask', payload },
+			{
+				repeated: false,
+				delay: Time.Hour * 12,
+			},
+		);
 	}
 
 	private async sendThankYouDM(user: User, guild: Guild) {

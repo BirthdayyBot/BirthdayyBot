@@ -41,17 +41,6 @@ declare module '@sapphire/framework' {
 	}
 }
 
-declare module '@sapphire/plugin-scheduled-tasks' {
-	interface ScheduledTasks {
-		BirthdayReminderTask: { message: string; role: string } | undefined;
-		BirthdayRoleRemoverTask: never;
-		VoteReminderTask: never;
-		CleanDatabaseTask: never;
-		DisplayStats: never;
-		PostStats: never;
-	}
-}
-
 declare module '@sapphire/plugin-utilities-store' {
 	export interface Utilities {
 		guild: Guild;

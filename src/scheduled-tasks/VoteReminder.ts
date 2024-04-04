@@ -20,3 +20,9 @@ export class VoteReminderTask extends ScheduledTask {
 		});
 	}
 }
+
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface ScheduledTasks {
+		VoteReminderTask: VoteReminderTaskPayload;
+	}
+}
