@@ -1,27 +1,30 @@
-import { WebsiteUrl } from '#lib/components/button';
+import thinking from '#lib/discord/thinking';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { Emojis } from '#utils';
-import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import type { APIEmbed } from 'discord.js';
+import { BrandingColors } from '#lib/utils/constants';
+import { applyLocalizedBuilder, fetchT, TFunction } from '@sapphire/plugin-i18next';
+import { EmbedBuilder } from 'discord.js';
 
 export class VoteCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
-		registry.registerChatInputCommand((builder) => {
-			return applyLocalizedBuilder(builder, 'commands/vote:vote');
-		});
+		registry.registerChatInputCommand(
+			(builder) => {
+				return applyLocalizedBuilder(builder, 'commands/tools:voteName', 'commands/tools:voteDescription');
+			},
+			{ guildIds: ['980559116076470272'] },
+		);
 	}
 
 	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
-		const embed = (await resolveKey(interaction, 'commands/vote:embed', {
-			returnObjects: true,
-			arrowRight: Emojis.ArrowRight,
-			heart: Emojis.Heart,
-			topgg: WebsiteUrl('topgg/vote'),
-			discordlist: WebsiteUrl('discordlist/vote'),
-			'discord-botlist': WebsiteUrl('discord-botlist/vote'),
-			premium: WebsiteUrl('premium'),
-		})) as APIEmbed;
+		await thinking(interaction);
+		const t = await fetchT(interaction);
+		const embed = this.buildEmbed(t);
+		return interaction.editReply({ embeds: [embed] });
+	}
 
-		return interaction.reply({ embeds: [embed] });
+	private buildEmbed(t: TFunction) {
+		return new EmbedBuilder()
+			.setTitle(t('commands/tools:voteEmbedTitle'))
+			.setDescription(t('commands/tools:voteEmbedDescription'))
+			.setColor(BrandingColors.Primary);
 	}
 }

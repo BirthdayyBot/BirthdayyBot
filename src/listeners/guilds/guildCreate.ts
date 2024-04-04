@@ -1,7 +1,6 @@
-import { sendDMMessage, sendMessage } from '#lib/discord/index';
+import { sendMessage } from '#lib/discord/index';
 import { checkGuildDeleteQueue, deleteTaskById } from '#lib/utils/functions/tasks';
 import { BOT_SERVER_LOG, BrandingColors, CLIENT_NAME, Emojis, generateDefaultEmbed } from '#lib/utils/index';
-import { resolveEmbed } from '#root/commands/General/guide';
 import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';
@@ -18,8 +17,6 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		const inviterId = await getBotInviter(guild);
 
 		await getSettings(guildId).update({ inDeleteQueue: false, inviter: inviterId });
-
-		if (inviterId) await sendDMMessage(inviterId, { embeds: await resolveEmbed(guild) });
 
 		await this.joinServerLog(guild, inviterId);
 

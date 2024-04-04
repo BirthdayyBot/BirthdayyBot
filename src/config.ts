@@ -80,9 +80,9 @@ function parseInternationalizationDefaultVariablesPermissions() {
 type EmojisString = keyof typeof Emojis;
 function parseInternationalizationDefaultVariablesEmojis() {
 	const keys = Object.keys(Emojis) as readonly EmojisString[];
-	const entries = keys.map((key) => [key, key] as const);
+	const entries = keys.map((key) => [key, Emojis[key]] as const);
 
-	return Object.fromEntries(entries) as Readonly<Record<EmojisString, EmojisString>>;
+	return Object.fromEntries(entries);
 }
 
 function parseInternationalizationDefaultVariables() {
@@ -95,7 +95,7 @@ function parseInternationalizationDefaultVariables() {
 		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
 		CLIENT_ID: process.env.CLIENT_ID,
 		...parseInternationalizationDefaultVariablesPermissions(),
-		...parseInternationalizationDefaultVariablesEmojis,
+		...parseInternationalizationDefaultVariablesEmojis(),
 	};
 }
 
