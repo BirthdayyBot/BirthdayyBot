@@ -116,6 +116,8 @@ function parseInternationalizationInterpolation(): InterpolationOptions {
 					return t(`languages:${language}`, options);
 				case LanguageFormatters.Timezone:
 					return TimezoneWithLocale[value as Locale];
+				case LanguageFormatters.Number:
+					return Intl.NumberFormat(language).format(value as number);
 				default:
 					return value as string;
 			}

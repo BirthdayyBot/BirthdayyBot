@@ -41,6 +41,7 @@ export const enum LanguageFormatters {
 	Role = 'role',
 	Language = 'language',
 	Timezone = 'timezone',
+	Number = 'number',
 	replaceNull = 'replaceNull',
 	BirthdayMessage = 'birthdayMessage',
 }

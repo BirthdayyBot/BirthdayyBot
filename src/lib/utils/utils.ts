@@ -1,12 +1,17 @@
-import { type PreconditionEntryResolvable } from '@sapphire/framework';
+import { container, type PreconditionEntryResolvable } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
+import { isNullishOrEmpty } from '@sapphire/utilities';
 import {
+	APIUser,
 	ChatInputCommandInteraction,
 	CommandInteraction,
+	EmbedAuthorData,
 	EmbedBuilder,
+	ImageURLOptions,
 	Message,
 	MessagePayload,
+	User,
 	userMention,
 	type InteractionReplyOptions,
 } from 'discord.js';
@@ -67,4 +72,35 @@ export function createSubcommandMappings(...subcommands: Array<string | Mapps>):
 
 export function snakeToCamel(str: string) {
 	return str.replace(/([-_][a-z])/g, (ltr) => ltr.toUpperCase()).replace(/[^a-zA-Z]/g, '');
+}
+
+/**
+ * Checks whether or not the user uses the new username change, defined by the
+ * `discriminator` being `'0'` or in the future, no discriminator at all.
+ * @see {@link https://dis.gd/usernames}
+ * @param user The user to check.
+ */
+export function usesPomelo(user: User | APIUser) {
+	return isNullishOrEmpty(user.discriminator) || user.discriminator === '0';
+}
+
+export function getDisplayAvatar(user: User | APIUser, options?: Readonly<ImageURLOptions>) {
+	if (user.avatar === null) {
+		const id = usesPomelo(user) ? Number(BigInt(user.id) >> 22n) % 6 : Number(user.discriminator) % 5;
+		return container.client.rest.cdn.defaultAvatar(id);
+	}
+
+	return container.client.rest.cdn.avatar(user.id, user.avatar, options);
+}
+
+export function getTag(user: User | APIUser) {
+	return usesPomelo(user) ? `@${user.username}` : `${user.username}#${user.discriminator}`;
+}
+
+export function getEmbedAuthor(user: User | APIUser, url?: string | undefined): EmbedAuthorData {
+	return { name: getTag(user), iconURL: getDisplayAvatar(user, { size: 128 }), url };
+}
+
+export function getFooterAuthor(user: User | APIUser, url?: string | undefined) {
+	return { iconURL: getDisplayAvatar(user, { size: 128 }), text: getTag(user), url };
 }

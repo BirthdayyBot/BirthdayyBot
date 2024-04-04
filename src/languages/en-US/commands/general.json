@@ -1,0 +1,20 @@
+{
+  "infoBody": "[Birthdayy](https://birthdayy.xyz) {{VERSION}} is a multi-purpose Discord Bot designed for managing your birthdays.\nI use the [Sapphire Framework](https://sapphirejs.dev) for the [Discord.js library](https://discord.js.org).\n\n[Privacy Policy](https://birthdayy.xyz/disclosure).",
+  "infoDescription": "Provides some information about me.",
+  "infoTitles": {
+    "stats": "Statistics",
+    "uptime": "Uptime",
+    "serverUsage": "Server Usage"
+  },
+  "infoFields": {
+    "stats": "• **Users**: {{stats.users, number}} | {{database.users, number}}\n• **Servers**: {{stats.guilds, number}} | {{database.guilds}}\n• **Channels**: {{stats.channels, number}}\n• **Birthdays**: {{database.birthdays, number}}\n• **Discord.js**: {{stats.djsVersion}}\n• **Sapphire**: {{stats.sapphireVersion}}\n• **Node.js**: {{stats.nodeJs}}",
+    "uptime": "• **Host**: {{uptime.host}}\n• **Total**: {{uptime.total}}\n• **Client**: {{uptime.client}}",
+    "serverUsage": "• **CPU Load**: {{usage.cpuLoad}}\n• **Heap**: {{usage.ramUsed, number}}MB (Total: {{usage.ramTotal, number}}MB)"
+  },
+  "infoComponentLabels": {
+    "addToServer": "Add me to your server!",
+    "supportServer": "Support server",
+    "repository": "GitHub Repository",
+    "donate": "Donate"
+  }
+}
