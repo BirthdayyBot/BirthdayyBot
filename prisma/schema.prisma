@@ -28,7 +28,7 @@ model Guild {
     channelsAnnouncement String?    @map("channels.announcement") @db.VarChar(19)
     channelsOverview     String?    @map("channels.overview") @db.VarChar(19)
     channelsLogs         String?    @map("channels.logs") @db.VarChar(19)
-    messagesAnnouncement String?    @map("messages.announcement") @db.VarChar(200)
+    messagesAnnouncement String?    @map("messages.announcement") @db.Text()
     messagesOverview     String?    @map("messages.overview") @db.VarChar(19)
     rolesBirthday        String?    @map("roles.birthday") @db.VarChar(19)
     rolesNotified        String[]   @default([]) @map("roles.notified") @db.VarChar(19)

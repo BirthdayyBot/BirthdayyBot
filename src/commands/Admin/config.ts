@@ -1,11 +1,11 @@
 import { getSettings } from '#lib/discord/guild';
-import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures';
+import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
+import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
 import { BrandingColors, CdnUrls } from '#lib/utils/constants';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { createSubcommandMappings } from '#lib/utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { Guild } from '@prisma/client';
@@ -25,7 +25,6 @@ import {
 	chatInputApplicationCommandMention,
 	roleMention,
 } from 'discord.js';
-import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 
 type ConfigDefault = Omit<
 	Required<Guild>,
@@ -113,7 +112,7 @@ export class ConfigCommand extends CustomSubCommand {
 			case 'all': {
 				const data: ConfigDefault = {
 					channelsAnnouncement: null,
-					messagesAnnouncement: DEFAULT_ANNOUNCEMENT_MESSAGE,
+					messagesAnnouncement: null,
 					rolesBirthday: null,
 					rolesNotified: [],
 					channelsOverview: null,
@@ -125,7 +124,7 @@ export class ConfigCommand extends CustomSubCommand {
 			case 'channelsAnnouncement':
 				return this.updateDatabase(interaction, { channelsAnnouncement: null });
 			case 'messagesAnnouncement':
-				return this.updateDatabase(interaction, { messagesAnnouncement: DEFAULT_ANNOUNCEMENT_MESSAGE });
+				return this.updateDatabase(interaction, { messagesAnnouncement: null });
 			case 'rolesBirthday':
 				return this.updateDatabase(interaction, { rolesBirthday: null });
 			case 'rolesNotified':
@@ -241,10 +240,10 @@ export class ConfigCommand extends CustomSubCommand {
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
 		}
 
-		if (announcementMessage.length > 512) {
+		if (announcementMessage.length > 200) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editMessageTooLong', {
-					maxLength: 512,
+					maxLength: 200,
 				}),
 			);
 		}

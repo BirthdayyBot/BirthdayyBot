@@ -143,15 +143,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		let {
+		const {
 			channelsAnnouncement,
 			messagesAnnouncement,
 			rolesBirthday,
 			rolesNotified,
 			premium: guildIsPremium,
 		} = config;
-
-		messagesAnnouncement ??= DEFAULT_ANNOUNCEMENT_MESSAGE;
 
 		const guild = await resolveOnErrorCodesDiscord(
 			container.client.guilds.fetch(guildId),
@@ -217,7 +215,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const embed: APIEmbed = {
 			title: `${Emojis.News} Birthday Announcement!`,
-			description: this.formatBirthdayMessage(messagesAnnouncement, member, guild),
+			description: this.formatBirthdayMessage(
+				messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE,
+				member,
+				guild,
+			),
 			thumbnail: {
 				url: CdnUrls.Cake,
 			},
