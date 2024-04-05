@@ -1,50 +1,45 @@
-import { sendMessage } from '#lib/discord';
-import { checkGuildDeleteQueue, createGuildDeleteQueue, deleteTaskById } from '#lib/utils/functions/tasks';
-import { CLIENT_NAME, BOT_SERVER_LOG, Emojis, generateDefaultEmbed } from '#utils';
+import { changeGuildDeleteQueueDelay, createGuildDeleteQueue, findGuildDeleteQueue } from '#lib/utils/functions/tasks';
+import { BOT_SERVER_LOG, CLIENT_NAME, defaultEmbed, Emojis } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { DurationFormatter } from '@sapphire/duration';
-import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
-import { Colors, Guild, time } from 'discord.js';
+import { Events, Listener, type ListenerOptions } from '@sapphire/framework';
+import { Colors, EmbedBuilder, Guild, time, TimestampStyles } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
 	public async run(guild: Guild) {
 		if (guild.available) return;
 
+		// Remove the guild from the fetch queue
 		this.container.client.guildMemberFetchQueue.remove(guild.shardId, guild.id);
-		await this.leaveServerLog(guild);
 
-		const taskID = await checkGuildDeleteQueue(guild.id);
-		if (taskID) await deleteTaskById(taskID);
-		await createGuildDeleteQueue(guild.id);
+		// Delete the guild from the database
+		const task = await findGuildDeleteQueue(guild.id);
+		if (task) await changeGuildDeleteQueueDelay(task);
+		else await createGuildDeleteQueue(guild.id);
+
+		// Log the guild deletion
+		const embed = await this.buildEmbed(guild);
+		const channel = await this.container.client.channels.fetch(BOT_SERVER_LOG);
+		if (channel?.isTextBased()) await channel.send({ embeds: [embed] });
+
+		this.container.logger.info(`[EVENT] ${Events.GuildDelete} - ${guild.name} (${guild.id})`);
 	}
 
-	private async leaveServerLog(guild: Guild) {
-		container.logger.info('Removed from Guild');
-		const { id: guildId, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
-		const joinedAgo = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
-		const joinedDate = time(Math.floor(rawJoinedTimestamp / 1000), 'R');
-		const timeServed = new DurationFormatter().format(Date.now() - rawJoinedTimestamp);
-		const fields = [
-			{ name: 'GuildName', value: `${name}` },
-			{
-				name: 'GuildID',
-				value: `${guildId}`,
-			},
-		];
+	private async buildEmbed(guild: Guild) {
+		const embed = new EmbedBuilder(defaultEmbed())
+			.setTitle(`${Emojis.Fail} ${CLIENT_NAME} got removed from a Guild`)
+			.setDescription(`I am now in \`${await this.container.client.computeGuilds()}\` guilds`)
+			.setColor(Colors.Red)
+			.addFields([
+				{ name: 'Name', value: guild.name, inline: true },
+				{ name: 'Description', value: guild.description ?? 'No Description', inline: true },
+				{ name: 'ID', value: guild.id, inline: true },
+				{ name: 'MemberCount', value: guild.memberCount.toString(), inline: true },
+				{ name: 'Owner', value: guild.ownerId, inline: true },
+				{ name: 'Created At', value: guild.createdAt.toUTCString(), inline: true },
+				{ name: 'Joined At', value: time(guild.joinedTimestamp, TimestampStyles.RelativeTime), inline: true },
+			]);
 
-		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
-		if (memberCount) fields.push({ name: 'GuildMemberCount', value: `${memberCount}` });
-		if (ownerId) fields.push({ name: 'GuildOwnerID', value: `${ownerId}` });
-		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedDate}\n${joinedAgo}` });
-		if (timeServed) fields.push({ name: 'TimeServed', value: `${timeServed}` });
-
-		const embed = generateDefaultEmbed({
-			title: `${Emojis.Fail} ${CLIENT_NAME} got removed from a Guild`,
-			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
-			fields,
-			color: Colors.Red,
-		});
-		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
+		return embed;
 	}
 }

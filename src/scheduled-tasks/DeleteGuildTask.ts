@@ -13,6 +13,7 @@ export class UserTask extends ScheduledTask {
 
 		if (!guild) {
 			await container.prisma.guild.delete({ where: { id: guildId } });
+			await container.prisma.birthday.deleteMany({ where: { guildId } });
 			container.client.guilds.cache.delete(guildId);
 			return container.logger.info(`[ScheduledTask] Deleted the guild ${guildId}`);
 		}

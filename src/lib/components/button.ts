@@ -11,6 +11,7 @@ export const enum ButtonID {
 	choiceBirthdayList = 'choice-birthday-list',
 	choiceGuildConfig = 'choice-guild-config',
 	choiceDiscordInformation = 'choice-discord-information',
+	github = 'github-button',
 }
 
 export function defaultButtonBuilder(data?: ButtonComponentData) {
@@ -43,6 +44,12 @@ export async function inviteBirthdayyButton(target: Target) {
 			}),
 		)
 		.setEmoji(Emojis.Gift);
+}
+
+export async function githubButtonBuilder(target: Target) {
+	const label = await resolveKey(target, 'button:repository');
+	const url = 'https://github.com/BirthdayyBot/BirthdayyBot';
+	return defaultButtonBuilder().setLabel(label).setURL(url).setEmoji(Emojis.Support);
 }
 
 export async function remindMeButtonBuilder(target: Target) {

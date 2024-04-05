@@ -45,7 +45,6 @@ declare module '@sapphire/plugin-utilities-store' {
 	export interface Utilities {
 		guild: Guild;
 		birthday: Birthday;
-		user: User;
 	}
 }
 

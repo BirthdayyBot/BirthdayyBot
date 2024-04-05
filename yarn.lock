@@ -1517,7 +1517,7 @@ __metadata:
     "@types/ws": "npm:^8.5.10"
     "@typescript-eslint/eslint-plugin": "npm:^6.20.0"
     "@typescript-eslint/parser": "npm:^6.20.0"
-    bullmq: "npm:^5.1.8"
+    bullmq: "npm:5.1.3"
     colorette: "npm:^2.0.20"
     common-tags: "npm:^1.8.2"
     dayjs: "npm:^1.11.10"
@@ -1583,23 +1583,6 @@ __metadata:
     tslib: "npm:^2.0.0"
     uuid: "npm:^9.0.0"
   checksum: 10c0/dc2177dfd736b2d008ccab1ba9f77f80cc730ce6197c9ffa0f37327e1cf34bd8b97d83ee9f9008253ef0c0854bbd04f8c925889a3370a0899e8f5c7a34fd3ab3
-  languageName: node
-  linkType: hard
-
-"bullmq@npm:^5.1.8":
-  version: 5.1.8
-  resolution: "bullmq@npm:5.1.8"
-  dependencies:
-    cron-parser: "npm:^4.6.0"
-    glob: "npm:^8.0.3"
-    ioredis: "npm:^5.3.2"
-    lodash: "npm:^4.17.21"
-    msgpackr: "npm:^1.10.1"
-    node-abort-controller: "npm:^3.1.1"
-    semver: "npm:^7.5.4"
-    tslib: "npm:^2.0.0"
-    uuid: "npm:^9.0.0"
-  checksum: 10c0/75e49c71a6d42cf73b890a3ec17200d7e25e3d31180e967e01002a5cfe28355d06ef5d93b8fb87e183466e2f48a67c30a3c82bfc67c37fb640456966613451f5
   languageName: node
   linkType: hard
 

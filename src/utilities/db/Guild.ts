@@ -156,16 +156,6 @@ export class Guild extends Utility {
 				}),
 	};
 
-	public check = {
-		isGuildPremium: async (guildId: Snowflake) => {
-			const result = await this.get.GuildPremium(guildId);
-			if (result === null) {
-				return false;
-			}
-			return result.premium;
-		},
-	};
-
 	public reset = {
 		AnnouncementChannel: (id: Snowflake) =>
 			this.prisma.guild.update({ where: { id }, data: { channelsAnnouncement: null } }),
