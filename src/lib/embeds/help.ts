@@ -16,11 +16,11 @@ export const HelpEmbed: APIEmbed = {
 		{
 			name: 'Utilities',
 			value: `
-  ${Emojis.ArrowRight}/help \`[command]\`
-  ${Emojis.ArrowRight}/guide
-  ${Emojis.ArrowRight}/invite
-  ${Emojis.ArrowRight}/status
-  ${Emojis.ArrowRight}/vote
+  ${Emojis.Arrow}/help \`[command]\`
+  ${Emojis.Arrow}/guide
+  ${Emojis.Arrow}/invite
+  ${Emojis.Arrow}/status
+  ${Emojis.Arrow}/vote
         `,
 			inline: true,
 		},
@@ -28,24 +28,24 @@ export const HelpEmbed: APIEmbed = {
 		{
 			name: '/birthday',
 			value: `
-  ${Emojis.ArrowRight}set \`<day>\` \`<month>\` \`[year]\` \`[user]\`
-  ${Emojis.ArrowRight}list
-  ${Emojis.ArrowRight}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
-  ${Emojis.ArrowRight}remove \`<user>\`
-  ${Emojis.ArrowRight}show \`[user]\`
+  ${Emojis.Arrow}set \`<day>\` \`<month>\` \`[year]\` \`[user]\`
+  ${Emojis.Arrow}list
+  ${Emojis.Arrow}update \`<user>\` \`<day>\` \`<month>\` \`[year]\`
+  ${Emojis.Arrow}remove \`<user>\`
+  ${Emojis.Arrow}show \`[user]\`
       `,
 			inline: true,
 		},
 		{
 			name: '/config',
 			value: `
-  ${Emojis.ArrowRight}status
-  ${Emojis.ArrowRight}announcement-channel \`<channel>\`
-  ${Emojis.ArrowRight}overview-channel \`<channel>\`
-  ${Emojis.ArrowRight}birthday-role \`<role>\`
-  ${Emojis.ArrowRight}ping-role \`<role>\`
-  ${Emojis.ArrowRight}timezone\`<zone>\`
-  ${Emojis.ArrowRight}announcement-message\`<message>\` ${Emojis.Plus}
+  ${Emojis.Arrow}status
+  ${Emojis.Arrow}announcement-channel \`<channel>\`
+  ${Emojis.Arrow}overview-channel \`<channel>\`
+  ${Emojis.Arrow}birthday-role \`<role>\`
+  ${Emojis.Arrow}ping-role \`<role>\`
+  ${Emojis.Arrow}timezone\`<zone>\`
+  ${Emojis.Arrow}announcement-message\`<message>\` ${Emojis.Plus}
       `,
 			inline: true,
 		},

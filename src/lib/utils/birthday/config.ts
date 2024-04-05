@@ -56,22 +56,22 @@ async function generateFields(id: string, member: GuildMember): Promise<APIEmbed
 
 	function getValueString(name: keyof PrismaGuild, value: any, member: GuildMember) {
 		if (value === null) {
-			return `${Emojis.ArrowRight} not set`;
+			return `${Emojis.Arrow} not set`;
 		} else if (name === 'timezone' && typeof value === 'number') {
-			return value < 0 ? `${Emojis.ArrowRight} UTC${value}` : `${Emojis.ArrowRight} UTC+${value}`;
+			return value < 0 ? `${Emojis.Arrow} UTC${value}` : `${Emojis.Arrow} UTC+${value}`;
 		} else if (name.includes('Channel') && typeof value === 'string') {
-			return `${Emojis.ArrowRight} ${channelMention(value)}`;
+			return `${Emojis.Arrow} ${channelMention(value)}`;
 		} else if (name.includes('Role') && typeof value === 'string') {
-			return `${Emojis.ArrowRight} ${roleMention(value)}`;
+			return `${Emojis.Arrow} ${roleMention(value)}`;
 		} else if (name.includes('User') && typeof value === 'string') {
-			return `${Emojis.ArrowRight} ${userMention(value)}`;
+			return `${Emojis.Arrow} ${userMention(value)}`;
 		} else if (name === 'messagesAnnouncement' && typeof value === 'string') {
-			return `${Emojis.ArrowRight} ${formatBirthdayMessage(value, member)}`;
+			return `${Emojis.Arrow} ${formatBirthdayMessage(value, member)}`;
 		} else if (name === 'rolesNotified' && Array.isArray(value)) {
-			return `${Emojis.ArrowRight} ${value.map((role) => roleMention(role)).join(', ')}`;
+			return `${Emojis.Arrow} ${value.map((role) => roleMention(role)).join(', ')}`;
 		}
 
-		return `${Emojis.ArrowRight} ${value.toString()}`;
+		return `${Emojis.Arrow} ${value.toString()}`;
 	}
 
 	function getNameString(name: keyof PrismaGuild): string {

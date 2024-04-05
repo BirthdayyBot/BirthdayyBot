@@ -21,15 +21,15 @@ export const VoteEmbed: APIEmbed = {
 		{
 			name: 'Vote for Birthdayy',
 			value: `
-            ${Emojis.ArrowRight} [top.gg](https://birthdayy.xyz/topgg/vote)
-            ${Emojis.ArrowRight} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
-            ${Emojis.ArrowRight} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
+            ${Emojis.Arrow} [top.gg](https://birthdayy.xyz/topgg/vote)
+            ${Emojis.Arrow} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
+            ${Emojis.Arrow} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
 			inline: false,
 		},
 		{
 			name: 'Birthdayy Premium',
-			value: `${Emojis.ArrowRight} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](https://www.patreon.com/birthdayy)`,
+			value: `${Emojis.Arrow} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](https://www.patreon.com/birthdayy)`,
 			inline: false,
 		},
 	],

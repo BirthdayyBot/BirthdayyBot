@@ -16,7 +16,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 	public defaultKey = {
 		channelsAnnouncement: null,
-		messagesAnnouncement: `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`,
+		messagesAnnouncement: `${Emojis.Arrow} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`,
 		rolesBirthday: null,
 		rolesNotified: [],
 		channelsLogs: null,

@@ -19,21 +19,15 @@ import {
 	envParseNumber,
 	envParseString,
 } from '@skyra/env-utilities';
+import { ActivityType, GatewayIntentBits, Locale, PermissionFlagsBits, type OAuth2Scopes } from 'discord-api-types/v10';
 import {
-	ActivityType,
-	GatewayIntentBits,
-	Locale,
-	PermissionFlagsBits,
-	PresenceUpdateStatus,
-	type OAuth2Scopes,
-} from 'discord-api-types/v10';
-import {
+	ActivitiesOptions,
 	Options,
+	Partials,
 	channelMention,
 	roleMention,
 	type ClientOptions,
 	type PermissionsString,
-	type PresenceData,
 	type WebhookClientData,
 } from 'discord.js';
 import type { FormatFunction, InterpolationOptions } from 'i18next';
@@ -41,17 +35,27 @@ import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
 
+export function parseAnalytics(): ConnectionOptions {
+	const url = envParseString('INFLUX_URL');
+	const token = envParseString('INFLUX_TOKEN');
+
+	return {
+		url,
+		token,
+	};
+}
+
 function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
 
 	return {
 		id: envParseString('CLIENT_ID'),
 		secret: envParseString('OAUTH_SECRET'),
-		cookie: envParseString('OAUTH_COOKIE', 'BIRTHDAYY_AUTH'),
-		redirect: envParseString('OAUTH_REDIRECT_URI', 'http://127.0.0.1:3000/oauth/callback'),
+		cookie: envParseString('OAUTH_COOKIE'),
+		redirect: envParseString('OAUTH_REDIRECT_URI'),
 		scopes: envParseArray('OAUTH_SCOPE') as OAuth2Scopes[],
 		transformers: [transformOauthGuildsAndUser],
-		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE', '127.0.0.1'),
+		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE'),
 	};
 }
 
@@ -61,13 +65,12 @@ function parseApi(): ServerOptions | undefined {
 	return {
 		auth: parseApiAuth(),
 		prefix: envParseString('API_PREFIX', '/'),
-		origin: envParseString('API_ORIGIN', 'http://127.0.0.1:3000'),
-		listenOptions: { port: envParseInteger('API_PORT', 3000) },
-		automaticallyConnect: false,
+		origin: envParseString('API_ORIGIN'),
+		listenOptions: { port: envParseInteger('API_PORT') },
 	};
 }
 
-export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'src');
+export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'dist');
 export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'languages');
 
 function parseInternationalizationDefaultVariablesPermissions() {
@@ -77,25 +80,15 @@ function parseInternationalizationDefaultVariablesPermissions() {
 	return Object.fromEntries(entries) as Readonly<Record<PermissionsString, PermissionsString>>;
 }
 
-type EmojisString = keyof typeof Emojis;
-function parseInternationalizationDefaultVariablesEmojis() {
-	const keys = Object.keys(Emojis) as readonly EmojisString[];
-	const entries = keys.map((key) => [key, Emojis[key]] as const);
-
-	return Object.fromEntries(entries);
-}
-
 function parseInternationalizationDefaultVariables() {
 	return {
 		VERSION: process.env.CLIENT_VERSION,
+		ARROW: Emojis.Arrow,
 		SUCCESS: Emojis.Success,
 		FAIL: Emojis.Fail,
-		PLUS: Emojis.Plus,
-		HEART: Emojis.Heart,
-		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
+		LOADIND: Emojis.Sign,
 		CLIENT_ID: process.env.CLIENT_ID,
 		...parseInternationalizationDefaultVariablesPermissions(),
-		...parseInternationalizationDefaultVariablesEmojis(),
 	};
 }
 
@@ -170,16 +163,16 @@ function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
 	};
 }
 
-function parsePresenceOptions(): PresenceData {
-	return {
-		status: PresenceUpdateStatus.Online,
-		activities: [
-			{
-				name: '/birthday set 🎂',
-				type: ActivityType.Watching,
-			},
-		],
-	};
+function parsePresenceActivity(): ActivitiesOptions[] {
+	const { CLIENT_PRESENCE_NAME } = process.env;
+	if (!CLIENT_PRESENCE_NAME) return [];
+
+	return [
+		{
+			name: CLIENT_PRESENCE_NAME,
+			type: ActivityType[envParseString('CLIENT_PRESENCE_TYPE', 'Listening') as keyof typeof ActivityType],
+		},
+	];
 }
 
 export const SENTRY_OPTIONS: NodeOptions = {
@@ -187,25 +180,11 @@ export const SENTRY_OPTIONS: NodeOptions = {
 	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
 };
 
-export function parseAnalytics(): ConnectionOptions {
-	const url = envParseString('INFLUX_URL');
-	const token = envParseString('INFLUX_TOKEN');
-
-	return {
-		url,
-		token,
-	};
-}
-
 export const CLIENT_OPTIONS: ClientOptions = {
 	allowedMentions: { users: [], roles: [] },
 	api: parseApi(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: false,
-	logger: {
-		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
-	},
-	shards: 'auto',
 	makeCache: Options.cacheEverything(),
 	sweepers: {
 		...Options.DefaultSweeperSettings,
@@ -214,9 +193,13 @@ export const CLIENT_OPTIONS: ClientOptions = {
 			lifetime: minutes.toSeconds(15),
 		},
 	},
+	partials: [Partials.Channel],
+	presence: { activities: parsePresenceActivity() },
+	logger: {
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
+	},
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
-	presence: parsePresenceOptions(),
 };
 
 function parseWebhookError(): WebhookClientData | null {

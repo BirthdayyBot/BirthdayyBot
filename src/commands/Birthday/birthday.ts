@@ -3,14 +3,22 @@ import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
-import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
+import { floatPromise, resolveOnErrorCodesPrisma } from '#lib/utils/functions/promises';
+import {
+	createSubcommandMappings,
+	Emojis,
+	interactionProblem,
+	interactionSuccess,
+	PrismaErrorCodeEnum,
+	resolveTarget,
+} from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import { getBirthdays } from '#utils/functions/guilds';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
+import { isNullish, isNullOrUndefined } from '@sapphire/utilities';
 import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<CustomSubCommand.Options>({
@@ -31,108 +39,109 @@ export class BirthdayCommand extends CustomSubCommand {
 		registry.registerChatInputCommand((builder) => registerBirthdayCommand(builder));
 	}
 
-	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const birthdayManager = getBirthdays(ctx.guild);
-		const month = ctx.options.getInteger('month');
+	public async list(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const birthdayManager = getBirthdays(interaction.guild);
+		const month = interaction.options.getInteger('month');
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
 		const title = month
-			? await resolveKey(ctx, 'commands/birthday:list.title.month', options)
-			: await resolveKey(ctx, 'commands/birthday:list.title.next');
+			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
+			: await resolveKey(interaction, 'commands/birthday:list.title.next');
 
-		return birthdayManager.sendListBirthdays(ctx, birthdays, title);
+		return birthdayManager.sendListBirthdays(interaction, birthdays, title);
 	}
 
-	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { options, user } = resolveTarget(ctx);
-		const day = addZeroToSingleDigitNumber(ctx.options.getInteger('day', true));
-		const month = addZeroToSingleDigitNumber(ctx.options.getInteger('month', true));
-		const year = ctx.options.getInteger('year') ?? 'XXXX';
-		const birthday = `${year}-${month}-${day}`;
+	public async set(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const target = interaction.options.getUser('user') ?? interaction.user;
+		const day = interaction.options.getInteger('day', true);
+		const month = interaction.options.getInteger('month', true);
+		const year = interaction.options.getInteger('year');
+
+		const context = target === interaction.user ? 'user' : 'self';
+
+		const birthday = `${year ?? 'XXXX'}/${addZeroToSingleDigitNumber(month)}/${addZeroToSingleDigitNumber(day)}`;
 
 		await this.container.prisma.birthday.upsert({
-			where: { userId_guildId: { userId: user.id, guildId: ctx.guildId } },
-			create: {
-				birthday,
-				user: {
-					connectOrCreate: {
-						where: { id: user.id },
-						create: { id: user.id, username: user.username },
-					},
-				},
-				guild: {
-					connectOrCreate: {
-						where: { id: ctx.guildId },
-						create: { id: ctx.guildId },
-					},
-				},
-			},
+			create: { userId: target.id, guildId: interaction.guildId, birthday },
+			where: { userId_guildId: { guildId: interaction.guildId, userId: target.id } },
 			update: { birthday },
 		});
 
-		await updateBirthdayOverview(ctx.guild);
+		floatPromise(updateBirthdayOverview(interaction.guild));
+
+		const content = await resolveKey(interaction, 'commands/birthday:set.success', { birthday, target, context });
+
+		return interaction.reply(content);
+	}
+
+	public async remove(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const target = interaction.options.getUser('user') ?? interaction.user;
+		const context = target ? 'user' : 'self';
+
+		const result = await resolveOnErrorCodesPrisma(
+			this.container.prisma.birthday.delete({
+				where: { userId_guildId: { guildId: interaction.guildId, userId: target.id } },
+			}),
+			PrismaErrorCodeEnum.NotFound,
+		);
+
+		if (isNullish(result)) {
+			const key = await resolveKey(interaction, 'commands/birthday:remove.notRegistered', { target, context });
+			return interactionProblem(interaction, key);
+		}
+
+		floatPromise(updateBirthdayOverview(interaction.guild));
 
 		return interactionSuccess(
-			ctx,
-			await resolveKey(ctx, 'commands/birthday:set.success', {
-				birthday: bold(formatDateForDisplay(birthday)),
-				...options,
-			}),
+			interaction,
+			await resolveKey(interaction, 'commands/birthday:remove.success', { target, context }),
 		);
 	}
 
-	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user, options } = resolveTarget(ctx);
-		const birthday = await this.container.prisma.birthday
-			.delete({ where: { userId_guildId: { guildId: ctx.guildId, userId: user.id } } })
-			.catch(() => null);
-
-		if (!birthday) {
-			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
-				command: BirthdayApplicationCommandMentions.Set,
-				...options,
-			});
-		}
-
-		await updateBirthdayOverview(ctx.guild);
-
-		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
-	}
-
-	public async show(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user, options } = resolveTarget(ctx);
-		const birthday = getBirthdays(ctx.guild).get(user.id);
+	public async show(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const { user, options } = resolveTarget(interaction);
+		const birthday = getBirthdays(interaction.guild).get(user.id);
 
 		if (isNullOrUndefined(birthday)) {
-			return interactionProblem(ctx, await resolveKey(ctx, 'commands/birthday:show.notRegistered'));
+			return interactionProblem(
+				interaction,
+				await resolveKey(interaction, 'commands/birthday:show.notRegistered'),
+			);
 		}
 
 		return interactionSuccess(
-			ctx,
-			await resolveKey(ctx, 'commands/birthday:show.success', {
+			interaction,
+			await resolveKey(interaction, 'commands/birthday:show.success', {
 				date: bold(formatDateForDisplay(birthday.birthday)),
-				emoji: Emojis.ArrowRight,
+				emoji: Emojis.Arrow,
 				...options,
 			}),
 		);
 	}
 
-	public async test(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
-		const { user } = resolveTarget(ctx);
-		const birthay = getBirthdays(ctx.guild).get(user.id);
+	public async test(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+		const target = interaction.options.getUser('user') ?? interaction.user;
+		const context = target ? 'user' : 'self';
 
-		if (isNullOrUndefined(birthay)) {
-			return interactionProblem(ctx, 'This user has not yet registered his birthday ');
+		const birthay = await this.container.prisma.birthday.findUnique({
+			where: { userId_guildId: { guildId: interaction.guildId, userId: target.id } },
+		});
+
+		if (isNullish(birthay)) {
+			const key = await resolveKey(interaction, 'commands/birthday:remove.notRegistered', { target, context });
+			return interactionProblem(interaction, key);
 		}
 
-		const result = await getBirthdays(ctx.guild).announcedBirthday(birthay);
+		const payload = { userId: target.id, guildId: interaction.guildId, isTest: true };
 
-		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
+		await this.container.tasks.create({ name: 'BirthdayReminderTask', payload });
 
-		return interactionSuccess(ctx, content);
+		return interaction.reply(
+			'Birthday reminder task created. Consult the overview and your roles to verify that the task has been carried out correctly.',
+		);
 	}
 }
 

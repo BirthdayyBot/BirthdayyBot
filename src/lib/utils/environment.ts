@@ -20,6 +20,6 @@ export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '10776213638813
 export const DISCORD_INVITE = 'https://discord.com/invite/Bs9bSVe2Hf';
 export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseString('LOG_CHANNEL_ADMIN');
 export const VOTE_ROLE_ID = '1039089174948626473';
-export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`;
+export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${Emojis.Arrow} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`;
 
 export const CLIENT_PERMISSIONS = new PermissionsBitField().add([PermissionsBitField.Flags.ViewChannel]);

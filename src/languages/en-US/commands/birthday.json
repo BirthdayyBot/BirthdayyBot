@@ -12,9 +12,8 @@
     "yearDescription": "Which year are you born ?",
     "userName": "user",
     "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
-    "success": "Your birthday has been set to {{birthday}} on this server.",
-    "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
-    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
+    "success_self": "{{SUCCESS}} Your birthday has been set to {{birthday}} on this server.",
+    "success_user": "{{SUCCESS}} {{target}}'s birthday has been set to {{birthday}} on this server.",
     "roleHigher": "You cannot execute this command on someone with a higher role than you!"
   },
   "listName": "list",
@@ -44,8 +43,8 @@
   "remove": {
     "userName": "user",
     "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
-    "success": "Your birthday was successfully removed.",
-    "success_target": "{target}}'s birthday was successfully removed.",
+    "success_self": "Your birthday has been removed from this server.",
+    "success_user": "{{target}}'s birthday has been removed from this server.",
     "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
     "notRegistered_target": "{{target}}'s birthday is not yet registered.",
     "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",

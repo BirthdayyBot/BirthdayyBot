@@ -41,7 +41,7 @@ export function sendLoadingMessage(message: Message): Promise<typeof message> {
 export function resolveTarget(interaction: ChatInputCommandInteraction) {
 	const user = interaction.options.getUser('user') ?? interaction.user;
 	const target = userMention(user.id);
-	return { user, options: { target, context: user === interaction.user ? '' : 'target' } };
+	return { user, options: { target, context: user === interaction.user ? undefined : 'target' } };
 }
 
 /**
