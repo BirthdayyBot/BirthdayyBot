@@ -25,6 +25,7 @@ import {
 	chatInputApplicationCommandMention,
 	roleMention,
 } from 'discord.js';
+import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 
 type ConfigDefault = Omit<
 	Required<Guild>,
@@ -87,6 +88,8 @@ export class ConfigCommand extends CustomSubCommand {
 			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
+			await updateBirthdayOverview(interaction.guild);
+
 			entries.push(['channelsOverview', result.unwrap()]);
 		}
 
@@ -143,8 +146,6 @@ export class ConfigCommand extends CustomSubCommand {
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
-
-		this.container.logger.debug(settings);
 
 		const embed = new EmbedBuilder()
 			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))

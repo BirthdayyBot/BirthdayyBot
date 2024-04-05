@@ -44,8 +44,11 @@ export interface BirthdayEventInfoModel {
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(payload?: { userId: string; guildId: string; isTest: boolean }) {
 		if (payload) {
-			const birthdays = getBirthdays(payload.guildId);
-			return birthdays.announcedBirthday(await birthdays.fetch(payload.userId));
+			const birthday = await container.prisma.birthday.findUnique({
+				where: { userId_guildId: { userId: payload.userId, guildId: payload.guildId } },
+			});
+			if (!birthday) return null;
+			return this.birthdayEvent(payload.userId, payload.guildId, payload.isTest);
 		}
 
 		for (const [, guild] of await container.client.guilds.fetch()) {

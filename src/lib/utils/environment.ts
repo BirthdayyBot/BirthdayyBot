@@ -22,31 +22,4 @@ export const VOTE_CHANNEL_ID = isProduction ? '950683261540130816' : envParseStr
 export const VOTE_ROLE_ID = '1039089174948626473';
 export const DEFAULT_ANNOUNCEMENT_MESSAGE = `${Emojis.ArrowRight} Today is a special Day!{NEW_LINE}${Emojis.Gift} Please wish {MENTION} a happy Birthday <3`;
 
-export const Permission_Bits = [
-	PermissionsBitField.Flags.AddReactions,
-	PermissionsBitField.Flags.AttachFiles,
-
-	PermissionsBitField.Flags.ChangeNickname,
-	PermissionsBitField.Flags.CreateInstantInvite,
-	PermissionsBitField.Flags.CreatePrivateThreads,
-	PermissionsBitField.Flags.CreatePublicThreads,
-
-	PermissionsBitField.Flags.EmbedLinks,
-
-	PermissionsBitField.Flags.MentionEveryone,
-	PermissionsBitField.Flags.ManageChannels,
-	PermissionsBitField.Flags.ManageGuildExpressions,
-	PermissionsBitField.Flags.ManageMessages,
-	PermissionsBitField.Flags.ManageNicknames,
-	PermissionsBitField.Flags.ManageEvents,
-	PermissionsBitField.Flags.ManageRoles,
-
-	PermissionsBitField.Flags.ViewChannel,
-	PermissionsBitField.Flags.ViewAuditLog,
-
-	PermissionsBitField.Flags.SendMessages,
-	PermissionsBitField.Flags.SendMessagesInThreads,
-
-	PermissionsBitField.Flags.UseExternalEmojis,
-	PermissionsBitField.Flags.UseExternalStickers,
-];
+export const CLIENT_PERMISSIONS = new PermissionsBitField().add([PermissionsBitField.Flags.ViewChannel]);

@@ -3,6 +3,7 @@ import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
 import { envParseBoolean } from '@skyra/env-utilities';
 import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
 import { BrandingColors } from './constants.js';
+import { container } from '@sapphire/framework';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
@@ -16,7 +17,7 @@ export function defaultEmbed(): APIEmbed {
 		color: BrandingColors.Primary,
 		timestamp: new Date().toISOString(),
 		footer: {
-			text: `${CLIENT_NAME} ${envParseBoolean('CUSTOM_BOT') ? '👑' : ''}`,
+			text: `${CLIENT_NAME ?? container.client.user?.globalName} ${envParseBoolean('CUSTOM_BOT') ? '👑' : ''}`,
 			icon_url: BOT_AVATAR,
 		},
 	};

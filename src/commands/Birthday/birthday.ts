@@ -1,6 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
-import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { DEFAULT_REQUIRED_CLIENT_PERMISSIONS } from '#lib/structures';
+import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
 import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
@@ -33,7 +33,6 @@ export class BirthdayCommand extends CustomSubCommand {
 
 	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const birthdayManager = getBirthdays(ctx.guild);
-		await getBirthdays(ctx.guild).fetch();
 		const month = ctx.options.getInteger('month');
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
@@ -54,9 +53,27 @@ export class BirthdayCommand extends CustomSubCommand {
 		const year = ctx.options.getInteger('year') ?? 'XXXX';
 		const birthday = `${year}-${month}-${day}`;
 
-		await getBirthdays(ctx.guildId).create({ birthday, userId: user.id });
+		await this.container.prisma.birthday.upsert({
+			where: { userId_guildId: { userId: user.id, guildId: ctx.guildId } },
+			create: {
+				birthday,
+				user: {
+					connectOrCreate: {
+						where: { id: user.id },
+						create: { id: user.id, username: user.username },
+					},
+				},
+				guild: {
+					connectOrCreate: {
+						where: { id: ctx.guildId },
+						create: { id: ctx.guildId },
+					},
+				},
+			},
+			update: { birthday },
+		});
 
-		await updateBirthdayOverview(ctx.guildId);
+		await updateBirthdayOverview(ctx.guild);
 
 		return interactionSuccess(
 			ctx,
@@ -69,16 +86,18 @@ export class BirthdayCommand extends CustomSubCommand {
 
 	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
-		const result = await getBirthdays(ctx.guildId).remove(user.id);
+		const birthday = await this.container.prisma.birthday
+			.delete({ where: { userId_guildId: { guildId: ctx.guildId, userId: user.id } } })
+			.catch(() => null);
 
-		if (!result) {
+		if (!birthday) {
 			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
 				...options,
 			});
 		}
 
-		await updateBirthdayOverview(ctx.guildId);
+		await updateBirthdayOverview(ctx.guild);
 
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}

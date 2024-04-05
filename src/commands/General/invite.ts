@@ -1,6 +1,6 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { BrandingColors, Permission_Bits } from '#utils';
+import { BrandingColors, CLIENT_PERMISSIONS } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
@@ -52,7 +52,7 @@ export class UserCommand extends CustomCommand {
 	private generateInviteLink(shouldNotAddPermissions: boolean) {
 		return this.container.client.generateInvite({
 			scopes: [OAuth2Scopes.ApplicationsCommands, OAuth2Scopes.Bot],
-			permissions: shouldNotAddPermissions ? 0n : Permission_Bits,
+			permissions: shouldNotAddPermissions ? 0n : CLIENT_PERMISSIONS,
 		});
 	}
 }
