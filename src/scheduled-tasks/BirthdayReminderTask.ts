@@ -29,7 +29,6 @@ import {
 	type EmbedField,
 	type Snowflake,
 } from 'discord.js';
-import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
 
 export interface BirthdayEventInfoModel {
 	userId: string;
@@ -238,14 +237,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 	private async addCurrentBirthdayChildRole(
 		member: GuildMember,
-		guildId: Snowflake,
+		guildID: Snowflake,
 		role: Role,
 		isTest: boolean,
 	): Promise<{
 		added: boolean;
 		message: string;
 	}> {
-		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
 			message: 'Not set',
@@ -255,8 +253,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 			await container.tasks.create(
 				{
-					name: 'BirthdayRoleRemoverTask',
-					payload,
+					name: 'RemoveBirthdayRole',
+					payload: { guildID, userID: member.user.id, roleID: role.id },
 				},
 				{
 					repeated: false,
@@ -269,7 +267,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
-					await container.utilities.guild.reset.BirthdayRole(guildId);
+					await container.utilities.guild.reset.BirthdayRole(guildID);
 					returnData.message = 'Missing Permissions';
 				} else {
 					returnData.message = error.message;
