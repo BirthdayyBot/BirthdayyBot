@@ -1,3 +1,4 @@
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
@@ -31,7 +32,6 @@ import {
 	userMention,
 } from 'discord.js';
 import { SettingsManager } from './SettingsManager.js';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 
 enum CacheActions {
 	None,
@@ -316,7 +316,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			} finally {
 				floatPromise(
 					container.tasks.create({
-						name: 'BirthdayRoleRemoverTask',
+						name: 'RemoveBirthdayRole',
 						payload: {
 							memberId: member.id,
 							guildId: member.guild.id,
