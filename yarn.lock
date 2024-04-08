@@ -1479,9 +1479,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"birthdayy-discord-bot@workspace:.":
+"birthdayy@workspace:.":
   version: 0.0.0-use.local
-  resolution: "birthdayy-discord-bot@workspace:."
+  resolution: "birthdayy@workspace:."
   dependencies:
     "@commitlint/cli": "npm:^18.6.0"
     "@commitlint/config-conventional": "npm:^18.6.0"
