@@ -30,7 +30,7 @@ export class UserEvent extends Listener {
 		const blc = isDevelopment ? magenta : blue;
 
 		container.logger.info(stripIndents`
-			{blc(process.env.CLIENT_VERSION)}
+			${blc(process.env.CLIENT_VERSION)}
 			[${success}] Gateway
 			${isDevelopment ? `${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
 		`);

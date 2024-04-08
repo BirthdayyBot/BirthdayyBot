@@ -185,6 +185,7 @@ export const SENTRY_OPTIONS: NodeOptions = {
 export const CLIENT_OPTIONS: ClientOptions = {
 	allowedMentions: { users: [], roles: [] },
 	api: parseApi(),
+	shards: 'auto',
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: false,
 	makeCache: Options.cacheEverything(),
