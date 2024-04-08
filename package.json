@@ -31,7 +31,7 @@
     "clean": "node scripts/clean.mjs",
     "start": "doppler run -- node --enable-source-maps dist/index.js",
     "lint": "eslint --fix --ext ts src",
-    "format": "prettier --write --log-level=warn \"{src,tests}/**/*.{js,ts,json}\"",
+    "format": "prettier --write --log-level=warn \"{src}/**/*.{js,ts,json}\"",
     "test": "eslint --ext .ts src",
     "update": "yarn upgrade-interactive",
     "prisma:generate": "npx prisma generate",
