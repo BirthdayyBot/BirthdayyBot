@@ -67,6 +67,7 @@ function parseApi(): ServerOptions | undefined {
 		prefix: envParseString('API_PREFIX', '/'),
 		origin: envParseString('API_ORIGIN'),
 		listenOptions: { port: envParseInteger('API_PORT') },
+		automaticallyConnect: false,
 	};
 }
 
