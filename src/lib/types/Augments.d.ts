@@ -1,5 +1,5 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
-import type { Birthday, Guild, User } from '#root/utilities/db/index';
+import type { Birthday, Guild } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import 'discord.js';
@@ -82,6 +82,7 @@ declare module '@skyra/env-utilities' {
 		REDIS_PASSWORD: string;
 		REDIS_DB: IntegerString;
 		REDIS_USERNAME: string;
+		REDIS_TLS: BooleanString;
 
 		DATABASE_URL: string;
 		PRISMA_DEBUG_LOGS: BooleanString;

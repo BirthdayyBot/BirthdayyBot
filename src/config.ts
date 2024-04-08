@@ -152,6 +152,7 @@ function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 			host: envParseString('REDIS_HOST', 'localhost'),
 			db: envParseInteger('REDIS_DB'),
 			username: REDIS_USERNAME,
+			tls: envParseBoolean('REDIS_TLS', false) ? {} : undefined,
 		},
 	};
 }
