@@ -1,0 +1,11 @@
+{
+  "helpTitles": {
+    "aliases": "🖇️ | **Aliases**",
+    "usages": "📝 | **Command Usage**",
+    "extendedHelp": "🔍 | **Extended Help**",
+    "explainedUsage": "⚙ | **Explained usage**",
+    "possibleFormats": "🔢 | **Possible formats**",
+    "examples": "🔗 | **Examples**",
+    "reminders": "⏰ | **Reminder**"
+  }
+}

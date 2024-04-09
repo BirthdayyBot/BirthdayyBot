@@ -104,3 +104,38 @@ export function getEmbedAuthor(user: User | APIUser, url?: string | undefined): 
 export function getFooterAuthor(user: User | APIUser, url?: string | undefined) {
 	return { iconURL: getDisplayAvatar(user, { size: 128 }), text: getTag(user), url };
 }
+
+/**
+ * Splits a message into multiple messages if it exceeds a certain length, using a specified character as the delimiter.
+ * @param content The message to split.
+ * @param options The options for splitting the message.
+ * @returns An array of messages split from the original message.
+ * @throws An error if the content cannot be split.
+ */
+export function splitMessage(content: string, options: SplitMessageOptions) {
+	if (content.length <= options.maxLength) return [content];
+
+	let last = 0;
+	const messages = [] as string[];
+	while (last < content.length) {
+		// If the last chunk can fit the rest of the content, push it and break:
+		if (content.length - last <= options.maxLength) {
+			messages.push(content.slice(last));
+			break;
+		}
+
+		// Find the last best index to split the chunk:
+		const index = content.lastIndexOf(options.char, options.maxLength + last);
+		if (index === -1) throw new Error('Unable to split content.');
+
+		messages.push(content.slice(last, index + 1));
+		last = index + 1;
+	}
+
+	return messages;
+}
+
+export interface SplitMessageOptions {
+	char: string;
+	maxLength: number;
+}

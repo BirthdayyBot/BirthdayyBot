@@ -24,6 +24,7 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 @ApplyOptions<CustomSubCommand.Options>({
 	name: 'birthday',
 	description: 'commands/birthday:birthdayDescription',
+	detailedDescription: 'commands/birthday:birthdayExtended',
 	subcommands: createSubcommandMappings(
 		'list',
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },

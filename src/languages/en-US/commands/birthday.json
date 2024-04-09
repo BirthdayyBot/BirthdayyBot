@@ -1,6 +1,12 @@
 {
   "birthdayName": "birthday",
   "birthdayDescription": "Birthday Management Commands",
+  "birthdayExtended": {
+    "usages": ["set <day> <month> <year> [user]", "remove [user]", "show [user]", "list [month]"],
+    "extendedHelp": "Birthday Management Commands. You can set, remove, show and list birthdays. If you set a birthday, the bot will announce it on the server when the day comes. If you remove a birthday, the bot will stop announcing it. If you show a birthday, the bot will tell you when it is. If you list birthdays, the bot will show you all the birthdays for the month you specify.",
+    "reminder": "The help command **only** shows the commands you can use. For the full list, please visit <https://skyra.pw/commands>.",
+    "examples": ["set 1 1 2000", "set 1 1 2000 @swizyy", "remove", "remove @swizyy", "show", "show @kyra", "list", "list 1"]
+  },
   "setName": "set",
   "setDescription": "Set your birthday date on the server.",
   "set": {

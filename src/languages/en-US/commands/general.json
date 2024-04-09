@@ -1,4 +1,20 @@
 {
+  "helpAllFlag": "Displaying one category per page. Have issues with the embed? Run `{{prefix}}help --all` for a full list in DMs.",
+  "helpCommandCount_one": "{{count}} command",
+  "helpCommandCount_other": "{{count}} commands",
+  "helpData": {
+    "footer": "Command help for {{footerName}}",
+    "title": "{{titleDescription}}"
+  },
+  "helpDescription": "Displays all commands or the description of one.",
+  "helpExtended": {
+    "usages": ["--cat/--categories", "--all", "CategoryName", "Page", "CommandName"],
+    "extendedHelp": "The help command shows a paginated list of all commands by their categories, or the extended information of a command if specified.\n\nIf you use `--categories` or `--cat`, you can get the list of all categories and the amount of commands each one of them have.",
+    "reminder": "The help command **only** shows the commands you can use. For the full list, please visit <https://skyra.pw/commands>.",
+    "examples": ["--cat", "--all", "Moderation", "12", "help"]
+  },
+  "helpDm": "📥 | The list of commands you have access to has been sent to your DMs.",
+  "helpNodm": "{{REDCROSS}} | You have DMs disabled so I couldn't send you the list of commands.",
   "infoBody": "[Birthdayy](https://birthdayy.xyz) {{VERSION}} is a multi-purpose Discord Bot designed for managing your birthdays.\nI use the [Sapphire Framework](https://sapphirejs.dev) for the [Discord.js library](https://discord.js.org).\n\n[Privacy Policy](https://birthdayy.xyz/disclosure).",
   "infoDescription": "Provides some information about me.",
   "infoTitles": {
