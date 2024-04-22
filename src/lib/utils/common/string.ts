@@ -25,7 +25,7 @@ export function formatBirthdayMessage(message: string, member: GuildMember) {
 		'{GUILD_NAME}': member.guild.name,
 		'{GUILD_ID}': member.guild.id,
 		'{MENTION}': userMention(member.id),
-		'{SERVERNAME}': member.guild.name,
+		'{SERVERNAME}': member.guild.name
 	};
 
 	let formattedMessage = message;

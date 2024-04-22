@@ -1,5 +1,6 @@
-import { CdnUrls, Emojis, GuildIDEnum, generateDefaultEmbed } from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
+import { CdnUrls, Emojis, GuildIDEnum } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
 import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
@@ -35,15 +36,11 @@ export async function generateBirthdayList(page_id: number, guild: Guild) {
  * @returns obj - Object
  * @returns obj.splitBirthdays - Array of Arrays with birthdays
  */
-function getBirthdaysAsLists(
-	allBirthdays: Birthday[],
-	maxBirthdaysPerList: number,
-): { birthdays: Birthday[][]; listAmount: number } {
+function getBirthdaysAsLists(allBirthdays: Birthday[], maxBirthdaysPerList: number): { birthdays: Birthday[][]; listAmount: number } {
 	const { length } = allBirthdays;
 	// split birthdays into arrays with max length x entries
 	const splitBirthdays = [];
-	for (let i = 0; i < length; i += maxBirthdaysPerList)
-		splitBirthdays.push(allBirthdays.slice(i, i + maxBirthdaysPerList));
+	for (let i = 0; i < length; i += maxBirthdaysPerList) splitBirthdays.push(allBirthdays.slice(i, i + maxBirthdaysPerList));
 
 	return { birthdays: splitBirthdays, listAmount: splitBirthdays.length };
 }
@@ -59,7 +56,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${Emojis.Arrow}Set your Birthday with\n\`/birthday set <day> <month> [year]\``,
 		fields: [],
-		thumbnail: { url: CdnUrls.Cake },
+		thumbnail: { url: CdnUrls.Cake }
 	};
 
 	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
@@ -73,9 +70,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 		// For each birthday in current month
 		for (const birthday of birthdays) {
 			const { userId, birthday: dateOfTheBirthday } = birthday;
-			const member = guildIsChilliAttackV2
-				? guild?.members.cache.get(userId) ?? null
-				: await guild?.members.fetch(userId).catch(() => null);
+			const member = guildIsChilliAttackV2 ? guild?.members.cache.get(userId) ?? null : await guild?.members.fetch(userId).catch(() => null);
 
 			if (!member && !guildIsChilliAttackV2) {
 				// Delete the birthday if the member is not in the guild
@@ -87,7 +82,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 				// If the current description is too long, add it to the embed
 				embed.fields?.push({
 					name: month,
-					value: currentDescription,
+					value: currentDescription
 				});
 				currentDescription = '';
 			}
@@ -97,7 +92,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 			// If the current description is not empty, add it to the embed
 			embed.fields?.push({
 				name: month,
-				value: currentDescription,
+				value: currentDescription
 			});
 			currentDescription = '';
 		}
@@ -129,14 +124,14 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 			label,
 			custom_id: `birthday_list_page_${i}`,
 			disabled,
-			type: 2,
+			type: 2
 		});
 	}
 	const components = [
 		{
 			type: 1,
-			components: innerComponents,
-		},
+			components: innerComponents
+		}
 	];
 	if (listAmount > 5) {
 		components.push({
@@ -147,9 +142,9 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 					style: 1,
 					label: 'To many birthdays to show all.',
 					disabled: true,
-					custom_id: 'birthday_list_to_many',
-				},
-			],
+					custom_id: 'birthday_list_to_many'
+				}
+			]
 		});
 	}
 

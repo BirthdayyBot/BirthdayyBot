@@ -14,14 +14,9 @@ export class UserRoute extends Route {
 		const { lang, category } = request.query;
 		const { i18n, stores } = this.container;
 		const language = i18n.getT((lang as string) ?? 'en-US');
-		const commands = (
-			category ? stores.get('commands').filter((cmd) => cmd.category === category) : stores.get('commands')
-		).filter((cmd) => {
+		const commands = (category ? stores.get('commands').filter((cmd) => cmd.category === category) : stores.get('commands')).filter((cmd) => {
 			const permissions = new PermissionsBitField(cmd.options.requiredUserPermissions);
-			return (
-				permissions.missing(PermissionFlagsBits.Administrator) ||
-				permissions.missing(PermissionFlagsBits.ManageGuild)
-			);
+			return permissions.missing(PermissionFlagsBits.Administrator) || permissions.missing(PermissionFlagsBits.ManageGuild);
 		});
 
 		return response.json(commands.map(UserRoute.process.bind(null, language)));
@@ -33,7 +28,7 @@ export class UserRoute extends Route {
 			category: command.category,
 			description: t(command.description),
 			name: command.name,
-			preconditions: command.preconditions,
+			preconditions: command.preconditions
 		};
 	}
 }

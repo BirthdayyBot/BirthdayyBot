@@ -1,8 +1,11 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BrandingColors, DISCORD_INVITE, getEmbedAuthor, isDevelopment } from '#utils';
+import { BirthdayyCommand } from '#lib/structures';
 import { seconds } from '#utils/common';
+import { BrandingColors } from '#utils/constants';
+import { isDevelopment } from '#utils/env';
+import { DISCORD_INVITE } from '#utils/environment';
+import { getEmbedAuthor } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { version as sapphireVersion } from '@sapphire/framework';
+import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { roundNumber } from '@sapphire/utilities';
 import {
@@ -15,18 +18,18 @@ import {
 	OAuth2Scopes,
 	PermissionFlagsBits,
 	time,
-	TimestampStyles,
+	TimestampStyles
 } from 'discord.js';
 import { TFunction } from 'i18next';
 import { cpus, uptime, type CpuInfo } from 'os';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<BirthdayyCommand.Options>({
 	name: 'info',
 	description: 'commands/general:infoDescription',
-	enabled: isDevelopment,
+	enabled: isDevelopment
 })
-export class UserCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class UserCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) =>
 				applyDescriptionLocalizedBuilder(builder, this.description)
@@ -34,12 +37,12 @@ export class UserCommand extends CustomCommand {
 					.setDMPermission(true)
 					.setDefaultMemberPermissions(PermissionFlagsBits.ViewChannel),
 			{
-				guildIds: ['980559116076470272'],
-			},
+				guildIds: ['980559116076470272']
+			}
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const t = await fetchT(interaction);
 		const embed = await this.buildEmbed(t);
 		const components = this.buildComponents(t);
@@ -65,7 +68,7 @@ export class UserCommand extends CustomCommand {
 					.setStyle(ButtonStyle.Link)
 					.setURL(DISCORD_INVITE)
 					.setLabel(componentLabels.supportServer)
-					.setEmoji({ name: '🆘' }),
+					.setEmoji({ name: '🆘' })
 			),
 			new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
 				new ButtonBuilder()
@@ -77,8 +80,8 @@ export class UserCommand extends CustomCommand {
 					.setStyle(ButtonStyle.Link)
 					.setURL('https://patreon.com/birthdayy')
 					.setLabel(componentLabels.donate)
-					.setEmoji({ name: '🧡' }),
-			),
+					.setEmoji({ name: '🧡' })
+			)
 		];
 	}
 
@@ -89,7 +92,7 @@ export class UserCommand extends CustomCommand {
 				PermissionFlagsBits.ViewChannel |
 				PermissionFlagsBits.ReadMessageHistory |
 				PermissionFlagsBits.SendMessages |
-				PermissionFlagsBits.EmbedLinks,
+				PermissionFlagsBits.EmbedLinks
 		});
 	}
 
@@ -104,7 +107,7 @@ export class UserCommand extends CustomCommand {
 			uptime: this.uptimeStatistics,
 			usage: this.usageStatistics,
 			database: await this.databaseStatistics(),
-			returnObjects: true,
+			returnObjects: true
 		}) as { stats: string; uptime: string; usage: string; serverUsage: string };
 
 		return new EmbedBuilder()
@@ -115,7 +118,7 @@ export class UserCommand extends CustomCommand {
 			.addFields(
 				{ name: titles.stats, value: fields.stats },
 				{ name: titles.uptime, value: fields.uptime },
-				{ name: titles.serverUsage, value: fields.serverUsage },
+				{ name: titles.serverUsage, value: fields.serverUsage }
 			);
 	}
 
@@ -127,7 +130,7 @@ export class UserCommand extends CustomCommand {
 			nodeJs: process.version,
 			users: client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0),
 			djsVersion: `v${djsVersion}`,
-			sapphireVersion: `v${sapphireVersion}`,
+			sapphireVersion: `v${sapphireVersion}`
 		};
 	}
 
@@ -135,7 +138,7 @@ export class UserCommand extends CustomCommand {
 		const [birthdays, guilds, users] = await this.container.prisma.$transaction([
 			this.container.prisma.birthday.count(),
 			this.container.prisma.guild.count(),
-			this.container.prisma.user.count(),
+			this.container.prisma.user.count()
 		]);
 		return { birthdays, guilds, users };
 	}
@@ -146,7 +149,7 @@ export class UserCommand extends CustomCommand {
 		return {
 			client: time(seconds.fromMilliseconds(now - this.container.client.uptime!), TimestampStyles.RelativeTime),
 			host: time(roundNumber(nowSeconds - uptime()), TimestampStyles.RelativeTime),
-			total: time(roundNumber(nowSeconds - process.uptime()), TimestampStyles.RelativeTime),
+			total: time(roundNumber(nowSeconds - process.uptime()), TimestampStyles.RelativeTime)
 		};
 	}
 
@@ -155,7 +158,7 @@ export class UserCommand extends CustomCommand {
 		return {
 			cpuLoad: cpus().map(UserCommand.formatCpuInfo.bind(null)).join(' | '),
 			ramTotal: usage.heapTotal / 1048576,
-			ramUsed: usage.heapUsed / 1048576,
+			ramUsed: usage.heapUsed / 1048576
 		};
 	}
 

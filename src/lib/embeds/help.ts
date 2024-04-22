@@ -22,7 +22,7 @@ export const HelpEmbed: APIEmbed = {
   ${Emojis.Arrow}/status
   ${Emojis.Arrow}/vote
         `,
-			inline: true,
+			inline: true
 		},
 
 		{
@@ -34,7 +34,7 @@ export const HelpEmbed: APIEmbed = {
   ${Emojis.Arrow}remove \`<user>\`
   ${Emojis.Arrow}show \`[user]\`
       `,
-			inline: true,
+			inline: true
 		},
 		{
 			name: '/config',
@@ -47,7 +47,7 @@ export const HelpEmbed: APIEmbed = {
   ${Emojis.Arrow}timezone\`<zone>\`
   ${Emojis.Arrow}announcement-message\`<message>\` ${Emojis.Plus}
       `,
-			inline: true,
-		},
-	],
+			inline: true
+		}
+	]
 };

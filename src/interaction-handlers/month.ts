@@ -21,9 +21,7 @@ export class UserInteractionHandler extends InteractionHandler {
 				this.container.logger.debug(months);
 				const items = months.map((name, index) => ({ name, value: index + 1 }));
 
-				return this.some(
-					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())),
-				);
+				return this.some(items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())));
 			}
 			default:
 				return this.none();

@@ -19,7 +19,7 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const entry: GuildUtilities = {
 		guild,
 		settings: new SettingsManager(guild),
-		birthdays: new BirthdaysManager(guild, getSettings(guild)),
+		birthdays: new BirthdaysManager(guild, getSettings(guild))
 	};
 
 	cache.set(guild, entry);

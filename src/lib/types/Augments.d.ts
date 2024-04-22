@@ -1,4 +1,5 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
+import { AnalyticsData } from '#lib/structures/AnalyticsData';
 import type { Birthday, Guild } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';

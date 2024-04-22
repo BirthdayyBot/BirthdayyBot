@@ -1,20 +1,21 @@
 import thinking from '#lib/discord/thinking';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#lib/utils/constants';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder, fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { EmbedBuilder } from 'discord.js';
 
-export class VoteCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class UserCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) => {
 				return applyLocalizedBuilder(builder, 'commands/tools:voteName', 'commands/tools:voteDescription');
 			},
-			{ guildIds: ['980559116076470272'] },
+			{ guildIds: [this.getGlobalCommandId()] }
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		await thinking(interaction);
 		const t = await fetchT(interaction);
 		const embed = this.buildEmbed(t);

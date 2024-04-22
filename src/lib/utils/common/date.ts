@@ -26,20 +26,7 @@ export function splitDateString(date: string, separator = '-') {
 	return { year, month: Number(month), day };
 }
 
-const months = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
-] as const;
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as const;
 
 export function numberToMonthName(number: number) {
 	return months[number - 1];
@@ -79,7 +66,7 @@ export function getCurrentOffset(): TimezoneObject {
 				date: today,
 				dateFormatted: today.format('YYYY/MM/DD'),
 				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset],
+				timezone: TIMEZONE_VALUES[offset]
 			};
 			return timezoneObject;
 		}
@@ -89,7 +76,7 @@ export function getCurrentOffset(): TimezoneObject {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY/MM/DD'),
 		utcOffset: 0,
-		timezone: 'UTC',
+		timezone: 'UTC'
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;

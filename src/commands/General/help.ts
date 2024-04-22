@@ -1,18 +1,12 @@
 import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#lib/utils/constants';
 import { splitMessage } from '#lib/utils/utils';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { ChatInputCommand, Command, container, Result } from '@sapphire/framework';
+import { ApplicationCommandRegistry, ChatInputCommand, Command, container, Result } from '@sapphire/framework';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
-import {
-	AutocompleteInteraction,
-	ChatInputCommandInteraction,
-	Collection,
-	EmbedBuilder,
-	PermissionFlagsBits,
-} from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, Collection, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 /**
  * Sorts a collection alphabetically as based on the keys, rather than the values.
@@ -22,22 +16,17 @@ import {
  * @param firstCategory Key of the first element for comparison
  * @param secondCategory Key of the second element for comparison
  */
-function sortCommandsAlphabetically(
-	_: Command[],
-	__: Command[],
-	firstCategory: string,
-	secondCategory: string,
-): 1 | -1 | 0 {
+function sortCommandsAlphabetically(_: Command[], __: Command[], firstCategory: string, secondCategory: string): 1 | -1 | 0 {
 	if (firstCategory > secondCategory) return 1;
 	if (secondCategory > firstCategory) return -1;
 	return 0;
 }
 
-@ApplyOptions<CustomCommand.Options>({
-	description: 'Displays the help menu, providing information on available commands.',
+@ApplyOptions<BirthdayyCommand.Options>({
+	description: 'Displays the help menu, providing information on available commands.'
 })
-export class UserCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class UserCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => {
 			return builder
 				.setName('help')
@@ -47,32 +36,22 @@ export class UserCommand extends CustomCommand {
 						.setName('categories')
 						.setDescription('Displays all command categories.')
 						.addStringOption((option) =>
-							option
-								.setName('category')
-								.setDescription('The category to display.')
-								.setRequired(false)
-								.setAutocomplete(true),
-						),
+							option.setName('category').setDescription('The category to display.').setRequired(false).setAutocomplete(true)
+						)
 				)
-				.addSubcommand((subcommand) =>
-					subcommand.setName('all').setDescription('Displays all available commands.'),
-				)
+				.addSubcommand((subcommand) => subcommand.setName('all').setDescription('Displays all available commands.'))
 				.addSubcommand((subcommand) =>
 					subcommand
 						.setName('command')
 						.setDescription('Displays the help menu for a specific command.')
 						.addStringOption((option) =>
-							option
-								.setName('command')
-								.setDescription('The command to display.')
-								.setRequired(true)
-								.setAutocomplete(true),
-						),
+							option.setName('command').setDescription('The command to display.').setRequired(true).setAutocomplete(true)
+						)
 				);
 		});
 	}
 
-	public override chatInputRun(interaction: ChatInputCommandInteraction) {
+	public override chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		if (interaction.options.getSubcommand() === 'categories') return this.helpCategories(interaction);
 		if (interaction.options.getSubcommand() === 'all') return this.all(interaction);
 		if (interaction.options.getSubcommand() === 'command') {
@@ -95,9 +74,7 @@ export class UserCommand extends CustomCommand {
 
 		if (focusedOption.name === 'category') {
 			const options = categories.map((category) => ({ name: category, value: category }));
-			return interaction.respond(
-				options.filter((option) => option.name.toLowerCase().includes(focusedOption.value.toLowerCase())),
-			);
+			return interaction.respond(options.filter((option) => option.name.toLowerCase().includes(focusedOption.value.toLowerCase())));
 		} else if (focusedOption.name === 'command') {
 			const commands = container.stores
 				.get('commands')
@@ -115,8 +92,8 @@ export class UserCommand extends CustomCommand {
 			const line = String(++i).padStart(2, '0');
 			commandCategories.push(
 				`\`${line}.\` **${category}** → ${t('commands/general:helpCommandCount', {
-					count: commands.length,
-				})}`,
+					count: commands.length
+				})}`
 			);
 		}
 
@@ -158,11 +135,7 @@ export class UserCommand extends CustomCommand {
 
 		const helpMessage: string[] = [];
 		for (const [category, list] of commands) {
-			helpMessage.push(
-				`**${category} Commands**:\n`,
-				list.map(this.formatCommand.bind(this, language, false)).join('\n'),
-				'',
-			);
+			helpMessage.push(`**${category} Commands**:\n`, list.map(this.formatCommand.bind(this, language, false)).join('\n'), '');
 		}
 
 		return helpMessage.join('\n');
@@ -172,17 +145,17 @@ export class UserCommand extends CustomCommand {
 		const commandsByCategory = await UserCommand.fetchCommands(interaction);
 
 		const display = new PaginatedMessage({
-			template: new EmbedBuilder().setColor(BrandingColors.Primary),
+			template: new EmbedBuilder().setColor(BrandingColors.Primary)
 		}) //
 			.setSelectMenuOptions((pageIndex) => ({
-				label: commandsByCategory.at(pageIndex - 1)![0].fullCategory!.join(' → '),
+				label: commandsByCategory.at(pageIndex - 1)![0].fullCategory!.join(' → ')
 			}));
 
 		for (const [category, commands] of commandsByCategory) {
 			display.addPageEmbed((embed) =>
 				embed //
 					.setTitle(`${category} Commands`)
-					.setDescription(commands.map(this.formatCommand.bind(this, t, true)).join('\n')),
+					.setDescription(commands.map(this.formatCommand.bind(this, t, true)).join('\n'))
 			);
 		}
 
@@ -205,9 +178,9 @@ export class UserCommand extends CustomCommand {
 
 		const extendedHelpData = t(command.detailedDescription as string, {
 			replace: {
-				prefix: '/',
+				prefix: '/'
 			},
-			returnObjects: true,
+			returnObjects: true
 		}) as LanguageHelpDisplayOptions;
 
 		const extendedHelp = builder.display(command.name, extendedHelpData);
@@ -215,7 +188,7 @@ export class UserCommand extends CustomCommand {
 		const data = t('commands/general:helpData', {
 			footerName: command.name,
 			titleDescription: t(command.description),
-			returnObjects: true,
+			returnObjects: true
 		}) as { title: string; footer: string };
 
 		return new EmbedBuilder()
@@ -240,7 +213,7 @@ export class UserCommand extends CustomCommand {
 				const command = cmd as Command;
 
 				const result = await cmd.preconditions.chatInputRun(interaction, command as ChatInputCommand, {
-					command: null!,
+					command: null!
 				});
 
 				if (result.isErr()) return;
@@ -248,7 +221,7 @@ export class UserCommand extends CustomCommand {
 				const category = filtered.get(command.fullCategory.join(' → '));
 				if (category) category.push(command);
 				else filtered.set(command.fullCategory.join(' → '), [command]);
-			}),
+			})
 		);
 
 		return filtered.sort(sortCommandsAlphabetically);

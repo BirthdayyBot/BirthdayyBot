@@ -1,2 +1,2 @@
-export * from './CustomCommand.js';
-export * from './utils.js';
+export * from '#lib/structures/commands/BirthdayyCommand';
+export * from '#lib/structures/commands/BirthdayySubcommand';

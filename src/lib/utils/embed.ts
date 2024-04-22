@@ -8,7 +8,7 @@ import { container } from '@sapphire/framework';
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
 		...defaultEmbed(),
-		...embed,
+		...embed
 	};
 }
 
@@ -18,8 +18,8 @@ export function defaultEmbed(): APIEmbed {
 		timestamp: new Date().toISOString(),
 		footer: {
 			text: `${CLIENT_NAME ?? container.client.user?.globalName} ${envParseBoolean('CUSTOM_BOT') ? '👑' : ''}`,
-			icon_url: BOT_AVATAR,
-		},
+			icon_url: BOT_AVATAR
+		}
 	};
 }
 
@@ -29,9 +29,9 @@ export function interactionSuccess(interaction: ChatInputCommandInteraction, des
 		embeds: [
 			{
 				color: BrandingColors.Primary,
-				description: `${description}`,
-			},
-		],
+				description: `${description}`
+			}
+		]
 	});
 }
 
@@ -41,8 +41,8 @@ export function interactionProblem(interaction: ChatInputCommandInteraction, des
 		embeds: [
 			{
 				color: Colors.Red,
-				description: `${description}`,
-			},
-		],
+				description: `${description}`
+			}
+		]
 	});
 }

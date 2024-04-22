@@ -13,8 +13,6 @@ export class TargetPositionPrecondition extends Precondition {
 
 		if (author.id === target.id) return this.ok();
 
-		return author.roles.highest.position >= target.roles.highest.position
-			? this.ok()
-			: this.error({ identifier: 'preconditions:roleHigher' });
+		return author.roles.highest.position >= target.roles.highest.position ? this.ok() : this.error({ identifier: 'preconditions:roleHigher' });
 	}
 }

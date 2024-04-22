@@ -14,7 +14,7 @@ export class UserListener extends Listener {
 		if (isNullish(member)) return;
 
 		void this.container.prisma.birthday.delete({
-			where: { userId_guildId: { userId: member.id, guildId: guild.id } },
+			where: { userId_guildId: { userId: member.id, guildId: guild.id } }
 		});
 	}
 }

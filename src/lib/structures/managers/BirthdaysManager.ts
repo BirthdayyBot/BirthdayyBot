@@ -7,12 +7,7 @@ import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promis
 import { CollectionConstructor } from '@discordjs/collection';
 import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
-import {
-	GuildTextBasedChannelTypes,
-	PaginatedFieldMessageEmbed,
-	canSendEmbeds,
-	isGuildBasedChannel,
-} from '@sapphire/discord.js-utilities';
+import { GuildTextBasedChannelTypes, PaginatedFieldMessageEmbed, canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { TOptions, resolveKey } from '@sapphire/plugin-i18next';
@@ -29,14 +24,14 @@ import {
 	MessageCreateOptions,
 	MessageEditOptions,
 	roleMention,
-	userMention,
+	userMention
 } from 'discord.js';
 import { SettingsManager } from './SettingsManager.js';
 
 enum CacheActions {
 	None,
 	Fetch,
-	Insert,
+	Insert
 }
 
 export class BirthdaysManager extends Collection<string, Birthday> {
@@ -95,7 +90,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	public async defaultBirthdayListEmbed(img: boolean = true) {
 		const translateEmbed = (await resolveKey(this.guild, 'commands/birthday:list.embedList', {
-			returnObjects: true,
+			returnObjects: true
 		})) satisfies APIEmbed;
 
 		const embed = new EmbedBuilder(translateEmbed).setColor(BrandingColors.Primary);
@@ -103,23 +98,16 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return img ? embed : embed.setThumbnail(null);
 	}
 
-	public async sendListBirthdays(
-		interaction: ChatInputCommandInteraction | Message,
-		birthdays: Birthday[],
-		key: string,
-		options?: TOptions,
-	) {
+	public async sendListBirthdays(interaction: ChatInputCommandInteraction | Message, birthdays: Birthday[], key: string, options?: TOptions) {
 		const embed = await this.defaultBirthdayListEmbed();
 
 		if (isNullOrUndefinedOrEmpty(birthdays)) {
 			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
 			const messageOptions: MessageEditOptions = {
-				embeds: [embed.setDescription(description)],
+				embeds: [embed.setDescription(description)]
 			};
 
-			return interaction instanceof Message
-				? interaction.edit(messageOptions)
-				: interactionSuccess(interaction, description);
+			return interaction instanceof Message ? interaction.edit(messageOptions) : interactionSuccess(interaction, description);
 		}
 
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
@@ -159,7 +147,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const birthday = await container.prisma.birthday.upsert({
 			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } },
 			create: { ...args, guildId: this.guildId },
-			update: args,
+			update: args
 		});
 		await this.updateBirthdayOverview();
 		return this._cache(birthday, CacheActions.Insert);
@@ -171,11 +159,11 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				where: {
 					userId_guildId: {
 						guildId: this.guildId,
-						userId,
-					},
-				},
+						userId
+					}
+				}
 			}),
-			PrismaErrorCodeEnum.NotFound,
+			PrismaErrorCodeEnum.NotFound
 		);
 
 		if (isNullish(birthday)) return false;
@@ -189,10 +177,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async fetch(id?: null): Promise<this>;
 	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | this | null> {
 		if (Array.isArray(id)) {
-			return this._cache(
-				await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: { in: id } } }),
-				CacheActions.None,
-			);
+			return this._cache(await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: { in: id } } }), CacheActions.None);
 		}
 
 		if (typeof id === 'string') {
@@ -200,18 +185,15 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				await container.prisma.birthday.findFirstOrThrow({
 					where: {
 						guildId: this.guildId,
-						userId: id,
-					},
+						userId: id
+					}
 				}),
-				CacheActions.None,
+				CacheActions.None
 			);
 		}
 
 		if (super.size !== this._count && id) {
-			this._cache(
-				await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: id } }),
-				CacheActions.Fetch,
-			);
+			this._cache(await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: id } }), CacheActions.Fetch);
 		}
 
 		this._cache(await container.prisma.birthday.findMany({ where: { guildId: this.guildId } }), CacheActions.Fetch);
@@ -257,23 +239,17 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return cast<CollectionConstructor>(Collection);
 	}
 
-	private async fetchOverviewMessage(
-		channel: GuildTextBasedChannelTypes,
-		overviewMessage: string,
-	): Promise<Message<boolean> | null> {
+	private async fetchOverviewMessage(channel: GuildTextBasedChannelTypes, overviewMessage: string): Promise<Message<boolean> | null> {
 		return channel.messages.fetch(overviewMessage);
 	}
 
-	private createOptionsMessageForAnnoncementChannel(
-		{ messagesAnnouncement, rolesNotified }: Settings,
-		member: GuildMember,
-	): MessageCreateOptions {
+	private createOptionsMessageForAnnoncementChannel({ messagesAnnouncement, rolesNotified }: Settings, member: GuildMember): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
 			.setDescription(formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member))
 			.setThumbnail(CdnUrls.Cake);
 
-		return { content: rolesNotified ? rolesNotified.map((id) => roleMention(id)).join(' ') : '', embeds: [embed] };
+		return { content: rolesNotified ? roleMention(rolesNotified) : '', embeds: [embed] };
 	}
 
 	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
@@ -320,9 +296,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 						payload: {
 							memberId: member.id,
 							guildId: member.guild.id,
-							rolesBirthday,
-						},
-					}),
+							rolesBirthday
+						}
+					})
 				);
 			}
 		}

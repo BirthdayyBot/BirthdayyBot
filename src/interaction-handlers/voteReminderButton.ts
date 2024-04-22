@@ -21,9 +21,9 @@ export class VoteReminderButton extends InteractionHandler {
 			components: [
 				{
 					type: 1,
-					components: [await remindMeButtonDisabledBuilder(interaction)],
-				},
-			],
+					components: [await remindMeButtonDisabledBuilder(interaction)]
+				}
+			]
 		});
 
 		const delay = result.time - Date.now();
@@ -32,17 +32,11 @@ export class VoteReminderButton extends InteractionHandler {
 			return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
 		}
 
-		await this.container.tasks.create(
-			{ name: 'VoteReminderTask', payload: { memberId: interaction.user.id } },
-			{ repeated: false, delay },
-		);
+		await this.container.tasks.create({ name: 'VoteReminderTask', payload: { memberId: interaction.user.id } }, { repeated: false, delay });
 
 		return interaction.followUp({
-			content: `I will remind you to vote ${time(
-				Math.round(result.time / 1000),
-				TimestampStyles.RelativeTime,
-			)} !`,
-			ephemeral: true,
+			content: `I will remind you to vote ${time(Math.round(result.time / 1000), TimestampStyles.RelativeTime)} !`,
+			ephemeral: true
 		});
 	}
 }

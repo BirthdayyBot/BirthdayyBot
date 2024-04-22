@@ -11,8 +11,6 @@ export class UserPermissionsPrecondition extends Precondition {
 	}
 
 	public handle(interaction: CommandInteraction<'cached'>) {
-		return interaction.user.id === interaction.guild.ownerId
-			? this.ok()
-			: this.error({ identifier: 'preconditions:serverOwner' });
+		return interaction.user.id === interaction.guild.ownerId ? this.ok() : this.error({ identifier: 'preconditions:serverOwner' });
 	}
 }

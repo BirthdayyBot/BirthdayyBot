@@ -8,8 +8,6 @@ export class UserShardListener extends ShardListener {
 	protected readonly title = magenta('Ready');
 
 	public run(id: number, unavailableGuilds: Set<string> | null) {
-		this.container.logger.info(
-			`${this.header(id)}: ${this.title} ${unavailableGuilds ? `(unavailable: ${unavailableGuilds.size})` : ''};	`,
-		);
+		this.container.logger.info(`${this.header(id)}: ${this.title} ${unavailableGuilds ? `(unavailable: ${unavailableGuilds.size})` : ''};	`);
 	}
 }

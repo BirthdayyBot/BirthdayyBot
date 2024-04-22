@@ -16,8 +16,7 @@ export async function updateBirthdayOverview(guild: Guild) {
 
 	if (isDMChannel(channel)) return container.logger.error(`Channel is a DM Channel in guild: ${guild.id}`);
 
-	if (!isGuildBasedChannel(channel))
-		return container.logger.error(`Channel is not a Guild Based Channel in guild: ${guild.id}`);
+	if (!isGuildBasedChannel(channel)) return container.logger.error(`Channel is not a Guild Based Channel in guild: ${guild.id}`);
 
 	const { embed, components } = await generateBirthdayList(1, guild);
 
@@ -37,7 +36,7 @@ async function createOverviewMessage(channel: GuildTextBasedChannel, options: Me
 		ok: async (message) => {
 			await container.prisma.guild.update({
 				where: { id: channel.guildId },
-				data: { messagesOverview: message.id },
+				data: { messagesOverview: message.id }
 			});
 
 			return message;
@@ -45,6 +44,6 @@ async function createOverviewMessage(channel: GuildTextBasedChannel, options: Me
 		err: (error) => {
 			container.logger.error(`Failed to send message in channel: ${channel.id} with error: ${error}`);
 			return null;
-		},
+		}
 	});
 }

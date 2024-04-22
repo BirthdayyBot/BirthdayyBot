@@ -11,7 +11,7 @@ export const enum ButtonID {
 	choiceBirthdayList = 'choice-birthday-list',
 	choiceGuildConfig = 'choice-guild-config',
 	choiceDiscordInformation = 'choice-discord-information',
-	github = 'github-button',
+	github = 'github-button'
 }
 
 export function defaultButtonBuilder(data?: ButtonComponentData) {
@@ -19,7 +19,7 @@ export function defaultButtonBuilder(data?: ButtonComponentData) {
 		style: ButtonStyle.Link,
 		type: ComponentType.Button,
 		disabled: false,
-		...data,
+		...data
 	});
 }
 
@@ -40,8 +40,8 @@ export async function inviteBirthdayyButton(target: Target) {
 		.setURL(
 			container.client.generateInvite({
 				scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
-				permissions: CLIENT_PERMISSIONS,
-			}),
+				permissions: CLIENT_PERMISSIONS
+			})
 		)
 		.setEmoji(Emojis.Gift);
 }
@@ -68,20 +68,12 @@ export async function websiteButtonBuiler(target: Target) {
 
 export async function birthdayListButtonBuilder(target: Target) {
 	const label = await resolveKey(target, 'button:birthdayyList');
-	return defaultButtonBuilder()
-		.setStyle(ButtonStyle.Secondary)
-		.setLabel(label)
-		.setEmoji(Emojis.Cake)
-		.setCustomId(ButtonID.choiceBirthdayList);
+	return defaultButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(label).setEmoji(Emojis.Cake).setCustomId(ButtonID.choiceBirthdayList);
 }
 
 export async function guildConfigButtonBuilder(target: Target) {
 	const label = await resolveKey(target, 'button:guildConfig');
-	return defaultButtonBuilder()
-		.setStyle(ButtonStyle.Secondary)
-		.setLabel(label)
-		.setEmoji(Emojis.Tools)
-		.setCustomId(ButtonID.choiceGuildConfig);
+	return defaultButtonBuilder().setStyle(ButtonStyle.Secondary).setLabel(label).setEmoji(Emojis.Tools).setCustomId(ButtonID.choiceGuildConfig);
 }
 
 export async function discordInformationButtonBuilder(target: Target) {

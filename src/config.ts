@@ -11,14 +11,7 @@ import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
-import {
-	envIsDefined,
-	envParseArray,
-	envParseBoolean,
-	envParseInteger,
-	envParseNumber,
-	envParseString,
-} from '@skyra/env-utilities';
+import { envIsDefined, envParseArray, envParseBoolean, envParseInteger, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { ActivityType, GatewayIntentBits, Locale, PermissionFlagsBits, type OAuth2Scopes } from 'discord-api-types/v10';
 import {
 	ActivitiesOptions,
@@ -28,7 +21,7 @@ import {
 	roleMention,
 	type ClientOptions,
 	type PermissionsString,
-	type WebhookClientData,
+	type WebhookClientData
 } from 'discord.js';
 import type { FormatFunction, InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
@@ -41,7 +34,7 @@ export function parseAnalytics(): ConnectionOptions {
 
 	return {
 		url,
-		token,
+		token
 	};
 }
 
@@ -55,7 +48,7 @@ function parseApiAuth(): ServerOptionsAuth | undefined {
 		redirect: envParseString('OAUTH_REDIRECT_URI'),
 		scopes: envParseArray('OAUTH_SCOPE') as OAuth2Scopes[],
 		transformers: [transformOauthGuildsAndUser],
-		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE'),
+		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE')
 	};
 }
 
@@ -67,7 +60,7 @@ function parseApi(): ServerOptions | undefined {
 		prefix: envParseString('API_PREFIX', '/'),
 		origin: envParseString('API_ORIGIN'),
 		listenOptions: { port: envParseInteger('API_PORT') },
-		automaticallyConnect: false,
+		automaticallyConnect: false
 	};
 }
 
@@ -89,7 +82,7 @@ function parseInternationalizationDefaultVariables() {
 		FAIL: Emojis.Fail,
 		LOADIND: Emojis.Sign,
 		CLIENT_ID: process.env.CLIENT_ID,
-		...parseInternationalizationDefaultVariablesPermissions(),
+		...parseInternationalizationDefaultVariablesPermissions()
 	};
 }
 
@@ -115,7 +108,7 @@ function parseInternationalizationInterpolation(): InterpolationOptions {
 				default:
 					return value as string;
 			}
-		},
+		}
 	};
 }
 
@@ -138,8 +131,8 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			fallbackLng: 'en-US',
 			defaultNS: 'globals',
 			initImmediate: false,
-			interpolation: parseInternationalizationInterpolation(),
-		}),
+			interpolation: parseInternationalizationInterpolation()
+		})
 	};
 }
 
@@ -153,15 +146,15 @@ function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 			host: envParseString('REDIS_HOST', 'localhost'),
 			db: envParseInteger('REDIS_DB'),
 			username: REDIS_USERNAME,
-			tls: envParseBoolean('REDIS_TLS', false) ? {} : undefined,
-		},
+			tls: envParseBoolean('REDIS_TLS', false) ? {} : undefined
+		}
 	};
 }
 
 function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
 	return {
 		queue: 'birthdayy',
-		bull: parseBullOptions(),
+		bull: parseBullOptions()
 	};
 }
 
@@ -172,14 +165,14 @@ function parsePresenceActivity(): ActivitiesOptions[] {
 	return [
 		{
 			name: CLIENT_PRESENCE_NAME,
-			type: ActivityType[envParseString('CLIENT_PRESENCE_TYPE', 'Listening') as keyof typeof ActivityType],
-		},
+			type: ActivityType[envParseString('CLIENT_PRESENCE_TYPE', 'Listening') as keyof typeof ActivityType]
+		}
 	];
 }
 
 export const SENTRY_OPTIONS: NodeOptions = {
 	debug: DEBUG,
-	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
+	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })]
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
@@ -193,16 +186,16 @@ export const CLIENT_OPTIONS: ClientOptions = {
 		...Options.DefaultSweeperSettings,
 		messages: {
 			interval: minutes.toSeconds(3),
-			lifetime: minutes.toSeconds(15),
-		},
+			lifetime: minutes.toSeconds(15)
+		}
 	},
 	partials: [Partials.Channel],
 	presence: { activities: parsePresenceActivity() },
 	logger: {
-		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
 	},
 	i18n: parseInternationalizationOptions(),
-	tasks: parseScheduledTasksOptions(),
+	tasks: parseScheduledTasksOptions()
 };
 
 function parseWebhookError(): WebhookClientData | null {
@@ -210,7 +203,7 @@ function parseWebhookError(): WebhookClientData | null {
 
 	return {
 		id: envParseString('WEBHOOK_ERROR_ID'),
-		token: envParseString('WEBHOOK_ERROR_TOKEN'),
+		token: envParseString('WEBHOOK_ERROR_TOKEN')
 	};
 }
 

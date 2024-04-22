@@ -24,7 +24,7 @@ export const TIMEZONE_VALUES: Record<number, string> = {
 	9: 'Asia/Tokyo',
 	10: 'Australia/Brisbane',
 	11: 'Pacific/Noumea',
-	12: 'Pacific/Fiji',
+	12: 'Pacific/Fiji'
 };
 
 export const TimezoneWithLocale: Record<Locale, string> = {
@@ -58,5 +58,5 @@ export const TimezoneWithLocale: Record<Locale, string> = {
 	[Locale.Thai]: 'Asia/Bangkok',
 	[Locale.Turkish]: 'Asia/Istanbul',
 	[Locale.Ukrainian]: 'Europe/Simferopol',
-	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh',
+	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh'
 };

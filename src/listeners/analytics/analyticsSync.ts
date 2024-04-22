@@ -9,12 +9,7 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 		const dbSet = this.container.prisma;
 		const birthdayCount = await dbSet.birthday.count({ where: { inDeleteQueue: false } });
 
-		this.writePoints([
-			this.syncGuilds(guilds),
-			this.syncUsers(users),
-			this.syncBirthdayCount(birthdayCount),
-			this.syncMessageCount(),
-		]);
+		this.writePoints([this.syncGuilds(guilds), this.syncUsers(users), this.syncBirthdayCount(birthdayCount), this.syncMessageCount()]);
 
 		return this.container.client.analytics!.writeApi.flush();
 	}

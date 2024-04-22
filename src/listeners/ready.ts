@@ -1,5 +1,6 @@
 import { sendMessage } from '#lib/discord';
-import { BOT_ADMIN_LOG, isDevelopment } from '#utils';
+import { isDevelopment } from '#utils/env';
+import { BOT_ADMIN_LOG } from '#utils/environment';
 import { floatPromise } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, Store, container } from '@sapphire/framework';

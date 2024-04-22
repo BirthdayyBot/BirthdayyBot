@@ -13,7 +13,7 @@ import {
 	GuildMember,
 	GuildPremiumTier,
 	GuildVerificationLevel,
-	PermissionsBitField,
+	PermissionsBitField
 } from 'discord.js';
 import { flattenGuild } from './ApiTransformers.js';
 import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
@@ -21,7 +21,7 @@ import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginD
 export const authenticated = (token?: string) =>
 	createFunctionPrecondition(
 		(request: ApiRequest) => (token ? request.headers.authorization === token : Boolean(request.auth?.token)),
-		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized),
+		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized)
 	);
 
 /**
@@ -34,9 +34,7 @@ export function ratelimit(time: number, limit = 1, auth = false) {
 	const xRateLimitLimit = time;
 	return createFunctionPrecondition(
 		(request: ApiRequest, response: ApiResponse) => {
-			const id = (
-				auth ? request.auth!.id : request.headers['x-forwarded-for'] || request.socket.remoteAddress
-			) as string;
+			const id = (auth ? request.auth!.id : request.headers['x-forwarded-for'] || request.socket.remoteAddress) as string;
 			const bucket = manager.acquire(id);
 
 			response.setHeader('Date', new Date().toUTCString());
@@ -57,7 +55,7 @@ export function ratelimit(time: number, limit = 1, auth = false) {
 		},
 		(_request: ApiRequest, response: ApiResponse) => {
 			response.error(HttpCodes.TooManyRequests);
-		},
+		}
 	);
 }
 
@@ -66,14 +64,9 @@ export function canManage(guild: Guild, member: GuildMember): boolean {
 	return canManageGuild(member);
 }
 
-async function getManageable(
-	id: string,
-	oauthGuild: RESTAPIPartialCurrentUserGuild,
-	guild: Guild | undefined,
-): Promise<boolean> {
+async function getManageable(id: string, oauthGuild: RESTAPIPartialCurrentUserGuild, guild: Guild | undefined): Promise<boolean> {
 	if (oauthGuild.owner) return true;
-	if (typeof guild === 'undefined')
-		return new PermissionsBitField(BigInt(oauthGuild.permissions)).has(PermissionFlagsBits.ManageGuild);
+	if (typeof guild === 'undefined') return new PermissionsBitField(BigInt(oauthGuild.permissions)).has(PermissionFlagsBits.ManageGuild);
 
 	const member = await guild.members.fetch(id).catch(() => null);
 	if (!member) return false;
@@ -81,11 +74,7 @@ async function getManageable(
 	return canManage(guild, member);
 }
 
-async function transformGuild(
-	client: Client,
-	userId: string,
-	data: RESTAPIPartialCurrentUserGuild,
-): Promise<OauthFlattenedGuild> {
+async function transformGuild(client: Client, userId: string, data: RESTAPIPartialCurrentUserGuild): Promise<OauthFlattenedGuild> {
 	const guild = client.guilds.cache.get(data.id);
 	const serialized: PartialOauthFlattenedGuild =
 		typeof guild === 'undefined'
@@ -117,7 +106,7 @@ async function transformGuild(
 					systemChannelId: null,
 					vanityURLCode: null,
 					verificationLevel: GuildVerificationLevel.None,
-					verified: false,
+					verified: false
 				}
 			: flattenGuild(guild);
 
@@ -125,7 +114,7 @@ async function transformGuild(
 		...serialized,
 		permissions: data.permissions,
 		manageable: await getManageable(userId, data, guild),
-		isBotAdded: typeof guild !== 'undefined',
+		isBotAdded: typeof guild !== 'undefined'
 	};
 }
 

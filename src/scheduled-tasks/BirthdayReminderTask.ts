@@ -27,7 +27,7 @@ import {
 	userMention,
 	type APIEmbed,
 	type EmbedField,
-	type Snowflake,
+	type Snowflake
 } from 'discord.js';
 
 export interface BirthdayEventInfoModel {
@@ -44,7 +44,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 	public async run(payload?: { userId: string; guildId: string; isTest: boolean }) {
 		if (payload) {
 			const birthday = await container.prisma.birthday.findUnique({
-				where: { userId_guildId: { userId: payload.userId, guildId: payload.guildId } },
+				where: { userId_guildId: { userId: payload.userId, guildId: payload.guildId } }
 			});
 			if (!birthday) return null;
 			return this.birthdayEvent(payload.userId, payload.guildId, payload.isTest);
@@ -70,16 +70,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 				embeds: [
 					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
-						description: 'No Current Offset could be generated',
-					}),
-				],
+						description: 'No Current Offset could be generated'
+					})
+				]
 			});
 			return container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
-			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
+			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true }
 		];
 
 		if (isCustom) {
@@ -88,13 +88,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
 				return container.logger.debug(
-					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
+					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`
 				);
 			}
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
 				utcOffset,
-				envParseString('CLIENT_MAIN_GUILD'),
+				envParseString('CLIENT_MAIN_GUILD')
 			);
 		} else {
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
@@ -103,29 +103,22 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!currentBirthdays.length) {
 			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
-			return container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
-			);
+			return container.logger.info(`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`);
 		}
 
-		container.logger.debug(
-			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
-		);
+		container.logger.debug(`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`);
 
 		const eventInfos = await this.birthdayReminderLoop(currentBirthdays);
 		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, currentBirthdays.length, current);
 		return container.logger.debug(
-			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
+			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`
 		);
 	}
 
 	private async birthdayReminderLoop(birthdays: Birthday[]): Promise<BirthdayEventInfoModel[]> {
 		const eventInfos = [];
 		for (const birthday of birthdays) {
-			if (DEBUG)
-				container.logger.debug(
-					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
-				);
+			if (DEBUG) container.logger.debug(`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`);
 			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 			eventInfos.push(eventInfo);
 		}
@@ -135,35 +128,24 @@ export class BirthdayReminderTask extends ScheduledTask {
 	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
-			guildId,
+			guildId
 		};
 		const config = await container.utilities.guild.get.GuildConfig(guildId);
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const {
-			channelsAnnouncement,
-			messagesAnnouncement,
-			rolesBirthday,
-			rolesNotified,
-			premium: guildIsPremium,
-		} = config;
+		const { channelsAnnouncement, messagesAnnouncement, rolesBirthday, rolesNotified, premium: guildIsPremium } = config;
 
-		const guild = await resolveOnErrorCodesDiscord(
-			container.client.guilds.fetch(guildId),
-			RESTJSONErrorCodes.UnknownGuild,
-		);
+		const guild = await resolveOnErrorCodesDiscord(container.client.guilds.fetch(guildId), RESTJSONErrorCodes.UnknownGuild);
 
 		if (!guild) {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
 				// TODO: Clean up in #407
-				await container.utilities.guild.update
-					.DisableGuildAndBirthdays(guildId, true)
-					.catch((error: PrismaClientUnknownRequestError) => {
-						container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
-					});
+				await container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error: PrismaClientUnknownRequestError) => {
+					container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+				});
 				eventInfo.error += ' - Guild & Birthdays disabled';
 			}
 			return eventInfo;
@@ -173,11 +155,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {
-				await container.utilities.birthday.delete
-					.ByGuildAndUser(guildId, userId)
-					.catch((error: PrismaClientUnknownRequestError) => {
-						container.logger.error('[BirthdayTask] Error deleting birthday', error);
-					});
+				await container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error: PrismaClientUnknownRequestError) => {
+					container.logger.error('[BirthdayTask] Error deleting birthday', error);
+				});
 				eventInfo.error += ' - Birthday deleted';
 			}
 			return eventInfo;
@@ -185,11 +165,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		eventInfo.announcement = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		eventInfo.birthday_role = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 
 		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
@@ -214,14 +194,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const embed: APIEmbed = {
 			title: `${Emojis.News} Birthday Announcement!`,
-			description: this.formatBirthdayMessage(
-				messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE,
-				member,
-				guild,
-			),
+			description: this.formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member, guild),
 			thumbnail: {
-				url: CdnUrls.Cake,
-			},
+				url: CdnUrls.Cake
+			}
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);
 
@@ -229,7 +205,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			guildId,
 			channelsAnnouncement,
 			birthdayEmbed,
-			rolesNotified.map((role) => roleMention(role)).join(' '),
+			rolesNotified ? roleMention(rolesNotified) : undefined
 		);
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;
@@ -239,14 +215,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		member: GuildMember,
 		guildID: Snowflake,
 		role: Role,
-		isTest: boolean,
+		isTest: boolean
 	): Promise<{
 		added: boolean;
 		message: string;
 	}> {
 		const returnData = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 
 		try {
@@ -254,12 +230,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			await container.tasks.create(
 				{
 					name: 'RemoveBirthdayRole',
-					payload: { guildID, userID: member.user.id, roleID: role.id },
+					payload: { guildID, userID: member.user.id, roleID: role.id }
 				},
 				{
 					repeated: false,
-					delay: isTest ? Time.Minute / 6 : Time.Day,
-				},
+					delay: isTest ? Time.Minute / 6 : Time.Day
+				}
 			);
 			returnData.added = true;
 			returnData.message = 'Success';
@@ -282,16 +258,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 		guildId: Snowflake,
 		channel_id: Snowflake,
 		birthdayEmbed: APIEmbed,
-		content?: string,
+		content?: string
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		try {
 			await sendMessage(channel_id, {
 				content,
-				embeds: [birthdayEmbed],
+				embeds: [birthdayEmbed]
 			});
 			container.logger.debug('Sent Birthday Announcement');
 			returnData.sent = true;
@@ -311,10 +287,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				} else {
 					returnData.message = error.message;
 				}
-				container.logger.warn(
-					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
-					error.message,
-				);
+				container.logger.warn("COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n", error.message);
 			}
 
 			return returnData;
@@ -329,7 +302,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			'{GUILD_NAME}': guild.name,
 			'{GUILD_ID}': guild.id,
 			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name,
+			'{SERVERNAME}': guild.name
 		};
 
 		let formattedMessage = message;
@@ -344,7 +317,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		eventInfos: BirthdayEventInfoModel[],
 		dateFields: EmbedField[],
 		birthdayCount: number,
-		current: TimezoneObject,
+		current: TimezoneObject
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
 		eventInfos.map((eventInfo) => {
@@ -356,10 +329,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			}
 			return eventInfo;
 		});
-		const embedFields = [
-			...dateFields,
-			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
-		];
+		const embedFields = [...dateFields, { name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true }];
 		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
 		// const reportDescription =
 		// 	codeBlock('json', JSON.stringify(eventInfos, null, 2)).length > EmbedLimits.MaximumDescriptionLength
@@ -381,11 +351,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
 			name: embedTitle,
-			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
 		});
 		const reportFile = new AttachmentBuilder(Buffer.from(reportContent), {
 			name: `${embedTitle}.json`,
-			description: 'Scheduler Report File',
+			description: 'Scheduler Report File'
 		});
 
 		if (!schedulerLogThread) {
@@ -395,13 +365,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			embeds: [
 				generateDefaultEmbed({
 					title: embedTitle,
-					description: `Guilds:\n${codeBlock(guildIdsString)}`,
-				}),
-			],
+					description: `Guilds:\n${codeBlock(guildIdsString)}`
+				})
+			]
 		});
 
 		return schedulerLogThread.send({
-			files: [reportFile],
+			files: [reportFile]
 		});
 
 		function sendReport() {
@@ -410,9 +380,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 					generateDefaultEmbed({
 						title: embedTitle,
 						description: embedDescription,
-						fields: embedFields,
-					}),
-				],
+						fields: embedFields
+					})
+				]
 			});
 		}
 	}

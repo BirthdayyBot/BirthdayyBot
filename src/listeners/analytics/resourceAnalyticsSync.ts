@@ -5,7 +5,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { cpus } from 'node:os';
 
 @ApplyOptions<AnalyticsListener.Options>({
-	event: Events.ResourceAnalyticsSync,
+	event: Events.ResourceAnalyticsSync
 })
 export class UserAnalyticsEvent extends AnalyticsListener {
 	public run() {
@@ -18,8 +18,7 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 		const point = new Point(Points.PerCoreCPULoad).tag(Tags.Action, Actions.Sync);
 
 		let index = 0;
-		for (const { times } of cpus())
-			point.floatField(`cpu_${index++}`, (times.user + times.nice + times.sys + times.irq) / times.idle);
+		for (const { times } of cpus()) point.floatField(`cpu_${index++}`, (times.user + times.nice + times.sys + times.irq) / times.idle);
 
 		return point;
 	}

@@ -8,16 +8,12 @@ export class UserPermissionsPrecondition extends Precondition {
 		return result;
 	}
 
-	public override async contextMenuRun(
-		interaction: ContextMenuCommandInteraction<'cached'>,
-	): Precondition.AsyncResult {
+	public override async contextMenuRun(interaction: ContextMenuCommandInteraction<'cached'>): Precondition.AsyncResult {
 		const result = await this.handler(interaction);
 		return result;
 	}
 
 	private async handler(interaction: CommandInteraction<'cached'>) {
-		return isGuildAdministrator(interaction.member)
-			? this.ok()
-			: this.error({ identifier: 'preconditions:administrator' });
+		return isGuildAdministrator(interaction.member) ? this.ok() : this.error({ identifier: 'preconditions:administrator' });
 	}
 }

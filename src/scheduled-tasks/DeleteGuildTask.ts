@@ -5,7 +5,7 @@ import { type Snowflake } from 'discord.js';
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'deleteGuild',
-	customJobOptions: { removeOnComplete: true },
+	customJobOptions: { removeOnComplete: true }
 })
 export class UserTask extends ScheduledTask {
 	public async run(guildId: Snowflake) {

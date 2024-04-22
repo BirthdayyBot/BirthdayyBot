@@ -37,23 +37,12 @@ export class LanguageHelp {
 	}
 
 	public display(name: string, options: LanguageHelpDisplayOptions) {
-		const {
-			usages = [],
-			extendedHelp,
-			explainedUsage = [],
-			possibleFormats = [],
-			examples = [],
-			reminder,
-		} = options;
+		const { usages = [], extendedHelp, explainedUsage = [], possibleFormats = [], examples = [], reminder } = options;
 		const output: string[] = [];
 
 		// Usages
 		if (usages.length) {
-			output.push(
-				this.usages,
-				...usages.map((usage) => `→ /${name}${usage.length === 0 ? '' : ` *${usage}*`}`),
-				'',
-			);
+			output.push(this.usages, ...usages.map((usage) => `→ /${name}${usage.length === 0 ? '' : ` *${usage}*`}`), '');
 		}
 
 		// Extended help
@@ -68,11 +57,7 @@ export class LanguageHelp {
 
 		// Possible formats
 		if (possibleFormats.length) {
-			output.push(
-				this.possibleFormats,
-				...possibleFormats.map(([type, example]) => `→ **${type}**: ${example}`),
-				'',
-			);
+			output.push(this.possibleFormats, ...possibleFormats.map(([type, example]) => `→ **${type}**: ${example}`), '');
 		}
 
 		// Examples

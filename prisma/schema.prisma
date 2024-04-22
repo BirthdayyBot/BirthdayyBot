@@ -31,7 +31,7 @@ model Guild {
     messagesAnnouncement String?    @map("messages.announcement") @db.Text()
     messagesOverview     String?    @map("messages.overview") @db.VarChar(19)
     rolesBirthday        String?    @map("roles.birthday") @db.VarChar(19)
-    rolesNotified        String[]   @default([]) @map("roles.notified") @db.VarChar(19)
+    rolesNotified        String?    @map("roles.notified") @db.VarChar(19)
     timezone             Int        @default(0)
     premium              Boolean    @default(false)
     language             String     @default("en-US") @db.VarChar(5)

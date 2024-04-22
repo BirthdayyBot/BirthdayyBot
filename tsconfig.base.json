@@ -1,10 +1,7 @@
 {
-	"extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators"],
+	"extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators", "@sapphire/ts-config/verbatim"],
 	"compilerOptions": {
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"target": "ESNext",
 		"removeComments": true,
-        "skipLibCheck": true
+		"verbatimModuleSyntax": false
 	}
 }

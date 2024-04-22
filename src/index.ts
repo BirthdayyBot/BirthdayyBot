@@ -19,8 +19,8 @@ async function main() {
 				new Sentry.Integrations.LinkedErrors(),
 				new Sentry.Integrations.Console(),
 				new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
-				rewriteFramesIntegration({ root: rootFolder }),
-			],
+				rewriteFramesIntegration({ root: rootFolder })
+			]
 		});
 	}
 

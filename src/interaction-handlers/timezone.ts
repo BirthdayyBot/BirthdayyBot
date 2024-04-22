@@ -17,9 +17,7 @@ export class UserInteractionHandler extends InteractionHandler {
 		switch (focusedOption.name) {
 			case 'timezone': {
 				const items = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value }));
-				return this.some(
-					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())),
-				);
+				return this.some(items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())));
 			}
 			default:
 				return this.none();

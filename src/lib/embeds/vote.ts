@@ -25,12 +25,12 @@ export const VoteEmbed: APIEmbed = {
             ${Emojis.Arrow} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
             ${Emojis.Arrow} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
-			inline: false,
+			inline: false
 		},
 		{
 			name: 'Birthdayy Premium',
 			value: `${Emojis.Arrow} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](https://www.patreon.com/birthdayy)`,
-			inline: false,
-		},
-	],
+			inline: false
+		}
+	]
 };

@@ -3,17 +3,18 @@ import { send } from '@sapphire/plugin-editable-commands';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import { isNullishOrEmpty } from '@sapphire/utilities';
 import {
-	APIUser,
+	type APIUser,
 	ChatInputCommandInteraction,
 	CommandInteraction,
-	EmbedAuthorData,
+	type EmbedAuthorData,
 	EmbedBuilder,
-	ImageURLOptions,
+	type ImageURLOptions,
+	type InteractionReplyOptions,
 	Message,
 	MessagePayload,
+	Snowflake,
 	User,
-	userMention,
-	type InteractionReplyOptions,
+	userMention
 } from 'discord.js';
 
 /**
@@ -34,7 +35,7 @@ export function pickRandom<T>(array: readonly T[]): T {
 export function sendLoadingMessage(message: Message): Promise<typeof message> {
 	const RandomLoadingMessage = ['Loading...', 'Please wait...', 'Fetching...', 'Processing...'];
 	return send(message, {
-		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')],
+		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')]
 	});
 }
 
@@ -65,7 +66,7 @@ export function createSubcommandMappings(...subcommands: Array<string | Mapps>):
 		return {
 			name: subcommand.name,
 			preconditions: subcommand.preconditions,
-			chatInputRun: snakeToCamel(subcommand.name),
+			chatInputRun: snakeToCamel(subcommand.name)
 		};
 	});
 }
@@ -138,4 +139,13 @@ export function splitMessage(content: string, options: SplitMessageOptions) {
 export interface SplitMessageOptions {
 	char: string;
 	maxLength: number;
+}
+
+/**
+ * Checks if the provided user ID is the same as the client's ID.
+ *
+ * @param userId - The user ID to check.
+ */
+export function isUserSelf(userId: Snowflake) {
+	return userId === process.env.CLIENT_ID;
 }
