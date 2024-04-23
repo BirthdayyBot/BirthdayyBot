@@ -23,7 +23,8 @@ function sortCommandsAlphabetically(_: Command[], __: Command[], firstCategory: 
 }
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	description: 'Displays the help menu, providing information on available commands.'
+	description: 'Displays the help menu, providing information on available commands.',
+	detailedDescription: {}
 })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

@@ -6,7 +6,7 @@ import {
 	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
 	type ExtendOptions
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
-import { PermissionLevels, type TypedT } from '#lib/types';
+import { PermissionLevels } from '#lib/types';
 import { first } from '#utils/common';
 import { Command, Args as SapphireArgs, UserError, type MessageCommand } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
@@ -20,8 +20,8 @@ export class BirthdayySubcommand extends Subcommand<BirthdayySubcommand.Args, Bi
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
-	public declare readonly detailedDescription: TypedT<LanguageHelpDisplayOptions>;
-	public override readonly description: TypedT<string>;
+	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
+	public override readonly description: string;
 
 	public constructor(context: BirthdayySubcommand.LoaderContext, options: BirthdayySubcommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });

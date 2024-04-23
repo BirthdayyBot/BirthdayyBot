@@ -1,5 +1,5 @@
 import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
-import { PermissionLevels, type TypedT } from '#lib/types';
+import { PermissionLevels } from '#lib/types';
 import { OWNERS } from '#root/config';
 import { seconds } from '#utils/common';
 import { Command, PreconditionContainerArray, UserError } from '@sapphire/framework';
@@ -67,8 +67,8 @@ export function implementBirthdayyCommandPaginatedOptions<T extends ExtendOption
 }
 
 export type ExtendOptions<T> = T & {
-	description: TypedT<string>;
-	detailedDescription: TypedT<LanguageHelpDisplayOptions>;
+	description: string;
+	detailedDescription?: LanguageHelpDisplayOptions;
 	guarded?: boolean;
 	hidden?: boolean;
 	permissionLevel?: number;

@@ -1,35 +1,37 @@
 import { GuildInfoCMD } from '#lib/commands/guildInfo';
-import type { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { generateDefaultEmbed, isCustom, reply } from '#utils';
 import generateConfigList from '#utils/birthday/config';
 import { getFormattedTimestamp } from '#utils/common';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-@ApplyOptions<CustomCommand.Options>({
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { BirthdayyCommand } from '#lib/structures';
+import { EmbedBuilder } from 'discord.js';
+import { isCustom } from '#utils/env';
+
+@ApplyOptions<BirthdayyCommand.Options>({
 	name: 'guild-info',
 	description: 'Get Infos about a Guild',
 	enabled: !isCustom,
 	permissionLevel: PermissionLevels.Administrator,
 	runIn: CommandOptionsRunTypeEnum.GuildAny
 })
-export class GuildInfoCommand extends Command {
-	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
+export class GuildInfoCommand extends BirthdayyCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(GuildInfoCMD(), {
 			guildIds: await getCommandGuilds('admin')
 		});
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction<'cached'>) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const guildId = interaction.options.getString('guild-id', true);
 		const settings = await this.container.utilities.guild.get.GuildById(guildId).catch(() => null);
 		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
 
-		if (!settings || !guild) return reply(interaction, 'Guild Infos not found');
+		if (!settings || !guild) return interaction.reply('Guild Infos not found');
 
-		const embed = generateDefaultEmbed({
+		const embed = new EmbedBuilder({
 			fields: [
 				{
 					name: 'GuildId',
@@ -107,9 +109,9 @@ export class GuildInfoCommand extends Command {
 			title: 'GuildInfos'
 		});
 
-		const configEmbed = generateDefaultEmbed(await generateConfigList(guildId, { member: interaction.member, guild }));
+		const configEmbed = new EmbedBuilder(await generateConfigList(guildId, { member: interaction.member, guild }));
 
-		return reply(interaction, {
+		return interaction.reply({
 			content: `GuildInfos for ${guild.name}`,
 			embeds: [embed, configEmbed]
 		});

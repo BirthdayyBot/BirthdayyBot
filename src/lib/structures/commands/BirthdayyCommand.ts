@@ -1,4 +1,3 @@
-import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import {
 	BirthdayyCommandConstructorDefaults,
 	implementBirthdayyCommandError,
@@ -6,10 +5,11 @@ import {
 	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
 	type ExtendOptions
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
-import { PermissionLevels, type TypedT } from '#lib/types';
+import { PermissionLevels } from '#lib/types';
 import { first } from '#utils/common';
 import { ChatInputCommand, Command, Args as SapphireArgs, UserError, type Awaitable, type MessageCommand } from '@sapphire/framework';
 import { ChatInputCommandInteraction, Snowflake } from 'discord.js';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 
 /**
  * The base class for all Birthdayy commands.
@@ -19,8 +19,8 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
-	public declare readonly detailedDescription: TypedT<LanguageHelpDisplayOptions>;
-	public declare readonly description: TypedT<string>;
+	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
+	public declare readonly description: string;
 
 	public constructor(context: Command.LoaderContext, options: BirthdayyCommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });

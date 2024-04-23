@@ -1,6 +1,4 @@
 import { getSettings } from '#lib/discord/guild';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
@@ -16,19 +14,25 @@ import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from
 import { isNullish } from '@sapphire/utilities';
 import { Channel, ChannelType, EmbedBuilder, PermissionFlagsBits, Role, channelMention, inlineCode, roleMention } from 'discord.js';
 
-const Root = LanguageKeys.Commands.Config;
-type ConfigDefault = Omit<Required<Guild>, 'id' | 'channelsLogs' | 'inviter' | 'language' | 'updatedAt' | 'inDeleteQueue' | 'premium' | 'createdAt'>;
+const Key = {
+	ChannelsAnnouncement: 'commands/config:keyChannelsAnnouncement',
+	ChannelsOverview: 'commands/config:keyChannelsOverview',
+	MessagesAnnouncement: 'commands/config:keyMessagesAnnouncement',
+	RolesBirthday: 'commands/config:keyRolesBirthday',
+	RolesNotified: 'commands/config:keyRolesNotified',
+	Timezone: 'commands/config:keyTimezone'
+};
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	description: Root.RootDescription,
-	detailedDescription: Root.RootExtended,
+	description: 'commands:config:description',
+	detailedDescription: 'commands:config:detailedDescription',
 	subcommands: [
 		{ name: 'edit', chatInputRun: 'runEdit' },
 		{ name: 'view', chatInputRun: 'runView' },
 		{ name: 'reset', chatInputRun: 'runReset' }
 	],
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Manager
+	permissionLevel: PermissionLevels.Moderator
 })
 export class UserCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -42,7 +46,7 @@ export class UserCommand extends BirthdayySubcommand {
 	public async runEdit(interaction: Command.ChatInputCommandInteraction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
-		const announcementChannel = interaction.options.getChannel('announcement-channel');
+		const announcementChannel = interaction.options.getChannel('channels-announcement');
 		if (!isNullish(announcementChannel)) {
 			const result = await this.parseChannel(interaction, announcementChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -50,7 +54,7 @@ export class UserCommand extends BirthdayySubcommand {
 			entries.push(['channelsAnnouncement', result.unwrap()]);
 		}
 
-		const announcementMessage = interaction.options.getString('announcement-message');
+		const announcementMessage = interaction.options.getString('messages-announcement');
 		if (!isNullish(announcementMessage)) {
 			const result = await this.parseAnnouncementMessage(interaction, announcementMessage);
 
@@ -59,7 +63,7 @@ export class UserCommand extends BirthdayySubcommand {
 			entries.push(['messagesAnnouncement', result.unwrap()]);
 		}
 
-		const birthdayRole = interaction.options.getRole('birthday-role');
+		const birthdayRole = interaction.options.getRole('roles-birthday');
 		if (!isNullish(birthdayRole)) {
 			const result = await this.parseRole(interaction, birthdayRole, false);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -67,7 +71,7 @@ export class UserCommand extends BirthdayySubcommand {
 			entries.push(['rolesBirthday', result.unwrap()]);
 		}
 
-		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
+		const birthdayPingRole = interaction.options.getRole('roles-notified');
 		if (!isNullish(birthdayPingRole)) {
 			const result = await this.parseRole(interaction, birthdayPingRole, true);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -75,7 +79,7 @@ export class UserCommand extends BirthdayySubcommand {
 			entries.push(['rolesNotified', result.unwrap()]);
 		}
 
-		const overviewChannel = interaction.options.getChannel('overview-channel');
+		const overviewChannel = interaction.options.getChannel('channels-overview');
 		if (!isNullish(overviewChannel)) {
 			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
@@ -106,7 +110,7 @@ export class UserCommand extends BirthdayySubcommand {
 		const key = interaction.options.getString('key', true) as ResetOptions;
 		switch (key) {
 			case 'all': {
-				const data: ConfigDefault = {
+				const data = {
 					channelsAnnouncement: null,
 					messagesAnnouncement: null,
 					rolesBirthday: null,
@@ -114,7 +118,7 @@ export class UserCommand extends BirthdayySubcommand {
 					channelsOverview: null,
 					messagesOverview: null,
 					timezone: 0
-				};
+				} satisfies DefaultKey;
 				return this.updateDatabase(interaction, data);
 			}
 			case 'channels-announcement':
@@ -136,16 +140,16 @@ export class UserCommand extends BirthdayySubcommand {
 		settings ??= {};
 
 		const t = await fetchT(interaction);
-		const Unset = inlineCode(t(LanguageKeys.Shared.Unset));
+		const Unset = inlineCode(t('globals:unset'));
 
-		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : t('globals:unset');
+		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : Unset;
 		const announcementMessage = settings.messagesAnnouncement ? formatBirthdayMessage(settings.messagesAnnouncement, interaction.member) : Unset;
 		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : Unset;
 		const birthdayPingRole = settings.rolesNotified ? roleMention(settings.rolesNotified) : Unset;
 		const overviewChannel = settings.channelsOverview ? channelMention(settings.channelsOverview) : Unset;
 		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : Unset;
 
-		return t(Root.ViewContent, {
+		return t('commands/config:viewContent', {
 			announcementChannel,
 			announcementMessage,
 			birthdayRole,
@@ -161,17 +165,17 @@ export class UserCommand extends BirthdayySubcommand {
 			this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null })
 		);
 
-		const t = getSupportedUserLanguageT(interaction);
-
-		const content = result.match({
-			ok: () => t(Root.EditSuccess),
+		const content = await result.match({
+			ok: () => resolveKey(interaction, 'commands/config:editSuccess'),
 			err: (error) => {
 				this.container.logger.error(error);
-				return t(Root.EditFailure);
+				return resolveKey(interaction, 'commands/config:editFailure');
 			}
 		});
 
-		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary);
+		const embed = new EmbedBuilder() //
+			.setDescription(content)
+			.setColor(BrandingColors.Primary);
 
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
@@ -225,7 +229,7 @@ export class UserCommand extends BirthdayySubcommand {
 		// Check if the bot has permissions to add the role to the user:
 		if (mention && !role.mentionable) {
 			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleNotMentionnable', {
+				await resolveKey(interaction, 'commands/config:editRoleNotMentionable', {
 					role: roleMention(role.id)
 				})
 			);
@@ -235,51 +239,53 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {
-		return applyLocalizedBuilder(builder, Root.RootName)
+		return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
 			.addSubcommand((subcommand) => this.registerEditCommand(subcommand))
 			.addSubcommand((subcommand) => this.registerViewCommand(subcommand))
 			.addSubcommand((subcommand) => this.registerResetCommand(subcommand));
 	}
 
 	private registerEditCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, Root.Edit)
+		return applyLocalizedBuilder(builder, 'command/config:edit')
 			.addChannelOption((builder) =>
-				applyLocalizedBuilder(builder, Root.KeyAnnouncementChannel, Root.EditOptionsAnnouncementChannelDescription).addChannelTypes(
-					ChannelType.GuildText
-				)
+				applyLocalizedBuilder(
+					builder,
+					Key.ChannelsAnnouncement,
+					'commands/config:editOptionsChannelsAnnouncementDescription'
+				).addChannelTypes(ChannelType.GuildText)
 			)
 			.addStringOption((builder) =>
-				applyLocalizedBuilder(builder, Root.KeyAnnouncementMessage, Root.EditOptionsAnnouncementMessageDescription)
+				applyLocalizedBuilder(builder, Key.MessagesAnnouncement, 'commands/config:editOptionsMessagesAnnouncementDescription')
 					.setMinLength(1)
 					.setMaxLength(512)
 			)
-			.addRoleOption((builder) => applyLocalizedBuilder(builder, Root.KeyBirthdayRole, Root.EditOptionsBirthdayRoleDescription))
-			.addRoleOption((builder) => applyLocalizedBuilder(builder, Root.KeyBirthdayPingRole, Root.EditOptionsBirthdayPingRoleDescription))
+			.addRoleOption((builder) => applyLocalizedBuilder(builder, Key.RolesBirthday, 'commands/config:editOptionsRolesBirthdayDescription'))
+			.addRoleOption((builder) => applyLocalizedBuilder(builder, Key.RolesNotified, 'commands/config:editOptionsRolesNotifiedDescription'))
 			.addChannelOption((builder) =>
-				applyLocalizedBuilder(builder, Root.KeyOverviewChannel, Root.EditOptionsOverviewChannelDescription).addChannelTypes(
+				applyLocalizedBuilder(builder, Key.ChannelsOverview, 'commands/config:editOptionsChannelsOverviewDescription').addChannelTypes(
 					ChannelType.GuildText
 				)
 			)
 			.addIntegerOption((builder) =>
-				applyLocalizedBuilder(builder, Root.KeyTimezone, Root.EditOptionsTimezoneDescription).setAutocomplete(true)
+				applyLocalizedBuilder(builder, Key.Timezone, 'commands/config:editOptionsTimezoneDescription').setAutocomplete(true)
 			);
 	}
 
 	private registerViewCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, Root.View);
+		return applyLocalizedBuilder(builder, 'commands/config:view');
 	}
 
 	private registerResetCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, Root.Reset).addStringOption((builder) =>
-			applyLocalizedBuilder(builder, Root.ResetOptionsKey)
+		return applyLocalizedBuilder(builder, 'commands/config:reset').addStringOption((builder) =>
+			applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
 				.addChoices(
-					createLocalizedChoice(Root.ResetOptionsKeyChoicesAll, { value: 'all' }),
-					createLocalizedChoice(Root.KeyAnnouncementChannel, { value: 'channels-announcement' }),
-					createLocalizedChoice(Root.KeyAnnouncementMessage, { value: 'messages-announcement' }),
-					createLocalizedChoice(Root.KeyBirthdayRole, { value: 'roles-birthday' }),
-					createLocalizedChoice(Root.KeyBirthdayPingRole, { value: 'roles-notified' }),
-					createLocalizedChoice(Root.KeyOverviewChannel, { value: 'channels-overview' }),
-					createLocalizedChoice(Root.KeyTimezone, { value: 'timezone' })
+					createLocalizedChoice('commands/config:resetOptionsChoicesAll', { value: 'all' }),
+					createLocalizedChoice(Key.ChannelsAnnouncement, { value: 'channels-announcement' }),
+					createLocalizedChoice(Key.MessagesAnnouncement, { value: 'messages-announcement' }),
+					createLocalizedChoice(Key.RolesBirthday, { value: 'roles-birthday' }),
+					createLocalizedChoice(Key.RolesNotified, { value: 'roles-notified' }),
+					createLocalizedChoice(Key.ChannelsOverview, { value: 'channels-overview' }),
+					createLocalizedChoice(Key.Timezone, { value: 'timezone' })
 				)
 				.setRequired(true)
 		);
@@ -294,5 +300,10 @@ interface EditOptions {
 	'channels-overview': string;
 	timezone: number;
 }
+
+type DefaultKey = Pick<
+	Guild,
+	'channelsAnnouncement' | 'channelsOverview' | 'messagesAnnouncement' | 'timezone' | 'rolesBirthday' | 'rolesNotified' | 'messagesOverview'
+>;
 
 type ResetOptions = 'all' | keyof EditOptions;
