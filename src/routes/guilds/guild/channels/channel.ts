@@ -2,7 +2,7 @@ import { flattenChannel } from '#lib/api/ApiTransformers';
 import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, HttpCodes, methods, Route, RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, HttpCodes, Route, RouteOptions, methods } from '@sapphire/plugin-api';
 
 @ApplyOptions<RouteOptions>({ route: 'guilds/:guild/channels/:channel' })
 export class UserRoute extends Route {

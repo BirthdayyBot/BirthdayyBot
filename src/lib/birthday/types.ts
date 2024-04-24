@@ -14,12 +14,12 @@ export const enum Month {
 }
 
 export interface DateWithOptionalYear {
-	year: number | null;
-	month: number;
 	day: number;
+	month: number;
+	year: null | number;
 }
 
 export interface TaskBirthdayData extends DateWithOptionalYear, Record<string, unknown> {
-	userId: string;
 	guildId: string;
+	userId: string;
 }

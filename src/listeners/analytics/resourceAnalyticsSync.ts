@@ -14,15 +14,6 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 		return this.container.client.analytics!.writeApi.flush();
 	}
 
-	private syncPerCoreLoad() {
-		const point = new Point(Points.PerCoreCPULoad).tag(Tags.Action, Actions.Sync);
-
-		let index = 0;
-		for (const { times } of cpus()) point.floatField(`cpu_${index++}`, (times.user + times.nice + times.sys + times.irq) / times.idle);
-
-		return point;
-	}
-
 	private syncMem() {
 		// TODO: Adjust for traditional sharding
 		const usage = process.memoryUsage();
@@ -30,5 +21,14 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 			.tag(Tags.Action, Actions.Sync)
 			.floatField('total', usage.heapTotal)
 			.floatField('used', usage.heapUsed);
+	}
+
+	private syncPerCoreLoad() {
+		const point = new Point(Points.PerCoreCPULoad).tag(Tags.Action, Actions.Sync);
+
+		let index = 0;
+		for (const { times } of cpus()) point.floatField(`cpu_${index++}`, (times.user + times.nice + times.sys + times.irq) / times.idle);
+
+		return point;
 	}
 }

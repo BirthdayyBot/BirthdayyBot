@@ -1,5 +1,6 @@
-import { container } from '@sapphire/pieces';
 import type { TextBasedChannel, VoiceBasedChannel } from 'discord.js';
+
+import { container } from '@sapphire/pieces';
 
 export async function getTextChannel(channel_id: string): Promise<TextBasedChannel | null> {
 	const channel = await container.client.channels.fetch(channel_id);

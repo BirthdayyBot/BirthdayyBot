@@ -1,5 +1,6 @@
-import { Tags } from '#lib/types/AnalyticsSchema';
 import type { Point } from '@influxdata/influxdb-client';
+
+import { Tags } from '#lib/types/AnalyticsSchema';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { envParseBoolean } from '@skyra/env-utilities';
 
@@ -24,15 +25,15 @@ export abstract class AnalyticsListener extends Listener {
 		return this.container.client.analytics!.writeApi?.writePoints(points);
 	}
 
+	protected initTags() {
+		this.tags.push([Tags.Client, process.env.CLIENT_ID], [Tags.OriginEvent, String(this.event)]);
+	}
+
 	protected injectTags(point: Point) {
 		for (const tag of this.tags) {
 			point.tag(tag[0], tag[1]);
 		}
 		return point;
-	}
-
-	protected initTags() {
-		this.tags.push([Tags.Client, process.env.CLIENT_ID], [Tags.OriginEvent, String(this.event)]);
 	}
 }
 

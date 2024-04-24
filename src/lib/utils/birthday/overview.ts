@@ -1,6 +1,7 @@
 import { isDMChannel, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { container, Result } from '@sapphire/framework';
-import { Guild, GuildTextBasedChannel, MessagePayload, type MessageCreateOptions } from 'discord.js';
+import { Result, container } from '@sapphire/framework';
+import { Guild, GuildTextBasedChannel, type MessageCreateOptions, MessagePayload } from 'discord.js';
+
 import { generateBirthdayList } from './birthday.js';
 
 export async function updateBirthdayOverview(guild: Guild) {
@@ -18,7 +19,7 @@ export async function updateBirthdayOverview(guild: Guild) {
 
 	if (!isGuildBasedChannel(channel)) return container.logger.error(`Channel is not a Guild Based Channel in guild: ${guild.id}`);
 
-	const { embed, components } = await generateBirthdayList(1, guild);
+	const { components, embed } = await generateBirthdayList(1, guild);
 
 	const message = messagesOverview
 		? await channel.messages.fetch(messagesOverview).catch(() => null)
@@ -26,24 +27,24 @@ export async function updateBirthdayOverview(guild: Guild) {
 
 	if (!message) return container.logger.error(`Failed to fetch or create message in guild: ${guild.id}`);
 
-	return message.edit({ content: null, embeds: [embed], components });
+	return message.edit({ components, content: null, embeds: [embed] });
 }
 
 async function createOverviewMessage(channel: GuildTextBasedChannel, options: MessageCreateOptions | MessagePayload) {
 	const result = await Result.fromAsync(channel.send(options));
 
 	return result.match({
-		ok: async (message) => {
-			await container.prisma.guild.update({
-				where: { id: channel.guildId },
-				data: { messagesOverview: message.id }
-			});
-
-			return message;
-		},
 		err: (error) => {
 			container.logger.error(`Failed to send message in channel: ${channel.id} with error: ${error}`);
 			return null;
+		},
+		ok: async (message) => {
+			await container.prisma.guild.update({
+				data: { messagesOverview: message.id },
+				where: { id: channel.guildId }
+			});
+
+			return message;
 		}
 	});
 }

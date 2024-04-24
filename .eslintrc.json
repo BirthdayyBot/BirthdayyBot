@@ -1,8 +1,10 @@
 {
 	"extends": ["@sapphire", "plugin:@sapphire/result/recommended"],
+	"plugins": ["perfectionist"],
 	"rules": {
 		"@typescript-eslint/no-base-to-string": 0,
 		"@typescript-eslint/no-throw-literal": 0,
+		"perfectionist/sort-interfaces": "error",
 		"no-catch-shadow": 0
 	},
 	"parserOptions": {

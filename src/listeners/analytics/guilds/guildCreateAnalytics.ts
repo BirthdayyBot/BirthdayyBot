@@ -1,8 +1,9 @@
+import type { Guild } from 'discord.js';
+
 import { AnalyticsListener } from '#lib/structures';
-import { Actions, Points, Tags, Events } from '#lib/types';
+import { Actions, Events, Points, Tags } from '#lib/types';
 import { Point } from '@influxdata/influxdb-client';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { Guild } from 'discord.js';
 
 @ApplyOptions<AnalyticsListener.Options>({ event: Events.GuildCreate })
 export class UserAnalyticsEvent extends AnalyticsListener {

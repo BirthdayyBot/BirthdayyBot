@@ -1,6 +1,7 @@
-import { OWNERS } from '#root/config';
-import { Precondition, type AsyncPreconditionResult } from '@sapphire/framework';
 import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+
+import { OWNERS } from '#root/config';
+import { type AsyncPreconditionResult, Precondition } from '@sapphire/framework';
 
 export class UserPrecondition extends Precondition {
 	public override async chatInputRun(interaction: ChatInputCommandInteraction): AsyncPreconditionResult {

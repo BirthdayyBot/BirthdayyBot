@@ -1,6 +1,5 @@
-import '#lib/setup/start';
-
 import { BirthdayyClient } from '#lib/BirthdayyClient';
+import '#lib/setup/start';
 import { rootFolder } from '#lib/utils/constants';
 import { container } from '@sapphire/pieces';
 import { rewriteFramesIntegration } from '@sentry/integrations';

@@ -4,9 +4,9 @@ import { container } from '@sapphire/pieces';
 import { Guild, GuildResolvable } from 'discord.js';
 
 interface GuildUtilities {
+	readonly birthdays: BirthdaysManager;
 	readonly guild: Guild;
 	readonly settings: SettingsManager;
-	readonly birthdays: BirthdaysManager;
 }
 
 const cache = new WeakMap<Guild, GuildUtilities>();
@@ -17,9 +17,9 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	if (previous !== undefined) return previous;
 
 	const entry: GuildUtilities = {
+		birthdays: new BirthdaysManager(guild, getSettings(guild)),
 		guild,
-		settings: new SettingsManager(guild),
-		birthdays: new BirthdaysManager(guild, getSettings(guild))
+		settings: new SettingsManager(guild)
 	};
 
 	cache.set(guild, entry);

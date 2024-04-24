@@ -1,6 +1,7 @@
+import type { CloseEvent } from 'discord.js';
+
 import { ShardListener } from '#lib/structures';
 import { red } from 'colorette';
-import type { CloseEvent } from 'discord.js';
 
 export class UserShardListener extends ShardListener {
 	protected readonly title = red('Disconnected');

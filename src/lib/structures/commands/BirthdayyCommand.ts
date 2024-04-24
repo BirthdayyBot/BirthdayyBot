@@ -1,26 +1,26 @@
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import {
 	BirthdayyCommandConstructorDefaults,
+	type ExtendOptions,
 	implementBirthdayyCommandError,
 	implementBirthdayyCommandPaginatedOptions,
-	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
-	type ExtendOptions
+	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
 import { first } from '#utils/common';
-import { ChatInputCommand, Command, Args as SapphireArgs, UserError, type Awaitable, type MessageCommand } from '@sapphire/framework';
+import { type Awaitable, ChatInputCommand, Command, type MessageCommand, Args as SapphireArgs, UserError } from '@sapphire/framework';
 import { ChatInputCommandInteraction, Snowflake } from 'discord.js';
-import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 
 /**
  * The base class for all Birthdayy commands.
  * @seealso {@link BirthdayySubcommand} for subcommand support.
  */
 export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, BirthdayyCommand.Options> {
+	public declare readonly description: string;
+	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
-	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
-	public declare readonly description: string;
 
 	public constructor(context: Command.LoaderContext, options: BirthdayyCommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });
@@ -28,8 +28,6 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 		this.hidden = options.hidden ?? BirthdayyCommandConstructorDefaults.hidden;
 		this.permissionLevel = options.permissionLevel ?? BirthdayyCommandConstructorDefaults.permissionLevel;
 	}
-
-	public abstract override chatInputRun(interaction: ChatInputCommandInteraction, context: ChatInputCommand.RunContext): Awaitable<unknown>;
 
 	/**
 	 * Retrieves the global command id from the application command registry.
@@ -45,7 +43,7 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 		return first(ids.values())!;
 	}
 
-	protected error(identifier: string | UserError, context?: unknown): never {
+	protected error(identifier: UserError | string, context?: unknown): never {
 		implementBirthdayyCommandError(identifier, context);
 	}
 
@@ -53,6 +51,8 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 		super.parseConstructorPreConditions(options);
 		implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel(this, options.permissionLevel);
 	}
+
+	public abstract override chatInputRun(interaction: ChatInputCommandInteraction, context: ChatInputCommand.RunContext): Awaitable<unknown>;
 
 	public static readonly PaginatedOptions = implementBirthdayyCommandPaginatedOptions<BirthdayyCommand.Options>;
 }

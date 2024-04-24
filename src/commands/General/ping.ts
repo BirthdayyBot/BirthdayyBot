@@ -7,18 +7,6 @@ import { Command } from '@sapphire/framework';
 	description: 'ping pong'
 })
 export class PingCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(
-			{
-				name: this.name,
-				description: this.description
-			},
-			{
-				guildIds: await getCommandGuilds('testing')
-			}
-		);
-	}
-
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({ content: `${Emojis.Ping} Loading...` });
 
@@ -27,5 +15,17 @@ export class PingCommand extends Command {
 		}ms.`;
 
 		return interaction.editReply({ content });
+	}
+
+	public override async registerApplicationCommands(registry: Command.Registry) {
+		registry.registerChatInputCommand(
+			{
+				description: this.description,
+				name: this.name
+			},
+			{
+				guildIds: await getCommandGuilds('testing')
+			}
+		);
 	}
 }

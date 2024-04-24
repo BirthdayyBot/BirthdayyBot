@@ -12,23 +12,30 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
-	version as djsVersion,
 	EmbedBuilder,
 	MessageActionRowComponentBuilder,
 	OAuth2Scopes,
 	PermissionFlagsBits,
-	time,
-	TimestampStyles
+	TimestampStyles,
+	version as djsVersion,
+	time
 } from 'discord.js';
 import { TFunction } from 'i18next';
-import { cpus, uptime, type CpuInfo } from 'os';
+import { type CpuInfo, cpus, uptime } from 'os';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'info',
 	description: 'commands/general:infoDescription',
-	enabled: isDevelopment
+	enabled: isDevelopment,
+	name: 'info'
 })
 export class UserCommand extends BirthdayyCommand {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
+		const t = await fetchT(interaction);
+		const embed = await this.buildEmbed(t);
+		const components = this.buildComponents(t);
+		return interaction.reply({ components, embeds: [embed] });
+	}
+
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) =>
@@ -42,19 +49,12 @@ export class UserCommand extends BirthdayyCommand {
 		);
 	}
 
-	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const t = await fetchT(interaction);
-		const embed = await this.buildEmbed(t);
-		const components = this.buildComponents(t);
-		return interaction.reply({ embeds: [embed], components });
-	}
-
 	private buildComponents(t: TFunction): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
 		const componentLabels = t('commands/general:infoComponentLabels', { returnObjects: true }) as {
 			addToServer: string;
-			supportServer: string;
-			repository: string;
 			donate: string;
+			repository: string;
+			supportServer: string;
 		};
 
 		return [
@@ -85,30 +85,19 @@ export class UserCommand extends BirthdayyCommand {
 		];
 	}
 
-	private get inviteLink() {
-		return this.container.client.generateInvite({
-			scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
-			permissions:
-				PermissionFlagsBits.ViewChannel |
-				PermissionFlagsBits.ReadMessageHistory |
-				PermissionFlagsBits.SendMessages |
-				PermissionFlagsBits.EmbedLinks
-		});
-	}
-
 	private async buildEmbed(t: TFunction) {
 		const titles = t('commands/general:infoTitles', { returnObjects: true }) as {
+			serverUsage: string;
 			stats: string;
 			uptime: string;
-			serverUsage: string;
 		};
 		const fields = t('commands/general:infoFields', {
+			database: await this.databaseStatistics(),
+			returnObjects: true,
 			stats: this.generalStatistics,
 			uptime: this.uptimeStatistics,
-			usage: this.usageStatistics,
-			database: await this.databaseStatistics(),
-			returnObjects: true
-		}) as { stats: string; uptime: string; usage: string; serverUsage: string };
+			usage: this.usageStatistics
+		}) as { serverUsage: string; stats: string; uptime: string; usage: string };
 
 		return new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
@@ -122,18 +111,6 @@ export class UserCommand extends BirthdayyCommand {
 			);
 	}
 
-	private get generalStatistics(): StatsGeneral {
-		const { client } = this.container;
-		return {
-			channels: client.channels.cache.size,
-			guilds: client.guilds.cache.size,
-			nodeJs: process.version,
-			users: client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0),
-			djsVersion: `v${djsVersion}`,
-			sapphireVersion: `v${sapphireVersion}`
-		};
-	}
-
 	private async databaseStatistics() {
 		const [birthdays, guilds, users] = await this.container.prisma.$transaction([
 			this.container.prisma.birthday.count(),
@@ -141,6 +118,33 @@ export class UserCommand extends BirthdayyCommand {
 			this.container.prisma.user.count()
 		]);
 		return { birthdays, guilds, users };
+	}
+
+	private static formatCpuInfo({ times }: CpuInfo) {
+		return `${roundNumber(((times.user + times.nice + times.sys + times.irq) / times.idle) * 10000) / 100}%`;
+	}
+
+	private get generalStatistics(): StatsGeneral {
+		const { client } = this.container;
+		return {
+			channels: client.channels.cache.size,
+			djsVersion: `v${djsVersion}`,
+			guilds: client.guilds.cache.size,
+			nodeJs: process.version,
+			sapphireVersion: `v${sapphireVersion}`,
+			users: client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0)
+		};
+	}
+
+	private get inviteLink() {
+		return this.container.client.generateInvite({
+			permissions:
+				PermissionFlagsBits.ViewChannel |
+				PermissionFlagsBits.ReadMessageHistory |
+				PermissionFlagsBits.SendMessages |
+				PermissionFlagsBits.EmbedLinks,
+			scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands]
+		});
 	}
 
 	private get uptimeStatistics(): StatsUptime {
@@ -161,19 +165,15 @@ export class UserCommand extends BirthdayyCommand {
 			ramUsed: usage.heapUsed / 1048576
 		};
 	}
-
-	private static formatCpuInfo({ times }: CpuInfo) {
-		return `${roundNumber(((times.user + times.nice + times.sys + times.irq) / times.idle) * 10000) / 100}%`;
-	}
 }
 
 export interface StatsGeneral {
 	channels: number;
+	djsVersion: string;
 	guilds: number;
 	nodeJs: string;
-	users: number;
-	djsVersion: string;
 	sapphireVersion: string;
+	users: number;
 }
 
 export interface StatsUptime {

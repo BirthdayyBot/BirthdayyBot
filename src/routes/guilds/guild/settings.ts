@@ -24,7 +24,7 @@ export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(seconds(1), 2, true)
 	public async [methods.PATCH](request: ApiRequest, response: ApiResponse) {
-		const requestBody = request.body as { guild_id: string; data: [string, unknown][] | undefined };
+		const requestBody = request.body as { data: [string, unknown][] | undefined; guild_id: string };
 
 		if (!requestBody.guild_id || !Array.isArray(requestBody.data) || requestBody.guild_id !== request.params.guild) {
 			return response.status(HttpCodes.BadRequest).json(['Invalid body.']);
@@ -42,10 +42,10 @@ export class UserRoute extends Route {
 
 		try {
 			const settings = await this.container.prisma.guild.update({
-				where: { id: requestBody.guild_id },
 				data: {
 					...entries.map((entry) => ({ [entry[0]]: entry[1] }))
-				}
+				},
+				where: { id: requestBody.guild_id }
 			});
 
 			return response.status(HttpCodes.OK).json(settings);

@@ -7,7 +7,7 @@ import { Events, Listener, Store, container } from '@sapphire/framework';
 import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
 import { stripIndents } from 'common-tags';
 
-@ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
+@ApplyOptions<Listener.Options>({ event: Events.ClientReady, once: true })
 export class UserEvent extends Listener {
 	private readonly style = isDevelopment ? yellow : blue;
 

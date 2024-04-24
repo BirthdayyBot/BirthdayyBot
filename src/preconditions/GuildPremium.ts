@@ -1,7 +1,8 @@
+import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+
 import { PrismaErrorCodeEnum } from '#utils/constants';
 import { resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Precondition } from '@sapphire/framework';
-import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 
 export class UserPrecondition extends Precondition {
 	public override async chatInputRun(interaction: ChatInputCommandInteraction<'cached'>) {

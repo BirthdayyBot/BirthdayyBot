@@ -2,8 +2,8 @@ import { authenticated, ratelimit } from '#lib/api/utils';
 import { minutes } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { ApiRequest, ApiResponse, HttpCodes, methods, MimeTypes, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { FetchResultTypes, fetch } from '@sapphire/fetch';
+import { ApiRequest, ApiResponse, HttpCodes, MimeTypes, Route, type RouteOptions, methods } from '@sapphire/plugin-api';
 import { OAuth2Routes, type RESTPostOAuth2AccessTokenResult } from 'discord-api-types/v9';
 import { stringify } from 'node:querystring';
 
@@ -28,10 +28,10 @@ export class UserRoute extends Route {
 				const body = await this.refreshToken(request.auth.id, request.auth.refresh);
 				if (body !== null) {
 					const authentication = auth.encrypt({
+						expires: Date.now() + body.expires_in * 1000,
 						id: request.auth.id,
-						token: body.access_token,
 						refresh: body.refresh_token,
-						expires: Date.now() + body.expires_in * 1000
+						token: body.access_token
 					});
 
 					response.cookies.add(auth.cookie, authentication, { maxAge: body.expires_in });
@@ -57,18 +57,18 @@ export class UserRoute extends Route {
 			return await fetch<RESTPostOAuth2AccessTokenResult>(
 				OAuth2Routes.tokenURL,
 				{
-					method: 'POST',
 					body: stringify({
 						client_id: server.auth!.id,
 						client_secret: server.auth!.secret,
 						grant_type: 'refresh_token',
-						refresh_token: refreshToken,
 						redirect_uri: server.auth!.redirect,
+						refresh_token: refreshToken,
 						scope: server.auth!.scopes
 					}),
 					headers: {
 						'Content-Type': MimeTypes.ApplicationFormUrlEncoded
-					}
+					},
+					method: 'POST'
 				},
 				FetchResultTypes.JSON
 			);

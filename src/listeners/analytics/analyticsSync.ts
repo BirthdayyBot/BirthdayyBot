@@ -14,6 +14,12 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 		return this.container.client.analytics!.writeApi.flush();
 	}
 
+	private syncBirthdayCount(value: number) {
+		return new Point(Points.BirthdayCount) //
+			.tag(Tags.Action, Actions.Sync)
+			.intField('count', value);
+	}
+
 	private syncGuilds(value: number) {
 		return (
 			new Point(Points.Guilds)
@@ -21,21 +27,6 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 				// TODO: Adjust for traditional sharding
 				.intField('value', value)
 		);
-	}
-
-	private syncUsers(value: number) {
-		return (
-			new Point(Points.Users)
-				.tag(Tags.Action, Actions.Sync)
-				// TODO: Adjust for traditional sharding
-				.intField('value', value)
-		);
-	}
-
-	private syncBirthdayCount(value: number) {
-		return new Point(Points.BirthdayCount) //
-			.tag(Tags.Action, Actions.Sync)
-			.intField('count', value);
 	}
 
 	private syncMessageCount() {
@@ -46,5 +37,14 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 		return new Point(Points.MessageCount) //
 			.tag(Tags.Action, Actions.Sync)
 			.intField('value', value);
+	}
+
+	private syncUsers(value: number) {
+		return (
+			new Point(Points.Users)
+				.tag(Tags.Action, Actions.Sync)
+				// TODO: Adjust for traditional sharding
+				.intField('value', value)
+		);
 	}
 }

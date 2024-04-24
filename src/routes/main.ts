@@ -1,6 +1,6 @@
 import { authenticated } from '#lib/api/utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, methods, Route, RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, Route, RouteOptions, methods } from '@sapphire/plugin-api';
 
 @ApplyOptions<RouteOptions>({ route: '' })
 export class UserRoute extends Route {

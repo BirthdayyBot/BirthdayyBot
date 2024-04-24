@@ -4,12 +4,12 @@ import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { type Snowflake } from 'discord.js';
 
 @ApplyOptions<ScheduledTask.Options>({
-	name: 'deleteGuild',
-	customJobOptions: { removeOnComplete: true }
+	customJobOptions: { removeOnComplete: true },
+	name: 'deleteGuild'
 })
 export class UserTask extends ScheduledTask {
 	public async run(guildId: Snowflake) {
-		const guild = await container.client.guilds.fetch({ guild: guildId, force: true }).catch(() => null);
+		const guild = await container.client.guilds.fetch({ force: true, guild: guildId }).catch(() => null);
 
 		if (!guild) {
 			await container.prisma.guild.delete({ where: { id: guildId } });

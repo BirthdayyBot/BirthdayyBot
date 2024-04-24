@@ -1,4 +1,5 @@
-import { Events, Listener, type ChatInputCommandErrorPayload } from '@sapphire/framework';
+import { type ChatInputCommandErrorPayload, Events, Listener } from '@sapphire/framework';
+
 import { handleCommandError } from './_chat-input-shared.js';
 
 export class UserListener extends Listener<typeof Events.ChatInputCommandError> {

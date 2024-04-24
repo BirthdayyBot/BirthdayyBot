@@ -1,4 +1,5 @@
 import type { SlashCommandIntegerOption, SlashCommandUserOption } from '@discordjs/builders';
+
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import dayjs from 'dayjs';
 

@@ -1,5 +1,6 @@
-import { FT, T } from '#lib/types';
 import type { ChannelType } from 'discord.js';
+
+import { FT, T } from '#lib/types';
 
 // Sapphire built-in:
 export const ClientPermissions = FT<{ missing: string[] }>('preconditions:clientPermissions');

@@ -1,3 +1,5 @@
+import type { Guild, GuildResolvable } from 'discord.js';
+
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
@@ -5,9 +7,8 @@ import { isCustom, isDevelopment } from '#utils/env';
 import { Guild as Settings } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
-import type { Guild, GuildResolvable } from 'discord.js';
 
-export async function getCommandGuilds(commandLevel: 'global' | 'testing' | 'premium' | 'admin'): Promise<string[] | undefined> {
+export async function getCommandGuilds(commandLevel: 'admin' | 'global' | 'premium' | 'testing'): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.ChilliHQ, GuildIDEnum.ChilliAttackV2, GuildIDEnum.BirthdayyTesting];
 	const adminGuilds = [GuildIDEnum.Birthdayy, GuildIDEnum.BirthdayyTesting];
 	const customGuild = [envParseString('CLIENT_MAIN_GUILD')];
@@ -21,7 +22,7 @@ export async function getCommandGuilds(commandLevel: 'global' | 'testing' | 'pre
 			return testingGuilds;
 		case 'premium': {
 			if (isCustom) return customGuild;
-			const guilds: Settings[] = await container.utilities.guild.get.PremiumGuilds();
+			const guilds: Settings[] = await container.prisma.guild.findMany({ where: { premium: true } });
 			const guildIds: string[] = guilds.map((guild) => guild.id);
 			return guildIds;
 		}
@@ -33,9 +34,9 @@ export async function getCommandGuilds(commandLevel: 'global' | 'testing' | 'pre
 }
 
 interface GuildUtilities {
-	readonly settings: SettingsManager;
 	readonly birthdays: BirthdaysManager;
 	readonly guild: Guild;
+	readonly settings: SettingsManager;
 }
 
 export const cache = new WeakMap<Guild, GuildUtilities>();
@@ -47,9 +48,9 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 
 	const settings = new SettingsManager(guild);
 	const entry: GuildUtilities = {
-		settings,
 		birthdays: new BirthdaysManager(guild, settings),
-		guild
+		guild,
+		settings
 	};
 	cache.set(guild, entry);
 

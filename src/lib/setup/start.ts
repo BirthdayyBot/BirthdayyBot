@@ -4,6 +4,7 @@ import 'reflect-metadata';
 // Unless explicitly defined, set NODE_ENV as development:
 process.env.NODE_ENV ??= 'development';
 
+import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';
 import '@sapphire/plugin-api/register';
 import '@sapphire/plugin-editable-commands/register';
 import '@sapphire/plugin-hmr/register';
@@ -13,8 +14,6 @@ import '@sapphire/plugin-scheduled-tasks/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-utilities-store/register';
 import '@sentry/tracing';
-
-import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
 import * as colorette from 'colorette';
 import { inspect } from 'node:util';

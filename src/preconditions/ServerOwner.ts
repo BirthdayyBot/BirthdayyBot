@@ -1,5 +1,6 @@
-import { Precondition } from '@sapphire/framework';
 import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+
+import { Precondition } from '@sapphire/framework';
 
 export class UserPermissionsPrecondition extends Precondition {
 	public override async chatInputRun(interaction: ChatInputCommandInteraction<'cached'>) {

@@ -1,7 +1,8 @@
 import type { BirthdayyCommand } from '#lib/structures';
+
 import { Events as SkyraEvents } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, type ChatInputCommandSuccessPayload } from '@sapphire/framework';
+import { type ChatInputCommandSuccessPayload, Events, Listener } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({ event: Events.ChatInputCommandSuccess })
 export class UserListener extends Listener<typeof Events.ChatInputCommandSuccess> {

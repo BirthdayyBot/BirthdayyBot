@@ -10,8 +10,8 @@ const header = blueBright('[POST STATS]');
 
 enum Lists {
 	DiscordBotList = 'discordbotlist.com',
-	TopGG = 'top.gg',
-	DiscordListGG = 'discordlist.gg'
+	DiscordListGG = 'discordlist.gg',
+	TopGG = 'top.gg'
 }
 
 @ApplyOptions<ScheduledTask.Options>({
@@ -62,14 +62,14 @@ export class PostStats extends ScheduledTask {
 		return null;
 	}
 
-	public async query(url: string, body: string, token: string | null, list: Lists) {
+	public async query(url: string, body: string, token: null | string, list: Lists) {
 		try {
 			if (!token) return null;
 			await fetch(
 				url,
 				{
 					body,
-					headers: { 'content-type': MimeTypes.ApplicationJson, authorization: token },
+					headers: { authorization: token, 'content-type': MimeTypes.ApplicationJson },
 					method: 'POST'
 				},
 				FetchResultTypes.Result

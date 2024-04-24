@@ -1,8 +1,8 @@
-import { DurationFormatter, type DurationFormatAssetsTime } from '@sapphire/duration';
+import { type DurationFormatAssetsTime, DurationFormatter } from '@sapphire/duration';
 
 export abstract class Handler {
-	public readonly name: string;
 	public readonly duration: DurationFormatter;
+	public readonly name: string;
 
 	public constructor(options: Handler.Options) {
 		this.name = options.name;
@@ -12,7 +12,7 @@ export abstract class Handler {
 
 export namespace Handler {
 	export interface Options {
-		name: string;
 		duration: DurationFormatAssetsTime;
+		name: string;
 	}
 }

@@ -2,7 +2,8 @@ import { container } from '@sapphire/framework';
 import dayjs from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
-import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
+import { ChatInputCommandInteraction, type TimestampStylesString, time } from 'discord.js';
+
 import { addZeroToSingleDigitNumber } from './string.js';
 import { TIMEZONE_VALUES } from './timezone.js';
 
@@ -12,8 +13,8 @@ dayjs.extend(dayjstimezone);
 export interface TimezoneObject {
 	date: import('dayjs').Dayjs;
 	dateFormatted: string;
-	utcOffset?: keyof typeof TIMEZONE_VALUES;
 	timezone?: typeof TIMEZONE_VALUES;
+	utcOffset?: keyof typeof TIMEZONE_VALUES;
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -23,7 +24,7 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 
 export function splitDateString(date: string, separator = '-') {
 	const [year, month, day] = date.split(separator);
-	return { year, month: Number(month), day };
+	return { day, month: Number(month), year };
 }
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as const;
@@ -32,7 +33,7 @@ export function numberToMonthName(number: number) {
 	return months[number - 1];
 }
 
-export function parseInputDate(date: string | Date): Date {
+export function parseInputDate(date: Date | string): Date {
 	let inputDate: Date;
 
 	if (typeof date === 'string') {
@@ -65,8 +66,8 @@ export function getCurrentOffset(): TimezoneObject {
 			timezoneObject = {
 				date: today,
 				dateFormatted: today.format('YYYY/MM/DD'),
-				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset]
+				timezone: TIMEZONE_VALUES[offset],
+				utcOffset: offset
 			};
 			return timezoneObject;
 		}
@@ -75,8 +76,8 @@ export function getCurrentOffset(): TimezoneObject {
 	timezoneObject = {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY/MM/DD'),
-		utcOffset: 0,
-		timezone: 'UTC'
+		timezone: 'UTC',
+		utcOffset: 0
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;

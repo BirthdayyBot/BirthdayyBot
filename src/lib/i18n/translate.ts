@@ -1,63 +1,46 @@
-import { LanguageKeys } from '#lib/i18n/languageKeys';
-import { DecoratorIdentifiers } from '@sapphire/decorators';
-import { Identifiers, container } from '@sapphire/framework';
 import type { InternationalizationContext, TFunction } from '@sapphire/plugin-i18next';
 import type { Nullish } from '@sapphire/utilities';
 import type { Interaction, LocaleString } from 'discord.js';
 
+import { DecoratorIdentifiers } from '@sapphire/decorators';
+import { Identifiers, container } from '@sapphire/framework';
+
 export function translate(identifier: string): string {
 	switch (identifier) {
 		case Identifiers.CommandDisabled:
-			return LanguageKeys.Preconditions.DisabledGlobal;
+			return 'commands:disabled';
 		case Identifiers.PreconditionCooldown:
-			return LanguageKeys.Preconditions.Cooldown;
-
+			return 'preconditions:cooldown';
 		case Identifiers.PreconditionNSFW:
-			return LanguageKeys.Preconditions.Nsfw;
+			return 'preconditions:nsfw';
 		case Identifiers.PreconditionClientPermissions:
+			return 'preconditions:clientPermissions';
 		case DecoratorIdentifiers.RequiresClientPermissionsMissingPermissions:
-			return LanguageKeys.Preconditions.ClientPermissions;
-		case Identifiers.PreconditionClientPermissionsNoClient:
-			return LanguageKeys.Preconditions.ClientPermissionsNoClient;
-		case Identifiers.PreconditionClientPermissionsNoPermissions:
-			return LanguageKeys.Preconditions.ClientPermissionsNoPermissions;
-		case Identifiers.PreconditionRunIn:
-			return LanguageKeys.Preconditions.RunIn;
-		case Identifiers.PreconditionUserPermissions:
+			return 'preconditions:clientPermissionsMissingPermissions';
 		case DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions:
-			return LanguageKeys.Preconditions.UserPermissions;
+			return 'preconditions:userPermissionsMissingPermissions';
+		case Identifiers.PreconditionClientPermissionsNoClient:
+			return 'preconditions:clientPermissionsNoClient';
+		case Identifiers.PreconditionClientPermissionsNoPermissions:
+			return 'preconditions:clientPermissionsNoPermissions';
+		case Identifiers.PreconditionRunIn:
+			return 'preconditions:runIn';
+		case Identifiers.PreconditionUserPermissions:
+			return 'preconditions:userPermissions';
 		case Identifiers.PreconditionUserPermissionsNoPermissions:
-			return LanguageKeys.Preconditions.UserPermissionsNoPermissions;
+			return 'preconditions:userPermissionsNoPermissions';
 		case Identifiers.PreconditionUnavailable:
-			return LanguageKeys.Preconditions.Unavailable;
+			return 'preconditions:unavailable';
 		case Identifiers.PreconditionMissingMessageHandler:
-			return LanguageKeys.Preconditions.MissingMessageHandler;
+			return 'preconditions:missingMessageHandler';
 		case Identifiers.PreconditionMissingChatInputHandler:
-			return LanguageKeys.Preconditions.MissingChatInputHandler;
+			return 'preconditions:missingChatInputHandler';
 		case Identifiers.PreconditionMissingContextMenuHandler:
-			return LanguageKeys.Preconditions.MissingContextMenuHandler;
+			return 'preconditions:missingContextMenuHandler';
 		case DecoratorIdentifiers.RequiresClientPermissionsGuildOnly:
+			return `preconditions:requiresClientPermissionsGuildOnly`;
 		case DecoratorIdentifiers.RequiresUserPermissionsGuildOnly:
-			return LanguageKeys.Preconditions.GuildOnly;
-
-		// Sapphire (deprecated)
-		case Identifiers.PreconditionDMOnly:
-			return LanguageKeys.Preconditions.DmOnly;
-		case Identifiers.PreconditionGuildNewsOnly:
-			return LanguageKeys.Preconditions.GuildNewsOnly;
-		case Identifiers.PreconditionGuildNewsThreadOnly:
-			return LanguageKeys.Preconditions.GuildNewsThreadOnly;
-		case Identifiers.PreconditionGuildOnly:
-			return LanguageKeys.Preconditions.GuildOnly;
-		case Identifiers.PreconditionGuildPrivateThreadOnly:
-			return LanguageKeys.Preconditions.GuildPrivateThreadOnly;
-		case Identifiers.PreconditionGuildPublicThreadOnly:
-			return LanguageKeys.Preconditions.GuildPublicThreadOnly;
-		case Identifiers.PreconditionGuildTextOnly:
-			return LanguageKeys.Preconditions.GuildTextOnly;
-		case Identifiers.PreconditionThreadOnly:
-			return LanguageKeys.Preconditions.ThreadOnly;
-
+			return `preconditions:requiresUserPermissionsGuildOnly`;
 		default:
 			return identifier;
 	}

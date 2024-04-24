@@ -1,19 +1,20 @@
-import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
-import { AnalyticsData } from '#lib/structures/AnalyticsData';
-import type { Birthday, Guild } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
+
+import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
+import { AnalyticsData } from '#lib/structures/AnalyticsData';
 import 'discord.js';
+
 import type { Events } from './Enums.js';
 
 declare module 'discord.js' {
 	interface Client {
-		readonly dev: boolean;
 		readonly analytics: AnalyticsData | null;
-		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
-		readonly webhookError: WebhookClient | null;
 		computeGuilds(): Promise<number>;
 		computeUsers(): Promise<number>;
+		readonly dev: boolean;
+		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
+		readonly webhookError: WebhookClient | null;
 	}
 }
 
@@ -29,10 +30,10 @@ declare module '@sapphire/framework' {
 		BotOwner: never;
 		Everyone: never;
 		GuildPremium: never;
-		Moderator: never;
-		ServerOwner: never;
-		RoleHigher: never;
 		Manager: never;
+		Moderator: never;
+		RoleHigher: never;
+		ServerOwner: never;
 	}
 
 	interface SapphireClient {
@@ -42,65 +43,59 @@ declare module '@sapphire/framework' {
 	}
 }
 
-declare module '@sapphire/plugin-utilities-store' {
-	export interface Utilities {
-		guild: Guild;
-		birthday: Birthday;
-	}
-}
-
 declare module '@skyra/env-utilities' {
 	export interface Env {
-		CLIENT_NAME: string;
-		CLIENT_VERSION: string;
-		CLIENT_OWNERS: ArrayString;
-		CLIENT_COLOR: NumberString;
-		CLIENT_MAIN_GUILD: string;
-		CLIENT_ID: string;
-
-		CLIENT_PRESENCE_NAME: string;
-		CLIENT_PRESENCE_TYPE: string;
-
-		LOG_CHANNEL_ADMIN: string;
-		CUSTOM_BOT: BooleanString;
-		APP_ENV: 'dev' | 'tst' | 'prd';
-		DEBUG: BooleanString;
-
 		API_ENABLED: BooleanString;
 		API_ORIGIN: string;
 		API_PORT: IntegerString;
 		API_PREFIX: string;
+		APP_ENV: 'dev' | 'prd' | 'tst';
+
+		CLIENT_COLOR: NumberString;
+		CLIENT_ID: string;
+		CLIENT_MAIN_GUILD: string;
+		CLIENT_NAME: string;
+		CLIENT_OWNERS: ArrayString;
+		CLIENT_PRESENCE_NAME: string;
+		CLIENT_PRESENCE_TYPE: string;
+		CLIENT_VERSION: string;
+
+		CUSTOM_BOT: BooleanString;
+		DATABASE_URL: string;
+		DEBUG: BooleanString;
+
+		DISCORD_BOT_LIST_TOKEN: string;
+		DISCORD_LIST_GG_TOKEN: string;
+		DISCORD_TOKEN: string;
+
+		INFLUX_ENABLED: BooleanString;
+		INFLUX_ORG: string;
+		INFLUX_ORG_ANALYTICS_BUCKET: string;
+		INFLUX_TOKEN: string;
+		INFLUX_URL: string;
+
+		LOG_CHANNEL_ADMIN: string;
 
 		OAUTH_COOKIE: string;
 		OAUTH_DOMAIN_OVERWRITE: string;
+
 		OAUTH_REDIRECT_URI: string;
 		OAUTH_SCOPE: ArrayString;
-		OAUTH_SECRET: string;
 
-		REDIS_PORT: NumberString;
+		OAUTH_SECRET: string;
+		PRISMA_DEBUG_LOGS: BooleanString;
+		REDIS_DB: IntegerString;
 		REDIS_HOST: string;
 		REDIS_PASSWORD: string;
-		REDIS_DB: IntegerString;
-		REDIS_USERNAME: string;
+
+		REDIS_PORT: NumberString;
 		REDIS_TLS: BooleanString;
 
-		DATABASE_URL: string;
-		PRISMA_DEBUG_LOGS: BooleanString;
-
-		INFLUX_ENABLED: BooleanString;
-		INFLUX_URL: string;
-		INFLUX_TOKEN: string;
-		INFLUX_ORG: string;
-		INFLUX_ORG_ANALYTICS_BUCKET: string;
-
-		WEBHOOK_ERROR_ID: string;
-		WEBHOOK_ERROR_TOKEN: string;
-
+		REDIS_USERNAME: string;
 		SENTRY_URL: string;
 		TOP_GG_TOKEN: string;
-		DISCORD_TOKEN: string;
 		TOPGG_WEBHOOK_SECRET: string;
-		DISCORD_LIST_GG_TOKEN: string;
-		DISCORD_BOT_LIST_TOKEN: string;
+		WEBHOOK_ERROR_ID: string;
+		WEBHOOK_ERROR_TOKEN: string;
 	}
 }

@@ -1,7 +1,8 @@
 import type { PrismaErrorCodeEnum } from '#utils/constants';
+
 import { Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
-import { isThenable, type Awaitable } from '@sapphire/utilities';
+import { type Awaitable, isThenable } from '@sapphire/utilities';
 import { DiscordAPIError, type RESTJSONErrorCodes } from 'discord.js';
 
 export async function resolveOnErrorCodesDiscord<T>(promise: Promise<T>, ...codes: readonly RESTJSONErrorCodes[]) {
@@ -32,8 +33,8 @@ export function floatPromise(promise: Awaitable<unknown>) {
 
 export interface ReferredPromise<T> {
 	promise: Promise<T>;
-	resolve(value?: T): void;
 	reject(error?: Error): void;
+	resolve(value?: T): void;
 }
 
 /**
@@ -48,5 +49,5 @@ export function createReferPromise<T>(): ReferredPromise<T> {
 	});
 
 	// noinspection JSUnusedAssignment
-	return { promise, resolve: resolve!, reject: reject! };
+	return { promise, reject: reject!, resolve: resolve! };
 }

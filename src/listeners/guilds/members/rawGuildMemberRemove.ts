@@ -3,7 +3,7 @@ import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import { GatewayDispatchEvents, type GatewayGuildMemberRemoveDispatch } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildMemberRemove, emitter: 'ws' })
+@ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.GuildMemberRemove })
 export class UserListener extends Listener {
 	public run(data: GatewayGuildMemberRemoveDispatch['d']) {
 		const guild = this.container.client.guilds.cache.get(data.guild_id);
@@ -14,7 +14,7 @@ export class UserListener extends Listener {
 		if (isNullish(member)) return;
 
 		void this.container.prisma.birthday.delete({
-			where: { userId_guildId: { userId: member.id, guildId: guild.id } }
+			where: { userId_guildId: { guildId: guild.id, userId: member.id } }
 		});
 	}
 }

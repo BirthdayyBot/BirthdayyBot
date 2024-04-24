@@ -3,7 +3,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { GatewayDispatchEvents, type GatewayGuildCreateDispatch } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildCreate, emitter: 'ws' })
+@ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.GuildCreate })
 export class UserListener extends Listener {
 	public async run(data: GatewayGuildCreateDispatch['d'], _shardId: number) {
 		const tasks = await this.container.tasks.list({ types: ['waiting'] });

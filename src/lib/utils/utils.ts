@@ -1,6 +1,7 @@
-import { container, type PreconditionEntryResolvable } from '@sapphire/framework';
-import { send } from '@sapphire/plugin-editable-commands';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
+
+import { type PreconditionEntryResolvable, container } from '@sapphire/framework';
+import { send } from '@sapphire/plugin-editable-commands';
 import { isNullishOrEmpty } from '@sapphire/utilities';
 import {
 	type APIUser,
@@ -44,7 +45,7 @@ export function sendLoadingMessage(message: Message): Promise<typeof message> {
 export function resolveTarget(interaction: ChatInputCommandInteraction) {
 	const user = interaction.options.getUser('user') ?? interaction.user;
 	const target = userMention(user.id);
-	return { user, options: { target, context: user === interaction.user ? undefined : 'target' } };
+	return { options: { context: user === interaction.user ? undefined : 'target', target }, user };
 }
 
 /**
@@ -53,7 +54,7 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
  * @param  options - The options to pass to the reply method.
  * @returns A promise that resolves to the message that was sent.
  */
-export function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
+export function reply(interaction: CommandInteraction, options: InteractionReplyOptions | MessagePayload | string) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
@@ -62,13 +63,13 @@ export interface Mapps {
 	preconditions: readonly PreconditionEntryResolvable[];
 }
 
-export function createSubcommandMappings(...subcommands: Array<string | Mapps>): SubcommandMappingArray {
+export function createSubcommandMappings(...subcommands: Array<Mapps | string>): SubcommandMappingArray {
 	return subcommands.map((subcommand) => {
-		if (typeof subcommand === 'string') return { name: subcommand, chatInputRun: snakeToCamel(subcommand) };
+		if (typeof subcommand === 'string') return { chatInputRun: snakeToCamel(subcommand), name: subcommand };
 		return {
+			chatInputRun: snakeToCamel(subcommand.name),
 			name: subcommand.name,
-			preconditions: subcommand.preconditions,
-			chatInputRun: snakeToCamel(subcommand.name)
+			preconditions: subcommand.preconditions
 		};
 	});
 }
@@ -83,11 +84,11 @@ export function snakeToCamel(str: string) {
  * @see {@link https://dis.gd/usernames}
  * @param user The user to check.
  */
-export function usesPomelo(user: User | APIUser) {
+export function usesPomelo(user: APIUser | User) {
 	return isNullishOrEmpty(user.discriminator) || user.discriminator === '0';
 }
 
-export function getDisplayAvatar(user: User | APIUser, options?: Readonly<ImageURLOptions>) {
+export function getDisplayAvatar(user: APIUser | User, options?: Readonly<ImageURLOptions>) {
 	if (user.avatar === null) {
 		const id = usesPomelo(user) ? Number(BigInt(user.id) >> 22n) % 6 : Number(user.discriminator) % 5;
 		return container.client.rest.cdn.defaultAvatar(id);
@@ -96,15 +97,15 @@ export function getDisplayAvatar(user: User | APIUser, options?: Readonly<ImageU
 	return container.client.rest.cdn.avatar(user.id, user.avatar, options);
 }
 
-export function getTag(user: User | APIUser) {
+export function getTag(user: APIUser | User) {
 	return usesPomelo(user) ? `@${user.username}` : `${user.username}#${user.discriminator}`;
 }
 
-export function getEmbedAuthor(user: User | APIUser, url?: string | undefined): EmbedAuthorData {
-	return { name: getTag(user), iconURL: getDisplayAvatar(user, { size: 128 }), url };
+export function getEmbedAuthor(user: APIUser | User, url?: string | undefined): EmbedAuthorData {
+	return { iconURL: getDisplayAvatar(user, { size: 128 }), name: getTag(user), url };
 }
 
-export function getFooterAuthor(user: User | APIUser, url?: string | undefined) {
+export function getFooterAuthor(user: APIUser | User, url?: string | undefined) {
 	return { iconURL: getDisplayAvatar(user, { size: 128 }), text: getTag(user), url };
 }
 
@@ -152,7 +153,7 @@ export function isUserSelf(userId: Snowflake) {
 	return userId === process.env.CLIENT_ID;
 }
 
-export function checkPermissions(interaction: ChatInputCommandInteraction<'cached'>, target: Role | GuildMember) {
+export function checkPermissions(interaction: ChatInputCommandInteraction<'cached'>, target: GuildMember | Role) {
 	// If it's to itself, always block
 	if (interaction.member!.id === target.id) return false;
 

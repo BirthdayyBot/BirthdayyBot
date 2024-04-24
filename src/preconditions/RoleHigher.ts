@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Precondition, type AsyncPreconditionResult } from '@sapphire/framework';
+import { type AsyncPreconditionResult, Precondition } from '@sapphire/framework';
 import { type ChatInputCommandInteraction } from 'discord.js';
 
 export interface TargetPosistionPreconditionContext extends Precondition.Context {

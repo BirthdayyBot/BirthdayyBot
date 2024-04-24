@@ -7,33 +7,49 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { isNullish, isNullOrUndefined, Nullish } from '@sapphire/utilities';
+import { Nullish, isNullOrUndefined, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
-import { chatInputApplicationCommandMention, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/birthdayy:rootDescription',
+	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	subcommands: [
-		{ name: 'set', chatInputRun: 'runSet' },
-		{ name: 'reset', chatInputRun: 'runReset' },
-		{ name: 'upcoming', chatInputRun: 'runUpcoming' },
-		{ name: 'view', chatInputRun: 'runView' }
-	],
-	runIn: CommandOptionsRunTypeEnum.GuildAny
+		{ chatInputRun: 'runSet', name: 'set' },
+		{ chatInputRun: 'runReset', name: 'reset' },
+		{ chatInputRun: 'runUpcoming', name: 'upcoming' },
+		{ chatInputRun: 'runView', name: 'view' }
+	]
 })
 export class UserCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand(
-			(
-				builder //
-			) => this.registerSubcommands(builder).setDMPermission(false)
-		);
+		registry.registerChatInputCommand((builder) => this.registerSubcommands(builder).setDMPermission(false));
+	}
+
+	public async runReset(interaction: BirthdayySubcommand.Interaction) {
+		const birthdayy = await container.prisma.birthday.findUnique({
+			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
+		});
+
+		const t = await fetchT(interaction);
+
+		if (isNullOrUndefined(birthdayy)) {
+			return interactionProblem(interaction, t('commands:birthday:removeNotRegistered'));
+		}
+
+		await container.prisma.birthday.delete({
+			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
+		});
+
+		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands:birthday:resetBirthdaySuccess'));
+
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runSet(interaction: BirthdayySubcommand.Interaction) {
 		const settings = await container.prisma.guild.findUnique({
-			where: { id: interaction.guildId },
-			select: { rolesBirthday: true, channelsAnnouncement: true }
+			select: { channelsAnnouncement: true, rolesBirthday: true },
+			where: { id: interaction.guildId }
 		});
 
 		if (!this.isCorrectlyConfigured(settings?.rolesBirthday, settings?.channelsAnnouncement))
@@ -47,25 +63,25 @@ export class UserCommand extends BirthdayySubcommand {
 			.set('date', date.day);
 
 		await container.prisma.birthday.upsert({
-			where: { userId_guildId: { userId: interaction.user.id, guildId: interaction.guildId } },
-			update: { birthday: birthday.format('YYYY-MM-DD') },
 			create: {
 				birthday: birthday.format('YYYY-MM-DD'),
 				guild: {
 					connectOrCreate: {
-						where: { id: interaction.guildId },
-						create: { id: interaction.guildId }
+						create: { id: interaction.guildId },
+						where: { id: interaction.guildId }
 					}
 				},
 				user: {
 					connectOrCreate: {
-						where: { id: interaction.user.id },
 						create: {
 							id: interaction.user.id
-						}
+						},
+						where: { id: interaction.user.id }
 					}
 				}
-			}
+			},
+			update: { birthday: birthday.format('YYYY-MM-DD') },
+			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
 		});
 
 		const content = await resolveKey(interaction, 'commands/birthday:setBirthdaySuccess', { nextBirthday: dayjs(birthday).format('MMMM DD') });
@@ -75,38 +91,18 @@ export class UserCommand extends BirthdayySubcommand {
 		return interaction.reply({ embeds: [embed] });
 	}
 
-	public async runReset(interaction: BirthdayySubcommand.Interaction) {
-		const birthdayy = await container.prisma.birthday.findUnique({
-			where: { userId_guildId: { userId: interaction.user.id, guildId: interaction.guildId } }
-		});
-
-		const t = await fetchT(interaction);
-
-		if (isNullOrUndefined(birthdayy)) {
-			return interactionProblem(interaction, t('commands:birthday:removeNotRegistered'));
-		}
-
-		await container.prisma.birthday.delete({
-			where: { userId_guildId: { userId: interaction.user.id, guildId: interaction.guildId } }
-		});
-
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands:birthday:resetBirthdaySuccess'));
-
-		return interaction.reply({ embeds: [embed] });
-	}
-
 	public async runUpcoming(_interaction: BirthdayySubcommand.Interaction) {
 		const birthdays = await container.prisma.birthday.findMany({
-			where: { guildId: _interaction.guildId },
-			orderBy: { month: 'asc', day: 'asc' },
 			cursor: {
-				month: dayjs().month() + 1,
 				day: dayjs().date(),
+				month: dayjs().month() + 1,
 				userId_guildId: {
-					userId: _interaction.user.id,
-					guildId: _interaction.guildId
+					guildId: _interaction.guildId,
+					userId: _interaction.user.id
 				}
-			}
+			},
+			orderBy: { day: 'asc', month: 'asc' },
+			where: { guildId: _interaction.guildId }
 		});
 
 		const t = await fetchT(_interaction);
@@ -119,8 +115,8 @@ export class UserCommand extends BirthdayySubcommand {
 			const upcomingBirthdays = birthdays.map((birthday) => {
 				const user = _interaction.guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
 				return t('commands:birthday:upcomingBirthday', {
-					user: user.toString(),
-					birthDate: formatDateForDisplay(birthday.birthday)
+					birthDate: formatDateForDisplay(birthday.birthday),
+					user: user.toString()
 				});
 			});
 
@@ -135,12 +131,12 @@ export class UserCommand extends BirthdayySubcommand {
 		const t = await fetchT(interaction);
 
 		const birthday = await container.prisma.birthday.findUnique({
-			where: { userId_guildId: { userId: user.id, guildId: interaction.guildId } }
+			where: { userId_guildId: { guildId: interaction.guildId, userId: user.id } }
 		});
 
 		const content = birthday
 			? t('commands:birthday:viewBirthdaySet', { birthDate: formatDateForDisplay(birthday.birthday), user: user.toString() })
-			: t('commands/birthday:viewBirthdayNotSet', { user: user.tag, command: BirthdayApplicationCommandMentions.Set });
+			: t('commands/birthday:viewBirthdayNotSet', { command: BirthdayApplicationCommandMentions.Set, user: user.tag });
 
 		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(content);
 
@@ -152,20 +148,16 @@ export class UserCommand extends BirthdayySubcommand {
 		const month = options.getInteger('month', true);
 		const day = options.getInteger('day', true);
 
-		return { year, month, day };
+		return { day, month, year };
 	}
 
-	private isCorrectlyConfigured(birthdayRole: string | Nullish, birthdayChannel: string | Nullish) {
+	private isCorrectlyConfigured(birthdayRole: Nullish | string, birthdayChannel: Nullish | string) {
 		// A birthday role, or a channel and message must be configured:
 		return !isNullish(birthdayRole) || !isNullish(birthdayChannel);
 	}
 
-	private registerSubcommands(builder: SlashCommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:rootName', 'commands/birthday:rootDescription')
-			.addSubcommand((subcommand) => this.registerSetSubcommand(subcommand))
-			.addSubcommand((subcommand) => this.registerResetSubcommand(subcommand))
-			.addSubcommand((subcommand) => this.registerUpcomingSubcommand(subcommand))
-			.addSubcommand((subcommand) => this.registerViewSubcommand(subcommand));
+	private registerResetSubcommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:resetName', 'commands/birthday:resetDescription');
 	}
 
 	private registerSetSubcommand(builder: SlashCommandSubcommandBuilder) {
@@ -188,8 +180,12 @@ export class UserCommand extends BirthdayySubcommand {
 			);
 	}
 
-	private registerResetSubcommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:resetName', 'commands/birthday:resetDescription');
+	private registerSubcommands(builder: SlashCommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:rootName', 'commands/birthday:rootDescription')
+			.addSubcommand((subcommand) => this.registerSetSubcommand(subcommand))
+			.addSubcommand((subcommand) => this.registerResetSubcommand(subcommand))
+			.addSubcommand((subcommand) => this.registerUpcomingSubcommand(subcommand))
+			.addSubcommand((subcommand) => this.registerViewSubcommand(subcommand));
 	}
 
 	private registerUpcomingSubcommand(builder: SlashCommandSubcommandBuilder) {
@@ -205,8 +201,8 @@ export class UserCommand extends BirthdayySubcommand {
 
 export const BirthdayApplicationCommandMentions = {
 	List: chatInputApplicationCommandMention('birthday', 'list', '935174192389840896'),
-	Set: chatInputApplicationCommandMention('birthday', 'set', '935174192389840896'),
 	Remove: chatInputApplicationCommandMention('birthday', 'remove', '935174192389840896'),
+	Set: chatInputApplicationCommandMention('birthday', 'set', '935174192389840896'),
 	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
 	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896')
 } as const;

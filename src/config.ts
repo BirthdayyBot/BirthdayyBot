@@ -1,3 +1,7 @@
+import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
+import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
+import type { FormatFunction, InterpolationOptions } from 'i18next';
+
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { minutes } from '#lib/utils/common/times';
 import { TimezoneWithLocale } from '#lib/utils/common/timezone';
@@ -6,24 +10,21 @@ import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
 import { ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
-import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
-import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
 import { envIsDefined, envParseArray, envParseBoolean, envParseInteger, envParseNumber, envParseString } from '@skyra/env-utilities';
-import { ActivityType, GatewayIntentBits, Locale, PermissionFlagsBits, type OAuth2Scopes } from 'discord-api-types/v10';
 import {
 	ActivitiesOptions,
+	type ClientOptions,
 	Options,
 	Partials,
-	channelMention,
-	roleMention,
-	type ClientOptions,
 	type PermissionsString,
-	type WebhookClientData
+	type WebhookClientData,
+	channelMention,
+	roleMention
 } from 'discord.js';
-import type { FormatFunction, InterpolationOptions } from 'i18next';
+import { ActivityType, GatewayIntentBits, Locale, type OAuth2Scopes, PermissionFlagsBits } from 'discord-api-types/v10';
 import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
@@ -33,8 +34,8 @@ export function parseAnalytics(): ConnectionOptions {
 	const token = envParseString('INFLUX_TOKEN');
 
 	return {
-		url,
-		token
+		token,
+		url
 	};
 }
 
@@ -42,13 +43,13 @@ function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
 
 	return {
-		id: envParseString('CLIENT_ID'),
-		secret: envParseString('OAUTH_SECRET'),
 		cookie: envParseString('OAUTH_COOKIE'),
+		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE'),
+		id: envParseString('CLIENT_ID'),
 		redirect: envParseString('OAUTH_REDIRECT_URI'),
 		scopes: envParseArray('OAUTH_SCOPE') as OAuth2Scopes[],
-		transformers: [transformOauthGuildsAndUser],
-		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE')
+		secret: envParseString('OAUTH_SECRET'),
+		transformers: [transformOauthGuildsAndUser]
 	};
 }
 
@@ -57,10 +58,10 @@ function parseApi(): ServerOptions | undefined {
 
 	return {
 		auth: parseApiAuth(),
-		prefix: envParseString('API_PREFIX', '/'),
-		origin: envParseString('API_ORIGIN'),
+		automaticallyConnect: false,
 		listenOptions: { port: envParseInteger('API_PORT') },
-		automaticallyConnect: false
+		origin: envParseString('API_ORIGIN'),
+		prefix: envParseString('API_PREFIX', '/')
 	};
 }
 
@@ -76,20 +77,20 @@ function parseInternationalizationDefaultVariablesPermissions() {
 
 function parseInternationalizationDefaultVariables() {
 	return {
-		VERSION: process.env.CLIENT_VERSION,
 		ARROW: Emojis.Arrow,
-		SUCCESS: Emojis.Success,
+		CLIENT_ID: process.env.CLIENT_ID,
 		FAIL: Emojis.Fail,
 		LOADIND: Emojis.Sign,
-		CLIENT_ID: process.env.CLIENT_ID,
+		SUCCESS: Emojis.Success,
+		VERSION: process.env.CLIENT_VERSION,
 		...parseInternationalizationDefaultVariablesPermissions()
 	};
 }
 
 function parseInternationalizationInterpolation(): InterpolationOptions {
 	return {
-		escapeValue: false,
 		defaultVariables: parseInternationalizationDefaultVariables(),
+		escapeValue: false,
 		format: (...[value, format, language, options]: Parameters<FormatFunction>) => {
 			const t = container.i18n.getT(language ?? 'en-US');
 			const defaultValue = t('globals:none', options);
@@ -121,40 +122,40 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			return getGuild(guild).preferredLocale ?? 'en-US';
 		},
 		i18next: (_: string[], languages: string[]) => ({
-			supportedLngs: languages,
+			defaultNS: 'globals',
+			fallbackLng: 'en-US',
+			initImmediate: false,
+			interpolation: parseInternationalizationInterpolation(),
+			lng: 'en-US',
+			load: 'all',
 			preload: languages,
-			returnObjects: true,
 			returnEmptyString: false,
 			returnNull: false,
-			load: 'all',
-			lng: 'en-US',
-			fallbackLng: 'en-US',
-			defaultNS: 'globals',
-			initImmediate: false,
-			interpolation: parseInternationalizationInterpolation()
+			returnObjects: true,
+			supportedLngs: languages
 		})
 	};
 }
 
 function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
-	const { REDIS_USERNAME, REDIS_PASSWORD } = process.env;
+	const { REDIS_PASSWORD, REDIS_USERNAME } = process.env;
 
 	return {
 		connection: {
-			port: envParseNumber('REDIS_PORT', 6379),
-			password: REDIS_PASSWORD,
-			host: envParseString('REDIS_HOST', 'localhost'),
 			db: envParseInteger('REDIS_DB'),
-			username: REDIS_USERNAME,
-			tls: envParseBoolean('REDIS_TLS', false) ? {} : undefined
+			host: envParseString('REDIS_HOST', 'localhost'),
+			password: REDIS_PASSWORD,
+			port: envParseNumber('REDIS_PORT', 6379),
+			tls: envParseBoolean('REDIS_TLS', false) ? {} : undefined,
+			username: REDIS_USERNAME
 		}
 	};
 }
 
 function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
 	return {
-		queue: 'birthdayy',
-		bull: parseBullOptions()
+		bull: parseBullOptions(),
+		queue: 'birthdayy'
 	};
 }
 
@@ -176,12 +177,18 @@ export const SENTRY_OPTIONS: NodeOptions = {
 };
 
 export const CLIENT_OPTIONS: ClientOptions = {
-	allowedMentions: { users: [], roles: [] },
+	allowedMentions: { roles: [], users: [] },
 	api: parseApi(),
-	shards: 'auto',
+	i18n: parseInternationalizationOptions(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: false,
+	logger: {
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
+	},
 	makeCache: Options.cacheEverything(),
+	partials: [Partials.Channel],
+	presence: { activities: parsePresenceActivity() },
+	shards: 'auto',
 	sweepers: {
 		...Options.DefaultSweeperSettings,
 		messages: {
@@ -189,12 +196,6 @@ export const CLIENT_OPTIONS: ClientOptions = {
 			lifetime: minutes.toSeconds(15)
 		}
 	},
-	partials: [Partials.Channel],
-	presence: { activities: parsePresenceActivity() },
-	logger: {
-		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
-	},
-	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions()
 };
 

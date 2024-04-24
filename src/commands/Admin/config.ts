@@ -10,8 +10,8 @@ import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/b
 import { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
+import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
+import { applyLocalizedBuilder, createLocalizedChoice, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { Channel, ChannelType, EmbedBuilder, PermissionFlagsBits, Role, channelMention, inlineCode, roleMention } from 'discord.js';
 
@@ -26,13 +26,13 @@ const Key = {
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands:config:rootDescription',
-	subcommands: [
-		{ name: 'edit', chatInputRun: 'runEdit' },
-		{ name: 'view', chatInputRun: 'runView' },
-		{ name: 'reset', chatInputRun: 'runReset' }
-	],
+	permissionLevel: PermissionLevels.Moderator,
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Moderator
+	subcommands: [
+		{ chatInputRun: 'runEdit', name: 'edit' },
+		{ chatInputRun: 'runView', name: 'view' },
+		{ chatInputRun: 'runReset', name: 'reset' }
+	]
 })
 export class UserCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -95,28 +95,17 @@ export class UserCommand extends BirthdayySubcommand {
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	public async runView(interaction: BirthdayySubcommand.Interaction) {
-		const { id } = interaction.guild;
-		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
-
-		const content = await this.viewGenerateContent(interaction, settings);
-
-		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary).setFooter(getFooterAuthor(interaction.user));
-
-		return interaction.reply({ embeds: [embed], ephemeral: false });
-	}
-
 	public runReset(interaction: BirthdayySubcommand.Interaction) {
 		const key = interaction.options.getString('key', true) as ResetOptions;
 		switch (key) {
 			case 'all': {
 				const data = {
 					channelsAnnouncement: null,
+					channelsOverview: null,
 					messagesAnnouncement: null,
+					messagesOverview: null,
 					rolesBirthday: null,
 					rolesNotified: null,
-					channelsOverview: null,
-					messagesOverview: null,
 					timezone: 0
 				} satisfies DefaultKey;
 				return this.updateDatabase(interaction, data);
@@ -136,60 +125,15 @@ export class UserCommand extends BirthdayySubcommand {
 		}
 	}
 
-	private async viewGenerateContent(interaction: Command.ChatInputCommandInteraction<'cached'>, settings?: Partial<Guild> | null) {
-		settings ??= {};
-
-		const t = await fetchT(interaction);
-		const Unset = inlineCode(t('globals:unset'));
-
-		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : Unset;
-		const announcementMessage = settings.messagesAnnouncement ? formatBirthdayMessage(settings.messagesAnnouncement, interaction.member) : Unset;
-		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : Unset;
-		const birthdayPingRole = settings.rolesNotified ? roleMention(settings.rolesNotified) : Unset;
-		const overviewChannel = settings.channelsOverview ? channelMention(settings.channelsOverview) : Unset;
-		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : Unset;
-
-		return t('commands/config:viewContent', {
-			announcementChannel,
-			announcementMessage,
-			birthdayRole,
-			birthdayPingRole,
-			overviewChannel,
-			timezone
-		});
-	}
-
-	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
+	public async runView(interaction: BirthdayySubcommand.Interaction) {
 		const { id } = interaction.guild;
-		const result = await Result.fromAsync(
-			this.container.prisma.guild.upsert({ where: { id }, create: { id, ...data }, update: data, select: null })
-		);
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
-		const content = await result.match({
-			ok: () => resolveKey(interaction, 'commands/config:editSuccess'),
-			err: (error) => {
-				this.container.logger.error(error);
-				return resolveKey(interaction, 'commands/config:editFailure');
-			}
-		});
+		const content = await this.viewGenerateContent(interaction, settings);
 
-		const embed = new EmbedBuilder() //
-			.setDescription(content)
-			.setColor(BrandingColors.Primary);
+		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary).setFooter(getFooterAuthor(interaction.user));
 
-		return interaction.reply({ embeds: [embed], ephemeral: true });
-	}
-
-	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {
-		if (!canSendEmbeds(channel)) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
-					channel: channelMention(channel.id)
-				})
-			);
-		}
-
-		return Result.ok(channel.id);
+		return interaction.reply({ embeds: [embed], ephemeral: false });
 	}
 
 	private async parseAnnouncementMessage(interaction: Command.ChatInputCommandInteraction<'cached'>, announcementMessage: string) {
@@ -199,8 +143,8 @@ export class UserCommand extends BirthdayySubcommand {
 
 		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
 			await this.container.prisma.guild.update({
-				where: { id: interaction.guildId },
-				data: { messagesAnnouncement: defaultAnnouncementMessage }
+				data: { messagesAnnouncement: defaultAnnouncementMessage },
+				where: { id: interaction.guildId }
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
@@ -215,6 +159,18 @@ export class UserCommand extends BirthdayySubcommand {
 		}
 
 		return Result.ok(announcementMessage);
+	}
+
+	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {
+		if (!canSendEmbeds(channel)) {
+			return Result.err(
+				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
+					channel: channelMention(channel.id)
+				})
+			);
+		}
+
+		return Result.ok(channel.id);
 	}
 
 	private async parseRole(interaction: Command.ChatInputCommandInteraction<'cached'>, role: Role, mention: boolean) {
@@ -236,13 +192,6 @@ export class UserCommand extends BirthdayySubcommand {
 		}
 
 		return Result.ok(role.id);
-	}
-
-	private registerSubcommands(builder: SlashCommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
-			.addSubcommand((subcommand) => this.registerEditCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerViewCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerResetCommand(subcommand));
 	}
 
 	private registerEditCommand(builder: SlashCommandSubcommandBuilder) {
@@ -271,10 +220,6 @@ export class UserCommand extends BirthdayySubcommand {
 			);
 	}
 
-	private registerViewCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/config:view');
-	}
-
 	private registerResetCommand(builder: SlashCommandSubcommandBuilder) {
 		return applyLocalizedBuilder(builder, 'commands/config:reset').addStringOption((builder) =>
 			applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
@@ -290,20 +235,80 @@ export class UserCommand extends BirthdayySubcommand {
 				.setRequired(true)
 		);
 	}
+
+	private registerSubcommands(builder: SlashCommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
+			.addSubcommand((subcommand) => this.registerEditCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerViewCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerResetCommand(subcommand));
+	}
+
+	private registerViewCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/config:view');
+	}
+
+	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
+		const { id } = interaction.guild;
+		const result = await Result.fromAsync(
+			this.container.prisma.guild.upsert({ create: { id, ...data }, select: null, update: data, where: { id } })
+		);
+
+		const content = await result.match({
+			err: (error) => {
+				this.container.logger.error(error);
+				return resolveKey(interaction, 'commands/config:editFailure');
+			},
+			ok: () => resolveKey(interaction, 'commands/config:editSuccess')
+		});
+
+		const embed = new EmbedBuilder() //
+			.setDescription(content)
+			.setColor(BrandingColors.Primary);
+
+		return interaction.reply({ embeds: [embed], ephemeral: true });
+	}
+
+	private async viewGenerateContent(interaction: Command.ChatInputCommandInteraction<'cached'>, settings?: Partial<Guild> | null) {
+		settings ??= {};
+
+		const Unset = inlineCode(await resolveKey(interaction, 'globals:unset'));
+
+		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : Unset;
+		const announcementMessage = settings.messagesAnnouncement ? formatBirthdayMessage(settings.messagesAnnouncement, interaction.member) : Unset;
+		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : Unset;
+		const birthdayPingRole = settings.rolesNotified ? roleMention(settings.rolesNotified) : Unset;
+		const overviewChannel = settings.channelsOverview ? channelMention(settings.channelsOverview) : Unset;
+		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : Unset;
+
+		return resolveKey(interaction, 'commands/config:viewContent', {
+			announcementChannel,
+			announcementMessage,
+			birthdayPingRole,
+			birthdayRole,
+			overviewChannel,
+			timezone
+		});
+	}
 }
 
 interface EditOptions {
 	'channels-announcement': string;
+	'channels-overview': string;
 	'messages-announcement': string;
 	'roles-birthday': string;
 	'roles-notified': string;
-	'channels-overview': string;
 	timezone: number;
 }
 
 type DefaultKey = Pick<
 	Guild,
-	'channelsAnnouncement' | 'channelsOverview' | 'messagesAnnouncement' | 'timezone' | 'rolesBirthday' | 'rolesNotified' | 'messagesOverview'
+	| 'channelsAnnouncement' //
+	| 'channelsOverview'
+	| 'messagesAnnouncement'
+	| 'messagesOverview'
+	| 'rolesBirthday'
+	| 'rolesNotified'
+	| 'timezone'
 >;
 
 type ResetOptions = 'all' | keyof EditOptions;

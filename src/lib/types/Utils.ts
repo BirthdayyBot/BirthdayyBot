@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
-export type TypedT<TCustom = string> = string & { __type__: TCustom };
+export type TypedT<TCustom = string> = { __type__: TCustom } & string;
 export type GetTypedT<T extends TypedT<unknown>> = T extends TypedT<infer U> ? U : never;
 
 export function T<TCustom = string>(k: string): TypedT<TCustom> {
 	return k as TypedT<TCustom>;
 }
 
-export type TypedFT<TArgs, TReturn = string> = string & { __args__: TArgs; __return__: TReturn };
+export type TypedFT<TArgs, TReturn = string> = { __args__: TArgs; __return__: TReturn } & string;
 export type GetTypedFTArgs<T extends TypedFT<unknown, unknown>> = T extends TypedFT<infer U, unknown> ? U : never;
 export type GetTypedFTReturn<T extends TypedFT<unknown, unknown>> = T extends TypedFT<unknown, infer U> ? U : never;
 
@@ -19,13 +19,13 @@ export interface Value<T = string> {
 }
 
 export interface Values<T = string> {
-	values: readonly T[];
 	count: number;
+	values: readonly T[];
 }
 
 export interface Difference<T = string> {
-	previous: T;
 	next: T;
+	previous: T;
 }
 
 export interface Parameter {

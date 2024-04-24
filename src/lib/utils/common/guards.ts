@@ -1,5 +1,6 @@
-import { DMMessage, GuildMessage } from '#lib/types/Discord';
 import type { Message } from 'discord.js';
+
+import { DMMessage, GuildMessage } from '#lib/types/Discord';
 
 /**
  * Checks whether or not a message was sent in a guild.

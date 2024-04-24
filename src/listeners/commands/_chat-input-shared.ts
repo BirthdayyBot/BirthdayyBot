@@ -1,6 +1,8 @@
+import type { ChatInputSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
+
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { type ChatInputCommandErrorPayload } from '@sapphire/framework';
-import type { ChatInputSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
+
 import { flattenError, generateUnexpectedErrorMessage, resolveError } from './_shared.js';
 
 export async function handleCommandError(error: unknown, payload: ChatInputCommandErrorPayload | ChatInputSubcommandErrorPayload) {

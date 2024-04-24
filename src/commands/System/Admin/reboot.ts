@@ -10,12 +10,6 @@ import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 	permissionLevel: PermissionLevels.BotOwner
 })
 export class UserCommand extends BirthdayyCommand {
-	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => applyDescriptionLocalizedBuilder(builder, this.description).setName('reboot'), {
-			guildIds: [envParseString('CLIENT_MAIN_GUILD')]
-		});
-	}
-
 	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const t = await fetchT(interaction);
 		const content = t('commands/system:reboot');
@@ -38,5 +32,11 @@ export class UserCommand extends BirthdayyCommand {
 		}
 
 		process.exit(0);
+	}
+
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
+		registry.registerChatInputCommand((builder) => applyDescriptionLocalizedBuilder(builder, this.description).setName('reboot'), {
+			guildIds: [envParseString('CLIENT_MAIN_GUILD')]
+		});
 	}
 }

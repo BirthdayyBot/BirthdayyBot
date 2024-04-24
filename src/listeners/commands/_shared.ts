@@ -1,19 +1,20 @@
+import type { TFunction } from '@sapphire/plugin-i18next';
+
 import { LanguageKeys } from '#lib/i18n/languageKeys';
 import { translate } from '#lib/i18n/translate';
 import { OWNERS } from '#root/config';
 import { getCodeStyle, getLogPrefix } from '#utils/functions';
-import { ArgumentError, ResultError, UserError, container, type Command } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import { ArgumentError, type Command, container, ResultError, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
-import { DiscordAPIError, HTTPError, RESTJSONErrorCodes, codeBlock, type Snowflake } from 'discord.js';
+import { codeBlock, DiscordAPIError, HTTPError, RESTJSONErrorCodes, type Snowflake } from 'discord.js';
 import { exists } from 'i18next';
 
 const Root = LanguageKeys.Errors;
 
-export function resolveError(t: TFunction, error: UserError | string) {
+export function resolveError(t: TFunction, error: string | UserError) {
 	return typeof error === 'string' ? resolveStringError(t, error) : resolveUserError(t, error);
 }
 
@@ -36,7 +37,7 @@ function resolveUserError(t: TFunction, error: UserError) {
 	) as string;
 }
 
-export function flattenError(command: Command | Subcommand, error: unknown): UserError | string | null {
+export function flattenError(command: Command | Subcommand, error: unknown): null | string | UserError {
 	if (typeof error === 'string') return error;
 
 	if (!(error instanceof Error)) {

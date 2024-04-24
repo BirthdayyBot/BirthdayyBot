@@ -1,17 +1,18 @@
+import type { Birthday } from '.prisma/client';
+
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import { CdnUrls, Emojis, GuildIDEnum } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
-import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import dayjs from 'dayjs';
-import { Guild, userMention, type APIEmbed } from 'discord.js';
+import { type APIEmbed, Guild, userMention } from 'discord.js';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
 
-	if (isNullOrUndefinedOrEmpty(birthdays)) return { embed: await createEmbed(guild, []), components: [] };
+	if (isNullOrUndefinedOrEmpty(birthdays)) return { components: [], embed: await createEmbed(guild, []) };
 
 	// sort all birthdays by day and month
 	const sortedBirthdays = sortByDayAndMonth(birthdays);
@@ -26,7 +27,7 @@ export async function generateBirthdayList(page_id: number, guild: Guild) {
 
 	const components = generateComponents(page_id, splitBirthdayList.listAmount);
 
-	return { embed, components };
+	return { components, embed };
 }
 
 /**
@@ -51,12 +52,12 @@ function getBirthdaysAsLists(allBirthdays: Birthday[], maxBirthdaysPerList: numb
  * @param birthdays - Array with all birthdays
  * @returns embed - Embed with the given values
  */
-async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
+async function createEmbed(guild: Guild, birthdaySortByMonth: { birthdays: Birthday[]; month: string }[]) {
 	const embed: APIEmbed = {
-		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
 		description: `${Emojis.Arrow}Set your Birthday with\n\`/birthday set <day> <month> [year]\``,
 		fields: [],
-		thumbnail: { url: CdnUrls.Cake }
+		thumbnail: { url: CdnUrls.Cake },
+		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`
 	};
 
 	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
@@ -69,7 +70,7 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 		if (isNullOrUndefinedOrEmpty(birthdays)) continue;
 		// For each birthday in current month
 		for (const birthday of birthdays) {
-			const { userId, birthday: dateOfTheBirthday } = birthday;
+			const { birthday: dateOfTheBirthday, userId } = birthday;
 			const member = guildIsChilliAttackV2 ? guild?.members.cache.get(userId) ?? null : await guild?.members.fetch(userId).catch(() => null);
 
 			if (!member && !guildIsChilliAttackV2) {
@@ -120,31 +121,31 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 		const disabled = isActive ? true : false;
 		const style = isActive ? 1 : 2;
 		innerComponents.push({
-			style,
-			label,
 			custom_id: `birthday_list_page_${i}`,
 			disabled,
+			label,
+			style,
 			type: 2
 		});
 	}
 	const components = [
 		{
-			type: 1,
-			components: innerComponents
+			components: innerComponents,
+			type: 1
 		}
 	];
 	if (listAmount > 5) {
 		components.push({
-			type: 1,
 			components: [
 				{
-					type: 2,
-					style: 1,
-					label: 'To many birthdays to show all.',
+					custom_id: 'birthday_list_to_many',
 					disabled: true,
-					custom_id: 'birthday_list_to_many'
+					label: 'To many birthdays to show all.',
+					style: 1,
+					type: 2
 				}
-			]
+			],
+			type: 1
 		});
 	}
 
@@ -152,8 +153,8 @@ function generateComponents(page_id: number, listAmount: number): any[] {
 }
 
 interface BirthdaysListWithMonth {
-	month: string;
 	birthdays: Birthday[];
+	month: string;
 }
 
 /**
@@ -164,7 +165,7 @@ function prepareBirthdayList(): BirthdaysListWithMonth[] {
 	const monthArray = [];
 	for (let i = 1; i <= 12; i++) {
 		const month = numberToMonthName(i);
-		monthArray.push({ month, birthdays: [] });
+		monthArray.push({ birthdays: [], month });
 	}
 	return monthArray;
 }

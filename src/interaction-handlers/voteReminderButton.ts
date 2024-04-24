@@ -1,8 +1,9 @@
-import { ButtonID, remindMeButtonDisabledBuilder } from '#lib/components/button';
+import { ButtonID, remindMeButtonBuilder } from '#lib/components/button';
 import { editInteractionResponse } from '#lib/discord/interaction';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
+import { Target } from '@sapphire/plugin-i18next';
 import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
@@ -20,8 +21,8 @@ export class VoteReminderButton extends InteractionHandler {
 		await editInteractionResponse(interaction, {
 			components: [
 				{
-					type: 1,
-					components: [await remindMeButtonDisabledBuilder(interaction)]
+					components: [await this.remindMeButtonDisabledBuilder(interaction)],
+					type: 1
 				}
 			]
 		});
@@ -32,11 +33,15 @@ export class VoteReminderButton extends InteractionHandler {
 			return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
 		}
 
-		await this.container.tasks.create({ name: 'VoteReminderTask', payload: { memberId: interaction.user.id } }, { repeated: false, delay });
+		await this.container.tasks.create({ name: 'VoteReminderTask', payload: { memberId: interaction.user.id } }, { delay, repeated: false });
 
 		return interaction.followUp({
 			content: `I will remind you to vote ${time(Math.round(result.time / 1000), TimestampStyles.RelativeTime)} !`,
 			ephemeral: true
 		});
+	}
+
+	private async remindMeButtonDisabledBuilder(target: Target) {
+		return (await remindMeButtonBuilder(target)).setDisabled(true);
 	}
 }

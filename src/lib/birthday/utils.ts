@@ -47,7 +47,7 @@ export async function getBirthdays(): Promise<Birthday[]> {
 export function getGuildBirthdays(guildId: string): Promise<Birthday[]> {
 	const date = new Date();
 	return container.prisma.birthday.findMany({
-		where: { guildId, month: date.getMonth() + 1, day: date.getDate() }
+		where: { day: date.getDate(), guildId, month: date.getMonth() + 1 }
 	});
 }
 
@@ -58,7 +58,7 @@ export function getGuildBirthdays(guildId: string): Promise<Birthday[]> {
  */
 export function getGuildMemberBirthday(guildId: string, userId: string): Promise<Birthday | null> {
 	return container.prisma.birthday.findUnique({
-		where: { userId_guildId: { userId, guildId } }
+		where: { userId_guildId: { guildId, userId } }
 	});
 }
 
@@ -143,7 +143,7 @@ export interface NextTimeOptions extends TimeOptions {
  * @param options The options for the operation of this function.
  * @returns A `Date` representing the next birthday, which can be `now`'s date if `options.nextYearIfToday` is set as `false`.
  */
-export function nextBirthday(month: Month, day: number, { now = Date.now(), nextYearIfToday = false, timeZoneOffset = 0 }: NextTimeOptions = {}) {
+export function nextBirthday(month: Month, day: number, { nextYearIfToday = false, now = Date.now(), timeZoneOffset = 0 }: NextTimeOptions = {}) {
 	const yearNow = new Date(now).getUTCFullYear();
 
 	const yearComparisonResult = compareDate(month, day, { now });

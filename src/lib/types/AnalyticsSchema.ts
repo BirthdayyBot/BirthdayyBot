@@ -1,18 +1,18 @@
 export const enum Points {
-	Guilds = 'guilds',
-	Users = 'users',
-	Commands = 'commands',
 	BirthdayCount = 'birthday_count',
-	PerCoreCPULoad = 'per_core_cpu_load',
+	Commands = 'commands',
+	Guilds = 'guilds',
 	Memory = 'memory',
-	MessageCount = 'message_count'
+	MessageCount = 'message_count',
+	PerCoreCPULoad = 'per_core_cpu_load',
+	Users = 'users'
 }
 
 export const enum Tags {
-	Shard = 'shard',
-	Client = 'client_id',
 	Action = 'action',
-	OriginEvent = 'origin_event'
+	Client = 'client_id',
+	OriginEvent = 'origin_event',
+	Shard = 'shard'
 }
 
 export const enum CommandCategoryTypes {

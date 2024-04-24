@@ -11,7 +11,7 @@ export const DEBUG = envParseBoolean('DEBUG', true);
 export const APP_ENV = envParseString('APP_ENV');
 
 // GENERIC
-export const { CLIENT_NAME, BOT_AVATAR } = process.env;
+export const { BOT_AVATAR, CLIENT_NAME } = process.env;
 
 // Values
 export const BOT_ADMIN_LOG = envParseString('LOG_CHANNEL_ADMIN', '1077621363881300018');

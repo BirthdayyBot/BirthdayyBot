@@ -5,10 +5,6 @@ import { AutocompleteInteraction } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Autocomplete })
 export class UserInteractionHandler extends InteractionHandler {
-	public async run(interaction: AutocompleteInteraction, result: InteractionHandler.ParseResult<this>) {
-		return interaction.respond(result);
-	}
-
 	public override parse(interaction: AutocompleteInteraction) {
 		if (interaction.commandName !== 'config') return this.none();
 
@@ -22,5 +18,9 @@ export class UserInteractionHandler extends InteractionHandler {
 			default:
 				return this.none();
 		}
+	}
+
+	public async run(interaction: AutocompleteInteraction, result: InteractionHandler.ParseResult<this>) {
+		return interaction.respond(result);
 	}
 }

@@ -1,9 +1,8 @@
 import { canManageGuild } from '#utils/functions/permissions';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
-import { ApiRequest, HttpCodes, type ApiResponse, type LoginData } from '@sapphire/plugin-api';
+import { ApiRequest, type ApiResponse, HttpCodes, type LoginData } from '@sapphire/plugin-api';
 import { RateLimitManager } from '@sapphire/ratelimits';
-import { Locale, PermissionFlagsBits, type RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
 import {
 	Client,
 	Guild,
@@ -15,8 +14,11 @@ import {
 	GuildVerificationLevel,
 	PermissionsBitField
 } from 'discord.js';
-import { flattenGuild } from './ApiTransformers.js';
+import { Locale, PermissionFlagsBits, type RESTAPIPartialCurrentUserGuild } from 'discord-api-types/v10';
+
 import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
+
+import { flattenGuild } from './ApiTransformers.js';
 
 export const authenticated = (token?: string) =>
 	createFunctionPrecondition(
@@ -89,7 +91,6 @@ async function transformGuild(client: Client, userId: string, data: RESTAPIParti
 					channels: [],
 					defaultMessageNotifications: GuildDefaultMessageNotifications.OnlyMentions,
 					description: null,
-					widgetEnabled: false,
 					explicitContentFilter: GuildExplicitContentFilter.Disabled,
 					icon: data.icon,
 					id: data.id,
@@ -106,24 +107,25 @@ async function transformGuild(client: Client, userId: string, data: RESTAPIParti
 					systemChannelId: null,
 					vanityURLCode: null,
 					verificationLevel: GuildVerificationLevel.None,
-					verified: false
+					verified: false,
+					widgetEnabled: false
 				}
 			: flattenGuild(guild);
 
 	return {
 		...serialized,
-		permissions: data.permissions,
+		isBotAdded: typeof guild !== 'undefined',
 		manageable: await getManageable(userId, data, guild),
-		isBotAdded: typeof guild !== 'undefined'
+		permissions: data.permissions
 	};
 }
 
-export async function transformOauthGuildsAndUser({ user, guilds }: LoginData): Promise<TransformedLoginData> {
-	if (!user || !guilds) return { user, guilds };
+export async function transformOauthGuildsAndUser({ guilds, user }: LoginData): Promise<TransformedLoginData> {
+	if (!user || !guilds) return { guilds, user };
 
 	const { client } = container;
 	const userId = user.id;
 
 	const transformedGuilds = await Promise.all(guilds.map((guild) => transformGuild(client, userId, guild)));
-	return { user, transformedGuilds };
+	return { transformedGuilds, user };
 }

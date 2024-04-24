@@ -5,8 +5,8 @@ import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 
 @ApplyOptions<ScheduledTask.Options>({
-	name: 'DisplayStats',
 	enabled: isProduction,
+	name: 'DisplayStats',
 	pattern: '0 * * * *'
 })
 export class DisplayStats extends ScheduledTask {

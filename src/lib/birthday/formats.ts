@@ -1,16 +1,16 @@
 export const dateFormats = new Map<string, RegExp>([
+	['DD.MM.YYYY', /^(?<day>\d{1,2})\.(?<month>\d{1,2})(?:\.(?<year>\d{4}))?/],
 	['DD/MM/YYYY', /^(?<day>\d{1,2})\/(?<month>\d{1,2})(?:\/(?<year>\d{4}))?/],
 	['DD-MM-YYYY', /^(?<day>\d{1,2})\-(?<month>\d{1,2})(?:\-(?<year>\d{4}))?/],
-	['DD.MM.YYYY', /^(?<day>\d{1,2})\.(?<month>\d{1,2})(?:\.(?<year>\d{4}))?/],
+	['MM.DD.YYYY', /^(?<month>\d{1,2})\.(?<day>\d{1,2})(?:\.(?<year>\d{4}))?/],
 	['MM/DD/YYYY', /^(?<month>\d{1,2})\/(?<day>\d{1,2})(?:\/(?<year>\d{4}))?/],
 	['MM-DD-YYYY', /^(?<month>\d{1,2})\-(?<day>\d{1,2})(?:\-(?<year>\d{4}))?/],
-	['MM.DD.YYYY', /^(?<month>\d{1,2})\.(?<day>\d{1,2})(?:\.(?<year>\d{4}))?/],
-	['YYYY/MM/DD', /^(?:(?<year>\d{4})\/)?(?<month>\d{1,2})\/(?<day>\d{1,2})/],
-	['YYYY-MM-DD', /^(?:(?<year>\d{4})\-)?(?<month>\d{1,2})\-(?<day>\d{1,2})/],
+	['YYYY.DD.MM', /^(?:(?<year>\d{4})\.)?(?<day>\d{1,2})\.(?<month>\d{1,2})/],
 	['YYYY.MM.DD', /^(?:(?<year>\d{4})\.)?(?<month>\d{1,2})\.(?<day>\d{1,2})/],
 	['YYYY/DD/MM', /^(?:(?<year>\d{4})\/)?(?<day>\d{1,2})\/(?<month>\d{1,2})/],
+	['YYYY/MM/DD', /^(?:(?<year>\d{4})\/)?(?<month>\d{1,2})\/(?<day>\d{1,2})/],
 	['YYYY-DD-MM', /^(?:(?<year>\d{4})\-)?(?<day>\d{1,2})\-(?<month>\d{1,2})/],
-	['YYYY.DD.MM', /^(?:(?<year>\d{4})\.)?(?<day>\d{1,2})\.(?<month>\d{1,2})/]
+	['YYYY-MM-DD', /^(?:(?<year>\d{4})\-)?(?<month>\d{1,2})\-(?<day>\d{1,2})/]
 ]);
 
 /**

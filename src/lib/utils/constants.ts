@@ -9,34 +9,34 @@ export const ZeroWidthSpace = '\u200B';
 export const LongWidthSpace = '\u3000';
 
 export enum Emojis {
-	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
-	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
-	Arrow = '<:arrow_right_birthdayy:1102221944016875650>',
-	Plus = '<:plus_birthdayy:1102222100544110712>',
-	Link = '<:link_birthdayy:1102222076380725319>',
-	Exclamation = '<:exclamation_mark_birthdayy:1102222058777223209>',
-	Cake = '<:cake_birthdayy:1102221988380020766>',
-	News = '<:news_birthdayy:1102222080029761618>',
-	Gift = '<:gift_birthdayy:1102222060845015050>',
-	Book = '<:book_birthdayy:1102221958592086137>',
 	Alarm = '<:bell_birthdayy:1102221947003219968>',
-	Support = '<:support_birthdayy:1102222115056386208>',
-	Sign = '<:sign_birthdayy:1102222111155703909> ',
+	Arrow = '<:arrow_right_birthdayy:1102221944016875650>',
+	Book = '<:book_birthdayy:1102221958592086137>',
+	Cake = '<:cake_birthdayy:1102221988380020766>',
+	Exclamation = '<:exclamation_mark_birthdayy:1102222058777223209>',
+	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
+	Gift = '<:gift_birthdayy:1102222060845015050>',
 	Heart = '<:heart_birthdayy:1102222063030239232>',
-	Ping = '<:ping_birthdayy:1102222097788440657>',
+	Link = '<:link_birthdayy:1102222076380725319>',
+	News = '<:news_birthdayy:1102222080029761618>',
 	People = '<:people_birthdayy:1102222095573844108>',
+	Ping = '<:ping_birthdayy:1102222097788440657>',
+	Plus = '<:plus_birthdayy:1102222100544110712>',
+	Sign = '<:sign_birthdayy:1102222111155703909> ',
+	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
+	Support = '<:support_birthdayy:1102222115056386208>',
 	Tools = '<:tools_birthdayy:1102222421651623936>'
 }
 
 export const enum LanguageFormatters {
-	Message = 'message',
+	BirthdayMessage = 'birthdayMessage',
 	Channel = 'channel',
-	Role = 'role',
 	Language = 'language',
-	Timezone = 'timezone',
+	Message = 'message',
 	Number = 'number',
-	replaceNull = 'replaceNull',
-	BirthdayMessage = 'birthdayMessage'
+	Role = 'role',
+	Timezone = 'timezone',
+	replaceNull = 'replaceNull'
 }
 
 export enum BrandingColors {
@@ -60,7 +60,7 @@ export enum PrismaErrorCodeEnum {
 
 export enum GuildIDEnum {
 	Birthdayy = '934467365389893704',
-	ChilliHQ = '766707453994729532',
+	BirthdayyTesting = '980559116076470272',
 	ChilliAttackV2 = '768556541439377438',
-	BirthdayyTesting = '980559116076470272'
+	ChilliHQ = '766707453994729532'
 }

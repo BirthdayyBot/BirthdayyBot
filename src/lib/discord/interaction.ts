@@ -14,18 +14,18 @@ import type {
  */
 export async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
-	options: string | MessagePayload | InteractionReplyOptions
+	options: InteractionReplyOptions | MessagePayload | string
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
-export async function replyToButtonInteraction(interaction: ButtonInteraction, options: string | MessagePayload | InteractionReplyOptions) {
+export async function replyToButtonInteraction(interaction: ButtonInteraction, options: InteractionReplyOptions | MessagePayload | string) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
 export function editInteractionResponse(
-	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | ButtonInteraction,
-	options: string | MessagePayload | InteractionReplyOptions
+	interaction: ButtonInteraction | ChatInputCommandInteraction | ContextMenuCommandInteraction,
+	options: InteractionReplyOptions | MessagePayload | string
 ) {
 	return interaction.editReply(options);
 }

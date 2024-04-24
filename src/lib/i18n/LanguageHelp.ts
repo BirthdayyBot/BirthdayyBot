@@ -1,43 +1,13 @@
 export class LanguageHelp {
-	private usages: string = null!;
-	private extendedHelp: string = null!;
-	private explainedUsage: string = null!;
-	private possibleFormats: string = null!;
 	private examples: string = null!;
+	private explainedUsage: string = null!;
+	private extendedHelp: string = null!;
+	private possibleFormats: string = null!;
 	private reminder: string = null!;
-
-	public setUsages(text: string) {
-		this.usages = text;
-		return this;
-	}
-
-	public setExplainedUsage(text: string) {
-		this.explainedUsage = text;
-		return this;
-	}
-
-	public setExtendedHelp(text: string) {
-		this.extendedHelp = text;
-		return this;
-	}
-
-	public setPossibleFormats(text: string) {
-		this.possibleFormats = text;
-		return this;
-	}
-
-	public setExamples(text: string) {
-		this.examples = text;
-		return this;
-	}
-
-	public setReminder(text: string) {
-		this.reminder = text;
-		return this;
-	}
+	private usages: string = null!;
 
 	public display(name: string, options: LanguageHelpDisplayOptions) {
-		const { usages = [], extendedHelp, explainedUsage = [], possibleFormats = [], examples = [], reminder } = options;
+		const { examples = [], explainedUsage = [], extendedHelp, possibleFormats = [], reminder, usages = [] } = options;
 		const output: string[] = [];
 
 		// Usages
@@ -74,13 +44,43 @@ export class LanguageHelp {
 
 		return output.join('\n');
 	}
+
+	public setExamples(text: string) {
+		this.examples = text;
+		return this;
+	}
+
+	public setExplainedUsage(text: string) {
+		this.explainedUsage = text;
+		return this;
+	}
+
+	public setExtendedHelp(text: string) {
+		this.extendedHelp = text;
+		return this;
+	}
+
+	public setPossibleFormats(text: string) {
+		this.possibleFormats = text;
+		return this;
+	}
+
+	public setReminder(text: string) {
+		this.reminder = text;
+		return this;
+	}
+
+	public setUsages(text: string) {
+		this.usages = text;
+		return this;
+	}
 }
 
 export interface LanguageHelpDisplayOptions {
-	usages?: string[];
-	extendedHelp?: string;
-	explainedUsage?: [string, string][];
-	possibleFormats?: [string, string][];
 	examples?: (null | string)[];
+	explainedUsage?: [string, string][];
+	extendedHelp?: string;
+	possibleFormats?: [string, string][];
 	reminder?: string;
+	usages?: string[];
 }

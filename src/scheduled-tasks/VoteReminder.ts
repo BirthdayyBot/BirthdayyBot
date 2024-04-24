@@ -1,14 +1,15 @@
+import type { Snowflake } from 'discord.js';
+
 import { VoteEmbed } from '#lib/embeds/vote';
 import { generateDefaultEmbed } from '#utils/embed';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import type { Snowflake } from 'discord.js';
 
 interface VoteReminderTaskPayload {
 	memberId: Snowflake;
 }
 
-@ApplyOptions<ScheduledTask.Options>({ name: 'VoteReminderTask', customJobOptions: { removeOnComplete: true } })
+@ApplyOptions<ScheduledTask.Options>({ customJobOptions: { removeOnComplete: true }, name: 'VoteReminderTask' })
 export class VoteReminderTask extends ScheduledTask {
 	public async run(payload: VoteReminderTaskPayload) {
 		const { memberId } = payload;

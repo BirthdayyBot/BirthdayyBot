@@ -1,15 +1,16 @@
+import type { Guild as PrismaGuild } from '@prisma/client';
+import type { APIEmbed, Guild, GuildMember, Snowflake } from 'discord.js';
+
 import { formatBirthdayMessage } from '#utils/common/string';
 import { Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
-import type { Guild as PrismaGuild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { objectEntries } from '@sapphire/utilities';
-import type { APIEmbed, Guild, GuildMember, Snowflake } from 'discord.js';
-import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
+import { type APIEmbedField, channelMention, roleMention, userMention } from 'discord.js';
 
 interface ConfigListOptions {
-	member: GuildMember;
 	guild?: Guild;
+	member: GuildMember;
 }
 
 export default async function generateConfigList(guildId: Snowflake, options: ConfigListOptions): Promise<APIEmbed> {
@@ -17,40 +18,40 @@ export default async function generateConfigList(guildId: Snowflake, options: Co
 	const guildInfo: Guild | null = options.guild ? options.guild : await container.client.guilds.fetch(guildId);
 	if (!guildInfo) {
 		return {
-			title: `Config List - ${guildId}`,
-			description: 'Guild Not Found, please report this to the developer'
+			description: 'Guild Not Found, please report this to the developer',
+			title: `Config List - ${guildId}`
 		};
 	}
 	return generateDefaultEmbed({
-		title: `Config List - ${guildInfo.name}`,
 		description: 'Use /config `<setting>` `<value>` to change any setting',
-		fields: embedFields
+		fields: embedFields,
+		title: `Config List - ${guildInfo.name}`
 	});
 }
 async function generateFields(id: string, member: GuildMember): Promise<APIEmbedField[]> {
 	const config = await container.prisma.guild.upsert({
 		create: { id },
-		where: { id },
-		update: { id },
 		select: {
+			channelsAnnouncement: true,
+			channelsOverview: true,
+			language: true,
+			messagesAnnouncement: true,
+			premium: true,
 			rolesBirthday: true,
 			rolesNotified: true,
-			channelsAnnouncement: true,
-			messagesAnnouncement: true,
-			channelsOverview: true,
-			timezone: true,
-			language: true,
-			premium: true
-		}
+			timezone: true
+		},
+		update: { id },
+		where: { id }
 	});
 
 	return objectEntries(config).map(([name, value]) => {
 		const valueString = getValueString(name, value, member);
 		const nameString = getNameString(name);
 		return {
+			inline: false,
 			name: nameString,
-			value: valueString,
-			inline: false
+			value: valueString
 		};
 	});
 

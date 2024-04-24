@@ -1,5 +1,5 @@
 import { OWNERS } from '#root/config';
-import { PermissionFlagsBits, type GuildMember } from 'discord.js';
+import { type GuildMember, PermissionFlagsBits } from 'discord.js';
 
 export function isGuildManager(member: GuildMember) {
 	return isGuildModerator(member) || canManageGuild(member);

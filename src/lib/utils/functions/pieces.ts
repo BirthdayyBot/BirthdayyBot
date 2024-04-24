@@ -5,6 +5,6 @@ export function getLogPrefix(piece: Piece | string) {
 	return bgBlue(piece instanceof Piece ? `[ ${piece.store.name} => ${piece.name} ]` : `[ ${piece} ]`);
 }
 
-export function getCodeStyle(code: string | number) {
+export function getCodeStyle(code: number | string) {
 	return bgRed(`[ ${code} ]`);
 }

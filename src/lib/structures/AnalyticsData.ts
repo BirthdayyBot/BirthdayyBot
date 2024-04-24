@@ -5,10 +5,10 @@ import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 export class AnalyticsData {
 	public influx: InfluxDB | null = envParseBoolean('INFLUX_ENABLED') ? new InfluxDB(parseAnalytics()) : null;
 
-	public writeApi!: WriteApi;
+	public messageCount = 0;
 	public queryApi!: QueryApi;
 
-	public messageCount = 0;
+	public writeApi!: WriteApi;
 
 	public constructor() {
 		this.writeApi = this.influx!.getWriteApi(envParseString('INFLUX_ORG'), envParseString('INFLUX_ORG_ANALYTICS_BUCKET'), 's');

@@ -19,13 +19,13 @@ export function checkLength(length: number, string: string) {
 
 export function formatBirthdayMessage(message: string, member: GuildMember) {
 	const placeholders = {
-		'{USERNAME}': member.displayName,
 		'{DISCRIMINATOR}': member.user?.discriminator ?? '0',
-		'{NEW_LINE}': '\n',
-		'{GUILD_NAME}': member.guild.name,
 		'{GUILD_ID}': member.guild.id,
+		'{GUILD_NAME}': member.guild.name,
 		'{MENTION}': userMention(member.id),
-		'{SERVERNAME}': member.guild.name
+		'{NEW_LINE}': '\n',
+		'{SERVERNAME}': member.guild.name,
+		'{USERNAME}': member.displayName
 	};
 
 	let formattedMessage = message;

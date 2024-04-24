@@ -26,6 +26,7 @@ import {
 	roleMention,
 	userMention
 } from 'discord.js';
+
 import { SettingsManager } from './SettingsManager.js';
 
 enum CacheActions {
@@ -35,26 +36,23 @@ enum CacheActions {
 }
 
 export class BirthdaysManager extends Collection<string, Birthday> {
-	public guildId: string;
-
 	/**
 	 * The Guild instance that manages this manager
 	 */
 	public guild: Guild;
 
+	public guildId: string;
+
 	public settings: SettingsManager;
-
-	private annoncementQueue = new AsyncQueue();
-
 	/**
 	 * The current case count
 	 */
-	private _count: number | null = null;
-
+	private _count: null | number = null;
 	/**
 	 * The timer that sweeps this manager's entries
 	 */
 	private _timer: NodeJS.Timeout | null = null;
+	private annoncementQueue = new AsyncQueue();
 
 	public constructor(guild: Guild, settings: SettingsManager) {
 		super();
@@ -63,15 +61,21 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		this.settings = settings;
 	}
 
-	public currentDate() {
-		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
-		return date;
+	public static get [Symbol.species]() {
+		return cast<CollectionConstructor>(Collection);
 	}
 
-	public async findTodayBirthday() {
-		const contains = this.currentDate().format('MM-DD');
-		await this.fetch();
-		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
+	public async announcedBirthday(birthday: Birthday) {
+		if (isNullish(birthday)) return;
+		const member = this.guild.members.resolve(birthday.userId);
+		if (!member) return;
+
+		const options = this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member);
+		const message = await this.announceBirthdayInChannel(options, member);
+		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
+
+		this.annoncementQueue.shift();
+		return { message, role };
 	}
 
 	public async *announcedTodayBirthday() {
@@ -80,12 +84,19 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 	}
 
-	public findBirthdayWithMonth(month: number) {
-		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
+	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
+		const birthday = await container.prisma.birthday.upsert({
+			create: { ...args, guildId: this.guildId },
+			update: args,
+			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } }
+		});
+		await this.updateBirthdayOverview();
+		return this._cache(birthday, CacheActions.Insert);
 	}
 
-	public findTeenNextBirthday() {
-		return this.sortBirthdayWithMonthAndDay(this.toJSON()).slice(0, 10);
+	public currentDate() {
+		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
+		return date;
 	}
 
 	public async defaultBirthdayListEmbed(img: boolean = true) {
@@ -98,84 +109,11 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return img ? embed : embed.setThumbnail(null);
 	}
 
-	public async sendListBirthdays(interaction: ChatInputCommandInteraction | Message, birthdays: Birthday[], key: string, options?: TOptions) {
-		const embed = await this.defaultBirthdayListEmbed();
-
-		if (isNullOrUndefinedOrEmpty(birthdays)) {
-			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
-			const messageOptions: MessageEditOptions = {
-				embeds: [embed.setDescription(description)]
-			};
-
-			return interaction instanceof Message ? interaction.edit(messageOptions) : interactionSuccess(interaction, description);
-		}
-
-		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
-			.setTemplate(await this.defaultBirthdayListEmbed())
-			.setTitleField(await resolveKey(interaction, key, options))
-			.setItems(this.sortBirthdayWithMonthAndDay(birthdays))
-			.formatItems(this.formatItems)
-			.setItemsPerPage(20);
-		return paginatedBirthdays.make().run(interaction);
-	}
-
-	public async announcedBirthday(birthday: Birthday) {
-		if (isNullish(birthday)) return;
-		const member = this.guild.members.resolve(birthday.userId);
-		if (!member) return;
-
-		const options = this.createOptionsMessageForAnnoncementChannel(await this.settings.fetch(), member);
-		const message = await this.announceBirthdayInChannel(options, member);
-		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
-
-		this.annoncementQueue.shift();
-		return { message, role };
-	}
-
-	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
-		return birthdays.sort((firstBirthday, secondBirthday) => {
-			const firstBirthdayDate = dayjs(firstBirthday.birthday);
-			const secondBirthdayDate = dayjs(secondBirthday.birthday);
-
-			return firstBirthdayDate.month() === secondBirthdayDate.month()
-				? firstBirthdayDate.date() - secondBirthdayDate.date()
-				: firstBirthdayDate.month() - secondBirthdayDate.month();
-		});
-	}
-
-	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
-		const birthday = await container.prisma.birthday.upsert({
-			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } },
-			create: { ...args, guildId: this.guildId },
-			update: args
-		});
-		await this.updateBirthdayOverview();
-		return this._cache(birthday, CacheActions.Insert);
-	}
-
-	public async remove(userId: string) {
-		const birthday = await resolveOnErrorCodesPrisma(
-			container.prisma.birthday.delete({
-				where: {
-					userId_guildId: {
-						guildId: this.guildId,
-						userId
-					}
-				}
-			}),
-			PrismaErrorCodeEnum.NotFound
-		);
-
-		if (isNullish(birthday)) return false;
-
-		await this.updateBirthdayOverview();
-		return super.delete(userId);
-	}
-
 	public async fetch(id?: string): Promise<Birthday>;
 	public async fetch(id?: string[]): Promise<Collection<string, Birthday>>;
+
 	public async fetch(id?: null): Promise<this>;
-	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | this | null> {
+	public async fetch(id?: null | string | string[]): Promise<Birthday | Collection<string, Birthday> | null | this> {
 		if (Array.isArray(id)) {
 			return this._cache(await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: { in: id } } }), CacheActions.None);
 		}
@@ -201,16 +139,86 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return this;
 	}
 
+	public findBirthdayWithMonth(month: number) {
+		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
+	}
+
+	public findTeenNextBirthday() {
+		return this.sortBirthdayWithMonthAndDay(this.toJSON()).slice(0, 10);
+	}
+
+	public async findTodayBirthday() {
+		const contains = this.currentDate().format('MM-DD');
+		await this.fetch();
+		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
+	}
+
 	public insert(data: Birthday): Birthday;
+
 	public insert(data: Birthday[]): Collection<string, Birthday>;
+
 	public insert(data: Birthday | Birthday[]) {
 		// @ts-expect-error TypeScript does not read the overloaded `data` parameter correctly
 		return this._cache(data, CacheActions.Insert);
 	}
 
+	public async remove(userId: string) {
+		const birthday = await resolveOnErrorCodesPrisma(
+			container.prisma.birthday.delete({
+				where: {
+					userId_guildId: {
+						guildId: this.guildId,
+						userId
+					}
+				}
+			}),
+			PrismaErrorCodeEnum.NotFound
+		);
+
+		if (isNullish(birthday)) return false;
+
+		await this.updateBirthdayOverview();
+		return super.delete(userId);
+	}
+
+	public async sendListBirthdays(interaction: ChatInputCommandInteraction | Message, birthdays: Birthday[], key: string, options?: TOptions) {
+		const embed = await this.defaultBirthdayListEmbed();
+
+		if (isNullOrUndefinedOrEmpty(birthdays)) {
+			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
+			const messageOptions: MessageEditOptions = {
+				embeds: [embed.setDescription(description)]
+			};
+
+			return interaction instanceof Message ? interaction.edit(messageOptions) : interactionSuccess(interaction, description);
+		}
+
+		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
+			.setTemplate(await this.defaultBirthdayListEmbed())
+			.setTitleField(await resolveKey(interaction, key, options))
+			.setItems(this.sortBirthdayWithMonthAndDay(birthdays))
+			.formatItems(this.formatItems)
+			.setItemsPerPage(20);
+		return paginatedBirthdays.make().run(interaction);
+	}
+
+	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
+		return birthdays.sort((firstBirthday, secondBirthday) => {
+			const firstBirthdayDate = dayjs(firstBirthday.birthday);
+			const secondBirthdayDate = dayjs(secondBirthday.birthday);
+
+			return firstBirthdayDate.month() === secondBirthdayDate.month()
+				? firstBirthdayDate.date() - secondBirthdayDate.date()
+				: firstBirthdayDate.month() - secondBirthdayDate.month();
+		});
+	}
+
 	private _cache(entry: Birthday, type: CacheActions): Birthday;
+
 	private _cache(entries: Birthday[], type?: CacheActions): Collection<string, Birthday>;
+
 	private _cache(entries?: null, type?: CacheActions): null;
+
 	private _cache(entries?: Birthday | Birthday[] | null, type?: CacheActions) {
 		if (!entries) return null;
 
@@ -235,21 +243,46 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return entries;
 	}
 
-	public static get [Symbol.species]() {
-		return cast<CollectionConstructor>(Collection);
-	}
+	private formatItems = (birthday: Birthday) => {
+		// exemple: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
+		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
+		const age = dayjs().diff(date, 'year');
+		const formattedDate = formatDateForDisplay(birthday.birthday);
+		const ageText = age === 1 ? 'year' : 'years';
+		const ageFormatted = `${age} ${ageText}`;
+		const emoji = date.isSame(this.currentDate(), 'date') ? Emojis.Cake : '';
+		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
+		return text;
+	};
 
-	private async fetchOverviewMessage(channel: GuildTextBasedChannelTypes, overviewMessage: string): Promise<Message<boolean> | null> {
-		return channel.messages.fetch(overviewMessage);
-	}
+	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
+		const { rolesBirthday } = guild;
 
-	private createOptionsMessageForAnnoncementChannel({ messagesAnnouncement, rolesNotified }: Settings, member: GuildMember): MessageCreateOptions {
-		const embed = new EmbedBuilder(defaultEmbed())
-			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member))
-			.setThumbnail(CdnUrls.Cake);
+		if (isNullish(rolesBirthday)) return `Birthday role for ths member is empty, so i can't`;
 
-		return { content: rolesNotified ? roleMention(rolesNotified) : '', embeds: [embed] };
+		if (member.roles.cache.has(rolesBirthday)) return `The user already has the role, so i can't `;
+
+		if (member.manageable) {
+			try {
+				await member.roles.add(rolesBirthday);
+				return `The Birthday Role ${rolesBirthday} has been added to the member ${member.id}`;
+			} catch {
+				return 'An error occurred when adding the role to this member ';
+			} finally {
+				floatPromise(
+					container.tasks.create({
+						name: 'RemoveBirthdayRole',
+						payload: {
+							guildId: member.guild.id,
+							memberId: member.id,
+							rolesBirthday
+						}
+					})
+				);
+			}
+		}
+
+		return `I cannot modify this member because his position is equal or superior to me. `;
 	}
 
 	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
@@ -276,34 +309,17 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 	}
 
-	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
-		const { rolesBirthday } = guild;
+	private createOptionsMessageForAnnouncementChannel({ messagesAnnouncement, rolesNotified }: Settings, member: GuildMember): MessageCreateOptions {
+		const embed = new EmbedBuilder(defaultEmbed())
+			.setTitle(`${Emojis.News} Birthday Announcement!`)
+			.setDescription(formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member))
+			.setThumbnail(CdnUrls.Cake);
 
-		if (isNullish(rolesBirthday)) return `Birthday role for ths member is empty, so i can't`;
+		return { content: rolesNotified ? roleMention(rolesNotified) : '', embeds: [embed] };
+	}
 
-		if (member.roles.cache.has(rolesBirthday)) return `The user already has the role, so i can't `;
-
-		if (member.manageable) {
-			try {
-				await member.roles.add(rolesBirthday);
-				return `The Birthday Role ${rolesBirthday} has been added to the member ${member.id}`;
-			} catch {
-				return 'An error occurred when adding the role to this member ';
-			} finally {
-				floatPromise(
-					container.tasks.create({
-						name: 'RemoveBirthdayRole',
-						payload: {
-							memberId: member.id,
-							guildId: member.guild.id,
-							rolesBirthday
-						}
-					})
-				);
-			}
-		}
-
-		return `I cannot modify this member because his position is equal or superior to me. `;
+	private async fetchOverviewMessage(channel: GuildTextBasedChannelTypes, overviewMessage: string): Promise<Message<boolean> | null> {
+		return channel.messages.fetch(overviewMessage);
 	}
 
 	private async updateBirthdayOverview() {
@@ -329,16 +345,4 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		return channel.send(options);
 	}
-
-	private formatItems = (birthday: Birthday) => {
-		// exemple: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
-		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
-		const age = dayjs().diff(date, 'year');
-		const formattedDate = formatDateForDisplay(birthday.birthday);
-		const ageText = age === 1 ? 'year' : 'years';
-		const ageFormatted = `${age} ${ageText}`;
-		const emoji = date.isSame(this.currentDate(), 'date') ? Emojis.Cake : '';
-		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
-		return text;
-	};
 }

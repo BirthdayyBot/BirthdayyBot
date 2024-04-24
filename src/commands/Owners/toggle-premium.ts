@@ -9,12 +9,33 @@ import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { EmbedBuilder, RESTJSONErrorCodes, inlineCode } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: !isCustom,
+	name: 'toggle-premium',
 	permissionLevel: PermissionLevels.Administrator
 })
 export class TogglePremiumCommand extends BirthdayyCommand {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
+		const toggle = interaction.options.getBoolean('toggle', true);
+		const guildId = interaction.options.getString('guild-id', true);
+		// check if guild exists if not send error message
+		const guild = await resolveOnErrorCodesDiscord(this.container.client.guilds.fetch(guildId), RESTJSONErrorCodes.UnknownGuild);
+		if (!guild) return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
+
+		// set premium for guild to toggle
+		await this.container.prisma.guild.update({
+			where: { id: guildId },
+			data: { premium: toggle }
+		});
+
+		const embed = new EmbedBuilder() //
+			.setColor(BrandingColors.Primary)
+			.setDescription('This premium has been');
+		return reply(interaction, {
+			embeds: [embed]
+		});
+	}
+
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) =>
@@ -27,22 +48,5 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 				guildIds: await getCommandGuilds('admin')
 			}
 		);
-	}
-
-	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const toggle = interaction.options.getBoolean('toggle', true);
-		const guildId = interaction.options.getString('guild-id', true);
-		// check if guild exists if not send error message
-		const guild = await resolveOnErrorCodesDiscord(this.container.client.guilds.fetch(guildId), RESTJSONErrorCodes.UnknownGuild);
-		if (!guild) return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
-
-		// set premium for guild to toggle
-		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		const embed = new EmbedBuilder() //
-			.setColor(BrandingColors.Primary)
-			.setDescription('This premium has been');
-		return reply(interaction, {
-			embeds: [embed]
-		});
 	}
 }

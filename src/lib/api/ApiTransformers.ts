@@ -1,13 +1,3 @@
-import {
-	ChannelTypeString,
-	isDMChannel,
-	isGuildBasedChannelByGuildKey,
-	isNewsChannel,
-	isTextChannel,
-	isThreadChannel,
-	isVoiceChannel
-} from '@sapphire/discord.js-utilities';
-import { ChannelType } from 'discord-api-types/v10';
 import type {
 	Channel,
 	DMChannel,
@@ -23,6 +13,17 @@ import type {
 	VoiceChannel
 } from 'discord.js';
 
+import {
+	ChannelTypeString,
+	isDMChannel,
+	isGuildBasedChannelByGuildKey,
+	isNewsChannel,
+	isTextChannel,
+	isThreadChannel,
+	isVoiceChannel
+} from '@sapphire/discord.js-utilities';
+import { ChannelType } from 'discord-api-types/v10';
+
 // #region Guild
 
 export function flattenGuild(guild: Guild): FlattenedGuild {
@@ -37,7 +38,6 @@ export function flattenGuild(guild: Guild): FlattenedGuild {
 		channels: guild.channels.cache.map(flattenChannel) as FlattenedGuildChannel[],
 		defaultMessageNotifications: guild.defaultMessageNotifications,
 		description: guild.description,
-		widgetEnabled: guild.widgetEnabled,
 		explicitContentFilter: guild.explicitContentFilter,
 		features: guild.features,
 		icon: guild.icon,
@@ -55,7 +55,8 @@ export function flattenGuild(guild: Guild): FlattenedGuild {
 		systemChannelId: guild.systemChannelId,
 		vanityURLCode: guild.vanityURLCode,
 		verificationLevel: guild.verificationLevel,
-		verified: guild.verified
+		verified: guild.verified,
+		widgetEnabled: guild.widgetEnabled
 	};
 }
 
@@ -71,7 +72,6 @@ export interface FlattenedGuild
 		| 'banner'
 		| 'defaultMessageNotifications'
 		| 'description'
-		| 'widgetEnabled'
 		| 'explicitContentFilter'
 		| 'features'
 		| 'icon'
@@ -89,6 +89,7 @@ export interface FlattenedGuild
 		| 'vanityURLCode'
 		| 'verificationLevel'
 		| 'verified'
+		| 'widgetEnabled'
 	> {
 	channels: FlattenedGuildChannel[];
 
@@ -101,15 +102,15 @@ export interface FlattenedGuild
 
 export function flattenRole(role: Role): FlattenedRole {
 	return {
-		id: role.id,
-		guildId: role.guild.id,
-		name: role.name,
 		color: role.color,
+		guildId: role.guild.id,
 		hoist: role.hoist,
-		rawPosition: role.rawPosition,
-		permissions: role.permissions.bitfield.toString(),
+		id: role.id,
 		managed: role.managed,
-		mentionable: role.mentionable
+		mentionable: role.mentionable,
+		name: role.name,
+		permissions: role.permissions.bitfield.toString(),
+		rawPosition: role.rawPosition
 	};
 }
 
@@ -144,7 +145,7 @@ export function flattenChannel(channel: GuildChannel): FlattenedGuildChannel;
 export function flattenChannel(channel: DMChannel): FlattenedDMChannel;
 export function flattenChannel(channel: ThreadChannel): FlattenedThreadChannel;
 export function flattenChannel(channel: Channel): FlattenedChannel;
-export function flattenChannel(channel: Channel | GuildChannel | DMChannel | ThreadChannel) {
+export function flattenChannel(channel: Channel | DMChannel | GuildChannel | ThreadChannel) {
 	if (isThreadChannel(channel)) return flattenChannelThread(channel as ThreadChannel);
 	if (isNewsChannel(channel)) return flattenChannelNews(channel as NewsChannel);
 	if (isTextChannel(channel)) return flattenChannelText(channel as TextChannel);
@@ -156,93 +157,93 @@ export function flattenChannel(channel: Channel | GuildChannel | DMChannel | Thr
 
 function flattenChannelNews(channel: NewsChannel): FlattenedNewsChannel {
 	return {
-		id: channel.id,
-		type: channel.type as FlattenedNewsChannel['type'],
+		createdTimestamp: channel.createdTimestamp,
 		guildId: channel.guild.id,
+		id: channel.id,
 		name: channel.name,
-		rawPosition: channel.rawPosition,
+		nsfw: channel.nsfw,
 		parentId: channel.parentId,
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
+		rawPosition: channel.rawPosition,
 		topic: channel.topic,
-		nsfw: channel.nsfw,
-		createdTimestamp: channel.createdTimestamp
+		type: channel.type as FlattenedNewsChannel['type']
 	};
 }
 
 function flattenChannelText(channel: TextChannel): FlattenedTextChannel {
 	return {
-		id: channel.id,
-		type: channel.type as FlattenedTextChannel['type'],
+		createdTimestamp: channel.createdTimestamp,
 		guildId: channel.guild.id,
+		id: channel.id,
 		name: channel.name,
-		rawPosition: channel.rawPosition,
+		nsfw: channel.nsfw,
 		parentId: channel.parentId,
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
-		topic: channel.topic,
-		nsfw: channel.nsfw,
 		rateLimitPerUser: channel.rateLimitPerUser,
-		createdTimestamp: channel.createdTimestamp
+		rawPosition: channel.rawPosition,
+		topic: channel.topic,
+		type: channel.type as FlattenedTextChannel['type']
 	};
 }
 
 function flattenChannelVoice(channel: VoiceChannel): FlattenedVoiceChannel {
 	return {
-		id: channel.id,
-		type: channel.type as FlattenedVoiceChannel['type'],
+		bitrate: channel.bitrate,
+		createdTimestamp: channel.createdTimestamp,
 		guildId: channel.guild.id,
+		id: channel.id,
 		name: channel.name,
-		rawPosition: channel.rawPosition,
 		parentId: channel.parentId,
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
-		bitrate: channel.bitrate,
-		userLimit: channel.userLimit,
-		createdTimestamp: channel.createdTimestamp
+		rawPosition: channel.rawPosition,
+		type: channel.type as FlattenedVoiceChannel['type'],
+		userLimit: channel.userLimit
 	};
 }
 
 function flattenChannelGuild(channel: GuildChannel): FlattenedGuildChannel {
 	return {
-		id: channel.id,
-		type: channel.type as FlattenedGuildChannel['type'],
+		createdTimestamp: channel.createdTimestamp,
 		guildId: channel.guild.id,
+		id: channel.id,
 		name: channel.name,
-		rawPosition: channel.rawPosition,
 		parentId: channel.parentId,
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
-		createdTimestamp: channel.createdTimestamp
+		rawPosition: channel.rawPosition,
+		type: channel.type as FlattenedGuildChannel['type']
 	};
 }
 
 function flattenChannelDM(channel: DMChannel): FlattenedDMChannel {
 	return {
+		createdTimestamp: channel.createdTimestamp ?? 0,
 		id: channel.id,
-		type: channel.type as FlattenedDMChannel['type'],
 		recipient: channel.recipientId,
-		createdTimestamp: channel.createdTimestamp ?? 0
+		type: channel.type as FlattenedDMChannel['type']
 	};
 }
 
 function flattenChannelThread(channel: ThreadChannel): FlattenedThreadChannel {
 	return {
-		id: channel.id,
-		type: channel.type,
 		archived: channel.archived ?? false,
 		archivedTimestamp: channel.archiveTimestamp,
 		createdTimestamp: channel.createdTimestamp ?? 0,
 		guildId: channel.guildId,
+		id: channel.id,
 		name: channel.name,
 		parentId: channel.parentId,
 		permissionOverwrites: [...(channel.parent?.permissionOverwrites.cache.entries() ?? [])],
+		rateLimitPerUser: channel.rateLimitPerUser,
 		rawPosition: channel.parent?.rawPosition ?? null,
-		rateLimitPerUser: channel.rateLimitPerUser
+		type: channel.type
 	};
 }
 
-function flattenChannelFallback(channel: Channel | GuildChannel | DMChannel | ThreadChannel): FlattenedChannel {
+function flattenChannelFallback(channel: Channel | DMChannel | GuildChannel | ThreadChannel): FlattenedChannel {
 	return {
+		createdTimestamp: channel.createdTimestamp ?? 0,
 		id: channel.id,
-		type: channel.type as FlattenedChannel['type'],
-		createdTimestamp: channel.createdTimestamp ?? 0
+		type: channel.type as FlattenedChannel['type']
 	};
 }
 
@@ -259,7 +260,7 @@ export interface FlattenedGuildChannel extends FlattenedChannel {
 
 	name: string;
 
-	parentId: string | null;
+	parentId: null | string;
 
 	permissionOverwrites: [string, PermissionOverwrites][];
 
@@ -269,11 +270,11 @@ export interface FlattenedGuildChannel extends FlattenedChannel {
 }
 
 export interface FlattenedNewsChannel extends FlattenedGuildChannel {
-	type: ChannelType.GuildAnnouncement;
-
 	nsfw: boolean;
 
-	topic: string | null;
+	topic: null | string;
+
+	type: ChannelType.GuildAnnouncement;
 }
 
 export interface FlattenedTextChannel extends FlattenedGuildChannel {
@@ -281,29 +282,29 @@ export interface FlattenedTextChannel extends FlattenedGuildChannel {
 
 	rateLimitPerUser: number;
 
-	topic: string | null;
+	topic: null | string;
 
 	type: ChannelType.GuildText;
 }
 
-export interface FlattenedThreadChannel extends Pick<FlattenedGuildChannel, 'id' | 'createdTimestamp'> {
+export interface FlattenedThreadChannel extends Pick<FlattenedGuildChannel, 'createdTimestamp' | 'id'> {
 	archived: boolean;
 
-	archivedTimestamp: number | null;
+	archivedTimestamp: null | number;
 
 	guildId: string;
 
 	name: string;
 
-	parentId: string | null;
+	parentId: null | string;
 
 	permissionOverwrites: [string, PermissionOverwrites][];
 
-	rateLimitPerUser: number | null;
+	rateLimitPerUser: null | number;
 
-	rawPosition: number | null;
+	rawPosition: null | number;
 
-	type: ChannelType.GuildPublicThread | ChannelType.GuildPrivateThread | ChannelType.GuildNewsThread;
+	type: ChannelType.GuildNewsThread | ChannelType.GuildPrivateThread | ChannelType.GuildPublicThread;
 }
 
 export interface FlattenedNewsThreadChannel extends FlattenedChannel {
@@ -319,17 +320,17 @@ export interface FlattenedPrivateThreadChannel extends FlattenedChannel {
 }
 
 export interface FlattenedVoiceChannel extends FlattenedGuildChannel {
-	type: ChannelType.GuildVoice;
-
 	bitrate: number;
+
+	type: ChannelType.GuildVoice;
 
 	userLimit: number;
 }
 
 export interface FlattenedDMChannel extends FlattenedChannel {
-	type: ChannelType.DM;
-
 	recipient: string;
+
+	type: ChannelType.DM;
 }
 
 // #endregion Channel
@@ -338,16 +339,16 @@ export interface FlattenedDMChannel extends FlattenedChannel {
 
 export function flattenUser(user: User): FlattenedUser {
 	return {
-		id: user.id,
+		avatar: user.avatar,
 		bot: user.bot,
-		username: user.username,
 		discriminator: user.discriminator,
-		avatar: user.avatar
+		id: user.id,
+		username: user.username
 	};
 }
 
 export interface FlattenedUser {
-	avatar: string | null;
+	avatar: null | string;
 
 	bot: boolean;
 
@@ -364,12 +365,12 @@ export interface FlattenedUser {
 
 export function flattenMember(member: GuildMember): FlattenedMember {
 	return {
-		id: member.id,
 		guildId: member.guild.id,
-		user: flattenUser(member.user),
+		id: member.id,
 		joinedTimestamp: member.joinedTimestamp,
 		premiumSinceTimestamp: member.premiumSinceTimestamp,
-		roles: member.roles.cache.map(flattenRole)
+		roles: member.roles.cache.map(flattenRole),
+		user: flattenUser(member.user)
 	};
 }
 
@@ -378,9 +379,9 @@ export interface FlattenedMember {
 
 	id: string;
 
-	joinedTimestamp: number | null;
+	joinedTimestamp: null | number;
 
-	premiumSinceTimestamp: number | null;
+	premiumSinceTimestamp: null | number;
 
 	roles: FlattenedRole[];
 

@@ -1,4 +1,5 @@
 import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+
 import { PermissionLevels } from '#lib/types';
 import { OWNERS } from '#root/config';
 import { seconds } from '#utils/common';
@@ -8,8 +9,8 @@ import { PermissionFlagsBits, PermissionsBitField } from 'discord.js';
 
 export const BirthdayyCommandConstructorDefaults = {
 	cooldownDelay: seconds(10),
-	cooldownLimit: 2,
 	cooldownFilteredUsers: OWNERS,
+	cooldownLimit: 2,
 	guarded: false,
 	hidden: false,
 	permissionLevel: PermissionLevels.Everyone,
@@ -20,8 +21,8 @@ export const BirthdayyCommandConstructorDefaults = {
 	)
 } satisfies Partial<ExtendOptions<Command.Options>>;
 
-export function implementBirthdayyCommandError(identifier: string | UserError, context?: unknown): never {
-	throw typeof identifier === 'string' ? new UserError({ identifier, context }) : identifier;
+export function implementBirthdayyCommandError(identifier: UserError | string, context?: unknown): never {
+	throw typeof identifier === 'string' ? new UserError({ context, identifier }) : identifier;
 }
 
 export function implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel(
@@ -66,10 +67,10 @@ export function implementBirthdayyCommandPaginatedOptions<T extends ExtendOption
 	} as unknown as T;
 }
 
-export type ExtendOptions<T> = T & {
+export type ExtendOptions<T> = {
 	description: string;
 	detailedDescription?: LanguageHelpDisplayOptions;
 	guarded?: boolean;
 	hidden?: boolean;
 	permissionLevel?: number;
-};
+} & T;

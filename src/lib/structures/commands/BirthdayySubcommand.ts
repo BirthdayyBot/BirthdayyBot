@@ -1,27 +1,29 @@
 import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+import type { ChatInputCommandInteraction, Snowflake } from 'discord.js';
+
 import {
 	BirthdayyCommandConstructorDefaults,
+	type ExtendOptions,
 	implementBirthdayyCommandError,
 	implementBirthdayyCommandPaginatedOptions,
-	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
-	type ExtendOptions
+	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
 import { first } from '#utils/common';
-import { Command, Args as SapphireArgs, UserError, type MessageCommand } from '@sapphire/framework';
+import { Command, type MessageCommand, Args as SapphireArgs, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import type { ChatInputCommandInteraction, Snowflake } from 'discord.js';
 
 /**
  * The base class for all Birthdayy commands with subcommands.
  * @seealso {@link BirthdayyCommand}.
  */
 export class BirthdayySubcommand extends Subcommand<BirthdayySubcommand.Args, BirthdayySubcommand.Options> {
+	public override readonly description: string;
+	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
+
 	public readonly permissionLevel: PermissionLevels;
-	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
-	public override readonly description: string;
 
 	public constructor(context: BirthdayySubcommand.LoaderContext, options: BirthdayySubcommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });
@@ -45,7 +47,7 @@ export class BirthdayySubcommand extends Subcommand<BirthdayySubcommand.Args, Bi
 		return first(ids.values())!;
 	}
 
-	protected error(identifier: string | UserError, context?: unknown): never {
+	protected error(identifier: UserError | string, context?: unknown): never {
 		implementBirthdayyCommandError(identifier, context);
 	}
 
