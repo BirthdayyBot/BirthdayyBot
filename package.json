@@ -11,6 +11,7 @@
 		"#utils/functions": "./dist/lib/utils/functions/index.js",
 		"#utils/resolvers": "./dist/lib/utils/resolvers/index.js",
 		"#utils/*": "./dist/lib/utils/*.js",
+		"#lib/birthday": "./dist/lib/birthday/index.js",
 		"#lib/database/entities": "./dist/lib/database/entities/index.js",
 		"#lib/database/keys": "./dist/lib/database/keys/index.js",
 		"#lib/database/settings": "./dist/lib/database/settings/index.js",

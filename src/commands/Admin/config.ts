@@ -5,6 +5,7 @@ import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
 import { BrandingColors } from '#lib/utils/constants';
+import { getFooterAuthor } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -24,8 +25,7 @@ const Key = {
 };
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	description: 'commands:config:description',
-	detailedDescription: 'commands:config:detailedDescription',
+	description: 'commands:config:rootDescription',
 	subcommands: [
 		{ name: 'edit', chatInputRun: 'runEdit' },
 		{ name: 'view', chatInputRun: 'runView' },
@@ -101,9 +101,9 @@ export class UserCommand extends BirthdayySubcommand {
 
 		const content = await this.viewGenerateContent(interaction, settings);
 
-		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary);
+		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary).setFooter(getFooterAuthor(interaction.user));
 
-		return interaction.reply({ embeds: [embed], ephemeral: true });
+		return interaction.reply({ embeds: [embed], ephemeral: false });
 	}
 
 	public runReset(interaction: BirthdayySubcommand.Interaction) {
@@ -246,7 +246,7 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerEditCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'command/config:edit')
+		return applyLocalizedBuilder(builder, 'commands/config:edit')
 			.addChannelOption((builder) =>
 				applyLocalizedBuilder(
 					builder,

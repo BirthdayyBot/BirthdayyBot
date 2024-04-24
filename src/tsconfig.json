@@ -10,6 +10,7 @@
 			"#utils/functions": ["lib/utils/functions/index.js"],
 			"#utils/resolvers": ["lib/utils/resolvers/index.js"],
 			"#utils/*": ["lib/utils/*"],
+			"#lib/birthday": ["lib/birthday/index.js"],
 			"#lib/database/entities": ["lib/database/entities/index.js"],
 			"#lib/database/keys": ["lib/database/keys/index.js"],
 			"#lib/database/settings": ["lib/database/settings/index.js"],

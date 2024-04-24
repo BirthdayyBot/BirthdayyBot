@@ -1,0 +1,52 @@
+projects:
+    - name: birthdayy # Name may contain lowercase letters, spaces, numbers, hyphens, and underscores
+      description: The Birthdayy Discord Bot
+
+      # List of totally customizable environments, Test, Stage, QA, CI-CD
+      environments:
+          - name: Development # Name may contain letters, spaces, numbers, hyphens, and underscores
+            slug: dev # Slug may contain letters, numbers, hyphens, and underscores
+            configs:
+                - slug: dev # First slug *must* match environment slug name
+
+          - name: Test
+            slug: test
+            configs:
+                - slug: test
+
+          - name: Production
+            slug: prd
+            configs:
+                - slug: prd
+
+      # Define secrets for each environment
+      secrets:
+          dev:
+              NODE_ENV: 'development'
+              CLIENT_NAME: 'Birthdayy Dev'
+              CLIENT_VERSION: '3.0.0'
+              CLIENT_COLOR: '0xF3969A'
+              CLIENT_MAIN_GUILD: ''
+              CLIENT_ID: '945106657527078952'
+              LOG_CHANNEL_SERVER: '1087389133200183366'
+          test:
+              NODE_ENV: 'test'
+              CLIENT_NAME: 'Birthdayy PTB'
+              CLIENT_VERSION: '2.3.0'
+              CLIENT_COLOR: '0xB34BD1'
+              CLIENT_MAIN_GUILD: '980559116076470272'
+              CLIENT_ID: '1063411719906529323'
+              CLIENT_PRESENCE_NAME: '/birthday set'
+              CLIENT_PRESENCE_TYPE: 'Playing'
+              LOG_CHANNEL_SERVER: '1087389733765795870'
+          prd:
+              NODE_ENV: 'production'
+              CLIENT_NAME: 'Birthdayy'
+              CLIENT_VERSION: '2.0.0'
+              CLIENT_OWNERS: '696324357940838492 267614892821970945'
+              CLIENT_COLOR: '0x78c2ad'
+              CLIENT_MAIN_GUILD: '934467365389893704'
+              CLIENT_ID: '916434908728164372'
+              CLIENT_PRESENCE_NAME: '/birthday register'
+              CLIENT_PRESENCE_TYPE: 'Playing'
+              LOG_CHANNEL_SERVER: '966987605348589588'

@@ -4,7 +4,7 @@ import { Guild, GuildTextBasedChannel, MessagePayload, type MessageCreateOptions
 import { generateBirthdayList } from './birthday.js';
 
 export async function updateBirthdayOverview(guild: Guild) {
-	const settings = await container.prisma.guild.findUnique({ where: { id: guild.id } });
+	const settings = await container.prisma.guild.findUniqueOrThrow({ where: { id: guild.id } });
 	if (!settings) return container.logger.error(`Failed to fetch guild settings in guild: ${guild.id}`);
 
 	const { channelsOverview, messagesOverview } = settings;

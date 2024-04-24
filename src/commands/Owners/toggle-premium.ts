@@ -1,17 +1,17 @@
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
+import { BrandingColors } from '#utils/constants';
+import { isCustom } from '#utils/env';
 import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { reply } from '#utils/utils.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { RESTJSONErrorCodes, inlineCode, EmbedBuilder } from 'discord.js';
-import { isNotCustom } from '#utils/env';
-import { BrandingColors } from '#utils/constants';
+import { EmbedBuilder, RESTJSONErrorCodes, inlineCode } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
 	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: isNotCustom,
+	enabled: !isCustom,
 	permissionLevel: PermissionLevels.Administrator
 })
 export class TogglePremiumCommand extends BirthdayyCommand {

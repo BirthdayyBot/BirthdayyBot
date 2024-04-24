@@ -8,10 +8,12 @@ import {
 	CommandInteraction,
 	type EmbedAuthorData,
 	EmbedBuilder,
+	GuildMember,
 	type ImageURLOptions,
 	type InteractionReplyOptions,
 	Message,
 	MessagePayload,
+	Role,
 	Snowflake,
 	User,
 	userMention
@@ -148,4 +150,20 @@ export interface SplitMessageOptions {
  */
 export function isUserSelf(userId: Snowflake) {
 	return userId === process.env.CLIENT_ID;
+}
+
+export function checkPermissions(interaction: ChatInputCommandInteraction<'cached'>, target: Role | GuildMember) {
+	// If it's to itself, always block
+	if (interaction.member!.id === target.id) return false;
+
+	// If the target is the owner, always block
+	if (interaction.guild.ownerId === target.id) return false;
+
+	// If the author is the owner, always allow
+	if (interaction.user.id === interaction.guild.ownerId) return true;
+
+	// Check hierarchy role positions, allow when greater, block otherwise
+	const targetPosition = target instanceof Role ? target.position : target.roles.highest.position;
+	const authorPosition = interaction.member!.roles.highest?.position ?? 0;
+	return authorPosition > targetPosition;
 }

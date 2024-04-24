@@ -1,9 +1,9 @@
 import { replyToInteraction } from '#lib/discord/interaction';
 import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
+import { container } from '@sapphire/framework';
 import { envParseBoolean } from '@skyra/env-utilities';
 import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
 import { BrandingColors } from './constants.js';
-import { container } from '@sapphire/framework';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {

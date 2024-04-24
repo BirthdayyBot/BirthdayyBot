@@ -61,7 +61,6 @@ declare module '@skyra/env-utilities' {
 		CLIENT_PRESENCE_NAME: string;
 		CLIENT_PRESENCE_TYPE: string;
 
-		LOG_CHANNEL_SERVER: string;
 		LOG_CHANNEL_ADMIN: string;
 		CUSTOM_BOT: BooleanString;
 		APP_ENV: 'dev' | 'tst' | 'prd';

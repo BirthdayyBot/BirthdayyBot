@@ -1,7 +1,7 @@
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
-import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
+import { isCustom, isDevelopment } from '#utils/env';
 import { Guild as Settings } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
@@ -11,7 +11,7 @@ export async function getCommandGuilds(commandLevel: 'global' | 'testing' | 'pre
 	const testingGuilds = [GuildIDEnum.ChilliHQ, GuildIDEnum.ChilliAttackV2, GuildIDEnum.BirthdayyTesting];
 	const adminGuilds = [GuildIDEnum.Birthdayy, GuildIDEnum.BirthdayyTesting];
 	const customGuild = [envParseString('CLIENT_MAIN_GUILD')];
-	if (isNotCustom) adminGuilds.push(GuildIDEnum.ChilliHQ);
+	if (!isCustom) adminGuilds.push(GuildIDEnum.ChilliHQ);
 	if (isDevelopment) return testingGuilds;
 	switch (commandLevel) {
 		case 'global':

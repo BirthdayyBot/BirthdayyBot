@@ -165,7 +165,7 @@ function parsePresenceActivity(): ActivitiesOptions[] {
 	return [
 		{
 			name: CLIENT_PRESENCE_NAME,
-			type: ActivityType[envParseString('CLIENT_PRESENCE_TYPE', 'Listening') as keyof typeof ActivityType]
+			type: ActivityType[envParseString('CLIENT_PRESENCE_TYPE', 'Playing') as keyof typeof ActivityType]
 		}
 	];
 }
