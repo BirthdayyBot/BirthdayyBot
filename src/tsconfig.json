@@ -5,6 +5,7 @@
 		"outDir": "../dist",
 		"rootDir": ".",
 		"baseUrl": ".",
+		"skipLibCheck": true,
 		"paths": {
 			"#utils/common": ["lib/utils/common/index.js"],
 			"#utils/functions": ["lib/utils/functions/index.js"],
