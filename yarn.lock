@@ -814,15 +814,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-scheduled-tasks@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "@sapphire/plugin-scheduled-tasks@npm:9.1.0"
+"@sapphire/plugin-scheduled-tasks@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "@sapphire/plugin-scheduled-tasks@npm:10.0.1"
   dependencies:
-    "@sapphire/stopwatch": "npm:^1.5.1"
-    "@sapphire/utilities": "npm:^3.14.0"
-    bullmq: "npm:3.15.8"
+    "@sapphire/stopwatch": "npm:^1.5.2"
+    "@sapphire/utilities": "npm:^3.15.3"
+    bullmq: "npm:5.1.3"
     tslib: "npm:^2.6.2"
-  checksum: 10c0/137af25450bed3af25e48daaf535365d4450db7586bcb86bb14d6067f5487abe26a5bbc8814866e62b71aa3c500fb47018d7d25c16ff9c810589e76ca37e1385
+  checksum: 10c0/b58e14141165ba668a5a2af5236ab975315d8bc3be5a20b971ec639167a08510344f48eb5bfbf4839458aa0456ad6babef3943e6ff9571dd277d7dc097eb9efb
   languageName: node
   linkType: hard
 
@@ -881,7 +881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/stopwatch@npm:^1.5.1, @sapphire/stopwatch@npm:^1.5.2":
+"@sapphire/stopwatch@npm:^1.5.2":
   version: 1.5.2
   resolution: "@sapphire/stopwatch@npm:1.5.2"
   dependencies:
@@ -907,7 +907,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/utilities@npm:^3.14.0, @sapphire/utilities@npm:^3.15.3":
+"@sapphire/utilities@npm:^3.15.3":
   version: 3.15.3
   resolution: "@sapphire/utilities@npm:3.15.3"
   checksum: 10c0/b1cb07f955b93f731b757f7f39fb9a9c9bc763bc5cddcd247e01beb5a4c7d38a6bb215d969b9aaf0891073333a63605861a219f5b5b457d73a2fd085c722f9c5
@@ -1481,7 +1481,7 @@ __metadata:
     "@sapphire/plugin-hmr": "npm:^3.0.1"
     "@sapphire/plugin-i18next": "npm:^7.1.1"
     "@sapphire/plugin-logger": "npm:^4.0.2"
-    "@sapphire/plugin-scheduled-tasks": "npm:^9.1.0"
+    "@sapphire/plugin-scheduled-tasks": "npm:^10.0.1"
     "@sapphire/plugin-subcommands": "npm:^6.0.3"
     "@sapphire/plugin-utilities-store": "npm:^2.0.2"
     "@sapphire/ratelimits": "npm:^2.4.9"
@@ -1547,19 +1547,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:3.15.8":
-  version: 3.15.8
-  resolution: "bullmq@npm:3.15.8"
+"bullmq@npm:5.1.3":
+  version: 5.1.3
+  resolution: "bullmq@npm:5.1.3"
   dependencies:
     cron-parser: "npm:^4.6.0"
     glob: "npm:^8.0.3"
     ioredis: "npm:^5.3.2"
     lodash: "npm:^4.17.21"
-    msgpackr: "npm:^1.6.2"
-    semver: "npm:^7.3.7"
+    msgpackr: "npm:^1.10.1"
+    node-abort-controller: "npm:^3.1.1"
+    semver: "npm:^7.5.4"
     tslib: "npm:^2.0.0"
     uuid: "npm:^9.0.0"
-  checksum: 10c0/e41429c526ec44c24891cc4533fb34e358a6ad996a001b14869b7495189c47395f9539def423e3a950f5e11a43711fdcea73592994a6387a7fcbf720d76b0442
+  checksum: 10c0/dc2177dfd736b2d008ccab1ba9f77f80cc730ce6197c9ffa0f37327e1cf34bd8b97d83ee9f9008253ef0c0854bbd04f8c925889a3370a0899e8f5c7a34fd3ab3
   languageName: node
   linkType: hard
 
@@ -3950,7 +3951,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msgpackr@npm:^1.10.1, msgpackr@npm:^1.6.2":
+"msgpackr@npm:^1.10.1":
   version: 1.10.1
   resolution: "msgpackr@npm:1.10.1"
   dependencies:
@@ -4729,7 +4730,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.4, semver@npm:^7.6.0":
+"semver@npm:^7.3.5, semver@npm:^7.5.4, semver@npm:^7.6.0":
   version: 7.6.0
   resolution: "semver@npm:7.6.0"
   dependencies:

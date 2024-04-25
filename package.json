@@ -58,7 +58,7 @@
     "@sapphire/plugin-hmr": "^3.0.1",
     "@sapphire/plugin-i18next": "^7.1.1",
     "@sapphire/plugin-logger": "^4.0.2",
-    "@sapphire/plugin-scheduled-tasks": "^9.1.0",
+    "@sapphire/plugin-scheduled-tasks": "^10.0.1",
     "@sapphire/plugin-subcommands": "^6.0.3",
     "@sapphire/plugin-utilities-store": "^2.0.2",
     "@sapphire/ratelimits": "^2.4.9",
