@@ -1,5 +1,4 @@
 import { Emojis } from '#lib/utils/constants';
-import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 
@@ -18,14 +17,9 @@ export class PingCommand extends Command {
 	}
 
 	public override async registerApplicationCommands(registry: Command.Registry) {
-		registry.registerChatInputCommand(
-			{
-				description: this.description,
-				name: this.name
-			},
-			{
-				guildIds: await getCommandGuilds('testing')
-			}
-		);
+		registry.registerChatInputCommand({
+			description: this.description,
+			name: this.name
+		});
 	}
 }

@@ -1,4 +1,5 @@
 import { DateWithOptionalYear, Month } from '#lib/birthday/types';
+import { numberToMonthName } from '#utils/common';
 import { Birthday } from '@prisma/client';
 import { container } from '@sapphire/framework';
 
@@ -151,4 +152,8 @@ export function nextBirthday(month: Month, day: number, { nextYearIfToday = fals
 	const yearOffset = shouldBeScheduledForNextYear ? 1 : 0;
 
 	return new Date(Date.UTC(yearNow + yearOffset, month - 1, day) + timeZoneOffset);
+}
+
+export function formatBirthdayForDisplay(data: DateWithOptionalYear) {
+	return `${data.day}. ${numberToMonthName(data.month)} ${data.year ?? ''}`;
 }

@@ -16,11 +16,10 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const previous = cache.get(guild);
 	if (previous !== undefined) return previous;
 
-	const entry: GuildUtilities = {
-		birthdays: new BirthdaysManager(guild, getSettings(guild)),
-		guild,
-		settings: new SettingsManager(guild)
-	};
+	const settings = new SettingsManager(guild);
+	const birthdays = new BirthdaysManager(guild, settings);
+
+	const entry: GuildUtilities = { birthdays, guild, settings };
 
 	cache.set(guild, entry);
 

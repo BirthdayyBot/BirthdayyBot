@@ -1,18 +1,19 @@
+import { formatBirthdayForDisplay, getAge } from '#lib/birthday';
+import { getBirthdays, getSettings } from '#lib/discord';
 import { BirthdayySubcommand } from '#lib/structures';
-import { formatDateForDisplay } from '#utils/common/date';
 import { BrandingColors } from '#utils/constants';
-import { interactionProblem } from '#utils/embed';
 import { type SlashCommandBuilder, type SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
 import { Nullish, isNullOrUndefined, isNullish } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
-import { EmbedBuilder, chatInputApplicationCommandMention } from 'discord.js';
+import { Colors, EmbedBuilder, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	description: 'commands/birthdayy:rootDescription',
+	description: 'commands/birthday:rootDescription',
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	subcommands: [
 		{ chatInputRun: 'runSet', name: 'set' },
@@ -27,19 +28,20 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	public async runReset(interaction: BirthdayySubcommand.Interaction) {
-		const birthdayy = await container.prisma.birthday.findUnique({
-			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
-		});
+		const birthday = await getBirthdays(interaction.guild).fetch(interaction.user.id);
 
 		const t = await fetchT(interaction);
 
-		if (isNullOrUndefined(birthdayy)) {
-			return interactionProblem(interaction, t('commands:birthday:removeNotRegistered'));
+		if (isNullOrUndefined(birthday)) {
+			const description = t('commands:birthday:resetBirthdayNotSet');
+			return interaction.reply({ embeds: [new EmbedBuilder({ description, color: Colors.Red })], ephemeral: true });
 		}
 
 		await container.prisma.birthday.delete({
 			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
 		});
+
+		await getBirthdays(interaction.guild).remove(interaction.user.id);
 
 		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands:birthday:resetBirthdaySuccess'));
 
@@ -47,65 +49,41 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	public async runSet(interaction: BirthdayySubcommand.Interaction) {
-		const settings = await container.prisma.guild.findUnique({
-			select: { channelsAnnouncement: true, rolesBirthday: true },
-			where: { id: interaction.guildId }
-		});
+		const settings = await getSettings(interaction.guild).fetch();
 
-		if (!this.isCorrectlyConfigured(settings?.rolesBirthday, settings?.channelsAnnouncement))
-			this.error('commands/birthdayy:setBirthdayNotConfigured');
+		if (!this.isCorrectlyConfigured(settings.rolesBirthday, settings.channelsAnnouncement)) {
+			const description = await resolveKey(interaction, 'commands/birthday:setBirthdayNotConfigured', {
+				command: chatInputApplicationCommandMention('config', 'edit', envParseString('CONFIG_COMMAND_ID'))
+			});
+			return interaction.reply({ embeds: [new EmbedBuilder({ description, color: Colors.Red })], ephemeral: true });
+		}
 
 		const date = this.extractBirthdayFromOptions(interaction.options);
 
-		const birthday = dayjs()
-			.set('year', date.year ?? dayjs().year())
-			.set('month', date.month - 1)
-			.set('date', date.day);
+		await getBirthdays(interaction.guild).create({ ...date, userId: interaction.user.id });
 
-		await container.prisma.birthday.upsert({
-			create: {
-				birthday: birthday.format('YYYY-MM-DD'),
-				guild: {
-					connectOrCreate: {
-						create: { id: interaction.guildId },
-						where: { id: interaction.guildId }
-					}
-				},
-				user: {
-					connectOrCreate: {
-						create: {
-							id: interaction.user.id
-						},
-						where: { id: interaction.user.id }
-					}
-				}
-			},
-			update: { birthday: birthday.format('YYYY-MM-DD') },
-			where: { userId_guildId: { guildId: interaction.guildId, userId: interaction.user.id } }
-		});
-
-		const content = await resolveKey(interaction, 'commands/birthday:setBirthdaySuccess', { nextBirthday: dayjs(birthday).format('MMMM DD') });
+		const content = await resolveKey(interaction, 'commands/birthday:setBirthdaySuccess', { nextBirthday: formatBirthdayForDisplay(date) });
 
 		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(content);
 
 		return interaction.reply({ embeds: [embed] });
 	}
 
-	public async runUpcoming(_interaction: BirthdayySubcommand.Interaction) {
+	public async runUpcoming(interaction: BirthdayySubcommand.Interaction) {
 		const birthdays = await container.prisma.birthday.findMany({
 			cursor: {
 				day: dayjs().date(),
 				month: dayjs().month() + 1,
 				userId_guildId: {
-					guildId: _interaction.guildId,
-					userId: _interaction.user.id
+					guildId: interaction.guildId,
+					userId: interaction.user.id
 				}
 			},
 			orderBy: { day: 'asc', month: 'asc' },
-			where: { guildId: _interaction.guildId }
+			where: { guildId: interaction.guildId }
 		});
 
-		const t = await fetchT(_interaction);
+		const t = await fetchT(interaction);
 
 		const embed = new EmbedBuilder().setColor(BrandingColors.Primary);
 
@@ -113,9 +91,10 @@ export class UserCommand extends BirthdayySubcommand {
 			embed.setDescription(t('commands:birthday:upcomingNoBirthdays'));
 		} else {
 			const upcomingBirthdays = birthdays.map((birthday) => {
-				const user = _interaction.guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
+				const user = interaction.guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
 				return t('commands:birthday:upcomingBirthday', {
-					birthDate: formatDateForDisplay(birthday.birthday),
+					birthDate: formatBirthdayForDisplay(birthday),
+					age: ` (${getAge(birthday)})`,
 					user: user.toString()
 				});
 			});
@@ -123,22 +102,25 @@ export class UserCommand extends BirthdayySubcommand {
 			embed.setDescription(upcomingBirthdays.join('\n'));
 		}
 
-		return _interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [embed] });
 	}
 
 	public async runView(interaction: BirthdayySubcommand.Interaction) {
 		const user = interaction.options.getUser('target') ?? interaction.user;
 		const t = await fetchT(interaction);
 
-		const birthday = await container.prisma.birthday.findUnique({
-			where: { userId_guildId: { guildId: interaction.guildId, userId: user.id } }
-		});
+		const birthday = await getBirthdays(interaction.guild)
+			.fetch(user.id)
+			.catch(() => null);
 
 		const content = birthday
-			? t('commands:birthday:viewBirthdaySet', { birthDate: formatDateForDisplay(birthday.birthday), user: user.toString() })
-			: t('commands/birthday:viewBirthdayNotSet', { command: BirthdayApplicationCommandMentions.Set, user: user.tag });
+			? t('commands:birthday:viewBirthdaySet', { birthDate: formatBirthdayForDisplay(birthday), user: user.toString() })
+			: t('commands/birthday:viewBirthdayNotSet', {
+					command: chatInputApplicationCommandMention('birthday', 'set', envParseString('BIRTHDAY_COMMAND_ID')),
+					user: user.toString()
+				});
 
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(content);
+		const embed = new EmbedBuilder().setColor(birthday ? BrandingColors.Primary : Colors.Yellow).setDescription(content);
 
 		return interaction.reply({ embeds: [embed] });
 	}

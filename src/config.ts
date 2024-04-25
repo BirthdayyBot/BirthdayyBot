@@ -14,6 +14,7 @@ import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
 import { envIsDefined, envParseArray, envParseBoolean, envParseInteger, envParseNumber, envParseString } from '@skyra/env-utilities';
+import { ActivityType, GatewayIntentBits, Locale, type OAuth2Scopes, PermissionFlagsBits } from 'discord-api-types/v10';
 import {
 	ActivitiesOptions,
 	type ClientOptions,
@@ -24,7 +25,6 @@ import {
 	channelMention,
 	roleMention
 } from 'discord.js';
-import { ActivityType, GatewayIntentBits, Locale, type OAuth2Scopes, PermissionFlagsBits } from 'discord-api-types/v10';
 import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
@@ -79,9 +79,9 @@ function parseInternationalizationDefaultVariables() {
 	return {
 		ARROW: Emojis.Arrow,
 		CLIENT_ID: process.env.CLIENT_ID,
-		FAIL: Emojis.Fail,
+		REDCROSS: Emojis.RedCross,
 		LOADIND: Emojis.Sign,
-		SUCCESS: Emojis.Success,
+		GREENTICK: Emojis.GreenTick,
 		VERSION: process.env.CLIENT_VERSION,
 		...parseInternationalizationDefaultVariablesPermissions()
 	};

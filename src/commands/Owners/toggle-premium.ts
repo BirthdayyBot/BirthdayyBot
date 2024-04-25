@@ -2,10 +2,11 @@ import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { BrandingColors } from '#utils/constants';
 import { isCustom } from '#utils/env';
-import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
-import { reply } from '#utils/utils.js';
+import { resolveOnErrorCodesDiscord } from '#utils/functions';
+import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
+import { envParseString } from '@skyra/env-utilities';
 import { EmbedBuilder, RESTJSONErrorCodes, inlineCode } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
@@ -45,7 +46,7 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 					.addStringOption((option) => option.setName('guild-id').setDescription('The guild id to toggle premium for').setRequired(true))
 					.addBooleanOption((option) => option.setName('toggle').setDescription('The toggle value').setRequired(true)),
 			{
-				guildIds: await getCommandGuilds('admin')
+				guildIds: [envParseString('CLIENT_MAIN_GUILD')]
 			}
 		);
 	}

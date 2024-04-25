@@ -50,7 +50,7 @@ declare module '@skyra/env-utilities' {
 		API_PORT: IntegerString;
 		API_PREFIX: string;
 		APP_ENV: 'dev' | 'prd' | 'tst';
-
+		BIRTHDAY_COMMAND_ID: string;
 		CLIENT_COLOR: NumberString;
 		CLIENT_ID: string;
 		CLIENT_MAIN_GUILD: string;
@@ -59,38 +59,30 @@ declare module '@skyra/env-utilities' {
 		CLIENT_PRESENCE_NAME: string;
 		CLIENT_PRESENCE_TYPE: string;
 		CLIENT_VERSION: string;
-
+		CONFIG_COMMAND_ID: string;
 		CUSTOM_BOT: BooleanString;
 		DATABASE_URL: string;
 		DEBUG: BooleanString;
-
 		DISCORD_BOT_LIST_TOKEN: string;
 		DISCORD_LIST_GG_TOKEN: string;
 		DISCORD_TOKEN: string;
-
 		INFLUX_ENABLED: BooleanString;
 		INFLUX_ORG: string;
 		INFLUX_ORG_ANALYTICS_BUCKET: string;
 		INFLUX_TOKEN: string;
 		INFLUX_URL: string;
-
 		LOG_CHANNEL_ADMIN: string;
-
 		OAUTH_COOKIE: string;
 		OAUTH_DOMAIN_OVERWRITE: string;
-
 		OAUTH_REDIRECT_URI: string;
 		OAUTH_SCOPE: ArrayString;
-
 		OAUTH_SECRET: string;
 		PRISMA_DEBUG_LOGS: BooleanString;
 		REDIS_DB: IntegerString;
 		REDIS_HOST: string;
 		REDIS_PASSWORD: string;
-
 		REDIS_PORT: NumberString;
 		REDIS_TLS: BooleanString;
-
 		REDIS_USERNAME: string;
 		SENTRY_URL: string;
 		TOP_GG_TOKEN: string;

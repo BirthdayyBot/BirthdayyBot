@@ -13,10 +13,10 @@ model Birthday {
     user          User     @relation(fields: [userId], references: [id])
     guildId       String   @map("guild_id") @db.VarChar(19)
     guild         Guild    @relation(fields: [guildId], references: [id])
-    birthday      String   @db.VarChar(10)
     year          Int?
-    month         Int?
-    day           Int?
+    month         Int
+    day           Int
+    hideYear      Boolean  @default(false) @map("hide_year")
     inDeleteQueue Boolean  @default(false) @map("in_delete_queue")
     createdAt     DateTime @default(now()) @map("created_at")
     updatedAt     DateTime @updatedAt() @map("updated_at")

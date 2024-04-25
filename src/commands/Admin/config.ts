@@ -1,7 +1,6 @@
-import { getSettings } from '#lib/discord/guild';
+import { getBirthdays, getSettings } from '#lib/discord/guild';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { updateBirthdayOverview } from '#lib/utils/birthday/overview';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
 import { BrandingColors } from '#lib/utils/constants';
@@ -84,8 +83,7 @@ export class UserCommand extends BirthdayySubcommand {
 			const result = await this.parseChannel(interaction, overviewChannel);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
-			await updateBirthdayOverview(interaction.guild);
-
+			await getBirthdays(interaction.guildId).updateBirthdayOverview();
 			entries.push(['channelsOverview', result.unwrap()]);
 		}
 
@@ -248,10 +246,7 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
-		const { id } = interaction.guild;
-		const result = await Result.fromAsync(
-			this.container.prisma.guild.upsert({ create: { id, ...data }, select: null, update: data, where: { id } })
-		);
+		const result = await Result.fromAsync(await getSettings(interaction.guildId).update(data));
 
 		const content = await result.match({
 			err: (error) => {

@@ -1,12 +1,11 @@
-import { GuildInfoCMD } from '#lib/commands/guildInfo';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import generateConfigList from '#utils/birthday/config';
 import { getFormattedTimestamp } from '#utils/common';
 import { isCustom } from '#utils/env';
-import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { envParseString } from '@skyra/env-utilities';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
@@ -112,8 +111,16 @@ export class GuildInfoCommand extends BirthdayyCommand {
 	}
 
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand(GuildInfoCMD(), {
-			guildIds: await getCommandGuilds('admin')
-		});
+		registry.registerChatInputCommand(
+			(builder) => {
+				return builder
+					.setName(this.name)
+					.setDescription(this.description)
+					.addStringOption((option) => option.setName('guild-id').setDescription('The GuildId to get Infos').setRequired(true));
+			},
+			{
+				guildIds: [envParseString('CLIENT_MAIN_GUILD')]
+			}
+		);
 	}
 }

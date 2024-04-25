@@ -38,9 +38,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (!this.isCorrectlyConfigured(rolesBirthday, channelsAnnouncement)) return null;
 
-		const birthdays = await container.prisma.birthday.findMany({
-			where: { day: { not: null }, guildId, month: { not: null } }
-		});
+		const birthdays = await container.prisma.birthday.findMany();
 
 		for (const birthday of birthdays) {
 			const member = await guildDiscord.members.fetch(birthday.userId);

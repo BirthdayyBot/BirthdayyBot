@@ -1,6 +1,5 @@
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
-import { generateBirthdayList } from '#utils/birthday/birthday';
-import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { TimezoneWithLocale, formatBirthdayMessage } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
@@ -10,7 +9,7 @@ import { AsyncQueue } from '@sapphire/async-queue';
 import { GuildTextBasedChannelTypes, PaginatedFieldMessageEmbed, canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { TOptions, resolveKey } from '@sapphire/plugin-i18next';
+import { TOptions, fetchT, resolveKey } from '@sapphire/plugin-i18next';
 import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
@@ -23,10 +22,10 @@ import {
 	Message,
 	MessageCreateOptions,
 	MessageEditOptions,
-	roleMention,
-	userMention
+	roleMention
 } from 'discord.js';
 
+import { formatBirthdayForDisplay, getAge } from '#lib/birthday';
 import { SettingsManager } from './SettingsManager.js';
 
 enum CacheActions {
@@ -122,8 +121,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			return this._cache(
 				await container.prisma.birthday.findFirstOrThrow({
 					where: {
-						guildId: this.guildId,
-						userId: id
+						userId: id,
+						guildId: this.guildId
 					}
 				}),
 				CacheActions.None
@@ -139,8 +138,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return this;
 	}
 
-	public findBirthdayWithMonth(month: number) {
-		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
+	public findBirthdaysWithMonth(month: number) {
+		return this.filter(({ month: m }) => month === m).toJSON();
 	}
 
 	public findTeenNextBirthday() {
@@ -148,15 +147,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public async findTodayBirthday() {
-		const contains = this.currentDate().format('MM-DD');
+		const currentDate = new Date();
 		await this.fetch();
-		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
+		return this.filter(({ month, day }) => month === currentDate.getMonth() && day === currentDate.getDate()).toJSON();
 	}
 
 	public insert(data: Birthday): Birthday;
-
 	public insert(data: Birthday[]): Collection<string, Birthday>;
-
 	public insert(data: Birthday | Birthday[]) {
 		// @ts-expect-error TypeScript does not read the overloaded `data` parameter correctly
 		return this._cache(data, CacheActions.Insert);
@@ -203,22 +200,40 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
-		return birthdays.sort((firstBirthday, secondBirthday) => {
-			const firstBirthdayDate = dayjs(firstBirthday.birthday);
-			const secondBirthdayDate = dayjs(secondBirthday.birthday);
+		return birthdays.sort((firstBirthday, secondBirthday) =>
+			firstBirthday.month === secondBirthday.month ? firstBirthday.day - secondBirthday.day : firstBirthday.month - secondBirthday.month
+		);
+	}
 
-			return firstBirthdayDate.month() === secondBirthdayDate.month()
-				? firstBirthdayDate.date() - secondBirthdayDate.date()
-				: firstBirthdayDate.month() - secondBirthdayDate.month();
-		});
+	public async updateBirthdayOverview() {
+		const settings = await this.settings.fetch();
+
+		const { channelsOverview, messagesOverview } = settings;
+
+		if (isNullish(channelsOverview)) return null;
+
+		const embed = await this.createOverviewMessage(this.guild, this.toJSON());
+
+		const channel = await container.client.guilds.fetch(this.guildId).then((guild) => guild.channels.fetch(channelsOverview));
+
+		if (isNullish(channel) || !isGuildBasedChannel(channel)) {
+			await this.settings.update({ channelsOverview: null });
+			return null;
+		}
+
+		const message = messagesOverview ? await this.fetchOverviewMessage(channel, messagesOverview) : null;
+
+		container.logger.info(`Updated Overview Message in guild: ${this.guildId}`);
+		container.logger.debug(message);
+
+		if (message) return message.edit({ embeds: [embed] });
+
+		return channel.send({ embeds: [embed] }).then((newMessage) => this.settings.update({ messagesOverview: newMessage.id }));
 	}
 
 	private _cache(entry: Birthday, type: CacheActions): Birthday;
-
 	private _cache(entries: Birthday[], type?: CacheActions): Collection<string, Birthday>;
-
 	private _cache(entries?: null, type?: CacheActions): null;
-
 	private _cache(entries?: Birthday | Birthday[] | null, type?: CacheActions) {
 		if (!entries) return null;
 
@@ -245,14 +260,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	private formatItems = (birthday: Birthday) => {
 		// exemple: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
-		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
-		const age = dayjs().diff(date, 'year');
-		const formattedDate = formatDateForDisplay(birthday.birthday);
-		const ageText = age === 1 ? 'year' : 'years';
-		const ageFormatted = `${age} ${ageText}`;
-		const emoji = date.isSame(this.currentDate(), 'date') ? Emojis.Cake : '';
-		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
-		return text;
+		const user = this.guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
+		const text = `${user.toString()} - ${formatBirthdayForDisplay(birthday)}`;
+		return birthday.hideYear ? text : `${text} (${getAge(birthday)} years) ${Emojis.Cake}`;
 	};
 
 	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
@@ -322,27 +332,33 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return channel.messages.fetch(overviewMessage);
 	}
 
-	private async updateBirthdayOverview() {
-		const settings = await this.settings.fetch();
+	private async createOverviewMessage(guild: Guild, birthdays: Birthday[]) {
+		const sortedBirthdays = birthdays.sort((a, b) => {
+			if (a.month === b.month) {
+				return a.day - b.day;
+			}
+			return a.month - b.month;
+		});
 
-		const { channelsOverview, messagesOverview } = settings;
-		const birthdayList = await generateBirthdayList(1, this.guild);
+		const t = await fetchT(guild);
 
-		if (isNullish(channelsOverview)) return null;
+		const embed = new EmbedBuilder().setColor(BrandingColors.Primary);
 
-		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
+		if (birthdays.length === 0) {
+			embed.setDescription(t('commands:birthday:upcomingNoBirthdays'));
+		} else {
+			const upcomingBirthdays = sortedBirthdays.map((birthday) => {
+				const user = guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
+				return t('commands:birthday:upcomingBirthday', {
+					birthDate: formatBirthdayForDisplay(birthday),
+					age: ` (${getAge(birthday)})`,
+					user: user.toString()
+				});
+			});
 
-		const channel = await container.client.channels.fetch(channelsOverview).catch(() => null);
+			embed.setDescription(upcomingBirthdays.join('\n').slice(0, 2048));
+		}
 
-		if (isNullish(channel) || !isGuildBasedChannel(channel)) return null;
-
-		const message = messagesOverview ? await this.fetchOverviewMessage(channel, messagesOverview) : null;
-
-		container.logger.info(`Updated Overview Message in guild: ${this.guildId}`);
-		container.logger.debug(message);
-
-		if (message) return message.edit(options);
-
-		return channel.send(options);
+		return embed;
 	}
 }
