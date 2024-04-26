@@ -85,11 +85,27 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
 		const birthday = await container.prisma.birthday.upsert({
-			create: { ...args, guildId: this.guildId },
-			update: args,
+			create: {
+				day: args.day,
+				month: args.month,
+				year: args.year,
+				hideYear: args.hideYear,
+				guild: {
+					connectOrCreate: {
+						where: { id: this.guildId },
+						create: { id: this.guildId }
+					}
+				},
+				user: {
+					connectOrCreate: {
+						where: { id: args.userId },
+						create: { id: args.userId }
+					}
+				}
+			},
+			update: { ...args },
 			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } }
 		});
-		await this.updateBirthdayOverview();
 		return this._cache(birthday, CacheActions.Insert);
 	}
 
@@ -231,6 +247,38 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return channel.send({ embeds: [embed] }).then((newMessage) => this.settings.update({ messagesOverview: newMessage.id }));
 	}
 
+	public async createOverviewMessage(guild: Guild, birthdays: Birthday[]) {
+		const sortedBirthdays = birthdays.sort((a, b) => {
+			if (a.month === b.month) {
+				return a.day - b.day;
+			}
+			return a.month - b.month;
+		});
+
+		const t = await fetchT(guild);
+
+		const embed = new EmbedBuilder()
+			.setColor(BrandingColors.Primary)
+			.setTitle(t('commands/birthday:upcomingHeader'))
+			.setThumbnail(guild.bannerURL({ size: 2048 }) ?? guild.iconURL({ size: 2048 }) ?? '')
+			.setFooter({ text: t('commands/birthday:upcomingFooter') });
+		if (birthdays.length === 0) {
+			embed.setDescription(t('commands/birthday:upcomingNoBirthdays'));
+		} else {
+			const upcomingBirthdays = sortedBirthdays.map((birthday) => {
+				const user = guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
+				const age = getAge(birthday);
+				const birthDate = formatBirthdayForDisplay(birthday);
+				if (age) birthDate.concat(` (${age} years)`);
+				return t('commands/birthday:upcomingBirthday', { birthDate, user: user.toString() });
+			});
+
+			embed.setDescription(upcomingBirthdays.join('\n').slice(0, 2048));
+		}
+
+		return embed;
+	}
+
 	private _cache(entry: Birthday, type: CacheActions): Birthday;
 	private _cache(entries: Birthday[], type?: CacheActions): Collection<string, Birthday>;
 	private _cache(entries?: null, type?: CacheActions): null;
@@ -255,6 +303,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			return new Collection<string, Birthday>(entries.map((entry) => [entry.userId, entry]));
 		}
 
+		floatPromise(this.updateBirthdayOverview());
 		return entries;
 	}
 
@@ -330,35 +379,5 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	private async fetchOverviewMessage(channel: GuildTextBasedChannelTypes, overviewMessage: string): Promise<Message<boolean> | null> {
 		return channel.messages.fetch(overviewMessage);
-	}
-
-	private async createOverviewMessage(guild: Guild, birthdays: Birthday[]) {
-		const sortedBirthdays = birthdays.sort((a, b) => {
-			if (a.month === b.month) {
-				return a.day - b.day;
-			}
-			return a.month - b.month;
-		});
-
-		const t = await fetchT(guild);
-
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary);
-
-		if (birthdays.length === 0) {
-			embed.setDescription(t('commands:birthday:upcomingNoBirthdays'));
-		} else {
-			const upcomingBirthdays = sortedBirthdays.map((birthday) => {
-				const user = guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
-				return t('commands:birthday:upcomingBirthday', {
-					birthDate: formatBirthdayForDisplay(birthday),
-					age: ` (${getAge(birthday)})`,
-					user: user.toString()
-				});
-			});
-
-			embed.setDescription(upcomingBirthdays.join('\n').slice(0, 2048));
-		}
-
-		return embed;
 	}
 }

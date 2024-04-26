@@ -79,9 +79,10 @@ function parseInternationalizationDefaultVariables() {
 	return {
 		ARROW: Emojis.Arrow,
 		CLIENT_ID: process.env.CLIENT_ID,
-		REDCROSS: Emojis.RedCross,
 		LOADIND: Emojis.Sign,
 		GREENTICK: Emojis.GreenTick,
+		REDCROSS: Emojis.RedCross,
+		BULB: '💡',
 		VERSION: process.env.CLIENT_VERSION,
 		...parseInternationalizationDefaultVariablesPermissions()
 	};

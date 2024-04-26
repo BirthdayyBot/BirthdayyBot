@@ -155,5 +155,5 @@ export function nextBirthday(month: Month, day: number, { nextYearIfToday = fals
 }
 
 export function formatBirthdayForDisplay(data: DateWithOptionalYear) {
-	return `${data.day}. ${numberToMonthName(data.month)} ${data.year ?? ''}`;
+	return `${data.day}. ${numberToMonthName(data.month)} ${data.year ? `(${data.year})` : ''}`;
 }
