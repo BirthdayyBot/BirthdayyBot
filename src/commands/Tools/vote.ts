@@ -12,12 +12,9 @@ export class UserCommand extends BirthdayyCommand {
 	}
 
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand(
-			(builder) => {
-				return applyLocalizedBuilder(builder, 'commands/tools:voteName', 'commands/tools:voteDescription');
-			},
-			{ guildIds: [this.getGlobalCommandId()] }
-		);
+		registry.registerChatInputCommand((builder) => {
+			return applyLocalizedBuilder(builder, 'commands/tools:voteName', 'commands/tools:voteDescription');
+		});
 	}
 
 	private buildEmbed(t: TFunction) {

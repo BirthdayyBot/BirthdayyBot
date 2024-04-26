@@ -7,9 +7,8 @@ import {
 	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
-import { first } from '#utils/common';
 import { type Awaitable, ChatInputCommand, Command, type MessageCommand, Args as SapphireArgs, UserError } from '@sapphire/framework';
-import { ChatInputCommandInteraction, Snowflake } from 'discord.js';
+import { ChatInputCommandInteraction } from 'discord.js';
 
 /**
  * The base class for all Birthdayy commands.
@@ -27,20 +26,6 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 		this.guarded = options.guarded ?? BirthdayyCommandConstructorDefaults.guarded;
 		this.hidden = options.hidden ?? BirthdayyCommandConstructorDefaults.hidden;
 		this.permissionLevel = options.permissionLevel ?? BirthdayyCommandConstructorDefaults.permissionLevel;
-	}
-
-	/**
-	 * Retrieves the global command id from the application command registry.
-	 *
-	 * @remarks
-	 *
-	 * This method is used for slash commands, and will throw an error if the
-	 * global command ids are empty.
-	 */
-	public getGlobalCommandId(): Snowflake {
-		const ids = this.applicationCommandRegistry.globalChatInputCommandIds;
-		if (ids.size === 0) throw new Error('The global command ids are empty.');
-		return first(ids.values())!;
 	}
 
 	protected error(identifier: UserError | string, context?: unknown): never {

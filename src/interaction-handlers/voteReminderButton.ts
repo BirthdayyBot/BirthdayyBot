@@ -1,10 +1,11 @@
-import { ButtonID, remindMeButtonBuilder } from '#lib/components/button';
+import { ButtonID } from '#lib/components/button';
 import { editInteractionResponse } from '#lib/discord/interaction';
+import { Emojis } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { Target } from '@sapphire/plugin-i18next';
-import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
+import { resolveKey, Target } from '@sapphire/plugin-i18next';
+import { ButtonBuilder, ButtonInteraction, time, TimestampStyles } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
@@ -41,7 +42,12 @@ export class VoteReminderButton extends InteractionHandler {
 		});
 	}
 
+	private async remindMeButtonBuilder(target: Target) {
+		const label = await resolveKey(target, 'button:remindeMe');
+		return new ButtonBuilder().setLabel(label).setCustomId('vote-reminder-button').setEmoji(Emojis.Alarm);
+	}
+
 	private async remindMeButtonDisabledBuilder(target: Target) {
-		return (await remindMeButtonBuilder(target)).setDisabled(true);
+		return (await this.remindMeButtonBuilder(target)).setDisabled(true);
 	}
 }

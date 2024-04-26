@@ -12,7 +12,6 @@ import '@sapphire/plugin-i18next/register';
 import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-scheduled-tasks/register';
 import '@sapphire/plugin-subcommands/register';
-import '@sapphire/plugin-utilities-store/register';
 import '@sentry/tracing';
 import { envParseString } from '@skyra/env-utilities';
 import * as colorette from 'colorette';

@@ -1,4 +1,4 @@
-import { formatBirthdayForDisplay } from '#lib/birthday';
+import { nextBirthday } from '#lib/birthday';
 import { getBirthdays, getSettings } from '#lib/discord';
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
@@ -8,7 +8,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { applyLocalizedBuilder, applyNameLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { Nullish, isNullOrUndefined, isNullish } from '@sapphire/utilities';
+import { Nullish, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	ApplicationCommandType,
@@ -16,9 +16,11 @@ import {
 	Colors,
 	ContextMenuCommandBuilder,
 	EmbedBuilder,
+	TimestampStyles,
 	User,
 	UserContextMenuCommandInteraction,
-	chatInputApplicationCommandMention
+	chatInputApplicationCommandMention,
+	time
 } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
@@ -38,11 +40,13 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	public async runReset(interaction: BirthdayySubcommand.Interaction) {
-		const birthday = await getBirthdays(interaction.guild).fetch(interaction.user.id);
+		const birthday = await getBirthdays(interaction.guild)
+			.fetch(interaction.user.id)
+			.catch(() => null);
 
 		const t = await fetchT(interaction);
 
-		if (isNullOrUndefined(birthday)) {
+		if (isNullish(birthday)) {
 			const description = t('commands/birthday:resetBirthdayNotSet');
 			return interaction.reply({ embeds: [new EmbedBuilder({ description, color: Colors.Red })], ephemeral: true });
 		}
@@ -53,7 +57,7 @@ export class UserCommand extends BirthdayySubcommand {
 
 		await getBirthdays(interaction.guild).remove(interaction.user.id);
 
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands:birthday:resetBirthdaySuccess'));
+		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands/birthday:resetBirthdaySuccess'));
 
 		return interaction.reply({ embeds: [embed] });
 	}
@@ -72,7 +76,11 @@ export class UserCommand extends BirthdayySubcommand {
 
 		await getBirthdays(interaction.guild).create({ ...date, userId: interaction.user.id });
 
-		const content = await resolveKey(interaction, 'commands/birthday:setBirthdaySuccess', { nextBirthday: formatBirthdayForDisplay(date) });
+		const birthday = nextBirthday(date.month, date.day);
+
+		const content = await resolveKey(interaction, 'commands/birthday:setBirthdaySuccess', {
+			nextBirthday: time(birthday, TimestampStyles.LongDate)
+		});
 
 		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(content);
 
@@ -89,21 +97,27 @@ export class UserCommand extends BirthdayySubcommand {
 
 	public async runView(interaction: BirthdayySubcommand.Interaction) {
 		const user = interaction.options.getUser('target') ?? interaction.user;
-		const embed = this.sharedViewRun(interaction, user);
+		const embed = await this.sharedViewRun(interaction, user);
 		return interaction.reply({ embeds: [embed] });
 	}
 
 	public override async contextMenuRun(interaction: UserContextMenuCommandInteraction<'cached'>) {
-		const embed = this.sharedViewRun(interaction, interaction.targetUser);
+		const embed = await this.sharedViewRun(interaction, interaction.targetUser);
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
-	private sharedViewRun(interaction: ChatInputCommandInteraction<'cached'> | UserContextMenuCommandInteraction<'cached'>, user: User) {
+	private async sharedViewRun(interaction: ChatInputCommandInteraction<'cached'> | UserContextMenuCommandInteraction<'cached'>, user: User) {
 		const t = getSupportedUserLanguageT(interaction);
 
-		const birthday = getBirthdays(interaction.guild).get(user.id);
+		const birthday = await getBirthdays(interaction.guild)
+			.fetch(user.id)
+			.catch(() => null);
+
 		const content = birthday
-			? t('commands/birthday:viewBirthdaySet', { birthDate: formatBirthdayForDisplay(birthday), user: user.toString() })
+			? t('commands/birthday:viewBirthdaySet', {
+					birthDate: time(nextBirthday(birthday.month, birthday.day), TimestampStyles.LongDate),
+					user: user.toString()
+				})
 			: t('commands/birthday:viewBirthdayNotSet', {
 					command: chatInputApplicationCommandMention('birthday', 'set', envParseString('BIRTHDAY_COMMAND_ID')),
 					user: user.toString()

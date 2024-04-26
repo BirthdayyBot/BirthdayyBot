@@ -3,9 +3,10 @@ import { isDevelopment } from '#utils/env';
 import { BOT_ADMIN_LOG } from '#utils/environment';
 import { floatPromise } from '#utils/functions/promises';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, Store, container } from '@sapphire/framework';
-import { blue, gray, green, magenta, magentaBright, white, yellow } from 'colorette';
-import { stripIndents } from 'common-tags';
+import { Events, Listener, Piece, Store } from '@sapphire/framework';
+import { TFunction } from '@sapphire/plugin-i18next';
+import { isNullish } from '@sapphire/utilities';
+import { blue, gray, green, magenta, magentaBright, red, white, yellow } from 'colorette';
 
 @ApplyOptions<Listener.Options>({ event: Events.ClientReady, once: true })
 export class UserEvent extends Listener {
@@ -25,28 +26,44 @@ export class UserEvent extends Listener {
 	}
 
 	private printBanner() {
+		const { client } = this.container;
 		const success = green('+');
+		const failed = red('-');
+		const llc = client.dev ? magentaBright : white;
+		const blc = client.dev ? magenta : blue;
 
-		const llc = isDevelopment ? magentaBright : white;
-		const blc = isDevelopment ? magenta : blue;
+		// Offset Pad
+		const pad = ' '.repeat(7);
 
-		container.logger.info(stripIndents`
-			${blc(process.env.CLIENT_VERSION)}
-			[${success}] Gateway
-			${isDevelopment ? `${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
-		`);
+		const isAuthEnabled = !isNullish(client.options.api?.auth);
+
+		console.log(
+			String.raw`
+${blc(process.env.CLIENT_VERSION)}
+[${success}] Gateway
+[${client.analytics ? success : failed}] Analytics
+[${isAuthEnabled ? success : failed}] OAuth 2.0 Enabled
+${client.dev ? ` ${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
+		`.trim()
+		);
 	}
 
 	private printStoreDebugInformation() {
-		const { client, logger } = this.container;
+		const { client, logger, i18n } = this.container;
 		const stores = [...client.stores.values()];
-		const last = stores.pop()!;
 
-		for (const store of stores) logger.info(this.styleStore(store, false));
-		logger.info(this.styleStore(last, true));
+		for (const store of stores) {
+			logger.info(this.styleStore(store));
+		}
+
+		logger.info(this.styleLanguages(i18n.languages));
 	}
 
-	private styleStore(store: Store<any>, last: boolean) {
-		return gray(`${last ? '└─' : '├─'} Loaded ${this.style(store.size.toString().padEnd(3, ' '))} ${store.name}.`);
+	private styleStore(store: Store<Piece>) {
+		return gray(`├─ Loaded ${this.style(store.size.toString().padEnd(2, ' '))} ${store.name}.`);
+	}
+
+	private styleLanguages(languages: Map<string, TFunction>) {
+		return gray(`└─ Loaded ${this.style(languages.size.toString().padEnd(2, ' '))} languages.`);
 	}
 }

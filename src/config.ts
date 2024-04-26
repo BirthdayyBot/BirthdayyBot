@@ -183,6 +183,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	i18n: parseInternationalizationOptions(),
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: false,
+	loadApplicationCommandRegistriesStatusListeners: false,
 	logger: {
 		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
 	},

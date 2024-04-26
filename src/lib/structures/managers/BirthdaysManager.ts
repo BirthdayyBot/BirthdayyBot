@@ -134,15 +134,14 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 
 		if (typeof id === 'string') {
-			return this._cache(
-				await container.prisma.birthday.findFirstOrThrow({
-					where: {
-						userId: id,
-						guildId: this.guildId
-					}
-				}),
-				CacheActions.None
-			);
+			const birthday = await container.prisma.birthday.findFirst({
+				where: {
+					userId: id,
+					guildId: this.guildId
+				}
+			});
+			if (isNullish(birthday)) return null;
+			return this._cache(birthday, CacheActions.None);
 		}
 
 		if (super.size !== this._count && id) {
