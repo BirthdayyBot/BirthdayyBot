@@ -1,16 +1,15 @@
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
-import { TimezoneWithLocale, formatBirthdayMessage } from '#utils/common/index';
+import { TimezoneWithLocale } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import { CollectionConstructor } from '@discordjs/collection';
 import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { GuildTextBasedChannelTypes, PaginatedFieldMessageEmbed, canSendEmbeds, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { TOptions, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
+import { TFunction, TOptions, fetchT, resolveKey } from '@sapphire/plugin-i18next';
+import { isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
 	APIEmbed,
@@ -22,10 +21,12 @@ import {
 	Message,
 	MessageCreateOptions,
 	MessageEditOptions,
-	roleMention
+	User,
+	roleMention,
+	userMention
 } from 'discord.js';
 
-import { formatBirthdayForDisplay, getAge } from '#lib/birthday';
+import { formatBirthdayForDisplay, getAge, transformMessage } from '#lib/birthday';
 import { SettingsManager } from './SettingsManager.js';
 
 enum CacheActions {
@@ -51,7 +52,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * The timer that sweeps this manager's entries
 	 */
 	private _timer: NodeJS.Timeout | null = null;
-	private annoncementQueue = new AsyncQueue();
+	private announcementQueue = new AsyncQueue();
 
 	public constructor(guild: Guild, settings: SettingsManager) {
 		super();
@@ -60,20 +61,15 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		this.settings = settings;
 	}
 
-	public static get [Symbol.species]() {
-		return cast<CollectionConstructor>(Collection);
-	}
-
 	public async announcedBirthday(birthday: Birthday) {
-		if (isNullish(birthday)) return;
-		const member = this.guild.members.resolve(birthday.userId);
-		if (!member) return;
+		const member = await this.guild.members.fetch(birthday.userId);
+		const t = await fetchT(this.guild);
 
-		const options = this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member);
-		const message = await this.announceBirthdayInChannel(options, member);
+		const options = this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member.user, t);
+		const message = await this.announceBirthdayInChannel(options, member.user);
 		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
 
-		this.annoncementQueue.shift();
+		this.announcementQueue.shift();
 		return { message, role };
 	}
 
@@ -247,7 +243,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public async createOverviewMessage(guild: Guild, birthdays: Birthday[]) {
-		const sortedBirthdays = birthdays.sort((a, b) => {
+		const sortedBirthdays = birthdays.toSorted((a, b) => {
 			if (a.month === b.month) {
 				return a.day - b.day;
 			}
@@ -265,11 +261,10 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			embed.setDescription(t('commands/birthday:upcomingNoBirthdays'));
 		} else {
 			const upcomingBirthdays = sortedBirthdays.map((birthday) => {
-				const user = guild.members.cache.get(birthday.userId)?.user ?? { tag: 'Unknown User' };
 				const age = getAge(birthday);
 				const birthDate = formatBirthdayForDisplay(birthday);
 				if (age) birthDate.concat(` (${age} years)`);
-				return t('commands/birthday:upcomingBirthday', { birthDate, user: user.toString() });
+				return t('commands/birthday:upcomingBirthday', { birthDate, user: userMention(birthday.userId) });
 			});
 
 			embed.setDescription(upcomingBirthdays.join('\n').slice(0, 2048));
@@ -343,10 +338,10 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return `I cannot modify this member because his position is equal or superior to me. `;
 	}
 
-	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
+	private async announceBirthdayInChannel(options: MessageCreateOptions, user: User) {
 		const { channelsAnnouncement } = await this.settings.fetch();
 		if (isNullish(channelsAnnouncement)) {
-			return `Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`;
+			return `Announcement channel is empty, so i can't announce the anniversary of ${user.displayName}`;
 		}
 
 		try {
@@ -363,14 +358,18 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 			return `Cannot send a message with embeds in channel ${channel.id}.`;
 		} catch (error) {
-			return `Error while announcing birthday for [${member.id}] ${member.displayName}: ${error}`;
+			return `Error while announcing birthday for [${user.id}] ${user.displayName}: ${error}`;
 		}
 	}
 
-	private createOptionsMessageForAnnouncementChannel({ messagesAnnouncement, rolesNotified }: Settings, member: GuildMember): MessageCreateOptions {
+	private createOptionsMessageForAnnouncementChannel(
+		{ messagesAnnouncement, rolesNotified }: Settings,
+		user: User,
+		t: TFunction
+	): MessageCreateOptions {
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, member))
+			.setDescription(transformMessage(messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, user, null, t))
 			.setThumbnail(CdnUrls.Cake);
 
 		return { content: rolesNotified ? roleMention(rolesNotified) : '', embeds: [embed] };

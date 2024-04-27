@@ -1,7 +1,7 @@
 import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#lib/utils/constants';
 import { splitMessage } from '#lib/utils/utils';
+import { CLIENT_COLOR } from '#utils/environment';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { ApplicationCommandRegistry, ChatInputCommand, Command, Result, container } from '@sapphire/framework';
@@ -130,7 +130,7 @@ export class UserCommand extends BirthdayyCommand {
 		}) as { footer: string; title: string };
 
 		return new EmbedBuilder()
-			.setColor(BrandingColors.Primary)
+			.setColor(CLIENT_COLOR)
 			.setTimestamp()
 			.setFooter({ text: data.footer })
 			.setTitle(data.title)
@@ -141,10 +141,10 @@ export class UserCommand extends BirthdayyCommand {
 		const commandsByCategory = await UserCommand.fetchCommands(interaction);
 
 		const display = new PaginatedMessage({
-			template: new EmbedBuilder().setColor(BrandingColors.Primary)
+			template: new EmbedBuilder().setColor(CLIENT_COLOR)
 		}) //
 			.setSelectMenuOptions((pageIndex) => ({
-				label: commandsByCategory.at(pageIndex - 1)![0].fullCategory!.join(' → ')
+				label: commandsByCategory.at(pageIndex - 1)![0].fullCategory.join(' → ')
 			}));
 
 		for (const [category, commands] of commandsByCategory) {
@@ -210,11 +210,9 @@ export class UserCommand extends BirthdayyCommand {
 		const filtered = new Collection<string, Command[]>();
 
 		await Promise.all(
-			commands.map(async (cmd) => {
-				const command = cmd as Command;
-
-				const result = await cmd.preconditions.chatInputRun(interaction, command as ChatInputCommand, {
-					command: null!
+			commands.map(async (command) => {
+				const result = await command.preconditions.chatInputRun(interaction, command as ChatInputCommand, {
+					command: null
 				});
 
 				if (result.isErr()) return;

@@ -1,9 +1,8 @@
 import { BrandingColors, Emojis } from '#lib/utils/constants';
-import { CollectionConstructor } from '@discordjs/collection';
 import { Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { Nullish, cast } from '@sapphire/utilities';
+import { Nullish } from '@sapphire/utilities';
 import { APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
@@ -28,10 +27,6 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		super();
 		this.guild = guild;
 		this.guildId = this.guild.id;
-	}
-
-	public static get [Symbol.species]() {
-		return cast<CollectionConstructor>(Collection);
 	}
 
 	public async create(args?: SettingsManagerCreateData): SettingsManagerReturnAsyncData {

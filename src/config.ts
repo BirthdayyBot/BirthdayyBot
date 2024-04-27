@@ -1,7 +1,3 @@
-import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
-import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
-import type { FormatFunction, InterpolationOptions } from 'i18next';
-
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { minutes } from '#lib/utils/common/times';
 import { TimezoneWithLocale } from '#lib/utils/common/timezone';
@@ -10,7 +6,9 @@ import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
 import { ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
+import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
+import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
 import { envIsDefined, envParseArray, envParseBoolean, envParseInteger, envParseNumber, envParseString } from '@skyra/env-utilities';
@@ -25,6 +23,7 @@ import {
 	channelMention,
 	roleMention
 } from 'discord.js';
+import type { FormatFunction, InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
@@ -83,6 +82,7 @@ function parseInternationalizationDefaultVariables() {
 		GREENTICK: Emojis.GreenTick,
 		REDCROSS: Emojis.RedCross,
 		BULB: '💡',
+		PLUS: Emojis.Plus,
 		VERSION: process.env.CLIENT_VERSION,
 		...parseInternationalizationDefaultVariablesPermissions()
 	};

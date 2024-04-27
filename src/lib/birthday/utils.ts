@@ -2,6 +2,8 @@ import { DateWithOptionalYear, Month } from '#lib/birthday/types';
 import { numberToMonthName } from '#utils/common';
 import { Birthday } from '@prisma/client';
 import { container } from '@sapphire/framework';
+import { User } from 'discord.js';
+import { TFunction } from 'i18next';
 
 /**
  * Determines whether or not a month of a year contains a specific day.
@@ -155,5 +157,41 @@ export function nextBirthday(month: Month, day: number, { nextYearIfToday = fals
 }
 
 export function formatBirthdayForDisplay(data: DateWithOptionalYear) {
-	return `${data.day}. ${numberToMonthName(data.month)} ${data.year ? `(${data.year})` : ''}`;
+	let formattedDate = `${data.day}. ${numberToMonthName(data.month)}`;
+	if (data.year) {
+		formattedDate += ` (${data.year})`;
+	}
+	return formattedDate;
+}
+
+export const enum Matches {
+	Age = '{age}',
+	AgeOrdinal = '{age.ordinal}',
+	User = '{user}',
+	UserName = '{user.name}',
+	UserTag = '{user.tag}',
+	Line = '{line}'
+}
+
+export const kTransformMessageRegExp = /{age}|{ageOrdinal}|{user}|{userName}|{userTag}|{line}/g;
+
+export function transformMessage(message: string, user: User, age: null | number, t: TFunction) {
+	return message.replace(kTransformMessageRegExp, (match) => {
+		switch (match) {
+			case Matches.Age:
+				return age === null ? t('globals:unknown') : age.toString();
+			case Matches.AgeOrdinal:
+				return age === null ? t('globals:unknown') : t('globals:ordinalValue', { value: age });
+			case Matches.User:
+				return user.toString();
+			case Matches.UserName:
+				return user.username;
+			case Matches.UserTag:
+				return user.tag;
+			case Matches.Line:
+				return '\n';
+			default:
+				return match;
+		}
+	});
 }

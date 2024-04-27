@@ -3,7 +3,6 @@ import { PermissionLevels } from '#lib/types/Enums';
 import { BrandingColors } from '#utils/constants';
 import { isCustom } from '#utils/env';
 import { resolveOnErrorCodesDiscord } from '#utils/functions';
-import { reply } from '#utils/utils';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
@@ -21,7 +20,7 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 		const guildId = interaction.options.getString('guild-id', true);
 		// check if guild exists if not send error message
 		const guild = await resolveOnErrorCodesDiscord(this.container.client.guilds.fetch(guildId), RESTJSONErrorCodes.UnknownGuild);
-		if (!guild) return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
+		if (!guild) return interaction.reply(`Guild ${inlineCode(guildId)} not found`);
 
 		// set premium for guild to toggle
 		await this.container.prisma.guild.update({
@@ -32,7 +31,7 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 		const embed = new EmbedBuilder() //
 			.setColor(BrandingColors.Primary)
 			.setDescription('This premium has been');
-		return reply(interaction, {
+		return interaction.reply({
 			embeds: [embed]
 		});
 	}

@@ -1,27 +1,28 @@
 import { nextBirthday } from '#lib/birthday';
 import { getBirthdays, getSettings } from '#lib/discord';
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
+import { fetchT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
-import { BrandingColors } from '#utils/constants';
+import { errorEmbed, infoEmbed, successEmbed } from '#utils/embed';
 import { type SlashCommandBuilder, type SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
-import { applyLocalizedBuilder, applyNameLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { Nullish, isNullish } from '@sapphire/utilities';
+import { applyLocalizedBuilder, applyNameLocalizedBuilder, resolveKey, TFunction } from '@sapphire/plugin-i18next';
+import { isNullish, Nullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	ApplicationCommandType,
+	chatInputApplicationCommandMention,
 	ChatInputCommandInteraction,
-	Colors,
 	ContextMenuCommandBuilder,
-	EmbedBuilder,
+	time,
 	TimestampStyles,
 	User,
-	UserContextMenuCommandInteraction,
-	chatInputApplicationCommandMention,
-	time
+	UserContextMenuCommandInteraction
 } from 'discord.js';
+
+type SharedInteraction = ChatInputCommandInteraction<'cached'> | UserContextMenuCommandInteraction<'cached'>;
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/birthday:rootDescription',
@@ -44,11 +45,9 @@ export class UserCommand extends BirthdayySubcommand {
 			.fetch(interaction.user.id)
 			.catch(() => null);
 
-		const t = await fetchT(interaction);
-
 		if (isNullish(birthday)) {
-			const description = t('commands/birthday:resetBirthdayNotSet');
-			return interaction.reply({ embeds: [new EmbedBuilder({ description, color: Colors.Red })], ephemeral: true });
+			const description = await resolveKey(interaction, 'commands/birthday:resetBirthdayNotSet');
+			return interaction.reply({ embeds: [errorEmbed(description)], ephemeral: true });
 		}
 
 		await container.prisma.birthday.delete({
@@ -56,10 +55,9 @@ export class UserCommand extends BirthdayySubcommand {
 		});
 
 		await getBirthdays(interaction.guild).remove(interaction.user.id);
+		const content = await resolveKey(interaction, 'commands/birthday:resetBirthdaySuccess');
 
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(t('commands/birthday:resetBirthdaySuccess'));
-
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [successEmbed(content)] });
 	}
 
 	public async runSet(interaction: BirthdayySubcommand.Interaction) {
@@ -69,7 +67,7 @@ export class UserCommand extends BirthdayySubcommand {
 			const description = await resolveKey(interaction, 'commands/birthday:setBirthdayNotConfigured', {
 				command: chatInputApplicationCommandMention('config', 'edit', envParseString('CONFIG_COMMAND_ID'))
 			});
-			return interaction.reply({ embeds: [new EmbedBuilder({ description, color: Colors.Red })], ephemeral: true });
+			return interaction.reply({ embeds: [errorEmbed(description)], ephemeral: true });
 		}
 
 		const date = this.extractBirthdayFromOptions(interaction.options);
@@ -82,9 +80,7 @@ export class UserCommand extends BirthdayySubcommand {
 			nextBirthday: time(birthday, TimestampStyles.LongDate)
 		});
 
-		const embed = new EmbedBuilder().setColor(BrandingColors.Primary).setDescription(content);
-
-		return interaction.reply({ embeds: [embed] });
+		return interaction.reply({ embeds: [successEmbed(content)] });
 	}
 
 	public async runUpcoming(interaction: BirthdayySubcommand.Interaction) {
@@ -106,24 +102,34 @@ export class UserCommand extends BirthdayySubcommand {
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
-	private async sharedViewRun(interaction: ChatInputCommandInteraction<'cached'> | UserContextMenuCommandInteraction<'cached'>, user: User) {
-		const t = getSupportedUserLanguageT(interaction);
+	private async sharedViewRun(interaction: SharedInteraction, user: User) {
+		const t = await fetchT(interaction);
+		const result = await Result.fromAsync(getBirthdays(interaction.guild).fetch(user.id));
 
-		const birthday = await getBirthdays(interaction.guild)
-			.fetch(user.id)
-			.catch(() => null);
+		const embed = await result.match({
+			ok: (birthday) => this.viewSuccessRun(t, birthday, user),
+			err: () => this.viewErrorRun(t, user)
+		});
 
-		const content = birthday
-			? t('commands/birthday:viewBirthdaySet', {
-					birthDate: time(nextBirthday(birthday.month, birthday.day), TimestampStyles.LongDate),
-					user: user.toString()
-				})
-			: t('commands/birthday:viewBirthdayNotSet', {
-					command: chatInputApplicationCommandMention('birthday', 'set', envParseString('BIRTHDAY_COMMAND_ID')),
-					user: user.toString()
-				});
+		return embed;
+	}
 
-		return new EmbedBuilder().setColor(birthday ? BrandingColors.Primary : Colors.Yellow).setDescription(content);
+	private async viewSuccessRun(t: TFunction, birthday: Birthday, user: User) {
+		const content = t('commands/birthday:viewBirthdaySet', {
+			birthDate: time(nextBirthday(birthday.month, birthday.day), TimestampStyles.LongDate),
+			user: user.toString()
+		});
+
+		return successEmbed(content);
+	}
+
+	private async viewErrorRun(t: TFunction, user: User) {
+		const content = t('commands/birthday:viewBirthdayNotSet', {
+			command: chatInputApplicationCommandMention('birthday', 'set', envParseString('BIRTHDAY_COMMAND_ID')),
+			user: user.toString()
+		});
+
+		return infoEmbed(content);
 	}
 
 	private extractBirthdayFromOptions(options: BirthdayySubcommand.Interaction['options']) {

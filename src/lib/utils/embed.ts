@@ -1,8 +1,8 @@
 import { replyToInteraction } from '#lib/discord/interaction';
-import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
+import { BOT_AVATAR, CLIENT_COLOR, CLIENT_NAME } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { envParseBoolean } from '@skyra/env-utilities';
-import { type APIEmbed, type ChatInputCommandInteraction, Colors } from 'discord.js';
+import { type APIEmbed, type ChatInputCommandInteraction, Colors, EmbedBuilder } from 'discord.js';
 
 import { BrandingColors } from './constants.js';
 
@@ -46,4 +46,22 @@ export function interactionProblem(interaction: ChatInputCommandInteraction, des
 		],
 		ephemeral
 	});
+}
+
+export function successEmbed(description: string): EmbedBuilder {
+	return new EmbedBuilder() //
+		.setColor(CLIENT_COLOR)
+		.setDescription(description);
+}
+
+export function errorEmbed(description: string): EmbedBuilder {
+	return new EmbedBuilder() //
+		.setColor(Colors.Red)
+		.setDescription(description);
+}
+
+export function infoEmbed(description: string): EmbedBuilder {
+	return new EmbedBuilder() //
+		.setColor(Colors.Blue)
+		.setDescription(description);
 }

@@ -1,18 +1,29 @@
+import { getAge, transformMessage } from '#lib/birthday';
 import { getBirthdays, getSettings } from '#lib/discord/guild';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { formatBirthdayMessage } from '#lib/utils/common/string';
-import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
-import { BrandingColors } from '#lib/utils/constants';
+import { TIMEZONE_VALUES } from '#utils/common';
+import { errorEmbed, successEmbed } from '#utils/embed';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { getFooterAuthor } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
-import { applyLocalizedBuilder, createLocalizedChoice, resolveKey } from '@sapphire/plugin-i18next';
+import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey, TFunction } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
-import { Channel, ChannelType, EmbedBuilder, PermissionFlagsBits, Role, channelMention, inlineCode, roleMention } from 'discord.js';
+import {
+	Channel,
+	channelMention,
+	ChannelType,
+	ChatInputCommandInteraction,
+	GuildMember,
+	inlineCode,
+	PermissionFlagsBits,
+	Role,
+	roleMention
+} from 'discord.js';
 
 const Key = {
 	ChannelsAnnouncement: 'commands/config:keyChannelsAnnouncement',
@@ -124,14 +135,16 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	public async runView(interaction: BirthdayySubcommand.Interaction) {
-		const { id } = interaction.guild;
-		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
+		const settings = await getSettings(interaction.guildId).fetch();
 
-		const content = await this.viewGenerateContent(interaction, settings);
+		const t = await fetchT(interaction);
 
-		const embed = new EmbedBuilder().setDescription(content).setColor(BrandingColors.Primary).setFooter(getFooterAuthor(interaction.user));
+		const embed = successEmbed(this.viewGenerateContent(interaction, t, settings)) //
+			.setTitle(t('commands/config:viewTitle'))
+			.setThumbnail(interaction.guild.iconURL() ?? '');
+		const birthdayMessage = await this.viewGenerateBirthdayMessage(interaction, settings);
 
-		return interaction.reply({ embeds: [embed], ephemeral: false });
+		return interaction.reply({ embeds: [embed, successEmbed(birthdayMessage).setFooter(getFooterAuthor(interaction.user))], ephemeral: false });
 	}
 
 	private async parseAnnouncementMessage(interaction: Command.ChatInputCommandInteraction<'cached'>, announcementMessage: string) {
@@ -172,24 +185,89 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private async parseRole(interaction: Command.ChatInputCommandInteraction<'cached'>, role: Role, mention: boolean) {
-		if (role.position >= interaction.guild.members.me!.roles.highest.position) {
+		if (!this.checkPermissions(interaction, role)) {
 			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleHigher', {
-					role: roleMention(role.id)
-				})
-			);
-		}
-
-		// Check if the bot has permissions to add the role to the user:
-		if (mention && !role.mentionable) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleNotMentionable', {
-					role: roleMention(role.id)
+				await resolveKey(interaction, 'commands/config:editRoleHierarchy', {
+					role: mention ? roleMention(role.id) : role.name
 				})
 			);
 		}
 
 		return Result.ok(role.id);
+	}
+
+	private checkPermissions(interaction: ChatInputCommandInteraction<'cached'>, target: Role | GuildMember) {
+		// If it's to itself, always block
+		if (interaction.member.id === target.id) return false;
+
+		// If the target is the owner, always block
+		if (interaction.guild.ownerId === target.id) return false;
+
+		// If the author is the owner, always allow
+		if (interaction.user.id === interaction.guild.ownerId) return true;
+
+		// Check hierarchy role positions, allow when greater, block otherwise
+		const targetPosition = target instanceof Role ? target.position : target.roles.highest.position;
+		const authorPosition = interaction.member.roles.highest?.position ?? 0;
+		return authorPosition > targetPosition;
+	}
+
+	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
+		const result = await Result.fromAsync(await getSettings(interaction.guildId).update(data));
+		const t = await fetchT(interaction);
+
+		const embed = result.match({
+			err: (error) => {
+				this.container.logger.error(error);
+				return errorEmbed('commands/config:editFailure');
+			},
+			ok: () => successEmbed(t('commands/config:editSuccess'))
+		});
+
+		return interaction.reply({ embeds: [embed], ephemeral: true });
+	}
+
+	private viewGenerateContent(interaction: Command.ChatInputCommandInteraction<'cached'>, t: TFunction, settings?: Partial<Guild> | null) {
+		settings ??= {};
+
+		const Unset = inlineCode(t('globals:unset'));
+
+		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : Unset;
+		const announcementMessage = transformMessage(settings.messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE, interaction.user, null, t);
+		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : Unset;
+		const birthdayPingRole = settings.rolesNotified ? roleMention(settings.rolesNotified) : Unset;
+		const overviewChannel = settings.channelsOverview ? channelMention(settings.channelsOverview) : Unset;
+		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : Unset;
+
+		return t('commands/config:viewContent', {
+			announcementChannel,
+			announcementMessage,
+			birthdayPingRole,
+			birthdayRole,
+			overviewChannel,
+			timezone
+		});
+	}
+
+	private async viewGenerateBirthdayMessage(interaction: Command.ChatInputCommandInteraction<'cached'>, settings: Guild) {
+		const birthday = await getBirthdays(interaction.guildId)
+			.fetch(interaction.user.id)
+			.catch(() => null);
+
+		const announcementMessage = transformMessage(
+			settings.messagesAnnouncement ?? DEFAULT_ANNOUNCEMENT_MESSAGE,
+			interaction.user,
+			birthday && getAge(birthday),
+			await fetchT(interaction)
+		);
+		return resolveKey(interaction, 'commands/config:viewBirthdayMessage', { announcementMessage });
+	}
+
+	private registerSubcommands(builder: SlashCommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
+			.addSubcommand((subcommand) => this.registerEditCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerViewCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerResetCommand(subcommand));
 	}
 
 	private registerEditCommand(builder: SlashCommandSubcommandBuilder) {
@@ -218,6 +296,10 @@ export class UserCommand extends BirthdayySubcommand {
 			);
 	}
 
+	private registerViewCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/config:view');
+	}
+
 	private registerResetCommand(builder: SlashCommandSubcommandBuilder) {
 		return applyLocalizedBuilder(builder, 'commands/config:reset').addStringOption((builder) =>
 			applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
@@ -232,57 +314,6 @@ export class UserCommand extends BirthdayySubcommand {
 				)
 				.setRequired(true)
 		);
-	}
-
-	private registerSubcommands(builder: SlashCommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
-			.addSubcommand((subcommand) => this.registerEditCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerViewCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerResetCommand(subcommand));
-	}
-
-	private registerViewCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/config:view');
-	}
-
-	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
-		const result = await Result.fromAsync(await getSettings(interaction.guildId).update(data));
-
-		const content = await result.match({
-			err: (error) => {
-				this.container.logger.error(error);
-				return resolveKey(interaction, 'commands/config:editFailure');
-			},
-			ok: () => resolveKey(interaction, 'commands/config:editSuccess')
-		});
-
-		const embed = new EmbedBuilder() //
-			.setDescription(content)
-			.setColor(BrandingColors.Primary);
-
-		return interaction.reply({ embeds: [embed], ephemeral: true });
-	}
-
-	private async viewGenerateContent(interaction: Command.ChatInputCommandInteraction<'cached'>, settings?: Partial<Guild> | null) {
-		settings ??= {};
-
-		const Unset = inlineCode(await resolveKey(interaction, 'globals:unset'));
-
-		const announcementChannel = settings.channelsAnnouncement ? channelMention(settings.channelsAnnouncement) : Unset;
-		const announcementMessage = settings.messagesAnnouncement ? formatBirthdayMessage(settings.messagesAnnouncement, interaction.member) : Unset;
-		const birthdayRole = settings.rolesBirthday ? roleMention(settings.rolesBirthday) : Unset;
-		const birthdayPingRole = settings.rolesNotified ? roleMention(settings.rolesNotified) : Unset;
-		const overviewChannel = settings.channelsOverview ? channelMention(settings.channelsOverview) : Unset;
-		const timezone = settings.timezone ? TIMEZONE_VALUES[settings.timezone] : Unset;
-
-		return resolveKey(interaction, 'commands/config:viewContent', {
-			announcementChannel,
-			announcementMessage,
-			birthdayPingRole,
-			birthdayRole,
-			overviewChannel,
-			timezone
-		});
 	}
 }
 
