@@ -1,0 +1,21 @@
+---
+networks:
+  birthdayy:
+services:
+  birthdayy:
+    build: ./
+    container_name: birthdayy
+    env_file:
+      - src/.env.development
+      - src/.env.development.local
+    image: ghcr.io/birthdayybot/birthdayy:latest
+    networks:
+      - birthdayy
+    ports:
+      - '8282:8282'
+    restart: always
+    tty: true
+    logging:
+      options:
+        max-size: '1g'
+        max-file: '3'
