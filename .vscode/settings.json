@@ -1,31 +1,20 @@
 {
-	"editor.formatOnSave": true,
-	"[javascript]": {
-		"editor.formatOnSave": false
-	},
-	"editor.formatOnSaveMode": "file",
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "explicit"
-	},
-	"[json]": {
-		"editor.codeActionsOnSave": {
-			"source.fixAll": "never",
-			"source.fixAll.eslint": "explicit"
-		}
-	},
+	"editor.tabSize": 4,
+	"editor.useTabStops": true,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": true,
 	"files.eol": "\n",
-	"editor.detectIndentation": false,
-	"conventionalCommits.emojiFormat": "emoji",
-	"conventionalCommits.scopes": ["bot", "api", "ci/cd"],
-	"turboConsoleLog.logFunction": "container.logger.info",
-	"turboConsoleLog.logMessagePrefix": "",
-	"turboConsoleLog.quote": "'",
-	"turboConsoleLog.wrapLogMessage": false,
-	"turboConsoleLog.includeFileNameAndLineNum": false,
-	"turboConsoleLog.addSemicolonInTheEnd": true,
 	"i18n-ally.sourceLanguage": "en-US",
 	"i18n-ally.localesPaths": ["src/languages"],
 	"i18n-ally.keystyle": "nested",
 	"i18n-ally.enabledFrameworks": ["sapphire-i18next"],
-	"cSpell.language": "en,fr,en-GB,en-US,fr-FR,de,de-DE,lorem,es-ES,es"
+	"powershell.codeFormatting.addWhitespaceAroundPipe": true,
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/bower_components": true,
+		"**/*.code-search": true,
+		"**/.yarn": true,
+		"**/dist/": true,
+		"**/.git/": true
+	}
 }

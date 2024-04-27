@@ -2,160 +2,33 @@ name: Continuous Delivery
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Bot Environment'
-        type: choice
-        options:
-          - prd
-          - tst
-          - custom
-          - straykids
-          - nayeon
-        required: true
-      publish: # Publish image to GHCR
-        description: 'Publish image to GHCR?'
-        required: false
-        type: boolean
-        default: true
   push:
-    branches: [testing, production]
-
-permissions:
-  contents: read
-  packages: write
-
-env:
-  # Uses docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-  REPOSITORY_NAME: ${{ github.event.repository.name }}
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - '.github/workflows/continuous-delivery.yml'
+      - 'package.json'
 
 jobs:
-  Publish:
-    name: Publish image to GHCR 🚀
+  PublishBirthdayy:
+    name: Publish Birthdayy image to container registries
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Project
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-        with:
-          ref: ${{ github.ref_name }}
-
-      - name: Extract version from package.json
-        id: package_version
-        uses: saionaro/extract-package-version@v1.2.1
-
-      - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@edfb0fe6204400c56fbfd3feba3fe9ad1adfa345
-
+        uses: actions/checkout@v4
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3.3.0
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.1.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata for Docker images
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Build and push Birthdayy Docker image
+        uses: docker/build-push-action@v5.3.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch,value=${{ github.ref_name }}
-            type=ref,event=pr
-            type=raw,value=${{ steps.package_version.outputs.version }}
-            type=raw,value=${{ steps.package_version.outputs.version }}.${{ github.run_number }}
-            type=raw,value=latest,enable=${{ endsWith(github.ref, 'production') }}
-
-      - name: Build and push Docker image
-        if: github.event.inputs.publish == 'true' || github.event_name == 'push'
-        uses: docker/build-push-action@v5.1.0
-        id: docker_build_push
-        with:
-          context: .
-          file: ./docker/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Print Docker image tags
-        run: echo "${{ steps.meta.outputs.tags }}"
-
-      - name: Print Build Digest
-        run: echo "${{ steps.docker_build_push.outputs.digest }}"
-
-  deploy_production:
-    name: Birthdayy 🎂
-    needs: Publish
-    if: |
-      github.event.inputs.environment == 'prd' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
-    uses: ./.github/workflows/deploy.yml
-    with:
-      CONTAINER_TAG: 'production'
-    secrets:
-      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_PRODUCTION }}'
-      SSH_HOST: '${{ secrets.SSH_HOST }}'
-      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-      SSH_USER: '${{ secrets.SSH_USER }}'
-
-  deploy_custom:
-    name: Custom 🎂
-    needs: Publish
-    if: |
-      github.event.inputs.environment == 'custom' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
-    uses: ./.github/workflows/deploy.yml
-    with:
-      CONTAINER_TAG: 'custom'
-    secrets:
-      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_BIRTHDAYY_CUSTOM }}'
-      SSH_HOST: '${{ secrets.SSH_HOST }}'
-      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-      SSH_USER: '${{ secrets.SSH_USER }}'
-
-  deploy_staykids:
-    name: StrayKids 🎂
-    needs: Publish
-    if: |
-      github.event.inputs.environment == 'straykids' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
-    uses: ./.github/workflows/deploy.yml
-    with:
-      CONTAINER_TAG: 'straykids'
-    secrets:
-      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_STRAYKIDS }}'
-      SSH_HOST: '${{ secrets.SSH_HOST }}'
-      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-      SSH_USER: '${{ secrets.SSH_USER }}'
-
-  deploy_nayeon:
-    name: NAYEON 🎂
-    needs: Publish
-    if: |
-      github.event.inputs.environment == 'nayeon' || (github.event.inputs.environment == null && github.ref == 'refs/heads/production')
-    uses: ./.github/workflows/deploy.yml
-    with:
-      CONTAINER_TAG: 'nayeon'
-    secrets:
-      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_NAYEON }}'
-      SSH_HOST: '${{ secrets.SSH_HOST }}'
-      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-      SSH_USER: '${{ secrets.SSH_USER }}'
-
-  deploy_testing:
-    name: Testing 🧪
-    needs: Publish
-    if: |
-      github.event.inputs.environment == 'tst' || (github.event.inputs.environment == null && github.ref == 'refs/heads/testing') || (github.event.inputs.environment == null && github.ref == 'refs/heads/develop')
-    uses: ./.github/workflows/deploy.yml
-    with:
-      CONTAINER_TAG: 'testing'
-    secrets:
-      DOCKER_NETWORK: '${{ secrets.DOCKER_NETWORK }}'
-      DOPPLER_TOKEN: '${{ secrets.DOPPLER_TOKEN_TESTING }}'
-      SSH_HOST: '${{ secrets.SSH_HOST }}'
-      SSH_KEY: '${{ secrets.SSH_PRIVATE_KEY }}'
-      SSH_USER: '${{ secrets.SSH_USER }}'
+          context: .
+          tags: ghcr.io/birthdayy-bot/birthdayy:latest
