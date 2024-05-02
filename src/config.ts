@@ -4,7 +4,7 @@ import { TimezoneWithLocale } from '#lib/utils/common/timezone';
 import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { DEBUG } from '#utils/environment';
 import { getGuild } from '#utils/functions/guilds';
-import { ConnectionOptions } from '@influxdata/influxdb-client';
+import { type ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { type InternationalizationOptions } from '@sapphire/plugin-i18next';

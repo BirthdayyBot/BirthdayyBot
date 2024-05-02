@@ -2,7 +2,7 @@ import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
 import { isCustom, isDevelopment, isNotCustom } from '#utils/env';
-import { Guild as Settings } from '@prisma/client';
+import type { Guild as Settings } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
 import type { Guild, GuildResolvable } from 'discord.js';

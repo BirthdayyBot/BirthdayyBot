@@ -4,16 +4,16 @@ import { rootFolder } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
 	ArgumentError,
-	ChatInputCommandErrorPayload,
+	type ChatInputCommandErrorPayload,
 	Command,
-	ContextMenuCommandErrorPayload,
+	type ContextMenuCommandErrorPayload,
 	Events,
 	Listener,
 	UserError,
 	container
 } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { NonNullObject, codeBlock, cutText } from '@sapphire/utilities';
+import { type NonNullObject, codeBlock, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';

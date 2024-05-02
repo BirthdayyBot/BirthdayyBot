@@ -1,10 +1,10 @@
 import { authenticated, ratelimit } from '#lib/api/utils';
 import { minutes } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { ApiRequest, ApiResponse, HttpCodes, methods, MimeTypes, Route, RouteOptions } from '@sapphire/plugin-api';
 import { Time } from '@sapphire/duration';
-import { OAuth2Routes, RESTPostOAuth2AccessTokenResult } from 'discord-api-types/v9';
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import { ApiRequest, ApiResponse, HttpCodes, methods, MimeTypes, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { OAuth2Routes, type RESTPostOAuth2AccessTokenResult } from 'discord-api-types/v9';
 import { stringify } from 'node:querystring';
 
 @ApplyOptions<RouteOptions>({ route: 'oauth/user' })

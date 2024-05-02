@@ -1,5 +1,5 @@
 import {
-	ChannelTypeString,
+	type ChannelTypeString,
 	isDMChannel,
 	isGuildBasedChannelByGuildKey,
 	isNewsChannel,

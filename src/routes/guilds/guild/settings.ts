@@ -1,7 +1,7 @@
 import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, HttpCodes, Route, RouteOptions, methods } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions, methods } from '@sapphire/plugin-api';
 
 @ApplyOptions<RouteOptions>({ name: 'guildSettings', route: 'guilds/:guild/settings' })
 export class UserRoute extends Route {

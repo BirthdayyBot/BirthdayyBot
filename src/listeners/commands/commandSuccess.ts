@@ -1,18 +1,18 @@
 import { Events as CustomEvents } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
+	type ChatInputCommandSuccessPayload,
 	Command,
-	ContextMenuCommandSuccessPayload,
+	type ContextMenuCommandSuccessPayload,
 	Events,
 	Listener,
 	LogLevel,
-	container,
-	type ChatInputCommandSuccessPayload
+	container
 } from '@sapphire/framework';
 import type { Logger } from '@sapphire/plugin-logger';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { cyan } from 'colorette';
-import { APIUser, Guild, User } from 'discord.js';
+import { type APIUser, Guild, User } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({
 	event: Events.ChatInputCommandSuccess,

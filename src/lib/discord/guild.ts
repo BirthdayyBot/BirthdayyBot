@@ -1,7 +1,7 @@
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { container } from '@sapphire/pieces';
-import { Guild, GuildResolvable } from 'discord.js';
+import { Guild, type GuildResolvable } from 'discord.js';
 
 interface GuildUtilities {
 	readonly guild: Guild;

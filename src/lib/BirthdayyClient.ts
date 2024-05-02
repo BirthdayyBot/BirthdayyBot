@@ -3,7 +3,7 @@ import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
 import { PrismaClient } from '@prisma/client';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
-import { InternationalizationContext } from '@sapphire/plugin-i18next';
+import type { InternationalizationContext } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
 import { AnalyticsData } from './structures/AnalyticsData.js';

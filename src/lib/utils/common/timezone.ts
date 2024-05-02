@@ -58,5 +58,6 @@ export const TimezoneWithLocale: Record<Locale, string> = {
 	[Locale.Thai]: 'Asia/Bangkok',
 	[Locale.Turkish]: 'Asia/Istanbul',
 	[Locale.Ukrainian]: 'Europe/Simferopol',
-	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh'
+	[Locale.Vietnamese]: 'Asia/Ho_Chi_Minh',
+	[Locale.SpanishLATAM]: 'Europe/Madrid'
 };

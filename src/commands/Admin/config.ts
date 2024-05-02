@@ -7,17 +7,17 @@ import { BrandingColors, CdnUrls } from '#lib/utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import { Guild } from '@prisma/client';
+import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
+import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
 import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
 import {
-	Channel,
+	type Channel,
 	ChannelType,
 	EmbedBuilder,
-	EmbedField,
+	type EmbedField,
 	PermissionFlagsBits,
 	Role,
 	channelMention,

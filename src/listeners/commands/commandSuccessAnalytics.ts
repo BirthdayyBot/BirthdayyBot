@@ -2,15 +2,15 @@ import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { Events as CustomEvents } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
-	ChatInputCommand,
-	ChatInputCommandSuccessPayload,
-	ContextMenuCommandSuccessPayload,
+	type ChatInputCommand,
+	type ChatInputCommandSuccessPayload,
+	type ContextMenuCommandSuccessPayload,
 	Events,
 	Listener
 } from '@sapphire/framework';
 import {
-	ChatInputCommandSubcommandMappingMethod,
-	ChatInputSubcommandSuccessPayload,
+	type ChatInputCommandSubcommandMappingMethod,
+	type ChatInputSubcommandSuccessPayload,
 	SubcommandPluginEvents
 } from '@sapphire/plugin-subcommands';
 

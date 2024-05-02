@@ -2,7 +2,7 @@ import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
 import { BrandingColors, Permission_Bits } from '#utils';
 import { ApplyOptions } from '@sapphire/decorators';
-import { TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
+import { type TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({

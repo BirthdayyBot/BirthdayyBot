@@ -1,10 +1,10 @@
 import { BrandingColors, Emojis } from '#lib/utils/constants';
-import { CollectionConstructor } from '@discordjs/collection';
-import { Guild, Prisma } from '@prisma/client';
+import type { CollectionConstructor } from '@discordjs/collection';
+import { type Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { Nullish, cast } from '@sapphire/utilities';
-import { APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
+import { type Nullish, cast } from '@sapphire/utilities';
+import { type APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
 	/**

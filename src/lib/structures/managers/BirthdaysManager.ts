@@ -3,30 +3,30 @@ import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseI
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import { CollectionConstructor } from '@discordjs/collection';
-import { Birthday, Prisma, Guild as Settings } from '@prisma/client';
+import type { CollectionConstructor } from '@discordjs/collection';
+import { type Birthday, Prisma, type Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import {
-	GuildTextBasedChannelTypes,
+	type GuildTextBasedChannelTypes,
 	PaginatedFieldMessageEmbed,
 	canSendEmbeds,
 	isGuildBasedChannel
 } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { TOptions, resolveKey } from '@sapphire/plugin-i18next';
+import { type TOptions, resolveKey } from '@sapphire/plugin-i18next';
 import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
-	APIEmbed,
+	type APIEmbed,
 	ChatInputCommandInteraction,
 	Collection,
 	EmbedBuilder,
 	Guild,
 	GuildMember,
 	Message,
-	MessageCreateOptions,
-	MessageEditOptions,
+	type MessageCreateOptions,
+	type MessageEditOptions,
 	roleMention,
 	userMention
 } from 'discord.js';

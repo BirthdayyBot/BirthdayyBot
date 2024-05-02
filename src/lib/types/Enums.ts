@@ -1,6 +1,7 @@
 export enum Events {
 	AnalyticsSync = 'analyticsSync',
 	CommandUsageAnalytics = 'commandUsageAnalytics',
+	Error = 'error',
 	PostStatsError = 'postStatsError',
 	PostStatsSuccess = 'postStatsSuccess',
 	MessageCreate = 'messageCreate',

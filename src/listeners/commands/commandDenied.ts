@@ -1,6 +1,6 @@
 import {
-	ChatInputCommandDeniedPayload,
-	ContextMenuCommandDeniedPayload,
+	type ChatInputCommandDeniedPayload,
+	type ContextMenuCommandDeniedPayload,
 	Events,
 	Listener,
 	UserError
