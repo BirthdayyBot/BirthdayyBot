@@ -1,18 +1,19 @@
-import '#lib/setup/start';
+import '#lib/setup';
 
 import { BirthdayyClient } from '#lib/BirthdayyClient';
 import { rootFolder } from '#lib/utils/constants';
 import { container } from '@sapphire/pieces';
 import { rewriteFramesIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
+import { envIsDefined, envParseString } from '@skyra/env-utilities';
 
 const client = new BirthdayyClient();
 
 async function main() {
 	// Load in Sentry for error logging
-	if (process.env.SENTRY_URL) {
+	if (envIsDefined('SENTRY_URL')) {
 		Sentry.init({
-			dsn: process.env.SENTRY_URL,
+			dsn: envParseString('SENTRY_URL'),
 			integrations: [
 				new Sentry.Integrations.Modules(),
 				new Sentry.Integrations.FunctionToString(),
