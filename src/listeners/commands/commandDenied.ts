@@ -3,7 +3,7 @@ import {
 	ContextMenuCommandDeniedPayload,
 	Events,
 	Listener,
-	UserError,
+	UserError
 } from '@sapphire/framework';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import type { CommandInteraction } from 'discord.js';
@@ -19,8 +19,8 @@ export class UserChatInputListener extends Listener<typeof Events.ChatInputComma
 			await resolveKey(interaction, identifier, {
 				interaction,
 				command,
-				...(context as any as Record<string, unknown>),
-			}),
+				...(context as any as Record<string, unknown>)
+			})
 		);
 	}
 
@@ -40,8 +40,8 @@ export class UserContextMenuListener extends Listener<typeof Events.ContextMenuC
 			await resolveKey(interaction, identifier, {
 				interaction,
 				command,
-				...(context as any as Record<string, unknown>),
-			}),
+				...(context as any as Record<string, unknown>)
+			})
 		);
 	}
 

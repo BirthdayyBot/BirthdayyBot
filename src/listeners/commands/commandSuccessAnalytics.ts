@@ -6,12 +6,12 @@ import {
 	ChatInputCommandSuccessPayload,
 	ContextMenuCommandSuccessPayload,
 	Events,
-	Listener,
+	Listener
 } from '@sapphire/framework';
 import {
 	ChatInputCommandSubcommandMappingMethod,
 	ChatInputSubcommandSuccessPayload,
-	SubcommandPluginEvents,
+	SubcommandPluginEvents
 } from '@sapphire/plugin-subcommands';
 
 @ApplyOptions<Listener.Options>({ name: 'AnalyticsChatInputCommandSuccess', event: Events.ChatInputCommandSuccess })
@@ -32,18 +32,18 @@ export class UserListenerContextMenu extends Listener<typeof Events.ContextMenuC
 
 @ApplyOptions<Listener.Options>({
 	name: 'AnalyticsChatInputSubcommandSuccess',
-	event: SubcommandPluginEvents.ChatInputSubcommandSuccess,
+	event: SubcommandPluginEvents.ChatInputSubcommandSuccess
 })
 export class UserListenerMessage extends Listener<typeof SubcommandPluginEvents.ChatInputSubcommandSuccess> {
 	public run(
 		_interaction: ChatInputCommand.Interaction,
 		subcommand: ChatInputCommandSubcommandMappingMethod,
-		payload: ChatInputSubcommandSuccessPayload,
+		payload: ChatInputSubcommandSuccessPayload
 	) {
 		this.container.client.emit(
 			CustomEvents.CommandUsageAnalytics,
 			`${payload.command.name}/${subcommand.name}`,
-			payload.command.category,
+			payload.command.category
 		);
 	}
 }

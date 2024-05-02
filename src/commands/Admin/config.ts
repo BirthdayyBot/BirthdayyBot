@@ -22,7 +22,7 @@ import {
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
-	roleMention,
+	roleMention
 } from 'discord.js';
 
 type ConfigDefault = Omit<
@@ -35,12 +35,12 @@ type ConfigDefault = Omit<
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Manager,
+	permissionLevel: PermissionLevels.Manager
 })
 export class ConfigCommand extends CustomSubCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
-			guildIds: ['980559116076470272'],
+			guildIds: ['980559116076470272']
 		});
 	}
 
@@ -113,7 +113,7 @@ export class ConfigCommand extends CustomSubCommand {
 					birthdayPingRole: null,
 					overviewChannel: null,
 					overviewMessage: null,
-					timezone: 0,
+					timezone: 0
 				};
 				return this.updateDatabase(interaction, data);
 			}
@@ -137,7 +137,7 @@ export class ConfigCommand extends CustomSubCommand {
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null,
-		modified = false,
+		modified = false
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
@@ -176,8 +176,8 @@ export class ConfigCommand extends CustomSubCommand {
 				birthdayRole,
 				birthdayPingRole,
 				overviewChannel,
-				timezone,
-			}) satisfies EmbedField[]),
+				timezone
+			}) satisfies EmbedField[])
 		);
 
 		return embed;
@@ -190,8 +190,8 @@ export class ConfigCommand extends CustomSubCommand {
 				where: { guildId },
 				create: { guildId, ...data },
 				update: data,
-				select: null,
-			}),
+				select: null
+			})
 		);
 
 		const content = await result.match({
@@ -200,7 +200,7 @@ export class ConfigCommand extends CustomSubCommand {
 			err: (error) => {
 				this.container.logger.error(error);
 				return resolveKey(interaction, 'commands/config:editFailure');
-			},
+			}
 		});
 
 		const options = typeof content === 'string' ? { content } : { embeds: [content] };
@@ -212,8 +212,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (!canSendEmbeds(channel)) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
-					channel: channelMention(channel.id),
-				}),
+					channel: channelMention(channel.id)
+				})
 			);
 		}
 
@@ -222,7 +222,7 @@ export class ConfigCommand extends CustomSubCommand {
 
 	private async parseAnnouncementMessage(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		announcementMessage: string,
+		announcementMessage: string
 	) {
 		const settingsManager = getSettings(interaction.guildId);
 		const settings = await settingsManager.fetch();
@@ -231,7 +231,7 @@ export class ConfigCommand extends CustomSubCommand {
 		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
 			await this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { announcementMessage: defaultAnnouncementMessage },
+				data: { announcementMessage: defaultAnnouncementMessage }
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
@@ -240,8 +240,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (announcementMessage.length > 512) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editMessageTooLong', {
-					maxLength: 512,
-				}),
+					maxLength: 512
+				})
 			);
 		}
 
@@ -252,8 +252,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (role.position >= interaction.guild.members.me!.roles.highest.position) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editRoleHigher', {
-					role: roleMention(role.id),
-				}),
+					role: roleMention(role.id)
+				})
 			);
 		}
 
@@ -261,8 +261,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (mention && !role.mentionable) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editRoleNotMentionnable', {
-					role: roleMention(role.id),
-				}),
+					role: roleMention(role.id)
+				})
 			);
 		}
 
@@ -273,7 +273,7 @@ export class ConfigCommand extends CustomSubCommand {
 export const ConfigApplicationCommandMentions = {
 	Edit: chatInputApplicationCommandMention('config', 'edit', '935174203882217483'),
 	View: chatInputApplicationCommandMention('config', 'view', '935174203882217483'),
-	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483'),
+	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483')
 } as const;
 
 function registerConfigCommand(builder: SlashCommandBuilder) {
@@ -291,45 +291,45 @@ function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyAnnouncementChannel',
-				'commands/config:editOptionsAnnoucementChannelDescription',
-			).addChannelTypes(ChannelType.GuildText),
+				'commands/config:editOptionsAnnoucementChannelDescription'
+			).addChannelTypes(ChannelType.GuildText)
 		)
 		.addStringOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyAnnouncementMessage',
-				'commands/config:editOptionsAnnoucementMessageDescription',
+				'commands/config:editOptionsAnnoucementMessageDescription'
 			)
 				.setMinLength(1)
-				.setMaxLength(512),
+				.setMaxLength(512)
 		)
 		.addRoleOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyBirthdayRole',
-				'commands/config:editOptionsBirthdayRoleDescription',
-			),
+				'commands/config:editOptionsBirthdayRoleDescription'
+			)
 		)
 		.addRoleOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyBirthdayPingRole',
-				'commands/config:editOptionsBirthdayPingRoleDescription',
-			),
+				'commands/config:editOptionsBirthdayPingRoleDescription'
+			)
 		)
 		.addChannelOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyOverviewChannel',
-				'commands/config:editOptionsOverviewChannelDescription',
-			).addChannelTypes(ChannelType.GuildText),
+				'commands/config:editOptionsOverviewChannelDescription'
+			).addChannelTypes(ChannelType.GuildText)
 		)
 		.addIntegerOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyTimezone',
-				'commands/config:editOptionsTimezoneDescription',
-			).setAutocomplete(true),
+				'commands/config:editOptionsTimezoneDescription'
+			).setAutocomplete(true)
 		);
 }
 
@@ -343,21 +343,21 @@ function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 			.addChoices(
 				createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
 				createLocalizedChoice('commands/config:keyAnnouncementChannel', {
-					value: 'announcementChannel',
+					value: 'announcementChannel'
 				}),
 				createLocalizedChoice('commands/config:keyAnnouncementMessage', {
-					value: 'announcementMessage',
+					value: 'announcementMessage'
 				}),
 				createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
 				createLocalizedChoice('commands/config:keyBirthdayPingRole', {
-					value: 'birthdayPingRole',
+					value: 'birthdayPingRole'
 				}),
 				createLocalizedChoice('commands/config:keyOverviewChannel', {
-					value: 'overviewChannel',
+					value: 'overviewChannel'
 				}),
-				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' }),
+				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
 			)
-			.setRequired(true),
+			.setRequired(true)
 	);
 }
 

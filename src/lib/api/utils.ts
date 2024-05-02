@@ -13,7 +13,7 @@ import {
 	GuildMember,
 	GuildPremiumTier,
 	GuildVerificationLevel,
-	PermissionsBitField,
+	PermissionsBitField
 } from 'discord.js';
 import { flattenGuild } from './ApiTransformers.js';
 import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
@@ -21,7 +21,7 @@ import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginD
 export const authenticated = (token?: string) =>
 	createFunctionPrecondition(
 		(request: ApiRequest) => (token ? request.headers.authorization === token : Boolean(request.auth?.token)),
-		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized),
+		(_request: ApiRequest, response: ApiResponse) => response.error(HttpCodes.Unauthorized)
 	);
 
 /**
@@ -57,7 +57,7 @@ export function ratelimit(time: number, limit = 1, auth = false) {
 		},
 		(_request: ApiRequest, response: ApiResponse) => {
 			response.error(HttpCodes.TooManyRequests);
-		},
+		}
 	);
 }
 
@@ -69,7 +69,7 @@ export function canManage(guild: Guild, member: GuildMember): boolean {
 async function getManageable(
 	id: string,
 	oauthGuild: RESTAPIPartialCurrentUserGuild,
-	guild: Guild | undefined,
+	guild: Guild | undefined
 ): Promise<boolean> {
 	if (oauthGuild.owner) return true;
 	if (typeof guild === 'undefined')
@@ -84,7 +84,7 @@ async function getManageable(
 async function transformGuild(
 	client: Client,
 	userId: string,
-	data: RESTAPIPartialCurrentUserGuild,
+	data: RESTAPIPartialCurrentUserGuild
 ): Promise<OauthFlattenedGuild> {
 	const guild = client.guilds.cache.get(data.id);
 	const serialized: PartialOauthFlattenedGuild =
@@ -117,7 +117,7 @@ async function transformGuild(
 					systemChannelId: null,
 					vanityURLCode: null,
 					verificationLevel: GuildVerificationLevel.None,
-					verified: false,
+					verified: false
 				}
 			: flattenGuild(guild);
 
@@ -125,7 +125,7 @@ async function transformGuild(
 		...serialized,
 		permissions: data.permissions,
 		manageable: await getManageable(userId, data, guild),
-		isBotAdded: typeof guild !== 'undefined',
+		isBotAdded: typeof guild !== 'undefined'
 	};
 }
 

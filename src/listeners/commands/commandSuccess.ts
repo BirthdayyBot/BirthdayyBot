@@ -7,7 +7,7 @@ import {
 	Listener,
 	LogLevel,
 	container,
-	type ChatInputCommandSuccessPayload,
+	type ChatInputCommandSuccessPayload
 } from '@sapphire/framework';
 import type { Logger } from '@sapphire/plugin-logger';
 import { Subcommand } from '@sapphire/plugin-subcommands';
@@ -16,7 +16,7 @@ import { APIUser, Guild, User } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({
 	event: Events.ChatInputCommandSuccess,
-	enabled: (container.logger as Logger).level <= LogLevel.Debug,
+	enabled: (container.logger as Logger).level <= LogLevel.Debug
 })
 export class UserListener extends Listener {
 	public run(payload: ChatInputCommandSuccessPayload) {
@@ -27,7 +27,7 @@ export class UserListener extends Listener {
 
 @ApplyOptions<Listener.Options>({
 	event: Events.ContextMenuCommandError,
-	enabled: (container.logger as Logger).level <= LogLevel.Debug,
+	enabled: (container.logger as Logger).level <= LogLevel.Debug
 })
 export class UserListenerContextMenu extends Listener {
 	public run(payload: ChatInputCommandSuccessPayload) {
@@ -39,11 +39,11 @@ export function logSuccessCommand(payload: ContextMenuCommandSuccessPayload | Ch
 	const successLoggerData = getSuccessLoggerData(
 		payload.interaction.guild,
 		payload.interaction.user,
-		payload.command,
+		payload.command
 	);
 
 	container.logger.debug(
-		`${successLoggerData.shard} - ${successLoggerData.commandName} ${successLoggerData.author} ${successLoggerData.sentAt}`,
+		`${successLoggerData.shard} - ${successLoggerData.commandName} ${successLoggerData.author} ${successLoggerData.sentAt}`
 	);
 
 	container.client.emit(CustomEvents.CommandUsageAnalytics, payload.command.name, payload.command.category);

@@ -8,7 +8,7 @@ import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
 @ApplyOptions<CustomCommand.Options>({
 	name: 'invite',
 	description: 'commands/invite:description',
-	permissionLevel: PermissionLevels.Everyone,
+	permissionLevel: PermissionLevels.Everyone
 })
 export class UserCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
@@ -16,8 +16,8 @@ export class UserCommand extends CustomCommand {
 			applyLocalizedBuilder(builder, this.name, this.description)
 				.setDMPermission(true)
 				.addBooleanOption((option) =>
-					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false),
-				),
+					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false)
+				)
 		);
 	}
 
@@ -30,11 +30,11 @@ export class UserCommand extends CustomCommand {
 	private getEmbed(t: TFunction, shouldNotAddPermissions: boolean): EmbedBuilder {
 		const embeddedInviteLink = hyperlink(
 			t('commands/general:invitePermissionInviteText'),
-			this.generateInviteLink(shouldNotAddPermissions),
+			this.generateInviteLink(shouldNotAddPermissions)
 		);
 		const embeddedJoinLink = hyperlink(
 			t('commands/invite:invitePermissionSupportServerText'),
-			'https://discord.birthdayy.xyz',
+			'https://discord.birthdayy.xyz'
 		);
 
 		return new EmbedBuilder() //
@@ -42,17 +42,17 @@ export class UserCommand extends CustomCommand {
 			.setDescription(
 				[
 					[embeddedInviteLink, embeddedJoinLink].join(' | '),
-					shouldNotAddPermissions ? undefined : t('commands/invite:invitePermissionsDescription'),
+					shouldNotAddPermissions ? undefined : t('commands/invite:invitePermissionsDescription')
 				]
 					.filter(Boolean)
-					.join('\n'),
+					.join('\n')
 			);
 	}
 
 	private generateInviteLink(shouldNotAddPermissions: boolean) {
 		return this.container.client.generateInvite({
 			scopes: [OAuth2Scopes.ApplicationsCommands, OAuth2Scopes.Bot],
-			permissions: shouldNotAddPermissions ? 0n : Permission_Bits,
+			permissions: shouldNotAddPermissions ? 0n : Permission_Bits
 		});
 	}
 }

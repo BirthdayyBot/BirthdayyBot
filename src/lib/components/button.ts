@@ -10,7 +10,7 @@ export const enum ButtonID {
 	voteReminder = 'vote-reminder-button',
 	choiceBirthdayList = 'choice-birthday-list',
 	choiceGuildConfig = 'choice-guild-config',
-	choiceDiscordInformation = 'choice-discord-information',
+	choiceDiscordInformation = 'choice-discord-information'
 }
 
 export function defaultButtonBuilder(data?: ButtonComponentData) {
@@ -18,7 +18,7 @@ export function defaultButtonBuilder(data?: ButtonComponentData) {
 		style: ButtonStyle.Link,
 		type: ComponentType.Button,
 		disabled: false,
-		...data,
+		...data
 	});
 }
 
@@ -39,8 +39,8 @@ export async function inviteBirthdayyButton(target: Target) {
 		.setURL(
 			container.client.generateInvite({
 				scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
-				permissions: Permission_Bits,
-			}),
+				permissions: Permission_Bits
+			})
 		)
 		.setEmoji(Emojis.Gift);
 }

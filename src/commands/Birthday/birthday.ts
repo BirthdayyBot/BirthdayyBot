@@ -17,9 +17,9 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
 		{ name: 'remove', preconditions: ['Manager', 'RoleHigher'] },
 		'show',
-		{ name: 'test', preconditions: ['Manager'] },
+		{ name: 'test', preconditions: ['Manager'] }
 	),
-	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	runIn: CommandOptionsRunTypeEnum.GuildAny
 })
 export class BirthdayCommand extends CustomSubCommand {
 	public override registerApplicationCommands(registry: CustomSubCommand.Registry) {
@@ -55,8 +55,8 @@ export class BirthdayCommand extends CustomSubCommand {
 			ctx,
 			await resolveKey(ctx, 'commands/birthday:set.success', {
 				birthday: bold(formatDateForDisplay(birthday)),
-				...options,
-			}),
+				...options
+			})
 		);
 	}
 
@@ -67,7 +67,7 @@ export class BirthdayCommand extends CustomSubCommand {
 		if (!result) {
 			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
-				...options,
+				...options
 			});
 		}
 
@@ -87,8 +87,8 @@ export class BirthdayCommand extends CustomSubCommand {
 			await resolveKey(ctx, 'commands/birthday:show.success', {
 				date: bold(formatDateForDisplay(birthday.birthday)),
 				emoji: Emojis.ArrowRight,
-				...options,
-			}),
+				...options
+			})
 		);
 	}
 
@@ -113,7 +113,7 @@ export const BirthdayApplicationCommandMentions = {
 	Set: chatInputApplicationCommandMention('birthday', 'set', '935174192389840896'),
 	Remove: chatInputApplicationCommandMention('birthday', 'remove', '935174192389840896'),
 	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
-	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896'),
+	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896')
 } as const;
 
 function registerBirthdayCommand(builder: SlashCommandBuilder) {
@@ -136,24 +136,24 @@ function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 
 function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
-		monthOptions(option, 'commands/birthday:list.month').setRequired(false),
+		monthOptions(option, 'commands/birthday:list.month').setRequired(false)
 	);
 }
 
 function removeBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:remove').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:remove.user'),
+		userOptions(option, 'commands/birthday:remove.user')
 	);
 }
 
 function showBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:show').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:show.user'),
+		userOptions(option, 'commands/birthday:show.user')
 	);
 }
 
 function testBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:test').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:test.user'),
+		userOptions(option, 'commands/birthday:test.user')
 	);
 }

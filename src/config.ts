@@ -17,7 +17,7 @@ import {
 	envParseBoolean,
 	envParseInteger,
 	envParseNumber,
-	envParseString,
+	envParseString
 } from '@skyra/env-utilities';
 import {
 	ActivityType,
@@ -25,7 +25,7 @@ import {
 	Locale,
 	PermissionFlagsBits,
 	PresenceUpdateStatus,
-	type OAuth2Scopes,
+	type OAuth2Scopes
 } from 'discord-api-types/v10';
 import {
 	Options,
@@ -34,7 +34,7 @@ import {
 	type ClientOptions,
 	type PermissionsString,
 	type PresenceData,
-	type WebhookClientData,
+	type WebhookClientData
 } from 'discord.js';
 import type { FormatFunction, InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
@@ -51,7 +51,7 @@ function parseApiAuth(): ServerOptionsAuth | undefined {
 		redirect: envParseString('OAUTH_REDIRECT_URI', 'http://127.0.0.1:3000/oauth/callback'),
 		scopes: envParseArray('OAUTH_SCOPE') as OAuth2Scopes[],
 		transformers: [transformOauthGuildsAndUser],
-		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE', '127.0.0.1'),
+		domainOverwrite: envParseString('OAUTH_DOMAIN_OVERWRITE', '127.0.0.1')
 	};
 }
 
@@ -63,7 +63,7 @@ function parseApi(): ServerOptions | undefined {
 		prefix: envParseString('API_PREFIX', '/'),
 		origin: envParseString('API_ORIGIN', 'http://127.0.0.1:3000'),
 		listenOptions: { port: envParseInteger('API_PORT', 3000) },
-		automaticallyConnect: false,
+		automaticallyConnect: false
 	};
 }
 
@@ -95,7 +95,7 @@ function parseInternationalizationDefaultVariables() {
 		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
 		CLIENT_ID: process.env.CLIENT_ID,
 		...parseInternationalizationDefaultVariablesPermissions(),
-		...parseInternationalizationDefaultVariablesEmojis,
+		...parseInternationalizationDefaultVariablesEmojis
 	};
 }
 
@@ -119,7 +119,7 @@ function parseInternationalizationInterpolation(): InterpolationOptions {
 				default:
 					return value as string;
 			}
-		},
+		}
 	};
 }
 
@@ -142,8 +142,8 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			fallbackLng: 'en-US',
 			defaultNS: 'globals',
 			initImmediate: false,
-			interpolation: parseInternationalizationInterpolation(),
-		}),
+			interpolation: parseInternationalizationInterpolation()
+		})
 	};
 }
 
@@ -156,15 +156,15 @@ function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
 			password: REDIS_PASSWORD,
 			host: envParseString('REDIS_HOST', 'localhost'),
 			db: envParseInteger('REDIS_DB'),
-			username: REDIS_USERNAME,
-		},
+			username: REDIS_USERNAME
+		}
 	};
 }
 
 function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
 	return {
 		queue: 'birthdayy',
-		bull: parseBullOptions(),
+		bull: parseBullOptions()
 	};
 }
 
@@ -174,15 +174,15 @@ function parsePresenceOptions(): PresenceData {
 		activities: [
 			{
 				name: '/birthday set 🎂',
-				type: ActivityType.Watching,
-			},
-		],
+				type: ActivityType.Watching
+			}
+		]
 	};
 }
 
 export const SENTRY_OPTIONS: NodeOptions = {
 	debug: DEBUG,
-	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })],
+	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })]
 };
 
 export function parseAnalytics(): ConnectionOptions {
@@ -191,7 +191,7 @@ export function parseAnalytics(): ConnectionOptions {
 
 	return {
 		url,
-		token,
+		token
 	};
 }
 
@@ -201,7 +201,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 	loadDefaultErrorListeners: false,
 	logger: {
-		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug,
+		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
 	},
 	shards: 'auto',
 	makeCache: Options.cacheEverything(),
@@ -209,12 +209,12 @@ export const CLIENT_OPTIONS: ClientOptions = {
 		...Options.DefaultSweeperSettings,
 		messages: {
 			interval: minutes.toSeconds(3),
-			lifetime: minutes.toSeconds(15),
-		},
+			lifetime: minutes.toSeconds(15)
+		}
 	},
 	i18n: parseInternationalizationOptions(),
 	tasks: parseScheduledTasksOptions(),
-	presence: parsePresenceOptions(),
+	presence: parsePresenceOptions()
 };
 
 function parseWebhookError(): WebhookClientData | null {
@@ -222,7 +222,7 @@ function parseWebhookError(): WebhookClientData | null {
 
 	return {
 		id: envParseString('WEBHOOK_ERROR_ID'),
-		token: envParseString('WEBHOOK_ERROR_TOKEN'),
+		token: envParseString('WEBHOOK_ERROR_TOKEN')
 	};
 }
 

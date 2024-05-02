@@ -14,7 +14,7 @@ export class AnalyticsData {
 		this.writeApi = this.influx!.getWriteApi(
 			envParseString('INFLUX_ORG'),
 			envParseString('INFLUX_ORG_ANALYTICS_BUCKET'),
-			's',
+			's'
 		);
 		this.queryApi = this.influx!.getQueryApi(envParseString('INFLUX_ORG'));
 	}

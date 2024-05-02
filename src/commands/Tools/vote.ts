@@ -19,7 +19,7 @@ export class VoteCommand extends CustomCommand {
 			topgg: WebsiteUrl('topgg/vote'),
 			discordlist: WebsiteUrl('discordlist/vote'),
 			'discord-botlist': WebsiteUrl('discord-botlist/vote'),
-			premium: WebsiteUrl('premium'),
+			premium: WebsiteUrl('premium')
 		})) as APIEmbed;
 
 		return interaction.reply({ embeds: [embed] });

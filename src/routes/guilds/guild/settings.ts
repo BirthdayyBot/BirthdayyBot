@@ -48,8 +48,8 @@ export class UserRoute extends Route {
 			const settings = await this.container.prisma.guild.update({
 				where: { guildId: requestBody.guild_id },
 				data: {
-					...entries.map((entry) => ({ [entry[0]]: entry[1] })),
-				},
+					...entries.map((entry) => ({ [entry[0]]: entry[1] }))
+				}
 			});
 
 			return response.status(HttpCodes.OK).json(settings);

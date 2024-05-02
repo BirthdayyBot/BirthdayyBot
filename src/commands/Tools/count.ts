@@ -7,15 +7,15 @@ import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 @ApplyOptions<CustomCommand.Options>({
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: isNotCustom,
+	enabled: isNotCustom
 })
 export class CountCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand(
 			(builder) => applyLocalizedBuilder(builder, 'commands/count:count').setDMPermission(true),
 			{
-				guildIds: await getCommandGuilds('admin'),
-			},
+				guildIds: await getCommandGuilds('admin')
+			}
 		);
 	}
 
@@ -29,19 +29,19 @@ export class CountCommand extends CustomCommand {
 						{
 							inline: true,
 							name: 'Guilds',
-							value: (await this.container.client.computeGuilds()).toString(),
+							value: (await this.container.client.computeGuilds()).toString()
 						},
 						{
 							inline: true,
 							name: 'Shards',
-							value: this.container.client.shard?.count?.toString() ?? '1',
+							value: this.container.client.shard?.count?.toString() ?? '1'
 						},
 						{
 							inline: true,
 							name: 'Users',
-							value: (await this.container.client.computeUsers()).toString(),
-						},
-					],
+							value: (await this.container.client.computeUsers()).toString()
+						}
+					]
 				},
 				generateDefaultEmbed({
 					title: 'Database Information',
@@ -49,21 +49,21 @@ export class CountCommand extends CustomCommand {
 						{
 							inline: true,
 							name: 'Guilds',
-							value: (await this.container.utilities.guild.get.GuildAvailableCount()).toString(),
+							value: (await this.container.utilities.guild.get.GuildAvailableCount()).toString()
 						},
 						{
 							inline: true,
 							name: 'Birthdays',
-							value: (await this.container.utilities.birthday.get.BirthdayAvailableCount()).toString(),
+							value: (await this.container.utilities.birthday.get.BirthdayAvailableCount()).toString()
 						},
 						{
 							inline: true,
 							name: 'Users',
-							value: (await this.container.utilities.user.get.UserCount()).toString(),
-						},
-					],
-				}),
-			],
+							value: (await this.container.utilities.user.get.UserCount()).toString()
+						}
+					]
+				})
+			]
 		});
 	}
 }

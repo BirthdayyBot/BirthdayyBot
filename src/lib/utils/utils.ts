@@ -8,7 +8,7 @@ import {
 	Message,
 	MessagePayload,
 	userMention,
-	type InteractionReplyOptions,
+	type InteractionReplyOptions
 } from 'discord.js';
 
 /**
@@ -29,7 +29,7 @@ export function pickRandom<T>(array: readonly T[]): T {
 export function sendLoadingMessage(message: Message): Promise<typeof message> {
 	const RandomLoadingMessage = ['Loading...', 'Please wait...', 'Fetching...', 'Processing...'];
 	return send(message, {
-		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')],
+		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')]
 	});
 }
 
@@ -60,7 +60,7 @@ export function createSubcommandMappings(...subcommands: Array<string | Mapps>):
 		return {
 			name: subcommand.name,
 			preconditions: subcommand.preconditions,
-			chatInputRun: snakeToCamel(subcommand.name),
+			chatInputRun: snakeToCamel(subcommand.name)
 		};
 	});
 }

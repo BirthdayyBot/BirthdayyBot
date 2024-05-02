@@ -8,7 +8,7 @@ import { envParseString } from '@skyra/env-utilities';
 import type { Guild, GuildResolvable } from 'discord.js';
 
 export async function getCommandGuilds(
-	commandLevel: 'global' | 'testing' | 'premium' | 'admin',
+	commandLevel: 'global' | 'testing' | 'premium' | 'admin'
 ): Promise<string[] | undefined> {
 	const testingGuilds = [GuildIDEnum.ChilliHQ, GuildIDEnum.ChilliAttackV2, GuildIDEnum.BirthdayyTesting];
 	const adminGuilds = [GuildIDEnum.Birthdayy, GuildIDEnum.BirthdayyTesting];
@@ -51,7 +51,7 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const entry: GuildUtilities = {
 		settings,
 		birthdays: new BirthdaysManager(guild, settings),
-		guild,
+		guild
 	};
 	cache.set(guild, entry);
 

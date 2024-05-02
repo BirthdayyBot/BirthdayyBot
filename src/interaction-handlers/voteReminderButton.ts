@@ -21,9 +21,9 @@ export class VoteReminderButton extends InteractionHandler {
 			components: [
 				{
 					type: 1,
-					components: [await remindMeButtonDisabledBuilder(interaction)],
-				},
-			],
+					components: [await remindMeButtonDisabledBuilder(interaction)]
+				}
+			]
 		});
 
 		const delay = result.time - Date.now();
@@ -35,14 +35,14 @@ export class VoteReminderButton extends InteractionHandler {
 		await this.container.tasks.create(
 			'VoteReminderTask',
 			{ memberId: interaction.user.id },
-			{ repeated: false, delay },
+			{ repeated: false, delay }
 		);
 		return interaction.followUp({
 			content: `I will remind you to vote ${time(
 				Math.round(result.time / 1000),
-				TimestampStyles.RelativeTime,
+				TimestampStyles.RelativeTime
 			)} !`,
-			ephemeral: true,
+			ephemeral: true
 		});
 	}
 }

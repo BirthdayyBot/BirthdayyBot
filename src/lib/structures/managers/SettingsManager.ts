@@ -21,7 +21,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		birthdayRole: null,
 		logChannel: null,
 		overviewChannel: null,
-		timezone: 0,
+		timezone: 0
 	};
 
 	public constructor(guild: GuildDiscord) {
@@ -34,7 +34,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		const settings = await container.prisma.guild.upsert({
 			create: { ...args, guildId: this.guildId },
 			where: { guildId: this.guildId },
-			update: { ...args },
+			update: { ...args }
 		});
 		return this.insert(settings);
 	}
@@ -65,7 +65,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 			defaultValue: 'null',
 			lng: this.guild.preferredLocale,
 			guild: this.guild,
-			settings,
+			settings
 		}) satisfies APIEmbed;
 
 		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));

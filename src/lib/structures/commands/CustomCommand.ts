@@ -87,7 +87,7 @@ function sharedCommandOptions(options: CustomCommand.Options | CustomSubCommand.
 		cooldownDelay: 10_000,
 		cooldownLimit: 2,
 		cooldownFilteredUsers: OWNERS,
-		...options,
+		...options
 	};
 }
 
@@ -116,7 +116,7 @@ function sharedPreconditionPermissionsLevel(command: CustomCommand | CustomSubCo
 			break;
 		default:
 			throw new Error(
-				`SkyraCommand[${command.name}]: "permissionLevel" was specified as an invalid permission level (${options.permissionLevel}).`,
+				`SkyraCommand[${command.name}]: "permissionLevel" was specified as an invalid permission level (${options.permissionLevel}).`
 			);
 	}
 

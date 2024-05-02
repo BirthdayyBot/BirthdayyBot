@@ -25,8 +25,8 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guildId}`,
-			},
+				value: `${guildId}`
+			}
 		];
 
 		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
@@ -39,7 +39,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			title: `${Emojis.Fail} ${CLIENT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
-			color: Colors.Red,
+			color: Colors.Red
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}

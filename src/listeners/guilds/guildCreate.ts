@@ -25,11 +25,11 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
 			if (
 				!(await guild.members.fetchMe()).permissions.has(
-					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator,
+					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator
 				)
 			) {
 				container.logger.debug(
-					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`,
+					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`
 				);
 				return undefined;
 			}
@@ -49,8 +49,8 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guild_id}`,
-			},
+				value: `${guild_id}`
+			}
 		];
 
 		const ownerInfo = await container.client.users.fetch(ownerId).catch(() => null);
@@ -68,7 +68,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
 			color: BrandingColors.Primary,
-			thumbnail: { url: guild.iconURL() ?? '' },
+			thumbnail: { url: guild.iconURL() ?? '' }
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}

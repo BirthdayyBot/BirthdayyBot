@@ -32,7 +32,7 @@ export enum Emojis {
 	Offline = '<:offline_birthdayy:1102222087973769368>',
 	Warning = '<:warning_birthdayy:1102222123809906778>',
 	Compass = '<:compass_birthdayy:1102222027101839360>',
-	Tools = '<:tools_birthdayy:1102222421651623936>',
+	Tools = '<:tools_birthdayy:1102222421651623936>'
 }
 
 export const enum LanguageFormatters {
@@ -42,16 +42,16 @@ export const enum LanguageFormatters {
 	Language = 'language',
 	Timezone = 'timezone',
 	replaceNull = 'replaceNull',
-	BirthdayMessage = 'birthdayMessage',
+	BirthdayMessage = 'birthdayMessage'
 }
 
 export enum BrandingColors {
-	Primary = envParseNumber('CLIENT_COLOR', 0x78c2ad),
+	Primary = envParseNumber('CLIENT_COLOR', 0x78c2ad)
 }
 
 export enum CdnUrls {
 	Cake = 'https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png',
-	CupCake = 'https://cdn.discordapp.com/avatars/916434908728164372/8107b2ca04a252947eeffef4692346f0.png?size=128',
+	CupCake = 'https://cdn.discordapp.com/avatars/916434908728164372/8107b2ca04a252947eeffef4692346f0.png?size=128'
 }
 
 /**
@@ -61,12 +61,12 @@ export enum CdnUrls {
  */
 export enum PrismaErrorCodeEnum {
 	UniqueConstraintFailed = 'P2002',
-	NotFound = 'P2025',
+	NotFound = 'P2025'
 }
 
 export enum GuildIDEnum {
 	Birthdayy = '934467365389893704',
 	ChilliHQ = '766707453994729532',
 	ChilliAttackV2 = '768556541439377438',
-	BirthdayyTesting = '980559116076470272',
+	BirthdayyTesting = '980559116076470272'
 }

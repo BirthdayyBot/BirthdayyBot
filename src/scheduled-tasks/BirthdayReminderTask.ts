@@ -27,7 +27,7 @@ import {
 	userMention,
 	type APIEmbed,
 	type EmbedField,
-	type Snowflake,
+	type Snowflake
 } from 'discord.js';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
 
@@ -68,16 +68,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 				embeds: [
 					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
-						description: 'No Current Offset could be generated',
-					}),
-				],
+						description: 'No Current Offset could be generated'
+					})
+				]
 			});
 			return container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
-			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true },
+			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true }
 		];
 
 		if (isCustom) {
@@ -86,13 +86,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
 				return container.logger.debug(
-					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
+					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`
 				);
 			}
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
 				utcOffset,
-				envParseString('CLIENT_MAIN_GUILD'),
+				envParseString('CLIENT_MAIN_GUILD')
 			);
 		} else {
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
@@ -102,18 +102,18 @@ export class BirthdayReminderTask extends ScheduledTask {
 			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return container.logger.info(
-				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
+				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`
 			);
 		}
 
 		container.logger.debug(
-			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`,
+			`[BirthdayTask] Birthdays today: ${currentBirthdays.length}, date: ${dateFormatted}, offset: ${current.utcOffset}`
 		);
 
 		const eventInfos = await this.birthdayReminderLoop(currentBirthdays);
 		await this.sendBirthdaySchedulerReport(eventInfos, dateFields, currentBirthdays.length, current);
 		return container.logger.debug(
-			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`,
+			`[BirthdayTask] Finished running ${currentBirthdays.length} birthdays for offset ${current.utcOffset} [${current.dateFormatted}}]`
 		);
 	}
 
@@ -122,7 +122,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		for (const birthday of birthdays) {
 			if (DEBUG)
 				container.logger.debug(
-					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`,
+					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`
 				);
 			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
 			eventInfos.push(eventInfo);
@@ -133,7 +133,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
-			guildId,
+			guildId
 		};
 		const config = await container.utilities.guild.get.GuildConfig(guildId);
 		if (!config) {
@@ -145,7 +145,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			birthdayRole,
 			birthdayPingRole,
 			announcementMessage,
-			premium: guildIsPremium,
+			premium: guildIsPremium
 		} = config;
 
 		let content: string | undefined;
@@ -154,7 +154,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		const guild = await resolveOnErrorCodesDiscord(
 			container.client.guilds.fetch(guildId),
-			RESTJSONErrorCodes.UnknownGuild,
+			RESTJSONErrorCodes.UnknownGuild
 		);
 
 		if (!guild) {
@@ -187,11 +187,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		eventInfo.announcement = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		eventInfo.birthday_role = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 
 		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
@@ -218,8 +218,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			title: `${Emojis.News} Birthday Announcement!`,
 			description: this.formatBirthdayMessage(announcementMessage, member, guild),
 			thumbnail: {
-				url: CdnUrls.Cake,
-			},
+				url: CdnUrls.Cake
+			}
 		};
 		const birthdayEmbed = generateDefaultEmbed(embed);
 
@@ -227,7 +227,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			guildId,
 			announcementChannel,
 			birthdayEmbed,
-			content,
+			content
 		);
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;
@@ -237,7 +237,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		member: GuildMember,
 		guildId: Snowflake,
 		role: Role,
-		isTest: boolean,
+		isTest: boolean
 	): Promise<{
 		added: boolean;
 		message: string;
@@ -245,14 +245,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
 		const returnData = {
 			added: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 
 		try {
 			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
 			await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 				repeated: false,
-				delay: isTest ? Time.Minute / 6 : Time.Day,
+				delay: isTest ? Time.Minute / 6 : Time.Day
 			});
 			returnData.added = true;
 			returnData.message = 'Success';
@@ -275,16 +275,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 		guildId: Snowflake,
 		channel_id: Snowflake,
 		birthdayEmbed: APIEmbed,
-		content?: string,
+		content?: string
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,
-			message: 'Not set',
+			message: 'Not set'
 		};
 		try {
 			await sendMessage(channel_id, {
 				content,
-				embeds: [birthdayEmbed],
+				embeds: [birthdayEmbed]
 			});
 			container.logger.debug('Sent Birthday Announcement');
 			returnData.sent = true;
@@ -306,7 +306,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				}
 				container.logger.warn(
 					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
-					error.message,
+					error.message
 				);
 			}
 
@@ -322,7 +322,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			'{GUILD_NAME}': guild.name,
 			'{GUILD_ID}': guild.id,
 			'{MENTION}': userMention(member.id),
-			'{SERVERNAME}': guild.name,
+			'{SERVERNAME}': guild.name
 		};
 
 		let formattedMessage = message;
@@ -337,7 +337,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		eventInfos: BirthdayEventInfoModel[],
 		dateFields: EmbedField[],
 		birthdayCount: number,
-		current: TimezoneObject,
+		current: TimezoneObject
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
 		eventInfos.map((eventInfo) => {
@@ -351,7 +351,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 		const embedFields = [
 			...dateFields,
-			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true },
+			{ name: 'Birthday Count', value: inlineCode(birthdayCount.toString()), inline: true }
 		];
 		const embedDescription = birthdayCount > 0 ? '' : 'No Birthdays Today';
 		// const reportDescription =
@@ -374,11 +374,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const schedulerReportMessage = await sendReport();
 		const schedulerLogThread = await schedulerReportMessage?.startThread({
 			name: embedTitle,
-			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour,
+			autoArchiveDuration: ThreadAutoArchiveDuration.OneHour
 		});
 		const reportFile = new AttachmentBuilder(Buffer.from(reportContent), {
 			name: `${embedTitle}.json`,
-			description: 'Scheduler Report File',
+			description: 'Scheduler Report File'
 		});
 
 		if (!schedulerLogThread) {
@@ -388,13 +388,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			embeds: [
 				generateDefaultEmbed({
 					title: embedTitle,
-					description: `Guilds:\n${codeBlock(guildIdsString)}`,
-				}),
-			],
+					description: `Guilds:\n${codeBlock(guildIdsString)}`
+				})
+			]
 		});
 
 		return schedulerLogThread.send({
-			files: [reportFile],
+			files: [reportFile]
 		});
 
 		function sendReport() {
@@ -403,9 +403,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 					generateDefaultEmbed({
 						title: embedTitle,
 						description: embedDescription,
-						fields: embedFields,
-					}),
-				],
+						fields: embedFields
+					})
+				]
 			});
 		}
 	}

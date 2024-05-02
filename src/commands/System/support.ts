@@ -8,12 +8,12 @@ import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({
 	description: 'commands/system:supportDescription',
-	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
+	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks]
 })
 export class SupportCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyDescriptionLocalizedBuilder(builder, this.description).setName('support').setDMPermission(true),
+			applyDescriptionLocalizedBuilder(builder, this.description).setName('support').setDMPermission(true)
 		);
 	}
 

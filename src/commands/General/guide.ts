@@ -10,7 +10,7 @@ import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 export class GuideCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/guide:guide').setDMPermission(true),
+			applyLocalizedBuilder(builder, 'commands/guide:guide').setDMPermission(true)
 		);
 	}
 
@@ -18,8 +18,8 @@ export class GuideCommand extends CustomCommand {
 		const components = [
 			new ActionRowBuilder<ButtonBuilder>().setComponents(
 				await docsButtonBuilder(interaction),
-				await inviteSupportDicordButton(interaction),
-			),
+				await inviteSupportDicordButton(interaction)
+			)
 		];
 		const embeds = await resolveEmbed(interaction);
 
@@ -35,17 +35,17 @@ export async function resolveEmbed(target: Target) {
 			cake: Emojis.Cake,
 			plus: Emojis.Plus,
 			exclamation: Emojis.Exclamation,
-			heart: Emojis.Heart,
+			heart: Emojis.Heart
 		},
 		command: {
 			set: BirthdayApplicationCommandMentions.Set,
-			list: ConfigApplicationCommandMentions.View,
+			list: ConfigApplicationCommandMentions.View
 		},
 		vote: WebsiteUrl('vote'),
 		invite: WebsiteUrl('invite'),
 		premium: WebsiteUrl('premium'),
 		quickstart: WebsiteUrl('docs/quickstart'),
-		name: CLIENT_NAME || container.client.user!.username,
+		name: CLIENT_NAME || container.client.user!.username
 	});
 	return [new EmbedBuilder({ ...defaultEmbed(), ...embed })];
 }

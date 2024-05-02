@@ -22,7 +22,7 @@ export class UserInteractionHandler extends InteractionHandler {
 				const items = months.map((name, index) => ({ name, value: index + 1 }));
 
 				return this.some(
-					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())),
+					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase()))
 				);
 			}
 			default:

@@ -33,7 +33,7 @@ export class UserRoute extends Route {
 			category: command.category,
 			description: t(command.description),
 			name: command.name,
-			preconditions: command.preconditions,
+			preconditions: command.preconditions
 		};
 	}
 }

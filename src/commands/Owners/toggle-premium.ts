@@ -8,7 +8,7 @@ import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 @ApplyOptions<CustomCommand.Options>({
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	permissionLevel: PermissionLevels.Administrator,
+	permissionLevel: PermissionLevels.Administrator
 })
 export class TogglePremiumCommand extends CustomCommand {
 	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
@@ -21,14 +21,14 @@ export class TogglePremiumCommand extends CustomCommand {
 						option
 							.setName('guild-id')
 							.setDescription('The guild id to toggle premium for')
-							.setRequired(true),
+							.setRequired(true)
 					)
 					.addBooleanOption((option) =>
-						option.setName('toggle').setDescription('The toggle value').setRequired(true),
+						option.setName('toggle').setDescription('The toggle value').setRequired(true)
 					),
 			{
-				guildIds: await getCommandGuilds('admin'),
-			},
+				guildIds: await getCommandGuilds('admin')
+			}
 		);
 	}
 
@@ -38,7 +38,7 @@ export class TogglePremiumCommand extends CustomCommand {
 		// check if guild exists if not send error message
 		const guild = await resolveOnErrorCodesDiscord(
 			this.container.client.guilds.fetch(guildId),
-			RESTJSONErrorCodes.UnknownGuild,
+			RESTJSONErrorCodes.UnknownGuild
 		);
 		if (!guild) {
 			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
@@ -50,10 +50,10 @@ export class TogglePremiumCommand extends CustomCommand {
 				generateDefaultEmbed({
 					title: 'Toggle Premium',
 					description: `Toggled premium for guild ${bold(guild.name)} [${inlineCode(
-						guildId,
-					)}] to ${inlineCode(toggle.toString())}`,
-				}),
-			],
+						guildId
+					)}] to ${inlineCode(toggle.toString())}`
+				})
+			]
 		});
 	}
 }

@@ -19,10 +19,10 @@ export class HelpCommand extends CustomCommand {
 					components: [
 						await websiteButtonBuiler(interaction),
 						await docsButtonBuilder(interaction),
-						await inviteSupportDicordButton(interaction),
-					],
-				},
-			],
+						await inviteSupportDicordButton(interaction)
+					]
+				}
+			]
 		});
 	}
 }

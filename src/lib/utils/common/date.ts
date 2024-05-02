@@ -38,7 +38,7 @@ const months = [
 	'September',
 	'October',
 	'November',
-	'December',
+	'December'
 ] as const;
 
 export function numberToMonthName(number: number) {
@@ -79,7 +79,7 @@ export function getCurrentOffset(): TimezoneObject {
 				date: today,
 				dateFormatted: today.format('YYYY/MM/DD'),
 				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset],
+				timezone: TIMEZONE_VALUES[offset]
 			};
 			return timezoneObject;
 		}
@@ -89,7 +89,7 @@ export function getCurrentOffset(): TimezoneObject {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY/MM/DD'),
 		utcOffset: 0,
-		timezone: 'UTC',
+		timezone: 'UTC'
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;

@@ -31,7 +31,7 @@ export class UserRoute extends Route {
 						id: request.auth.id,
 						token: body.access_token,
 						refresh: body.refresh_token,
-						expires: Date.now() + body.expires_in * 1000,
+						expires: Date.now() + body.expires_in * 1000
 					});
 
 					response.cookies.add(auth.cookie, authentication, { maxAge: body.expires_in });
@@ -64,13 +64,13 @@ export class UserRoute extends Route {
 						grant_type: 'refresh_token',
 						refresh_token: refreshToken,
 						redirect_uri: server.auth!.redirect,
-						scope: server.auth!.scopes,
+						scope: server.auth!.scopes
 					}),
 					headers: {
-						'Content-Type': MimeTypes.ApplicationFormUrlEncoded,
-					},
+						'Content-Type': MimeTypes.ApplicationFormUrlEncoded
+					}
 				},
-				FetchResultTypes.JSON,
+				FetchResultTypes.JSON
 			);
 		} catch (error) {
 			logger.fatal(error);

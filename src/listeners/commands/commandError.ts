@@ -10,7 +10,7 @@ import {
 	Events,
 	Listener,
 	UserError,
-	container,
+	container
 } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { NonNullObject, codeBlock, cutText } from '@sapphire/utilities';
@@ -38,7 +38,7 @@ export class ContextMenuCommandError extends Listener<typeof Events.ContextMenuC
 
 async function sharedRun(
 	error: Error,
-	{ interaction, command }: ChatInputCommandErrorPayload | ContextMenuCommandErrorPayload,
+	{ interaction, command }: ChatInputCommandErrorPayload | ContextMenuCommandErrorPayload
 ) {
 	// If the error was a string or an UserError, send it to the user:
 	const message = await interaction.fetchReply();
@@ -102,8 +102,8 @@ function argumentError(message: Message, t: TFunction, error: ArgumentError<unkn
 			...error,
 			...(error.context as NonNullObject),
 			argument,
-			parameter: cutText(parameter, 50),
-		}),
+			parameter: cutText(parameter, 50)
+		})
 	);
 }
 
