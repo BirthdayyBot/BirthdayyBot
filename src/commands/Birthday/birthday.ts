@@ -1,17 +1,20 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
-import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayySubcommand } from '#lib/structures/index';
+import { PermissionLevels } from '#lib/types/Enums';
 import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
 import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import { getBirthdays } from '#utils/functions/guilds';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
-import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
 import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
-@ApplyOptions<CustomSubCommand.Options>({
+@ApplyOptions<BirthdayySubcommand.Options>({
+	description: 'commands/birthday:rootDescription',
+	detailedDescription: 'commands/birthday:rootDetailedDescription',
 	subcommands: createSubcommandMappings(
 		'list',
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
@@ -20,13 +23,14 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 		{ name: 'test', preconditions: ['Manager'] },
 	),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
+	permissionLevel: PermissionLevels.Everyone,
 })
-export class BirthdayCommand extends CustomSubCommand {
-	public override registerApplicationCommands(registry: CustomSubCommand.Registry) {
+export class BirthdayCommand extends BirthdayySubcommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerBirthdayCommand(builder));
 	}
 
-	public async list(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async list(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const birthdayManager = getBirthdays(ctx.guild);
 		await getBirthdays(ctx.guild).fetch();
 		const month = ctx.options.getInteger('month');
@@ -42,7 +46,7 @@ export class BirthdayCommand extends CustomSubCommand {
 		return birthdayManager.sendListBirthdays(ctx, birthdays, title);
 	}
 
-	public async set(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async set(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { options, user } = resolveTarget(ctx);
 		const day = addZeroToSingleDigitNumber(ctx.options.getInteger('day', true));
 		const month = addZeroToSingleDigitNumber(ctx.options.getInteger('month', true));
@@ -60,7 +64,7 @@ export class BirthdayCommand extends CustomSubCommand {
 		);
 	}
 
-	public async remove(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async remove(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const result = await getBirthdays(ctx.guildId).remove(user.id);
 
@@ -74,7 +78,7 @@ export class BirthdayCommand extends CustomSubCommand {
 		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
 	}
 
-	public async show(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async show(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(ctx);
 		const birthday = getBirthdays(ctx.guild).get(user.id);
 
@@ -92,7 +96,7 @@ export class BirthdayCommand extends CustomSubCommand {
 		);
 	}
 
-	public async test(ctx: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async test(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user } = resolveTarget(ctx);
 		const birthay = getBirthdays(ctx.guild).get(user.id);
 

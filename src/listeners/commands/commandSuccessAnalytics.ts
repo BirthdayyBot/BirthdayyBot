@@ -1,4 +1,4 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures/commands/BirthdayyCommand';
 import { Events as CustomEvents } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
 import {
@@ -17,7 +17,7 @@ import {
 @ApplyOptions<Listener.Options>({ name: 'AnalyticsChatInputCommandSuccess', event: Events.ChatInputCommandSuccess })
 export class UserListener extends Listener<typeof Events.ChatInputCommandSuccess> {
 	public run(payload: ChatInputCommandSuccessPayload) {
-		const command = payload.command as CustomCommand;
+		const command = payload.command as BirthdayyCommand;
 		this.container.client.emit(CustomEvents.CommandUsageAnalytics, command.name, command.category);
 	}
 }
@@ -25,7 +25,7 @@ export class UserListener extends Listener<typeof Events.ChatInputCommandSuccess
 @ApplyOptions<Listener.Options>({ name: 'AnalyticsContextMenuCommandSuccess', event: Events.ContextMenuCommandSuccess })
 export class UserListenerContextMenu extends Listener<typeof Events.ContextMenuCommandSuccess> {
 	public run(payload: ContextMenuCommandSuccessPayload) {
-		const command = payload.command as CustomCommand;
+		const command = payload.command as BirthdayyCommand;
 		this.container.client.emit(CustomEvents.CommandUsageAnalytics, command.name, command.category);
 	}
 }

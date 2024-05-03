@@ -1,23 +1,24 @@
 import { StatsCMD } from '#lib/commands';
 import thinking from '#lib/discord/thinking';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { Emojis, generateDefaultEmbed, isDevelopment } from '#utils';
 import { getCurrentOffset } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import type { APIEmbed } from 'discord.js';
 import { totalmem } from 'os';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<BirthdayyCommand.Options>({
 	name: 'stats',
 	description: 'Stats Command',
 	enabled: isDevelopment,
 })
-export class StatsCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class StatsCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(StatsCMD());
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		await thinking(interaction);
 		const currentOffset = getCurrentOffset();
 		const memoryUsageInPercent = Math.round((process.memoryUsage().heapUsed / totalmem()) * 100);
