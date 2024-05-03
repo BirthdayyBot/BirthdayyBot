@@ -1,4 +1,4 @@
-import { BrandingColors, Emojis } from '#lib/utils/constants';
+import { BrandingColors, Emojis } from '#utils/constants';
 import type { CollectionConstructor } from '@discordjs/collection';
 import { type Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';

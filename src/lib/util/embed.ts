@@ -1,5 +1,5 @@
 import { replyToInteraction } from '#lib/discord/interaction';
-import { BrandingColors } from '#lib/utils/constants';
+import { BrandingColors } from '#utils/constants';
 import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
 import { envParseBoolean } from '@skyra/env-utilities';
 import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';

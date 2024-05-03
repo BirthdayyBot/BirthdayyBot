@@ -1,5 +1,5 @@
-import { isGuildMessage } from '#lib/utils/common/guards';
 import { OWNERS } from '#root/config';
+import { isGuildMessage } from '#utils/common';
 import { rootFolder } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import {

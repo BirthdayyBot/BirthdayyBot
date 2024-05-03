@@ -1,7 +1,6 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
-import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
-import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
+import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions/guilds';

@@ -1,4 +1,4 @@
-import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
+import { TIMEZONE_VALUES } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { AutocompleteInteraction } from 'discord.js';

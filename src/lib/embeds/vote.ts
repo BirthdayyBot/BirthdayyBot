@@ -1,4 +1,4 @@
-import { Emojis } from '#lib/utils/constants';
+import { Emojis } from '#utils/constants';
 import type { APIEmbed } from 'discord.js';
 
 export const VoteEmbed: APIEmbed = {

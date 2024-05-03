@@ -1,7 +1,7 @@
 import '#lib/setup';
 
 import { BirthdayyClient } from '#lib/BirthdayyClient';
-import { rootFolder } from '#lib/utils/constants';
+import { rootFolder } from '#utils/constants';
 import { container } from '@sapphire/pieces';
 import { rewriteFramesIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';

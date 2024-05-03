@@ -1,5 +1,5 @@
 import { WebsiteUrl } from '#lib/components/button';
-import { Emojis } from '#lib/utils/constants';
+import { Emojis } from '#utils/constants';
 import { CLIENT_NAME } from '#utils/environment';
 import type { APIEmbed } from 'discord-api-types/v9';
 

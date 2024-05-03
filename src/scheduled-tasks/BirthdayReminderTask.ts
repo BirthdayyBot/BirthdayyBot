@@ -1,7 +1,7 @@
 import { sendMessage } from '#lib/discord/message';
-import { CdnUrls, Emojis } from '#lib/utils/constants';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
+import { CdnUrls, Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';

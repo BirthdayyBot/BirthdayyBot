@@ -1,6 +1,6 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { PermissionLevels } from '#lib/types/Enums';
-import { BrandingColors } from '#lib/utils/constants';
+import { PermissionLevels } from '#lib/types';
+import { BrandingColors } from '#utils/constants';
 import { Permission_Bits } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { type TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
