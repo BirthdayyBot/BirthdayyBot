@@ -15,6 +15,7 @@ services:
         max-size: '10m'
         max-file: '3'
 
+  ## To be deleted when switching from MySQL to PostgreSQL
   mysql:
     container_name: mysql
     image: 'mysql:8.0'
@@ -54,7 +55,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=skyra
+      - POSTGRES_DB=birthdayy
     logging:
       options:
         max-size: '20m'
