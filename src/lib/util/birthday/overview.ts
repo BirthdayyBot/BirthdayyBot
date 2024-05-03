@@ -1,8 +1,8 @@
 import { editMessage, sendMessage } from '#lib/discord';
+import { generateBirthdayList } from '#utils/birthday';
+import { isPrivateMessage } from '#utils/common';
 import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
-import { isPrivateMessage } from '../common/guards.js';
-import { generateBirthdayList } from './birthday.js';
 
 export async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);

@@ -1,3 +1,4 @@
+import { SettingsManager } from '#lib/structures/managers';
 import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
@@ -30,7 +31,6 @@ import {
 	roleMention,
 	userMention
 } from 'discord.js';
-import { SettingsManager } from './SettingsManager.js';
 
 enum CacheActions {
 	None,

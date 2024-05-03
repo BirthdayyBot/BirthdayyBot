@@ -1,5 +1,6 @@
 import { sendMessage } from '#lib/discord/message';
 import { CdnUrls, Emojis } from '#lib/utils/constants';
+import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
@@ -29,7 +30,6 @@ import {
 	type EmbedField,
 	type Snowflake
 } from 'discord.js';
-import type { RoleRemovePayload } from './BirthdayRoleRemoverTask.js';
 
 export interface BirthdayEventInfoModel {
 	userId: string;

@@ -1,6 +1,6 @@
 import { WebsiteUrl } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { Emojis } from '#utils';
+import { Emojis } from '#utils/constants';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import type { APIEmbed } from 'discord.js';
 

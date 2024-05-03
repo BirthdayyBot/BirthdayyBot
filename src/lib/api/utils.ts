@@ -1,3 +1,5 @@
+import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from '#lib/api//types.js';
+import { flattenGuild } from '#lib/api/ApiTransformers';
 import { canManageGuild } from '#utils/functions/permissions';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
@@ -15,8 +17,6 @@ import {
 	GuildVerificationLevel,
 	PermissionsBitField
 } from 'discord.js';
-import { flattenGuild } from './ApiTransformers.js';
-import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from './types.js';
 
 export const authenticated = (token?: string) =>
 	createFunctionPrecondition(

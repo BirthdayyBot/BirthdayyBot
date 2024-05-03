@@ -1,5 +1,5 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BrandingColors } from '#utils';
+import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Command } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';

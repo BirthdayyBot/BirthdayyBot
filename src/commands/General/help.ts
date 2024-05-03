@@ -1,8 +1,8 @@
-import { HelpCMD } from '#lib/commands';
+import { HelpCMD } from '#lib/commands/help';
 import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
 import { HelpEmbed } from '#lib/embeds';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { generateDefaultEmbed, reply } from '#utils';
+import { generateDefaultEmbed } from '#utils/embed';
 
 export class HelpCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
@@ -11,7 +11,7 @@ export class HelpCommand extends CustomCommand {
 
 	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
 		const embed = generateDefaultEmbed(HelpEmbed);
-		await reply(interaction, {
+		await interaction.reply({
 			embeds: [embed],
 			components: [
 				{

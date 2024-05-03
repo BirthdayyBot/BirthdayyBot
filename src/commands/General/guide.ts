@@ -1,8 +1,10 @@
 import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { CLIENT_NAME, Emojis, defaultEmbed } from '#utils';
+import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
+import { Emojis } from '#utils/constants';
+import { defaultEmbed } from '#utils/embed';
+import { CLIENT_NAME } from '#utils/environment';
 import { container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';

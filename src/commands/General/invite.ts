@@ -1,6 +1,7 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { BrandingColors, Permission_Bits } from '#utils';
+import { BrandingColors } from '#lib/utils/constants';
+import { Permission_Bits } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { type TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';

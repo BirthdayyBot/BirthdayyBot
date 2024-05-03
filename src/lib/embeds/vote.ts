@@ -1,19 +1,6 @@
 import { Emojis } from '#lib/utils/constants';
 import type { APIEmbed } from 'discord.js';
 
-// ! Currently not working??
-/*
-import { VoteSites } from '../db/voteSites';
- const VoteFields = (): string => {
-	const sites = VoteSites;
-	let value = '';
-	sites.map((site) => {
-		value += `${ARROW_RIGHT}[${site.name}](${site.url})\n`;
-	});
-	container.logger.info('value', value);
-	return value;
-}; */
-
 export const VoteEmbed: APIEmbed = {
 	title: `${Emojis.Heart} Support Birthdayy`,
 	description: '',

@@ -1,18 +1,27 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": ".",
-    "outDir": "../dist",
-    "composite": true,
-    "tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
-    "paths": {
-      "#utils/*": ["lib/utils/*.js"],
-      "#lib/*": ["lib/*"],
-      "#languages": ["languages/index.js"],
-      "#root/*": ["*.js"]
-    }
-  },
-  "include": [".", "./**/*.json"],
-  "exclude": ["./tsconfig.json"]
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": ".",
+		"baseUrl": ".",
+		"outDir": "../dist",
+		"composite": true,
+		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
+		"paths": {
+			"#utils/birthday": ["lib/util/birthday/index.js"],
+			"#utils/common": ["lib/util/common/index.js"],
+			"#utils/functions": ["lib/util/functions/index.js"],
+			"#utils/*": ["lib/util/*"],
+			"#lib/discord": ["lib/discord/index.js"],
+			"#lib/embeds": ["lib/embeds/index.js"],
+			"#lib/structures/managers": ["lib/structures/managers/index.js"],
+			"#lib/structures": ["lib/structures/index.js"],
+			"#lib/setup": ["lib/setup/index.js"],
+			"#lib/types": ["lib/types/index.js"],
+			"#lib/*": ["lib/*"],
+			"#languages": ["languages/index.js"],
+			"#root/*": ["*"]
+		}
+	},
+	"include": [".", "./**/*.json"],
+	"exclude": ["./tsconfig.json"]
 }

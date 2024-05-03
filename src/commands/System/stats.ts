@@ -1,8 +1,10 @@
-import { StatsCMD } from '#lib/commands';
+import { StatsCMD } from '#lib/commands/stats';
 import thinking from '#lib/discord/thinking';
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { Emojis, generateDefaultEmbed, isDevelopment } from '#utils';
 import { getCurrentOffset } from '#utils/common';
+import { Emojis } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isDevelopment } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { APIEmbed } from 'discord.js';
 import { totalmem } from 'os';

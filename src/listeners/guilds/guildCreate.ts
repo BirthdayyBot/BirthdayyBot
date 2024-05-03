@@ -1,6 +1,8 @@
 import { sendDMMessage, sendMessage } from '#lib/discord';
 import { resolveEmbed } from '#root/commands/General/guide';
-import { CLIENT_NAME, BOT_SERVER_LOG, BrandingColors, Emojis, generateDefaultEmbed } from '#utils';
+import { BrandingColors, Emojis } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
+import { BOT_SERVER_LOG, CLIENT_NAME } from '#utils/environment';
 import { getSettings } from '#utils/functions/guilds';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, container, type ListenerOptions } from '@sapphire/framework';

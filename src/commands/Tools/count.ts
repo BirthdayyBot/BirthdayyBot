@@ -1,5 +1,7 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BrandingColors, generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { BrandingColors } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isNotCustom } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
@@ -20,7 +22,7 @@ export class CountCommand extends CustomCommand {
 	}
 
 	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
-		await reply(interaction, {
+		return interaction.reply({
 			embeds: [
 				{
 					title: 'Discord Information',

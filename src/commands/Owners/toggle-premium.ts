@@ -1,6 +1,7 @@
 import { CustomCommand } from '#lib/structures/commands/CustomCommand';
 import { PermissionLevels } from '#lib/types/Enums';
-import { generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isNotCustom } from '#utils/env';
 import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
@@ -41,11 +42,11 @@ export class TogglePremiumCommand extends CustomCommand {
 			RESTJSONErrorCodes.UnknownGuild
 		);
 		if (!guild) {
-			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
+			return interaction.reply(`Guild ${inlineCode(guildId)} not found`);
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		return reply(interaction, {
+		return interaction.reply({
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Toggle Premium',

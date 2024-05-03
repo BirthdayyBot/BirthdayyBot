@@ -1,2 +1,3 @@
-export * from './preconditions/index.js';
-export * from './listeners/index.js';
+export * from '#lib/structures/commands/index';
+export * from '#lib/structures/listeners/index';
+export * from '#lib/structures/preconditions/index';
