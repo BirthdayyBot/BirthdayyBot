@@ -1,0 +1,15 @@
+{
+  "name": "info",
+  "description": "Provides information about me, and links for adding the bot and joining the support server",
+  "embedDescription": "[Birthdayy](https://birthdayy.xyz) {{VERSION}} is a bot designed to help you remember your birthday. I use the [Sapphire Framework](https://sapphirejs.dev) for the [Discord.js library](https://discord.js.org).\n- [Terms of use](https://birthdayy.xyz/disclosure).",
+  "embedFieldApplicationTitle": "Statistics",
+  "embedFieldApplicationValue": "- **Users**: {{users, number}}\n- **Servers**: {{guilds, number}}\n- **Channels**: {{channels, number}}\n- **Birthdays**: {{birthdays, number}}\n- **Discord.js**: {{versionDiscord}}\n- **Sapphire**: {{versionSapphire}}\n- **Node.js**: {{versionNode}}",
+  "embedFieldUptimeTitle": "Uptime",
+  "embedFieldUptimeValue": "- **Host**: {{host}}\n- **Client**: {{client}}",
+  "embedFieldServerUsageTitle": "Server Usage",
+  "embedFieldServerUsageValue": "- **CPU Usage**: {{cpu}}\n- **Memory**: {{heapUsed}}MB (Total: {{heapTotal}}MB)",
+  "buttonInvite": "Add me to your server!",
+  "buttonSupport": "Support server",
+  "buttonGitHub": "GitHub Repository",
+  "buttonPremium": "Premium"
+}
