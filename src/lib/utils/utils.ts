@@ -1,5 +1,7 @@
+import { GuildMessage } from '#lib/types';
 import { type PreconditionEntryResolvable } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
+import { TFunction } from '@sapphire/plugin-i18next';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import {
 	ChatInputCommandInteraction,
@@ -10,6 +12,7 @@ import {
 	userMention,
 	type InteractionReplyOptions,
 } from 'discord.js';
+import { BrandingColors } from './constants.js';
 
 /**
  * Picks a random item from an array
@@ -26,11 +29,14 @@ export function pickRandom<T>(array: readonly T[]): T {
  * Sends a loading message to the current channel
  * @param message - The message data for which to send the loading message
  */
-export function sendLoadingMessage(message: Message): Promise<typeof message> {
-	const RandomLoadingMessage = ['Loading...', 'Please wait...', 'Fetching...', 'Processing...'];
-	return send(message, {
-		embeds: [new EmbedBuilder().setDescription(pickRandom(RandomLoadingMessage)).setColor('#FF0000')],
-	});
+export function sendLoadingMessage<T extends GuildMessage | Message>(
+	message: T,
+	t: TFunction,
+): Promise<typeof message> {
+	const embed = new EmbedBuilder()
+		.setDescription(pickRandom(t('system:loadingMessages', { returnObjects: true })))
+		.setColor(BrandingColors.Primary);
+	return send(message, { embeds: [embed] }) as Promise<T>;
 }
 
 export function resolveTarget(interaction: ChatInputCommandInteraction) {

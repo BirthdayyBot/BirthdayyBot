@@ -1,8 +1,8 @@
 {
   "guideName": "guide",
-  "guideDescription": "Besoin d'un guide d'installation rapide ! Ne vous inquiétez pas, cela vous aidera !",
+  "guideDescription": "Besoin d'un guide d'installation rapide ! Ne vous inquiétez pas, cela vous aidera !",
   "embed": {
-    "title": "{{emoji.heart}} {{name}} Guide !",
+    "title": "{{emoji.heart}} {{name}} Guide !",
     "description": "{{emoji.exclamation}} En tapant **/help** dans le chat, vous pouvez consulter toutes mes fonctionnalités et commandes disponibles.",
     "fields": [
       {
