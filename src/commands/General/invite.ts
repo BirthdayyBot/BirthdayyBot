@@ -6,14 +6,12 @@ import { TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18ne
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
 
 @ApplyOptions<CustomCommand.Options>({
-	name: 'invite',
-	description: 'commands/invite:description',
 	permissionLevel: PermissionLevels.Everyone,
 })
 export class UserCommand extends CustomCommand {
 	public override registerApplicationCommands(registry: CustomCommand.Registry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, this.name, this.description)
+			applyLocalizedBuilder(builder, 'commands/invite:name', 'commands/invite:description')
 				.setDMPermission(true)
 				.addBooleanOption((option) =>
 					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false),
