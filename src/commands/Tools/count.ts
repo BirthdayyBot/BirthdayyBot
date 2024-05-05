@@ -1,18 +1,19 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isNotCustom } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<BirthdayyCommand.Options>({
 	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom
 })
-export class CountCommand extends CustomCommand {
-	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
+export class CountCommand extends BirthdayyCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) => applyLocalizedBuilder(builder, 'commands/count:count').setDMPermission(true),
 			{
@@ -21,7 +22,7 @@ export class CountCommand extends CustomCommand {
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		return interaction.reply({
 			embeds: [
 				{

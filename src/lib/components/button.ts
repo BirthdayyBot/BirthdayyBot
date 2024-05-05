@@ -22,7 +22,7 @@ export function defaultButtonBuilder(data?: ButtonComponentData) {
 	});
 }
 
-export async function inviteSupportDicordButton(target: Target) {
+export async function inviteSupportDiscordButton(target: Target) {
 	const label = await resolveKey(target, 'button:supportDiscord');
 	return defaultButtonBuilder().setLabel(label).setURL(WebsiteUrl('discord')).setEmoji(Emojis.People);
 }
@@ -54,7 +54,7 @@ export async function remindMeButtonDisabledBuilder(target: Target) {
 	return (await remindMeButtonBuilder(target)).setDisabled(true);
 }
 
-export async function websiteButtonBuiler(target: Target) {
+export async function websiteButtonBuilder(target: Target) {
 	const label = await resolveKey(target, 'button:website');
 	return defaultButtonBuilder().setLabel(label).setEmoji(Emojis.Link).setURL(WebsiteUrl());
 }

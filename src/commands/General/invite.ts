@@ -1,20 +1,20 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { PermissionLevels } from '#lib/types';
+import { BirthdayyCommand } from '#lib/structures';
+import { PermissionLevels } from '#lib/types/Enums';
 import { BrandingColors } from '#utils/constants';
 import { Permission_Bits } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { type TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
-
-@ApplyOptions<CustomCommand.Options>({
-	name: 'invite',
+@ApplyOptions<BirthdayyCommand.Options>({
 	description: 'commands/invite:description',
+	detailedDescription: 'commands/invite:detailedDescription',
 	permissionLevel: PermissionLevels.Everyone
 })
-export class UserCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class UserCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, this.name, this.description)
+			applyLocalizedBuilder(builder, 'commands/invite:name', 'commands/invite:description')
 				.setDMPermission(true)
 				.addBooleanOption((option) =>
 					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false)
@@ -22,7 +22,7 @@ export class UserCommand extends CustomCommand {
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const shouldNotAddPermissions = interaction.options.getBoolean('permissions') ?? false;
 		const embed = this.getEmbed(await fetchT(interaction), shouldNotAddPermissions);
 		return interaction.reply({ embeds: [embed], ephemeral: false });

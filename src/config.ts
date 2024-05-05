@@ -1,14 +1,13 @@
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
-import { TimezoneWithLocale, minutes } from '#utils/common';
+import { getHandler } from '#root/languages/index';
+import { minutes } from '#utils/common';
 import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { DEBUG } from '#utils/environment';
-import { getGuild } from '#utils/functions/guilds';
 import { type ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
-import { type InternationalizationOptions } from '@sapphire/plugin-i18next';
+import { i18next, type I18nextFormatter, type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
-import { isNullOrUndefined } from '@sapphire/utilities';
 import { Integrations, type NodeOptions } from '@sentry/node';
 import {
 	envIsDefined,
@@ -21,21 +20,21 @@ import {
 import {
 	ActivityType,
 	GatewayIntentBits,
-	Locale,
 	PermissionFlagsBits,
 	PresenceUpdateStatus,
 	type OAuth2Scopes
 } from 'discord-api-types/v10';
 import {
 	Options,
-	channelMention,
-	roleMention,
+	TimestampStyles,
+	time,
 	type ClientOptions,
+	type LocaleString,
 	type PermissionsString,
 	type PresenceData,
 	type WebhookClientData
 } from 'discord.js';
-import type { FormatFunction, InterpolationOptions } from 'i18next';
+import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
@@ -99,37 +98,78 @@ function parseInternationalizationDefaultVariables() {
 }
 
 function parseInternationalizationInterpolation(): InterpolationOptions {
-	return {
-		escapeValue: false,
-		defaultVariables: parseInternationalizationDefaultVariables(),
-		format: (...[value, format, language, options]: Parameters<FormatFunction>) => {
-			const t = container.i18n.getT(language ?? 'en-US');
-			const defaultValue = t('globals:none', options);
-			if (isNullOrUndefined(value)) return defaultValue;
-			switch (format as LanguageFormatters) {
-				case LanguageFormatters.Channel:
-					return channelMention(value) as string;
-				case LanguageFormatters.Role:
-					return roleMention(value) as string;
-				case LanguageFormatters.Language:
-					return t(`languages:${language}`, options);
-				case LanguageFormatters.Timezone:
-					return TimezoneWithLocale[value as Locale];
-				default:
-					return value as string;
-			}
+	return { escapeValue: false, defaultVariables: parseInternationalizationDefaultVariables() };
+}
+
+function parseInternationalizationFormatters(): I18nextFormatter[] {
+	const { t } = i18next;
+
+	return [
+		// Add custom formatters:
+		{
+			name: LanguageFormatters.Number,
+			format: (lng, options) => {
+				const formatter = new Intl.NumberFormat(lng, { maximumFractionDigits: 2, ...options });
+				return (value) => formatter.format(value);
+			},
+			cached: true
+		},
+		{
+			name: LanguageFormatters.NumberCompact,
+			format: (lng, options) => {
+				const formatter = new Intl.NumberFormat(lng, {
+					notation: 'compact',
+					compactDisplay: 'short',
+					maximumFractionDigits: 2,
+					...options
+				});
+				return (value) => formatter.format(value);
+			},
+			cached: true
+		},
+		{
+			name: LanguageFormatters.Duration,
+			format: (lng, options) => {
+				const formatter = getHandler((lng ?? 'en-US') as LocaleString).duration;
+				const precision = (options?.precision as number) ?? 2;
+				return (value) => formatter.format(value, precision);
+			},
+			cached: true
+		},
+		{
+			name: LanguageFormatters.HumanDateTime,
+			format: (lng, options) => {
+				const formatter = new Intl.DateTimeFormat(lng, {
+					timeZone: 'Etc/UTC',
+					dateStyle: 'short',
+					timeStyle: 'medium',
+					...options
+				});
+				return (value) => formatter.format(value);
+			},
+			cached: true
+		},
+		// Add Discord markdown formatters:
+		{ name: LanguageFormatters.DateTime, format: (value) => time(new Date(value), TimestampStyles.ShortDateTime) },
+		// Add alias formatters:
+		{
+			name: LanguageFormatters.Permissions,
+			format: (value, lng, options) => t(`permissions:${value}`, { lng, ...options }) as string
 		}
-	};
+	];
 }
 
 function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
+		defaultMissingKey: 'default',
+		defaultNS: 'globals',
 		defaultLanguageDirectory: LANGUAGE_ROOT,
-		fetchLanguage: ({ guild }) => {
+		fetchLanguage: async ({ guild }) => {
 			if (!guild) return 'en-US';
-
-			return getGuild(guild).preferredLocale ?? 'en-US';
+			const settings = await container.prisma.guild.findFirst({ where: { guildId: guild.id } });
+			return settings?.language ?? 'en-US';
 		},
+		formatters: parseInternationalizationFormatters(),
 		i18next: (_: string[], languages: string[]) => ({
 			supportedLngs: languages,
 			preload: languages,
@@ -138,8 +178,11 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 			returnNull: false,
 			load: 'all',
 			lng: 'en-US',
-			fallbackLng: 'en-US',
+			fallbackLng: {
+				default: ['en-US']
+			},
 			defaultNS: 'globals',
+			overloadTranslationOptionHandler: (args) => ({ defaultValue: args[1] ?? 'globals:default' }),
 			initImmediate: false,
 			interpolation: parseInternationalizationInterpolation()
 		})

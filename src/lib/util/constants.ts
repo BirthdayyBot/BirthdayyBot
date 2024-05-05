@@ -36,13 +36,12 @@ export enum Emojis {
 }
 
 export const enum LanguageFormatters {
-	Message = 'message',
-	Channel = 'channel',
-	Role = 'role',
-	Language = 'language',
-	Timezone = 'timezone',
-	replaceNull = 'replaceNull',
-	BirthdayMessage = 'birthdayMessage'
+	Duration = 'duration',
+	Number = 'number',
+	NumberCompact = 'numberCompact',
+	Permissions = 'permissions',
+	DateTime = 'dateTime',
+	HumanDateTime = 'humanDateTime'
 }
 
 export enum BrandingColors {

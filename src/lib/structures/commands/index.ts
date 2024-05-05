@@ -1,1 +1,2 @@
-export * from '#lib/structures/commands/CustomCommand';
+export * from '#lib/structures/commands/BirthdayyCommand';
+export * from '#lib/structures/commands/BirthdayySubcommand';

@@ -1,18 +1,19 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isNotCustom } from '#utils/env';
 import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 
-@ApplyOptions<CustomCommand.Options>({
+@ApplyOptions<BirthdayyCommand.Options>({
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
 	permissionLevel: PermissionLevels.Administrator
 })
-export class TogglePremiumCommand extends CustomCommand {
-	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
+export class TogglePremiumCommand extends BirthdayyCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) =>
 				builder
@@ -33,7 +34,7 @@ export class TogglePremiumCommand extends CustomCommand {
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const toggle = interaction.options.getBoolean('toggle', true);
 		const guildId = interaction.options.getString('guild-id', true);
 		// check if guild exists if not send error message
