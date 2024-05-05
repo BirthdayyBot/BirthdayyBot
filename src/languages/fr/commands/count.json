@@ -1,4 +1,4 @@
 {
-  "countName": "count",
-  "countDescription": "Le nombre actuel de serveurs, anniversaires et utilisateurs"
+    "countName": "count",
+    "countDescription": "Le nombre actuel de serveurs, anniversaires et utilisateurs"
 }
