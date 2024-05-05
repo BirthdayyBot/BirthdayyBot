@@ -88,8 +88,8 @@ services:
       - influx
       - mysql
       # - postgres
-    env_file:
-      - .env
+    environment:
+      - DOPPLER_TOKEN=${DOPPLER_TOKEN}
     image: ghcr.io/birthdayybot/birthdayy:latest
     networks:
       - birthdayy

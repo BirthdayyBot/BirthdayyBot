@@ -55,8 +55,6 @@ COPY --chown=node:node --from=builder /usr/src/app//prisma ./prisma
 COPY --chown=node:node --from=builder /usr/src/app/node_modules/@prisma/client/ ./node_modules/@prisma/client/
 COPY --chown=node:node --from=builder /usr/src/app/node_modules/.prisma/client/ ./node_modules/.prisma/client/
 
-COPY --chown=node:node src/.env src/.env
-
 
 RUN yarn workspaces focus --all --production
 RUN chown node:node /usr/src/app/
