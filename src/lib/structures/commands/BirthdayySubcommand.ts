@@ -7,7 +7,7 @@ import {
 	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
-import { first } from '#lib/utils/common/index';
+import { first } from '#utils/common';
 import { Command, type MessageCommand, Args as SapphireArgs, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { CacheType, ChatInputCommandInteraction, Snowflake } from 'discord.js';
