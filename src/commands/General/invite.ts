@@ -5,16 +5,15 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
-
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'invite',
 	description: 'commands/invite:description',
+	detailedDescription: 'commands/invite:detailedDescription',
 	permissionLevel: PermissionLevels.Everyone,
 })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, this.name, this.description)
+			applyLocalizedBuilder(builder, 'commands/invite:name', 'commands/invite:description')
 				.setDMPermission(true)
 				.addBooleanOption((option) =>
 					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false),
