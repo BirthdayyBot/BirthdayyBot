@@ -1,5 +1,5 @@
 import { getSettings } from '#lib/discord/guild';
-import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { formatBirthdayMessage } from '#lib/utils/common/string';
 import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
@@ -30,21 +30,21 @@ type ConfigDefault = Omit<
 	'guildId' | 'logChannel' | 'inviter' | 'language' | 'lastUpdated' | 'disabled' | 'premium'
 >;
 
-@ApplyOptions<CustomSubCommand.Options>({
+@ApplyOptions<BirthdayySubcommand.Options>({
 	name: 'config',
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Manager,
 })
-export class ConfigCommand extends CustomSubCommand {
+export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
 			guildIds: ['980559116076470272'],
 		});
 	}
 
-	public async edit(interaction: Command.ChatInputCommandInteraction<'cached'>) {
+	public async edit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
@@ -94,7 +94,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	public async view(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async view(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { guildId } = interaction;
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
@@ -102,7 +102,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
-	public reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public reset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const key = interaction.options.getString('key', true) as ResetConfig;
 		switch (key) {
 			case 'all': {
