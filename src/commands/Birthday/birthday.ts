@@ -1,8 +1,7 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
-import { formatDateForDisplay, numberToMonthName } from '#utils/common';
+import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
