@@ -37,6 +37,8 @@
 	},
 	"dependencies": {
 		"@influxdata/influxdb-client": "^1.33.2",
+		"@neondatabase/serverless": "^0.9.1",
+		"@prisma/adapter-neon": "^5.13.0",
 		"@prisma/client": "^5.9.1",
 		"@sapphire/async-queue": "^1.5.2",
 		"@sapphire/decorators": "^6.0.4",

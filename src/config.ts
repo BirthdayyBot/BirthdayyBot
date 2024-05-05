@@ -4,6 +4,9 @@ import { minutes } from '#utils/common';
 import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { DEBUG } from '#utils/environment';
 import { type ConnectionOptions } from '@influxdata/influxdb-client';
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import type { Prisma } from '@prisma/client';
 import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { i18next, type I18nextFormatter, type InternationalizationOptions } from '@sapphire/plugin-i18next';
@@ -36,6 +39,7 @@ import {
 } from 'discord.js';
 import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
+import ws from 'ws';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
 
@@ -269,3 +273,19 @@ function parseWebhookError(): WebhookClientData | null {
 }
 
 export const WEBHOOK_ERROR = parseWebhookError();
+
+function parsePrismaOptions(): Prisma.PrismaClientOptions | undefined {
+	const connectionString = envParseString('DATABASE_URL');
+	const isPooled = envParseBoolean('DATABASE_POOLED', true);
+
+	if (connectionString.includes('neon.tech') && isPooled) {
+		neonConfig.webSocketConstructor = ws;
+		const pool = new Pool({ connectionString });
+		const adapter = new PrismaNeon(pool);
+		return { adapter };
+	}
+
+	return undefined;
+}
+
+export const PRISMA_CLIENT_OPTIONS = parsePrismaOptions();

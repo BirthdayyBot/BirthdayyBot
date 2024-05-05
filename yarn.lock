@@ -473,6 +473,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@neondatabase/serverless@npm:^0.9.1":
+  version: 0.9.1
+  resolution: "@neondatabase/serverless@npm:0.9.1"
+  dependencies:
+    "@types/pg": "npm:8.6.6"
+  checksum: 10/a5b7bd66bd6e81f13a56b0c54687507c64dcd5a14f90d4ed58585be0d2c01a52c1a08c43efdc938c78e82a56e8f3c6a39f756b124f9b59ed7d399c1f861d7da7
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -536,6 +545,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/adapter-neon@npm:^5.13.0":
+  version: 5.13.0
+  resolution: "@prisma/adapter-neon@npm:5.13.0"
+  dependencies:
+    "@prisma/driver-adapter-utils": "npm:5.13.0"
+    postgres-array: "npm:3.0.2"
+  peerDependencies:
+    "@neondatabase/serverless": ^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0
+  checksum: 10/100a4fad6a2a083c4f833215b18a5f7507b67a5a99745ea37cedc6bbacd9f7590544c99e7c35cc5c810b3ac586c57d9c4f567535966928f52ee96ab49cd7d624
+  languageName: node
+  linkType: hard
+
 "@prisma/client@npm:^5.9.1":
   version: 5.9.1
   resolution: "@prisma/client@npm:5.9.1"
@@ -548,10 +569,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/debug@npm:5.13.0":
+  version: 5.13.0
+  resolution: "@prisma/debug@npm:5.13.0"
+  checksum: 10/3f061d9fdcbd396f54085d2a0d51b98dc0d733bfcd0647faccc54eef667b26ca56ac9f7583f1fb31bb63f7d47260bac5a8c62258a51b2514143ab37ccde4f316
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:5.9.1":
   version: 5.9.1
   resolution: "@prisma/debug@npm:5.9.1"
   checksum: 10/ef9daf19c083e6a7c7470417aee4d4a3a12446c18285cc76f65ce2d133650c28d7a2f0fa5efe9ed7b2d0968ea91d1884e16d377908cc853f20a458270612aa44
+  languageName: node
+  linkType: hard
+
+"@prisma/driver-adapter-utils@npm:5.13.0":
+  version: 5.13.0
+  resolution: "@prisma/driver-adapter-utils@npm:5.13.0"
+  dependencies:
+    "@prisma/debug": "npm:5.13.0"
+  checksum: 10/cd3f212d01ccfd26f8d8ff962834c7e950cb24329d326583ba4b14d3e510f1ebf2ae4d11f588531ef0b16e8d5ae4d71d73036c6a8f9ab61442ba7a81bc01c815
   languageName: node
   linkType: hard
 
@@ -1006,6 +1043,17 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10/9f31c471047d7b3e240ce7b77ff29b0d15e83be7e3feafb3d0b0d0931122b438b1eefa302a5a2e1e9849914ff3fd76aafbd8ccb372efb1331ba048da63bce6f8
+  languageName: node
+  linkType: hard
+
+"@types/pg@npm:8.6.6":
+  version: 8.6.6
+  resolution: "@types/pg@npm:8.6.6"
+  dependencies:
+    "@types/node": "npm:*"
+    pg-protocol: "npm:*"
+    pg-types: "npm:^2.2.0"
+  checksum: 10/577bded68874a5233b9b85bd12a4db99933b81ec5dc4c6fa1a6301043e86df5da09f355068fb3d288f812ce45c23c1be2faf3da158f0ea4be557236105d7eb5c
   languageName: node
   linkType: hard
 
@@ -1467,6 +1515,8 @@ __metadata:
     "@commitlint/cli": "npm:^19.3.0"
     "@commitlint/config-conventional": "npm:^19.2.2"
     "@influxdata/influxdb-client": "npm:^1.33.2"
+    "@neondatabase/serverless": "npm:^0.9.1"
+    "@prisma/adapter-neon": "npm:^5.13.0"
     "@prisma/client": "npm:^5.9.1"
     "@sapphire/async-queue": "npm:^1.5.2"
     "@sapphire/cli": "npm:^1.9.3"
@@ -3639,6 +3689,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pg-int8@npm:1.0.1":
+  version: 1.0.1
+  resolution: "pg-int8@npm:1.0.1"
+  checksum: 10/a1e3a05a69005ddb73e5f324b6b4e689868a447c5fa280b44cd4d04e6916a344ac289e0b8d2695d66e8e89a7fba023affb9e0e94778770ada5df43f003d664c9
+  languageName: node
+  linkType: hard
+
+"pg-protocol@npm:*":
+  version: 1.6.1
+  resolution: "pg-protocol@npm:1.6.1"
+  checksum: 10/9af672208adae8214f55f5b4597c4699ab9946205a99863d3e2bb8d024fdab16711457b539bc366cc29040218aa87508cf61294b76d288f48881b973d9117bd6
+  languageName: node
+  linkType: hard
+
+"pg-types@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "pg-types@npm:2.2.0"
+  dependencies:
+    pg-int8: "npm:1.0.1"
+    postgres-array: "npm:~2.0.0"
+    postgres-bytea: "npm:~1.0.0"
+    postgres-date: "npm:~1.0.4"
+    postgres-interval: "npm:^1.1.0"
+  checksum: 10/87a84d4baa91378d3a3da6076c69685eb905d1087bf73525ae1ba84b291b9dd8738c6716b333d8eac6cec91bf087237adc3e9281727365e9cbab0d9d072778b1
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.3.1":
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
@@ -3652,6 +3729,43 @@ __metadata:
   bin:
     pidtree: bin/pidtree.js
   checksum: 10/ea67fb3159e170fd069020e0108ba7712df9f0fd13c8db9b2286762856ddce414fb33932e08df4bfe36e91fe860b51852aee49a6f56eb4714b69634343add5df
+  languageName: node
+  linkType: hard
+
+"postgres-array@npm:3.0.2":
+  version: 3.0.2
+  resolution: "postgres-array@npm:3.0.2"
+  checksum: 10/0159517e4e5f263bf9e324f0c4d3c10244a294021f2b5980abc8c23afdb965370a7fc0c82012fce4d28e83186ad089b6476b05fcef6c88f8e43e37a3a2fa0ad5
+  languageName: node
+  linkType: hard
+
+"postgres-array@npm:~2.0.0":
+  version: 2.0.0
+  resolution: "postgres-array@npm:2.0.0"
+  checksum: 10/aff99e79714d1271fe942fec4ffa2007b755e7e7dc3d2feecae3f1ceecb86fd3637c8138037fc3d9e7ec369231eeb136843c0b25927bf1ce295245a40ef849b4
+  languageName: node
+  linkType: hard
+
+"postgres-bytea@npm:~1.0.0":
+  version: 1.0.0
+  resolution: "postgres-bytea@npm:1.0.0"
+  checksum: 10/d844ae4ca7a941b70e45cac1261a73ee8ed39d72d3d74ab1d645248185a1b7f0ac91a3c63d6159441020f4e1f7fe64689ac56536a307b31cef361e5187335090
+  languageName: node
+  linkType: hard
+
+"postgres-date@npm:~1.0.4":
+  version: 1.0.7
+  resolution: "postgres-date@npm:1.0.7"
+  checksum: 10/571ef45bec4551bb5d608c31b79987d7a895141f7d6c7b82e936a52d23d97474c770c6143e5cf8936c1cdc8b0dfd95e79f8136bf56a90164182a60f242c19f2b
+  languageName: node
+  linkType: hard
+
+"postgres-interval@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "postgres-interval@npm:1.2.0"
+  dependencies:
+    xtend: "npm:^4.0.0"
+  checksum: 10/746b71f93805ae33b03528e429dc624706d1f9b20ee81bf743263efb6a0cd79ae02a642a8a480dbc0f09547b4315ab7df6ce5ec0be77ed700bac42730f5c76b2
   languageName: node
   linkType: hard
 
@@ -4431,6 +4545,13 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10/746a3102d43e8df7b09f5814bec858f12d10185a7abd655537f3291b687d440bb80fc9d1e082f8dee42d4d74307f78a96810e18a2c8e13053b003c6608c1c648
+  languageName: node
+  linkType: hard
+
+"xtend@npm:^4.0.0":
+  version: 4.0.2
+  resolution: "xtend@npm:4.0.2"
+  checksum: 10/ac5dfa738b21f6e7f0dd6e65e1b3155036d68104e67e5d5d1bde74892e327d7e5636a076f625599dc394330a731861e87343ff184b0047fef1360a7ec0a5a36a
   languageName: node
   linkType: hard
 

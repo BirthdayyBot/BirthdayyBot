@@ -1,11 +1,12 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-    provider     = "mysql"
-    url          = env("DATABASE_URL")
-    relationMode = "prisma"
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 }
 
 model Birthday {
@@ -18,9 +19,6 @@ model Birthday {
     guild    Guild   @relation(fields: [guildId], references: [guildId])
 
     @@unique([userId, guildId], map: "unique_user_guild")
-    @@index([birthday], map: "index_birthday_birthday")
-    @@index([guildId], map: "index_guild_id_birthday")
-    @@index([userId], map: "index_user_id_birthday")
     @@map("birthday")
 }
 
@@ -41,7 +39,6 @@ model Guild {
     disabled            Boolean    @default(false)
     birthday            Birthday[]
 
-    @@index([lastUpdated], map: "index_last_updated_guild")
     @@map("guild")
 }
 
@@ -53,7 +50,6 @@ model User {
     lastUpdated   DateTime   @default(now()) @map("last_updated") @db.Timestamp(0)
     birthday      Birthday[]
 
-    @@index([username], map: "index_user_birthday")
     @@map("user")
 }
 
