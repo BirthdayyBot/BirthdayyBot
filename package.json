@@ -89,7 +89,7 @@
 	},
 	"resolutions": {
 		"@types/node": "20.11.5",
-		"ansi-regex": "^5.0.1",
+		"ansi-regex": "^6.0.1",
 		"discord-api-types": "^0.37.79",
 		"minimist": "^1.2.8"
 	},
