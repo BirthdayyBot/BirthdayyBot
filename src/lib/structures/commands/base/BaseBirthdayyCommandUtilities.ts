@@ -1,5 +1,4 @@
 import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
-
 import { PermissionLevels } from '#lib/types';
 import { OWNERS } from '#root/config';
 import { seconds } from '#utils/common';
