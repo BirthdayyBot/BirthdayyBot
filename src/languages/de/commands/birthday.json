@@ -1,51 +1,51 @@
 {
-  "birthdayName": "geburtstag",
-  "birthdayDescription": "Befehle zur Geburtstagsverwaltung",
-  "setName": "definieren",
-  "setDescription": "Legen Sie Ihr Geburtstagsdatum auf dem Server fest.",
-  "set": {
-    "dayName": "tag",
-    "dayDescription": "An welchem ​​Tag wurdest du geboren?",
-    "monthName": "monat",
-    "monthDescription": "Was ist dein Geburtstagsmonat?",
-    "yearName": "jahr",
-    "yearDescription": "In welchem ​​Jahr bist du geboren?",
-    "userName": "benutzer",
-    "userDescription": "Für welchen Benutzer möchten Sie das Geburtsdatum festlegen? - NUR MANAGER.",
-    "success": "Ihr Geburtstag wurde auf diesem Server auf den {{date}} gesetzt.",
-    "success_target": "Der Geburtstag von {{target}} wurde auf diesem Server auf {{date}} gesetzt",
-    "hasNotPermissionManagesRoles": "Es ist Ihnen nicht gestattet, die Geburtstage anderer Benutzer zu verwalten.",
-    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
-  },
-  "listName": "liste",
-  "listDescription": "Listen Sie alle registrierten Geburtstage auf",
-  "removeName": "entfernen",
-  "removeDescription": "Entfernen Sie Ihren Geburtstag",
-  "remove": {
-    "userName": "benutzer",
-    "userDescription": "Entfernen Sie einen Geburtstag für eine Person – NUR MANAGER",
-    "success": "Ihr Geburtstag wurde erfolgreich entfernt.",
-    "success_target": "Der Geburtstag von {target}} wurde erfolgreich entfernt.",
-    "notRegistered": "Ihr Geburtstag ist nicht registriert. Verwenden Sie {{command}}, um es zu registrieren.",
-    "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
-    "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu entfernen",
-    "target": "You do not have permission to delete this user's birthday."
-  },
-  "showName": "zeigen",
-  "showDescription": "Zeigen Sie Ihren Geburtstag",
-  "show": {
-    "userName": "benutzer",
-    "userDescription": "Zeigen Sie einen Geburtstag für eine Person an – NUR FÜR MANAGER",
-    "title": "{{emoji}} Geburtstag",
-    "success": "{{emoji}} Your birthday is at the {{date}}.",
-    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
-    "notRegistered": "Ihr Geburtstag ist nicht registriert. \nVerwenden Sie {{command}}, um es zu registrieren.",
-    "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert."
-  },
-  "testName": "prüfen",
-  "testDescription": "Testen Sie Ihre aktuellen Geburtstagskonfigurationen",
-  "test": {
-    "userName": "benutzer",
-    "userDescription": "Testen Sie einen Geburtstag für eine Person – NUR MANAGER"
-  }
+    "birthdayName": "geburtstag",
+    "birthdayDescription": "Befehle zur Geburtstagsverwaltung",
+    "setName": "definieren",
+    "setDescription": "Legen Sie Ihr Geburtstagsdatum auf dem Server fest.",
+    "set": {
+        "dayName": "tag",
+        "dayDescription": "An welchem ​​Tag wurdest du geboren?",
+        "monthName": "monat",
+        "monthDescription": "Was ist dein Geburtstagsmonat?",
+        "yearName": "jahr",
+        "yearDescription": "In welchem ​​Jahr bist du geboren?",
+        "userName": "benutzer",
+        "userDescription": "Für welchen Benutzer möchten Sie das Geburtsdatum festlegen? - NUR MANAGER.",
+        "success": "Ihr Geburtstag wurde auf diesem Server auf den {{date}} gesetzt.",
+        "success_target": "Der Geburtstag von {{target}} wurde auf diesem Server auf {{date}} gesetzt",
+        "hasNotPermissionManagesRoles": "Es ist Ihnen nicht gestattet, die Geburtstage anderer Benutzer zu verwalten.",
+        "roleHigher": "You cannot execute this command on someone with a higher role than you!"
+    },
+    "listName": "liste",
+    "listDescription": "Listen Sie alle registrierten Geburtstage auf",
+    "removeName": "entfernen",
+    "removeDescription": "Entfernen Sie Ihren Geburtstag",
+    "remove": {
+        "userName": "benutzer",
+        "userDescription": "Entfernen Sie einen Geburtstag für eine Person – NUR MANAGER",
+        "success": "Ihr Geburtstag wurde erfolgreich entfernt.",
+        "success_target": "Der Geburtstag von {target}} wurde erfolgreich entfernt.",
+        "notRegistered": "Ihr Geburtstag ist nicht registriert. Verwenden Sie {{command}}, um es zu registrieren.",
+        "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert.",
+        "hasNotPermissionManagesRoles": "Sie sind nicht berechtigt, Geburtstage zu entfernen",
+        "target": "You do not have permission to delete this user's birthday."
+    },
+    "showName": "zeigen",
+    "showDescription": "Zeigen Sie Ihren Geburtstag",
+    "show": {
+        "userName": "benutzer",
+        "userDescription": "Zeigen Sie einen Geburtstag für eine Person an – NUR FÜR MANAGER",
+        "title": "{{emoji}} Geburtstag",
+        "success": "{{emoji}} Your birthday is at the {{date}}.",
+        "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+        "notRegistered": "Ihr Geburtstag ist nicht registriert. \nVerwenden Sie {{command}}, um es zu registrieren.",
+        "notRegistered_target": "Der Geburtstag von {{target}} ist nicht registriert."
+    },
+    "testName": "prüfen",
+    "testDescription": "Testen Sie Ihre aktuellen Geburtstagskonfigurationen",
+    "test": {
+        "userName": "benutzer",
+        "userDescription": "Testen Sie einen Geburtstag für eine Person – NUR MANAGER"
+    }
 }

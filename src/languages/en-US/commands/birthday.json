@@ -1,71 +1,71 @@
 {
-  "birthdayName": "birthday",
-  "birthdayDescription": "Birthday Management Commands",
-  "setName": "set",
-  "setDescription": "Set your birthday date on the server.",
-  "set": {
-    "dayName": "day",
-    "dayDescription": "What day were you born?",
-    "monthName": "month",
-    "monthDescription": "What is your birthday month?",
-    "yearName": "year",
-    "yearDescription": "Which year are you born ?",
-    "userName": "user",
-    "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
-    "success": "Your birthday has been set to {{birthday}} on this server.",
-    "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
-    "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
-    "roleHigher": "You cannot execute this command on someone with a higher role than you!"
-  },
-  "listName": "list",
-  "listDescription": "List all registered birthdays",
-  "list": {
-    "embedList": {
-      "title": "Upcoming birthdays on the server!",
-      "thumbnail": {
-        "url": "https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png"
-      },
-      "footer": {
-        "text": "Manage your Birthday with /birthday set|remove"
-      }
+    "birthdayName": "birthday",
+    "birthdayDescription": "Birthday Management Commands",
+    "setName": "set",
+    "setDescription": "Set your birthday date on the server.",
+    "set": {
+        "dayName": "day",
+        "dayDescription": "What day were you born?",
+        "monthName": "month",
+        "monthDescription": "What is your birthday month?",
+        "yearName": "year",
+        "yearDescription": "Which year are you born ?",
+        "userName": "user",
+        "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
+        "success": "Your birthday has been set to {{birthday}} on this server.",
+        "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
+        "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
+        "roleHigher": "You cannot execute this command on someone with a higher role than you!"
     },
-    "title": {
-      "month": "Birthdays in {{month}}",
-      "month_empty": "There are no birthdays for this month ({{month}}).",
-      "next": "Here is the list of the next 10 birthdays:",
-      "next_empty": "There are no birthdays on this server."
+    "listName": "list",
+    "listDescription": "List all registered birthdays",
+    "list": {
+        "embedList": {
+            "title": "Upcoming birthdays on the server!",
+            "thumbnail": {
+                "url": "https://media.discordapp.net/attachments/931273194160160829/931273371889586226/cake.png"
+            },
+            "footer": {
+                "text": "Manage your Birthday with /birthday set|remove"
+            }
+        },
+        "title": {
+            "month": "Birthdays in {{month}}",
+            "month_empty": "There are no birthdays for this month ({{month}}).",
+            "next": "Here is the list of the next 10 birthdays:",
+            "next_empty": "There are no birthdays on this server."
+        },
+        "monthName": "month",
+        "monthDescription": "Which month do you want the birthday list for?",
+        "format": "{{arrow}} {{user, userMention}} - {{date}} {{age}}"
     },
-    "monthName": "month",
-    "monthDescription": "Which month do you want the birthday list for?",
-    "format": "{{arrow}} {{user, userMention}} - {{date}} {{age}}"
-  },
-  "removeName": "remove",
-  "removeDescription": "Remove your birthday",
-  "remove": {
-    "userName": "user",
-    "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
-    "success": "Your birthday was successfully removed.",
-    "success_target": "{target}}'s birthday was successfully removed.",
-    "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
-    "notRegistered_target": "{{target}}'s birthday is not yet registered.",
-    "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
-    "target": "You do not have permission to delete this user's birthday."
-  },
-  "showName": "show",
-  "showDescription": "Show your birthday",
-  "show": {
-    "userName": "user",
-    "userDescription": "Show this user's birthday - MANAGER ONLY",
-    "title": "{{emoji}} Birthday",
-    "success": "{{emoji}} Your birthday is at the {{date}}.",
-    "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
-    "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
-    "notRegistered_target": "{{target}}'s birthday is not registered."
-  },
-  "testName": "test",
-  "testDescription": "Test your current birthday setup",
-  "test": {
-    "userName": "user",
-    "userDescription": "Test this user's birthday - MANAGER ONLY"
-  }
+    "removeName": "remove",
+    "removeDescription": "Remove your birthday",
+    "remove": {
+        "userName": "user",
+        "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
+        "success": "Your birthday was successfully removed.",
+        "success_target": "{target}}'s birthday was successfully removed.",
+        "notRegistered": "Your birthday is not recorded. Use {{command}} to save it.",
+        "notRegistered_target": "{{target}}'s birthday is not yet registered.",
+        "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
+        "target": "You do not have permission to delete this user's birthday."
+    },
+    "showName": "show",
+    "showDescription": "Show your birthday",
+    "show": {
+        "userName": "user",
+        "userDescription": "Show this user's birthday - MANAGER ONLY",
+        "title": "{{emoji}} Birthday",
+        "success": "{{emoji}} Your birthday is at the {{date}}.",
+        "success_target": "{{emoji}} {{target}}'s birthday is at the {{date}}.",
+        "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
+        "notRegistered_target": "{{target}}'s birthday is not registered."
+    },
+    "testName": "test",
+    "testDescription": "Test your current birthday setup",
+    "test": {
+        "userName": "user",
+        "userDescription": "Test this user's birthday - MANAGER ONLY"
+    }
 }
