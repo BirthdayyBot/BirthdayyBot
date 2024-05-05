@@ -1,10 +1,10 @@
-import { BrandingColors, Emojis } from '#lib/utils/constants';
-import { CollectionConstructor } from '@discordjs/collection';
-import { Guild, Prisma } from '@prisma/client';
+import { BrandingColors, Emojis } from '#utils/constants';
+import type { CollectionConstructor } from '@discordjs/collection';
+import { type Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { Nullish, cast } from '@sapphire/utilities';
-import { APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
+import { type Nullish, cast } from '@sapphire/utilities';
+import { type APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
 	/**
@@ -21,7 +21,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		birthdayRole: null,
 		logChannel: null,
 		overviewChannel: null,
-		timezone: 0,
+		timezone: 0
 	};
 
 	public constructor(guild: GuildDiscord) {
@@ -34,7 +34,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		const settings = await container.prisma.guild.upsert({
 			create: { ...args, guildId: this.guildId },
 			where: { guildId: this.guildId },
-			update: { ...args },
+			update: { ...args }
 		});
 		return this.insert(settings);
 	}
@@ -65,7 +65,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 			defaultValue: 'null',
 			lng: this.guild.preferredLocale,
 			guild: this.guild,
-			settings,
+			settings
 		}) satisfies APIEmbed;
 
 		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));

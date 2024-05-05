@@ -1,0 +1,13 @@
+{
+  "discordAbortError": "I had a small network error when messaging Discord, please run this command again!",
+  "loading": [
+    "{{LOADING}} Watching hamsters run...",
+    "{{LOADING}} Finding people at hide-and-seek...",
+    "{{LOADING}} Trying to figure out this command...",
+    "{{LOADING}} Fetching data from the cloud...",
+    "{{LOADING}} Calibrating lenses...",
+    "{{LOADING}} Playing rock, paper, scissors...",
+    "{{LOADING}} Tuning in to the right frequencies...",
+    "{{LOADING}} Reticulating splines..."
+  ]
+}

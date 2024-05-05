@@ -17,7 +17,7 @@ export function sendMessage(channel_id: string, options: string | MessagePayload
 export async function editMessage(
 	channel_id: string,
 	message_id: string,
-	options: string | MessageEditOptions | MessagePayload,
+	options: string | MessageEditOptions | MessagePayload
 ) {
 	const message = await fetchMessage(channel_id, message_id);
 	return message?.edit(options);

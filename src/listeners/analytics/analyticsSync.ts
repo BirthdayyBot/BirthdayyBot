@@ -13,7 +13,7 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 			this.syncGuilds(guilds),
 			this.syncUsers(users),
 			this.syncBirthdayCount(birthdayCount),
-			this.syncMessageCount(),
+			this.syncMessageCount()
 		]);
 
 		return this.container.client.analytics!.writeApi.flush();

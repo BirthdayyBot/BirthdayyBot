@@ -1,6 +1,6 @@
 import { Tags } from '#lib/types/AnalyticsSchema';
 import type { Point } from '@influxdata/influxdb-client';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { Listener, type ListenerOptions } from '@sapphire/framework';
 import { envParseBoolean } from '@skyra/env-utilities';
 
 export abstract class AnalyticsListener extends Listener {

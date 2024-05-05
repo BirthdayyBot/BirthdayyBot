@@ -31,10 +31,10 @@
     "success": "Le **fuseau horaire** a été défini sur {{timezone}}."
   },
   "announcementChannel": {
-    "cannotPermissions": "Oh... on dirait que je ne peux pas envoyer de message dans ce salon. Tu peux jeter un oeil?",
+    "cannotPermissions": "Oh... on dirait que je ne peux pas envoyer de message dans ce salon. Tu peux jeter un oeil ?",
     "channelName": "salon",
     "channelDescription": "Dans quel salon doit-je envoyer le message d'annonce?",
-    "success": "Le salon d'annonce à bien été defini sur {{channel}}."
+    "success": "Le salon d'annonce à bien été défini sur {{channel}}."
   },
   "announcementChannelDescription": "Salon où j'enverrais un message quand ce sera l'anniversaire d'un utilisateur",
   "announcementChannelName": "salon-annonce",
@@ -50,7 +50,7 @@
     "highestBotRole": "Oh je ne peux pas attribuer ce rôle... On dirait qu'il est plus haut que mon rôle le plus haut.",
     "roleDescription": "Rôle qui sera attribué à l'utilisateur le jour de son anniversaire",
     "roleName": "role",
-    "success": "Le rôle d'anniversaire a bien été defini sur {{role}}."
+    "success": "Le rôle d'anniversaire a bien été défini sur {{role}}."
   },
   "birthdayRoleDescription": "Rôle attribué à l'utilisateur le jour de son anniversaire",
   "birthdayRoleName": "role-anniversaire",
@@ -69,8 +69,8 @@
           "value": "{{ArrowRight}} {{settings.pingRole}}"
         },
         {
-            "name": "Salon d'annonce",
-            "value": "{{ArrowRight}} {{settings.announcementChannel}}"
+          "name": "Salon d'annonce",
+          "value": "{{ArrowRight}} {{settings.announcementChannel}}"
         }
       ]
     }
@@ -79,14 +79,14 @@
     "cannotPermissions": "Je n'ai pas l'autorisation d'envoyer des messages sur {{channel}}.",
     "channelDescription": "Salon sur lequel l'aperçu doit être envoyé et mis à jour",
     "channelName": "salon",
-    "success": "Le salon d'apercu a bien été defini sur {{channel}} et le nouveau [message]({{message}})."
+    "success": "Le salon d'apercu a bien été défini sur {{channel}} et le nouveau [message]({{message}})."
   },
   "overviewChannelDescription": "Salon qui répertorie tous les anniversaires du serveur",
   "overviewChannelName": "salon-apercu",
   "pingRole": {
     "roleDescription": "Quel rôle doit-je mentionner dans le message d'annonce ?",
     "roleName": "role",
-    "success": "Le rôle de mention a bien été defini sur {{role}}."
+    "success": "Le rôle de mention a bien été défini sur {{role}}."
   },
   "pingRoleDescription": "Mentionne un rôle le jour de l'anniversaire de quelqu'un",
   "pingRoleName": "role-mention",

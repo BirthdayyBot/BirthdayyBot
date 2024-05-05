@@ -17,7 +17,7 @@ export class UserPrecondition extends Precondition {
 	private async handler({ guildId }: CommandInteraction<'cached'>) {
 		const result = await resolveOnErrorCodesPrisma(
 			this.container.prisma.guild.findFirstOrThrow({ where: { guildId } }),
-			PrismaErrorCodeEnum.NotFound,
+			PrismaErrorCodeEnum.NotFound
 		);
 
 		return result?.premium === true ? this.ok() : this.error({ identifier: 'preconditions:guildPremium' });

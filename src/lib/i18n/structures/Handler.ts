@@ -1,4 +1,4 @@
-import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/duration';
+import { type DurationFormatAssetsTime, DurationFormatter } from '@sapphire/duration';
 
 export abstract class Handler {
 	public readonly name: string;
@@ -15,14 +15,14 @@ export abstract class Handler {
 		this.numberCompact = new Intl.NumberFormat(this.name, {
 			notation: 'compact',
 			compactDisplay: 'short',
-			maximumFractionDigits: 2,
+			maximumFractionDigits: 2
 		});
 		this.listAnd = new Intl.ListFormat(this.name, { type: 'conjunction' });
 		this.listOr = new Intl.ListFormat(this.name, { type: 'disjunction' });
 		this.dateTime = new Intl.DateTimeFormat(this.name, {
 			timeZone: 'Etc/UTC',
 			dateStyle: 'short',
-			timeStyle: 'medium',
+			timeStyle: 'medium'
 		});
 		this.duration = new DurationFormatter(options.duration);
 	}

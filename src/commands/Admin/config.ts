@@ -1,28 +1,27 @@
 import { getSettings } from '#lib/discord/guild';
-import { CustomSubCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { formatBirthdayMessage } from '#lib/utils/common/string';
-import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
-import { BrandingColors, CdnUrls } from '#lib/utils/constants';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#lib/utils/environment';
+import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
+import { BrandingColors, CdnUrls } from '#utils/constants';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import { Guild } from '@prisma/client';
+import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
+import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
 import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
 import {
-	Channel,
+	type Channel,
 	ChannelType,
 	EmbedBuilder,
-	EmbedField,
+	type EmbedField,
 	PermissionFlagsBits,
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
-	roleMention,
+	roleMention
 } from 'discord.js';
 
 type ConfigDefault = Omit<
@@ -30,21 +29,21 @@ type ConfigDefault = Omit<
 	'guildId' | 'logChannel' | 'inviter' | 'language' | 'lastUpdated' | 'disabled' | 'premium'
 >;
 
-@ApplyOptions<CustomSubCommand.Options>({
+@ApplyOptions<BirthdayySubcommand.Options>({
 	name: 'config',
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Manager,
+	permissionLevel: PermissionLevels.Manager
 })
-export class ConfigCommand extends CustomSubCommand {
+export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
-			guildIds: ['980559116076470272'],
+			guildIds: ['980559116076470272']
 		});
 	}
 
-	public async edit(interaction: Command.ChatInputCommandInteraction<'cached'>) {
+	public async edit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
@@ -94,7 +93,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	public async view(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public async view(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { guildId } = interaction;
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
@@ -102,7 +101,7 @@ export class ConfigCommand extends CustomSubCommand {
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
-	public reset(interaction: CustomSubCommand.ChatInputCommandInteraction<'cached'>) {
+	public reset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const key = interaction.options.getString('key', true) as ResetConfig;
 		switch (key) {
 			case 'all': {
@@ -113,7 +112,7 @@ export class ConfigCommand extends CustomSubCommand {
 					birthdayPingRole: null,
 					overviewChannel: null,
 					overviewMessage: null,
-					timezone: 0,
+					timezone: 0
 				};
 				return this.updateDatabase(interaction, data);
 			}
@@ -137,7 +136,7 @@ export class ConfigCommand extends CustomSubCommand {
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null,
-		modified = false,
+		modified = false
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
@@ -176,8 +175,8 @@ export class ConfigCommand extends CustomSubCommand {
 				birthdayRole,
 				birthdayPingRole,
 				overviewChannel,
-				timezone,
-			}) satisfies EmbedField[]),
+				timezone
+			}) satisfies EmbedField[])
 		);
 
 		return embed;
@@ -190,8 +189,8 @@ export class ConfigCommand extends CustomSubCommand {
 				where: { guildId },
 				create: { guildId, ...data },
 				update: data,
-				select: null,
-			}),
+				select: null
+			})
 		);
 
 		const content = await result.match({
@@ -200,7 +199,7 @@ export class ConfigCommand extends CustomSubCommand {
 			err: (error) => {
 				this.container.logger.error(error);
 				return resolveKey(interaction, 'commands/config:editFailure');
-			},
+			}
 		});
 
 		const options = typeof content === 'string' ? { content } : { embeds: [content] };
@@ -212,8 +211,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (!canSendEmbeds(channel)) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
-					channel: channelMention(channel.id),
-				}),
+					channel: channelMention(channel.id)
+				})
 			);
 		}
 
@@ -222,7 +221,7 @@ export class ConfigCommand extends CustomSubCommand {
 
 	private async parseAnnouncementMessage(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		announcementMessage: string,
+		announcementMessage: string
 	) {
 		const settingsManager = getSettings(interaction.guildId);
 		const settings = await settingsManager.fetch();
@@ -231,7 +230,7 @@ export class ConfigCommand extends CustomSubCommand {
 		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
 			await this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { announcementMessage: defaultAnnouncementMessage },
+				data: { announcementMessage: defaultAnnouncementMessage }
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
@@ -240,8 +239,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (announcementMessage.length > 512) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editMessageTooLong', {
-					maxLength: 512,
-				}),
+					maxLength: 512
+				})
 			);
 		}
 
@@ -252,8 +251,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (role.position >= interaction.guild.members.me!.roles.highest.position) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editRoleHigher', {
-					role: roleMention(role.id),
-				}),
+					role: roleMention(role.id)
+				})
 			);
 		}
 
@@ -261,8 +260,8 @@ export class ConfigCommand extends CustomSubCommand {
 		if (mention && !role.mentionable) {
 			return Result.err(
 				await resolveKey(interaction, 'commands/config:editRoleNotMentionnable', {
-					role: roleMention(role.id),
-				}),
+					role: roleMention(role.id)
+				})
 			);
 		}
 
@@ -273,7 +272,7 @@ export class ConfigCommand extends CustomSubCommand {
 export const ConfigApplicationCommandMentions = {
 	Edit: chatInputApplicationCommandMention('config', 'edit', '935174203882217483'),
 	View: chatInputApplicationCommandMention('config', 'view', '935174203882217483'),
-	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483'),
+	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483')
 } as const;
 
 function registerConfigCommand(builder: SlashCommandBuilder) {
@@ -291,45 +290,45 @@ function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyAnnouncementChannel',
-				'commands/config:editOptionsAnnoucementChannelDescription',
-			).addChannelTypes(ChannelType.GuildText),
+				'commands/config:editOptionsAnnoucementChannelDescription'
+			).addChannelTypes(ChannelType.GuildText)
 		)
 		.addStringOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyAnnouncementMessage',
-				'commands/config:editOptionsAnnoucementMessageDescription',
+				'commands/config:editOptionsAnnoucementMessageDescription'
 			)
 				.setMinLength(1)
-				.setMaxLength(512),
+				.setMaxLength(512)
 		)
 		.addRoleOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyBirthdayRole',
-				'commands/config:editOptionsBirthdayRoleDescription',
-			),
+				'commands/config:editOptionsBirthdayRoleDescription'
+			)
 		)
 		.addRoleOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyBirthdayPingRole',
-				'commands/config:editOptionsBirthdayPingRoleDescription',
-			),
+				'commands/config:editOptionsBirthdayPingRoleDescription'
+			)
 		)
 		.addChannelOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyOverviewChannel',
-				'commands/config:editOptionsOverviewChannelDescription',
-			).addChannelTypes(ChannelType.GuildText),
+				'commands/config:editOptionsOverviewChannelDescription'
+			).addChannelTypes(ChannelType.GuildText)
 		)
 		.addIntegerOption((builder) =>
 			applyLocalizedBuilder(
 				builder,
 				'commands/config:keyTimezone',
-				'commands/config:editOptionsTimezoneDescription',
-			).setAutocomplete(true),
+				'commands/config:editOptionsTimezoneDescription'
+			).setAutocomplete(true)
 		);
 }
 
@@ -343,21 +342,21 @@ function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 			.addChoices(
 				createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
 				createLocalizedChoice('commands/config:keyAnnouncementChannel', {
-					value: 'announcementChannel',
+					value: 'announcementChannel'
 				}),
 				createLocalizedChoice('commands/config:keyAnnouncementMessage', {
-					value: 'announcementMessage',
+					value: 'announcementMessage'
 				}),
 				createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
 				createLocalizedChoice('commands/config:keyBirthdayPingRole', {
-					value: 'birthdayPingRole',
+					value: 'birthdayPingRole'
 				}),
 				createLocalizedChoice('commands/config:keyOverviewChannel', {
-					value: 'overviewChannel',
+					value: 'overviewChannel'
 				}),
-				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' }),
+				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
 			)
-			.setRequired(true),
+			.setRequired(true)
 	);
 }
 

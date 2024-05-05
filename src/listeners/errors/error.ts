@@ -8,12 +8,12 @@ export class UserListener extends Listener {
 		const { logger } = this.container;
 		if (error instanceof DiscordAPIError) {
 			logger.warn(
-				`[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`,
+				`[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`
 			);
 			logger.fatal(error.stack);
 		} else if (error instanceof HTTPError) {
 			logger.warn(
-				`[HTTP ERROR] [CODE: ${error.status}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`,
+				`[HTTP ERROR] [CODE: ${error.status}] ${error.message}${NEWLINE}[PATH: ${error.method} ${error.url}]`
 			);
 			logger.fatal(error.stack);
 		} else {

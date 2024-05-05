@@ -6,7 +6,7 @@ import type { Command } from '@sapphire/framework';
  */
 export default async function thinking(
 	interaction: Command.ChatInputCommandInteraction,
-	isEphemeral = false,
+	isEphemeral = false
 ): Promise<void> {
 	if (isEphemeral) {
 		// send out ephemeral thinking message

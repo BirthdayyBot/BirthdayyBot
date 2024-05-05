@@ -1,31 +1,32 @@
+import { BirthdayyCommand } from '#lib/structures';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Command } from '@sapphire/framework';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 
-@ApplyOptions<Command.Options>({
-	description: 'ping pong',
+@ApplyOptions<BirthdayyCommand.Options>({
+	description: 'ping pong'
 })
-export class PingCommand extends Command {
-	public override async registerApplicationCommands(registry: Command.Registry) {
+export class PingCommand extends BirthdayyCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
-				description: this.description,
+				description: this.description
 			},
 			{
-				guildIds: await getCommandGuilds('testing'),
-			},
+				guildIds: await getCommandGuilds('testing')
+			}
 		);
 	}
 
-	public override async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const msg = await interaction.reply({ content: 'Ping?', fetchReply: true });
 		const content = `Pong! Bot Latency ${Math.round(this.container.client.ws.ping)}ms. API Latency ${
 			msg.createdTimestamp - interaction.createdTimestamp
 		}ms.`;
 
 		return interaction.editReply({
-			content,
+			content
 		});
 	}
 }

@@ -1,12 +1,13 @@
 export enum Events {
 	AnalyticsSync = 'analyticsSync',
 	CommandUsageAnalytics = 'commandUsageAnalytics',
+	Error = 'error',
 	PostStatsError = 'postStatsError',
 	PostStatsSuccess = 'postStatsSuccess',
 	MessageCreate = 'messageCreate',
 	GuildCreate = 'guildCreate',
 	GuildDelete = 'guildDelete',
-	ResourceAnalyticsSync = 'resourceAnalyticsSync',
+	ResourceAnalyticsSync = 'resourceAnalyticsSync'
 }
 
 export enum PermissionLevels {
@@ -15,5 +16,5 @@ export enum PermissionLevels {
 	Manager = 5,
 	Administrator = 6,
 	ServerOwner = 7,
-	BotOwner = 10,
+	BotOwner = 10
 }

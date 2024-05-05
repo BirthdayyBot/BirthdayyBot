@@ -1,18 +1,5 @@
-import { Emojis } from '#lib/utils/constants';
+import { Emojis } from '#utils/constants';
 import type { APIEmbed } from 'discord.js';
-
-// ! Currently not working??
-/*
-import { VoteSites } from '../db/voteSites';
- const VoteFields = (): string => {
-	const sites = VoteSites;
-	let value = '';
-	sites.map((site) => {
-		value += `${ARROW_RIGHT}[${site.name}](${site.url})\n`;
-	});
-	container.logger.info('value', value);
-	return value;
-}; */
 
 export const VoteEmbed: APIEmbed = {
 	title: `${Emojis.Heart} Support Birthdayy`,
@@ -25,12 +12,12 @@ export const VoteEmbed: APIEmbed = {
             ${Emojis.ArrowRight} [discord-botlist.eu](https://birthdayy.xyz/discord-botlist/vote)
             ${Emojis.ArrowRight} [discordlist.gg](https://birthdayy.xyz/discordlist/vote)
             `,
-			inline: false,
+			inline: false
 		},
 		{
 			name: 'Birthdayy Premium',
 			value: `${Emojis.ArrowRight} Support the Project and get access to beta features\n${Emojis.Plus} [Birthdayy Patreon](https://www.patreon.com/birthdayy)`,
-			inline: false,
-		},
-	],
+			inline: false
+		}
+	]
 };
