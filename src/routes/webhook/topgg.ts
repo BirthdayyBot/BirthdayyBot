@@ -22,7 +22,7 @@ export class UserRoute extends Route {
 			user: s.string,
 			type: s.enum('test', 'upvote'),
 			query: s.string,
-			bot: s.string,
+			bot: s.string
 		});
 
 		const body = data.parse(request.body);
@@ -42,7 +42,7 @@ export class UserRoute extends Route {
 			const payload = {
 				memberId: user.id,
 				guildId: guild.id,
-				roleId: defaultRoleID,
+				roleId: defaultRoleID
 			};
 
 			await this.addRoleAndCreateTask(payload);
@@ -59,14 +59,14 @@ export class UserRoute extends Route {
 		await addRoleToUser(payload.memberId, payload.roleId, payload.guildId);
 		await container.tasks.create('BirthdayRoleRemoverTask', payload, {
 			repeated: false,
-			delay: Time.Hour * 12,
+			delay: Time.Hour * 12
 		});
 	}
 
 	private async sendThankYouDM(user: User, guild: Guild) {
 		const embed = generateDefaultEmbed({
 			title: `${Emojis.Success} You voted for Birthdayy on TopGG!`,
-			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`,
+			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`
 		});
 
 		const components = [new ActionRowBuilder<ButtonBuilder>().setComponents(await remindMeButtonBuilder(guild))];
@@ -78,7 +78,7 @@ export class UserRoute extends Route {
 		const embed = generateDefaultEmbed({
 			title: `${Emojis.Exclamation} New Vote on TopGG!`,
 			description: `\`${user.username}#${user.discriminator}\` has **voted** for ${CLIENT_NAME}! Use \`/vote\` or vote [here](https://top.gg/bot/${container.client.id}/vote) directly.`,
-			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL },
+			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL }
 		});
 
 		await sendMessage(VOTE_CHANNEL_ID, { embeds: [embed] });

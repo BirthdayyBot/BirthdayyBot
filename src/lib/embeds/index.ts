@@ -1,2 +1,2 @@
-export * from './help.js';
-export * from './vote.js';
+export * from '#lib/embeds/help';
+export * from '#lib/embeds/vote';

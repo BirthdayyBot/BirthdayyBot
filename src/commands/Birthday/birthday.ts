@@ -1,10 +1,11 @@
 import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
-import { BirthdayySubcommand } from '#lib/structures/index';
+import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { addZeroToSingleDigitNumber } from '#lib/utils/common/string';
-import { Emojis, createSubcommandMappings, interactionProblem, interactionSuccess, resolveTarget } from '#utils';
-import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
-import { getBirthdays } from '#utils/functions/guilds';
+import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
+import { Emojis } from '#utils/constants';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { getBirthdays } from '#utils/functions';
+import { createSubcommandMappings, resolveTarget } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
@@ -20,10 +21,11 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
 		{ name: 'remove', preconditions: ['Manager', 'RoleHigher'] },
 		'show',
-		{ name: 'test', preconditions: ['Manager'] },
+		{ name: 'test', preconditions: ['Manager'] }
 	),
+
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
-	permissionLevel: PermissionLevels.Everyone,
+	permissionLevel: PermissionLevels.Everyone
 })
 export class BirthdayCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -59,8 +61,8 @@ export class BirthdayCommand extends BirthdayySubcommand {
 			ctx,
 			await resolveKey(ctx, 'commands/birthday:set.success', {
 				birthday: bold(formatDateForDisplay(birthday)),
-				...options,
-			}),
+				...options
+			})
 		);
 	}
 
@@ -71,7 +73,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		if (!result) {
 			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
-				...options,
+				...options
 			});
 		}
 
@@ -91,8 +93,8 @@ export class BirthdayCommand extends BirthdayySubcommand {
 			await resolveKey(ctx, 'commands/birthday:show.success', {
 				date: bold(formatDateForDisplay(birthday.birthday)),
 				emoji: Emojis.ArrowRight,
-				...options,
-			}),
+				...options
+			})
 		);
 	}
 
@@ -117,7 +119,7 @@ export const BirthdayApplicationCommandMentions = {
 	Set: chatInputApplicationCommandMention('birthday', 'set', '935174192389840896'),
 	Remove: chatInputApplicationCommandMention('birthday', 'remove', '935174192389840896'),
 	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
-	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896'),
+	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896')
 } as const;
 
 function registerBirthdayCommand(builder: SlashCommandBuilder) {
@@ -140,24 +142,24 @@ function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 
 function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
-		monthOptions(option, 'commands/birthday:list.month').setRequired(false),
+		monthOptions(option, 'commands/birthday:list.month').setRequired(false)
 	);
 }
 
 function removeBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:remove').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:remove.user'),
+		userOptions(option, 'commands/birthday:remove.user')
 	);
 }
 
 function showBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:show').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:show.user'),
+		userOptions(option, 'commands/birthday:show.user')
 	);
 }
 
 function testBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyLocalizedBuilder(builder, 'commands/birthday:test').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:test.user'),
+		userOptions(option, 'commands/birthday:test.user')
 	);
 }

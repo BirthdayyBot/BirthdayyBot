@@ -27,9 +27,9 @@ function resolveUserError(t: TFunction, error: UserError) {
 					...error,
 					...(error.context as object),
 					argument: error.argument.name,
-					parameter: cutText(error.parameter.replaceAll('`', '῾'), 50),
+					parameter: cutText(error.parameter.replaceAll('`', '῾'), 50)
 				}
-			: (error.context as any),
+			: (error.context as any)
 	) as string;
 }
 
@@ -67,7 +67,7 @@ export function generateUnexpectedErrorMessage(
 	userId: Snowflake,
 	command: Command | Subcommand,
 	t: TFunction,
-	error: unknown,
+	error: unknown
 ) {
 	if (OWNERS.includes(userId)) return codeBlock('js', String(error));
 	if (!sentry) return t('events/errors:unexpectedError');

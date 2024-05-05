@@ -1,5 +1,7 @@
 import { sendMessage } from '#lib/discord';
-import { CLIENT_NAME, BOT_SERVER_LOG, Emojis, generateDefaultEmbed } from '#utils';
+import { Emojis } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
+import { BOT_SERVER_LOG, CLIENT_NAME } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { DurationFormatter } from '@sapphire/duration';
 import { Events, Listener, container, type ListenerOptions } from '@sapphire/framework';
@@ -25,8 +27,8 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			{ name: 'GuildName', value: `${name}` },
 			{
 				name: 'GuildID',
-				value: `${guildId}`,
-			},
+				value: `${guildId}`
+			}
 		];
 
 		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
@@ -39,7 +41,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 			title: `${Emojis.Fail} ${CLIENT_NAME} got removed from a Guild`,
 			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
 			fields,
-			color: Colors.Red,
+			color: Colors.Red
 		});
 		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}

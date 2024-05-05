@@ -1,4 +1,4 @@
-import { DMMessage, GuildMessage } from '#lib/types/Discord';
+import type { DMMessage, GuildMessage } from '#lib/types/Discord';
 import type { Message } from 'discord.js';
 
 /**

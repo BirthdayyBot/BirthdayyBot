@@ -1,12 +1,12 @@
 import { GuildMemberFetchQueue } from '#lib/discord';
+import { AnalyticsData } from '#lib/structures/AnalyticsData.js';
 import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
 import { PrismaClient } from '@prisma/client';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
-import { InternationalizationContext } from '@sapphire/plugin-i18next';
+import type { InternationalizationContext } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
-import { AnalyticsData } from './structures/AnalyticsData.js';
 
 export class BirthdayyClient extends SapphireClient {
 	@Enumerable(false)
@@ -30,7 +30,7 @@ export class BirthdayyClient extends SapphireClient {
 		this.analytics = envParseBoolean('INFLUX_ENABLED') ? new AnalyticsData() : null;
 		container.prisma = new PrismaClient({
 			datasourceUrl: envParseString('DATABASE_URL'),
-			log: envParseBoolean('PRISMA_DEBUG_LOGS') ? ['query', 'info', 'warn', 'error'] : ['warn', 'error'],
+			log: envParseBoolean('PRISMA_DEBUG_LOGS') ? ['query', 'info', 'warn', 'error'] : ['warn', 'error']
 		});
 		this.webhookError = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
 	}
@@ -67,7 +67,7 @@ export class BirthdayyClient extends SapphireClient {
 	public override async computeUsers() {
 		if (this.shard) {
 			const users = await this.shard.broadcastEval((c) =>
-				c.guilds.cache.filter((g) => g.available).reduce((acc, guild) => acc + (guild.memberCount ?? 0), 0),
+				c.guilds.cache.filter((g) => g.available).reduce((acc, guild) => acc + (guild.memberCount ?? 0), 0)
 			);
 
 			return users.reduce((acc, m) => acc + m, 0);

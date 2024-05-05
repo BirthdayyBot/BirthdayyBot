@@ -1,14 +1,15 @@
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { BrandingColors, Permission_Bits } from '#utils';
+import { BrandingColors } from '#utils/constants';
+import { Permission_Bits } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
+import { type TFunction, applyLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, OAuth2Scopes, hyperlink } from 'discord.js';
 @ApplyOptions<BirthdayyCommand.Options>({
 	description: 'commands/invite:description',
 	detailedDescription: 'commands/invite:detailedDescription',
-	permissionLevel: PermissionLevels.Everyone,
+	permissionLevel: PermissionLevels.Everyone
 })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -16,8 +17,8 @@ export class UserCommand extends BirthdayyCommand {
 			applyLocalizedBuilder(builder, 'commands/invite:name', 'commands/invite:description')
 				.setDMPermission(true)
 				.addBooleanOption((option) =>
-					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false),
-				),
+					applyLocalizedBuilder(option, 'commands/invite:inviteOptionsPermissions').setRequired(false)
+				)
 		);
 	}
 
@@ -30,11 +31,11 @@ export class UserCommand extends BirthdayyCommand {
 	private getEmbed(t: TFunction, shouldNotAddPermissions: boolean): EmbedBuilder {
 		const embeddedInviteLink = hyperlink(
 			t('commands/general:invitePermissionInviteText'),
-			this.generateInviteLink(shouldNotAddPermissions),
+			this.generateInviteLink(shouldNotAddPermissions)
 		);
 		const embeddedJoinLink = hyperlink(
 			t('commands/invite:invitePermissionSupportServerText'),
-			'https://discord.birthdayy.xyz',
+			'https://discord.birthdayy.xyz'
 		);
 
 		return new EmbedBuilder() //
@@ -42,17 +43,17 @@ export class UserCommand extends BirthdayyCommand {
 			.setDescription(
 				[
 					[embeddedInviteLink, embeddedJoinLink].join(' | '),
-					shouldNotAddPermissions ? undefined : t('commands/invite:invitePermissionsDescription'),
+					shouldNotAddPermissions ? undefined : t('commands/invite:invitePermissionsDescription')
 				]
 					.filter(Boolean)
-					.join('\n'),
+					.join('\n')
 			);
 	}
 
 	private generateInviteLink(shouldNotAddPermissions: boolean) {
 		return this.container.client.generateInvite({
 			scopes: [OAuth2Scopes.ApplicationsCommands, OAuth2Scopes.Bot],
-			permissions: shouldNotAddPermissions ? 0n : Permission_Bits,
+			permissions: shouldNotAddPermissions ? 0n : Permission_Bits
 		});
 	}
 }

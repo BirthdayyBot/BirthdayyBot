@@ -1,3 +1,3 @@
-export * from './guildInfo.js';
-export * from './help.js';
-export * from './stats.js';
+export * from '#lib/commands/guildInfo';
+export * from '#lib/commands/help';
+export * from '#lib/commands/stats';

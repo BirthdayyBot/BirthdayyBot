@@ -1,5 +1,5 @@
 import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#utils';
+import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
@@ -8,12 +8,12 @@ import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
 	description: 'commands/system:supportDescription',
-	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
+	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks]
 })
 export class SupportCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyDescriptionLocalizedBuilder(builder, this.description).setName('support').setDMPermission(true),
+			applyDescriptionLocalizedBuilder(builder, this.description).setName('support').setDMPermission(true)
 		);
 	}
 

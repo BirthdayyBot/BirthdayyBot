@@ -1,9 +1,10 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
+import type { AnalyticsData } from '#lib/structures/AnalyticsData';
+import type { Events } from '#lib/types/Enums';
 import type { Birthday, Guild, User } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import 'discord.js';
-import type { Events } from './Enums.js';
 
 declare module 'discord.js' {
 	interface Client {

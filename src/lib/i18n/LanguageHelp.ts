@@ -13,7 +13,7 @@ export class LanguageHelp {
 			extendedHelp,
 			possibleFormats = [],
 			reminder,
-			usages = [],
+			usages = []
 		} = options;
 		const output: string[] = [];
 
@@ -22,7 +22,7 @@ export class LanguageHelp {
 			output.push(
 				this.usages,
 				...usages.map((usage) => `→ /${name}${usage.length === 0 ? '' : ` *${usage}*`}`),
-				'',
+				''
 			);
 		}
 
@@ -41,7 +41,7 @@ export class LanguageHelp {
 			output.push(
 				this.possibleFormats,
 				...possibleFormats.map(([type, example]) => `→ **${type}**: ${example}`),
-				'',
+				''
 			);
 		}
 

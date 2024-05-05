@@ -1,7 +1,7 @@
-import { isDevelopment } from '#utils';
+import { isDevelopment } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, Piece, Store, container } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { type TFunction } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { blue, gray, green, magenta, magentaBright, red, white, yellow } from 'colorette';
 
@@ -30,7 +30,7 @@ ${blc('1.0.0')}
 [${client.analytics ? success : failed}] Analytics
 [${isAuthEnabled ? success : failed}] OAuth 2.0 Enabled
 ${isDevelopment ? ` ${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}` : ''}
-		`.trim(),
+		`.trim()
 		);
 	}
 

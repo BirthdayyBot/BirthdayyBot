@@ -18,7 +18,7 @@ export const RequiresUserPermissionsIfTargetIsNotAuthor = (
 			const message = await resolveKey(interaction, `${key}.hasNotPermissionManagesRoles`);
 			throw new UserError({
 				identifier: DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions,
-				message,
+				message
 			});
 		}
 
@@ -29,7 +29,7 @@ export const RequiresUserPermissionsIfTargetIsNotAuthor = (
 			const message = await resolveKey(interaction, `${key}.hasNotPermissionToManageThisUser`);
 			throw new UserError({
 				identifier: DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions,
-				message,
+				message
 			});
 		}
 

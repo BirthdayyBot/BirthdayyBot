@@ -48,5 +48,5 @@ export const Permission_Bits = [
 	PermissionsBitField.Flags.SendMessagesInThreads,
 
 	PermissionsBitField.Flags.UseExternalEmojis,
-	PermissionsBitField.Flags.UseExternalStickers,
+	PermissionsBitField.Flags.UseExternalStickers
 ];

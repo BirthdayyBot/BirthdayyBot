@@ -8,33 +8,33 @@ export class ExtendedHandler extends Handler {
 			duration: {
 				[TimeTypes.Year]: {
 					1: 'year',
-					DEFAULT: 'years',
+					DEFAULT: 'years'
 				},
 				[TimeTypes.Month]: {
 					1: 'month',
-					DEFAULT: 'months',
+					DEFAULT: 'months'
 				},
 				[TimeTypes.Week]: {
 					1: 'week',
-					DEFAULT: 'weeks',
+					DEFAULT: 'weeks'
 				},
 				[TimeTypes.Day]: {
 					1: 'day',
-					DEFAULT: 'days',
+					DEFAULT: 'days'
 				},
 				[TimeTypes.Hour]: {
 					1: 'hour',
-					DEFAULT: 'hours',
+					DEFAULT: 'hours'
 				},
 				[TimeTypes.Minute]: {
 					1: 'minute',
-					DEFAULT: 'minutes',
+					DEFAULT: 'minutes'
 				},
 				[TimeTypes.Second]: {
 					1: 'second',
-					DEFAULT: 'seconds',
-				},
-			},
+					DEFAULT: 'seconds'
+				}
+			}
 		});
 	}
 }

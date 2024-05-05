@@ -9,7 +9,7 @@ export class UserPermissionsPrecondition extends Precondition {
 	}
 
 	public override async contextMenuRun(
-		interaction: ContextMenuCommandInteraction<'cached'>,
+		interaction: ContextMenuCommandInteraction<'cached'>
 	): Precondition.AsyncResult {
 		const result = await this.handler(interaction);
 		return result;

@@ -1,10 +1,9 @@
+import { TIMEZONE_VALUES, addZeroToSingleDigitNumber } from '#utils/common';
 import { container } from '@sapphire/framework';
 import dayjs from 'dayjs';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import utc from 'dayjs/plugin/utc.js';
 import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
-import { addZeroToSingleDigitNumber } from './string.js';
-import { TIMEZONE_VALUES } from './timezone.js';
 
 dayjs.extend(utc);
 dayjs.extend(dayjstimezone);
@@ -38,7 +37,7 @@ const months = [
 	'September',
 	'October',
 	'November',
-	'December',
+	'December'
 ] as const;
 
 export function numberToMonthName(number: number) {
@@ -79,7 +78,7 @@ export function getCurrentOffset(): TimezoneObject {
 				date: today,
 				dateFormatted: today.format('YYYY/MM/DD'),
 				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset],
+				timezone: TIMEZONE_VALUES[offset]
 			};
 			return timezoneObject;
 		}
@@ -89,7 +88,7 @@ export function getCurrentOffset(): TimezoneObject {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY/MM/DD'),
 		utcOffset: 0,
-		timezone: 'UTC',
+		timezone: 'UTC'
 	};
 	container.logger.debug('getCurrentOffset ~ timezoneObject:', timezoneObject);
 	return timezoneObject;

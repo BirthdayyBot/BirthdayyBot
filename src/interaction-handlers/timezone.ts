@@ -1,4 +1,4 @@
-import { TIMEZONE_VALUES } from '#lib/utils/common/timezone';
+import { TIMEZONE_VALUES } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { AutocompleteInteraction } from 'discord.js';
@@ -18,7 +18,7 @@ export class UserInteractionHandler extends InteractionHandler {
 			case 'timezone': {
 				const items = Object.entries(TIMEZONE_VALUES).map(([value, name]) => ({ name, value }));
 				return this.some(
-					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase())),
+					items.filter((item) => item.name.toLowerCase().includes(focusedOption.value.toLowerCase()))
 				);
 			}
 			default:

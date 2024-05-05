@@ -1,7 +1,7 @@
-import { GuildMessage } from '#lib/types';
+import { type GuildMessage } from '#lib/types';
 import { type PreconditionEntryResolvable } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { type TFunction } from '@sapphire/plugin-i18next';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import {
 	ChatInputCommandInteraction,
@@ -10,7 +10,7 @@ import {
 	Message,
 	MessagePayload,
 	userMention,
-	type InteractionReplyOptions,
+	type InteractionReplyOptions
 } from 'discord.js';
 import { BrandingColors } from './constants.js';
 
@@ -31,7 +31,7 @@ export function pickRandom<T>(array: readonly T[]): T {
  */
 export function sendLoadingMessage<T extends GuildMessage | Message>(
 	message: T,
-	t: TFunction,
+	t: TFunction
 ): Promise<typeof message> {
 	const embed = new EmbedBuilder()
 		.setDescription(pickRandom(t('system:loadingMessages', { returnObjects: true })))
@@ -66,7 +66,7 @@ export function createSubcommandMappings(...subcommands: Array<string | Mapps>):
 		return {
 			name: subcommand.name,
 			preconditions: subcommand.preconditions,
-			chatInputRun: snakeToCamel(subcommand.name),
+			chatInputRun: snakeToCamel(subcommand.name)
 		};
 	});
 }

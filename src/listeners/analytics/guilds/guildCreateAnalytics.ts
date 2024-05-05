@@ -18,7 +18,7 @@ export class UserAnalyticsEvent extends AnalyticsListener {
 			// TODO: Adjust for traditional sharding
 			.intField(
 				'value',
-				guild.client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0),
+				guild.client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0)
 			);
 
 		return this.writePoints([guilds, users]);

@@ -5,7 +5,7 @@ import { flattenError, generateUnexpectedErrorMessage, resolveError } from './_s
 
 export async function handleCommandError(
 	error: unknown,
-	payload: ChatInputCommandErrorPayload | ChatInputSubcommandErrorPayload,
+	payload: ChatInputCommandErrorPayload | ChatInputSubcommandErrorPayload
 ) {
 	const { interaction } = payload;
 	const t = getSupportedUserLanguageT(interaction);

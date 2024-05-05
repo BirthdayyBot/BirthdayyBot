@@ -2,7 +2,7 @@ import {
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
 	PermissionFlagsBits,
-	type ChatInputApplicationCommandData,
+	type ChatInputApplicationCommandData
 } from 'discord.js';
 
 export function GuildInfoCMD(): ChatInputApplicationCommandData {
@@ -17,8 +17,8 @@ export function GuildInfoCMD(): ChatInputApplicationCommandData {
 				type: ApplicationCommandOptionType.String,
 				name: 'guild-id',
 				description: 'The GuildId',
-				required: true,
-			},
-		],
+				required: true
+			}
+		]
 	};
 }

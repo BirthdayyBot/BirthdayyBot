@@ -11,12 +11,12 @@ const header = blueBright('[POST STATS]');
 enum Lists {
 	DiscordBotList = 'discordbotlist.com',
 	TopGG = 'top.gg',
-	DiscordListGG = 'discordlist.gg',
+	DiscordListGG = 'discordlist.gg'
 }
 
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'PostStats',
-	pattern: '*/10 * * * *',
+	pattern: '*/10 * * * *'
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
@@ -41,20 +41,20 @@ export class PostStats extends ScheduledTask {
 					`https://top.gg/api/bots/${process.env.CLIENT_ID}/stats`,
 					`{"server_count":${guilds}}`,
 					process.env.TOP_GG_TOKEN,
-					Lists.TopGG,
+					Lists.TopGG
 				),
 				this.query(
 					`https://discordbotlist.com/api/v1/bots/${process.env.CLIENT_ID}/stats`,
 					`{"guilds":${guilds},"users":${users}}`,
 					process.env.DISCORD_BOT_LIST_TOKEN ? `Bot ${process.env.DISCORD_BOT_LIST_TOKEN}` : null,
-					Lists.DiscordBotList,
+					Lists.DiscordBotList
 				),
 				this.query(
 					`https://api.discordlist.gg/v1/bots/${process.env.CLIENT_ID}/stats`,
 					`{"count":${guilds}}`,
 					process.env.DISCORD_LIST_GG_TOKEN,
-					Lists.DiscordListGG,
-				),
+					Lists.DiscordListGG
+				)
 			])
 		).filter((value) => value !== null);
 
@@ -70,14 +70,14 @@ export class PostStats extends ScheduledTask {
 				{
 					body,
 					headers: { 'content-type': MimeTypes.ApplicationJson, authorization: token },
-					method: 'POST',
+					method: 'POST'
 				},
-				FetchResultTypes.Result,
+				FetchResultTypes.Result
 			);
 			return green(list);
 		} catch (error) {
 			const message = String(
-				error instanceof Error ? (error instanceof QueryError ? error.code : error.message) : error,
+				error instanceof Error ? (error instanceof QueryError ? error.code : error.message) : error
 			);
 			return `${red(list)} [${red(message)}]`;
 		}
