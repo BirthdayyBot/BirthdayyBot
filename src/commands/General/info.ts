@@ -1,4 +1,4 @@
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#lib/utils/constants';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
@@ -16,14 +16,14 @@ import {
 import { getFixedT } from 'i18next';
 import { cpus, uptime, type CpuInfo } from 'os';
 
-export class UserCommand extends CustomCommand {
+export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((command) =>
 			applyLocalizedBuilder(command, 'commands/info:name', 'commands/info:description'),
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const t = getFixedT(interaction.locale);
 		const embed = new EmbedBuilder()
 			.setColor(BrandingColors.Primary)

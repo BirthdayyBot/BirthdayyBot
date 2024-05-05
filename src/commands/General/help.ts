@@ -1,15 +1,16 @@
 import { HelpCMD } from '#lib/commands';
-import { docsButtonBuilder, inviteSupportDicordButton, websiteButtonBuiler } from '#lib/components/button';
+import { docsButtonBuilder, inviteSupportDiscordButton, websiteButtonBuilder } from '#lib/components/button';
 import { HelpEmbed } from '#lib/embeds';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
+import { BirthdayyCommand } from '#lib/structures';
 import { generateDefaultEmbed, reply } from '#utils';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 
-export class HelpCommand extends CustomCommand {
-	public override registerApplicationCommands(registry: CustomCommand.Registry) {
+export class HelpCommand extends BirthdayyCommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(HelpCMD());
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const embed = generateDefaultEmbed(HelpEmbed);
 		await reply(interaction, {
 			embeds: [embed],
@@ -17,9 +18,9 @@ export class HelpCommand extends CustomCommand {
 				{
 					type: 1,
 					components: [
-						await websiteButtonBuiler(interaction),
+						await websiteButtonBuilder(interaction),
 						await docsButtonBuilder(interaction),
-						await inviteSupportDicordButton(interaction),
+						await inviteSupportDiscordButton(interaction),
 					],
 				},
 			],

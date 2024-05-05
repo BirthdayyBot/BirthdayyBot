@@ -1,24 +1,24 @@
-import { WebsiteUrl, docsButtonBuilder, inviteSupportDicordButton } from '#lib/components/button';
-import { CustomCommand } from '#lib/structures/commands/CustomCommand';
-import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
+import { WebsiteUrl, docsButtonBuilder, inviteSupportDiscordButton } from '#lib/components/button';
+import { BirthdayyCommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
+import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { CLIENT_NAME, Emojis, defaultEmbed } from '#utils';
-import { container } from '@sapphire/framework';
+import { ApplicationCommandRegistry, container } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey, type Target } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 
-export class GuideCommand extends CustomCommand {
-	public override async registerApplicationCommands(registry: CustomCommand.Registry) {
+export class GuideCommand extends BirthdayyCommand {
+	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
 			applyLocalizedBuilder(builder, 'commands/guide:guide').setDMPermission(true),
 		);
 	}
 
-	public override async chatInputRun(interaction: CustomCommand.ChatInputCommandInteraction) {
+	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const components = [
 			new ActionRowBuilder<ButtonBuilder>().setComponents(
 				await docsButtonBuilder(interaction),
-				await inviteSupportDicordButton(interaction),
+				await inviteSupportDiscordButton(interaction),
 			),
 		];
 		const embeds = await resolveEmbed(interaction);
