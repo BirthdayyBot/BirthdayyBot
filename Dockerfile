@@ -9,12 +9,14 @@ WORKDIR /usr/src/app
 ENV YARN_DISABLE_GIT_HOOKS=1
 ENV CI=true
 
+# Required for Sapphire to run
 RUN apk add --no-cache dumb-init python3 g++ make
+
+# Install Doppler CLI ❗ Dont suppress output
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg && \
     curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | gpg --dearmor -o /usr/share/keyrings/doppler-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main" | tee /etc/apt/sources.list.d/doppler-cli.list && \
-    apt-get update && \
-    apt-get -y install doppler
+    apt-get update && \ apt-get -y install doppler \ apt-get clean
 
 COPY --chown=node:node yarn.lock .
 COPY --chown=node:node package.json .
