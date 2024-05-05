@@ -1,5 +1,5 @@
 import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#lib/utils/constants';
+import { BrandingColors } from '#utils/constants';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
@@ -11,7 +11,7 @@ import {
 	version as djsVersion,
 	type APIActionRowComponent,
 	type APIEmbedField,
-	type APIMessageActionRowComponent,
+	type APIMessageActionRowComponent
 } from 'discord.js';
 import { getFixedT } from 'i18next';
 import { cpus, uptime, type CpuInfo } from 'os';
@@ -19,7 +19,7 @@ import { cpus, uptime, type CpuInfo } from 'os';
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((command) =>
-			applyLocalizedBuilder(command, 'commands/info:name', 'commands/info:description'),
+			applyLocalizedBuilder(command, 'commands/info:name', 'commands/info:description')
 		);
 	}
 
@@ -29,13 +29,13 @@ export class UserCommand extends BirthdayyCommand {
 			.setColor(BrandingColors.Primary)
 			.setAuthor({
 				name: this.container.client.user!.tag,
-				iconURL: this.container.client.user!.displayAvatarURL({ size: 128 }),
+				iconURL: this.container.client.user!.displayAvatarURL({ size: 128 })
 			})
 			.setDescription(t('commands/info:embedDescription'))
 			.addFields(
 				await this.getApplicationStatistics(t),
 				this.getUptimeStatistics(t),
-				this.getServerUsageStatistics(t, interaction.locale),
+				this.getServerUsageStatistics(t, interaction.locale)
 			);
 		const components = this.getComponents(t);
 
@@ -52,8 +52,8 @@ export class UserCommand extends BirthdayyCommand {
 				birthdays: await this.container.prisma.birthday.count(),
 				versionNode: process.version,
 				versionDiscord: `v${djsVersion}`,
-				versionSapphire: `v${sapphireVersion}`,
-			}),
+				versionSapphire: `v${sapphireVersion}`
+			})
 		};
 	}
 
@@ -65,8 +65,8 @@ export class UserCommand extends BirthdayyCommand {
 			name: t('commands/info:embedFieldUptimeTitle'),
 			value: t('commands/info:embedFieldUptimeValue', {
 				host: time(Math.round(nowSeconds - uptime()), TimestampStyles.RelativeTime),
-				client: time(Math.round(nowSeconds - process.uptime()), TimestampStyles.RelativeTime),
-			}),
+				client: time(Math.round(nowSeconds - process.uptime()), TimestampStyles.RelativeTime)
+			})
 		};
 	}
 
@@ -77,8 +77,8 @@ export class UserCommand extends BirthdayyCommand {
 			value: t('commands/info:embedFieldServerUsageValue', {
 				cpu: cpus().map(this.formatCpuInfo.bind(null)).join(' | '),
 				heapUsed: (usage.heapUsed / 1048576).toLocaleString(lng, { maximumFractionDigits: 2 }),
-				heapTotal: (usage.heapTotal / 1048576).toLocaleString(lng, { maximumFractionDigits: 2 }),
-			}),
+				heapTotal: (usage.heapTotal / 1048576).toLocaleString(lng, { maximumFractionDigits: 2 })
+			})
 		};
 	}
 
@@ -102,7 +102,7 @@ export class UserCommand extends BirthdayyCommand {
 			style: ButtonStyle.Link,
 			label: t('commands/info:buttonSupport'),
 			emoji: { name: '🆘' },
-			url: 'https://discord.gg/Bs9bSVe2Hf',
+			url: 'https://discord.gg/Bs9bSVe2Hf'
 		};
 	}
 
@@ -112,7 +112,7 @@ export class UserCommand extends BirthdayyCommand {
 			style: ButtonStyle.Link,
 			label: t('commands/info:buttonInvite'),
 			emoji: { name: '🎉' },
-			url,
+			url
 		};
 	}
 
@@ -122,7 +122,7 @@ export class UserCommand extends BirthdayyCommand {
 			style: ButtonStyle.Link,
 			label: t('commands/info:buttonGitHub'),
 			emoji: { name: 'github2', id: '1229375525827645590' },
-			url: 'https://github.com/BirthdayyBot/BirthdayyBot',
+			url: 'https://github.com/BirthdayyBot/BirthdayyBot'
 		};
 	}
 
@@ -132,7 +132,7 @@ export class UserCommand extends BirthdayyCommand {
 			style: ButtonStyle.Link,
 			label: t('commands/info:buttonPremium'),
 			emoji: { name: '🧡' },
-			url: 'https://birthdayy.xyz/premium',
+			url: 'https://birthdayy.xyz/premium'
 		};
 	}
 
@@ -151,7 +151,7 @@ export class UserCommand extends BirthdayyCommand {
 				PermissionFlagsBits.SendMessages |
 				PermissionFlagsBits.SendMessagesInThreads |
 				PermissionFlagsBits.UseExternalEmojis |
-				PermissionFlagsBits.ViewChannel,
+				PermissionFlagsBits.ViewChannel
 		});
 	}
 }
