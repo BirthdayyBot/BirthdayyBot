@@ -1,4 +1,3 @@
-import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { PermissionLevels } from '#lib/types';
 import { OWNERS } from '#root/config';
 import { seconds } from '#utils/common';
@@ -10,8 +9,6 @@ export const BirthdayyCommandConstructorDefaults = {
 	cooldownDelay: seconds(10),
 	cooldownFilteredUsers: OWNERS,
 	cooldownLimit: 2,
-	guarded: false,
-	hidden: false,
 	permissionLevel: PermissionLevels.Everyone,
 	requiredClientPermissions: new PermissionsBitField().add(
 		PermissionFlagsBits.SendMessages,
@@ -72,8 +69,5 @@ export function implementBirthdayyCommandPaginatedOptions<
 
 export type ExtendOptions<T> = {
 	description: string;
-	detailedDescription?: LanguageHelpDisplayOptions;
-	guarded?: boolean;
-	hidden?: boolean;
 	permissionLevel?: number;
 } & T;

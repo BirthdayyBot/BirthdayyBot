@@ -15,7 +15,6 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/birthday:rootDescription',
-	detailedDescription: 'commands/birthday:rootDetailedDescription',
 	subcommands: createSubcommandMappings(
 		'list',
 		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
@@ -23,7 +22,6 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 		'show',
 		{ name: 'test', preconditions: ['Manager'] }
 	),
-
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Everyone
 })

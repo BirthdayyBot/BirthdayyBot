@@ -1,4 +1,3 @@
-import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import {
 	BirthdayyCommandConstructorDefaults,
 	type ExtendOptions,
@@ -23,15 +22,10 @@ import { type CacheType, ChatInputCommandInteraction } from 'discord.js';
  */
 export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, BirthdayyCommand.Options> {
 	public declare readonly description: string;
-	public declare readonly detailedDescription: LanguageHelpDisplayOptions;
-	public readonly guarded: boolean;
-	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
 
 	public constructor(context: Command.LoaderContext, options: BirthdayyCommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });
-		this.guarded = options.guarded ?? BirthdayyCommandConstructorDefaults.guarded;
-		this.hidden = options.hidden ?? BirthdayyCommandConstructorDefaults.hidden;
 		this.permissionLevel = options.permissionLevel ?? BirthdayyCommandConstructorDefaults.permissionLevel;
 	}
 
