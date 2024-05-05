@@ -5,8 +5,8 @@ import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 export class AnalyticsData {
 	public influx: InfluxDB | null = envParseBoolean('INFLUX_ENABLED') ? new InfluxDB(parseAnalytics()) : null;
 
-	public writeApi: WriteApi | null;
-	public queryApi!: QueryApi | null;
+	public writeApi: WriteApi;
+	public queryApi!: QueryApi;
 
 	public messageCount = 0;
 
