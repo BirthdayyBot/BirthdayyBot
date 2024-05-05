@@ -1,3 +1,3 @@
-export * from './Birthday.js';
-export * from './Guild.js';
-export * from './User.js';
+export * from '#root/utilities/db/Birthday';
+export * from '#root/utilities/db/Guild';
+export * from '#root/utilities/db/User';

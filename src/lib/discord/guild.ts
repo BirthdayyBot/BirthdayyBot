@@ -1,7 +1,7 @@
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { container } from '@sapphire/pieces';
-import { Guild, GuildResolvable } from 'discord.js';
+import { Guild, type GuildResolvable } from 'discord.js';
 
 interface GuildUtilities {
 	readonly guild: Guild;
@@ -19,7 +19,7 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const entry: GuildUtilities = {
 		guild,
 		settings: new SettingsManager(guild),
-		birthdays: new BirthdaysManager(guild, getSettings(guild)),
+		birthdays: new BirthdaysManager(guild, getSettings(guild))
 	};
 
 	cache.set(guild, entry);

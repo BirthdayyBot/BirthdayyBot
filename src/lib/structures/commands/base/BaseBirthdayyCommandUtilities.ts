@@ -1,5 +1,4 @@
 import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
-
 import { PermissionLevels } from '#lib/types';
 import { OWNERS } from '#root/config';
 import { seconds } from '#utils/common';
@@ -17,8 +16,8 @@ export const BirthdayyCommandConstructorDefaults = {
 	requiredClientPermissions: new PermissionsBitField().add(
 		PermissionFlagsBits.SendMessages,
 		PermissionFlagsBits.EmbedLinks,
-		PermissionFlagsBits.ViewChannel,
-	),
+		PermissionFlagsBits.ViewChannel
+	)
 } satisfies Partial<ExtendOptions<Command.Options>>;
 
 export function implementBirthdayyCommandError(identifier: UserError | string, context?: unknown): never {
@@ -27,7 +26,7 @@ export function implementBirthdayyCommandError(identifier: UserError | string, c
 
 export function implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel(
 	command: Command | Subcommand,
-	permissionLevel: PermissionLevels = PermissionLevels.Everyone,
+	permissionLevel: PermissionLevels = PermissionLevels.Everyone
 ): void {
 	if (permissionLevel === PermissionLevels.BotOwner) {
 		command.preconditions.append('BotOwner');
@@ -50,7 +49,7 @@ export function implementBirthdayyCommandParseConstructorPreConditionsPermission
 			break;
 		default:
 			throw new Error(
-				`BirthdayyCommand[${command.name}]: "permissionLevel" was specified as an invalid permission level (${permissionLevel}).`,
+				`BirthdayyCommand[${command.name}]: "permissionLevel" was specified as an invalid permission level (${permissionLevel}).`
 			);
 	}
 
@@ -58,7 +57,7 @@ export function implementBirthdayyCommandParseConstructorPreConditionsPermission
 }
 
 export function implementBirthdayyCommandPaginatedOptions<
-	T extends ExtendOptions<Command.Options> = ExtendOptions<Command.Options>,
+	T extends ExtendOptions<Command.Options> = ExtendOptions<Command.Options>
 >(options?: T): T {
 	return {
 		cooldownDelay: seconds(15),
@@ -66,8 +65,8 @@ export function implementBirthdayyCommandPaginatedOptions<
 		...options,
 		// Add all requiredPermissions set in the command, along EmbedLinks to send EmbedBuilder's
 		requiredClientPermissions: new PermissionsBitField(options?.requiredClientPermissions).add(
-			PermissionFlagsBits.EmbedLinks,
-		),
+			PermissionFlagsBits.EmbedLinks
+		)
 	} as unknown as T;
 }
 

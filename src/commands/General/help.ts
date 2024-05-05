@@ -1,8 +1,8 @@
-import { HelpCMD } from '#lib/commands';
+import { HelpCMD } from '#lib/commands/help';
 import { docsButtonBuilder, inviteSupportDiscordButton, websiteButtonBuilder } from '#lib/components/button';
 import { HelpEmbed } from '#lib/embeds';
 import { BirthdayyCommand } from '#lib/structures';
-import { generateDefaultEmbed, reply } from '#utils';
+import { generateDefaultEmbed } from '#utils/embed';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 
 export class HelpCommand extends BirthdayyCommand {
@@ -12,7 +12,7 @@ export class HelpCommand extends BirthdayyCommand {
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const embed = generateDefaultEmbed(HelpEmbed);
-		await reply(interaction, {
+		await interaction.reply({
 			embeds: [embed],
 			components: [
 				{
@@ -20,10 +20,10 @@ export class HelpCommand extends BirthdayyCommand {
 					components: [
 						await websiteButtonBuilder(interaction),
 						await docsButtonBuilder(interaction),
-						await inviteSupportDiscordButton(interaction),
-					],
-				},
-			],
+						await inviteSupportDiscordButton(interaction)
+					]
+				}
+			]
 		});
 	}
 }

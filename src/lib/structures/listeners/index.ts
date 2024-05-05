@@ -1,2 +1,2 @@
-export * from './AnalyticsListener.js';
-export * from './ShardListener.js';
+export * from '#lib/structures/listeners/AnalyticsListener';
+export * from '#lib/structures/listeners/ShardListener';

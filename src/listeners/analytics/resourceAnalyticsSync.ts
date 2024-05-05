@@ -5,7 +5,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { cpus } from 'node:os';
 
 @ApplyOptions<AnalyticsListener.Options>({
-	event: Events.ResourceAnalyticsSync,
+	event: Events.ResourceAnalyticsSync
 })
 export class UserAnalyticsEvent extends AnalyticsListener {
 	public run() {

@@ -7,13 +7,13 @@ import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 
 @ApplyOptions<BirthdayyCommand.Options>({
 	description: 'commands/system:rebootDescription',
-	permissionLevel: PermissionLevels.BotOwner,
+	permissionLevel: PermissionLevels.BotOwner
 })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) => applyDescriptionLocalizedBuilder(builder, this.description).setName('reboot'),
-			{ guildIds: [envParseString('CLIENT_MAIN_GUILD')] },
+			{ guildIds: [envParseString('CLIENT_MAIN_GUILD')] }
 		);
 	}
 
@@ -28,7 +28,7 @@ export class UserCommand extends BirthdayyCommand {
 				client.emit(
 					Events.AnalyticsSync,
 					client.guilds.cache.size,
-					client.guilds.cache.reduce((acc, val) => acc + val.memberCount, 0),
+					client.guilds.cache.reduce((acc, val) => acc + val.memberCount, 0)
 				);
 
 				await client.analytics!.writeApi.flush();

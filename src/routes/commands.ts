@@ -2,7 +2,7 @@ import { ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Command } from '@sapphire/framework';
-import { ApiRequest, ApiResponse, methods, Route, RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { PermissionsBitField } from 'discord.js';
 import type { TFunction } from 'i18next';
@@ -33,7 +33,7 @@ export class UserRoute extends Route {
 			category: command.category,
 			description: t(command.description),
 			name: command.name,
-			preconditions: command.preconditions,
+			preconditions: command.preconditions
 		};
 	}
 }

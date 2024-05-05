@@ -1,21 +1,21 @@
-import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+import type { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import {
 	BirthdayyCommandConstructorDefaults,
 	type ExtendOptions,
 	implementBirthdayyCommandError,
 	implementBirthdayyCommandPaginatedOptions,
-	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
+	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
 import {
 	type Awaitable,
-	ChatInputCommand,
+	type ChatInputCommand,
 	Command,
 	type MessageCommand,
 	Args as SapphireArgs,
-	UserError,
+	UserError
 } from '@sapphire/framework';
-import { CacheType, ChatInputCommandInteraction } from 'discord.js';
+import { type CacheType, ChatInputCommandInteraction } from 'discord.js';
 
 /**
  * The base class for all Birthdayy commands.
@@ -46,7 +46,7 @@ export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, Bi
 
 	public abstract override chatInputRun(
 		interaction: ChatInputCommandInteraction,
-		context: ChatInputCommand.RunContext,
+		context: ChatInputCommand.RunContext
 	): Awaitable<unknown>;
 
 	public static readonly PaginatedOptions = implementBirthdayyCommandPaginatedOptions<BirthdayyCommand.Options>;

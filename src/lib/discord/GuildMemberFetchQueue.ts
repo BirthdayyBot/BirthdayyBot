@@ -49,7 +49,7 @@ export class GuildMemberFetchQueue {
 		} else {
 			this.shards.set(shardId, {
 				fetching: 0,
-				pending: [guildId],
+				pending: [guildId]
 			});
 		}
 	}

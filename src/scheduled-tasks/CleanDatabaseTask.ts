@@ -12,7 +12,7 @@ import { inlineCode } from 'discord.js';
 @ApplyOptions<ScheduledTask.Options>({
 	name: 'CleanDatabaseTask',
 	pattern: '30 0 * * *',
-	enabled: isProduction,
+	enabled: isProduction
 })
 export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
@@ -33,11 +33,11 @@ export class CleanDatabaseTask extends ScheduledTask {
 						{
 							name: 'Deleted Birthdays',
 							value: inlineCode(deletedBirthdays.toString()),
-							inline: true,
-						},
-					],
-				}),
-			],
+							inline: true
+						}
+					]
+				})
+			]
 		});
 
 		container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);

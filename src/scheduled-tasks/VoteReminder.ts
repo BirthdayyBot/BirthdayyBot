@@ -16,7 +16,7 @@ export class VoteReminderTask extends ScheduledTask {
 		if (!user) return;
 		await user.send({
 			content: `Hi, you can vote for Birthdayy again!`,
-			embeds: [generateDefaultEmbed(VoteEmbed)],
+			embeds: [generateDefaultEmbed(VoteEmbed)]
 		});
 	}
 }

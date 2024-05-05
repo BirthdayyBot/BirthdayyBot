@@ -4,18 +4,18 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	description: 'ping pong',
+	description: 'ping pong'
 })
 export class PingCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			{
 				name: this.name,
-				description: this.description,
+				description: this.description
 			},
 			{
-				guildIds: await getCommandGuilds('testing'),
-			},
+				guildIds: await getCommandGuilds('testing')
+			}
 		);
 	}
 
@@ -26,7 +26,7 @@ export class PingCommand extends BirthdayyCommand {
 		}ms.`;
 
 		return interaction.editReply({
-			content,
+			content
 		});
 	}
 }

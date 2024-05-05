@@ -35,22 +35,22 @@ export class Guild extends Utility {
 					overviewMessage: true,
 					timezone: true,
 					language: true,
-					premium: true,
-				},
+					premium: true
+				}
 			}),
 		ByLastUpdatedDisabled: (date: Date) =>
 			this.prisma
 				.$transaction([
 					this.prisma.birthday.findMany({
-						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true }
 					}),
 					this.prisma.guild.findMany({
-						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
-					}),
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true }
+					})
 				])
 				.then(([birthdays, guilds]) => ({
 					deletedBirthdays: birthdays.length,
-					deletedGuilds: guilds.length,
+					deletedGuilds: guilds.length
 				}))
 				.catch((error: any) => {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
@@ -60,7 +60,7 @@ export class Guild extends Utility {
 		GuildAvailableCount: () => this.prisma.guild.count({ where: { disabled: false } }),
 		GuildNotAvailableCount: () => this.prisma.guild.count({ where: { disabled: true } }),
 		GuildTimezone: (guildId: string) =>
-			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, timezone: true } }),
+			this.prisma.guild.findUnique({ where: { guildId }, select: { guildId: true, timezone: true } })
 	};
 
 	public set = {
@@ -83,14 +83,14 @@ export class Guild extends Utility {
 		BirthdayPingRole: (guildId: string, roleID: string) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: roleID } }),
 		Premium: (guildId: string, premium: boolean) =>
-			this.prisma.guild.update({ where: { guildId }, data: { premium } }),
+			this.prisma.guild.update({ where: { guildId }, data: { premium } })
 	};
 
 	public update = {
 		DisableGuildAndBirthdays: (guildId: string, disabled: boolean) =>
 			this.prisma.guild.update({
 				where: {
-					guildId,
+					guildId
 				},
 				data: {
 					disabled,
@@ -98,32 +98,32 @@ export class Guild extends Utility {
 						updateMany: {
 							where: { guildId },
 							data: {
-								disabled,
-							},
-						},
-					},
+								disabled
+							}
+						}
+					}
 				},
-				include: { birthday: true },
+				include: { birthday: true }
 			}),
 		ByNotInAndBirthdays: (guildId: string[], disabled: boolean) =>
 			this.prisma.$transaction([
 				this.prisma.guild.updateMany({
 					where: {
-						guildId: { notIn: guildId },
+						guildId: { notIn: guildId }
 					},
 					data: {
-						disabled,
-					},
+						disabled
+					}
 				}),
 				this.prisma.birthday.updateMany({
 					where: {
-						guildId: { notIn: guildId },
+						guildId: { notIn: guildId }
 					},
 					data: {
-						disabled,
-					},
-				}),
-			]),
+						disabled
+					}
+				})
+			])
 	};
 
 	public delete = {
@@ -133,23 +133,23 @@ export class Guild extends Utility {
 			this.prisma
 				.$transaction([
 					this.prisma.birthday.deleteMany({
-						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true },
+						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true }
 					}),
 					this.prisma.guild.deleteMany({
-						where: { lastUpdated: { lt: date.toISOString() }, disabled: true },
-					}),
+						where: { lastUpdated: { lt: date.toISOString() }, disabled: true }
+					})
 				])
 				.then(([deletedBirthdays, deletedGuilds]) => ({
 					deletedBirthdays: deletedBirthdays.count,
-					deletedGuilds: deletedGuilds.count,
+					deletedGuilds: deletedGuilds.count
 				}))
 				.catch(async (error: any) => {
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
 					await sendMessage(BOT_ADMIN_LOG, {
-						content: `**[ERROR][DeleteByLastUpdated]**\n${codeBlock(JSON.stringify(error))}`,
+						content: `**[ERROR][DeleteByLastUpdated]**\n${codeBlock(JSON.stringify(error))}`
 					});
 					return { deletedBirthdays: 0, deletedGuilds: 0 };
-				}),
+				})
 	};
 
 	public check = {
@@ -159,7 +159,7 @@ export class Guild extends Utility {
 				return false;
 			}
 			return result.premium;
-		},
+		}
 	};
 
 	public reset = {
@@ -176,7 +176,7 @@ export class Guild extends Utility {
 		BirthdayRole: (guildId: Snowflake) =>
 			this.prisma.guild.update({ where: { guildId }, data: { birthdayRole: null } }),
 		BirthdayPingRole: (guildId: Snowflake) =>
-			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: null } }),
+			this.prisma.guild.update({ where: { guildId }, data: { birthdayPingRole: null } })
 	};
 
 	private prisma = container.prisma;
@@ -184,7 +184,7 @@ export class Guild extends Utility {
 	public constructor(context: Utility.Context, options: Utility.Options) {
 		super(context, {
 			...options,
-			name: 'guild',
+			name: 'guild'
 		});
 	}
 

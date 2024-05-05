@@ -1,6 +1,7 @@
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { generateDefaultEmbed, isNotCustom, reply } from '#utils';
+import { generateDefaultEmbed } from '#utils/embed';
+import { isNotCustom } from '#utils/env';
 import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
@@ -9,7 +10,7 @@ import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 @ApplyOptions<BirthdayyCommand.Options>({
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	permissionLevel: PermissionLevels.Administrator,
+	permissionLevel: PermissionLevels.Administrator
 })
 export class TogglePremiumCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -22,14 +23,14 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 						option
 							.setName('guild-id')
 							.setDescription('The guild id to toggle premium for')
-							.setRequired(true),
+							.setRequired(true)
 					)
 					.addBooleanOption((option) =>
-						option.setName('toggle').setDescription('The toggle value').setRequired(true),
+						option.setName('toggle').setDescription('The toggle value').setRequired(true)
 					),
 			{
-				guildIds: await getCommandGuilds('admin'),
-			},
+				guildIds: await getCommandGuilds('admin')
+			}
 		);
 	}
 
@@ -39,22 +40,22 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 		// check if guild exists if not send error message
 		const guild = await resolveOnErrorCodesDiscord(
 			this.container.client.guilds.fetch(guildId),
-			RESTJSONErrorCodes.UnknownGuild,
+			RESTJSONErrorCodes.UnknownGuild
 		);
 		if (!guild) {
-			return reply(interaction, `Guild ${inlineCode(guildId)} not found`);
+			return interaction.reply(`Guild ${inlineCode(guildId)} not found`);
 		}
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		return reply(interaction, {
+		return interaction.reply({
 			embeds: [
 				generateDefaultEmbed({
 					title: 'Toggle Premium',
 					description: `Toggled premium for guild ${bold(guild.name)} [${inlineCode(
-						guildId,
-					)}] to ${inlineCode(toggle.toString())}`,
-				}),
-			],
+						guildId
+					)}] to ${inlineCode(toggle.toString())}`
+				})
+			]
 		});
 	}
 }

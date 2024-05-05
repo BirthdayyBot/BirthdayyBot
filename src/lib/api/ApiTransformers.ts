@@ -1,11 +1,11 @@
 import {
-	ChannelTypeString,
+	type ChannelTypeString,
 	isDMChannel,
 	isGuildBasedChannelByGuildKey,
 	isNewsChannel,
 	isTextChannel,
 	isThreadChannel,
-	isVoiceChannel,
+	isVoiceChannel
 } from '@sapphire/discord.js-utilities';
 import { ChannelType } from 'discord-api-types/v10';
 import type {
@@ -20,7 +20,7 @@ import type {
 	TextChannel,
 	ThreadChannel,
 	User,
-	VoiceChannel,
+	VoiceChannel
 } from 'discord.js';
 
 // #region Guild
@@ -55,7 +55,7 @@ export function flattenGuild(guild: Guild): FlattenedGuild {
 		systemChannelId: guild.systemChannelId,
 		vanityURLCode: guild.vanityURLCode,
 		verificationLevel: guild.verificationLevel,
-		verified: guild.verified,
+		verified: guild.verified
 	};
 }
 
@@ -109,7 +109,7 @@ export function flattenRole(role: Role): FlattenedRole {
 		rawPosition: role.rawPosition,
 		permissions: role.permissions.bitfield.toString(),
 		managed: role.managed,
-		mentionable: role.mentionable,
+		mentionable: role.mentionable
 	};
 }
 
@@ -165,7 +165,7 @@ function flattenChannelNews(channel: NewsChannel): FlattenedNewsChannel {
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
 		topic: channel.topic,
 		nsfw: channel.nsfw,
-		createdTimestamp: channel.createdTimestamp,
+		createdTimestamp: channel.createdTimestamp
 	};
 }
 
@@ -181,7 +181,7 @@ function flattenChannelText(channel: TextChannel): FlattenedTextChannel {
 		topic: channel.topic,
 		nsfw: channel.nsfw,
 		rateLimitPerUser: channel.rateLimitPerUser,
-		createdTimestamp: channel.createdTimestamp,
+		createdTimestamp: channel.createdTimestamp
 	};
 }
 
@@ -196,7 +196,7 @@ function flattenChannelVoice(channel: VoiceChannel): FlattenedVoiceChannel {
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
 		bitrate: channel.bitrate,
 		userLimit: channel.userLimit,
-		createdTimestamp: channel.createdTimestamp,
+		createdTimestamp: channel.createdTimestamp
 	};
 }
 
@@ -209,7 +209,7 @@ function flattenChannelGuild(channel: GuildChannel): FlattenedGuildChannel {
 		rawPosition: channel.rawPosition,
 		parentId: channel.parentId,
 		permissionOverwrites: [...channel.permissionOverwrites.cache.entries()],
-		createdTimestamp: channel.createdTimestamp,
+		createdTimestamp: channel.createdTimestamp
 	};
 }
 
@@ -218,7 +218,7 @@ function flattenChannelDM(channel: DMChannel): FlattenedDMChannel {
 		id: channel.id,
 		type: channel.type as FlattenedDMChannel['type'],
 		recipient: channel.recipientId,
-		createdTimestamp: channel.createdTimestamp ?? 0,
+		createdTimestamp: channel.createdTimestamp ?? 0
 	};
 }
 
@@ -234,7 +234,7 @@ function flattenChannelThread(channel: ThreadChannel): FlattenedThreadChannel {
 		parentId: channel.parentId,
 		permissionOverwrites: [...(channel.parent?.permissionOverwrites.cache.entries() ?? [])],
 		rawPosition: channel.parent?.rawPosition ?? null,
-		rateLimitPerUser: channel.rateLimitPerUser,
+		rateLimitPerUser: channel.rateLimitPerUser
 	};
 }
 
@@ -242,7 +242,7 @@ function flattenChannelFallback(channel: Channel | GuildChannel | DMChannel | Th
 	return {
 		id: channel.id,
 		type: channel.type as FlattenedChannel['type'],
-		createdTimestamp: channel.createdTimestamp ?? 0,
+		createdTimestamp: channel.createdTimestamp ?? 0
 	};
 }
 
@@ -342,7 +342,7 @@ export function flattenUser(user: User): FlattenedUser {
 		bot: user.bot,
 		username: user.username,
 		discriminator: user.discriminator,
-		avatar: user.avatar,
+		avatar: user.avatar
 	};
 }
 
@@ -369,7 +369,7 @@ export function flattenMember(member: GuildMember): FlattenedMember {
 		user: flattenUser(member.user),
 		joinedTimestamp: member.joinedTimestamp,
 		premiumSinceTimestamp: member.premiumSinceTimestamp,
-		roles: member.roles.cache.map(flattenRole),
+		roles: member.roles.cache.map(flattenRole)
 	};
 }
 

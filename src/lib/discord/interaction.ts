@@ -3,7 +3,7 @@ import type {
 	ChatInputCommandInteraction,
 	ContextMenuCommandInteraction,
 	InteractionReplyOptions,
-	MessagePayload,
+	MessagePayload
 } from 'discord.js';
 
 /**
@@ -14,21 +14,21 @@ import type {
  */
 export async function replyToInteraction(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction,
-	options: string | MessagePayload | InteractionReplyOptions,
+	options: string | MessagePayload | InteractionReplyOptions
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
 export async function replyToButtonInteraction(
 	interaction: ButtonInteraction,
-	options: string | MessagePayload | InteractionReplyOptions,
+	options: string | MessagePayload | InteractionReplyOptions
 ) {
 	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
 }
 
 export function editInteractionResponse(
 	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | ButtonInteraction,
-	options: string | MessagePayload | InteractionReplyOptions,
+	options: string | MessagePayload | InteractionReplyOptions
 ) {
 	return interaction.editReply(options);
 }
