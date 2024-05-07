@@ -28,11 +28,8 @@ declare module '@sapphire/framework' {
 		Administrator: never;
 		BotOwner: never;
 		Everyone: never;
-		GuildPremium: never;
 		Moderator: never;
 		ServerOwner: never;
-		RoleHigher: never;
-		Manager: never;
 	}
 
 	interface SapphireClient {
