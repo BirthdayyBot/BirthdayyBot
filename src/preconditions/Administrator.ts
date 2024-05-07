@@ -1,4 +1,4 @@
-import { isGuildAdministrator } from '#utils/functions/permissions';
+import { isAdmin } from '#utils/functions/permissions';
 import { Precondition } from '@sapphire/framework';
 import type { ChatInputCommandInteraction, CommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 
@@ -16,8 +16,6 @@ export class UserPermissionsPrecondition extends Precondition {
 	}
 
 	private async handler(interaction: CommandInteraction<'cached'>) {
-		return isGuildAdministrator(interaction.member)
-			? this.ok()
-			: this.error({ identifier: 'preconditions:administrator' });
+		return isAdmin(interaction.member) ? this.ok() : this.error({ identifier: 'preconditions:administrator' });
 	}
 }

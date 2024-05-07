@@ -1,6 +1,6 @@
 import type { OauthFlattenedGuild, PartialOauthFlattenedGuild, TransformedLoginData } from '#lib/api//types.js';
 import { flattenGuild } from '#lib/api/ApiTransformers';
-import { canManageGuild } from '#utils/functions/permissions';
+import { isModerator } from '#utils/functions/permissions';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { ApiRequest, HttpCodes, type ApiResponse, type LoginData } from '@sapphire/plugin-api';
@@ -63,7 +63,7 @@ export function ratelimit(time: number, limit = 1, auth = false) {
 
 export function canManage(guild: Guild, member: GuildMember): boolean {
 	if (guild.ownerId === member.id) return true;
-	return canManageGuild(member);
+	return isModerator(member);
 }
 
 async function getManageable(

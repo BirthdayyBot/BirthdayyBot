@@ -7,7 +7,7 @@ import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
 import { createSubcommandMappings, resolveTarget } from '#utils/utils';
 import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import { ApplyOptions } from '@sapphire/decorators';
+import { ApplyOptions, RequiresUserPermissions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
@@ -15,13 +15,11 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/birthday:rootDescription',
-	subcommands: createSubcommandMappings(
-		'list',
-		{ name: 'set', preconditions: [['Manager', 'RoleHigher']] },
-		{ name: 'remove', preconditions: ['Manager', 'RoleHigher'] },
-		'show',
-		{ name: 'test', preconditions: ['Manager'] }
-	),
+	detailedDescription: 'commands/birthday:rootDetailedDescription',
+	subcommands: createSubcommandMappings('list', 'set', 'remove', 'show', {
+		name: 'test',
+		preconditions: ['Moderator']
+	}),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Everyone
 })
@@ -96,6 +94,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		);
 	}
 
+	@RequiresUserPermissions('ManageGuild')
 	public async test(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user } = resolveTarget(ctx);
 		const birthay = getBirthdays(ctx.guild).get(user.id);
