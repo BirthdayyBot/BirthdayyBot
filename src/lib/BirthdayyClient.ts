@@ -23,6 +23,6 @@ export class BirthdayyClient extends SapphireClient {
 	private initailizeDB_URL() {
 		if (!envIsDefined('DB_URL'))
 			process.env.DB_URL = `mysql://${envParseString('DB_USERNAME')}:${envParseString('DB_PASSWORD')}@
-		${envParseString('DB_HOST')}:${envParseNumber('DB_PORT')}/${envParseString('DB_NAME')}?sslaccept=strict`;
+		${envParseString('DB_HOST')}:${envParseNumber('DB_PORT')}/${envParseString('DB_NAME')}`;
 	}
 }
