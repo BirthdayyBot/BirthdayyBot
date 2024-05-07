@@ -1,5 +1,5 @@
 import { GuildMemberFetchQueue } from '#lib/discord';
-import { AnalyticsData } from '#lib/structures/AnalyticsData.js';
+import { AnalyticsData } from '#lib/structures';
 import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
 import { PrismaClient } from '@prisma/client';
 import { Enumerable } from '@sapphire/decorators';

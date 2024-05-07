@@ -1,1 +1,1 @@
-export * from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor.js';
+export * from '#lib/structures/preconditions/requiresUserPermissionsIfTargetIsNotAuthor';
