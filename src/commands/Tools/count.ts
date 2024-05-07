@@ -52,17 +52,17 @@ export class CountCommand extends BirthdayyCommand {
 						{
 							inline: true,
 							name: 'Guilds',
-							value: (await this.container.utilities.guild.get.GuildAvailableCount()).toString()
+							value: await this.container.prisma.guild.count().then((count) => count.toString())
 						},
 						{
 							inline: true,
 							name: 'Birthdays',
-							value: (await this.container.utilities.birthday.get.BirthdayAvailableCount()).toString()
+							value: await this.container.prisma.birthday.count().then((count) => count.toString())
 						},
 						{
 							inline: true,
 							name: 'Users',
-							value: (await this.container.utilities.user.get.UserCount()).toString()
+							value: await this.container.prisma.user.count().then((count) => count.toString())
 						}
 					]
 				})

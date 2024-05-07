@@ -46,7 +46,12 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 			return interaction.reply(`Guild ${inlineCode(guildId)} not found`);
 		}
 		// set premium for guild to toggle
-		await this.container.utilities.guild.set.Premium(guildId, toggle);
+		await this.container.prisma.guild.upsert({
+			where: { guildId },
+			create: { guildId, premium: toggle },
+			update: { premium: toggle }
+		});
+
 		return interaction.reply({
 			embeds: [
 				generateDefaultEmbed({

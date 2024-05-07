@@ -20,27 +20,23 @@ export class CleanDatabaseTask extends ScheduledTask {
 		container.logger.debug('[CleaningTask] Started');
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
-		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
-		const { deletedBirthdays, deletedGuilds } = req;
+		const req = await container.prisma.guild.deleteMany({
+			where: { lastUpdated: { lt: oneDayAgo } }
+		});
+
+		const deletedGuilds = req.count;
 
 		await sendMessage(BOT_ADMIN_LOG, {
 			embeds: [
 				generateDefaultEmbed({
 					title: `CleanUp Report (DELETE)`,
 					description: '',
-					fields: [
-						{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.toString()), inline: true },
-						{
-							name: 'Deleted Birthdays',
-							value: inlineCode(deletedBirthdays.toString()),
-							inline: true
-						}
-					]
+					fields: [{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.toString()), inline: true }]
 				})
 			]
 		});
 
-		container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
+		container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds`);
 
 		container.logger.debug('[CleaningTask] Done');
 	}

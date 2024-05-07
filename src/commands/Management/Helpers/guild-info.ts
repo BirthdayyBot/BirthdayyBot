@@ -23,9 +23,9 @@ export class GuildInfoCommand extends BirthdayyCommand {
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction<'cached'>) {
 		const guildId = interaction.options.getString('guild-id', true);
-		const settings = await this.container.utilities.guild.get.GuildById(guildId).catch(() => null);
+		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } }).catch(() => null);
 		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
-		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
+		const guildBirthdayCount = await this.container.prisma.birthday.count({ where: { guildId } });
 
 		if (!settings || !guild) return interaction.reply('Guild Infos not found');
 

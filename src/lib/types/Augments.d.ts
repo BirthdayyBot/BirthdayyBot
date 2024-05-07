@@ -1,7 +1,6 @@
 import { GuildMemberFetchQueue } from '#lib/discord/GuildMemberFetchQueue';
 import type { AnalyticsData } from '#lib/structures/AnalyticsData';
 import type { Events } from '#lib/types/Enums';
-import type { Birthday, Guild, User } from '#root/utilities/db/index';
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
 import 'discord.js';
@@ -47,14 +46,6 @@ declare module '@sapphire/plugin-scheduled-tasks' {
 		CleanDatabaseTask: never;
 		DisplayStats: never;
 		PostStats: never;
-	}
-}
-
-declare module '@sapphire/plugin-utilities-store' {
-	export interface Utilities {
-		guild: Guild;
-		birthday: Birthday;
-		user: User;
 	}
 }
 

@@ -2,12 +2,18 @@ import { editMessage, sendMessage } from '#lib/discord';
 import { generateBirthdayList } from '#utils/birthday';
 import { isPrivateMessage } from '#utils/common';
 import { container } from '@sapphire/framework';
+import { isNullish } from '@sapphire/utilities';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
 
 export async function updateBirthdayOverview(guild_id: string) {
-	const config = await container.utilities.guild.get.GuildConfig(guild_id);
-	if (!config || !config.overviewChannel) return;
+	const config = await container.prisma.guild.findUnique({ where: { guildId: guild_id } }).catch(() => null);
+
+	if (isNullish(config)) return;
+
 	const { overviewChannel, overviewMessage } = config;
+
+	if (overviewChannel === null) return;
+
 	const guild = await container.client.guilds.fetch(guild_id);
 
 	const birthdayList = await generateBirthdayList(1, guild);
@@ -27,8 +33,10 @@ export async function updateBirthdayOverview(guild_id: string) {
 					await generateNewOverviewMessage(overviewChannel, options);
 					container.logger.warn('Message Not found, so generated new overview message');
 				} else if (error.message.includes('Missing Permissions')) {
-					await container.utilities.guild.reset.OverviewChannel(guild_id);
-					await container.utilities.guild.reset.OverviewMessage(guild_id);
+					await container.prisma.guild.update({
+						where: { guildId: guild_id },
+						data: { overviewChannel: null, overviewMessage: null }
+					});
 					container.logger.warn('Overview Channel was missing permissions, so reset it');
 				} else {
 					container.logger.error('[OVERVIEW CHANNEL 1] ', error.message);
@@ -56,5 +64,9 @@ export async function updateBirthdayOverview(guild_id: string) {
 async function generateNewOverviewMessage(channel_id: string, birthdayList: MessageCreateOptions | MessagePayload) {
 	const message = await sendMessage(channel_id, birthdayList);
 	if (!message || isPrivateMessage(message)) return;
-	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
+
+	await container.prisma.guild.update({
+		where: { guildId: message.guildId },
+		data: { overviewMessage: message.id, overviewChannel: message.channelId }
+	});
 }
