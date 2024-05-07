@@ -1,4 +1,4 @@
-import { getSettings } from '#lib/discord/guild';
+import { fetchSettings, resetSettings, updateSettings } from '#lib/database/settings';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
@@ -184,14 +184,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
 		const { guildId } = interaction;
-		const result = await Result.fromAsync(
-			this.container.prisma.guild.upsert({
-				where: { guildId },
-				create: { guildId, ...data },
-				update: data,
-				select: null
-			})
-		);
+		const result = await Result.fromAsync(updateSettings(guildId, data));
 
 		const content = await result.match({
 			ok: async (settings) =>
@@ -223,15 +216,10 @@ export class ConfigCommand extends BirthdayySubcommand {
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		announcementMessage: string
 	) {
-		const settingsManager = getSettings(interaction.guildId);
-		const settings = await settingsManager.fetch();
-		const defaultAnnouncementMessage = settingsManager.defaultKey.announcementMessage;
+		const settings = await fetchSettings(interaction.guildId);
 
-		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
-			await this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { announcementMessage: defaultAnnouncementMessage }
-			});
+		if (!settings?.premium && announcementMessage !== DEFAULT_ANNOUNCEMENT_MESSAGE) {
+			await resetSettings(interaction.guildId, 'announcementMessage');
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
 		}

@@ -29,11 +29,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 	}
 
 	public async list(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const birthdayManager = getBirthdays(ctx.guild);
-		await getBirthdays(ctx.guild).fetch();
 		const month = ctx.options.getInteger('month');
-
-		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
@@ -41,7 +37,18 @@ export class BirthdayCommand extends BirthdayySubcommand {
 			? await resolveKey(ctx, 'commands/birthday:list.title.month', options)
 			: await resolveKey(ctx, 'commands/birthday:list.title.next');
 
-		return birthdayManager.sendListBirthdays(ctx, birthdays, title);
+		const description = month
+			? await resolveKey(ctx, 'commands/birthday:list.description.month', options)
+			: await resolveKey(ctx, 'commands/birthday:list.description.next', options);
+
+		const content = await resolveKey(ctx, 'commands/birthday:list.content', {
+			title,
+			description,
+			emoji: Emojis.ArrowRight,
+			...options
+		});
+
+		return interactionSuccess(ctx, content);
 	}
 
 	public async set(ctx: BirthdayySubcommand.Interaction<'cached'>) {

@@ -1,3 +1,5 @@
+import { fetchBirthdaysByGuildAndDate } from '#lib/database/birthdays';
+import { resetSettings } from '#lib/database/settings';
 import { sendMessage } from '#lib/discord/message';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
@@ -5,7 +7,7 @@ import { CdnUrls, Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
-import { getBirthdays } from '#utils/functions/guilds';
+import { getBirthdays, getSettings } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -81,9 +83,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (isCustom) {
 			container.logger.info('[BirthdayTask] Custom Bot task');
-			const guildOffset = await container.prisma.guild.findUnique({
-				where: { guildId: envParseString('CLIENT_MAIN_GUILD') }
-			});
+			const guildOffset = await getSettings(envParseString('CLIENT_MAIN_GUILD')).fetch();
 
 			if (guildOffset?.timezone !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
@@ -92,12 +92,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 				);
 			}
 
-			currentBirthdays = await container.prisma.birthday.findMany({
-				where: {
-					birthday: { contains: todaysDate.format('-MM-DD') },
-					guild: { timezone: utcOffset, guildId: envParseString('CLIENT_MAIN_GUILD') }
-				}
-			});
+			currentBirthdays = await fetchBirthdaysByGuildAndDate(
+				envParseString('CLIENT_MAIN_GUILD'),
+				todaysDate.format('-MM-DD')
+			);
 		} else {
 			currentBirthdays = await container.prisma.birthday.findMany({
 				where: {
@@ -204,10 +202,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 				eventInfo.birthday_role = birthdayChildInfo;
 			} else {
 				eventInfo.birthday_role.message = 'Role not found';
-				await container.prisma.guild.update({
-					where: { guildId },
-					data: { birthdayRole: null }
-				});
+				await getSettings(guild).update({ birthdayRole: null });
 			}
 		}
 
@@ -303,17 +298,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
 					// send Log to user and remove channel from config
 					returnData.message = 'Missing Permissions';
-					await container.prisma.guild.update({
-						where: { guildId },
-						data: { announcementChannel: null }
-					});
+					await resetSettings(guildId, 'announcementChannel', 'announcementMessage');
 				} else if (error.message.includes('Unknown Channel')) {
 					// send Log to user and remove channel from config
 					returnData.message = 'Unknown Channel';
-					await container.prisma.guild.update({
-						where: { guildId },
-						data: { announcementChannel: null }
-					});
+					await resetSettings(guildId, 'announcementChannel', 'announcementMessage');
 				} else {
 					returnData.message = error.message;
 				}
