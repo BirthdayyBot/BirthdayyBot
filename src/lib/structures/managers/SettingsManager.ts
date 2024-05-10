@@ -1,9 +1,8 @@
 import { BrandingColors, Emojis } from '#utils/constants';
-import type { CollectionConstructor } from '@discordjs/collection';
 import { type Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { type Nullish, cast } from '@sapphire/utilities';
+import { type Nullish } from '@sapphire/utilities';
 import { type APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
@@ -76,10 +75,6 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	public async resetKey(key: SettingsDefaultKey): SettingsManagerReturnAsyncData {
 		return this.update({ [key]: this.defaultKey[key] });
 	}
-
-	public static get [Symbol.species]() {
-		return cast<CollectionConstructor>(Collection);
-	}
 }
 
 export type SettingsManagerReturnData = Guild;
@@ -87,7 +82,6 @@ export type SettingsManagerFetchData = SettingsManagerReturnData['guildId'];
 export type SettingsManagerReturnAsyncData = Promise<SettingsManagerReturnData>;
 
 export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'guildId'>;
-export type SettingsManagerUpdateData = SettingsManagerCreateData;
 export type SettingsDefaultKey = keyof Pick<
 	Prisma.GuildCreateInput,
 	| 'announcementChannel'

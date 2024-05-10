@@ -4,7 +4,6 @@ import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseI
 import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
-import type { CollectionConstructor } from '@discordjs/collection';
 import { type Birthday, Prisma, type Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
 import {
@@ -16,7 +15,7 @@ import {
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { type TOptions, resolveKey } from '@sapphire/plugin-i18next';
-import { cast, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
+import { isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
 	type APIEmbed,
@@ -250,10 +249,6 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 
 		return entries;
-	}
-
-	public static get [Symbol.species]() {
-		return cast<CollectionConstructor>(Collection);
 	}
 
 	private async fetchOverviewMessage(
