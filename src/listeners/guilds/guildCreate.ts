@@ -1,84 +1,100 @@
-import { sendDMMessage, sendMessage } from '#lib/discord';
-import { resolveEmbed } from '#root/commands/General/guide';
-import { BrandingColors, Emojis } from '#utils/constants';
-import { generateDefaultEmbed } from '#utils/embed';
-import { BOT_SERVER_LOG, CLIENT_NAME } from '#utils/environment';
-import { getSettings } from '#utils/functions/guilds';
+import { getT } from '#lib/i18n/translate';
+import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, container, type ListenerOptions } from '@sapphire/framework';
-import { AuditLogEvent, Events, Guild, PermissionFlagsBits, time, type Snowflake } from 'discord.js';
+import { canSendMessages, isTextChannel } from '@sapphire/discord.js-utilities';
+import { Listener, type ListenerOptions } from '@sapphire/framework';
+import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, Events, Guild } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ event: Events.GuildCreate })
 export class UserEvent extends Listener<typeof Events.GuildCreate> {
 	public async run(guild: Guild) {
 		this.container.client.guildMemberFetchQueue.add(guild.shardId, guild.id);
 
-		container.logger.info(`[EVENT] ${Events.GuildCreate} - ${guild.name} (${guild.id})`);
+		this.container.logger.info(`[GUILD JOIN] ${guild.name} (${guild.id}) added the bot.`);
 
-		const guildId = guild.id;
-		const inviterId = await getBotInviter(guild);
+		const { webhookLog } = this.container.client;
 
-		await getSettings(guildId).update({ disabled: false, inviter: inviterId });
+		if (webhookLog) await webhookLog.send({ embeds: [await this.#createLogsEmbed(guild, getT('en-US'))] });
 
-		if (inviterId) await sendDMMessage(inviterId, { embeds: await resolveEmbed(guild) });
+		const channel = guild.systemChannel ?? guild.channels.cache.filter(isTextChannel).find(canSendMessages);
 
-		await this.joinServerLog(guild, inviterId);
+		const t = await fetchT(guild);
 
-		async function getBotInviter(guildInformation: Guild): Promise<Snowflake | undefined> {
-			if (
-				!(await guild.members.fetchMe()).permissions.has(
-					PermissionFlagsBits.ViewAuditLog || PermissionFlagsBits.Administrator
-				)
-			) {
-				container.logger.debug(
-					`[GetBotInviter] ${guildInformation.name} (${guildInformation.id}) - No permission to view audit logs`
-				);
-				return undefined;
-			}
-
-			const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.BotAdd });
-			const entry = auditLogs.entries.first();
-			const userId = entry?.executor?.id;
-			container.logger.debug(`[GetBotInviter] ${guild.name} (${guild.id}) - Inviter: ${userId}`);
-			return userId;
+		if (channel) {
+			const embeds = [this.#createBotJoinEmbed(guild, t)];
+			const components = this.#createBotJoinComponents(t);
+			await channel.send({ embeds, components });
 		}
+
+		await this.#setDisableSettings(guild);
 	}
 
-	private async joinServerLog(guild: Guild, inviterId?: Snowflake) {
-		const { id: guild_id, name, description, memberCount, ownerId, joinedTimestamp: rawJoinedTimestamp } = guild;
-		const joinedTimestamp = time(Math.floor(rawJoinedTimestamp / 1000), 'f');
-		const fields = [
-			{ name: 'GuildName', value: `${name}` },
-			{
-				name: 'GuildID',
-				value: `${guild_id}`
-			}
-		];
-
-		const ownerInfo = await container.client.users.fetch(ownerId).catch(() => null);
-		const inviterInfo = inviterId ? await container.client.users.fetch(inviterId).catch(() => null) : undefined;
-
-		if (description) fields.push({ name: 'GuildDescription', value: `${description}` });
-		if (memberCount) fields.push({ name: 'GuildMemberCount', value: `${memberCount}` });
-		if (ownerId) fields.push({ name: 'GuildOwner', value: this.generateInfoString(ownerId, ownerInfo?.username) });
-		if (inviterId)
-			fields.push({ name: 'Inviter', value: this.generateInfoString(inviterId, inviterInfo?.username) });
-		if (rawJoinedTimestamp) fields.push({ name: 'GuildJoinedTimestamp', value: `${joinedTimestamp}` });
-
-		const embed = generateDefaultEmbed({
-			title: `${Emojis.Success} ${CLIENT_NAME} got added to a Guild`,
-			description: `I am now in \`${await this.container.client.computeGuilds()}\` guilds`,
-			fields,
-			color: BrandingColors.Primary,
-			thumbnail: { url: guild.iconURL() ?? '' }
+	async #setDisableSettings(guild: Guild) {
+		await this.container.prisma.guild.upsert({
+			where: { guildId: guild.id },
+			update: { disabled: false },
+			create: { guildId: guild.id }
 		});
-		await sendMessage(BOT_SERVER_LOG, { embeds: [embed] });
 	}
 
-	private generateInfoString(id: string | undefined, name: string | undefined): string {
-		let string = '';
-		if (name) string += `Name: ${name}\n`;
-		if (id) string += `ID: ${id}\n`;
-		return string;
+	#createBotJoinEmbed(guild: Guild, t: TFunction): EmbedBuilder {
+		const embed = new EmbedBuilder()
+			.setTitle(t('events/guilds-logs:joinBotEmbedTitle'))
+			.setDescription(t('events/guilds-logs:joinBotEmbedDescription', { guild: guild.name }))
+			.setColor(BrandingColors.Primary);
+
+		return embed;
+	}
+
+	#createBotJoinComponents(t: TFunction) {
+		return [
+			new ActionRowBuilder<ButtonBuilder>().setComponents(
+				new ButtonBuilder() //
+					.setLabel(t('events/guilds-logs:joinBotEmbedFieldsDocumentation'))
+					.setURL('https://docs.birthdayy.xyz/')
+					.setStyle(ButtonStyle.Link)
+					.setEmoji('📚'),
+				new ButtonBuilder() //
+					.setLabel(t('events/guilds-logs:joinBotEmbedFieldsInvite'))
+					.setURL('https://invite.birthdayy.xyz/')
+					.setStyle(ButtonStyle.Link)
+					.setEmoji('🎉'),
+				new ButtonBuilder() //
+					.setLabel(t('events/guilds-logs:joinBotEmbedFieldsSupport'))
+					.setURL('https://support.birthdayy.xyz/')
+					.setStyle(ButtonStyle.Link)
+					.setEmoji('🛠️'),
+				new ButtonBuilder() //
+					.setLabel(t('events/guilds-logs:joinBotEmbedFieldsWebsite'))
+					.setURL('https://birthdayy.xyz/')
+					.setStyle(ButtonStyle.Link)
+					.setEmoji('🎂')
+			)
+		];
+	}
+
+	async #createLogsEmbed(guild: Guild, t: TFunction): Promise<EmbedBuilder> {
+		const owner = await guild.fetchOwner();
+		const embed = new EmbedBuilder()
+			.setTitle(t('events/guilds-logs/create:logsEmbedTitle'))
+			.setDescription(t('events/guilds-logs:logsEmbedDescription', { guild }))
+			.setColor(BrandingColors.Primary)
+			.addFields(
+				{
+					name: t('events/guilds-logs:logsEmbedFieldsOwner'),
+					value: `${owner.user.tag} (${owner.id})`
+				},
+				{
+					name: t('events/guilds-logs:logsEmbedFieldsMembers'),
+					value: guild.memberCount.toString()
+				},
+				{
+					name: t('events/guilds-logs:logsEmbedFieldsCreated'),
+					value: t('events/guilds-logs:logsEmbedFieldsCreatedValue', { timestamp: guild.createdAt })
+				}
+			);
+
+		return embed;
 	}
 }

@@ -1,0 +1,14 @@
+{
+    "logsEmbedTitle": "Guild Joined",
+    "logsEmbedDescription": "{{guild.name}} ({{guild.id}}) has joined the bot.",
+    "logsEmbedFieldsOwner": "Owner",
+    "logsEmbedFieldsMembers": "Members",
+    "logsEmbedFieldsCreated": "Created At",
+    "logsEmbedFieldsCreatedValue": "{{timestamp, dateTime}}",
+    "joinBotEmbedTitle": "Hello!",
+    "joinBotEmbedDescription": "Hello! I'm Birthdayy Bot, a bot that can help you celebrate birthdays! To get started, use this command for set configuration: {{command}}. If you need help, join our support server [here](https://join.birthdayy.xyz).",
+    "joinBotEmbedFieldsDocumentation": "Documentation",
+    "joinBotEmbedFieldsInvite": "Invite",
+    "joinBotEmbedFieldsSupport": "Support",
+    "joinBotEmbedFieldsWebsite": "Website"
+}
