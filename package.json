@@ -52,7 +52,6 @@
 		"@sapphire/plugin-subcommands": "^6.0.3",
 		"@sapphire/plugin-utilities-store": "^2.0.2",
 		"@sapphire/ratelimits": "^2.4.9",
-		"@sapphire/shapeshift": "^3.9.6",
 		"@sapphire/utilities": "^3.15.3",
 		"@sentry/integrations": "^7.99.0",
 		"@sentry/node": "^7.99.0",

@@ -10,22 +10,22 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
-import { s } from '@sapphire/shapeshift';
+import { cast } from '@sapphire/utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 import { ActionRowBuilder, ButtonBuilder, Guild, User } from 'discord.js';
+
+interface TopGGWebhookData {
+	type: 'upvote';
+	user: string;
+	query: string;
+	bot: string;
+}
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
 	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		const data = s.object({
-			user: s.string,
-			type: s.enum('test', 'upvote'),
-			query: s.string,
-			bot: s.string
-		});
-
-		const body = data.parse(request.body);
+		const body = cast<TopGGWebhookData>(request.body);
 
 		if (!body || body.type !== 'upvote') {
 			return response.end();
