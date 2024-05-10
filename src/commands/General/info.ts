@@ -1,3 +1,4 @@
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#utils/constants';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
@@ -13,7 +14,6 @@ import {
 	type APIEmbedField,
 	type APIMessageActionRowComponent
 } from 'discord.js';
-import { getFixedT } from 'i18next';
 import { cpus, uptime, type CpuInfo } from 'os';
 
 export class UserCommand extends BirthdayyCommand {
@@ -24,7 +24,7 @@ export class UserCommand extends BirthdayyCommand {
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const t = getFixedT(interaction.locale);
+		const t = getSupportedUserLanguageT(interaction);
 		const embed = new EmbedBuilder()
 			.setColor(BrandingColors.Primary)
 			.setAuthor({

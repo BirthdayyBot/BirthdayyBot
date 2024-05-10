@@ -3,9 +3,9 @@ import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Command } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
+import type { TFunction } from '@sapphire/plugin-i18next';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { PermissionsBitField } from 'discord.js';
-import type { TFunction } from 'i18next';
 
 @ApplyOptions<RouteOptions>({ route: 'commands' })
 export class UserRoute extends Route {
