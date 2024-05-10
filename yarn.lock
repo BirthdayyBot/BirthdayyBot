@@ -748,15 +748,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-editable-commands@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "@sapphire/plugin-editable-commands@npm:4.0.2"
-  dependencies:
-    "@skyra/editable-commands": "npm:^3.0.1"
-  checksum: 10/5b98478cace39b7caaa419830a6e34cd35bde9229dbafa930a3dc394b405856f8d996779d08d412ea6a7eabc3389484d1e73bbe70e59fdf2fa2fa2b89358fb05
-  languageName: node
-  linkType: hard
-
 "@sapphire/plugin-hmr@npm:^3.0.1":
   version: 3.0.1
   resolution: "@sapphire/plugin-hmr@npm:3.0.1"
@@ -955,13 +946,6 @@ __metadata:
   dependencies:
     "@sentry/types": "npm:7.99.0"
   checksum: 10/5626380f04f9e49d07dd96158c7020ee8aef7cf6b0e580eacd767a9b6947e49115acee056402a75f0feae93bf97f2a06e38bf1962860155e79fb6268eb85f401
-  languageName: node
-  linkType: hard
-
-"@skyra/editable-commands@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@skyra/editable-commands@npm:3.0.1"
-  checksum: 10/1ce649569e95b51dfa228e76e9f9c93afcfb990237a9337878a2d6158b5638abc192a3435c8c2a1d5af5fd74ca2465aa44f30b65aac45ef11730e9738af5758d
   languageName: node
   linkType: hard
 
@@ -1478,7 +1462,6 @@ __metadata:
     "@sapphire/fetch": "npm:^3.0.2"
     "@sapphire/framework": "npm:^5.0.7"
     "@sapphire/plugin-api": "npm:^6.1.1"
-    "@sapphire/plugin-editable-commands": "npm:^4.0.2"
     "@sapphire/plugin-hmr": "npm:^3.0.1"
     "@sapphire/plugin-i18next": "npm:^7.1.1"
     "@sapphire/plugin-logger": "npm:^4.0.2"

@@ -1,6 +1,5 @@
 import { type GuildMessage } from '#lib/types';
 import { type PreconditionEntryResolvable } from '@sapphire/framework';
-import { send } from '@sapphire/plugin-editable-commands';
 import { type TFunction } from '@sapphire/plugin-i18next';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import {
@@ -36,7 +35,7 @@ export function sendLoadingMessage<T extends GuildMessage | Message>(
 	const embed = new EmbedBuilder()
 		.setDescription(pickRandom(t('system:loadingMessages', { returnObjects: true })))
 		.setColor(BrandingColors.Primary);
-	return send(message, { embeds: [embed] }) as Promise<T>;
+	return message.reply({ embeds: [embed] }) as Promise<T>;
 }
 
 export function resolveTarget(interaction: ChatInputCommandInteraction) {
