@@ -276,3 +276,14 @@ function parseWebhookError(): WebhookClientData | null {
 }
 
 export const WEBHOOK_ERROR = parseWebhookError();
+
+function parseWebhookLog(): WebhookClientData | null {
+	if (!envIsDefined('WEBHOOK_LOG_ID', 'WEBHOOK_LOG_TOKEN')) return null;
+
+	return {
+		id: envParseString('WEBHOOK_LOG_ID'),
+		token: envParseString('WEBHOOK_LOG_TOKEN')
+	};
+}
+
+export const WEBHOOK_LOG = parseWebhookLog();

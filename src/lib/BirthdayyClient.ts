@@ -1,6 +1,6 @@
 import { GuildMemberFetchQueue } from '#lib/discord';
 import { AnalyticsData } from '#lib/structures';
-import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
+import { CLIENT_OPTIONS, WEBHOOK_ERROR, WEBHOOK_LOG } from '#root/config';
 import { PrismaClient } from '@prisma/client';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
@@ -17,6 +17,12 @@ export class BirthdayyClient extends SapphireClient {
 	 */
 	@Enumerable(false)
 	public override webhookError: WebhookClient | null = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
+
+	/**
+	 * The webhook to use for the logs event
+	 */
+	@Enumerable(false)
+	public override webhookLog: WebhookClient | null = WEBHOOK_LOG ? new WebhookClient(WEBHOOK_LOG) : null;
 
 	@Enumerable(false)
 	public override readonly analytics: AnalyticsData | null;
