@@ -3,7 +3,13 @@ import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Listener } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { EmbedBuilder, GatewayDispatchEvents, type GatewayGuildCreateDispatch } from 'discord.js';
+import {
+	EmbedBuilder,
+	GatewayDispatchEvents,
+	type EmbedAuthorData,
+	type GatewayGuildCreateDispatch,
+	type GatewayGuildCreateDispatchData
+} from 'discord.js';
 
 @ApplyOptions<Listener.Options>({
 	event: GatewayDispatchEvents.GuildCreate,
@@ -13,14 +19,15 @@ import { EmbedBuilder, GatewayDispatchEvents, type GatewayGuildCreateDispatch } 
 export class UserListener extends Listener {
 	public async run(data: GatewayGuildCreateDispatch['d'], _shardId: number) {
 		const t = getT('en-US');
-		const { name, id } = data;
 
 		const size = await this.container.client.computeGuilds();
 
 		const embed = new EmbedBuilder()
-			.setTitle(t('events/guilds-logs:joinLogsEmbedTitle'))
-			.setDescription(t('events/guilds-logs:joinLogsEmbedDescription', { name, id, size }))
+			.setDescription(t('events/guilds:joinEmbedDescription', { size }))
 			.setColor(BrandingColors.Primary)
+			.setAuthor(this.fetchAuthorField(data, t))
+			.setTimestamp()
+			.setFooter({ text: t('events/guilds:joinEmbedFooter') })
 			.addFields([
 				await this.fetchOwnerField(data.owner_id, t),
 				this.getMembersField(data.member_count, t),
@@ -30,26 +37,35 @@ export class UserListener extends Listener {
 		return this.container.client.webhookLog!.send({ embeds: [embed] });
 	}
 
+	private fetchAuthorField(data: GatewayGuildCreateDispatchData, t: TFunction): EmbedAuthorData {
+		const { name, id, icon } = data;
+
+		return {
+			name: t('events/guilds:joinEmbedFieldsAuthor', { name, id }),
+			iconURL: icon ? `https://cdn.discordapp.com/icons/${id}/${icon}.png` : undefined
+		};
+	}
+
 	private async fetchOwnerField(ownerId: string, t: TFunction) {
 		const owner = await this.container.client.users.fetch(ownerId);
 
 		return {
-			name: t('events/guilds-logs:joinLogsEmbedFieldsOwner'),
+			name: t('events/guilds:joinEmbedFieldsOwner'),
 			value: `${owner.tag} (${owner.id})`
 		};
 	}
 
 	private getMembersField(memberCount: number, t: TFunction) {
 		return {
-			name: t('events/guilds-logs:joinLogsEmbedFieldsMembers'),
+			name: t('events/guilds:joinEmbedFieldsMembers'),
 			value: memberCount.toString()
 		};
 	}
 
 	private getCreatedField(joinedAt: string, t: TFunction) {
 		return {
-			name: t('events/guilds-logs:joinLogsEmbedFieldsCreated'),
-			value: t('events/guilds-logs:logsEmbedFieldsCreatedValue', { joined_at: joinedAt })
+			name: t('events/guilds:joinEmbedFieldsCreated'),
+			value: t('events/guilds:joinEmbedFieldsCreatedValue', { joined_at: joinedAt })
 		};
 	}
 }
