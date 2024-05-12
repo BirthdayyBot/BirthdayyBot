@@ -42,7 +42,7 @@ export class UserListener extends Listener {
 
 		return {
 			name: t('events/guilds:joinEmbedFieldsAuthor', { name, id }),
-			iconURL: icon ? `https://cdn.discordapp.com/icons/${id}/${icon}.png` : undefined
+			iconURL: icon ? container.client.rest.cdn.icon(id, icon) : undefined
 		};
 	}
 

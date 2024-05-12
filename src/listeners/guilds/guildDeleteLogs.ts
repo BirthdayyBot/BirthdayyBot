@@ -25,7 +25,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 
 		return {
 			name: t('events/guilds:leaveEmbedAuthor', { name, id }),
-			iconURL: icon ? `https://cdn.discordapp.com/icons/${id}/${icon}.png` : undefined
+			iconURL: icon ? container.client.rest.cdn.icon(id, icon) : undefined
 		};
 	}
 
