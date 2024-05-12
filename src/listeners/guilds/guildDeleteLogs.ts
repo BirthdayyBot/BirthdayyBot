@@ -1,39 +1,37 @@
 import { getT } from '#lib/i18n/translate';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, type ListenerOptions } from '@sapphire/framework';
+import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { Colors, EmbedBuilder, Guild } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>({ event: Events.GuildDelete })
+@ApplyOptions<ListenerOptions>({ event: Events.GuildDelete, enabled: Boolean(container.client.webhookLog) })
 export class UserEvent extends Listener<typeof Events.GuildDelete> {
 	public async run(guild: Guild) {
 		if (guild.available) return;
 
-		const { webhookLog } = this.container.client;
-		if (webhookLog) await webhookLog.send({ embeds: [await this.#createLogsEmbed(guild, getT('en-US'))] });
+		const t = getT('en-US');
+		const embed = new EmbedBuilder()
+			.setTitle('events/guilds-logs:leaveBotEmbedTitle')
+			.setDescription('events/guilds-logs:joinBotEmbedDescription')
+			.setColor(Colors.Red)
+			.addFields([this.getMembersField(guild.memberCount, t), this.getJoinedField(guild.joinedTimestamp, t)]);
+
+		return this.container.client.webhookLog!.send({ embeds: [embed] });
 	}
 
-	async #createLogsEmbed(guild: Guild, t: TFunction) {
-		const { joinedTimestamp, memberCount, name, id } = guild;
-		const size = await this.container.client.computeGuilds();
-		return new EmbedBuilder()
-			.setTitle(t('events/guilds-logs:leaveBotEmbedTitle'))
-			.setDescription(t('events/guilds-logs:joinBotEmbedDescription', { name, id, size }))
-			.setColor(Colors.Red)
-			.addFields(
-				{
-					name: t('events/guilds-logs:leaveLogsEmbedFieldsMembers'),
-					value: memberCount.toString(),
-					inline: true
-				},
-				{
-					name: t('events/guilds-logs:leaveLogsEmbedFieldsJoined'),
-					value: t('events/guilds-logs:leaveLogsEmbedFieldsJoinedValue', {
-						timestamp: joinedTimestamp
-					}),
+	private getMembersField(memberCount: number, t: TFunction) {
+		return {
+			name: t('events/guilds-logs:joinLogsEmbedFieldsMembers'),
+			value: memberCount.toString(),
+			inline: true
+		};
+	}
 
-					inline: true
-				}
-			);
+	private getJoinedField(joinedAt: number, t: TFunction) {
+		return {
+			name: t('events/guilds-logs:joinLogsEmbedFieldsJoined'),
+			value: t('events/guilds-logs:joinLogsEmbedFieldsJoinedValue', { joined_at: joinedAt }),
+			inline: true
+		};
 	}
 }
