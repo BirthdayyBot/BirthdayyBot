@@ -1,17 +1,17 @@
+import {
+	getActionRow,
+	getDocumentationComponent,
+	getInviteComponent,
+	getSupportComponent,
+	getWebsiteComponent
+} from '#lib/discord/button';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds, isTextChannel } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
-import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	EmbedBuilder,
-	GatewayDispatchEvents,
-	type GatewayGuildCreateDispatch
-} from 'discord.js';
+import { fetchT } from '@sapphire/plugin-i18next';
+import { EmbedBuilder, GatewayDispatchEvents, type GatewayGuildCreateDispatch } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildCreate, emitter: 'ws' })
 export class UserListener extends Listener {
@@ -31,34 +31,21 @@ export class UserListener extends Listener {
 			.setTitle('events/guilds:welcomeEmbedTitle')
 			.setDescription(description)
 			.setColor(BrandingColors.Primary);
-		const components = this.createComponents(await fetchT(guild));
+
+		const components = this.getComponents();
 
 		return channel.send({ embeds: [embed], components });
 	}
 
-	private createComponents(t: TFunction) {
+	private getComponents() {
 		return [
-			new ActionRowBuilder<ButtonBuilder>().setComponents(
-				new ButtonBuilder() //
-					.setLabel(t('events/guilds:welcomeComponentsDocumentation'))
-					.setURL('https://docs.birthdayy.xyz/')
-					.setStyle(ButtonStyle.Link)
-					.setEmoji('📚'),
-				new ButtonBuilder() //
-					.setLabel(t('events/guilds:welcomeComponentsInvite'))
-					.setURL('https://invite.birthdayy.xyz/')
-					.setStyle(ButtonStyle.Link)
-					.setEmoji('🎉'),
-				new ButtonBuilder() //
-					.setLabel(t('events/guilds:welcomeComponentsSupport'))
-					.setURL('https://support.birthdayy.xyz/')
-					.setStyle(ButtonStyle.Link)
-					.setEmoji('🛠️'),
-				new ButtonBuilder() //
-					.setLabel(t('events/guilds:welcomeComponentsWebsite'))
-					.setURL('https://birthdayy.xyz/')
-					.setStyle(ButtonStyle.Link)
-					.setEmoji('🎂')
+			getActionRow(
+				getDocumentationComponent('events/guilds:welcomeComponentsDocumentation'),
+				getInviteComponent('events/guilds:welcomeComponentsInvite')
+			),
+			getActionRow(
+				getSupportComponent('events/guilds:welcomeComponentsSupport'),
+				getWebsiteComponent('events/guilds:welcomeComponentsWebsite')
 			)
 		];
 	}
