@@ -1,5 +1,6 @@
-import { ButtonID, remindMeButtonDisabledBuilder } from '#lib/components/button';
 import { editInteractionResponse } from '#lib/discord/interaction';
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
+import { getActionRow, getRemindMeDisabledComponent } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
@@ -8,7 +9,7 @@ import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
 export class VoteReminderButton extends InteractionHandler {
 	public override parse(interaction: ButtonInteraction) {
-		if (interaction.customId !== ButtonID.voteReminder) return this.none();
+		if (interaction.customId !== 'vote-reminder-button') return this.none();
 
 		const timestampTwelveHoursLater = interaction.message.createdTimestamp + Time.Hour * 12;
 		return this.some({ time: timestampTwelveHoursLater });
@@ -16,15 +17,9 @@ export class VoteReminderButton extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction, result: { time: number }) {
 		await interaction.deferUpdate();
+		const components = [getActionRow(getRemindMeDisabledComponent(getSupportedUserLanguageT(interaction)))];
 
-		await editInteractionResponse(interaction, {
-			components: [
-				{
-					type: 1,
-					components: [await remindMeButtonDisabledBuilder(interaction)]
-				}
-			]
-		});
+		await editInteractionResponse(interaction, { components });
 
 		const delay = result.time - Date.now();
 

@@ -1,7 +1,6 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { BrandingColors, Emojis } from '#utils/constants';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
@@ -29,7 +28,7 @@ export class GuideCommand extends BirthdayyCommand {
 	}
 
 	private getStartedField(t: TFunction) {
-		const command = BirthdayApplicationCommandMentions.Set;
+		const command = chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID'));
 		return {
 			name: t('commands/guide:embedFieldsStartedTitle'),
 			value: t('commands/guide:embedFieldsStartedValue', { command })

@@ -1,7 +1,8 @@
 import { authenticated } from '#lib/api/utils';
-import { remindMeButtonBuilder } from '#lib/components/button';
+import { getActionRow, getRemindMeComponent } from '#lib/discord/button';
 import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { addRoleToUser } from '#lib/discord/role';
+import { getT } from '#lib/i18n/translate';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
@@ -12,7 +13,7 @@ import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
 import { cast } from '@sapphire/utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import { ActionRowBuilder, ButtonBuilder, Guild, User } from 'discord.js';
+import { Guild, User } from 'discord.js';
 
 interface TopGGWebhookData {
 	type: 'upvote';
@@ -69,7 +70,7 @@ export class UserRoute extends Route {
 			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`
 		});
 
-		const components = [new ActionRowBuilder<ButtonBuilder>().setComponents(await remindMeButtonBuilder(guild))];
+		const components = [getActionRow(getRemindMeComponent(getT(guild.preferredLocale)))];
 
 		await sendDMMessage(user.id, { embeds: [embed], components });
 	}
