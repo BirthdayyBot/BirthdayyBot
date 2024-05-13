@@ -29,7 +29,7 @@ export class VoteReminderButton extends InteractionHandler {
 
 		await this.container.tasks.create(
 			'VoteReminderTask',
-			{ memberId: interaction.user.id },
+			{ memberId: interaction.user.id, local: interaction.locale },
 			{ repeated: false, delay }
 		);
 		return interaction.followUp({
