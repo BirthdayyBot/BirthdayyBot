@@ -75,11 +75,13 @@ export function getWebsiteComponent(label: string): APIMessageActionRowComponent
 	};
 }
 
+export const remindMeComponentCustomId = 'vote-reminder-button';
+
 export function getRemindMeComponent(t: TFunction): APIMessageActionRowComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Primary,
-		custom_id: 'vote-reminder-button',
+		custom_id: remindMeComponentCustomId,
 		emoji: { name: '⏰' },
 		label: t('button:remindMe')
 	};
