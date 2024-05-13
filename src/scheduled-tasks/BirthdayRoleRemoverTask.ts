@@ -18,3 +18,9 @@ export class BirthdayRoleRemoverTask extends ScheduledTask {
 		return member.roles.remove(roleId, 'Birthday Role Removal');
 	}
 }
+
+declare module '@sapphire/plugin-scheduled-tasks' {
+	interface Tasks {
+		BirthdayRoleRemoverTask: BirthdayRoleRemoverTask;
+	}
+}
