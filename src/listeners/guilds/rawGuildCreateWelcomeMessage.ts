@@ -16,7 +16,7 @@ import { EmbedBuilder, GatewayDispatchEvents, type GatewayGuildCreateDispatch } 
 @ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildCreate, emitter: 'ws' })
 export class UserListener extends Listener {
 	public async run({ id: guildId }: GatewayGuildCreateDispatch['d'], _shardId: number) {
-		const guild = this.container.client.guilds.cache.get(guildId);
+		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		if (!guild) return;
 
 		const channel = guild.systemChannel ?? guild.channels.cache.filter(isTextChannel).filter(canSendEmbeds).first();
