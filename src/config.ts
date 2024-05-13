@@ -75,25 +75,32 @@ function parseInternationalizationDefaultVariablesPermissions() {
 	return Object.fromEntries(entries) as Readonly<Record<PermissionsString, PermissionsString>>;
 }
 
-type EmojisString = keyof typeof Emojis;
 function parseInternationalizationDefaultVariablesEmojis() {
-	const keys = Object.keys(Emojis) as readonly EmojisString[];
-	const entries = keys.map((key) => [key, key] as const);
-
-	return Object.fromEntries(entries) as Readonly<Record<EmojisString, EmojisString>>;
-}
-
-function parseInternationalizationDefaultVariables() {
 	return {
-		VERSION: process.env.CLIENT_VERSION,
 		SUCCESS: Emojis.Success,
 		FAIL: Emojis.Fail,
 		PLUS: Emojis.Plus,
 		HEART: Emojis.Heart,
-		DEFAULT_PREFIX: process.env.CLIENT_PREFIX,
-		CLIENT_ID: process.env.CLIENT_ID,
+		ARROW_LEFT: Emojis.ArrowLeft,
+		ARROW_RIGHT: Emojis.ArrowRight,
+		BOOK: Emojis.Book,
+		PEOPLE: Emojis.People,
+		ALARM: Emojis.Alarm,
+		CAKE: Emojis.Cake,
+		EXCLAMATION: Emojis.Exclamation
+	};
+}
+
+function parseInternationalizationDefaultVariables() {
+	const { CLIENT_VERSION: VERSION, CLIENT_ID, CLIENT_NAME, CLIENT_PREFIX: DEFAULT_PREFIX } = process.env;
+
+	return {
+		VERSION,
+		DEFAULT_PREFIX,
+		CLIENT_ID,
+		CLIENT_NAME,
 		...parseInternationalizationDefaultVariablesPermissions(),
-		...parseInternationalizationDefaultVariablesEmojis
+		...parseInternationalizationDefaultVariablesEmojis()
 	};
 }
 
@@ -269,3 +276,14 @@ function parseWebhookError(): WebhookClientData | null {
 }
 
 export const WEBHOOK_ERROR = parseWebhookError();
+
+function parseWebhookLog(): WebhookClientData | null {
+	if (!envIsDefined('WEBHOOK_LOG_ID', 'WEBHOOK_LOG_TOKEN')) return null;
+
+	return {
+		id: envParseString('WEBHOOK_LOG_ID'),
+		token: envParseString('WEBHOOK_LOG_TOKEN')
+	};
+}
+
+export const WEBHOOK_LOG = parseWebhookLog();

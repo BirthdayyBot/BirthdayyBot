@@ -1,19 +1,17 @@
+import {
+	getActionRow,
+	getGitHubComponent,
+	getInviteComponent,
+	getPremiumComponent,
+	getSupportComponent
+} from '#lib/discord/button';
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { BrandingColors } from '#utils/constants';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
-import {
-	ButtonStyle,
-	ComponentType,
-	OAuth2Scopes,
-	PermissionFlagsBits,
-	version as djsVersion,
-	type APIActionRowComponent,
-	type APIEmbedField,
-	type APIMessageActionRowComponent
-} from 'discord.js';
+import { version as djsVersion, type APIEmbedField } from 'discord.js';
 import { cpus, uptime, type CpuInfo } from 'os';
 
 export class UserCommand extends BirthdayyCommand {
@@ -83,75 +81,19 @@ export class UserCommand extends BirthdayyCommand {
 	}
 
 	private getComponents(t: TFunction) {
-		const url = this.getInvite();
-		const support = this.getSupportComponent(t);
-		const github = this.getGitHubComponent(t);
-		const donate = this.getPremiumComponent(t);
-		return [this.getActionRow(support, this.getInviteComponent(t, url)), this.getActionRow(github, donate)];
-	}
-
-	private getActionRow(
-		...components: APIMessageActionRowComponent[]
-	): APIActionRowComponent<APIMessageActionRowComponent> {
-		return { type: ComponentType.ActionRow, components };
-	}
-
-	private getSupportComponent(t: TFunction): APIMessageActionRowComponent {
-		return {
-			type: ComponentType.Button,
-			style: ButtonStyle.Link,
-			label: t('commands/info:buttonSupport'),
-			emoji: { name: '🆘' },
-			url: 'https://discord.gg/Bs9bSVe2Hf'
-		};
-	}
-
-	private getInviteComponent(t: TFunction, url: string): APIMessageActionRowComponent {
-		return {
-			type: ComponentType.Button,
-			style: ButtonStyle.Link,
-			label: t('commands/info:buttonInvite'),
-			emoji: { name: '🎉' },
-			url
-		};
-	}
-
-	private getGitHubComponent(t: TFunction): APIMessageActionRowComponent {
-		return {
-			type: ComponentType.Button,
-			style: ButtonStyle.Link,
-			label: t('commands/info:buttonGitHub'),
-			emoji: { name: 'github2', id: '1229375525827645590' },
-			url: 'https://github.com/BirthdayyBot/BirthdayyBot'
-		};
-	}
-
-	private getPremiumComponent(t: TFunction): APIMessageActionRowComponent {
-		return {
-			type: ComponentType.Button,
-			style: ButtonStyle.Link,
-			label: t('commands/info:buttonPremium'),
-			emoji: { name: '🧡' },
-			url: 'https://birthdayy.xyz/premium'
-		};
+		return [
+			getActionRow(
+				getSupportComponent(t('commands/info:buttonSupport')),
+				getInviteComponent(t('commands/info:buttonInvite'))
+			),
+			getActionRow(
+				getGitHubComponent(t('commands/info:buttonGitHub')),
+				getPremiumComponent(t('commands/info:buttonPremium'))
+			)
+		];
 	}
 
 	private formatCpuInfo({ times }: CpuInfo) {
 		return `${Math.round(((times.user + times.nice + times.sys + times.irq) / times.idle) * 10000) / 100}%`;
-	}
-
-	private getInvite() {
-		return this.container.client.generateInvite({
-			scopes: [OAuth2Scopes.Bot, OAuth2Scopes.ApplicationsCommands],
-			permissions:
-				PermissionFlagsBits.AddReactions |
-				PermissionFlagsBits.AttachFiles |
-				PermissionFlagsBits.EmbedLinks |
-				PermissionFlagsBits.ManageRoles |
-				PermissionFlagsBits.SendMessages |
-				PermissionFlagsBits.SendMessagesInThreads |
-				PermissionFlagsBits.UseExternalEmojis |
-				PermissionFlagsBits.ViewChannel
-		});
 	}
 }

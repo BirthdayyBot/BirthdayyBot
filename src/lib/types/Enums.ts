@@ -7,6 +7,7 @@ export enum Events {
 	MessageCreate = 'messageCreate',
 	GuildCreate = 'guildCreate',
 	GuildDelete = 'guildDelete',
+	GuildDeleteLogs = 'rawGuildDeleteLogs',
 	ResourceAnalyticsSync = 'resourceAnalyticsSync'
 }
 
