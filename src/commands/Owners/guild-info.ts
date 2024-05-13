@@ -1,4 +1,3 @@
-import { GuildInfoCMD } from '#lib/commands/guildInfo';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import generateConfigList from '#utils/birthday/config';
@@ -8,6 +7,8 @@ import { isCustom } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import type { SlashCommandBuilder } from 'discord.js';
+
 @ApplyOptions<BirthdayyCommand.Options>({
 	description: 'Get Infos about a Guild',
 	enabled: !isCustom,
@@ -16,7 +17,7 @@ import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire
 })
 export class GuildInfoCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand(GuildInfoCMD(), {
+		registry.registerChatInputCommand((builder) => this.registerCommands(builder), {
 			guildIds: await getCommandGuilds('admin')
 		});
 	}
@@ -115,5 +116,12 @@ export class GuildInfoCommand extends BirthdayyCommand {
 			content: `GuildInfos for ${guild.name}`,
 			embeds: [embed, configEmbed]
 		});
+	}
+
+	private registerCommands(builder: SlashCommandBuilder) {
+		return builder
+			.setName(this.name)
+			.setDescription(this.description)
+			.addStringOption((option) => option.setName('guild-id').setDescription('The GuildId').setRequired(true));
 	}
 }
