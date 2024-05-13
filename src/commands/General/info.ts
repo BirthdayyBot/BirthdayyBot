@@ -1,13 +1,13 @@
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
+import { BirthdayyCommand } from '#lib/structures';
+import { BrandingColors } from '#utils/constants';
 import {
 	getActionRow,
 	getGitHubComponent,
 	getInviteComponent,
 	getPremiumComponent,
 	getSupportComponent
-} from '#lib/discord/button';
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
-import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#utils/constants';
+} from '#utils/functions';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';

@@ -4,7 +4,14 @@ import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { BrandingColors, Emojis } from '#utils/constants';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { envParseString } from '@skyra/env-utilities';
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	chatInputApplicationCommandMention,
+	EmbedBuilder
+} from 'discord.js';
 
 export class GuideCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {

@@ -1,5 +1,4 @@
 import { authenticated } from '#lib/api/utils';
-import { getActionRow, getRemindMeComponent } from '#lib/discord/button';
 import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { addRoleToUser } from '#lib/discord/role';
 import { getT } from '#lib/i18n/translate';
@@ -7,6 +6,7 @@ import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemove
 import { Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { CLIENT_NAME, VOTE_CHANNEL_ID } from '#utils/environment';
+import { getActionRow, getRemindMeComponent } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
