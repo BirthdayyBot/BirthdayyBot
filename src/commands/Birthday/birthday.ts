@@ -1,4 +1,3 @@
-import { dayOptions, monthOptions, userOptions, yearOptions } from '#lib/components/builder';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
@@ -11,7 +10,13 @@ import { ApplyOptions, RequiresUserPermissions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
-import { bold, chatInputApplicationCommandMention } from 'discord.js';
+import dayjs from 'dayjs';
+import {
+	bold,
+	chatInputApplicationCommandMention,
+	SlashCommandIntegerOption,
+	SlashCommandUserOption
+} from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/birthday:rootDescription',
@@ -25,7 +30,7 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 })
 export class BirthdayCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => registerBirthdayCommand(builder));
+		registry.registerChatInputCommand((builder) => this.registerCommands(builder));
 	}
 
 	public async list(ctx: BirthdayySubcommand.Interaction<'cached'>) {
@@ -109,6 +114,66 @@ export class BirthdayCommand extends BirthdayySubcommand {
 
 		return interactionSuccess(ctx, content);
 	}
+
+	private registerCommands(builder: SlashCommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:birthday')
+			.setDMPermission(false)
+			.addSubcommand((subcommand) => this.registerListSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerSetSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerRemoveSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerShowSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerTestSubCommand(subcommand));
+	}
+
+	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:set')
+			.addIntegerOption((option) => this.dayOptions(option, 'commands/birthday:set.day'))
+			.addIntegerOption((option) => this.monthOptions(option, 'commands/birthday:set.month'))
+			.addIntegerOption((option) => this.yearOptions(option, 'commands/birthday:set.year'))
+			.addUserOption((option) => this.userOptions(option, 'commands/birthday:set.user'));
+	}
+
+	private registerListSubCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
+			this.monthOptions(option, 'commands/birthday:list.month').setRequired(false)
+		);
+	}
+
+	private registerRemoveSubCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:remove').addUserOption((option) =>
+			this.userOptions(option, 'commands/birthday:remove.user')
+		);
+	}
+
+	private registerShowSubCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:show').addUserOption((option) =>
+			this.userOptions(option, 'commands/birthday:show.user')
+		);
+	}
+
+	private registerTestSubCommand(builder: SlashCommandSubcommandBuilder) {
+		return applyLocalizedBuilder(builder, 'commands/birthday:test').addUserOption((option) =>
+			this.userOptions(option, 'commands/birthday:test.user')
+		);
+	}
+
+	private dayOptions(option: SlashCommandIntegerOption, key: string) {
+		return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);
+	}
+
+	private monthOptions(option: SlashCommandIntegerOption, key: string) {
+		return applyLocalizedBuilder(option, key).setRequired(true).setAutocomplete(true);
+	}
+
+	private yearOptions(option: SlashCommandIntegerOption, key: string) {
+		const currentYear = dayjs().year();
+		const minYear = currentYear - 100;
+		return applyLocalizedBuilder(option, key).setMinValue(minYear).setMaxValue(currentYear).setRequired(false);
+	}
+
+	private userOptions(option: SlashCommandUserOption, key: string) {
+		return applyLocalizedBuilder(option, key).setRequired(false);
+	}
 }
 
 export const BirthdayApplicationCommandMentions = {
@@ -118,45 +183,3 @@ export const BirthdayApplicationCommandMentions = {
 	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
 	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896')
 } as const;
-
-function registerBirthdayCommand(builder: SlashCommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:birthday')
-		.setDMPermission(false)
-		.addSubcommand((builder) => registerBirthdaySubCommand(builder))
-		.addSubcommand((builder) => listBirthdaySubCommand(builder))
-		.addSubcommand((builder) => removeBirthdaySubCommand(builder))
-		.addSubcommand((builder) => showBirthdaySubCommand(builder))
-		.addSubcommand((builder) => testBirthdaySubCommand(builder));
-}
-
-function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:set')
-		.addIntegerOption((option) => dayOptions(option, 'commands/birthday:set.day'))
-		.addIntegerOption((option) => monthOptions(option, 'commands/birthday:set.month'))
-		.addIntegerOption((option) => yearOptions(option, 'commands/birthday:set.year'))
-		.addUserOption((option) => userOptions(option, 'commands/birthday:set.user'));
-}
-
-function listBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
-		monthOptions(option, 'commands/birthday:list.month').setRequired(false)
-	);
-}
-
-function removeBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:remove').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:remove.user')
-	);
-}
-
-function showBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:show').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:show.user')
-	);
-}
-
-function testBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/birthday:test').addUserOption((option) =>
-		userOptions(option, 'commands/birthday:test.user')
-	);
-}
