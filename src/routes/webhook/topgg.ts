@@ -1,5 +1,4 @@
 import { authenticated } from '#lib/api/utils';
-import { sendDMMessage, sendMessage } from '#lib/discord/message';
 import { getT } from '#lib/i18n/translate';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { Emojis, GuildIDEnum } from '#utils/constants';
@@ -7,6 +6,7 @@ import { generateDefaultEmbed } from '#utils/embed';
 import { CLIENT_NAME, VOTE_CHANNEL_ID } from '#utils/environment';
 import { getActionRow, getRemindMeComponent } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
@@ -76,8 +76,9 @@ export class UserRoute extends Route {
 		});
 
 		const components = [getActionRow(getRemindMeComponent(getT(guild.preferredLocale)))];
+		const channel = user.dmChannel ?? (await user.createDM());
 
-		await sendDMMessage(user.id, { embeds: [embed], components });
+		return channel.send({ embeds: [embed], components });
 	}
 
 	private async sendVoteNotification(user: User) {
@@ -87,6 +88,10 @@ export class UserRoute extends Route {
 			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL }
 		});
 
-		await sendMessage(VOTE_CHANNEL_ID, { embeds: [embed] });
+		const channel = container.client.channels.cache.get(VOTE_CHANNEL_ID);
+
+		if (!isTextBasedChannel(channel)) return;
+
+		return channel.send({ embeds: [embed] });
 	}
 }

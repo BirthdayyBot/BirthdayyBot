@@ -20,7 +20,9 @@ export class DisplayStats extends ScheduledTask {
 		const serverCountChannel = await guild.channels.fetch(this.serverChannelID);
 		const userCountChannel = await guild.channels.fetch(this.userChannelID);
 
-		if (!isVoiceBasedChannel(serverCountChannel) || !isVoiceBasedChannel(userCountChannel)) return;
+		if (!isVoiceBasedChannel(serverCountChannel) || !isVoiceBasedChannel(userCountChannel)) {
+			return container.logger.error('[DisplayStats] Server or User count channel not found.');
+		}
 
 		await serverCountChannel?.setName(`Servers: ${await container.client.computeGuilds()} 🍰`);
 		await userCountChannel?.setName(`Users: ${await container.client.computeUsers()} 👥`);

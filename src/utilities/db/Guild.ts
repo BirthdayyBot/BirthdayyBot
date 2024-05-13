@@ -1,6 +1,6 @@
-import { sendMessage } from '#lib/discord/message';
 import { BOT_ADMIN_LOG } from '#utils/environment';
 import type { Prisma } from '@prisma/client';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { codeBlock } from '@sapphire/utilities';
@@ -144,10 +144,13 @@ export class Guild extends Utility {
 					deletedGuilds: deletedGuilds.count
 				}))
 				.catch(async (error: any) => {
+					const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
+					if (!isTextBasedChannel(channel)) return { deletedBirthdays: 0, deletedGuilds: 0 };
+
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
-					await sendMessage(BOT_ADMIN_LOG, {
-						content: `**[ERROR][DeleteByLastUpdated]**\n${codeBlock(JSON.stringify(error))}`
-					});
+					await channel.send(
+						codeBlock('json', `Error in [Guild][DeleteByLastUpdated]:\n${JSON.stringify(error)}`)
+					);
 					return { deletedBirthdays: 0, deletedGuilds: 0 };
 				})
 	};
