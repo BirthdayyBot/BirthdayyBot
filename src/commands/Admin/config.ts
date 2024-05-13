@@ -12,6 +12,7 @@ import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
 import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import {
 	type Channel,
 	ChannelType,
@@ -270,9 +271,9 @@ export class ConfigCommand extends BirthdayySubcommand {
 }
 
 export const ConfigApplicationCommandMentions = {
-	Edit: chatInputApplicationCommandMention('config', 'edit', '935174203882217483'),
-	View: chatInputApplicationCommandMention('config', 'view', '935174203882217483'),
-	Reset: chatInputApplicationCommandMention('config', 'reset', '935174203882217483')
+	Edit: chatInputApplicationCommandMention('config', 'edit', envParseString('COMMANDS_CONFIG_ID')),
+	View: chatInputApplicationCommandMention('config', 'view', envParseString('COMMANDS_CONFIG_ID')),
+	Reset: chatInputApplicationCommandMention('config', 'reset', envParseString('COMMANDS_CONFIG_ID'))
 } as const;
 
 function registerConfigCommand(builder: SlashCommandBuilder) {

@@ -12,6 +12,7 @@ declare module 'discord.js' {
 		readonly analytics: AnalyticsData | null;
 		readonly guildMemberFetchQueue: GuildMemberFetchQueue;
 		readonly webhookError: WebhookClient | null;
+		readonly webhookLog: WebhookClient | null;
 		computeGuilds(): Promise<number>;
 		computeUsers(): Promise<number>;
 	}
@@ -70,6 +71,9 @@ declare module '@skyra/env-utilities' {
 		CLIENT_PRESENCE_NAME: string;
 		CLIENT_PRESENCE_TYPE: string;
 
+		COMMANDS_CONFIG_ID: string;
+		COMMANDS_BIRTHDAY_ID: string;
+
 		LOG_CHANNEL_SERVER: string;
 		LOG_CHANNEL_ADMIN: string;
 		CUSTOM_BOT: BooleanString;
@@ -104,6 +108,9 @@ declare module '@skyra/env-utilities' {
 
 		WEBHOOK_ERROR_ID: string;
 		WEBHOOK_ERROR_TOKEN: string;
+
+		WEBHOOK_LOG_ID: string;
+		WEBHOOK_LOG_TOKEN: string;
 
 		SENTRY_URL: string;
 		TOP_GG_TOKEN: string;

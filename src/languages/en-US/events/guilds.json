@@ -1,0 +1,21 @@
+{
+    "joinEmbedDescription": "I am now in {{size}} guilds.",
+    "joinEmbedAuthor": "{{name}} ({{id}})",
+    "joinEmbedFieldsOwner": "Owner",
+    "joinEmbedFieldsMembers": "Members",
+    "joinEmbedFieldsCreated": "Created At",
+    "joinEmbedFieldsCreatedValue": "{{joined_at, dateTime}}",
+    "joinEmbedFooter": "Guild Joined",
+    "welcomeEmbedTitle": "Hello!",
+    "welcomeEmbedDescription": "Hello! I'm Birthdayy Bot, a bot that can help you celebrate birthdays! To get started, use this command for set configuration: {{command}}. If you need help, join our support server [here](https://join.birthdayy.xyz).",
+    "welcomeComponentsDocumentation": "Documentation",
+    "welcomeComponentsInvite": "Invite",
+    "welcomeComponentsSupport": "Support",
+    "welcomeComponentsWebsite": "Website",
+    "leaveEmbedAuthor": "{{name}} ({{id}})",
+    "leaveEmbedDescription": "I am now in {{size}} guilds.",
+    "leaveEmbedFieldsMembers": "Members",
+    "leaveEmbedFieldsJoined": "Joined At",
+    "leaveEmbedFieldsJoinedValue": "{{joined_at, dateTime}}",
+    "leaveEmbedFooter": "Guild Left"
+}

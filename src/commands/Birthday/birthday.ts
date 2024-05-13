@@ -10,6 +10,7 @@ import { ApplyOptions, RequiresUserPermissions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
 	bold,
@@ -177,9 +178,9 @@ export class BirthdayCommand extends BirthdayySubcommand {
 }
 
 export const BirthdayApplicationCommandMentions = {
-	List: chatInputApplicationCommandMention('birthday', 'list', '935174192389840896'),
-	Set: chatInputApplicationCommandMention('birthday', 'set', '935174192389840896'),
-	Remove: chatInputApplicationCommandMention('birthday', 'remove', '935174192389840896'),
-	Show: chatInputApplicationCommandMention('birthday', 'show', '935174192389840896'),
-	Test: chatInputApplicationCommandMention('birthday', 'test', '935174192389840896')
+	List: chatInputApplicationCommandMention('birthday', 'list', envParseString('COMMANDS_BIRTHDAY_ID')),
+	Set: chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID')),
+	Remove: chatInputApplicationCommandMention('birthday', 'remove', envParseString('COMMANDS_BIRTHDAY_ID')),
+	Show: chatInputApplicationCommandMention('birthday', 'show', envParseString('COMMANDS_BIRTHDAY_ID')),
+	Test: chatInputApplicationCommandMention('birthday', 'test', envParseString('COMMANDS_BIRTHDAY_ID'))
 } as const;

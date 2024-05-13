@@ -18,7 +18,7 @@ services:
   ## To be deleted when switching from MySQL to PostgreSQL
   mysql:
     container_name: mysql
-    image: 'mysql:8.0'
+    image: 'mysql:8.4'
     networks:
       - birthdayy
     ports:

@@ -86,9 +86,9 @@
 		"typescript": "^5.4.5"
 	},
 	"resolutions": {
-		"@types/node": "20.11.5",
+		"@types/node": "20.12.11",
 		"ansi-regex": "^5.0.1",
-		"discord-api-types": "^0.37.79",
+		"discord-api-types": "^0.37.83",
 		"minimist": "^1.2.8"
 	},
 	"engines": {
@@ -113,8 +113,8 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
-	"packageManager": "yarn@4.1.1",
+	"packageManager": "yarn@4.2.2",
 	"volta": {
-		"node": "20.12.2"
+		"node": "20.13.1"
 	}
 }
