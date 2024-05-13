@@ -47,7 +47,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	public settings: SettingsManager;
 
-	private annoncementQueue = new AsyncQueue();
+	private announcementQueue = new AsyncQueue();
 
 	/**
 	 * The current case count
@@ -117,7 +117,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 			return interaction instanceof Message
 				? interaction.edit(messageOptions)
-				: interactionSuccess(interaction, description);
+				: interaction.reply(interactionSuccess(description));
 		}
 
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
@@ -134,11 +134,11 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const member = this.guild.members.resolve(birthday.userId);
 		if (!member) return;
 
-		const options = this.createOptionsMessageForAnnoncementChannel(await this.settings.fetch(), member);
+		const options = this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member);
 		const message = await this.announceBirthdayInChannel(options, member);
 		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
 
-		this.annoncementQueue.shift();
+		this.announcementQueue.shift();
 		return { message, role };
 	}
 
@@ -258,7 +258,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return channel.messages.fetch(overviewMessage);
 	}
 
-	private createOptionsMessageForAnnoncementChannel(
+	private createOptionsMessageForAnnouncementChannel(
 		{ announcementMessage, birthdayPingRole }: Settings,
 		member: GuildMember
 	): MessageCreateOptions {
@@ -346,7 +346,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	private formatItems = (birthday: Birthday) => {
-		// exemple: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
+		// example: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
 		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
 		const age = dayjs().diff(date, 'year');
 		const formattedDate = formatDateForDisplay(birthday.birthday);
