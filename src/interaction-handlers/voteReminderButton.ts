@@ -1,4 +1,3 @@
-import { editInteractionResponse } from '#lib/discord/interaction';
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { getActionRow, getRemindMeDisabledComponent, remindMeComponentCustomId } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -17,21 +16,19 @@ export class VoteReminderButton extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction, result: { time: number }) {
 		await interaction.deferUpdate();
+
 		const components = [getActionRow(getRemindMeDisabledComponent(getSupportedUserLanguageT(interaction)))];
 
-		await editInteractionResponse(interaction, { components });
+		await interaction.editReply({ components });
 
 		const delay = result.time - Date.now();
 
-		if (delay < 0) {
-			return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
-		}
+		if (delay < 0) return interaction.followUp({ content: 'You can vote now already again!', ephemeral: true });
 
-		await this.container.tasks.create(
-			'VoteReminderTask',
-			{ memberId: interaction.user.id, local: interaction.locale },
-			{ repeated: false, delay }
-		);
+		const payload = { memberId: interaction.user.id, local: interaction.locale };
+
+		await this.container.tasks.create('VoteReminderTask', payload, { repeated: false, delay });
+
 		return interaction.followUp({
 			content: `I will remind you to vote ${time(
 				Math.round(result.time / 1000),

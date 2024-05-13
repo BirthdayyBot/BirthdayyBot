@@ -1,8 +1,7 @@
-import { replyToInteraction } from '#lib/discord/interaction';
 import { BrandingColors } from '#utils/constants';
 import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
 import { envParseBoolean } from '@skyra/env-utilities';
-import { Colors, type APIEmbed, type ChatInputCommandInteraction } from 'discord.js';
+import { Colors, type APIEmbed } from 'discord.js';
 
 export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 	return {
@@ -22,8 +21,8 @@ export function defaultEmbed(): APIEmbed {
 	};
 }
 
-export function interactionSuccess(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
-	return replyToInteraction(interaction, {
+export function interactionSuccess(description: string, ephemeral = false) {
+	return {
 		ephemeral,
 		embeds: [
 			{
@@ -31,11 +30,11 @@ export function interactionSuccess(interaction: ChatInputCommandInteraction, des
 				description: `${description}`
 			}
 		]
-	});
+	};
 }
 
-export function interactionProblem(interaction: ChatInputCommandInteraction, description: string, ephemeral = false) {
-	return replyToInteraction(interaction, {
+export function interactionProblem(description: string, ephemeral = false) {
+	return {
 		ephemeral,
 		embeds: [
 			{
@@ -43,5 +42,5 @@ export function interactionProblem(interaction: ChatInputCommandInteraction, des
 				description: `${description}`
 			}
 		]
-	});
+	};
 }

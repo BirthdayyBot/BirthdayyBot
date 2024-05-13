@@ -34,86 +34,85 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		registry.registerChatInputCommand((builder) => this.registerCommands(builder));
 	}
 
-	public async list(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const birthdayManager = getBirthdays(ctx.guild);
-		await getBirthdays(ctx.guild).fetch();
-		const month = ctx.options.getInteger('month');
+	public async list(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const birthdayManager = getBirthdays(interaction.guild);
+		await getBirthdays(interaction.guild).fetch();
+		const month = interaction.options.getInteger('month');
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
 		const title = month
-			? await resolveKey(ctx, 'commands/birthday:list.title.month', options)
-			: await resolveKey(ctx, 'commands/birthday:list.title.next');
+			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
+			: await resolveKey(interaction, 'commands/birthday:list.title.next');
 
-		return birthdayManager.sendListBirthdays(ctx, birthdays, title);
+		return birthdayManager.sendListBirthdays(interaction, birthdays, title);
 	}
 
-	public async set(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const { options, user } = resolveTarget(ctx);
-		const day = addZeroToSingleDigitNumber(ctx.options.getInteger('day', true));
-		const month = addZeroToSingleDigitNumber(ctx.options.getInteger('month', true));
-		const year = ctx.options.getInteger('year') ?? 'XXXX';
+	public async set(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const { options, user } = resolveTarget(interaction);
+		const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));
+		const month = addZeroToSingleDigitNumber(interaction.options.getInteger('month', true));
+		const year = interaction.options.getInteger('year') ?? 'XXXX';
 		const birthday = `${year}-${month}-${day}`;
 
-		await getBirthdays(ctx.guildId).create({ birthday, userId: user.id });
+		await getBirthdays(interaction.guildId).create({ birthday, userId: user.id });
 
-		return interactionSuccess(
-			ctx,
-			await resolveKey(ctx, 'commands/birthday:set.success', {
-				birthday: bold(formatDateForDisplay(birthday)),
-				...options
-			})
-		);
+		const content = await resolveKey(interaction, 'commands/birthday:set.success', { ...options });
+
+		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async remove(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user, options } = resolveTarget(ctx);
-		const result = await getBirthdays(ctx.guildId).remove(user.id);
+	public async remove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const { user, options } = resolveTarget(interaction);
+		const result = await getBirthdays(interaction.guildId).remove(user.id);
 
 		if (!result) {
-			return resolveKey(ctx, 'commands/birthday:remove.notRegistered', {
+			return resolveKey(interaction, 'commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
 				...options
 			});
 		}
 
-		return interactionSuccess(ctx, await resolveKey(ctx, 'commands/birthday:remove.success', { ...options }));
+		const content = await resolveKey(interaction, 'commands/birthday:remove.success', { ...options });
+
+		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async show(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user, options } = resolveTarget(ctx);
-		const birthday = getBirthdays(ctx.guild).get(user.id);
+	public async show(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const { user, options } = resolveTarget(interaction);
+		const birthday = getBirthdays(interaction.guild).get(user.id);
 
 		if (isNullOrUndefined(birthday)) {
-			return interactionProblem(ctx, await resolveKey(ctx, 'commands/birthday:show.notRegistered'));
+			const content = await resolveKey(interaction, 'commands/birthday:show.notRegistered', { ...options });
+			return interaction.reply(interactionProblem(content));
 		}
 
-		return interactionSuccess(
-			ctx,
-			await resolveKey(ctx, 'commands/birthday:show.success', {
-				date: bold(formatDateForDisplay(birthday.birthday)),
-				emoji: Emojis.ArrowRight,
-				...options
-			})
-		);
+		const content = await resolveKey(interaction, 'commands/birthday:show.success', {
+			...options,
+			date: bold(formatDateForDisplay(birthday.birthday)),
+			emoji: Emojis.ArrowRight
+		});
+
+		return interaction.reply(interactionSuccess(content));
 	}
 
 	@RequiresUserPermissions('ManageGuild')
-	public async test(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user } = resolveTarget(ctx);
-		const birthay = getBirthdays(ctx.guild).get(user.id);
+	public async test(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const { user } = resolveTarget(interaction);
+		const birthday = getBirthdays(interaction.guild).get(user.id);
 
-		if (isNullOrUndefined(birthay)) {
-			return interactionProblem(ctx, 'This user has not yet registered his birthday ');
+		if (isNullOrUndefined(birthday)) {
+			const content = "This user doesn't have a birthday registered.";
+			return interaction.reply(interactionProblem(content));
 		}
 
-		const result = await getBirthdays(ctx.guild).announcedBirthday(birthay);
+		const result = await getBirthdays(interaction.guild).announcedBirthday(birthday);
 
 		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
 
-		return interactionSuccess(ctx, content);
+		return interaction.reply(interactionSuccess(content));
 	}
 
 	private registerCommands(builder: SlashCommandBuilder) {
