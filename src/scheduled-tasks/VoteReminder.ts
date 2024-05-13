@@ -1,8 +1,9 @@
-import { VoteEmbed } from '#lib/embeds/vote';
-import { generateDefaultEmbed } from '#utils/embed';
+import { getT } from '#lib/i18n/translate';
+import { BrandingColors } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
+import type { TFunction } from '@sapphire/plugin-i18next';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
-import type { Snowflake } from 'discord.js';
+import { EmbedBuilder, type EmbedField, type Snowflake } from 'discord.js';
 
 interface VoteReminderTaskPayload {
 	memberId: Snowflake;
@@ -11,12 +12,33 @@ interface VoteReminderTaskPayload {
 @ApplyOptions<ScheduledTask.Options>({ name: 'VoteReminderTask', customJobOptions: { removeOnComplete: true } })
 export class VoteReminderTask extends ScheduledTask {
 	public async run(payload: VoteReminderTaskPayload) {
-		const { memberId } = payload;
-		const user = await this.container.client.users.fetch(memberId).catch(() => null);
+		const user = await this.container.client.users.fetch(payload.memberId).catch(() => null);
 		if (!user) return;
-		await user.send({
-			content: `Hi, you can vote for Birthdayy again!`,
-			embeds: [generateDefaultEmbed(VoteEmbed)]
-		});
+
+		const t = getT('en-US');
+		const channel = user.dmChannel ?? (await user.createDM());
+
+		const embed = new EmbedBuilder()
+			.setColor(BrandingColors.Primary)
+			.setTitle(t('tasks:voteReminderEmbedTitle'))
+			.setFields([this.getVoteFields(t), this.getPremiumFields(t)]);
+
+		return channel.send({ content: t('tasks:voteReminderContent'), embeds: [embed] });
+	}
+
+	private getVoteFields(t: TFunction): EmbedField {
+		return {
+			name: t('tasks:voteReminderEmbedVoteFields'),
+			value: t('tasks:voteReminderEmbedVoteFieldsValue'),
+			inline: false
+		};
+	}
+
+	private getPremiumFields(t: TFunction): EmbedField {
+		return {
+			name: t('tasks:voteReminderEmbedPremiumFields'),
+			value: t('tasks:voteReminderEmbedPremiumFieldsValue'),
+			inline: false
+		};
 	}
 }
