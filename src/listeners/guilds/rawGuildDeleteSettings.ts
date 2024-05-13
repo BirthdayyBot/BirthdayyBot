@@ -7,6 +7,10 @@ export class UserListener extends Listener {
 	public run(data: GatewayGuildDeleteDispatch['d'], _shardId: number) {
 		if (data.unavailable) return;
 
-		return this.container.prisma.guild.update({ where: { guildId: data.id }, data: { disabled: true } });
+		return this.container.prisma.guild.upsert({
+			create: { guildId: data.id, disabled: true },
+			update: { disabled: true },
+			where: { guildId: data.id }
+		});
 	}
 }
