@@ -8,6 +8,7 @@ import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
+	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
 	permissionLevel: PermissionLevels.Administrator

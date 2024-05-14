@@ -1,16 +1,22 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
-import { BirthdayyCommand } from '#lib/structures';
+import { BirthdayyCommand, BirthdayySubcommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
 import { BrandingColors, Emojis } from '#utils/constants';
-import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
+import { ApplyOptions } from '@sapphire/decorators';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 
+@ApplyOptions<BirthdayySubcommand.Options>({
+	name: 'guide',
+	description: 'commands/guide:description',
+	runIn: CommandOptionsRunTypeEnum.GuildAny
+})
 export class GuideCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/guide:name', 'commands/guide:description').setDMPermission(true)
+			applyDescriptionLocalizedBuilder(builder, this.description).setName(this.name).setDMPermission(true)
 		);
 	}
 
@@ -52,6 +58,7 @@ export class GuideCommand extends BirthdayyCommand {
 		};
 	}
 
+	// TODO: Change to central implementation of Button
 	private createComponents(t: TFunction) {
 		return [
 			new ActionRowBuilder<ButtonBuilder>().setComponents(

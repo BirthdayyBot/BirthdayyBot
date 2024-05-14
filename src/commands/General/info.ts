@@ -6,18 +6,25 @@ import {
 	getSupportComponent
 } from '#lib/discord/button';
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
-import { BirthdayyCommand } from '#lib/structures';
+import { BirthdayyCommand, BirthdayySubcommand } from '#lib/structures';
+import { PermissionLevels } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
+import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
-import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
 import { version as djsVersion, type APIEmbedField } from 'discord.js';
 import { cpus, uptime, type CpuInfo } from 'os';
 
+@ApplyOptions<BirthdayySubcommand.Options>({
+	name: 'info',
+	description: 'commands/info:description',
+	permissionLevel: PermissionLevels.Everyone
+})
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((command) =>
-			applyLocalizedBuilder(command, 'commands/info:name', 'commands/info:description')
+			applyDescriptionLocalizedBuilder(command, this.description).setName(this.name).setDMPermission(true)
 		);
 	}
 

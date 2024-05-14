@@ -9,20 +9,26 @@ import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/b
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { type ApplicationCommandRegistry, Command, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
-import { applyLocalizedBuilder, createLocalizedChoice, fetchT, resolveKey } from '@sapphire/plugin-i18next';
+import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
+import {
+	applyDescriptionLocalizedBuilder,
+	applyLocalizedBuilder,
+	createLocalizedChoice,
+	fetchT,
+	resolveKey
+} from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
-	type Channel,
 	ChannelType,
 	EmbedBuilder,
-	type EmbedField,
 	PermissionFlagsBits,
 	Role,
 	channelMention,
 	chatInputApplicationCommandMention,
-	roleMention
+	roleMention,
+	type Channel,
+	type EmbedField
 } from 'discord.js';
 
 type ConfigDefault = Omit<
@@ -39,9 +45,7 @@ type ConfigDefault = Omit<
 })
 export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => registerConfigCommand(builder), {
-			guildIds: ['980559116076470272']
-		});
+		registry.registerChatInputCommand((builder) => registerConfigCommand(builder));
 	}
 
 	public async edit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -108,7 +112,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'all': {
 				const data: ConfigDefault = {
 					announcementChannel: null,
-					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
+					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE, // TODO: Use NULL instead of DEFAULT_ANNOUNCEMENT_MESSAGE
 					birthdayRole: null,
 					birthdayPingRole: null,
 					overviewChannel: null,
@@ -277,59 +281,48 @@ export const ConfigApplicationCommandMentions = {
 } as const;
 
 function registerConfigCommand(builder: SlashCommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:name', 'commands/config:description')
-		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+	return applyDescriptionLocalizedBuilder(builder, 'commands/config:description')
+		.setName('config')
 		.setDMPermission(false)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 		.addSubcommand((builder) => editConfigSubCommand(builder))
 		.addSubcommand((builder) => viewConfigSubCommand(builder))
 		.addSubcommand((builder) => resetConfigSubCommand(builder));
 }
 
 function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:edit')
+	return applyDescriptionLocalizedBuilder(builder, 'commands/config:edit')
+		.setName('edit-config')
 		.addChannelOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyAnnouncementChannel',
-				'commands/config:editOptionsAnnoucementChannelDescription'
-			).addChannelTypes(ChannelType.GuildText)
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnoucementChannelDescription')
+				.setName('announcement-channel')
+				.addChannelTypes(ChannelType.GuildText)
 		)
 		.addStringOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyAnnouncementMessage',
-				'commands/config:editOptionsAnnoucementMessageDescription'
-			)
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnoucementMessageDescription')
+				.setName('announcement-message')
 				.setMinLength(1)
 				.setMaxLength(512)
 		)
 		.addRoleOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyBirthdayRole',
-				'commands/config:editOptionsBirthdayRoleDescription'
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayRoleDescription').setName(
+				'birthday-role'
 			)
 		)
 		.addRoleOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyBirthdayPingRole',
-				'commands/config:editOptionsBirthdayPingRoleDescription'
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayPingRoleDescription').setName(
+				'birthday-ping-role'
 			)
 		)
 		.addChannelOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyOverviewChannel',
-				'commands/config:editOptionsOverviewChannelDescription'
-			).addChannelTypes(ChannelType.GuildText)
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsOverviewChannelDescription')
+				.setName('overview-channel')
+				.addChannelTypes(ChannelType.GuildText)
 		)
 		.addIntegerOption((builder) =>
-			applyLocalizedBuilder(
-				builder,
-				'commands/config:keyTimezone',
-				'commands/config:editOptionsTimezoneDescription'
-			).setAutocomplete(true)
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsTimezoneDescription')
+				.setName('timezone')
+				.setAutocomplete(true)
 		);
 }
 

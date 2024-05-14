@@ -6,8 +6,10 @@ import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18ne
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 
 @ApplyOptions<BirthdayyCommand.Options>({
+	name: 'reboot',
 	description: 'commands/system:rebootDescription',
-	permissionLevel: PermissionLevels.BotOwner
+	permissionLevel: PermissionLevels.BotOwner,
+	preconditions: ['BotOwner']
 })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
