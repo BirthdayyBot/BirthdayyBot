@@ -1,5 +1,5 @@
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import {
 	getActionRow,
 	getDocumentationComponent,
@@ -33,7 +33,7 @@ export class UserListener extends Listener {
 		const embed = new EmbedBuilder()
 			.setTitle(t('events/guilds:welcomeEmbedTitle'))
 			.setDescription(description)
-			.setColor(BrandingColors.Primary);
+			.setColor(ClientColor);
 
 		const components = this.getComponents(t);
 

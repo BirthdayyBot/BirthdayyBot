@@ -1,5 +1,5 @@
 import { getT } from '#lib/i18n/translate';
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Listener } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
@@ -24,7 +24,7 @@ export class UserListener extends Listener {
 
 		const embed = new EmbedBuilder()
 			.setDescription(t('events/guilds:joinEmbedDescription', { size }))
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.setAuthor(this.fetchAuthorField(data, t))
 			.setTimestamp()
 			.setFooter({ text: t('events/guilds:joinEmbedFooter') })

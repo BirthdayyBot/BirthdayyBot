@@ -1,6 +1,6 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import {
 	getActionRow,
 	getGitHubComponent,
@@ -24,7 +24,7 @@ export class UserCommand extends BirthdayyCommand {
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const t = getSupportedUserLanguageT(interaction);
 		const embed = new EmbedBuilder()
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.setAuthor({
 				name: this.container.client.user!.tag,
 				iconURL: this.container.client.user!.displayAvatarURL({ size: 128 })

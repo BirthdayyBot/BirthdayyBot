@@ -1,4 +1,4 @@
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import { BOT_AVATAR, CLIENT_NAME } from '#utils/environment';
 import { envParseBoolean } from '@skyra/env-utilities';
 import { Colors, type APIEmbed } from 'discord.js';
@@ -12,7 +12,7 @@ export function generateDefaultEmbed(embed: APIEmbed): APIEmbed {
 
 export function defaultEmbed(): APIEmbed {
 	return {
-		color: BrandingColors.Primary,
+		color: ClientColor,
 		timestamp: new Date().toISOString(),
 		footer: {
 			text: `${CLIENT_NAME} ${envParseBoolean('CUSTOM_BOT') ? '👑' : ''}`,
@@ -26,7 +26,7 @@ export function interactionSuccess(description: string, ephemeral = false) {
 		ephemeral,
 		embeds: [
 			{
-				color: BrandingColors.Primary,
+				color: ClientColor,
 				description: `${description}`
 			}
 		]

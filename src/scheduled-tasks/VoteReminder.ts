@@ -1,5 +1,5 @@
 import { getT } from '#lib/i18n/translate';
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -20,7 +20,7 @@ export class VoteReminderTask extends ScheduledTask {
 		const channel = user.dmChannel ?? (await user.createDM());
 
 		const embed = new EmbedBuilder()
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.setTitle(t('tasks:voteReminderEmbedTitle'))
 			.setFields([this.getVoteFields(t), this.getPremiumFields(t)]);
 

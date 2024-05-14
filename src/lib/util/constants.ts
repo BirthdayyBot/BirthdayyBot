@@ -8,6 +8,10 @@ export const rootFolder = join(mainFolder, '..');
 export const ZeroWidthSpace = '\u200B';
 export const LongWidthSpace = '\u3000';
 
+export const DefaultColor = 0x78c2ad;
+
+export const ClientColor = envParseNumber('CLIENT_COLOR', DefaultColor);
+
 export enum Emojis {
 	Success = '<:checkmark_square_birthdayy:1102222019476586526>',
 	Fail = '<:cross_square_birthdayy:1102222032155988068> ',
@@ -42,10 +46,6 @@ export const enum LanguageFormatters {
 	Permissions = 'permissions',
 	DateTime = 'dateTime',
 	HumanDateTime = 'humanDateTime'
-}
-
-export enum BrandingColors {
-	Primary = envParseNumber('CLIENT_COLOR', 0x78c2ad)
 }
 
 export enum CdnUrls {

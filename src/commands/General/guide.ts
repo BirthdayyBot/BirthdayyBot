@@ -1,7 +1,7 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BrandingColors, Emojis } from '#utils/constants';
+import { ClientColor, Emojis } from '#utils/constants';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
 import { envParseString } from '@skyra/env-utilities';
@@ -26,7 +26,7 @@ export class GuideCommand extends BirthdayyCommand {
 		const embed = new EmbedBuilder()
 			.setTitle(t('commands/guide:embedTitle'))
 			.setDescription(t('commands/guide:embedDescription'))
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.addFields(this.getStartedField(t), this.getConfigField(t), this.getImportantField(t));
 
 		const components = this.createComponents(t);

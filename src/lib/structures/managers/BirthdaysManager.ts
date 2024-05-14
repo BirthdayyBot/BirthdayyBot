@@ -1,7 +1,7 @@
 import { SettingsManager } from '#lib/structures/managers';
 import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
-import { BrandingColors, CdnUrls, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
+import { CdnUrls, ClientColor, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { type Birthday, Prisma, type Guild as Settings } from '@prisma/client';
@@ -96,7 +96,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			returnObjects: true
 		})) satisfies APIEmbed;
 
-		const embed = new EmbedBuilder(translateEmbed).setColor(BrandingColors.Primary);
+		const embed = new EmbedBuilder(translateEmbed).setColor(ClientColor);
 
 		return img ? embed : embed.setThumbnail(null);
 	}
