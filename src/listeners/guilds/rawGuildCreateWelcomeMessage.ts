@@ -10,7 +10,7 @@ import {
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds, isTextChannel } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
-import { fetchT } from '@sapphire/plugin-i18next';
+import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
 import { EmbedBuilder, GatewayDispatchEvents, type GatewayGuildCreateDispatch } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildCreate, emitter: 'ws' })
@@ -18,6 +18,9 @@ export class UserListener extends Listener {
 	public async run({ id: guildId }: GatewayGuildCreateDispatch['d'], _shardId: number) {
 		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
 		if (!guild) return;
+
+		// Check if the guild has joined the guild for less than a day
+		if (Date.now() - guild.joinedTimestamp > 86400000) return;
 
 		const channel = guild.systemChannel ?? guild.channels.cache.filter(isTextChannel).filter(canSendEmbeds).first();
 		if (!channel) return;
@@ -28,24 +31,24 @@ export class UserListener extends Listener {
 		});
 
 		const embed = new EmbedBuilder()
-			.setTitle('events/guilds:welcomeEmbedTitle')
+			.setTitle(t('events/guilds:welcomeEmbedTitle'))
 			.setDescription(description)
 			.setColor(BrandingColors.Primary);
 
-		const components = this.getComponents();
+		const components = this.getComponents(t);
 
 		return channel.send({ embeds: [embed], components });
 	}
 
-	private getComponents() {
+	private getComponents(t: TFunction) {
 		return [
 			getActionRow(
-				getDocumentationComponent('events/guilds:welcomeComponentsDocumentation'),
-				getInviteComponent('events/guilds:welcomeComponentsInvite')
+				getDocumentationComponent(t('events/guilds:welcomeComponentsDocumentation')),
+				getInviteComponent(t('events/guilds:welcomeComponentsInvite'))
 			),
 			getActionRow(
-				getSupportComponent('events/guilds:welcomeComponentsSupport'),
-				getWebsiteComponent('events/guilds:welcomeComponentsWebsite')
+				getSupportComponent(t('events/guilds:welcomeComponentsSupport')),
+				getWebsiteComponent(t('events/guilds:welcomeComponentsWebsite'))
 			)
 		];
 	}

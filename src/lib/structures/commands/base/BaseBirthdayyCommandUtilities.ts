@@ -68,6 +68,5 @@ export function implementBirthdayyCommandPaginatedOptions<
 }
 
 export type ExtendOptions<T> = {
-	description: string;
 	permissionLevel?: number;
 } & T;

@@ -16,13 +16,11 @@ import type { CacheType, ChatInputCommandInteraction, Snowflake } from 'discord.
  * @seealso {@link BirthdayyCommand}.
  */
 export class BirthdayySubcommand extends Subcommand<BirthdayySubcommand.Args, BirthdayySubcommand.Options> {
-	public override readonly description: string;
 	public readonly permissionLevel: PermissionLevels;
 
 	public constructor(context: BirthdayySubcommand.LoaderContext, options: BirthdayySubcommand.Options) {
 		super(context, { ...BirthdayyCommandConstructorDefaults, ...options });
 		this.permissionLevel = options.permissionLevel ?? BirthdayyCommandConstructorDefaults.permissionLevel;
-		this.description = options.description;
 	}
 
 	/**
