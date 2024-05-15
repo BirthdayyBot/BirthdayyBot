@@ -1,12 +1,18 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand, BirthdayySubcommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BirthdayApplicationCommandMentions } from '#root/commands/Birthday/birthday';
-import { BrandingColors, Emojis } from '#utils/constants';
+import { ClientColor, Emojis } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { envParseString } from '@skyra/env-utilities';
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	chatInputApplicationCommandMention,
+	EmbedBuilder
+} from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	description: 'commands/guide:description',
@@ -25,7 +31,7 @@ export class GuideCommand extends BirthdayyCommand {
 		const embed = new EmbedBuilder()
 			.setTitle(t('commands/guide:embedTitle'))
 			.setDescription(t('commands/guide:embedDescription'))
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.addFields(this.getStartedField(t), this.getConfigField(t), this.getImportantField(t));
 
 		const components = this.createComponents(t);
@@ -34,7 +40,7 @@ export class GuideCommand extends BirthdayyCommand {
 	}
 
 	private getStartedField(t: TFunction) {
-		const command = BirthdayApplicationCommandMentions.Set;
+		const command = chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID'));
 		return {
 			name: t('commands/guide:embedFieldsStartedTitle'),
 			value: t('commands/guide:embedFieldsStartedValue', { command })

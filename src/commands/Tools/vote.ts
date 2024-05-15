@@ -1,4 +1,3 @@
-import { WebsiteUrl } from '#lib/components/button';
 import { BirthdayyCommand } from '#lib/structures';
 import { Emojis } from '#utils/constants';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
@@ -19,10 +18,10 @@ export class VoteCommand extends BirthdayyCommand {
 			returnObjects: true,
 			arrowRight: Emojis.ArrowRight,
 			heart: Emojis.Heart,
-			topgg: WebsiteUrl('topgg/vote'),
-			discordlist: WebsiteUrl('discordlist/vote'),
-			'discord-botlist': WebsiteUrl('discord-botlist/vote'),
-			premium: WebsiteUrl('premium')
+			topgg: 'https://top.gg/bot/270010330782892032/vote',
+			discordlist: 'https://discordlist.com/bot/270010330782892032/vote',
+			'discord-botlist': 'https://discord-botlist.eu/bot/270010330782892032/vote',
+			premium: 'https://premium.birthdayy.xyz'
 		})) as APIEmbed;
 
 		return interaction.reply({ embeds: [embed] });

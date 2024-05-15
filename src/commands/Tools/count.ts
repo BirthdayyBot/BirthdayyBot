@@ -1,5 +1,5 @@
 import { BirthdayyCommand } from '#lib/structures';
-import { BrandingColors } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isNotCustom } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
@@ -27,7 +27,7 @@ export class CountCommand extends BirthdayyCommand {
 			embeds: [
 				{
 					title: 'Discord Information',
-					color: BrandingColors.Primary,
+					color: ClientColor,
 					fields: [
 						{
 							inline: true,

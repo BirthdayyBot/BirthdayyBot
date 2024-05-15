@@ -1,9 +1,9 @@
-import { getSettings } from '#lib/discord/guild';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
-import { BrandingColors, CdnUrls } from '#utils/constants';
+import { CdnUrls, ClientColor } from '#utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
+import { getSettings } from '#utils/functions';
 import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -157,7 +157,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const embed = new EmbedBuilder()
 			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))
-			.setColor(BrandingColors.Primary)
+			.setColor(ClientColor)
 			.setThumbnail(CdnUrls.CupCake);
 
 		const announcementChannel = settings.announcementChannel
