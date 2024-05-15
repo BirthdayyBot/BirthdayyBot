@@ -8,10 +8,9 @@ import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'toggle-premium',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom,
-	permissionLevel: PermissionLevels.Administrator
+	permissionLevel: PermissionLevels.BotOwner
 })
 export class TogglePremiumCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {

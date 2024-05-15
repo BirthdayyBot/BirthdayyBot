@@ -5,7 +5,7 @@ import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
 import { BrandingColors, CdnUrls } from '#utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { createSubcommandMappings } from '#utils/utils';
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
@@ -37,7 +37,6 @@ type ConfigDefault = Omit<
 >;
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	name: 'config',
 	description: 'commands/config:description',
 	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
@@ -45,7 +44,15 @@ type ConfigDefault = Omit<
 })
 export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => registerConfigCommand(builder));
+		registry.registerChatInputCommand((builder) =>
+			applyDescriptionLocalizedBuilder(builder, this.description)
+				.setName('config')
+				.setDMPermission(false)
+				.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+				.addSubcommand((builder) => editConfigSubCommand(builder))
+				.addSubcommand((builder) => viewConfigSubCommand(builder))
+				.addSubcommand((builder) => resetConfigSubCommand(builder))
+		);
 	}
 
 	public async edit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -280,19 +287,9 @@ export const ConfigApplicationCommandMentions = {
 	Reset: chatInputApplicationCommandMention('config', 'reset', envParseString('COMMANDS_CONFIG_ID'))
 } as const;
 
-function registerConfigCommand(builder: SlashCommandBuilder) {
-	return applyDescriptionLocalizedBuilder(builder, 'commands/config:description')
-		.setName('config')
-		.setDMPermission(false)
-		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-		.addSubcommand((builder) => editConfigSubCommand(builder))
-		.addSubcommand((builder) => viewConfigSubCommand(builder))
-		.addSubcommand((builder) => resetConfigSubCommand(builder));
-}
-
 function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyDescriptionLocalizedBuilder(builder, 'commands/config:editDescription')
-		.setName('edit-config')
+		.setName('edit')
 		.addChannelOption((builder) =>
 			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementChannelDescription')
 				.setName('announcement-channel')

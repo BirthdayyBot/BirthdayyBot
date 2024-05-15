@@ -17,7 +17,6 @@ import { version as djsVersion, type APIEmbedField } from 'discord.js';
 import { cpus, uptime, type CpuInfo } from 'os';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	name: 'info',
 	description: 'commands/info:description',
 	permissionLevel: PermissionLevels.Everyone
 })

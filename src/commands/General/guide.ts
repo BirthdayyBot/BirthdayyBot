@@ -9,14 +9,13 @@ import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plug
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	name: 'guide',
 	description: 'commands/guide:description',
 	runIn: CommandOptionsRunTypeEnum.GuildAny
 })
 export class GuideCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyDescriptionLocalizedBuilder(builder, this.description).setName(this.name).setDMPermission(true)
+			applyDescriptionLocalizedBuilder(builder, this.description).setName('guide').setDMPermission(true)
 		);
 	}
 

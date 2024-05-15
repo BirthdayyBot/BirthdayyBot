@@ -5,17 +5,17 @@ import { isNotCustom } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder } from '@sapphire/plugin-i18next';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'count',
 	description: 'The current count of Guilds, Birthdays and Users',
 	enabled: isNotCustom
 })
 export class CountCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
-			(builder) => applyLocalizedBuilder(builder, 'commands/count:count').setDMPermission(true),
+			(builder) =>
+				applyDescriptionLocalizedBuilder(builder, this.description).setName(this.name).setDMPermission(true),
 			{
 				guildIds: await getCommandGuilds('admin')
 			}

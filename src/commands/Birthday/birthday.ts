@@ -6,7 +6,7 @@ import { Emojis } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
 import { createSubcommandMappings, resolveTarget } from '#utils/utils';
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions, RequiresUserPermissions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
@@ -15,7 +15,6 @@ import { envParseString } from '@skyra/env-utilities';
 import { bold, chatInputApplicationCommandMention } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	name: 'birthday',
 	description: 'commands/birthday:birthdayDescription',
 	subcommands: createSubcommandMappings('list', 'set', 'remove', 'show', {
 		name: 'test',
@@ -26,7 +25,16 @@ import { bold, chatInputApplicationCommandMention } from 'discord.js';
 })
 export class BirthdayCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => registerBirthdayCommand(builder, this.description));
+		registry.registerChatInputCommand((builder) =>
+			applyDescriptionLocalizedBuilder(builder, this.description)
+				.setName('birthday')
+				.setDMPermission(false)
+				.addSubcommand((builder) => registerBirthdaySubCommand(builder))
+				.addSubcommand((builder) => listBirthdaySubCommand(builder))
+				.addSubcommand((builder) => removeBirthdaySubCommand(builder))
+				.addSubcommand((builder) => showBirthdaySubCommand(builder))
+				.addSubcommand((builder) => testBirthdaySubCommand(builder))
+		);
 	}
 
 	public async list(ctx: BirthdayySubcommand.Interaction<'cached'>) {
@@ -119,17 +127,6 @@ export const BirthdayApplicationCommandMentions = {
 	Show: chatInputApplicationCommandMention('birthday', 'show', envParseString('COMMANDS_BIRTHDAY_ID')),
 	Test: chatInputApplicationCommandMention('birthday', 'test', envParseString('COMMANDS_BIRTHDAY_ID'))
 } as const;
-
-function registerBirthdayCommand(builder: SlashCommandBuilder, description: string) {
-	return applyDescriptionLocalizedBuilder(builder, description)
-		.setName('birthday')
-		.setDMPermission(false)
-		.addSubcommand((builder) => registerBirthdaySubCommand(builder))
-		.addSubcommand((builder) => listBirthdaySubCommand(builder))
-		.addSubcommand((builder) => removeBirthdaySubCommand(builder))
-		.addSubcommand((builder) => showBirthdaySubCommand(builder))
-		.addSubcommand((builder) => testBirthdaySubCommand(builder));
-}
 
 function registerBirthdaySubCommand(builder: SlashCommandSubcommandBuilder) {
 	return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:setDescription')

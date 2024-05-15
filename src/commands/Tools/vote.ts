@@ -2,13 +2,15 @@ import { WebsiteUrl } from '#lib/components/button';
 import { BirthdayyCommand } from '#lib/structures';
 import { Emojis } from '#utils/constants';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import type { APIEmbed } from 'discord.js';
 
 export class VoteCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) => {
-			return applyLocalizedBuilder(builder, 'commands/vote:vote');
+			return applyDescriptionLocalizedBuilder(builder, 'commands/vote:voteDescription')
+				.setName('vote')
+				.setDMPermission(true);
 		});
 	}
 

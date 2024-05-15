@@ -4,7 +4,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'ping',
 	description: 'ping pong'
 })
 export class PingCommand extends BirthdayyCommand {

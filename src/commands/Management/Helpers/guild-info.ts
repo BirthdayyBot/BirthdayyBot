@@ -10,11 +10,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 
 @ApplyOptions<BirthdayyCommand.Options>({
-	name: 'guild-info',
 	description: 'Get Infos about a Guild',
 	enabled: !isCustom,
-	permissionLevel: PermissionLevels.Administrator,
-	preconditions: ['BotOwner'],
+	permissionLevel: PermissionLevels.BotOwner,
 	runIn: CommandOptionsRunTypeEnum.GuildText
 })
 export class GuildInfoCommand extends BirthdayyCommand {
