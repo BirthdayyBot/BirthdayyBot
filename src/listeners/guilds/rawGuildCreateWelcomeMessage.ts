@@ -1,12 +1,12 @@
+import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
+import { ClientColor } from '#utils/constants';
 import {
 	getActionRow,
 	getDocumentationComponent,
 	getInviteComponent,
 	getSupportComponent,
 	getWebsiteComponent
-} from '#lib/discord/button';
-import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { BrandingColors } from '#utils/constants';
+} from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds, isTextChannel } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
@@ -33,7 +33,7 @@ export class UserListener extends Listener {
 		const embed = new EmbedBuilder()
 			.setTitle(t('events/guilds:welcomeEmbedTitle'))
 			.setDescription(description)
-			.setColor(BrandingColors.Primary);
+			.setColor(ClientColor);
 
 		const components = this.getComponents(t);
 

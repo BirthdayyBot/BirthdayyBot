@@ -1,18 +1,18 @@
 import { authenticated } from '#lib/api/utils';
-import { remindMeButtonBuilder } from '#lib/components/button';
-import { sendDMMessage, sendMessage } from '#lib/discord/message';
-import { addRoleToUser } from '#lib/discord/role';
+import { getT } from '#lib/i18n/translate';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
-import { Emojis } from '#utils/constants';
+import { Emojis, GuildIDEnum } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { CLIENT_NAME, VOTE_CHANNEL_ID } from '#utils/environment';
+import { getActionRow, getRemindMeComponent } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
 import { cast } from '@sapphire/utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
-import { ActionRowBuilder, ButtonBuilder, Guild, User } from 'discord.js';
+import { Guild, GuildMember, User } from 'discord.js';
 
 interface TopGGWebhookData {
 	type: 'upvote';
@@ -23,6 +23,8 @@ interface TopGGWebhookData {
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
 export class UserRoute extends Route {
+	private readonly roleID = '1039089174948626473';
+
 	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
 	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
 		const body = cast<TopGGWebhookData>(request.body);
@@ -32,22 +34,17 @@ export class UserRoute extends Route {
 		}
 
 		try {
-			const user = await container.client.users.fetch(body.user).catch(() => null);
-			const guild = await container.client.guilds.fetch(process.env.CLIENT_ID).catch(() => null);
+			const guild = container.client.guilds.cache.get(GuildIDEnum.Birthdayy);
 
-			if (!user || !guild) return response.end();
+			if (!guild) return response.end();
 
-			const defaultRoleID = '1039089174948626473';
+			const member = await guild.members.fetch(body.user).catch(() => null);
 
-			const payload = {
-				memberId: user.id,
-				guildId: guild.id,
-				roleId: defaultRoleID
-			};
+			if (!member) return response.end();
 
-			await this.addRoleAndCreateTask(payload);
-			await this.sendThankYouDM(user, guild);
-			await this.sendVoteNotification(user);
+			await this.addRoleAndCreateTask(member);
+			await this.sendThankYouDM(member.user, guild);
+			await this.sendVoteNotification(member.user);
 
 			return response.ok();
 		} catch (error) {
@@ -55,9 +52,18 @@ export class UserRoute extends Route {
 		}
 	}
 
-	private async addRoleAndCreateTask(payload: RoleRemovePayload) {
-		await addRoleToUser(payload.memberId, payload.roleId, payload.guildId);
-		await container.tasks.create('BirthdayRoleRemoverTask', payload, {
+	private async addRoleAndCreateTask(member: GuildMember) {
+		const result = await member.roles.add(this.roleID).catch(() => null);
+
+		if (!result) return;
+
+		const payload = {
+			memberId: member.id,
+			guildId: member.guild.id,
+			roleId: this.roleID
+		} satisfies RoleRemovePayload;
+
+		return container.tasks.create('BirthdayRoleRemoverTask', payload, {
 			repeated: false,
 			delay: Time.Hour * 12
 		});
@@ -69,9 +75,10 @@ export class UserRoute extends Route {
 			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`
 		});
 
-		const components = [new ActionRowBuilder<ButtonBuilder>().setComponents(await remindMeButtonBuilder(guild))];
+		const components = [getActionRow(getRemindMeComponent(getT(guild.preferredLocale)))];
+		const channel = user.dmChannel ?? (await user.createDM());
 
-		await sendDMMessage(user.id, { embeds: [embed], components });
+		return channel.send({ embeds: [embed], components });
 	}
 
 	private async sendVoteNotification(user: User) {
@@ -81,6 +88,10 @@ export class UserRoute extends Route {
 			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL }
 		});
 
-		await sendMessage(VOTE_CHANNEL_ID, { embeds: [embed] });
+		const channel = container.client.channels.cache.get(VOTE_CHANNEL_ID);
+
+		if (!isTextBasedChannel(channel)) return;
+
+		return channel.send({ embeds: [embed] });
 	}
 }

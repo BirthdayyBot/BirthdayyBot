@@ -11,7 +11,7 @@ import {
 	userMention,
 	type InteractionReplyOptions
 } from 'discord.js';
-import { BrandingColors } from './constants.js';
+import { ClientColor } from './constants.js';
 
 /**
  * Picks a random item from an array
@@ -34,7 +34,7 @@ export function sendLoadingMessage<T extends GuildMessage | Message>(
 ): Promise<typeof message> {
 	const embed = new EmbedBuilder()
 		.setDescription(pickRandom(t('system:loadingMessages', { returnObjects: true })))
-		.setColor(BrandingColors.Primary);
+		.setColor(ClientColor);
 	return message.reply({ embeds: [embed] }) as Promise<T>;
 }
 

@@ -1,4 +1,4 @@
-import { BrandingColors, Emojis } from '#utils/constants';
+import { ClientColor, Emojis } from '#utils/constants';
 import { type Guild, Prisma } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
@@ -69,7 +69,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 
 		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));
 
-		return new EmbedBuilder(embed).setColor(BrandingColors.Primary);
+		return new EmbedBuilder(embed).setColor(ClientColor);
 	}
 
 	public async resetKey(key: SettingsDefaultKey): SettingsManagerReturnAsyncData {

@@ -1,4 +1,3 @@
-import { sendMessage } from '#lib/discord/message';
 import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
@@ -10,6 +9,7 @@ import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promi
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -64,7 +64,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		const current = getCurrentOffset();
 		if (current.utcOffset === undefined) {
 			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
-			await sendMessage(BOT_ADMIN_LOG, {
+			const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
+			if (!isTextBasedChannel(channel)) {
+				return container.logger.error('BirthdayReminderTask ~ run ~ channel:', channel);
+			}
+			await channel.send({
 				embeds: [
 					generateDefaultEmbed({
 						title: 'BirthdayScheduler Report',
@@ -72,7 +76,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 					})
 				]
 			});
-			return container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+			return container.logger.warn('[BirthdayTask] Timezone Object not correctly generated');
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
@@ -282,10 +286,17 @@ export class BirthdayReminderTask extends ScheduledTask {
 			message: 'Not set'
 		};
 		try {
-			await sendMessage(channel_id, {
-				content,
-				embeds: [birthdayEmbed]
+			const channel = await container.client.channels.fetch(channel_id);
+			if (!isTextBasedChannel(channel)) {
+				returnData.message = 'Channel not Text Based';
+				return returnData;
+			}
+
+			await channel.send({
+				embeds: [birthdayEmbed],
+				content
 			});
+
 			container.logger.debug('Sent Birthday Announcement');
 			returnData.sent = true;
 			returnData.message = 'Success';
@@ -398,7 +409,11 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 
 		function sendReport() {
-			return sendMessage(BOT_ADMIN_LOG, {
+			const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
+			if (!isTextBasedChannel(channel)) {
+				return container.logger.error('[BirthdayTask] Admin log channel not found');
+			}
+			return channel.send({
 				embeds: [
 					generateDefaultEmbed({
 						title: embedTitle,

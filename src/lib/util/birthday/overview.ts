@@ -1,6 +1,6 @@
-import { editMessage, sendMessage } from '#lib/discord';
 import { generateBirthdayList } from '#utils/birthday';
 import { isPrivateMessage } from '#utils/common';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
 
@@ -16,7 +16,13 @@ export async function updateBirthdayOverview(guild_id: string) {
 
 	if (overviewMessage) {
 		try {
-			await editMessage(overviewChannel, overviewMessage, options);
+			const channel = await container.client.channels.fetch(overviewChannel);
+			if (!channel || !channel.isTextBased() || channel.isDMBased()) return;
+
+			const message = await channel.messages.fetch(overviewMessage);
+			if (!message || isPrivateMessage(message)) return;
+
+			await message.edit(options);
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				if (
@@ -54,7 +60,9 @@ export async function updateBirthdayOverview(guild_id: string) {
 }
 
 async function generateNewOverviewMessage(channel_id: string, birthdayList: MessageCreateOptions | MessagePayload) {
-	const message = await sendMessage(channel_id, birthdayList);
+	const channel = await container.client.channels.fetch(channel_id);
+	if (!isTextBasedChannel(channel)) return;
+	const message = await channel.send(birthdayList);
 	if (!message || isPrivateMessage(message)) return;
 	await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
 }

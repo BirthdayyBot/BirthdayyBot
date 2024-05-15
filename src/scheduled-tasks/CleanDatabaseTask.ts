@@ -1,8 +1,8 @@
-import { sendMessage } from '#lib/discord/message';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isProduction } from '#utils/env';
 import { BOT_ADMIN_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { envParseBoolean } from '@skyra/env-utilities';
@@ -23,7 +23,11 @@ export class CleanDatabaseTask extends ScheduledTask {
 		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
 		const { deletedBirthdays, deletedGuilds } = req;
 
-		await sendMessage(BOT_ADMIN_LOG, {
+		const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
+
+		if (!isTextBasedChannel(channel)) return container.logger.error('[CleaningTask] Admin log channel not found');
+
+		await channel.send({
 			embeds: [
 				generateDefaultEmbed({
 					title: `CleanUp Report (DELETE)`,

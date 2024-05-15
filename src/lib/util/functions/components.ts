@@ -1,9 +1,10 @@
 import { container } from '@sapphire/framework';
+import type { TFunction } from '@sapphire/plugin-i18next';
 import {
-	type APIMessageActionRowComponent,
 	type APIActionRowComponent,
-	ComponentType,
+	type APIMessageActionRowComponent,
 	ButtonStyle,
+	ComponentType,
 	OAuth2Scopes,
 	PermissionFlagsBits
 } from 'discord.js';
@@ -71,6 +72,25 @@ export function getWebsiteComponent(label: string): APIMessageActionRowComponent
 		emoji: { name: '🎂' },
 		url: 'https://birthdayy.xyz/',
 		label
+	};
+}
+
+export const remindMeComponentCustomId = 'vote-reminder-button';
+
+export function getRemindMeComponent(t: TFunction): APIMessageActionRowComponent {
+	return {
+		type: ComponentType.Button,
+		style: ButtonStyle.Primary,
+		custom_id: remindMeComponentCustomId,
+		emoji: { name: '⏰' },
+		label: t('button:remindMe')
+	};
+}
+
+export function getRemindMeDisabledComponent(t: TFunction): APIMessageActionRowComponent {
+	return {
+		...getRemindMeComponent(t),
+		disabled: true
 	};
 }
 
