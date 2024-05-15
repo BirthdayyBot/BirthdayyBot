@@ -291,15 +291,15 @@ function registerConfigCommand(builder: SlashCommandBuilder) {
 }
 
 function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyDescriptionLocalizedBuilder(builder, 'commands/config:edit')
+	return applyDescriptionLocalizedBuilder(builder, 'commands/config:editDescription')
 		.setName('edit-config')
 		.addChannelOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnoucementChannelDescription')
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementChannelDescription')
 				.setName('announcement-channel')
 				.addChannelTypes(ChannelType.GuildText)
 		)
 		.addStringOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnoucementMessageDescription')
+			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementMessageDescription')
 				.setName('announcement-message')
 				.setMinLength(1)
 				.setMaxLength(512)
@@ -327,31 +327,33 @@ function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
 }
 
 function viewConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:view');
+	return applyDescriptionLocalizedBuilder(builder, 'commands/config:viewDescription').setName('view');
 }
 
 function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyLocalizedBuilder(builder, 'commands/config:reset').addStringOption((builder) =>
-		applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
-			.addChoices(
-				createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
-				createLocalizedChoice('commands/config:keyAnnouncementChannel', {
-					value: 'announcementChannel'
-				}),
-				createLocalizedChoice('commands/config:keyAnnouncementMessage', {
-					value: 'announcementMessage'
-				}),
-				createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
-				createLocalizedChoice('commands/config:keyBirthdayPingRole', {
-					value: 'birthdayPingRole'
-				}),
-				createLocalizedChoice('commands/config:keyOverviewChannel', {
-					value: 'overviewChannel'
-				}),
-				createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
-			)
-			.setRequired(true)
-	);
+	return applyDescriptionLocalizedBuilder(builder, 'commands/config:resetDescription')
+		.setName('reset')
+		.addStringOption((builder) =>
+			applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
+				.addChoices(
+					createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
+					createLocalizedChoice('commands/config:keyAnnouncementChannel', {
+						value: 'announcementChannel'
+					}),
+					createLocalizedChoice('commands/config:keyAnnouncementMessage', {
+						value: 'announcementMessage'
+					}),
+					createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
+					createLocalizedChoice('commands/config:keyBirthdayPingRole', {
+						value: 'birthdayPingRole'
+					}),
+					createLocalizedChoice('commands/config:keyOverviewChannel', {
+						value: 'overviewChannel'
+					}),
+					createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
+				)
+				.setRequired(true)
+		);
 }
 
 type ResetConfig = 'all' | keyof ConfigDefault;

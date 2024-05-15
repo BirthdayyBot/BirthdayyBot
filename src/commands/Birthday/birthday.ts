@@ -122,6 +122,7 @@ export const BirthdayApplicationCommandMentions = {
 
 function registerBirthdayCommand(builder: SlashCommandBuilder, description: string) {
 	return applyDescriptionLocalizedBuilder(builder, description)
+		.setName('birthday')
 		.setDMPermission(false)
 		.addSubcommand((builder) => registerBirthdaySubCommand(builder))
 		.addSubcommand((builder) => listBirthdaySubCommand(builder))
