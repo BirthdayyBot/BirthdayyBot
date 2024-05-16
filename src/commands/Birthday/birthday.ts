@@ -4,7 +4,7 @@ import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } f
 import { Emojis } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
-import { createSubcommandMappings, resolveTarget } from '#utils/utils';
+import { resolveTarget } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
@@ -15,34 +15,34 @@ import dayjs from 'dayjs';
 import {
 	bold,
 	chatInputApplicationCommandMention,
+	SlashCommandBuilder,
 	SlashCommandIntegerOption,
 	SlashCommandUserOption
 } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
-	description: 'commands/birthday:birthdayDescription',
-	subcommands: createSubcommandMappings('list', 'set', 'remove', 'show', {
-		name: 'test',
-		preconditions: ['Moderator']
-	}),
+	subcommands: [
+		{ name: 'list', chatInputRun: 'chatInputRunList' },
+		{ name: 'set', chatInputRun: 'chatInputRunSet' },
+		{ name: 'remove', chatInputRun: 'chatInputRunRemove' },
+		{ name: 'show', chatInputRun: 'chatInputRunShow' },
+		{ name: 'test', chatInputRun: 'chatInputRunTest', preconditions: ['Moderator'] }
+	],
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Everyone
 })
 export class BirthdayCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyDescriptionLocalizedBuilder(builder, this.description)
-				.setName('birthday')
-				.setDMPermission(false)
-				.addSubcommand((subcommand) => this.registerSetSubCommand(subcommand))
-				.addSubcommand((subcommand) => this.registerRemoveSubCommand(subcommand))
-				.addSubcommand((subcommand) => this.registerListSubCommand(subcommand))
-				.addSubcommand((subcommand) => this.registerShowSubCommand(subcommand))
-				.addSubcommand((subcommand) => this.registerTestSubCommand(subcommand))
+			this.registerSubcommands(
+				applyDescriptionLocalizedBuilder(builder, 'commands/birthday:birthdayDescription') //
+					.setName('birthday')
+					.setDMPermission(false)
+			)
 		);
 	}
 
-	public async list(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunList(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const birthdayManager = getBirthdays(interaction.guild);
 		await getBirthdays(interaction.guild).fetch();
 		const month = interaction.options.getInteger('month');
@@ -58,7 +58,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		return birthdayManager.sendListBirthdays(interaction, birthdays, title);
 	}
 
-	public async set(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunSet(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { options, user } = resolveTarget(interaction);
 		const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));
 		const month = addZeroToSingleDigitNumber(interaction.options.getInteger('month', true));
@@ -72,7 +72,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async remove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunRemove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(interaction);
 		const result = await getBirthdays(interaction.guildId).remove(user.id);
 
@@ -88,7 +88,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async show(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunShow(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(interaction);
 		const birthday = getBirthdays(interaction.guild).get(user.id);
 
@@ -106,7 +106,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async test(ctx: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunTest(ctx: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user } = resolveTarget(ctx);
 		const birthday = getBirthdays(ctx.guild).get(user.id);
 
@@ -119,6 +119,15 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
 
 		return ctx.reply(interactionSuccess(content));
+	}
+
+	private registerSubcommands(builder: SlashCommandBuilder) {
+		return builder
+			.addSubcommand((subcommand) => this.registerSetSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerRemoveSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerListSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerShowSubCommand(subcommand))
+			.addSubcommand((subcommand) => this.registerTestSubCommand(subcommand));
 	}
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
