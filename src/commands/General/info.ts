@@ -1,6 +1,5 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
-import { BirthdayyCommand, BirthdayySubcommand } from '#lib/structures';
-import { PermissionLevels } from '#lib/types';
+import { BirthdayyCommand } from '#lib/structures';
 import { ClientColor } from '#utils/constants';
 import {
 	getActionRow,
@@ -10,20 +9,15 @@ import {
 	getSupportComponent
 } from '#utils/functions';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
-import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
 import { version as djsVersion, type APIEmbedField } from 'discord.js';
 import { cpus, uptime, type CpuInfo } from 'os';
 
-@ApplyOptions<BirthdayySubcommand.Options>({
-	description: 'commands/info:description',
-	permissionLevel: PermissionLevels.Everyone
-})
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((command) =>
-			applyDescriptionLocalizedBuilder(command, this.description).setName(this.name).setDMPermission(true)
+			applyDescriptionLocalizedBuilder(command, 'commands/general:infoDescription').setName(this.name)
 		);
 	}
 
@@ -35,7 +29,7 @@ export class UserCommand extends BirthdayyCommand {
 				name: this.container.client.user!.tag,
 				iconURL: this.container.client.user!.displayAvatarURL({ size: 128 })
 			})
-			.setDescription(t('commands/info:embedDescription'))
+			.setDescription(t('commands/general:infoEmbedDescription'))
 			.addFields(
 				await this.getApplicationStatistics(t),
 				this.getUptimeStatistics(t),
@@ -48,8 +42,8 @@ export class UserCommand extends BirthdayyCommand {
 
 	private async getApplicationStatistics(t: TFunction): Promise<APIEmbedField> {
 		return {
-			name: t('commands/info:embedFieldApplicationTitle'),
-			value: t('commands/info:embedFieldApplicationValue', {
+			name: t('commands/general:infoEmbedFieldApplicationTitle'),
+			value: t('commands/general:infoEmbedFieldApplicationValue', {
 				channels: this.container.client.channels.cache.size,
 				guilds: this.container.client.guilds.cache.size,
 				users: this.container.client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0),
@@ -66,8 +60,8 @@ export class UserCommand extends BirthdayyCommand {
 		const nowSeconds = Math.round(now / 1000);
 
 		return {
-			name: t('commands/info:embedFieldUptimeTitle'),
-			value: t('commands/info:embedFieldUptimeValue', {
+			name: t('commands/general:infoEmbedFieldUptimeTitle'),
+			value: t('commands/general:infoEmbedFieldUptimeValue', {
 				host: time(Math.round(nowSeconds - uptime()), TimestampStyles.RelativeTime),
 				client: time(Math.round(nowSeconds - process.uptime()), TimestampStyles.RelativeTime)
 			})
@@ -77,8 +71,8 @@ export class UserCommand extends BirthdayyCommand {
 	private getServerUsageStatistics(t: TFunction, lng: string): APIEmbedField {
 		const usage = process.memoryUsage();
 		return {
-			name: t('commands/info:embedFieldServerUsageTitle'),
-			value: t('commands/info:embedFieldServerUsageValue', {
+			name: t('commands/general:infoEmbedFieldServerUsageTitle'),
+			value: t('commands/general:infoEmbedFieldServerUsageValue', {
 				cpu: cpus().map(this.formatCpuInfo.bind(null)).join(' | '),
 				heapUsed: (usage.heapUsed / 1048576).toLocaleString(lng, { maximumFractionDigits: 2 }),
 				heapTotal: (usage.heapTotal / 1048576).toLocaleString(lng, { maximumFractionDigits: 2 })
@@ -89,12 +83,12 @@ export class UserCommand extends BirthdayyCommand {
 	private getComponents(t: TFunction) {
 		return [
 			getActionRow(
-				getSupportComponent(t('commands/info:buttonSupport')),
-				getInviteComponent(t('commands/info:buttonInvite'))
+				getSupportComponent(t('commands/general:infoButtonSupport')),
+				getInviteComponent(t('commands/general:infoButtonInvite'))
 			),
 			getActionRow(
-				getGitHubComponent(t('commands/info:buttonGitHub')),
-				getPremiumComponent(t('commands/info:buttonPremium'))
+				getGitHubComponent(t('commands/general:infoButtonGitHub')),
+				getPremiumComponent(t('commands/general:infoButtonPremium'))
 			)
 		];
 	}
