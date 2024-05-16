@@ -266,7 +266,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		// Check if the bot has permissions to add the role to the user:
 		if (mention && !role.mentionable) {
 			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleNotMentionnable', {
+				await resolveKey(interaction, 'commands/config:editRoleNotMentionable', {
 					role: roleMention(role.id)
 				})
 			);
@@ -325,7 +325,8 @@ export class ConfigCommand extends BirthdayySubcommand {
 			.setName('reset')
 			.addStringOption((builder) =>
 				applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
-					.addChoices(
+					.setRequired(true)
+					.setChoices(
 						createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
 						createLocalizedChoice('commands/config:keyAnnouncementChannel', {
 							value: 'announcementChannel'
@@ -342,7 +343,6 @@ export class ConfigCommand extends BirthdayySubcommand {
 						}),
 						createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
 					)
-					.setRequired(true)
 			);
 	}
 }
