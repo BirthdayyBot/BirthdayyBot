@@ -4,7 +4,6 @@ import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
 import { CdnUrls, ClientColor } from '#utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { getSettings } from '#utils/functions';
-import { createSubcommandMappings } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -24,6 +23,7 @@ import {
 	EmbedBuilder,
 	PermissionFlagsBits,
 	Role,
+	SlashCommandBuilder,
 	channelMention,
 	chatInputApplicationCommandMention,
 	roleMention,
@@ -31,31 +31,28 @@ import {
 	type EmbedField
 } from 'discord.js';
 
-type ConfigDefault = Omit<
-	Required<Guild>,
-	'guildId' | 'logChannel' | 'inviter' | 'language' | 'lastUpdated' | 'disabled' | 'premium'
->;
-
 @ApplyOptions<BirthdayySubcommand.Options>({
-	description: 'commands/config:description',
-	subcommands: createSubcommandMappings('edit', 'view', 'reset'),
+	subcommands: [
+		{ name: 'edit', chatInputRun: 'chatInputRunEdit' },
+		{ name: 'view', chatInputRun: 'chatInputRunView' },
+		{ name: 'reset', chatInputRun: 'chatInputRunReset' }
+	],
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Administrator
 })
 export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyDescriptionLocalizedBuilder(builder, this.description)
-				.setName('config')
-				.setDMPermission(false)
-				.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-				.addSubcommand((builder) => editConfigSubCommand(builder))
-				.addSubcommand((builder) => viewConfigSubCommand(builder))
-				.addSubcommand((builder) => resetConfigSubCommand(builder))
+			this.registerSubcommands(
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:description')
+					.setName('config')
+					.setDMPermission(false)
+					.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+			)
 		);
 	}
 
-	public async edit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunEdit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
@@ -105,7 +102,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
-	public async view(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunView(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { guildId } = interaction;
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
@@ -113,11 +110,11 @@ export class ConfigCommand extends BirthdayySubcommand {
 		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
-	public reset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public chatInputRunReset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const key = interaction.options.getString('key', true) as ResetConfig;
 		switch (key) {
 			case 'all': {
-				const data: ConfigDefault = {
+				const data: Partial<Guild> = {
 					announcementChannel: null,
 					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE, // TODO: Use NULL instead of DEFAULT_ANNOUNCEMENT_MESSAGE
 					birthdayRole: null,
@@ -138,8 +135,6 @@ export class ConfigCommand extends BirthdayySubcommand {
 				return this.updateDatabase(interaction, { birthdayPingRole: null });
 			case 'overviewChannel':
 				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
-			case 'overviewMessage':
-				return this.updateDatabase(interaction, { overviewMessage: null });
 			case 'timezone':
 				return this.updateDatabase(interaction, { timezone: 0 });
 		}
@@ -168,7 +163,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
 			: t('globals:unset');
 
-		if (!settings.premium) embed.setDescription(t('commands/config:viewMessageRequiredPremimAlert'));
+		if (!settings.premium) embed.setDescription(t('commands/config:viewMessageRequiredPremiumAlert'));
 
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
 		const birthdayPingRole = settings.birthdayPingRole
@@ -279,6 +274,77 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		return Result.ok(role.id);
 	}
+
+	private registerSubcommands(builder: SlashCommandBuilder) {
+		return builder
+			.addSubcommand((builder) => this.registerEditSubcommand(builder))
+			.addSubcommand((builder) => this.registerViewSubcommand(builder))
+			.addSubcommand((builder) => this.registerResetSubcommand(builder));
+	}
+
+	private registerEditSubcommand(builder: SlashCommandSubcommandBuilder) {
+		return applyDescriptionLocalizedBuilder(builder, 'commands/config:editDescription')
+			.setName('edit')
+			.addChannelOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementChannelDescription')
+					.setName('announcement-channel')
+					.addChannelTypes(ChannelType.GuildText)
+			)
+			.addStringOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementMessageDescription')
+					.setName('announcement-message')
+					.setMinLength(1)
+					.setMaxLength(512)
+			)
+			.addRoleOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayRoleDescription') //
+					.setName('birthday-role')
+			)
+			.addRoleOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayPingRoleDescription') //
+					.setName('birthday-ping-role')
+			)
+			.addChannelOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsOverviewChannelDescription')
+					.setName('overview-channel')
+					.addChannelTypes(ChannelType.GuildText)
+			)
+			.addIntegerOption((builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsTimezoneDescription')
+					.setName('timezone')
+					.setAutocomplete(true)
+			);
+	}
+
+	private registerViewSubcommand(builder: SlashCommandSubcommandBuilder) {
+		return applyDescriptionLocalizedBuilder(builder, 'commands/config:viewDescription').setName('view');
+	}
+
+	private registerResetSubcommand(builder: SlashCommandSubcommandBuilder) {
+		return applyDescriptionLocalizedBuilder(builder, 'commands/config:resetDescription')
+			.setName('reset')
+			.addStringOption((builder) =>
+				applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
+					.addChoices(
+						createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
+						createLocalizedChoice('commands/config:keyAnnouncementChannel', {
+							value: 'announcementChannel'
+						}),
+						createLocalizedChoice('commands/config:keyAnnouncementMessage', {
+							value: 'announcementMessage'
+						}),
+						createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
+						createLocalizedChoice('commands/config:keyBirthdayPingRole', {
+							value: 'birthdayPingRole'
+						}),
+						createLocalizedChoice('commands/config:keyOverviewChannel', {
+							value: 'overviewChannel'
+						}),
+						createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
+					)
+					.setRequired(true)
+			);
+	}
 }
 
 export const ConfigApplicationCommandMentions = {
@@ -287,70 +353,13 @@ export const ConfigApplicationCommandMentions = {
 	Reset: chatInputApplicationCommandMention('config', 'reset', envParseString('COMMANDS_CONFIG_ID'))
 } as const;
 
-function editConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyDescriptionLocalizedBuilder(builder, 'commands/config:editDescription')
-		.setName('edit')
-		.addChannelOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementChannelDescription')
-				.setName('announcement-channel')
-				.addChannelTypes(ChannelType.GuildText)
-		)
-		.addStringOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsAnnouncementMessageDescription')
-				.setName('announcement-message')
-				.setMinLength(1)
-				.setMaxLength(512)
-		)
-		.addRoleOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayRoleDescription').setName(
-				'birthday-role'
-			)
-		)
-		.addRoleOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayPingRoleDescription').setName(
-				'birthday-ping-role'
-			)
-		)
-		.addChannelOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsOverviewChannelDescription')
-				.setName('overview-channel')
-				.addChannelTypes(ChannelType.GuildText)
-		)
-		.addIntegerOption((builder) =>
-			applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsTimezoneDescription')
-				.setName('timezone')
-				.setAutocomplete(true)
-		);
+interface EditConfig {
+	announcementChannel: string | null;
+	announcementMessage?: string;
+	birthdayRole: string | null;
+	birthdayPingRole: string | null;
+	overviewChannel: string | null;
+	timezone: number;
 }
 
-function viewConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyDescriptionLocalizedBuilder(builder, 'commands/config:viewDescription').setName('view');
-}
-
-function resetConfigSubCommand(builder: SlashCommandSubcommandBuilder) {
-	return applyDescriptionLocalizedBuilder(builder, 'commands/config:resetDescription')
-		.setName('reset')
-		.addStringOption((builder) =>
-			applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
-				.addChoices(
-					createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
-					createLocalizedChoice('commands/config:keyAnnouncementChannel', {
-						value: 'announcementChannel'
-					}),
-					createLocalizedChoice('commands/config:keyAnnouncementMessage', {
-						value: 'announcementMessage'
-					}),
-					createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
-					createLocalizedChoice('commands/config:keyBirthdayPingRole', {
-						value: 'birthdayPingRole'
-					}),
-					createLocalizedChoice('commands/config:keyOverviewChannel', {
-						value: 'overviewChannel'
-					}),
-					createLocalizedChoice('commands/config:keyTimezone', { value: 'timezone' })
-				)
-				.setRequired(true)
-		);
-}
-
-type ResetConfig = 'all' | keyof ConfigDefault;
+type ResetConfig = 'all' | keyof EditConfig;
