@@ -3,7 +3,6 @@ import '#lib/setup';
 import { BirthdayyClient } from '#lib/BirthdayyClient';
 import { rootFolder } from '#utils/constants';
 import { container } from '@sapphire/pieces';
-import { rewriteFramesIntegration } from '@sentry/integrations';
 import * as Sentry from '@sentry/node';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 
@@ -15,12 +14,16 @@ async function main() {
 		Sentry.init({
 			dsn: envParseString('SENTRY_URL'),
 			integrations: [
-				new Sentry.Integrations.Modules(),
-				new Sentry.Integrations.FunctionToString(),
-				new Sentry.Integrations.LinkedErrors(),
-				new Sentry.Integrations.Console(),
-				new Sentry.Integrations.Http({ breadcrumbs: true, tracing: true }),
-				rewriteFramesIntegration({ root: rootFolder })
+				Sentry.consoleIntegration(),
+				Sentry.functionToStringIntegration(),
+				Sentry.linkedErrorsIntegration(),
+				Sentry.modulesIntegration(),
+				Sentry.onUncaughtExceptionIntegration(),
+				Sentry.onUnhandledRejectionIntegration(),
+				Sentry.httpIntegration({ breadcrumbs: true }),
+				// TODO: Enable for NeonDB
+				// Sentry.postgresIntegration(),
+				Sentry.rewriteFramesIntegration({ root: rootFolder })
 			]
 		});
 	}

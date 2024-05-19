@@ -2,13 +2,11 @@ import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { getHandler } from '#root/languages/index';
 import { minutes } from '#utils/common';
 import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
-import { DEBUG } from '#utils/environment';
 import { type ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
 import { i18next, type I18nextFormatter, type InternationalizationOptions } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
-import { Integrations, type NodeOptions } from '@sentry/node';
 import {
 	envIsDefined,
 	envParseArray,
@@ -228,11 +226,6 @@ function parsePresenceOptions(): PresenceData {
 		]
 	};
 }
-
-export const SENTRY_OPTIONS: NodeOptions = {
-	debug: DEBUG,
-	integrations: [new Integrations.Http({ breadcrumbs: true, tracing: true })]
-};
 
 export function parseAnalytics(): ConnectionOptions {
 	const url = envParseString('INFLUX_URL');
