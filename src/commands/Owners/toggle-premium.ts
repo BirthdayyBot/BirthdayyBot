@@ -1,36 +1,29 @@
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { generateDefaultEmbed } from '#utils/embed';
-import { isNotCustom } from '#utils/env';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds, resolveOnErrorCodesDiscord } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { RESTJSONErrorCodes, bold, inlineCode } from 'discord.js';
+import { applyDescriptionLocalizedBuilder } from '@sapphire/plugin-i18next';
+import {
+	RESTJSONErrorCodes,
+	SlashCommandBooleanOption,
+	SlashCommandBuilder,
+	SlashCommandStringOption
+} from 'discord.js';
 
-@ApplyOptions<BirthdayyCommand.Options>({
-	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: isNotCustom,
-	permissionLevel: PermissionLevels.Administrator
-})
+@ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class TogglePremiumCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
 			(builder) =>
-				builder
-					.setName(this.name)
-					.setDescription(this.description)
-					.addStringOption((option) =>
-						option
-							.setName('guild-id')
-							.setDescription('The guild id to toggle premium for')
-							.setRequired(true)
-					)
-					.addBooleanOption((option) =>
-						option.setName('toggle').setDescription('The toggle value').setRequired(true)
-					),
-			{
-				guildIds: await getCommandGuilds('admin')
-			}
+				this.registerCommandsOptions(
+					applyDescriptionLocalizedBuilder(builder, 'commands/owners:togglePremiumDescription') //
+						.setName('toggle-premium')
+				),
+			{ guildIds: await getCommandGuilds('admin') }
 		);
 	}
 
@@ -42,20 +35,36 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 			this.container.client.guilds.fetch(guildId),
 			RESTJSONErrorCodes.UnknownGuild
 		);
-		if (!guild) {
-			return interaction.reply(`Guild ${inlineCode(guildId)} not found`);
-		}
+		const t = getSupportedUserLanguageT(interaction);
+
+		if (!guild)
+			return interaction.reply(interactionProblem(t('commands/owners:togglePremiumGuildNotFound', { guildId })));
+
 		// set premium for guild to toggle
 		await this.container.utilities.guild.set.Premium(guildId, toggle);
-		return interaction.reply({
-			embeds: [
-				generateDefaultEmbed({
-					title: 'Toggle Premium',
-					description: `Toggled premium for guild ${bold(guild.name)} [${inlineCode(
-						guildId
-					)}] to ${inlineCode(toggle.toString())}`
-				})
-			]
+		const content = t('commands/owners:togglePremiumSuccess', {
+			guildId,
+			guildName: guild.name,
+			status: toggle ? 'enabled' : 'disabled'
 		});
+		return interaction.reply(interactionSuccess(content));
+	}
+
+	private registerCommandsOptions(builder: SlashCommandBuilder) {
+		return builder
+			.addStringOption((option) => this.registerGuildIDCommandOption(option))
+			.addBooleanOption((option) => this.registerToggleCommandOption(option));
+	}
+
+	private registerGuildIDCommandOption(option: SlashCommandStringOption) {
+		return applyDescriptionLocalizedBuilder(option, 'commands/owners:togglePremiumGuildIdOptionDescription')
+			.setName('guild-id')
+			.setRequired(true);
+	}
+
+	private registerToggleCommandOption(option: SlashCommandBooleanOption) {
+		return applyDescriptionLocalizedBuilder(option, 'commands/owners:togglePremiumGoggleOptionDescription')
+			.setName('toggle')
+			.setRequired(true);
 	}
 }

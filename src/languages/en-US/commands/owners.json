@@ -1,0 +1,11 @@
+{
+    "togglePremiumDescription": "Set the premium status of a guild.",
+    "togglePremiumGuildIdOptionDescription": "The ID of the guild to set the premium status of.",
+    "togglePremiumGoggleOptionDescription": "Whether to enable or disable premium status.",
+    "togglePremiumGuildNotFound": "{{guildId}} is not a valid guild ID.",
+    "togglePremiumSuccess": "Successfully set the premium status of {{guildName}}({{guildId}}) to {{status}}.",
+    "guildInfoDescription": "Get information about a guild.",
+    "guildInfoGuildIdOptionDescription": "The ID of the guild to get information about.",
+    "guildInfoGuildNotFound": "{{guildId}} is not a valid guild ID.",
+    "guildInfoSettingsNotFound": "Settings for {{guildName}}({{guildId}}) not found."
+}

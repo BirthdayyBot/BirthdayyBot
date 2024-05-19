@@ -5,14 +5,12 @@ import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 
-@ApplyOptions<BirthdayyCommand.Options>({
-	description: 'commands/system:rebootDescription',
-	permissionLevel: PermissionLevels.BotOwner
-})
+@ApplyOptions<BirthdayyCommand.Options>({ permissionLevel: PermissionLevels.BotOwner })
 export class UserCommand extends BirthdayyCommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
-			(builder) => applyDescriptionLocalizedBuilder(builder, this.description).setName('reboot'),
+			(builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/system:rebootDescription').setName('reboot'),
 			{ guildIds: [envParseString('CLIENT_MAIN_GUILD')] }
 		);
 	}

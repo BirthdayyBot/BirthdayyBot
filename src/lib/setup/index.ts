@@ -14,6 +14,7 @@ import '@sentry/tracing';
 import 'reflect-metadata';
 
 import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';
+import { envParseString } from '@skyra/env-utilities';
 import * as colorette from 'colorette';
 import { inspect } from 'node:util';
 
@@ -24,3 +25,4 @@ inspect.defaultOptions.depth = 1;
 colorette.createColors({ useColor: true });
 
 ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
+ApplicationCommandRegistries.setDefaultGuildIds([envParseString('CLIENT_MAIN_GUILD')]);

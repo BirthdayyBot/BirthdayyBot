@@ -1,22 +1,17 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
-import { ClientColor, Emojis } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
+import { getActionRow, getDocumentationComponent, getInviteComponent } from '#utils/functions';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
 import { envParseString } from '@skyra/env-utilities';
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	chatInputApplicationCommandMention,
-	EmbedBuilder
-} from 'discord.js';
+import { chatInputApplicationCommandMention, EmbedBuilder } from 'discord.js';
 
 export class GuideCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
-			applyLocalizedBuilder(builder, 'commands/guide:name', 'commands/guide:description').setDMPermission(true)
+			applyDescriptionLocalizedBuilder(builder, 'commands/general:guideDescription').setName(this.name)
 		);
 	}
 
@@ -24,12 +19,12 @@ export class GuideCommand extends BirthdayyCommand {
 		const t = getSupportedUserLanguageT(interaction);
 
 		const embed = new EmbedBuilder()
-			.setTitle(t('commands/guide:embedTitle'))
-			.setDescription(t('commands/guide:embedDescription'))
+			.setTitle(t('commands/general:guideEmbedTitle'))
+			.setDescription(t('commands/general:guideEmbedDescription'))
 			.setColor(ClientColor)
 			.addFields(this.getStartedField(t), this.getConfigField(t), this.getImportantField(t));
 
-		const components = this.createComponents(t);
+		const components = this.getComponents(t);
 
 		return interaction.reply({ embeds: [embed], components, ephemeral: true });
 	}
@@ -37,8 +32,8 @@ export class GuideCommand extends BirthdayyCommand {
 	private getStartedField(t: TFunction) {
 		const command = chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID'));
 		return {
-			name: t('commands/guide:embedFieldsStartedTitle'),
-			value: t('commands/guide:embedFieldsStartedValue', { command })
+			name: t('commands/general:guideEmbedFieldsStartedTitle'),
+			value: t('commands/general:guideEmbedFieldsStartedValue', { command })
 		};
 	}
 
@@ -46,31 +41,23 @@ export class GuideCommand extends BirthdayyCommand {
 		const commandView = ConfigApplicationCommandMentions.View;
 		const commandEdit = ConfigApplicationCommandMentions.Edit;
 		return {
-			name: t('commands/guide:embedFieldsConfigTitle'),
-			value: t('commands/guide:embedFieldsConfigValue', { commandView, commandEdit })
+			name: t('commands/general:guideEmbedFieldsConfigTitle'),
+			value: t('commands/general:guideEmbedFieldsConfigValue', { commandView, commandEdit })
 		};
 	}
 
 	private getImportantField(t: TFunction) {
 		return {
-			name: t('commands/guide:embedFieldsImportantTitle'),
-			value: t('commands/guide:embedFieldsImportantValue')
+			name: t('commands/general:guideEmbedFieldsImportantTitle'),
+			value: t('commands/general:guideEmbedFieldsImportantValue')
 		};
 	}
 
-	private createComponents(t: TFunction) {
+	private getComponents(t: TFunction) {
 		return [
-			new ActionRowBuilder<ButtonBuilder>().setComponents(
-				new ButtonBuilder()
-					.setLabel(t('commands/guide:buttonDocsLabel'))
-					.setURL('https://birthdayy.xyz/docs')
-					.setStyle(ButtonStyle.Link)
-					.setEmoji(Emojis.Book),
-				new ButtonBuilder()
-					.setURL('https://join.birthdayy.xyz')
-					.setLabel(t('commands/guide:buttonInviteLabel'))
-					.setStyle(ButtonStyle.Link)
-					.setEmoji(Emojis.People)
+			getActionRow(
+				getDocumentationComponent(t('commands/general:guideButtonDocumentation')),
+				getInviteComponent(t('commands/general:guideButtonInvite'))
 			)
 		];
 	}

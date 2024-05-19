@@ -1,34 +1,46 @@
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
+import { OWNERS } from '#root/config';
 import generateConfigList from '#utils/birthday/config';
 import { getFormattedTimestamp } from '#utils/common';
-import { generateDefaultEmbed } from '#utils/embed';
-import { isCustom } from '#utils/env';
+import { generateDefaultEmbed, interactionProblem } from '#utils/embed';
+import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import type { SlashCommandBuilder } from 'discord.js';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
+import { applyDescriptionLocalizedBuilder } from '@sapphire/plugin-i18next';
+import type { SlashCommandStringOption } from 'discord.js';
 
-@ApplyOptions<BirthdayyCommand.Options>({
-	description: 'Get Infos about a Guild',
-	enabled: !isCustom,
-	permissionLevel: PermissionLevels.Administrator,
-	runIn: CommandOptionsRunTypeEnum.GuildAny
-})
+@ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class GuildInfoCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
-		registry.registerChatInputCommand((builder) => this.registerCommands(builder), {
-			guildIds: await getCommandGuilds('admin')
-		});
+		registry.registerChatInputCommand(
+			(builder) =>
+				applyDescriptionLocalizedBuilder(builder, 'commands/owners:guildInfoDescription')
+					.setName('guild-info')
+					.setDMPermission(false)
+					.addStringOption((option) => this.registerGuildIDCommandOption(option)),
+			{
+				guildIds: await getCommandGuilds('admin')
+			}
+		);
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction<'cached'>) {
-		const guildId = interaction.options.getString('guild-id', true);
-		const settings = await this.container.utilities.guild.get.GuildById(guildId).catch(() => null);
-		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
-		const guildBirthdayCount = await this.container.utilities.birthday.get.BirthdayCountByGuildId(guildId);
+		if (!OWNERS.includes(interaction.user.id)) return;
 
-		if (!settings || !guild) return interaction.reply('Guild Infos not found');
+		const guildId = interaction.options.getString('guild-id', true);
+		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
+		const t = getSupportedUserLanguageT(interaction);
+
+		if (!guild) return interaction.reply(interactionProblem(t('commands/owners:guildInfoGuildNotFound')));
+
+		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
+
+		if (!settings) return interaction.reply(interactionProblem(t('commands/owners:guildInfoSettingsNotFound')));
+
+		const guildBirthdayCount = await this.container.prisma.birthday.count({ where: { guildId } });
 
 		const embed = generateDefaultEmbed({
 			fields: [
@@ -118,10 +130,9 @@ export class GuildInfoCommand extends BirthdayyCommand {
 		});
 	}
 
-	private registerCommands(builder: SlashCommandBuilder) {
-		return builder
-			.setName(this.name)
-			.setDescription(this.description)
-			.addStringOption((option) => option.setName('guild-id').setDescription('The GuildId').setRequired(true));
+	private registerGuildIDCommandOption(option: SlashCommandStringOption) {
+		return applyDescriptionLocalizedBuilder(option, 'commands/owners:guildInfoGuildIdOptionDescription')
+			.setName('guild-id')
+			.setRequired(true);
 	}
 }

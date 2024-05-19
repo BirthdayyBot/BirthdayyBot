@@ -1,21 +1,21 @@
 import { BirthdayyCommand } from '#lib/structures';
+import { PermissionLevels } from '#lib/types';
 import { ClientColor } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
-import { isNotCustom } from '#utils/env';
+import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 
-@ApplyOptions<BirthdayyCommand.Options>({
-	name: 'count',
-	description: 'The current count of Guilds, Birthdays and Users',
-	enabled: isNotCustom
-})
+@ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class CountCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand(
-			(builder) => applyLocalizedBuilder(builder, 'commands/count:count').setDMPermission(true),
+			(builder) =>
+				builder
+					.setDescription('The current count of Guilds, Birthdays and Users')
+					.setName(this.name)
+					.setDMPermission(true),
 			{
 				guildIds: await getCommandGuilds('admin')
 			}
