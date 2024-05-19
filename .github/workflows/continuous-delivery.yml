@@ -47,7 +47,7 @@ jobs:
         uses: saionaro/extract-package-version@v1.3.0
 
       - name: Setup Docker buildx
-        uses: docker/setup-buildx-action@be3701b2116d2f723573ca9e8cdb4ca85d3cdaf0
+        uses: docker/setup-buildx-action@5138f76647652447004da686b2411557eaf65f33
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3.1.0
