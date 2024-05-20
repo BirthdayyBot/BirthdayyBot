@@ -67,7 +67,10 @@ export class BirthdayCommand extends BirthdayySubcommand {
 
 		await getBirthdays(interaction.guildId).create({ birthday, userId: user.id });
 
-		const content = await resolveKey(interaction, 'commands/birthday:set.success', { ...options });
+		const content = await resolveKey(interaction, 'commands/birthday:set.success', {
+			...options,
+			birthday: bold(formatDateForDisplay(birthday))
+		});
 
 		return interaction.reply(interactionSuccess(content));
 	}

@@ -3,7 +3,7 @@ import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
 import { CdnUrls, ClientColor } from '#utils/constants';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
-import { getSettings } from '#utils/functions';
+import { getOverview, getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -148,8 +148,6 @@ export class ConfigCommand extends BirthdayySubcommand {
 		settings ??= {};
 		const t = await fetchT(interaction);
 
-		this.container.logger.debug(settings);
-
 		const embed = new EmbedBuilder()
 			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))
 			.setColor(ClientColor)
@@ -199,6 +197,10 @@ export class ConfigCommand extends BirthdayySubcommand {
 				select: null
 			})
 		);
+
+		if ('announcementChannel' in data) {
+			await getOverview(guildId).edit();
+		}
 
 		const content = await result.match({
 			ok: async (settings) =>

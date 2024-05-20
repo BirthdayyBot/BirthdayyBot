@@ -1,3 +1,4 @@
+import { OverviewManager } from '#lib/structures';
 import { BirthdaysManager } from '#lib/structures/managers/BirthdaysManager';
 import { SettingsManager } from '#lib/structures/managers/SettingsManager';
 import { GuildIDEnum } from '#utils/constants';
@@ -38,6 +39,7 @@ interface GuildUtilities {
 	readonly settings: SettingsManager;
 	readonly birthdays: BirthdaysManager;
 	readonly guild: Guild;
+	readonly overview: OverviewManager;
 }
 
 export const cache = new WeakMap<Guild, GuildUtilities>();
@@ -51,7 +53,8 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const entry: GuildUtilities = {
 		settings,
 		birthdays: new BirthdaysManager(guild, settings),
-		guild
+		guild,
+		overview: new OverviewManager(guild)
 	};
 	cache.set(guild, entry);
 
@@ -61,6 +64,7 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 export const getSettings = getProperty('settings');
 export const getBirthdays = getProperty('birthdays');
 export const getGuild = getProperty('guild');
+export const getOverview = getProperty('overview');
 
 function getProperty<K extends keyof GuildUtilities>(property: K) {
 	return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];
