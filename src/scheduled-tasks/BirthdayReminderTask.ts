@@ -3,7 +3,7 @@ import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
-import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
+import { BOT_ADMIN_LOG, DEBUG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
@@ -144,13 +144,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const {
-			announcementChannel,
-			birthdayRole,
-			birthdayPingRole,
-			announcementMessage,
-			premium: guildIsPremium
-		} = config;
+		const { announcementChannel, birthdayRole, birthdayPingRole, premium: guildIsPremium } = config;
+
+		const announcementMessage = config.announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
 
 		let content: string | undefined;
 		if (birthdayPingRole) content = roleMention(birthdayPingRole);

@@ -3,6 +3,7 @@ import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { CdnUrls, ClientColor, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { defaultEmbed, interactionSuccess } from '#utils/embed';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { type Birthday, Prisma, type Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
@@ -262,9 +263,10 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		{ announcementMessage, birthdayPingRole }: Settings,
 		member: GuildMember
 	): MessageCreateOptions {
+		const message = announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
 		const embed = new EmbedBuilder(defaultEmbed())
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(announcementMessage, member))
+			.setDescription(formatBirthdayMessage(message, member))
 			.setThumbnail(CdnUrls.Cake);
 
 		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };

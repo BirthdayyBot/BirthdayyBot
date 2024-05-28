@@ -2,7 +2,6 @@ import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
 import { CdnUrls, ClientColor } from '#utils/constants';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
 import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -116,7 +115,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'all': {
 				const data: Partial<Guild> = {
 					announcementChannel: null,
-					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE, // TODO: Use NULL instead of DEFAULT_ANNOUNCEMENT_MESSAGE
+					announcementMessage: null,
 					birthdayRole: null,
 					birthdayPingRole: null,
 					overviewChannel: null,
@@ -128,7 +127,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'announcementChannel':
 				return this.updateDatabase(interaction, { announcementChannel: null });
 			case 'announcementMessage':
-				return this.updateDatabase(interaction, { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE });
+				return this.updateDatabase(interaction, { announcementMessage: null });
 			case 'birthdayRole':
 				return this.updateDatabase(interaction, { birthdayRole: null });
 			case 'birthdayPingRole':
@@ -159,11 +158,21 @@ export class ConfigCommand extends BirthdayySubcommand {
 			? channelMention(settings.announcementChannel)
 			: t('globals:unset');
 
-		const announcementMessage = settings.announcementMessage
-			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-			: t('globals:unset');
+		const defaultAnnouncementMessage =
+			settings.premium && !settings.announcementMessage
+				? t('commands/config:viewMessageDefault')
+				: t('commands/config:viewMessagePremiumRequired');
 
-		if (!settings.premium) embed.setDescription(t('commands/config:viewMessageRequiredPremiumAlert'));
+		const announcementMessage =
+			settings.premium && settings.announcementMessage
+				? formatBirthdayMessage(settings.announcementMessage, interaction.member)
+				: defaultAnnouncementMessage;
+
+		if (settings.announcementMessage && settings.announcementMessage.length > 512) {
+			embed.setDescription(t('commands/config:viewMessageTooLong', { maxLength: 512 }));
+		} else {
+			embed.setDescription(announcementMessage);
+		}
 
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
 		const birthdayPingRole = settings.birthdayPingRole
@@ -232,12 +241,11 @@ export class ConfigCommand extends BirthdayySubcommand {
 	) {
 		const settingsManager = getSettings(interaction.guildId);
 		const settings = await settingsManager.fetch();
-		const defaultAnnouncementMessage = settingsManager.defaultKey.announcementMessage;
 
-		if (!settings?.premium && announcementMessage !== defaultAnnouncementMessage) {
+		if (!settings?.premium) {
 			await this.container.prisma.guild.update({
 				where: { guildId: interaction.guildId },
-				data: { announcementMessage: defaultAnnouncementMessage }
+				data: { announcementMessage: null }
 			});
 
 			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
