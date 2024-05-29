@@ -1,8 +1,7 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
-import { generateDefaultEmbed } from '#utils/embed';
+import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
 import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -16,7 +15,7 @@ import {
 	fetchT,
 	resolveKey
 } from '@sapphire/plugin-i18next';
-import { isNullOrUndefined, isNullOrUndefinedOrEmpty, isNullish, objectEntries } from '@sapphire/utilities';
+import { isNullOrUndefined, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	ChannelType,
@@ -26,6 +25,7 @@ import {
 	SlashCommandBuilder,
 	channelMention,
 	chatInputApplicationCommandMention,
+	inlineCode,
 	roleMention,
 	type Channel,
 	type EmbedField
@@ -142,53 +142,39 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		settings?: Partial<Guild> | null,
-		modified = false
+		settings?: Partial<Guild> | null
 	) {
 		settings ??= {};
+
 		const t = await fetchT(interaction);
 
-		this.container.logger.debug(settings);
+		const unset = inlineCode(t('globals:unset'));
+		const bool = [inlineCode(t('globals:disabled')), inlineCode(t('globals:enabled'))];
 
 		const embed = new EmbedBuilder()
-			.setTitle(
-				t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed', {
-					guildName: interaction.guild.name
-				})
-			)
-			.setThumbnail(interaction.guild.iconURL())
-			.setDescription(t('commands/config:viewEmbedDescription'));
+			.setTitle(t('commands/config:viewEmbedTitle'))
+			.setDescription(t('commands/config:viewEmbedDescription'))
+			.setThumbnail(interaction.guild.iconURL());
 
-		const announcementChannel = settings.announcementChannel
-			? channelMention(settings.announcementChannel)
-			: t('globals:unset');
-		const defaultAnnouncementMessage =
-			settings.premium && !settings.announcementMessage
-				? DEFAULT_ANNOUNCEMENT_MESSAGE
-				: t('commands/config:viewMessageRequiredPremiumAlert');
+		const premiumAlert = settings.premium
+			? t('commands/config:viewPremiumAnnouncementMessageAlertNotModified')
+			: t('commands/config:viewPremiumAnnouncementMessageAlertNotPremium');
 
-		const formattedBirthdayMessage =
-			settings.premium && settings.announcementMessage
-				? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-				: defaultAnnouncementMessage;
-		const announcementMessage =
-			formattedBirthdayMessage.length > 512
-				? t('commands/config:viewMessageTooLong', { maxLength: 512 })
-				: formattedBirthdayMessage;
+		const announcementMessage = settings.announcementMessage
+			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
+			: premiumAlert;
 
-		if (settings.announcementMessage && settings.announcementMessage.length > 512) {
-			embed.setDescription(t('commands/config:viewMessageTooLong', { maxLength: 512 }));
-		}
+		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
 
-		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
-		const birthdayPingRole = settings.birthdayPingRole
-			? roleMention(settings.birthdayPingRole)
-			: t('globals:unset');
-		const overviewChannel = settings.overviewChannel
-			? channelMention(settings.overviewChannel)
-			: t('globals:unset');
-		const timezone = isNullOrUndefined(settings.timezone) ? t('globals:unset') : TIMEZONE_VALUES[settings.timezone];
-		const premium = settings.premium ? t('globals:yes') : t('globals:no');
+		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
+
+		const birthdayPingRole = settings.birthdayPingRole ? roleMention(settings.birthdayPingRole) : unset;
+
+		const overviewChannel = settings.overviewChannel ? channelMention(settings.overviewChannel) : unset;
+
+		const timezone = isNullOrUndefined(settings.timezone) ? unset : TIMEZONE_VALUES[settings.timezone];
+
+		const premium = bool[Number(settings.premium)];
 
 		embed.setFields(
 			...(t('commands/config:viewFieldsEmbed', {
@@ -202,6 +188,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 				timezone
 			}) satisfies EmbedField[])
 		);
+
 		return embed.toJSON();
 	}
 
@@ -216,18 +203,15 @@ export class ConfigCommand extends BirthdayySubcommand {
 			})
 		);
 
-		const content = await result.match({
-			ok: async (settings) =>
-				this.viewGenerateContent(interaction, settings, !isNullOrUndefinedOrEmpty(objectEntries(data))),
-			err: (error) => {
+		const messageOptions = await result.match({
+			ok: async () => interactionSuccess(await resolveKey(interaction, 'commands/config:editSuccess'), true),
+			err: async (error) => {
 				this.container.logger.error(error);
-				return resolveKey(interaction, 'commands/config:editFailure');
+				return interactionProblem(await resolveKey(interaction, 'commands/config:editFailure'), true);
 			}
 		});
 
-		const options = typeof content === 'string' ? { content } : { embeds: [generateDefaultEmbed(content)] };
-
-		return interaction.reply({ ...options, ephemeral: true });
+		return interaction.reply(messageOptions);
 	}
 
 	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {

@@ -2,11 +2,11 @@
 	"name": "config",
 	"description": "Manage the configuration for this server",
 	"viewName": "view",
-	"viewDescription": "View the current configuration",
-	"viewTitleEmbed": "**Server Configuration** - {{guildName}}",
-	"viewTitleEmbedModified": "**Modified settings**:",
+	"viewEmbedTitle": "View the current configuration",
 	"viewEmbedDescription": "Use /config edit `<config>` `<value>` to change any setting",
 	"viewMessageTooLong": "Your message is too long, please shorten it",
+    "viewPremiumAnnouncementMessageAlertNotModified": "Use /config edit `announcement-message` `<message>` to change it.",
+    "viewPremiumAnnouncementMessageAlertNotPremium": "{{PLUS}} You need to have premium to edit the birthday message. You can get premium by supporting us on [patreon](https://www.patreon.com/birthdayy).",
 	"viewFieldsEmbed": [
 		{
 			"name": "Announcement Channel",
