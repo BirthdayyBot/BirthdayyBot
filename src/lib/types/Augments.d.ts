@@ -74,6 +74,8 @@ declare module '@skyra/env-utilities' {
 		COMMANDS_CONFIG_ID: string;
 		COMMANDS_BIRTHDAY_ID: string;
 
+		DEFAULT_ANNOUNCEMENT_MESSAGE: string;
+
 		LOG_CHANNEL_SERVER: string;
 		LOG_CHANNEL_ADMIN: string;
 		CUSTOM_BOT: BooleanString;

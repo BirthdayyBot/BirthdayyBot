@@ -1,27 +1,26 @@
 import {
 	BirthdayyCommandConstructorDefaults,
-	type ExtendOptions,
 	implementBirthdayyCommandError,
 	implementBirthdayyCommandPaginatedOptions,
-	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel
+	implementBirthdayyCommandParseConstructorPreConditionsPermissionLevel,
+	type ExtendOptions
 } from '#lib/structures/commands/base/BaseBirthdayyCommandUtilities';
 import { PermissionLevels } from '#lib/types';
 import {
+	Command,
+	Args as SapphireArgs,
+	UserError,
 	type Awaitable,
 	type ChatInputCommand,
-	Command,
-	type MessageCommand,
-	Args as SapphireArgs,
-	UserError
+	type MessageCommand
 } from '@sapphire/framework';
-import { type CacheType, ChatInputCommandInteraction } from 'discord.js';
+import { ChatInputCommandInteraction, type CacheType } from 'discord.js';
 
 /**
  * The base class for all Birthdayy commands.
  * @seealso {@link BirthdayySubcommand} for subcommand support.
  */
 export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, BirthdayyCommand.Options> {
-	public declare readonly description: string;
 	public readonly permissionLevel: PermissionLevels;
 
 	public constructor(context: Command.LoaderContext, options: BirthdayyCommand.Options) {
