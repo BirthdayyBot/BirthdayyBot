@@ -1,7 +1,8 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
-import { CdnUrls, ClientColor } from '#utils/constants';
+import { ClientColor } from '#utils/constants';
 import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -146,13 +147,19 @@ export class ConfigCommand extends BirthdayySubcommand {
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
+		if (interaction.guild === null) throw new Error('Guild not found');
 
 		this.container.logger.debug(settings);
 
 		const embed = new EmbedBuilder()
-			.setTitle(t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed'))
+			.setTitle(
+				t(modified ? 'commands/config:viewTitleEmbedModified' : 'commands/config:viewTitleEmbed', {
+					guildName: interaction.guild.name
+				})
+			)
 			.setColor(ClientColor)
-			.setThumbnail(CdnUrls.CupCake);
+			.setThumbnail(interaction.guild.iconURL())
+			.setDescription(t('commands/config:viewEmbedDescription'));
 
 		const announcementChannel = settings.announcementChannel
 			? channelMention(settings.announcementChannel)
@@ -160,18 +167,20 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const defaultAnnouncementMessage =
 			settings.premium && !settings.announcementMessage
-				? t('commands/config:viewMessageDefault')
+				? DEFAULT_ANNOUNCEMENT_MESSAGE
 				: t('commands/config:viewMessagePremiumRequired');
 
-		const announcementMessage =
+		const formattedBirthdayMessage =
 			settings.premium && settings.announcementMessage
 				? formatBirthdayMessage(settings.announcementMessage, interaction.member)
 				: defaultAnnouncementMessage;
+		const announcementMessage =
+			formattedBirthdayMessage.length > 512
+				? t('commands/config:viewMessageTooLong', { maxLength: 512 })
+				: formattedBirthdayMessage;
 
 		if (settings.announcementMessage && settings.announcementMessage.length > 512) {
 			embed.setDescription(t('commands/config:viewMessageTooLong', { maxLength: 512 }));
-		} else {
-			embed.setDescription(announcementMessage);
 		}
 
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : t('globals:unset');
@@ -182,6 +191,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			? channelMention(settings.overviewChannel)
 			: t('globals:unset');
 		const timezone = isNullOrUndefined(settings.timezone) ? t('globals:unset') : TIMEZONE_VALUES[settings.timezone];
+		const premium = settings.premium ? 'true' : 'false';
 
 		embed.setFields(
 			...(t('commands/config:viewFieldsEmbed', {
@@ -190,6 +200,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 				announcementMessage,
 				birthdayRole,
 				birthdayPingRole,
+				premium,
 				overviewChannel,
 				timezone
 			}) satisfies EmbedField[])
