@@ -225,7 +225,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			}
 		});
 
-		const options = typeof content === 'string' ? { content } : { embeds: [content] };
+		const options = typeof content === 'string' ? { content } : { embeds: [generateDefaultEmbed(content)] };
 
 		return interaction.reply({ ...options, ephemeral: true });
 	}
