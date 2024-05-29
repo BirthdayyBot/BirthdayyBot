@@ -147,7 +147,6 @@ export class ConfigCommand extends BirthdayySubcommand {
 	) {
 		settings ??= {};
 		const t = await fetchT(interaction);
-		if (interaction.guild === null) throw new Error('Guild not found');
 
 		this.container.logger.debug(settings);
 
@@ -163,7 +162,6 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const announcementChannel = settings.announcementChannel
 			? channelMention(settings.announcementChannel)
 			: t('globals:unset');
-		//
 		const defaultAnnouncementMessage =
 			settings.premium && !settings.announcementMessage
 				? DEFAULT_ANNOUNCEMENT_MESSAGE

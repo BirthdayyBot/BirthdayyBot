@@ -281,5 +281,7 @@ function parseWebhookLog(): WebhookClientData | null {
 
 export const WEBHOOK_LOG = parseWebhookLog();
 
-export const DEFAULT_ANNOUNCEMENT_MESSAGE =
-	envParseString('DEFAULT_ANNOUNCEMENT_MESSAGE') || 'Default Announcement Message';
+export const DEFAULT_ANNOUNCEMENT_MESSAGE = envParseString(
+	'DEFAULT_ANNOUNCEMENT_MESSAGE',
+	'Default Announcement Message'
+);
