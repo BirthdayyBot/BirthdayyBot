@@ -311,7 +311,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				return 'An error occurred when adding the role to this member ';
 			} finally {
 				floatPromise(
-					container.tasks.create('BirthdayRoleRemoverTask', {
+					container.tasks.create('removeBirthdayRole', {
 						memberId: member.id,
 						guildId: member.guild.id,
 						birthdayRole
