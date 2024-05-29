@@ -1,6 +1,6 @@
 import type { PrismaErrorCodeEnum } from '#utils/constants';
 import { Prisma } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container, err, ok, Result } from '@sapphire/framework';
 import { isThenable, type Awaitable } from '@sapphire/utilities';
 import { DiscordAPIError, type RESTJSONErrorCodes } from 'discord.js';
 
@@ -22,6 +22,15 @@ export async function resolveOnErrorCodesPrisma<T>(promise: Promise<T>, ...codes
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		if (error instanceof Prisma.PrismaClientKnownRequestError && codes.includes(error.code)) return null;
+		throw error;
+	}
+}
+
+export async function toErrorCodeResult<T>(promise: Promise<T>): Promise<Result<T, RESTJSONErrorCodes>> {
+	try {
+		return ok(await promise);
+	} catch (error) {
+		if (error instanceof DiscordAPIError) return err(error.code as RESTJSONErrorCodes);
 		throw error;
 	}
 }

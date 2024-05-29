@@ -1,6 +1,6 @@
 import { authenticated } from '#lib/api/utils';
 import { getT } from '#lib/i18n/translate';
-import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
+import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { Emojis, GuildIDEnum } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
 import { CLIENT_NAME, VOTE_CHANNEL_ID } from '#utils/environment';
@@ -58,12 +58,12 @@ export class UserRoute extends Route {
 		if (!result) return;
 
 		const payload = {
-			memberId: member.id,
-			guildId: member.guild.id,
-			roleId: this.roleID
-		} satisfies RoleRemovePayload;
+			userID: member.id,
+			guildID: member.guild.id,
+			roleID: this.roleID
+		} satisfies RemoveBirthdayRoleData;
 
-		return container.tasks.create('BirthdayRoleRemoverTask', payload, {
+		return container.tasks.create('removeBirthdayRole', payload, {
 			repeated: false,
 			delay: Time.Hour * 12
 		});

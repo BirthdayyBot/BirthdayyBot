@@ -1,5 +1,5 @@
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import type { RoleRemovePayload } from '#root/scheduled-tasks/BirthdayRoleRemoverTask';
+import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
 import { generateDefaultEmbed } from '#utils/embed';
@@ -14,6 +14,7 @@ import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
+import { isNullish, type Nullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	AttachmentBuilder,
@@ -21,7 +22,6 @@ import {
 	Guild,
 	GuildMember,
 	RESTJSONErrorCodes,
-	Role,
 	ThreadAutoArchiveDuration,
 	codeBlock,
 	inlineCode,
@@ -104,7 +104,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!currentBirthdays.length) {
-			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`
@@ -190,23 +189,12 @@ export class BirthdayReminderTask extends ScheduledTask {
 			sent: false,
 			message: 'Not set'
 		};
-		eventInfo.birthday_role = {
-			added: false,
-			message: 'Not set'
-		};
-
 		this.container.logger.debug(`[BirthdayTask] Guild: ${guild.id} [${guild.name}]`);
 		this.container.logger.debug(`[BirthdayTask] Member: ${member.id} [${member.user.tag}]`);
 
 		if (birthdayRole) {
-			const role = await guild.roles.fetch(birthdayRole);
-			if (role) {
-				const birthdayChildInfo = await this.addCurrentBirthdayChildRole(member, guildId, role, isTest);
-				eventInfo.birthday_role = birthdayChildInfo;
-			} else {
-				eventInfo.birthday_role.message = 'Role not found';
-				await container.utilities.guild.reset.BirthdayRole(guildId);
-			}
+			const payload = { guildID: guild.id, userID: member.id, roleID: birthdayRole };
+			eventInfo.birthday_role = await this.handleRole(payload, member, birthdayRole, isTest);
 		}
 
 		if (!announcementChannel) {
@@ -234,42 +222,55 @@ export class BirthdayReminderTask extends ScheduledTask {
 		return eventInfo;
 	}
 
-	private async addCurrentBirthdayChildRole(
+	private async handleRole(
+		data: RemoveBirthdayRoleData,
 		member: GuildMember,
-		guildId: Snowflake,
-		role: Role,
+		roleId: string | Nullish,
 		isTest: boolean
-	): Promise<{
-		added: boolean;
-		message: string;
-	}> {
-		const payload: RoleRemovePayload = { memberId: member.id, guildId, roleId: role.id };
-		const returnData = {
-			added: false,
-			message: 'Not set'
-		};
+	): Promise<{ added: boolean; message: string }> {
+		if (isNullish(roleId)) return { added: false, message: 'Role not set' };
 
-		try {
-			if (!member.roles.cache.has(role.id)) await member.roles.add(role);
-			await container.tasks.create('BirthdayRoleRemoverTask', payload, {
-				repeated: false,
-				delay: isTest ? Time.Minute / 6 : Time.Day
+		const role = member.guild.roles.cache.get(roleId);
+
+		// If the role doesn't exist anymore, reset:
+		if (!role) {
+			await container.prisma.guild.update({
+				where: { guildId: data.guildID },
+				data: { birthdayRole: null }
 			});
-			returnData.added = true;
-			returnData.message = 'Success';
-			return returnData;
-		} catch (error: any) {
-			if (error instanceof DiscordAPIError) {
-				if (error.message.includes('Missing Permissions') || error.message.includes('Missing Access')) {
-					await container.utilities.guild.reset.BirthdayRole(guildId);
-					returnData.message = 'Missing Permissions';
-				} else {
-					returnData.message = error.message;
-				}
-				container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
-			}
-			return returnData;
+			return { added: false, message: 'Role not found' };
 		}
+
+		const me = await member.guild.members.fetchMe();
+
+		// If the role can be given, add it to the user:
+		if (me.roles.highest.position > role.position) {
+			await this.addBirthdayRole(data, member, role.id, isTest);
+		}
+
+		return { added: true, message: 'Role handled' };
+	}
+
+	private async addBirthdayRole(
+		data: RemoveBirthdayRoleData,
+		member: GuildMember,
+		birthdayRole: string,
+		isTest: boolean
+	) {
+		await member.roles.add(birthdayRole);
+		const delay = isTest ? Time.Second * 30 : Time.Day;
+		await this.container.tasks.create(
+			'removeBirthdayRole',
+			{
+				guildID: data.guildID,
+				roleID: birthdayRole,
+				userID: data.userID
+			},
+			{
+				repeated: false,
+				delay
+			}
+		);
 	}
 
 	private async sendBirthdayAnnouncement(
