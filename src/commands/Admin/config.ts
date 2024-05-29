@@ -156,13 +156,13 @@ export class ConfigCommand extends BirthdayySubcommand {
 			.setDescription(t('commands/config:viewEmbedDescription'))
 			.setThumbnail(interaction.guild.iconURL());
 
-		const premiumAlert = settings.premium
+		const premiumAlertMessage = settings.premium
 			? t('commands/config:viewPremiumAnnouncementMessageAlertNotModified')
 			: t('commands/config:viewPremiumAnnouncementMessageAlertNotPremium');
 
 		const announcementMessage = settings.announcementMessage
 			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-			: premiumAlert;
+			: premiumAlertMessage;
 
 		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
 
