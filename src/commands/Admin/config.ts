@@ -2,7 +2,7 @@ import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
-import { ClientColor } from '#utils/constants';
+import { generateDefaultEmbed } from '#utils/embed';
 import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -107,7 +107,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
 		const embed = await this.viewGenerateContent(interaction, settings);
-		return interaction.reply({ embeds: [embed], ephemeral: true });
+		return interaction.reply({ embeds: [generateDefaultEmbed(embed)], ephemeral: true });
 	}
 
 	public chatInputRunReset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -157,18 +157,17 @@ export class ConfigCommand extends BirthdayySubcommand {
 					guildName: interaction.guild.name
 				})
 			)
-			.setColor(ClientColor)
 			.setThumbnail(interaction.guild.iconURL())
 			.setDescription(t('commands/config:viewEmbedDescription'));
 
 		const announcementChannel = settings.announcementChannel
 			? channelMention(settings.announcementChannel)
 			: t('globals:unset');
-
+		//
 		const defaultAnnouncementMessage =
 			settings.premium && !settings.announcementMessage
 				? DEFAULT_ANNOUNCEMENT_MESSAGE
-				: t('commands/config:viewMessagePremiumRequired');
+				: t('commands/config:viewMessageRequiredPremiumAlert');
 
 		const formattedBirthdayMessage =
 			settings.premium && settings.announcementMessage
@@ -191,7 +190,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			? channelMention(settings.overviewChannel)
 			: t('globals:unset');
 		const timezone = isNullOrUndefined(settings.timezone) ? t('globals:unset') : TIMEZONE_VALUES[settings.timezone];
-		const premium = settings.premium ? 'true' : 'false';
+		const premium = settings.premium ? t('globals:yes') : t('globals:no');
 
 		embed.setFields(
 			...(t('commands/config:viewFieldsEmbed', {
@@ -205,8 +204,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 				timezone
 			}) satisfies EmbedField[])
 		);
-
-		return embed;
+		return embed.toJSON();
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {

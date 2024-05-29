@@ -11,7 +11,11 @@ export const DEBUG = envParseBoolean('DEBUG', true);
 export const APP_ENV = envParseString('APP_ENV');
 
 // GENERIC
-export const { CLIENT_NAME, BOT_AVATAR } = process.env;
+export const CLIENT_NAME = envParseString('CLIENT_NAME', 'Birthdayy');
+export const CLIENT_AVATAR = envParseString(
+	'CLIENT_AVATAR',
+	'https://cdn.discordapp.com/avatars/1039089174948626473/8d7f1e8a8b9f6e2b2f4b9a2c9b2b3a7e.webp'
+);
 
 // Values
 export const BOT_SERVER_LOG = envParseString('LOG_CHANNEL_SERVER', '1077621363881300018');

@@ -6,6 +6,7 @@
 	"viewTitleEmbed": "**Server Configuration** - {{guildName}}",
 	"viewTitleEmbedModified": "**Modified settings**:",
 	"viewEmbedDescription": "Use /config edit `<config>` `<value>` to change any setting",
+	"viewMessageTooLong": "Your message is too long, please shorten it",
 	"viewFieldsEmbed": [
 		{
 			"name": "Announcement Channel",
@@ -38,12 +39,12 @@
 			"inline": false
 		},
 		{
-			"name": "{{PLUS}} Birthday Message",
+			"name": "Birthday Message {{PLUS}}",
 			"value": "{{announcementMessage}}",
 			"inline": false
 		}
 	],
-	"viewMessageRequiredPremiumAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+	"viewMessageRequiredPremiumAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by supporting us on [patreon](https://www.patreon.com/birthdayy).",
 	"editName": "edit",
 	"editDescription": "Edit the configuration for this server",
 	"editSuccess": "Successfully edited the configuration for this server.",
