@@ -1,4 +1,4 @@
-import { ConfigApplicationCommandMentions } from '#root/commands/Birthday/config';
+import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { ClientColor } from '#utils/constants';
 import {
 	getActionRow,

@@ -1,6 +1,6 @@
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
-import { ConfigApplicationCommandMentions } from '#root/commands/Birthday/config';
+import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { ClientColor } from '#utils/constants';
 import { getActionRow, getDocumentationComponent, getInviteComponent } from '#utils/functions';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
