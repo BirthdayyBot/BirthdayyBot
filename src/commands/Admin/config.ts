@@ -1,7 +1,8 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
-import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '#utils/embed';
+import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
@@ -19,7 +20,6 @@ import { isNullOrUndefined, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	ChannelType,
-	EmbedBuilder,
 	PermissionFlagsBits,
 	Role,
 	SlashCommandBuilder,
@@ -107,7 +107,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
 		const embed = await this.viewGenerateContent(interaction, settings);
-		return interaction.reply({ embeds: [generateDefaultEmbed(embed)], ephemeral: true });
+		return interaction.reply({ embeds: [embed], ephemeral: true });
 	}
 
 	public chatInputRunReset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -151,29 +151,24 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const unset = inlineCode(t('globals:unset'));
 		const bool = [inlineCode(t('globals:disabled')), inlineCode(t('globals:enabled'))];
 
-		const embed = new EmbedBuilder()
+		const embed = new DefaultEmbedBuilder()
 			.setTitle(t('commands/config:viewEmbedTitle'))
 			.setDescription(t('commands/config:viewEmbedDescription'))
 			.setThumbnail(interaction.guild.iconURL());
 
-		const premiumAlertMessage = settings.premium
-			? t('commands/config:viewPremiumAnnouncementMessageAlertNotModified')
-			: t('commands/config:viewPremiumAnnouncementMessageAlertNotPremium');
+		const premiumAlertMessageKey = settings.premium
+			? 'commands/config:viewPremiumAnnouncementMessageAlertNotModified'
+			: 'commands/config:viewPremiumAnnouncementMessageAlertNotPremium';
 
 		const announcementMessage = settings.announcementMessage
 			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-			: premiumAlertMessage;
+			: t(premiumAlertMessageKey);
 
 		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
-
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
-
 		const birthdayPingRole = settings.birthdayPingRole ? roleMention(settings.birthdayPingRole) : unset;
-
 		const overviewChannel = settings.overviewChannel ? channelMention(settings.overviewChannel) : unset;
-
 		const timezone = isNullOrUndefined(settings.timezone) ? unset : TIMEZONE_VALUES[settings.timezone];
-
 		const premium = bool[Number(settings.premium)];
 
 		embed.setFields(

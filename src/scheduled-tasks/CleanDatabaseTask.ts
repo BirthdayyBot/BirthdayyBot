@@ -1,4 +1,4 @@
-import { generateDefaultEmbed } from '#utils/embed';
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { isProduction } from '#utils/env';
 import { BOT_ADMIN_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -18,6 +18,7 @@ export class CleanDatabaseTask extends ScheduledTask {
 	public async run() {
 		if (envParseBoolean('CUSTOM_BOT', false)) return;
 		container.logger.debug('[CleaningTask] Started');
+
 		const oneDayAgo = dayjs().subtract(1, 'day').toDate();
 
 		const req = await container.utilities.guild.delete.ByLastUpdatedDisabled(oneDayAgo);
@@ -27,25 +28,19 @@ export class CleanDatabaseTask extends ScheduledTask {
 
 		if (!isTextBasedChannel(channel)) return container.logger.error('[CleaningTask] Admin log channel not found');
 
-		await channel.send({
-			embeds: [
-				generateDefaultEmbed({
-					title: `CleanUp Report (DELETE)`,
-					description: '',
-					fields: [
-						{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.toString()), inline: true },
-						{
-							name: 'Deleted Birthdays',
-							value: inlineCode(deletedBirthdays.toString()),
-							inline: true
-						}
-					]
-				})
-			]
-		});
+		const embed = new DefaultEmbedBuilder().setTitle(`CleanUp Report (DELETE)`).addFields(
+			{ name: 'Deleted Guilds', value: inlineCode(deletedGuilds.toString()), inline: true },
+			{
+				name: 'Deleted Birthdays',
+				value: inlineCode(deletedBirthdays.toString()),
+				inline: true
+			}
+		);
 
 		container.logger.info(`[CleaningTask] Deleted ${deletedGuilds} guilds and ${deletedBirthdays} birthdays`);
 
 		container.logger.debug('[CleaningTask] Done');
+
+		return channel.send({ embeds: [embed] });
 	}
 }

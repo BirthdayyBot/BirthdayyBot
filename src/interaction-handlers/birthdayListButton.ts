@@ -1,5 +1,4 @@
 import { generateBirthdayList } from '#utils/birthday/index';
-import { generateDefaultEmbed } from '#utils/embed';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { ButtonInteraction } from 'discord.js';
@@ -16,7 +15,6 @@ export class ExampleParseMethod extends InteractionHandler {
 
 	public async run(interaction: ButtonInteraction<'cached'>, result: { pageNumber: number }) {
 		const { embed, components } = await generateBirthdayList(result.pageNumber, interaction.guild);
-		const finalEmbed = generateDefaultEmbed(embed);
-		return interaction.message.edit({ embeds: [finalEmbed], components });
+		return interaction.message.edit({ embeds: [embed.toJSON()], components });
 	}
 }

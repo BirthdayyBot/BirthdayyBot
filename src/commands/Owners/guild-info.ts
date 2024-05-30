@@ -1,10 +1,11 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { OWNERS } from '#root/config';
-import generateConfigList from '#utils/birthday/config';
+import generateConfigListToApiEmbed from '#utils/birthday/config';
 import { getFormattedTimestamp } from '#utils/common';
-import { generateDefaultEmbed, interactionProblem } from '#utils/embed';
+import { interactionProblem } from '#utils/embed';
 import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -42,11 +43,13 @@ export class GuildInfoCommand extends BirthdayyCommand {
 
 		const guildBirthdayCount = await this.container.prisma.birthday.count({ where: { guildId } });
 
-		const embed = generateDefaultEmbed({
-			fields: [
+		const infoEmbed = new DefaultEmbedBuilder()
+			.setTitle('GuildInfos')
+			.setThumbnail(guild.iconURL())
+			.addFields(
 				{
 					name: 'GuildId',
-					value: settings.guildId,
+					value: guild.id,
 					inline: true
 				},
 				{
@@ -74,7 +77,6 @@ export class GuildInfoCommand extends BirthdayyCommand {
 					value: guildBirthdayCount.toString(),
 					inline: true
 				},
-
 				{
 					name: 'GuildOwner',
 					value: guild.ownerId,
@@ -82,8 +84,8 @@ export class GuildInfoCommand extends BirthdayyCommand {
 				},
 				{
 					name: 'IsPartnered',
-					inline: true,
-					value: `${guild.partnered}`
+					value: `${guild.partnered}`,
+					inline: true
 				},
 				{
 					name: 'Premium Tier',
@@ -111,22 +113,15 @@ export class GuildInfoCommand extends BirthdayyCommand {
 						guild.members.me?.permissions
 							.toArray()
 							.map((permission: string) => `**\`${permission}\`**`)
-							.join(' • ') ?? 'No Permissions'
+							.join(' • ') ?? 'No Permissions',
+					inline: true
 				}
-			],
-			thumbnail: {
-				url: guild.iconURL({ extension: 'png' }) ?? 'No Image'
-			},
-			title: 'GuildInfos'
-		});
+			);
 
-		const configEmbed = generateDefaultEmbed(
-			await generateConfigList(guildId, { member: interaction.member, guild })
-		);
-
+		const configEmbed = await generateConfigListToApiEmbed(guildId, { member: interaction.member, guild });
 		return interaction.reply({
 			content: `GuildInfos for ${guild.name}`,
-			embeds: [embed, configEmbed]
+			embeds: [infoEmbed.toJSON(), configEmbed.toJSON()]
 		});
 	}
 

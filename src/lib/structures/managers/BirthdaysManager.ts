@@ -1,9 +1,10 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { CdnUrls, ClientColor, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
-import { defaultEmbed, interactionSuccess } from '#utils/embed';
+import { interactionSuccess } from '#utils/embed';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Prisma, type Birthday, type Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
@@ -264,12 +265,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		member: GuildMember
 	): MessageCreateOptions {
 		const message = announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
-		const embed = new EmbedBuilder(defaultEmbed())
+		const embed = new DefaultEmbedBuilder()
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
 			.setDescription(formatBirthdayMessage(message, member))
 			.setThumbnail(CdnUrls.Cake);
 
-		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed] };
+		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed.toJSON()] };
 	}
 
 	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
@@ -331,7 +332,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		if (isNullish(overviewChannel)) return null;
 
-		const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
+		const options = { ...birthdayList.components, embeds: [birthdayList.embed.toJSON()] };
 
 		const channel = await container.client.channels.fetch(overviewChannel).catch(() => null);
 
