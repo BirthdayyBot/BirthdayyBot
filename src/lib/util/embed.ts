@@ -1,7 +1,7 @@
 import { ClientColor } from '#utils/constants';
 import { Colors } from 'discord.js';
 
-export function interactionSuccess(description: string, ephemeral = false) {
+export function interactionSuccess(description: string, ephemeral = true) {
 	return {
 		ephemeral,
 		embeds: [
@@ -13,7 +13,7 @@ export function interactionSuccess(description: string, ephemeral = false) {
 	};
 }
 
-export function interactionProblem(description: string, ephemeral = false) {
+export function interactionProblem(description: string, ephemeral = true) {
 	return {
 		ephemeral,
 		embeds: [

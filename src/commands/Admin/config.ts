@@ -1,34 +1,46 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
+import { ClientColor } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
-import { getSettings } from '#utils/functions';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, Result, type ApplicationCommandRegistry } from '@sapphire/framework';
+import {
+	Command,
+	CommandOptionsRunTypeEnum,
+	Result,
+	err,
+	ok,
+	type ApplicationCommandRegistry
+} from '@sapphire/framework';
 import {
 	applyDescriptionLocalizedBuilder,
 	applyLocalizedBuilder,
 	createLocalizedChoice,
 	fetchT,
-	resolveKey
+	type TFunction
 } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import {
 	ChannelType,
+	EmbedBuilder,
 	PermissionFlagsBits,
 	Role,
 	SlashCommandBuilder,
+	blockQuote,
 	channelMention,
 	chatInputApplicationCommandMention,
 	inlineCode,
 	roleMention,
 	type Channel,
-	type EmbedField
+	type EmbedField,
+	type InteractionReplyOptions
 } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
@@ -55,9 +67,11 @@ export class ConfigCommand extends BirthdayySubcommand {
 	public async chatInputRunEdit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
+		const t = getSupportedUserLanguageT(interaction);
+
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
 		if (!isNullish(announcementChannel)) {
-			const result = await this.parseChannel(interaction, announcementChannel);
+			const result = await this.parseChannel(announcementChannel, t);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['announcementChannel', result.unwrap()]);
@@ -65,7 +79,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const announcementMessage = interaction.options.getString('announcement-message');
 		if (!isNullish(announcementMessage)) {
-			const result = await this.parseAnnouncementMessage(interaction, announcementMessage);
+			const result = await this.parseAnnouncementMessage(interaction, announcementMessage, t);
 
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
@@ -74,7 +88,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const birthdayRole = interaction.options.getRole('birthday-role');
 		if (!isNullish(birthdayRole)) {
-			const result = await this.parseRole(interaction, birthdayRole, false);
+			const result = await this.parseRole(interaction, birthdayRole, t);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['birthdayRole', result.unwrap()]);
@@ -82,7 +96,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
 		if (!isNullish(birthdayPingRole)) {
-			const result = await this.parseRole(interaction, birthdayPingRole, true);
+			const result = await this.parseRoleMention(birthdayPingRole, t);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['birthdayPingRole', result.unwrap()]);
@@ -90,7 +104,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const overviewChannel = interaction.options.getChannel('overview-channel');
 		if (!isNullish(overviewChannel)) {
-			const result = await this.parseChannel(interaction, overviewChannel);
+			const result = await this.parseChannel(overviewChannel, t);
 			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
 
 			entries.push(['overviewChannel', result.unwrap()]);
@@ -106,8 +120,8 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const { guildId } = interaction;
 		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
 
-		const embed = await this.viewGenerateContent(interaction, settings);
-		return interaction.reply({ embeds: [embed], ephemeral: true });
+		const content = await this.viewGenerateContent(interaction, settings);
+		return interaction.reply(content);
 	}
 
 	public chatInputRunReset(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -143,7 +157,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 	private async viewGenerateContent(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
 		settings?: Partial<Guild> | null
-	) {
+	): Promise<InteractionReplyOptions> {
 		settings ??= {};
 
 		const t = await fetchT(interaction);
@@ -151,18 +165,20 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const unset = inlineCode(t('globals:unset'));
 		const bool = [inlineCode(t('globals:disabled')), inlineCode(t('globals:enabled'))];
 
-		const embed = new DefaultEmbedBuilder()
+		const settingsEmbed = new EmbedBuilder()
 			.setTitle(t('commands/config:viewEmbedTitle'))
 			.setDescription(t('commands/config:viewEmbedDescription'))
+			.setColor(ClientColor)
 			.setThumbnail(interaction.guild.iconURL());
 
-		const premiumAlertMessageKey = settings.premium
-			? 'commands/config:viewPremiumAnnouncementMessageAlertNotModified'
-			: 'commands/config:viewPremiumAnnouncementMessageAlertNotPremium';
+		const announcementMessage = formatBirthdayMessage(
+			settings.announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE,
+			interaction.member
+		);
 
-		const announcementMessage = settings.announcementMessage
-			? formatBirthdayMessage(settings.announcementMessage, interaction.member)
-			: t(premiumAlertMessageKey);
+		const premiumAlertMessage = settings.premium
+			? t('commands/config:viewPremiumAnnouncementMessageAlert')
+			: t('commands/config:viewPremiumAnnouncementMessageAlertNotPremium');
 
 		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
@@ -171,20 +187,31 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const timezone = isNullOrUndefined(settings.timezone) ? unset : TIMEZONE_VALUES[settings.timezone];
 		const premium = bool[Number(settings.premium)];
 
-		embed.setFields(
-			...(t('commands/config:viewFieldsEmbed', {
-				returnObjects: true,
-				announcementChannel,
-				announcementMessage,
-				birthdayRole,
-				birthdayPingRole,
-				premium,
-				overviewChannel,
-				timezone
-			}) satisfies EmbedField[])
-		);
+		const fieldsTitles: string[] = t('commands/config:viewFieldsTitles', { returnObjects: true });
+		const fieldsValues: string[] = t('commands/config:viewFieldsValues', {
+			returnObjects: true,
+			announcementChannel,
+			birthdayRole,
+			birthdayPingRole,
+			premium,
+			overviewChannel,
+			timezone
+		});
 
-		return embed.toJSON();
+		settingsEmbed.addFields([...this.generateEmbedFields(fieldsTitles, fieldsValues)]);
+
+		const birthdayEmbed = new DefaultEmbedBuilder()
+			.setTitle(t('commands/config:viewBirthdayEmbedTitle'))
+			.setDescription(`${announcementMessage} \n\n ${blockQuote(premiumAlertMessage)}`)
+			.setColor(ClientColor);
+
+		return { embeds: [settingsEmbed.toJSON(), birthdayEmbed.toJSON()], ephemeral: false };
+	}
+
+	private *generateEmbedFields(title: string[], values: string[]): IterableIterator<EmbedField> {
+		for (let i = 0; i < title.length; i++) {
+			yield { name: title[i], value: values[i], inline: false };
+		}
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
@@ -198,75 +225,53 @@ export class ConfigCommand extends BirthdayySubcommand {
 			})
 		);
 
-		const messageOptions = await result.match({
-			ok: async () => interactionSuccess(await resolveKey(interaction, 'commands/config:editSuccess'), true),
+		const t = getSupportedUserLanguageT(interaction);
+
+		const content = await result.match({
+			ok: async () => interactionSuccess(t('commands/config:editSuccess')),
 			err: async (error) => {
 				this.container.logger.error(error);
-				return interactionProblem(await resolveKey(interaction, 'commands/config:editFailure'), true);
+				return interactionProblem(t('commands/config:editFailure'));
 			}
 		});
 
-		return interaction.reply(messageOptions);
+		return interaction.reply(content);
 	}
 
-	private async parseChannel(interaction: Command.ChatInputCommandInteraction<'cached'>, channel: Channel) {
-		if (!canSendEmbeds(channel)) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editChannelCanSendEmbeds', {
-					channel: channelMention(channel.id)
-				})
-			);
-		}
+	private async parseChannel(channel: Channel, t: TFunction) {
+		if (canSendEmbeds(channel)) return ok(channel.id);
 
-		return Result.ok(channel.id);
+		return err(t('commands/config:editChannelCanSendEmbeds', { channel: channelMention(channel.id) }));
 	}
 
 	private async parseAnnouncementMessage(
 		interaction: Command.ChatInputCommandInteraction<'cached'>,
-		announcementMessage: string
+		announcementMessage: string,
+		t: TFunction
 	) {
-		const settingsManager = getSettings(interaction.guildId);
-		const settings = await settingsManager.fetch();
+		const settings = await this.container.prisma.guild.findUnique({
+			where: { guildId: interaction.guildId },
+			select: { premium: true }
+		});
 
-		if (!settings?.premium) {
-			await this.container.prisma.guild.update({
-				where: { guildId: interaction.guildId },
-				data: { announcementMessage: null }
-			});
+		if (!settings?.premium) return err(t('commands/config:editAnnouncementMessagePremiumRequired'));
 
-			return Result.err(await resolveKey(interaction, 'commands/config:editMessagePremiumRequired'));
-		}
-
-		if (announcementMessage.length > 512) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editMessageTooLong', {
-					maxLength: 512
-				})
-			);
-		}
-
-		return Result.ok(announcementMessage);
+		return ok(announcementMessage);
 	}
 
-	private async parseRole(interaction: Command.ChatInputCommandInteraction<'cached'>, role: Role, mention: boolean) {
-		if (role.position >= interaction.guild.members.me!.roles.highest.position) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleHigher', {
-					role: roleMention(role.id)
-				})
-			);
+	private async parseRole(interaction: Command.ChatInputCommandInteraction<'cached'>, role: Role, t: TFunction) {
+		const me = await interaction.guild.members.fetchMe();
+
+		if (role.position >= me.roles.highest.position) {
+			return err(t('commands/config:editRoleHigher', { role: roleMention(role.id) }));
 		}
 
-		// Check if the bot has permissions to add the role to the user:
-		if (mention && !role.mentionable) {
-			return Result.err(
-				await resolveKey(interaction, 'commands/config:editRoleNotMentionable', {
-					role: roleMention(role.id)
-				})
-			);
-		}
+		return ok(role.id);
+	}
 
-		return Result.ok(role.id);
+	private async parseRoleMention(role: Role, t: TFunction) {
+		if (role.mentionable) return ok(role.id);
+		return err(t('commands/config:editRoleNotMentionable', { role: roleMention(role.id) }));
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {
