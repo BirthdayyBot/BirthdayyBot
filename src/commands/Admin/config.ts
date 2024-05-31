@@ -56,7 +56,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
 			this.registerSubcommands(
-				applyDescriptionLocalizedBuilder(builder, 'commands/config:description')
+				applyDescriptionLocalizedBuilder(builder, 'commands/config:rootDescription')
 					.setName('config')
 					.setDMPermission(false)
 					.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
@@ -176,9 +176,9 @@ export class ConfigCommand extends BirthdayySubcommand {
 			interaction.member
 		);
 
-		const premiumAlertMessage = settings.premium
-			? t('commands/config:viewPremiumAnnouncementMessageAlert')
-			: t('commands/config:viewPremiumAnnouncementMessageAlertNotPremium');
+		const infoBirthdayMessage = settings.premium
+			? t('commands/config:viewBirthdayMessagePremiumEnabled')
+			: t('commands/config:viewBirthdayMessagePremiumDisable');
 
 		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
@@ -202,7 +202,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const birthdayEmbed = new DefaultEmbedBuilder()
 			.setTitle(t('commands/config:viewBirthdayEmbedTitle'))
-			.setDescription(`${announcementMessage} \n\n ${blockQuote(premiumAlertMessage)}`)
+			.setDescription(`${announcementMessage} \n\n ${blockQuote(infoBirthdayMessage)}`)
 			.setColor(ClientColor);
 
 		return { embeds: [settingsEmbed.toJSON(), birthdayEmbed.toJSON()], ephemeral: false };
@@ -239,9 +239,10 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async parseChannel(channel: Channel, t: TFunction) {
-		if (canSendEmbeds(channel)) return ok(channel.id);
+		if (!canSendEmbeds(channel))
+			return err(t('commands/config:editChannelCanSendEmbeds', { channel: channelMention(channel.id) }));
 
-		return err(t('commands/config:editChannelCanSendEmbeds', { channel: channelMention(channel.id) }));
+		return ok(channel.id);
 	}
 
 	private async parseAnnouncementMessage(
@@ -254,7 +255,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			select: { premium: true }
 		});
 
-		if (!settings?.premium) return err(t('commands/config:editAnnouncementMessagePremiumRequired'));
+		if (!settings?.premium) return err(t('commands/config:editAnnouncementMessagePremium'));
 
 		return ok(announcementMessage);
 	}
@@ -270,8 +271,9 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async parseRoleMention(role: Role, t: TFunction) {
-		if (role.mentionable) return ok(role.id);
-		return err(t('commands/config:editRoleNotMentionable', { role: roleMention(role.id) }));
+		if (!role.mentionable) return err(t('commands/config:editRoleMentionable', { role: roleMention(role.id) }));
+
+		return ok(role.id);
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {
