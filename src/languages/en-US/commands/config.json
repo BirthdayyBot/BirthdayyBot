@@ -1,59 +1,41 @@
 {
-    "name": "config",
-    "description": "Manage the configuration for this server",
-    "viewName": "view",
+    "rootDescription": "Manage the configuration for this server",
     "viewDescription": "View the current configuration",
-    "viewTitleEmbed": "**Current settings**:",
-    "viewTitleEmbedModified": "**Modified settings**:",
-    "viewFieldsEmbed": [
-        {
-            "name": "Announcement Channel",
-            "value": "{{announcementChannel}}",
-            "inline": false
-        },
-        {
-            "name": "Birthday Role",
-            "value": "{{birthdayRole}}",
-            "inline": false
-        },
-        {
-            "name": "Mention Role",
-            "value": "{{birthdayPingRole}}",
-            "inline": false
-        },
-        {
-            "name": "Overview Channel",
-            "value": "{{overviewChannel}}",
-            "inline": false
-        },
-        {
-            "name": "Timezone",
-            "value": "{{timezone}}",
-            "inline": false
-        },
-        {
-            "name": "{{PLUS}} Birthday Message",
-            "value": "{{announcementMessage}}",
-            "inline": false
-        }
+    "viewEmbedTitle": "**Current settings**:",
+    "viewEmbedDescription": "Use /config edit `<config>` `<value>` to change any setting",
+    "viewFieldsTitles": [
+        "Announcement Channel",
+        "Birthday Role",
+        "Mention Role",
+        "Overview Channel",
+        "Timezone",
+        "Premium"
     ],
-    "viewMessageRequiredPremiumAlert": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
-    "editName": "edit",
+    "viewFieldsValues": [
+        "{{ARROW_RIGHT}} {{announcementChannel}}",
+        "{{ARROW_RIGHT}} {{birthdayRole}}",
+        "{{ARROW_RIGHT}} {{birthdayPingRole}}",
+        "{{ARROW_RIGHT}} {{overviewChannel}}",
+        "{{ARROW_RIGHT}} {{timezone}}",
+        "{{ARROW_RIGHT}} {{premium}}"
+    ],
+    "viewBirthdayEmbedTitle": "Birthday Message {{PLUS}}",
+    "viewBirthdayMessagePremiumEnabled": "Use /config edit `announcement-message` `<message>` to change the birthday message",
+    "viewBirthdayMessagePremiumDisable": "You need to have premium to view the birthday message. \n You can get premium by [patreon](https://www.patreon.com/birthdayy).",
     "editDescription": "Edit the configuration for this server",
     "editSuccess": "Successfully edited the configuration for this server.",
     "editFailure": "I wasn't able to save your changes, sorry 😦",
+    "editAnnouncementMessagePremium": "{{PLUS}} You need to have premium to edit the birthday message. \n You can get premium by [patreon](https://www.patreon.com/birthdayy).",
+    "editChannelCanSendEmbeds": "I need the permission to send embeds in {{channel}} to be able to post the birthday announcement there.",
+    "editMessageTooLong": "The message is too long, please shorten it to {{maxLength}} characters.",
     "editOptionsAnnouncementChannelDescription": "If set, the channel to post birthday announcements in",
     "editOptionsAnnouncementMessageDescription": "If set, the message to post when someone has a birthday",
     "editOptionsBirthdayRoleDescription": "If set, the role to give to people on their birthday",
     "editOptionsBirthdayPingRoleDescription": "If set, the role to ping when someone has a birthday",
     "editOptionsOverviewChannelDescription": "If set, the channel to post the birthday overview in",
     "editOptionsTimezoneDescription": "The timezone to use for birthdays",
-    "editChannelCanSendEmbeds": "I need the permission to send embeds in {{channel}} to be able to post the birthday announcement there.",
-    "editMessageTooLong": "The message is too long, please shorten it to {{maxLength}} characters.",
-    "editMessagePremiumRequired": " {{PLUS}} You need to have premium to edit the birthday message. You can get premium by [patreon](https://www.patreon.com/birthdayy).",
     "editRoleHigher": "I need the role {{role}} to be higher than the birthday role to be able to give it to people on their birthday.",
     "editRoleNotMentionable": "I need the role {{role}} to be mentionable to be able to ping it when someone has a birthday.",
-    "resetName": "reset",
     "resetDescription": "Reset a configuration option to its default setting",
     "resetOptionsKeyName": "key",
     "resetOptionsKeyDescription": "The option to reset",

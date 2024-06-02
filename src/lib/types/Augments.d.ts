@@ -62,6 +62,7 @@ declare module '@sapphire/plugin-utilities-store' {
 declare module '@skyra/env-utilities' {
 	export interface Env {
 		CLIENT_NAME: string;
+		CLIENT_AVATAR: string;
 		CLIENT_VERSION: string;
 		CLIENT_OWNERS: ArrayString;
 		CLIENT_COLOR: NumberString;
@@ -73,6 +74,8 @@ declare module '@skyra/env-utilities' {
 
 		COMMANDS_CONFIG_ID: string;
 		COMMANDS_BIRTHDAY_ID: string;
+
+		DEFAULT_ANNOUNCEMENT_MESSAGE: string;
 
 		LOG_CHANNEL_SERVER: string;
 		LOG_CHANNEL_ADMIN: string;

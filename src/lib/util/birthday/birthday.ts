@@ -1,12 +1,12 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { formatDateForDisplay, numberToMonthName } from '#utils/common/date';
 import { CdnUrls, Emojis, GuildIDEnum } from '#utils/constants';
-import { generateDefaultEmbed } from '#utils/embed';
 import type { Birthday } from '.prisma/client';
 import { EmbedLimits } from '@sapphire/discord-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import dayjs from 'dayjs';
-import { Guild, userMention, type APIEmbed } from 'discord.js';
+import { Guild, userMention } from 'discord.js';
 
 export async function generateBirthdayList(page_id: number, guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
@@ -56,14 +56,12 @@ function getBirthdaysAsLists(
  * @returns embed - Embed with the given values
  */
 async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; birthdays: Birthday[] }[]) {
-	const embed: APIEmbed = {
-		title: `Birthday List - ${guild?.name ?? 'Unknown Guild'}`,
-		description: `${Emojis.ArrowRight}Set your Birthday with\n\`/birthday set <day> <month> [year]\``,
-		fields: [],
-		thumbnail: { url: CdnUrls.Cake }
-	};
+	const embed = new DefaultEmbedBuilder()
+		.setTitle(`Birthday List - ${guild?.name ?? 'Unknown Guild'}`)
+		.setDescription(`${Emojis.ArrowRight}Set your Birthday with\n\`/birthday set <day> <month> [year]\``)
+		.setThumbnail(CdnUrls.Cake);
 
-	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
+	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return embed;
 
 	let currentDescription = '';
 	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.ChilliAttackV2;
@@ -86,24 +84,26 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
 			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
 				// If the current description is too long, add it to the embed
-				embed.fields?.push({
+				embed.addFields({
 					name: month,
 					value: currentDescription
 				});
+
 				currentDescription = '';
 			}
 			currentDescription += descriptionToAdd;
 		}
 		if (currentDescription.length > 0) {
 			// If the current description is not empty, add it to the embed
-			embed.fields?.push({
+			embed.addFields({
 				name: month,
 				value: currentDescription
 			});
 			currentDescription = '';
 		}
 	}
-	return generateDefaultEmbed(embed);
+
+	return embed;
 }
 /**
  *  Generate Components for the Birthday List according to the amount of pages

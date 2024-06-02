@@ -1,9 +1,10 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
-import { generateDefaultEmbed } from '#utils/embed';
 import { isCustom } from '#utils/env';
-import { BOT_ADMIN_LOG, DEBUG, DEFAULT_ANNOUNCEMENT_MESSAGE } from '#utils/environment';
+import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
@@ -68,15 +69,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (!isTextBasedChannel(channel)) {
 				return container.logger.error('BirthdayReminderTask ~ run ~ channel:', channel);
 			}
-			await channel.send({
-				embeds: [
-					generateDefaultEmbed({
-						title: 'BirthdayScheduler Report',
-						description: 'No Current Offset could be generated'
-					})
-				]
-			});
-			return container.logger.warn('[BirthdayTask] Timezone Object not correctly generated');
+			const embed = new DefaultEmbedBuilder()
+				.setTitle('BirthdayScheduler Report')
+				.setDescription('No Current Offset could be generated');
+
+			container.logger.error('BirthdayReminderTask ~ run ~ embed:', embed);
+
+			return channel.send({ embeds: [embed] });
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
@@ -202,21 +201,18 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return eventInfo;
 		}
 
-		const embed: APIEmbed = {
-			title: `${Emojis.News} Birthday Announcement!`,
-			description: this.formatBirthdayMessage(announcementMessage, member, guild),
-			thumbnail: {
-				url: CdnUrls.Cake
-			}
-		};
-		const birthdayEmbed = generateDefaultEmbed(embed);
+		const birthdayEmbed = new DefaultEmbedBuilder()
+			.setTitle(`${Emojis.News} Birthday Announcement!`)
+			.setDescription(this.formatBirthdayMessage(announcementMessage, member, guild))
+			.setThumbnail(CdnUrls.Cake);
 
 		const announcementInfo = await this.sendBirthdayAnnouncement(
 			guildId,
 			announcementChannel,
-			birthdayEmbed,
+			birthdayEmbed.toJSON(),
 			content
 		);
+
 		eventInfo.announcement = announcementInfo;
 		return eventInfo;
 	}
@@ -390,16 +386,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 
 		if (!schedulerLogThread) {
-			return schedulerReportMessage?.channel.send('Couldnt create a thread!');
+			return schedulerReportMessage?.channel.send("Couldn't create a thread!");
 		}
-		await schedulerLogThread.send({
-			embeds: [
-				generateDefaultEmbed({
-					title: embedTitle,
-					description: `Guilds:\n${codeBlock(guildIdsString)}`
-				})
-			]
-		});
+
+		const embed = new DefaultEmbedBuilder()
+			.setTitle(embedTitle)
+			.setDescription(`Guilds:\n${codeBlock(guildIdsString)}`);
+
+		await schedulerLogThread.send({ embeds: [embed] });
 
 		return schedulerLogThread.send({
 			files: [reportFile]
@@ -410,15 +404,13 @@ export class BirthdayReminderTask extends ScheduledTask {
 			if (!isTextBasedChannel(channel)) {
 				return container.logger.error('[BirthdayTask] Admin log channel not found');
 			}
-			return channel.send({
-				embeds: [
-					generateDefaultEmbed({
-						title: embedTitle,
-						description: embedDescription,
-						fields: embedFields
-					})
-				]
-			});
+
+			const embed = new DefaultEmbedBuilder()
+				.setTitle(embedTitle)
+				.setDescription(embedDescription)
+				.addFields(embedFields);
+
+			return channel.send({ embeds: [embed] });
 		}
 	}
 }

@@ -1,9 +1,9 @@
 import { authenticated } from '#lib/api/utils';
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { getT } from '#lib/i18n/translate';
 import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { Emojis, GuildIDEnum } from '#utils/constants';
-import { generateDefaultEmbed } from '#utils/embed';
-import { CLIENT_NAME, VOTE_CHANNEL_ID } from '#utils/environment';
+import { VOTE_CHANNEL_ID } from '#utils/environment';
 import { getActionRow, getRemindMeComponent } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
@@ -70,28 +70,28 @@ export class UserRoute extends Route {
 	}
 
 	private async sendThankYouDM(user: User, guild: Guild) {
-		const embed = generateDefaultEmbed({
-			title: `${Emojis.Success} You voted for Birthdayy on TopGG!`,
-			description: `Thank you so much for supporting me, you're the best ${Emojis.Heart}`
-		});
+		const embed = new DefaultEmbedBuilder()
+			.setTitle(`${Emojis.Success} You voted for Birthdayy on TopGG!`)
+			.setDescription(`Thank you so much for supporting me, you're the best ${Emojis.Heart}`);
 
 		const components = [getActionRow(getRemindMeComponent(getT(guild.preferredLocale)))];
 		const channel = user.dmChannel ?? (await user.createDM());
 
-		return channel.send({ embeds: [embed], components });
+		return channel.send({ embeds: [embed.toJSON()], components });
 	}
 
 	private async sendVoteNotification(user: User) {
-		const embed = generateDefaultEmbed({
-			title: `${Emojis.Exclamation} New Vote on TopGG!`,
-			description: `\`${user.username}#${user.discriminator}\` has **voted** for ${CLIENT_NAME}! Use \`/vote\` or vote [here](https://top.gg/bot/${container.client.id}/vote) directly.`,
-			thumbnail: { url: user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL }
-		});
+		const embed = new DefaultEmbedBuilder()
+			.setTitle(`${Emojis.Exclamation} New Vote on TopGG!`)
+			.setDescription(
+				`\`${user.username}#${user.discriminator}\` has **voted** for ${container.client.user!.displayName}! Use \`/vote\` or vote [here](https://top.gg/bot/${container.client.id}/vote) directly.`
+			)
+			.setThumbnail(user.avatarURL({ extension: 'png' }) ?? user.defaultAvatarURL);
 
 		const channel = container.client.channels.cache.get(VOTE_CHANNEL_ID);
 
 		if (!isTextBasedChannel(channel)) return;
 
-		return channel.send({ embeds: [embed] });
+		return channel.send({ embeds: [embed.toJSON()] });
 	}
 }

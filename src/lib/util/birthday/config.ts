@@ -1,31 +1,41 @@
+import { DefaultEmbedBuilder } from '#lib/discord';
 import { formatBirthdayMessage } from '#utils/common/string';
 import { Emojis } from '#utils/constants';
-import { generateDefaultEmbed } from '#utils/embed';
 import type { Guild as PrismaGuild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { objectEntries } from '@sapphire/utilities';
-import type { APIEmbed, Guild, GuildMember, Snowflake } from 'discord.js';
-import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
+import {
+	channelMention,
+	EmbedBuilder,
+	roleMention,
+	userMention,
+	type APIEmbedField,
+	type Guild,
+	type GuildMember,
+	type Snowflake
+} from 'discord.js';
 
 interface ConfigListOptions {
 	member: GuildMember;
 	guild?: Guild;
 }
 
-export default async function generateConfigList(guildId: Snowflake, options: ConfigListOptions): Promise<APIEmbed> {
+export default async function generateConfigListToApiEmbed(
+	guildId: Snowflake,
+	options: ConfigListOptions
+): Promise<EmbedBuilder> {
 	const embedFields = await generateFields(guildId, options.member);
 	const guildInfo: Guild | null = options.guild ? options.guild : await container.client.guilds.fetch(guildId);
 	if (!guildInfo) {
-		return {
-			title: `Config List - ${guildId}`,
-			description: 'Guild Not Found, please report this to the developer'
-		};
+		return new EmbedBuilder()
+			.setTitle('Config List')
+			.setDescription('An error occurred while fetching the guild information.');
 	}
-	return generateDefaultEmbed({
-		title: `Config List - ${guildInfo.name}`,
-		description: 'Use /config `<setting>` `<value>` to change any setting',
-		fields: embedFields
-	});
+
+	return new DefaultEmbedBuilder()
+		.setTitle(`Config List - ${guildInfo.name}`)
+		.setDescription('Use /config `<setting>` `<value>` to change any setting')
+		.addFields(embedFields);
 }
 async function generateFields(guildId: string, member: GuildMember): Promise<APIEmbedField[]> {
 	const config = await container.prisma.guild.upsert({
