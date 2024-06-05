@@ -19,7 +19,7 @@ export class UserRoute extends Route {
 
 		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
 
-		return this.container.prisma.guild.findUnique({ where: { guildId } });
+		return this.container.prisma.guild.upsert({ where: { guildId }, create: { guildId }, update: {} });
 	}
 
 	@authenticated()
