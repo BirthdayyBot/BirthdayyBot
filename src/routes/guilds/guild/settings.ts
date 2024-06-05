@@ -1,7 +1,8 @@
 import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions, methods } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, HttpCodes, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { s } from '@sapphire/shapeshift';
 
 @ApplyOptions<RouteOptions>({ name: 'guildSettings', route: 'guilds/:guild/settings' })
 export class UserRoute extends Route {
@@ -24,7 +25,12 @@ export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(seconds(1), 2, true)
 	public async [methods.PATCH](request: ApiRequest, response: ApiResponse) {
-		const requestBody = request.body as { guild_id: string; data: [string, unknown][] | undefined };
+		const settingsDataSchema = s.object({
+			guild_id: s.string,
+			data: s.array(s.tuple([s.string, s.unknown]))
+		});
+
+		const requestBody = settingsDataSchema.parse(request.body);
 
 		if (
 			!requestBody.guild_id ||
@@ -42,17 +48,15 @@ export class UserRoute extends Route {
 
 		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
 
-		const entries = requestBody.data;
-
 		try {
-			const settings = await this.container.prisma.guild.update({
+			const data = Object.fromEntries(requestBody.data);
+			const updatedSettings = await this.container.prisma.guild.upsert({
 				where: { guildId: requestBody.guild_id },
-				data: {
-					...entries.map((entry) => ({ [entry[0]]: entry[1] }))
-				}
+				create: { ...data, guildId: requestBody.guild_id },
+				update: data
 			});
 
-			return response.status(HttpCodes.OK).json(settings);
+			return response.status(HttpCodes.OK).json(updatedSettings);
 		} catch (errors) {
 			return response.status(HttpCodes.BadRequest).json(errors);
 		}
