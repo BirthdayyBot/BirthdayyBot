@@ -1,20 +1,20 @@
 import { OWNERS } from '#root/config';
 import { PermissionFlagsBits, type GuildMember } from 'discord.js';
 
-export function isModerator(member: GuildMember) {
-	return isGuildOwner(member) || checkModerator(member) || checkAdministrator(member);
-}
-
-export function isAdmin(member: GuildMember) {
-	return isGuildOwner(member) || checkAdministrator(member);
+export function isOwner(member: GuildMember) {
+	return OWNERS.includes(member.id);
 }
 
 export function isGuildOwner(member: GuildMember) {
 	return member.id === member.guild.ownerId;
 }
 
-export function isOwner(member: GuildMember) {
-	return OWNERS.includes(member.id);
+export function isAdmin(member: GuildMember) {
+	return isGuildOwner(member) ?? checkAdministrator(member);
+}
+
+export function isModerator(member: GuildMember) {
+	return isAdmin(member) ?? checkModerator(member);
 }
 
 function checkModerator(member: GuildMember) {
