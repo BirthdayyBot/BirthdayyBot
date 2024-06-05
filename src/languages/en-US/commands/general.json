@@ -11,7 +11,7 @@
     "guideButtonDocsLabel": "Documentation",
     "guideButtonInviteLabel": "Invite",
     "infoDescription": "Provides information about me, and links for adding the bot and joining the support server",
-    "infoEmbedDescription": "[Birthdayy](https://birthdayy.xyz) {{VERSION}} is a bot designed to help you remember your birthday. I use the [Sapphire Framework](https://sapphirejs.dev) for the [Discord.js library](https://discord.js.org).\n- [Terms of use](https://birthdayy.xyz/disclosure).",
+    "infoEmbedDescription": "[Birthdayy Bot](https://birthdayy.xyz) {{VERSION}} is a Discord Bot designed to remember your birthday with greet uptime.\nI use the [Sapphire Framework](https://sapphirejs.dev) for the [Discord.js library](https://discord.js.org).\n\n [Terms of use](https://birthdayy.xyz/disclosure).",
     "infoEmbedFieldApplicationTitle": "Statistics",
     "infoEmbedFieldApplicationValue": "- **Users**: {{users, number}}\n- **Servers**: {{guilds, number}}\n- **Channels**: {{channels, number}}\n- **Birthdays**: {{birthdays, number}}\n- **Discord.js**: {{versionDiscord}}\n- **Sapphire**: {{versionSapphire}}\n- **Node.js**: {{versionNode}}",
     "infoEmbedFieldUptimeTitle": "Uptime",

@@ -23,21 +23,22 @@ export class UserCommand extends BirthdayyCommand {
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
 		const t = getSupportedUserLanguageT(interaction);
-		const embed = new EmbedBuilder()
-			.setColor(ClientColor)
-			.setAuthor({
-				name: this.container.client.user!.tag,
-				iconURL: this.container.client.user!.displayAvatarURL({ size: 128 })
-			})
-			.setDescription(t('commands/general:infoEmbedDescription'))
-			.addFields(
-				await this.getApplicationStatistics(t),
-				this.getUptimeStatistics(t),
-				this.getServerUsageStatistics(t, interaction.locale)
-			);
-		const components = this.getComponents(t);
+		const clientUser = this.container.client.user!;
 
-		return interaction.reply({ embeds: [embed], components, ephemeral: true });
+		const fields = [
+			await this.getApplicationStatistics(t),
+			this.getUptimeStatistics(t),
+			this.getServerUsageStatistics(t, interaction.locale)
+		];
+
+		const embed = new EmbedBuilder()
+			.setAuthor({ name: clientUser.tag, iconURL: clientUser.displayAvatarURL({ size: 128 }) })
+			.setDescription(t('commands/general:infoEmbedDescription'))
+			.setColor(ClientColor)
+			.addFields(fields)
+			.setTimestamp();
+
+		return interaction.reply({ embeds: [embed], components: this.getComponents(t), ephemeral: true });
 	}
 
 	private async getApplicationStatistics(t: TFunction): Promise<APIEmbedField> {
