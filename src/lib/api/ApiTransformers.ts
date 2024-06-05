@@ -91,7 +91,6 @@ export interface FlattenedGuild
 		| 'verified'
 	> {
 	channels: FlattenedGuildChannel[];
-
 	roles: FlattenedRole[];
 }
 
@@ -115,21 +114,13 @@ export function flattenRole(role: Role): FlattenedRole {
 
 export interface FlattenedRole {
 	color: number;
-
 	guildId: string;
-
 	hoist: boolean;
-
 	id: string;
-
 	managed: boolean;
-
 	mentionable: boolean;
-
 	name: string;
-
 	permissions: string;
-
 	rawPosition: number;
 }
 
@@ -248,61 +239,41 @@ function flattenChannelFallback(channel: Channel | GuildChannel | DMChannel | Th
 
 export interface FlattenedChannel {
 	createdTimestamp: number;
-
 	id: string;
-
 	type: ChannelTypeString;
 }
 
 export interface FlattenedGuildChannel extends FlattenedChannel {
 	guildId: string;
-
 	name: string;
-
 	parentId: string | null;
-
 	permissionOverwrites: [string, PermissionOverwrites][];
-
 	rawPosition: number;
-
 	type: ChannelTypeString;
 }
 
 export interface FlattenedNewsChannel extends FlattenedGuildChannel {
 	type: ChannelType.GuildAnnouncement;
-
 	nsfw: boolean;
-
 	topic: string | null;
 }
 
 export interface FlattenedTextChannel extends FlattenedGuildChannel {
 	nsfw: boolean;
-
 	rateLimitPerUser: number;
-
 	topic: string | null;
-
 	type: ChannelType.GuildText;
 }
 
 export interface FlattenedThreadChannel extends Pick<FlattenedGuildChannel, 'id' | 'createdTimestamp'> {
 	archived: boolean;
-
 	archivedTimestamp: number | null;
-
 	guildId: string;
-
 	name: string;
-
 	parentId: string | null;
-
 	permissionOverwrites: [string, PermissionOverwrites][];
-
 	rateLimitPerUser: number | null;
-
 	rawPosition: number | null;
-
 	type: ChannelType.GuildPublicThread | ChannelType.GuildPrivateThread | ChannelType.GuildNewsThread;
 }
 
@@ -320,15 +291,12 @@ export interface FlattenedPrivateThreadChannel extends FlattenedChannel {
 
 export interface FlattenedVoiceChannel extends FlattenedGuildChannel {
 	type: ChannelType.GuildVoice;
-
 	bitrate: number;
-
 	userLimit: number;
 }
 
 export interface FlattenedDMChannel extends FlattenedChannel {
 	type: ChannelType.DM;
-
 	recipient: string;
 }
 
@@ -348,13 +316,9 @@ export function flattenUser(user: User): FlattenedUser {
 
 export interface FlattenedUser {
 	avatar: string | null;
-
 	bot: boolean;
-
 	discriminator: string;
-
 	id: string;
-
 	username: string;
 }
 
@@ -375,15 +339,10 @@ export function flattenMember(member: GuildMember): FlattenedMember {
 
 export interface FlattenedMember {
 	guildId: string;
-
 	id: string;
-
 	joinedTimestamp: number | null;
-
 	premiumSinceTimestamp: number | null;
-
 	roles: FlattenedRole[];
-
 	user: FlattenedUser;
 }
 
