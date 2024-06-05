@@ -1,4 +1,13 @@
-import type { GuildMember, Message } from 'discord.js';
+import type { DMChannel, Guild, GuildMember, GuildTextBasedChannel, Message } from 'discord.js';
 
-export type GuildMessage = Message<true> & { member: GuildMember };
-export type DMMessage = Message<false>;
+export interface GuildMessage extends Message {
+	channel: GuildTextBasedChannel;
+	readonly guild: Guild;
+	readonly member: GuildMember;
+}
+
+export interface DMMessage extends Message {
+	channel: DMChannel;
+	readonly guild: null;
+	readonly member: null;
+}

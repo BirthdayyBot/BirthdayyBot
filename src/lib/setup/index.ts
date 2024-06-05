@@ -1,8 +1,8 @@
+// Config must be the first to be loaded, as it sets the env:
+import 'reflect-metadata';
 import '#root/config';
 
-// Unless explicitly defined, set NODE_ENV as development:
-process.env.NODE_ENV ??= 'development';
-
+// Import everything else:
 import '@sapphire/plugin-api/register';
 import '@sapphire/plugin-hmr/register';
 import '@sapphire/plugin-i18next/register';
@@ -10,19 +10,8 @@ import '@sapphire/plugin-logger/register';
 import '@sapphire/plugin-scheduled-tasks/register';
 import '@sapphire/plugin-subcommands/register';
 import '@sapphire/plugin-utilities-store/register';
-import '@sentry/tracing';
-import 'reflect-metadata';
 
-import { ApplicationCommandRegistries, RegisterBehavior } from '@sapphire/framework';
-import { envParseString } from '@skyra/env-utilities';
-import * as colorette from 'colorette';
-import { inspect } from 'node:util';
-
-// Set default inspection depth
-inspect.defaultOptions.depth = 1;
-
-// Enable colorette
-colorette.createColors({ useColor: true });
-
-ApplicationCommandRegistries.setDefaultBehaviorWhenNotIdentical(RegisterBehavior.BulkOverwrite);
-ApplicationCommandRegistries.setDefaultGuildIds([envParseString('CLIENT_MAIN_GUILD')]);
+// Setup files
+import '#lib/setup/application-registries';
+import '#lib/setup/inspect';
+import '#lib/setup/prisma';

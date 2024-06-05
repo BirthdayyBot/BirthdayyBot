@@ -1,11 +1,10 @@
 import { GuildMemberFetchQueue } from '#lib/discord';
 import { AnalyticsData } from '#lib/structures';
 import { CLIENT_OPTIONS, WEBHOOK_ERROR, WEBHOOK_LOG } from '#root/config';
-import { PrismaClient } from '@prisma/client';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
 import type { InternationalizationContext } from '@sapphire/plugin-i18next';
-import { envParseBoolean, envParseString } from '@skyra/env-utilities';
+import { envParseBoolean } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
 
 export class BirthdayyClient extends SapphireClient {
@@ -25,20 +24,15 @@ export class BirthdayyClient extends SapphireClient {
 	public override webhookLog: WebhookClient | null = WEBHOOK_LOG ? new WebhookClient(WEBHOOK_LOG) : null;
 
 	@Enumerable(false)
-	public override readonly analytics: AnalyticsData | null;
+	public override readonly analytics: AnalyticsData | null = envParseBoolean('INFLUX_ENABLED')
+		? new AnalyticsData()
+		: null;
 
 	@Enumerable(false)
 	public override readonly guildMemberFetchQueue = new GuildMemberFetchQueue();
 
 	public constructor() {
 		super(CLIENT_OPTIONS);
-
-		this.analytics = envParseBoolean('INFLUX_ENABLED') ? new AnalyticsData() : null;
-		container.prisma = new PrismaClient({
-			datasourceUrl: envParseString('DATABASE_URL'),
-			log: envParseBoolean('PRISMA_DEBUG_LOGS') ? ['query', 'info', 'warn', 'error'] : ['warn', 'error']
-		});
-		this.webhookError = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
 	}
 
 	public override async login(token?: string) {
