@@ -4,7 +4,7 @@ import { interactionProblem } from '#utils/embed';
 import { isNotCustom as enabled } from '#utils/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { Colors, EmbedBuilder, inlineCode } from 'discord.js';
+import { Colors, EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class TogglePremiumCommand extends BirthdayyCommand {
