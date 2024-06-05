@@ -1,8 +1,0 @@
-{
-    "reboot": ":cyclone: Rebooting...",
-    "rebootDescription": "Reboots the bot.",
-    "supportName": "support",
-    "supportDescription": "Get a link to the support server.",
-    "supportEmbedTitle": "Looking for help, {{username}}?",
-    "supportEmbedDescription": "Click [here](https://discord.birthdayy.xyz) to join the support server."
-}
