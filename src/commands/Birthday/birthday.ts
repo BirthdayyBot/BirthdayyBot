@@ -1,3 +1,4 @@
+import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
@@ -67,7 +68,10 @@ export class BirthdayCommand extends BirthdayySubcommand {
 
 		await getBirthdays(interaction.guildId).create({ birthday, userId: user.id });
 
-		const content = await resolveKey(interaction, 'commands/birthday:set.success', { ...options });
+		const content = await resolveKey(interaction, 'commands/birthday:set.success', {
+			birthday: formatDateForDisplay(birthday),
+			...options
+		});
 
 		return interaction.reply(interactionSuccess(content));
 	}
@@ -75,15 +79,17 @@ export class BirthdayCommand extends BirthdayySubcommand {
 	public async chatInputRunRemove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(interaction);
 		const result = await getBirthdays(interaction.guildId).remove(user.id);
+		const t = getSupportedUserLanguageT(interaction);
 
 		if (!result) {
-			return resolveKey(interaction, 'commands/birthday:remove.notRegistered', {
+			const content = t('commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
 				...options
 			});
+			return interaction.reply(interactionProblem(content));
 		}
 
-		const content = await resolveKey(interaction, 'commands/birthday:remove.success', { ...options });
+		const content = t('commands/birthday:remove.success', { ...options });
 
 		return interaction.reply(interactionSuccess(content));
 	}

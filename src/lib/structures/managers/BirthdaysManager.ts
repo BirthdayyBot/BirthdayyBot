@@ -1,10 +1,10 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { generateBirthdayList } from '#utils/birthday/birthday';
 import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { CdnUrls, ClientColor, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
+import { isProduction } from '#utils/env';
 import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Prisma, type Birthday, type Guild as Settings } from '@prisma/client';
 import { AsyncQueue } from '@sapphire/async-queue';
@@ -17,7 +17,7 @@ import {
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
 import { resolveKey, type TOptions } from '@sapphire/plugin-i18next';
-import { isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
+import { chunk, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
 	ChatInputCommandInteraction,
@@ -90,7 +90,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	}
 
 	public findTeenNextBirthday() {
-		return this.sortBirthdayWithMonthAndDay(this.toJSON()).slice(0, 10);
+		return this.sortBirthdaysByMonthAndDay(this.toJSON()).slice(0, 10);
 	}
 
 	public async defaultBirthdayListEmbed(img: boolean = true) {
@@ -125,8 +125,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
 			.setTemplate(await this.defaultBirthdayListEmbed())
 			.setTitleField(await resolveKey(interaction, key, options))
-			.setItems(this.sortBirthdayWithMonthAndDay(birthdays))
-			.formatItems(this.formatItems)
+			.setItems(this.sortBirthdaysByMonthAndDay(birthdays))
+			.formatItems(this.formatBirthdayItem)
 			.setItemsPerPage(20);
 		return paginatedBirthdays.make().run(interaction);
 	}
@@ -144,7 +144,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return { message, role };
 	}
 
-	public sortBirthdayWithMonthAndDay(birthdays: Birthday[]) {
+	public sortBirthdaysByMonthAndDay(birthdays: Birthday[]) {
 		return birthdays.sort((firstBirthday, secondBirthday) => {
 			const firstBirthdayDate = dayjs(firstBirthday.birthday);
 			const secondBirthdayDate = dayjs(secondBirthday.birthday);
@@ -158,7 +158,21 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
 		const birthday = await container.prisma.birthday.upsert({
 			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } },
-			create: { ...args, guildId: this.guildId },
+			create: {
+				guild: {
+					connectOrCreate: {
+						where: { guildId: this.guildId },
+						create: { guildId: this.guildId }
+					}
+				},
+				user: {
+					connectOrCreate: {
+						where: { userId: args.userId },
+						create: { userId: args.userId }
+					}
+				},
+				birthday: args.birthday
+			},
 			update: args
 		});
 		await this.updateBirthdayOverview();
@@ -178,16 +192,15 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			PrismaErrorCodeEnum.NotFound
 		);
 
-		if (isNullish(birthday)) return false;
+		if (birthday === null) return false;
 
 		await this.updateBirthdayOverview();
 		return super.delete(userId);
 	}
 
 	public async fetch(id?: string): Promise<Birthday>;
-	public async fetch(id?: string[]): Promise<Collection<string, Birthday>>;
-	public async fetch(id?: null): Promise<this>;
-	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | this | null> {
+	public async fetch(id?: string[] | null): Promise<Collection<string, Birthday> | null>;
+	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | null> {
 		if (Array.isArray(id)) {
 			return this._cache(
 				await container.prisma.birthday.findMany({ where: { guildId: this.guildId, userId: { in: id } } }),
@@ -257,7 +270,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		channel: GuildTextBasedChannelTypes,
 		overviewMessage: string
 	): Promise<Message<boolean> | null> {
-		return channel.messages.fetch(overviewMessage);
+		return channel.messages.fetch(overviewMessage).catch(() => null);
 	}
 
 	private createOptionsMessageForAnnouncementChannel(
@@ -328,11 +341,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const settings = await this.settings.fetch();
 
 		const { overviewChannel, overviewMessage } = settings;
-		const birthdayList = await generateBirthdayList(1, this.guild);
+		const options = { embeds: await this.generatePaginatedBirthdayList() };
 
 		if (isNullish(overviewChannel)) return null;
-
-		const options = { ...birthdayList.components, embeds: [birthdayList.embed.toJSON()] };
 
 		const channel = await container.client.channels.fetch(overviewChannel).catch(() => null);
 
@@ -344,11 +355,19 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		container.logger.debug(message);
 
 		if (message) return message.edit(options);
+		const newMessage = await channel.send(options);
 
-		return channel.send(options);
+		await container.prisma.guild.update({
+			where: { guildId: this.guildId },
+			data: {
+				overviewMessage: newMessage.id
+			}
+		});
+
+		return newMessage;
 	}
 
-	private formatItems = (birthday: Birthday) => {
+	private formatBirthdayItem = (birthday: Birthday) => {
 		// example: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
 		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
 		const age = dayjs().diff(date, 'year');
@@ -359,4 +378,50 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
 		return text;
 	};
+
+	private async generatePaginatedBirthdayList(pageId: number = 0): Promise<EmbedBuilder[]> {
+		const birthdaysList = await container.prisma.birthday.findMany({ where: { guildId: this.guildId } });
+
+		if (isNullOrUndefinedOrEmpty(birthdaysList)) return [this.createEmptyPaginatedBirthdayListEmbed()];
+
+		const sortedBirthdays = this.sortBirthdaysByMonthAndDay(birthdaysList);
+
+		const descriptionText = sortedBirthdays
+			.filter(async (birthday) => {
+				const member = await this.guild.members.fetch(birthday.userId).catch(() => null);
+
+				if (member) return true;
+
+				if (isProduction) await this.remove(birthday.userId);
+				return false;
+			})
+			.map((b) => this.formatBirthdayItem(b))
+			.join('\n');
+
+		const textChunks = this.splitTextIntoChunks(descriptionText, 2000);
+
+		const paginatedEmbeds = textChunks.map((chunk) =>
+			new DefaultEmbedBuilder() //
+				.setTitle(`${Emojis.Cake} Paginated Birthday List`)
+				.setFooter({ text: `Page ${pageId + 1} of ${textChunks.length}` })
+				.setDescription(chunk)
+				.setThumbnail(CdnUrls.Cake)
+		);
+
+		return paginatedEmbeds;
+	}
+
+	private splitTextIntoChunks(text: string, chunkSize: number) {
+		const chunks = chunk(text.split('\n'), chunkSize);
+		return chunks.map((chunk) => chunk.join('\n'));
+	}
+
+	private createEmptyPaginatedBirthdayListEmbed() {
+		const embed = new DefaultEmbedBuilder()
+			.setTitle(`Birthday List - ${this.guild.name ?? 'Unknown Guild'}`)
+			.setDescription(`${Emojis.ArrowRight}Set your Birthday with\n\`/birthday set <day> <month> [year]\``)
+			.setThumbnail(CdnUrls.Cake);
+
+		return embed;
+	}
 }
