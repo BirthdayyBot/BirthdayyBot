@@ -17,7 +17,7 @@ model Birthday {
     user      User     @relation(fields: [userId], references: [userId])
     guild     Guild    @relation(fields: [guildId], references: [guildId])
 
-    @@unique([userId, guildId], name: "unique_user_guild")
+    @@unique([userId, guildId], map: "unique_user_guild")
     @@index([birthday], map: "index_birthday")
     @@map("birthday")
 }
