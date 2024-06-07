@@ -15,7 +15,8 @@
         "success": "Your birthday has been set to {{birthday}} on this server.",
         "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
         "hasNotPermissionManagesRoles": "You are not allowed to manage other users birthdays.",
-        "roleHigher": "You cannot execute this command on someone with a higher role than you!"
+        "roleHigher": "You cannot execute this command on someone with a higher role than you!",
+        "error": "An error occurred while trying to set the birthday."
     },
     "listName": "list",
     "listDescription": "List all registered birthdays",

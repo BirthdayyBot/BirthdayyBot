@@ -1,13 +1,12 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
+import { getT } from '#lib/i18n/translate';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { TimezoneWithLocale, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
-import { CdnUrls, ClientColor, Emojis, PrismaErrorCodeEnum } from '#utils/constants';
+import { TIMEZONE_VALUES, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { CdnUrls, ClientColor, Emojis } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
 import { isProduction } from '#utils/env';
-import { floatPromise, resolveOnErrorCodesPrisma } from '#utils/functions/promises';
 import { Prisma, type Birthday, type Guild as Settings } from '@prisma/client';
-import { AsyncQueue } from '@sapphire/async-queue';
 import {
 	PaginatedFieldMessageEmbed,
 	canSendEmbeds,
@@ -28,7 +27,6 @@ import {
 	Message,
 	roleMention,
 	userMention,
-	type APIEmbed,
 	type MessageCreateOptions,
 	type MessageEditOptions
 } from 'discord.js';
@@ -49,8 +47,6 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	public settings: SettingsManager;
 
-	private announcementQueue = new AsyncQueue();
-
 	/**
 	 * The current case count
 	 */
@@ -68,53 +64,86 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		this.settings = settings;
 	}
 
-	public currentDate() {
-		const date = dayjs().tz(TimezoneWithLocale[this.guild.preferredLocale]);
+	/**
+	 * Retrieves the current date in the specified timezone.
+	 * @returns The current date.
+	 */
+	public async getCurrentDate() {
+		const date = dayjs().tz(TIMEZONE_VALUES[(await this.settings.fetch()).timezone]);
 		return date;
 	}
 
+	/**
+	 * Finds birthdays that occur today.
+	 * @returns An array of birthdays that occur today.
+	 */
 	public async findTodayBirthday() {
-		const contains = this.currentDate().format('MM-DD');
+		const contains = (await this.getCurrentDate()).format('MM-DD');
 		await this.fetch();
 		return this.filter(({ birthday }) => birthday.includes(contains)).toJSON();
 	}
 
+	/**
+	 * Retrieves and yields the birthdays that are announced today.
+	 * @returns An asynchronous generator that yields the announced birthdays.
+	 */
 	public async *announcedTodayBirthday() {
 		for (const birthday of await this.findTodayBirthday()) {
 			yield this.announcedBirthday(birthday);
 		}
 	}
 
+	/**
+	 * Finds birthdays with the specified month.
+	 * @param month - The month to search for birthdays.
+	 * @returns An array of birthdays with the specified month.
+	 */
 	public findBirthdayWithMonth(month: number) {
 		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
 	}
 
+	/**
+	 * Finds the next 10 teen birthdays.
+	 * @returns An array of teen birthdays sorted by month and day.
+	 */
 	public findTeenNextBirthday() {
 		return this.sortBirthdaysByMonthAndDay(this.toJSON()).slice(0, 10);
 	}
 
-	public async defaultBirthdayListEmbed(img: boolean = true) {
-		const translateEmbed = (await resolveKey(this.guild, 'commands/birthday:list.embedList', {
-			returnObjects: true
-		})) satisfies APIEmbed;
-
-		const embed = new EmbedBuilder(translateEmbed).setColor(ClientColor);
-
-		return img ? embed : embed.setThumbnail(null);
+	/**
+	 * Generates a default birthday list embed.
+	 * @param includeImage - Whether to include an image in the embed. Defaults to true.
+	 * @returns The generated embed.
+	 */
+	public generateDefaultBirthdayListEmbed(includeImage: boolean = true) {
+		const t = getT(this.guild.preferredLocale);
+		return new EmbedBuilder()
+			.setTitle(t('commands/birthday:list.embedList.title'))
+			.setColor(ClientColor)
+			.setThumbnail(includeImage ? CdnUrls.Cake : null)
+			.setFooter({ text: t('commands/birthday:list.embedList.footer') });
 	}
 
-	public async sendListBirthdays(
+	/**
+	 * Sends a list of birthdays.
+	 * @param interaction - The interaction or message object.
+	 * @param birthdays - An array of Birthday objects.
+	 * @param key - The key used to resolve the title field of the embed.
+	 * @param options - Additional options for resolving the key and description.
+	 * @returns A Promise that resolves to the edited message or reply interaction.
+	 */
+	public async sendPaginatedBirthdays(
 		interaction: ChatInputCommandInteraction | Message,
 		birthdays: Birthday[],
 		key: string,
 		options?: TOptions
 	) {
-		const embed = await this.defaultBirthdayListEmbed();
+		const defaultEmbed = this.generateDefaultBirthdayListEmbed();
 
 		if (isNullOrUndefinedOrEmpty(birthdays)) {
 			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
 			const messageOptions: MessageEditOptions = {
-				embeds: [embed.setDescription(description)]
+				embeds: [defaultEmbed.setDescription(description).toJSON()]
 			};
 
 			return interaction instanceof Message
@@ -123,7 +152,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		}
 
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
-			.setTemplate(await this.defaultBirthdayListEmbed())
+			.setTemplate(defaultEmbed.toJSON())
 			.setTitleField(await resolveKey(interaction, key, options))
 			.setItems(this.sortBirthdaysByMonthAndDay(birthdays))
 			.formatItems(this.formatBirthdayItem)
@@ -131,19 +160,29 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return paginatedBirthdays.make().run(interaction);
 	}
 
+	/**
+	 * Announces a birthday by sending a message in the announcement channel and adding a role to the member.
+	 * @param birthday - The birthday to be announced.
+	 * @returns A promise that resolves when the birthday has been announced.
+	 */
 	public async announcedBirthday(birthday: Birthday) {
 		if (isNullish(birthday)) return;
 		const member = this.guild.members.resolve(birthday.userId);
 		if (!member) return;
 
-		const options = this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member);
-		const message = await this.announceBirthdayInChannel(options, member);
-		const role = await this.addCurrentBirthdayChildRole(await this.settings.fetch(), member);
-
-		this.announcementQueue.shift();
-		return { message, role };
+		return Promise.all([
+			this.announceBirthdayInChannel(
+				this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member)
+			),
+			this.addCurrentBirthdayChildRole(await this.settings.fetch(), member)
+		]);
 	}
 
+	/**
+	 * Sorts an array of birthdays by month and day.
+	 * @param birthdays - The array of birthdays to be sorted.
+	 * @returns The sorted array of birthdays.
+	 */
 	public sortBirthdaysByMonthAndDay(birthdays: Birthday[]) {
 		return birthdays.sort((firstBirthday, secondBirthday) => {
 			const firstBirthdayDate = dayjs(firstBirthday.birthday);
@@ -155,49 +194,70 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		});
 	}
 
-	public async create(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday> {
-		const birthday = await container.prisma.birthday.upsert({
-			where: { userId_guildId: { guildId: this.guildId, userId: args.userId } },
-			create: {
-				guild: {
-					connectOrCreate: {
-						where: { guildId: this.guildId },
-						create: { guildId: this.guildId }
-					}
-				},
-				user: {
-					connectOrCreate: {
-						where: { userId: args.userId },
-						create: { userId: args.userId }
-					}
-				},
-				birthday: args.birthday
-			},
-			update: args
-		});
-		await this.updateBirthdayOverview();
-		return this._cache(birthday, CacheActions.Insert);
-	}
-
-	public async remove(userId: string) {
-		const birthday = await resolveOnErrorCodesPrisma(
-			container.prisma.birthday.delete({
+	/**
+	 * Upserts a birthday record in the database.
+	 * If a record with the same `userId` and `guildId` already exists, it updates the record.
+	 * Otherwise, it creates a new record.
+	 *
+	 * @param args - The data for the birthday record to upsert.
+	 * @returns The upserted birthday record, or `null` if an error occurred.
+	 */
+	public async upsert(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday | null> {
+		try {
+			const birthday = await container.prisma.birthday.upsert({
 				where: {
 					userId_guildId: {
 						guildId: this.guildId,
-						userId
+						userId: args.userId
 					}
+				},
+				update: args,
+				create: {
+					...args,
+					guildId: this.guildId
 				}
-			}),
-			PrismaErrorCodeEnum.NotFound
-		);
-
-		if (birthday === null) return false;
-
-		await this.updateBirthdayOverview();
-		return super.delete(userId);
+			});
+			await this.updateBirthdayOverview();
+			return this._cache(birthday, CacheActions.Insert);
+		} catch (error) {
+			container.logger.error(error);
+			return null;
+		}
 	}
 
+	/**
+	 * Removes a birthday record for the specified user.
+	 *
+	 * @param userId - The ID of the user whose birthday record should be removed.
+	 * @returns A boolean indicating whether the removal was successful.
+	 */
+	public async remove(userId: string) {
+		try {
+			try {
+				await container.prisma.birthday.delete({
+					where: {
+						userId_guildId: {
+							guildId: this.guildId,
+							userId
+						}
+					}
+				});
+				await this.updateBirthdayOverview();
+			} finally {
+				super.delete(userId);
+			}
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Fetches a birthday or a collection of birthdays from the database.
+	 *
+	 * @param id - The ID(s) of the birthday(s) to fetch. Can be a single ID or an array of IDs.
+	 * @returns A Promise that resolves to a Birthday object, a Collection of Birthday objects, or null if no birthday is found.
+	 */
 	public async fetch(id?: string): Promise<Birthday>;
 	public async fetch(id?: string[] | null): Promise<Collection<string, Birthday> | null>;
 	public async fetch(id?: string | string[] | null): Promise<Birthday | Collection<string, Birthday> | null> {
@@ -232,13 +292,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return this;
 	}
 
-	public insert(data: Birthday): Birthday;
-	public insert(data: Birthday[]): Collection<string, Birthday>;
-	public insert(data: Birthday | Birthday[]) {
-		// @ts-expect-error TypeScript does not read the overloaded `data` parameter correctly
-		return this._cache(data, CacheActions.Insert);
-	}
-
+	/**
+	 * Caches the provided entries in the BirthdaysManager.
+	 *
+	 * @param entries - The entries to be cached. Can be a single entry, an array of entries, or null.
+	 * @param type - The type of cache action. Defaults to undefined.
+	 * @returns The cached entries or null if no entries were provided.
+	 */
 	private _cache(entry: Birthday, type: CacheActions): Birthday;
 	private _cache(entries: Birthday[], type?: CacheActions): Collection<string, Birthday>;
 	private _cache(entries?: null, type?: CacheActions): null;
@@ -266,6 +326,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return entries;
 	}
 
+	/**
+	 * Fetches the overview message from the specified channel.
+	 *
+	 * @param channel - The channel to fetch the message from.
+	 * @param overviewMessage - The ID of the overview message to fetch.
+	 * @returns A promise that resolves to the fetched message, or null if the message is not found.
+	 */
 	private async fetchOverviewMessage(
 		channel: GuildTextBasedChannelTypes,
 		overviewMessage: string
@@ -273,70 +340,63 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return channel.messages.fetch(overviewMessage).catch(() => null);
 	}
 
-	private createOptionsMessageForAnnouncementChannel(
-		{ announcementMessage, birthdayPingRole }: Settings,
-		member: GuildMember
-	): MessageCreateOptions {
-		const message = announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
+	/**
+	 * Creates a message with options for the announcement channel.
+	 *
+	 * @param settings - The settings object containing the announcement message and birthday ping role.
+	 * @param member - The guild member for whom the birthday announcement is being created.
+	 * @returns The message options object with content and embeds.
+	 */
+	private createOptionsMessageForAnnouncementChannel(settings: Settings, member: GuildMember): MessageCreateOptions {
+		const { announcementMessage, birthdayPingRole } = settings;
+
+		const description = announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
 		const embed = new DefaultEmbedBuilder()
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(message, member))
+			.setDescription(formatBirthdayMessage(description, member))
 			.setThumbnail(CdnUrls.Cake);
 
-		return { content: birthdayPingRole ? roleMention(birthdayPingRole) : '', embeds: [embed.toJSON()] };
+		if (birthdayPingRole) return { content: roleMention(birthdayPingRole), embeds: [embed.toJSON()] };
+
+		return { embeds: [embed.toJSON()] };
 	}
 
-	private async announceBirthdayInChannel(options: MessageCreateOptions, member: GuildMember) {
+	/**
+	 * Announces a birthday in the specified channel.
+	 *
+	 * @param options - The options for the message to be sent.
+	 * @returns A Promise that resolves to the sent message, or null if the announcement channel is not set or invalid.
+	 */
+	private async announceBirthdayInChannel(options: MessageCreateOptions) {
 		const { announcementChannel } = await this.settings.fetch();
-		if (isNullish(announcementChannel)) {
-			return `Announcement channel is empty, so i can't announce the anniversary of ${member.displayName}`;
-		}
+		if (isNullish(announcementChannel)) return null;
 
-		try {
-			const channel = await this.guild.channels.fetch(announcementChannel);
+		const channel = await this.guild.channels.fetch(announcementChannel);
+		if (!isGuildBasedChannel(channel) || !canSendEmbeds(channel)) return null;
 
-			if (!channel) {
-				return `Announcement channel (${announcementChannel}) does not exist.`;
-			}
-
-			if (isGuildBasedChannel(channel) && canSendEmbeds(channel)) {
-				const message = await channel.send(options);
-				return `This Birthday has been announced in the [message](${message.url}).`;
-			}
-
-			return `Cannot send a message with embeds in channel ${channel.id}.`;
-		} catch (error) {
-			return `Error while announcing birthday for [${member.id}] ${member.displayName}: ${error}`;
-		}
+		return channel.send(options);
 	}
 
+	/**
+	 * Adds the current birthday child role to a member.
+	 * @param {Settings} guild - The guild settings.
+	 * @param {GuildMember} member - The member to add the role to.
+	 * @returns {Promise<string>} A promise that resolves to a string indicating the result of the operation.
+	 */
 	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
 		const { birthdayRole } = guild;
 
-		if (isNullish(birthdayRole)) return `Birthday role for ths member is empty, so i can't`;
+		if (isNullish(birthdayRole)) return null;
 
-		if (member.roles.cache.has(birthdayRole)) return `The user already has the role, so i can't `;
+		const role = await member.roles.add(birthdayRole).catch(() => null);
 
-		if (member.manageable) {
-			try {
-				await member.roles.add(birthdayRole);
-				return `The Birthday Role ${birthdayRole} has been added to the member ${member.id}`;
-			} catch {
-				return 'An error occurred when adding the role to this member ';
-			} finally {
-				floatPromise(
-					container.tasks.create('removeBirthdayRole', {
-						memberId: member.id,
-						guildId: member.guild.id,
-						birthdayRole
-					})
-				);
-			}
-		}
-
-		return `I cannot modify this member because his position is equal or superior to me. `;
+		return role ? role.id : null;
 	}
 
+	/**
+	 * Updates the birthday overview by sending a new message or editing the existing one.
+	 * @returns The updated or newly created message.
+	 */
 	private async updateBirthdayOverview() {
 		const settings = await this.settings.fetch();
 
@@ -367,18 +427,28 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return newMessage;
 	}
 
-	private formatBirthdayItem = (birthday: Birthday) => {
+	/**
+	 * Formats a birthday item into a string representation.
+	 * @param birthday - The birthday object to format.
+	 * @returns The formatted string representation of the birthday item.
+	 */
+	private formatBirthdayItem = async (birthday: Birthday) => {
 		// example: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
 		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
 		const age = dayjs().diff(date, 'year');
 		const formattedDate = formatDateForDisplay(birthday.birthday);
 		const ageText = age === 1 ? 'year' : 'years';
 		const ageFormatted = `${age} ${ageText}`;
-		const emoji = date.isSame(this.currentDate(), 'date') ? Emojis.Cake : '';
+		const emoji = date.isSame(await this.getCurrentDate(), 'date') ? Emojis.Cake : '';
 		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
 		return text;
 	};
 
+	/**
+	 * Generates a paginated list of birthdays as an array of EmbedBuilders.
+	 * @param pageId - The page number of the generated list (default: 0).
+	 * @returns A promise that resolves to an array of EmbedBuilders representing the paginated birthday list.
+	 */
 	private async generatePaginatedBirthdayList(pageId: number = 0): Promise<EmbedBuilder[]> {
 		const birthdaysList = await container.prisma.birthday.findMany({ where: { guildId: this.guildId } });
 
@@ -411,11 +481,23 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		return paginatedEmbeds;
 	}
 
+	/**
+	 * Splits the given text into chunks of the specified size.
+	 *
+	 * @param text - The text to be split into chunks.
+	 * @param chunkSize - The size of each chunk.
+	 * @returns An array of chunks, where each chunk is a string.
+	 */
 	private splitTextIntoChunks(text: string, chunkSize: number) {
 		const chunks = chunk(text.split('\n'), chunkSize);
 		return chunks.map((chunk) => chunk.join('\n'));
 	}
 
+	/**
+	 * Creates an empty paginated birthday list embed.
+	 *
+	 * @returns The created embed.
+	 */
 	private createEmptyPaginatedBirthdayListEmbed() {
 		const embed = new DefaultEmbedBuilder()
 			.setTitle(`Birthday List - ${this.guild.name ?? 'Unknown Guild'}`)

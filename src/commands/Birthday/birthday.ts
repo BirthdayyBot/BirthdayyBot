@@ -56,7 +56,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
 			: await resolveKey(interaction, 'commands/birthday:list.title.next');
 
-		return birthdayManager.sendListBirthdays(interaction, birthdays, title);
+		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
 	}
 
 	public async chatInputRunSet(interaction: BirthdayySubcommand.Interaction<'cached'>) {
@@ -66,7 +66,14 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const year = interaction.options.getInteger('year') ?? 'XXXX';
 		const birthday = `${year}-${month}-${day}`;
 
-		await getBirthdays(interaction.guildId).create({ birthday, userId: user.id });
+		const newBirthday = await getBirthdays(interaction.guildId).upsert({ birthday, userId: user.id });
+
+		if (newBirthday === null) {
+			const content = await resolveKey(interaction, 'commands/birthday:set.error', {
+				...options
+			});
+			return interaction.reply(interactionProblem(content));
+		}
 
 		const content = await resolveKey(interaction, 'commands/birthday:set.success', {
 			birthday: formatDateForDisplay(birthday),
