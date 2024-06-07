@@ -1,8 +1,8 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { getActionRow, getRemindMeDisabledComponent, remindMeComponentCustomId } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { ButtonInteraction, TimestampStyles, time } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({ interactionHandlerType: InteractionHandlerTypes.Button })
@@ -17,7 +17,7 @@ export class VoteReminderButton extends InteractionHandler {
 	public async run(interaction: ButtonInteraction, result: { time: number }) {
 		await interaction.deferUpdate();
 
-		const components = [getActionRow(getRemindMeDisabledComponent(getSupportedUserLanguageT(interaction)))];
+		const components = [getActionRow(getRemindMeDisabledComponent(await fetchT(interaction)))];
 
 		await interaction.editReply({ components });
 

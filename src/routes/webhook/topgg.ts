@@ -1,6 +1,5 @@
 import { authenticated } from '#lib/api/utils';
 import { DefaultEmbedBuilder } from '#lib/discord';
-import { getT } from '#lib/i18n/translate';
 import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { Emojis, GuildIDEnum } from '#utils/constants';
 import { VOTE_CHANNEL_ID } from '#utils/environment';
@@ -74,7 +73,7 @@ export class UserRoute extends Route {
 			.setTitle(`${Emojis.Success} You voted for Birthdayy on TopGG!`)
 			.setDescription(`Thank you so much for supporting me, you're the best ${Emojis.Heart}`);
 
-		const components = [getActionRow(getRemindMeComponent(getT(guild.preferredLocale)))];
+		const components = [getActionRow(getRemindMeComponent(container.i18n.getT(guild.preferredLocale)))];
 		const channel = user.dmChannel ?? (await user.createDM());
 
 		return channel.send({ embeds: [embed.toJSON()], components });

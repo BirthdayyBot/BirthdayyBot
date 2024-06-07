@@ -1,4 +1,3 @@
-import { getT } from '#lib/i18n/translate';
 import { ClientColor } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Listener } from '@sapphire/framework';
@@ -18,7 +17,7 @@ import {
 })
 export class UserListener extends Listener {
 	public async run(data: GatewayGuildCreateDispatch['d'], _shardId: number) {
-		const t = getT('en-US');
+		const t = container.i18n.getT('en-US');
 
 		const size = await this.container.client.computeGuilds();
 

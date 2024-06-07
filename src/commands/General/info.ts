@@ -1,4 +1,3 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ClientColor } from '#utils/constants';
 import {
@@ -10,7 +9,7 @@ import {
 } from '#utils/functions';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplicationCommandRegistry, version as sapphireVersion } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, fetchT, type TFunction } from '@sapphire/plugin-i18next';
 import { version as djsVersion, type APIEmbedField } from 'discord.js';
 import { cpus, uptime, type CpuInfo } from 'os';
 
@@ -22,7 +21,7 @@ export class UserCommand extends BirthdayyCommand {
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 		const clientUser = this.container.client.user!;
 
 		const fields = [

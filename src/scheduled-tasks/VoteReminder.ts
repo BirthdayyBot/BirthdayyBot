@@ -1,4 +1,3 @@
-import { getT } from '#lib/i18n/translate';
 import { ClientColor } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { TFunction } from '@sapphire/plugin-i18next';
@@ -16,7 +15,7 @@ export class VoteReminderTask extends ScheduledTask {
 		const user = await this.container.client.users.fetch(payload.memberId).catch(() => null);
 		if (!user) return;
 
-		const t = getT(payload.local);
+		const t = this.container.i18n.getT(payload.local);
 		const channel = user.dmChannel ?? (await user.createDM());
 
 		const embed = new EmbedBuilder()

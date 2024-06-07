@@ -1,14 +1,14 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { type ChatInputCommandErrorPayload } from '@sapphire/framework';
 import type { ChatInputSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
 import { flattenError, generateUnexpectedErrorMessage, resolveError } from './_shared.js';
+import { fetchT } from '@sapphire/plugin-i18next';
 
 export async function handleCommandError(
 	error: unknown,
 	payload: ChatInputCommandErrorPayload | ChatInputSubcommandErrorPayload
 ) {
 	const { interaction } = payload;
-	const t = getSupportedUserLanguageT(interaction);
+	const t = await fetchT(interaction);
 	const resolved = flattenError(payload.command, error);
 	const content = resolved
 		? resolveError(t, resolved)

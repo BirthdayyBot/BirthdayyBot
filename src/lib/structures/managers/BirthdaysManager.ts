@@ -1,5 +1,4 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
-import { getT } from '#lib/i18n/translate';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
@@ -25,6 +24,7 @@ import {
 	Guild,
 	GuildMember,
 	Message,
+	Role,
 	roleMention,
 	userMention,
 	type MessageCreateOptions,
@@ -116,7 +116,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @returns The generated embed.
 	 */
 	public generateDefaultBirthdayListEmbed(includeImage: boolean = true) {
-		const t = getT(this.guild.preferredLocale);
+		const t = container.i18n.getT(this.guild.preferredLocale);
 		return new EmbedBuilder()
 			.setTitle(t('commands/birthday:list.embedList.title'))
 			.setColor(ClientColor)
@@ -165,10 +165,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @param birthday - The birthday to be announced.
 	 * @returns A promise that resolves when the birthday has been announced.
 	 */
-	public async announcedBirthday(birthday: Birthday) {
-		if (isNullish(birthday)) return;
+	public async announcedBirthday(birthday: Birthday): Promise<[Message<boolean> | null, Role | null]> {
 		const member = this.guild.members.resolve(birthday.userId);
-		if (!member) return;
+		if (!member) return [null, null];
 
 		return Promise.all([
 			this.announceBirthdayInChannel(
@@ -234,7 +233,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async remove(userId: string) {
 		try {
 			try {
-				await container.prisma.birthday.delete({
+				const birthday = await container.prisma.birthday.delete({
 					where: {
 						userId_guildId: {
 							guildId: this.guildId,
@@ -243,12 +242,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 					}
 				});
 				await this.updateBirthdayOverview();
+				return birthday;
 			} finally {
 				super.delete(userId);
 			}
-			return true;
 		} catch {
-			return false;
+			return null;
 		}
 	}
 
@@ -381,23 +380,24 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * Adds the current birthday child role to a member.
 	 * @param {Settings} guild - The guild settings.
 	 * @param {GuildMember} member - The member to add the role to.
-	 * @returns {Promise<string>} A promise that resolves to a string indicating the result of the operation.
+	 * @returns {Promise<string | null>} A promise that resolves to a string indicating the result of the operation.
 	 */
-	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember) {
+	private async addCurrentBirthdayChildRole(guild: Settings, member: GuildMember): Promise<Role | null> {
 		const { birthdayRole } = guild;
 
 		if (isNullish(birthdayRole)) return null;
+		const role = await this.guild.roles.fetch(birthdayRole);
+		if (!role) return null;
 
-		const role = await member.roles.add(birthdayRole).catch(() => null);
-
-		return role ? role.id : null;
+		await member.roles.add(role);
+		return role;
 	}
 
 	/**
 	 * Updates the birthday overview by sending a new message or editing the existing one.
 	 * @returns The updated or newly created message.
 	 */
-	private async updateBirthdayOverview() {
+	private async updateBirthdayOverview(): Promise<Message<boolean> | null> {
 		const settings = await this.settings.fetch();
 
 		const { overviewChannel, overviewMessage } = settings;

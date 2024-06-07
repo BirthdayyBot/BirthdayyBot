@@ -5,7 +5,12 @@ import { Emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { type ConnectionOptions } from '@influxdata/influxdb-client';
 import { LogLevel, container } from '@sapphire/framework';
 import type { ServerOptions, ServerOptionsAuth } from '@sapphire/plugin-api';
-import { i18next, type I18nextFormatter, type InternationalizationOptions } from '@sapphire/plugin-i18next';
+import {
+	i18next,
+	type I18nextFormatter,
+	type InternationalizationContext,
+	type InternationalizationOptions
+} from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
 import {
 	envIsDefined,
@@ -164,16 +169,23 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 	];
 }
 
+async function fetchLanguage(context: InternationalizationContext) {
+	const { interactionLocale, interactionGuildLocale, guild } = context;
+	if (interactionLocale) return interactionLocale;
+	if (interactionGuildLocale) return interactionGuildLocale;
+	if (guild) {
+		const settings = await container.prisma.guild.findFirst({ where: { guildId: guild.id } });
+		return settings?.language ?? 'en-US';
+	}
+	return 'en-US';
+}
+
 function parseInternationalizationOptions(): InternationalizationOptions {
 	return {
 		defaultMissingKey: 'default',
 		defaultNS: 'globals',
 		defaultLanguageDirectory: LANGUAGE_ROOT,
-		fetchLanguage: async ({ guild }) => {
-			if (!guild) return 'en-US';
-			const settings = await container.prisma.guild.findFirst({ where: { guildId: guild.id } });
-			return settings?.language ?? 'en-US';
-		},
+		fetchLanguage,
 		formatters: parseInternationalizationFormatters(),
 		i18next: (_: string[], languages: string[]) => ({
 			supportedLngs: languages,

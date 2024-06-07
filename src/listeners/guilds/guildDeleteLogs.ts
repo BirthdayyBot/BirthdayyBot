@@ -1,4 +1,3 @@
-import { getT } from '#lib/i18n/translate';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Events, Listener, type ListenerOptions } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
@@ -9,7 +8,7 @@ export class UserEvent extends Listener<typeof Events.GuildDelete> {
 	public async run(guild: Guild) {
 		if (guild.available) return;
 
-		const t = getT('en-US');
+		const t = container.i18n.getT('en-US');
 		const embed = new EmbedBuilder()
 			.setDescription('events/guilds:leaveEmbedDescription')
 			.setColor(Colors.Red)

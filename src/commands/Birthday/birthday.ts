@@ -1,4 +1,3 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
@@ -9,16 +8,16 @@ import { resolveTarget } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
-import { isNullOrUndefined, objectValues } from '@sapphire/utilities';
+import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
+import { isNullOrUndefined, isNullish, objectValues } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
-	bold,
-	chatInputApplicationCommandMention,
 	SlashCommandBuilder,
 	SlashCommandIntegerOption,
-	SlashCommandUserOption
+	SlashCommandUserOption,
+	bold,
+	chatInputApplicationCommandMention
 } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
@@ -65,17 +64,14 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const month = addZeroToSingleDigitNumber(interaction.options.getInteger('month', true));
 		const year = interaction.options.getInteger('year') ?? 'XXXX';
 		const birthday = `${year}-${month}-${day}`;
-
+		const t = await fetchT(interaction);
 		const newBirthday = await getBirthdays(interaction.guildId).upsert({ birthday, userId: user.id });
 
-		if (newBirthday === null) {
-			const content = await resolveKey(interaction, 'commands/birthday:set.error', {
-				...options
-			});
-			return interaction.reply(interactionProblem(content));
+		if (isNullish(newBirthday)) {
+			return interaction.reply(interactionProblem(t('commands/birthday:set.error', { ...options })));
 		}
 
-		const content = await resolveKey(interaction, 'commands/birthday:set.success', {
+		const content = t('commands/birthday:set.success', {
 			birthday: formatDateForDisplay(birthday),
 			...options
 		});
@@ -86,9 +82,9 @@ export class BirthdayCommand extends BirthdayySubcommand {
 	public async chatInputRunRemove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const { user, options } = resolveTarget(interaction);
 		const result = await getBirthdays(interaction.guildId).remove(user.id);
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 
-		if (!result) {
+		if (isNullish(result)) {
 			const content = t('commands/birthday:remove.notRegistered', {
 				command: BirthdayApplicationCommandMentions.Set,
 				...options
@@ -119,19 +115,19 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async chatInputRunTest(ctx: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user } = resolveTarget(ctx);
-		const birthday = getBirthdays(ctx.guild).get(user.id);
+	public async chatInputRunTest(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const { user } = resolveTarget(interaction);
+		const birthday = getBirthdays(interaction.guild).get(user.id);
 
 		if (isNullOrUndefined(birthday)) {
-			return ctx.reply(interactionProblem('This user has not yet registered his birthday '));
+			return interaction.reply(interactionProblem('This user has not yet registered his birthday '));
 		}
 
-		const result = await getBirthdays(ctx.guild).announcedBirthday(birthday);
+		const result = await getBirthdays(interaction.guild).announcedBirthday(birthday);
 
 		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
 
-		return ctx.reply(interactionSuccess(content));
+		return interaction.reply(interactionSuccess(content));
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {

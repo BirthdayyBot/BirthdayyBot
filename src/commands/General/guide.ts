@@ -1,10 +1,9 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ConfigApplicationCommandMentions } from '#root/commands/Admin/config';
 import { ClientColor } from '#utils/constants';
 import { getActionRow, getDocumentationComponent, getInviteComponent } from '#utils/functions';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, type TFunction } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, fetchT, type TFunction } from '@sapphire/plugin-i18next';
 import { envParseString } from '@skyra/env-utilities';
 import { chatInputApplicationCommandMention, EmbedBuilder } from 'discord.js';
 
@@ -16,7 +15,7 @@ export class GuideCommand extends BirthdayyCommand {
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 
 		const embed = new EmbedBuilder()
 			.setTitle(t('commands/general:guideEmbedTitle'))

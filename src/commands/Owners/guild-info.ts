@@ -1,5 +1,4 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { OWNERS } from '#root/config';
@@ -10,7 +9,7 @@ import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 import type { SlashCommandStringOption } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
@@ -33,7 +32,7 @@ export class GuildInfoCommand extends BirthdayyCommand {
 
 		const guildId = interaction.options.getString('guild-id', true);
 		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 
 		if (!guild) return interaction.reply(interactionProblem(t('commands/owners:guildInfoGuildNotFound')));
 

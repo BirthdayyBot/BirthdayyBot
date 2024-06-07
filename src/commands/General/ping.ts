@@ -1,7 +1,6 @@
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayyCommand } from '#lib/structures';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
 
 export class PingCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -11,7 +10,7 @@ export class PingCommand extends BirthdayyCommand {
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 		const msg = await interaction.reply({ content: t('commands/general:pingLoading'), fetchReply: true });
 		const content = t('commands/general:pingContent', {
 			latency: msg.createdTimestamp - interaction.createdTimestamp,

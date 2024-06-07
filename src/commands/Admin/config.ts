@@ -1,5 +1,4 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
-import { getSupportedUserLanguageT } from '#lib/i18n/translate';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
@@ -67,7 +66,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 	public async chatInputRunEdit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 
 		const announcementChannel = interaction.options.getChannel('announcement-channel');
 		if (!isNullish(announcementChannel)) {
@@ -225,7 +224,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			})
 		);
 
-		const t = getSupportedUserLanguageT(interaction);
+		const t = await fetchT(interaction);
 
 		const content = await result.match({
 			ok: async () => interactionSuccess(t('commands/config:editSuccess')),
