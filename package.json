@@ -7,7 +7,6 @@
 	"main": "./dist/index.js",
 	"type": "module",
 	"imports": {
-		"#utils/birthday": "./dist/lib/util/birthday/index.js",
 		"#utils/common": "./dist/lib/util/common/index.js",
 		"#utils/functions": "./dist/lib/util/functions/index.js",
 		"#utils/*": "./dist/lib/util/*.js",

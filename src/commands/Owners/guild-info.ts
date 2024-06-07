@@ -2,11 +2,10 @@ import { DefaultEmbedBuilder } from '#lib/discord';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { OWNERS } from '#root/config';
-import generateConfigListToApiEmbed from '#utils/birthday/config';
 import { getFormattedTimestamp } from '#utils/common';
 import { interactionProblem } from '#utils/embed';
 import { isNotCustom as enabled } from '#utils/env';
-import { getCommandGuilds } from '#utils/functions';
+import { getCommandGuilds, getSettings } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
@@ -117,7 +116,7 @@ export class GuildInfoCommand extends BirthdayyCommand {
 				}
 			);
 
-		const configEmbed = await generateConfigListToApiEmbed(guildId, { member: interaction.member, guild });
+		const configEmbed = await getSettings(guildId).embedList();
 		return interaction.reply({
 			content: `GuildInfos for ${guild.name}`,
 			embeds: [infoEmbed.toJSON(), configEmbed.toJSON()]
