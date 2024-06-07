@@ -3,6 +3,16 @@ import { ChannelType, channelMention } from 'discord.js';
 import { reply } from '../../../helpers';
 import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { canSendEmbeds } from '@sapphire/discord.js-utilities';
+
+const channelTypes = [
+	ChannelType.GuildText,
+	ChannelType.GuildAnnouncement,
+	ChannelType.GuildForum,
+	ChannelType.PublicThread,
+	ChannelType.PrivateThread,
+	ChannelType.AnnouncementThread,
+]as const;
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -12,7 +22,7 @@ import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed
 			option
 				.setName('channel')
 				.setDescription('Channel where the announcement should get sent')
-				.addChannelTypes(ChannelType.GuildText)
+				.addChannelTypes(...channelTypes)
 				.setRequired(true),
 		),
 )
@@ -20,11 +30,9 @@ export class AnnouncementChannelCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 
-		const channel = interaction.options.getChannel('channel', true);
-		const guildClient = await interaction.guild.members.fetchMe();
-		const hasPermissionInNewChannel = channel.permissionsFor(guildClient).has(['ViewChannel', 'SendMessages']);
+		const channel = interaction.options.getChannel<typeof channelTypes[number]>('channel', true);
 
-		if (!hasPermissionInNewChannel) {
+		if (!canSendEmbeds(channel)) {
 			return reply(
 				interaction,
 				interactionProblem(` I don't have permission to send messages in ${channelMention(channel.id)}.`),
