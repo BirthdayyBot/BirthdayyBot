@@ -8,53 +8,60 @@ datasource db {
 }
 
 model Birthday {
-    id       BigInt  @id @default(autoincrement())
-    userId   String  @map("user_id") @db.VarChar(32)
-    guildId  String  @map("guild_id") @db.VarChar(32)
-    birthday String  @db.VarChar(10)
-    disabled Boolean @default(false)
-    user     User    @relation(fields: [userId], references: [userId])
-    guild    Guild   @relation(fields: [guildId], references: [guildId])
+    id        BigInt   @id @default(autoincrement())
+    userId    String   @map("user_id") @db.VarChar(19)
+    guildId   String   @map("guild_id") @db.VarChar(19)
+    birthday  String   @db.VarChar(10)
+    disabled  Boolean  @default(false)
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    user      User     @relation(fields: [userId], references: [userId])
+    guild     Guild    @relation(fields: [guildId], references: [guildId])
 
     @@unique([userId, guildId], map: "unique_user_guild")
+    @@index([birthday], map: "index_birthday")
     @@map("birthday")
 }
 
 model Guild {
-    guildId             String     @id @map("guild_id") @db.VarChar(32)
-    inviter             String?    @db.VarChar(20)
-    announcementChannel String?    @map("announcement_channel") @db.VarChar(20)
+    guildId             String     @id @map("guild_id") @db.VarChar(19)
+    inviter             String?    @db.VarChar(19)
+    announcementChannel String?    @map("announcement_channel") @db.VarChar(19)
     announcementMessage String?    @map("announcement_message") @db.VarChar(512)
-    overviewChannel     String?    @map("overview_channel") @db.VarChar(20)
-    overviewMessage     String?    @map("overview_message") @db.VarChar(20)
-    birthdayRole        String?    @map("birthday_role") @db.VarChar(20)
-    birthdayPingRole    String?    @map("birthday_ping_role") @db.VarChar(20)
-    logChannel          String?    @map("log_channel") @db.VarChar(20)
+    overviewChannel     String?    @map("overview_channel") @db.VarChar(19)
+    overviewMessage     String?    @map("overview_message") @db.VarChar(19)
+    birthdayRole        String?    @map("birthday_role") @db.VarChar(19)
+    birthdayPingRole    String?    @map("birthday_ping_role") @db.VarChar(19)
+    logChannel          String?    @map("log_channel") @db.VarChar(19)
     timezone            Int        @default(0)
     premium             Boolean    @default(false)
     language            String     @default("en-US") @db.VarChar(5)
-    lastUpdated         DateTime?  @default(now()) @map("last_updated") @db.Timestamp(0)
+    createdAt           DateTime   @default(now()) @map("created_at")
+    updatedAt           DateTime   @updatedAt @map("updated_at")
     disabled            Boolean    @default(false)
     birthday            Birthday[]
 
+    @@index([guildId], map: "index_guild_id")
     @@map("guild")
 }
 
 model User {
-    userId        String     @id @map("user_id") @db.VarChar(32)
-    username      String?    @db.VarChar(32)
+    userId        String     @id @map("user_id") @db.VarChar(19)
+    username      String?    @db.VarChar(19)
     discriminator String?    @db.VarChar(4)
     premium       Boolean    @default(false)
-    lastUpdated   DateTime   @default(now()) @map("last_updated") @db.Timestamp(0)
+    createdAt     DateTime   @default(now()) @map("created_at")
+    updatedAt     DateTime   @updatedAt @map("updated_at")
     birthday      Birthday[]
 
+    @@index([userId], map: "index_user_id")
     @@map("user")
 }
 
 model Premium {
     id      Int     @id @default(autoincrement())
-    userId  String  @map("user_id") @db.VarChar(32)
-    guildId String? @map("guild_id") @db.VarChar(32)
+    userId  String  @map("user_id") @db.VarChar(19)
+    guildId String? @map("guild_id") @db.VarChar(19)
     tier    Boolean @default(true)
 
     @@map("premium")

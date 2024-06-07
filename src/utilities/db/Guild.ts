@@ -42,10 +42,10 @@ export class Guild extends Utility {
 			this.prisma
 				.$transaction([
 					this.prisma.birthday.findMany({
-						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true }
+						where: { guild: { updatedAt: { lt: date.toISOString() } }, disabled: true }
 					}),
 					this.prisma.guild.findMany({
-						where: { lastUpdated: { lt: date.toISOString() }, disabled: true }
+						where: { updatedAt: { lt: date.toISOString() }, disabled: true }
 					})
 				])
 				.then(([birthdays, guilds]) => ({
@@ -133,10 +133,10 @@ export class Guild extends Utility {
 			this.prisma
 				.$transaction([
 					this.prisma.birthday.deleteMany({
-						where: { guild: { lastUpdated: { lt: date.toISOString() } }, disabled: true }
+						where: { guild: { updatedAt: { lt: date.toISOString() } }, disabled: true }
 					}),
 					this.prisma.guild.deleteMany({
-						where: { lastUpdated: { lt: date.toISOString() }, disabled: true }
+						where: { updatedAt: { lt: date.toISOString() }, disabled: true }
 					})
 				])
 				.then(([deletedBirthdays, deletedGuilds]) => ({
