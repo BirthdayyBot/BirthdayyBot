@@ -8,7 +8,6 @@ datasource db {
 }
 
 model Birthday {
-    id        BigInt   @id @default(autoincrement())
     userId    String   @map("user_id") @db.VarChar(19)
     guildId   String   @map("guild_id") @db.VarChar(19)
     birthday  String   @db.VarChar(10)
@@ -18,7 +17,7 @@ model Birthday {
     user      User     @relation(fields: [userId], references: [userId])
     guild     Guild    @relation(fields: [guildId], references: [guildId])
 
-    @@unique([userId, guildId], map: "unique_user_guild")
+    @@unique([userId, guildId], name: "unique_user_guild")
     @@index([birthday], map: "index_birthday")
     @@map("birthday")
 }
