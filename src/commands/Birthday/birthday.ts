@@ -49,22 +49,14 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const month = interaction.options.getInteger('month');
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findAllBirthdays();
-
-		if (month) {
-			const title = await resolveKey(
-				interaction,
-				isNullOrUndefined(birthdays)
-					? 'commands/birthday:list.title.month_empty'
-					: 'commands/birthday:list.title.month',
-				{ month: numberToMonthName(Number(month)) }
-			);
-
-			return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
-		}
-
-		const title = await resolveKey(interaction, 'commands/birthday:list.title.normal', {
+		const options = {
+			month: numberToMonthName(Number(month)),
+			context: birthdays.length < 1 ? 'empty' : '',
 			serverName: interaction.guild.name
-		});
+		};
+
+		const key = month ? 'commands/birthday:list.title.month' : 'commands/birthday:list.title.normal';
+		const title = await resolveKey(interaction, key, options);
 
 		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
 	}

@@ -129,7 +129,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			.setTitle(t('commands/birthday:list.embedList.title'))
 			.setColor(ClientColor)
 			.setThumbnail(includeImage ? CdnUrls.Cake : null)
-			.setFooter({ text: t('commands/birthday:list.embedList.footer') });
+			.setFooter({ text: t('commands/birthday:list.embedList.footer.text') });
 	}
 
 	/**
