@@ -137,20 +137,17 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * Sends a list of birthdays.
 	 * @param interaction - The interaction or message object.
 	 * @param birthdays - An array of Birthday objects.
-	 * @param key - The key used to resolve the title field of the embed.
-	 * @param options - Additional options for resolving the key and description.
+	 * @param description - The description of the embed.
 	 * @returns A Promise that resolves to the edited message or reply interaction.
 	 */
 	public async sendPaginatedBirthdays(
 		interaction: ChatInputCommandInteraction | Message,
 		birthdays: Birthday[],
-		key: string,
-		options?: TOptions
+		description: string
 	) {
 		const defaultEmbed = this.generateDefaultBirthdayListEmbed();
 
 		if (isNullOrUndefinedOrEmpty(birthdays)) {
-			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
 			const messageOptions: MessageEditOptions = {
 				embeds: [defaultEmbed.setDescription(description).toJSON()]
 			};
@@ -162,7 +159,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
 			.setTemplate(defaultEmbed.toJSON())
-			.setTitleField(await resolveKey(interaction, key, options))
+			.setTitleField(description)
 			.setItems(this.sortBirthdaysByMonthAndDay(birthdays))
 			.formatItems(this.formatBirthdayItem)
 			.setItemsPerPage(20);

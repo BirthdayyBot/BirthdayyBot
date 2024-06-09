@@ -50,11 +50,21 @@ export class BirthdayCommand extends BirthdayySubcommand {
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findAllBirthdays();
 
-		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
+		if (month) {
+			const title = await resolveKey(
+				interaction,
+				isNullOrUndefined(birthdays)
+					? 'commands/birthday:list.title.month_empty'
+					: 'commands/birthday:list.title.month',
+				{ month: numberToMonthName(Number(month)) }
+			);
 
-		const title = month
-			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
-			: await resolveKey(interaction, 'commands/birthday:list.title.normal');
+			return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
+		}
+
+		const title = await resolveKey(interaction, 'commands/birthday:list.title.normal', {
+			serverName: interaction.guild.name
+		});
 
 		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
 	}
@@ -139,8 +149,8 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const options = { context: 'upcoming' };
 
 		const title = upcomingBirthdays
-			? await resolveKey(interaction, 'commands/birthday:upcoming.title.upcoming', options)
-			: await resolveKey(interaction, 'commands/birthday:upcoming.title.upcoming');
+			? await resolveKey(interaction, 'commands/birthday:upcoming.title', options)
+			: await resolveKey(interaction, 'commands/birthday:upcoming.title');
 
 		return birthdayManager.sendPaginatedBirthdays(interaction, upcomingBirthdays, title);
 	}
