@@ -14,7 +14,6 @@ import {
 } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { chunk, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
