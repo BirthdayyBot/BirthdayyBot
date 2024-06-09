@@ -201,8 +201,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 		const birthdayEmbed = new DefaultEmbedBuilder()
 			.setTitle(t('commands/config:viewBirthdayEmbedTitle'))
-			.setDescription(`${announcementMessage} \n\n ${blockQuote(infoBirthdayMessage)}`)
-			.setColor(ClientColor);
+			.setDescription(`${announcementMessage} \n\n ${blockQuote(infoBirthdayMessage)}`);
 
 		return { embeds: [settingsEmbed.toJSON(), birthdayEmbed.toJSON()], ephemeral: false };
 	}

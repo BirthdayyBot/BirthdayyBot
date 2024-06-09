@@ -1,16 +1,10 @@
 {
-    "birthdayName": "birthday",
-    "birthdayDescription": "Birthday Management Commands",
-    "setName": "set",
-    "setDescription": "Set your birthday date on the server.",
+    "description": "Birthday Management Commands",
     "set": {
-        "dayName": "day",
+      "description": "Set your birthday date on the server.",
         "dayDescription": "What day were you born?",
-        "monthName": "month",
         "monthDescription": "What is your birthday month?",
-        "yearName": "year",
         "yearDescription": "Which year are you born ?",
-        "userName": "user",
         "userDescription": "Which user do you want to set the date of birth for? - MANAGER ONLY.",
         "success": "Your birthday has been set to {{birthday}} on this server.",
         "success_target": "{{target}}'s birthday was set to {{birthday}} on this server",
@@ -18,9 +12,9 @@
         "roleHigher": "You cannot execute this command on someone with a higher role than you!",
         "error": "An error occurred while trying to set the birthday."
     },
-    "listName": "list",
-    "listDescription": "List all registered birthdays",
     "list": {
+      "description": "List all registered birthdays",
+      "monthDescription": "Which month do you want the birthday list for?",
         "embedList": {
             "title": "Upcoming birthdays on the server!",
             "thumbnail": {
@@ -28,7 +22,8 @@
             },
             "footer": {
                 "text": "Manage your Birthday with /birthday set|remove"
-            }
+            },
+            "upcomingName": "upcoming"
         },
         "title": {
             "month": "Birthdays in {{month}}",
@@ -36,14 +31,10 @@
             "next": "Here is the list of the next 10 birthdays:",
             "next_empty": "There are no birthdays on this server."
         },
-        "monthName": "month",
-        "monthDescription": "Which month do you want the birthday list for?",
         "format": "{{arrow}} {{user, userMention}} - {{date}} {{age}}"
     },
-    "removeName": "remove",
-    "removeDescription": "Remove your birthday",
     "remove": {
-        "userName": "user",
+        "description": "Remove your birthday",
         "userDescription": "Remove a Birthday for a Person - MANAGER ONLY",
         "success": "Your birthday was successfully removed.",
         "success_target": "{target}}'s birthday was successfully removed.",
@@ -52,10 +43,8 @@
         "hasNotPermissionManagesRoles": "You do not have permission to delete birthdays",
         "target": "You do not have permission to delete this user's birthday."
     },
-    "showName": "show",
-    "showDescription": "Show your birthday",
     "show": {
-        "userName": "user",
+        "description": "Show your birthday",
         "userDescription": "Show this user's birthday - MANAGER ONLY",
         "title": "{{emoji}} Birthday",
         "success": "{{emoji}} Your birthday is at the {{date}}.",
@@ -63,10 +52,12 @@
         "notRegistered": "Your birthday is not registered. Use {{command}} to set it.",
         "notRegistered_target": "{{target}}'s birthday is not registered."
     },
-    "testName": "test",
-    "testDescription": "Test your current birthday setup",
     "test": {
-        "userName": "user",
+        "description": "Test your current birthday setup",
         "userDescription": "Test this user's birthday - MANAGER ONLY"
+    },
+    "upcoming": {
+      "description": "Show upcoming birthdays",
+        "title": "{{emoji}} Upcoming Birthdays"
     }
 }
