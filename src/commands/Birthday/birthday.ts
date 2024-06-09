@@ -157,6 +157,7 @@ export class BirthdayCommand extends BirthdayySubcommand {
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
 		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:set.description')
+			.setName('set')
 			.addIntegerOption((option) => this.dayOptions(option, 'commands/birthday:set.dayDescription'))
 			.addIntegerOption((option) => this.monthOptions(option, 'commands/birthday:set.monthDescription'))
 			.addIntegerOption((option) => this.yearOptions(option, 'commands/birthday:set.yearDescription'))
