@@ -48,13 +48,13 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		await getBirthdays(interaction.guild).fetch();
 		const month = interaction.options.getInteger('month');
 
-		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
+		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findAllBirthdays();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
 		const title = month
 			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
-			: await resolveKey(interaction, 'commands/birthday:list.title.next');
+			: await resolveKey(interaction, 'commands/birthday:list.title.normal');
 
 		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
 	}
@@ -129,6 +129,20 @@ export class BirthdayCommand extends BirthdayySubcommand {
 		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
 
 		return interaction.reply(interactionSuccess(content));
+	}
+
+	public async chatInputRunUpcoming(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+		const birthdayManager = getBirthdays(interaction.guild);
+		await getBirthdays(interaction.guild).fetch();
+		const upcomingBirthdays = birthdayManager.findUpcomingBirthdays();
+
+		const options = { context: 'upcoming' };
+
+		const title = upcomingBirthdays
+			? await resolveKey(interaction, 'commands/birthday:upcoming.title.upcoming', options)
+			: await resolveKey(interaction, 'commands/birthday:upcoming.title.upcoming');
+
+		return birthdayManager.sendPaginatedBirthdays(interaction, upcomingBirthdays, title);
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {

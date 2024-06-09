@@ -28,8 +28,9 @@
         "title": {
             "month": "Birthdays in {{month}}",
             "month_empty": "There are no birthdays for this month ({{month}}).",
-            "next": "Here is the list of the next 10 birthdays:",
-            "next_empty": "There are no birthdays on this server."
+            "upcoming": "Here is the list of the next 10 birthdays:",
+            "upcoming_empty": "There are no birthdays on this server.",
+            "normal": "Birthday List - {{serverName}}"
         },
         "format": "{{arrow}} {{user, userMention}} - {{date}} {{age}}"
     },

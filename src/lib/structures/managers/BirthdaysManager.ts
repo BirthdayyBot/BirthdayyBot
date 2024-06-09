@@ -104,10 +104,19 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 	/**
 	 * Finds the next 10 teen birthdays.
+	 * @param amount - The amount of upcoming birthdays to return. Defaults to 10.
 	 * @returns An array of teen birthdays sorted by month and day.
 	 */
-	public findTeenNextBirthday() {
-		return this.sortBirthdaysByMonthAndDay(this.toJSON()).slice(0, 10);
+	public findUpcomingBirthdays(amount = 10) {
+		return this.findAllBirthdays().slice(0, amount);
+	}
+
+	/**
+	 * Get all birthdays of the server
+	 * @returns An array of birthdays sorted by month and day.
+	 */
+	public findAllBirthdays() {
+		return this.sortBirthdaysByMonthAndDay(this.toJSON());
 	}
 
 	/**
