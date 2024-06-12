@@ -35,7 +35,7 @@ projects:
                 CLIENT_OWNERS: '267614892821970945 696324357940838492'
                 CLIENT_VERSION: '2.3.0 Canary'
                 CUSTOM_BOT: 'false'
-                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_dev'
+                DATABASE_URL: 'mysql://***:***@localhost:3306/birthdayy_dev'
                 DEFAULT_ANNOUNCEMENT_MESSAGE: "It's your birthday! 🎉"
                 DISCORD_ERROR_WEBHOOK_ID: ''
                 DISCORD_ERROR_WEBHOOK_TOKEN: ''
@@ -61,7 +61,7 @@ projects:
                 NODE_ENV: test,
                 CLIENT_NAME: 'Birthdayy PTB'
                 CLIENT_VERSION: '2.3.0 Test'
-                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_test'
+                DATABASE_URL: 'mysql://***:***@localhost:3306/birthdayy_test'
                 INFLUX_ORG_ANALYTICS_BUCKET: 'test'
                 REDIS_DB: 1
 
@@ -72,7 +72,7 @@ projects:
                 API_PREFIX: '/'
                 CLIENT_NAME: 'Birthdayy'
                 CLIENT_VERSION: '2.3.0'
-                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_prod'
+                DATABASE_URL: 'mysql://***:***@localhost:3306/birthdayy_prod'
                 INFLUX_ORG_ANALYTICS_BUCKET: 'prod'
                 REDIS_DB: 2
                 OAUTH_REDIRECT_URI: 'https://api.birthdayy.xyz/oauth/callback'
