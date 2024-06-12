@@ -1,0 +1,78 @@
+projects:
+    - name: birthdayy # Name may contain lowercase letters, spaces, numbers, hyphens, and underscores
+      description: Birthday Bot is a Discord bot that manages server members' birthdays.
+
+      # List of totally customizable environments, e.g Test, Stage, QA, CI-CD
+      environments:
+          - name: Development # Name may contain letters, spaces, numbers, hyphens, and underscores
+            slug: dev # Slug may contain letters, numbers, hyphens, and underscores
+            configs:
+                - slug: dev # First slug *must* match environment slug name
+
+          - name: Test
+            slug: test
+            configs:
+                - slug: test
+
+          - name: Production
+            slug: prd
+            configs:
+                - slug: prd
+
+      # Define secrets for each environment
+      secrets:
+          - dev:
+                NODE_ENV: 'development'
+                API_ORIGIN: 'http://127.0.0.1:3000'
+                API_PORT: '3000'
+                API_PREFIX: '/'
+                APP_ENV: 'dev'
+                CLIENT_AVATAR: 'https://cdn.discordapp.com/attachments/1234567890/1234567890/image.png'
+                CLIENT_COLOR: '0xF3969A'
+                CLIENT_ID: '945106657527078952'
+                CLIENT_MAIN_GUILD: '980559116076470272'
+                CLIENT_NAME: 'Birthdayy Canary'
+                CLIENT_OWNERS: '267614892821970945 696324357940838492'
+                CLIENT_VERSION: '2.3.0 Canary'
+                CUSTOM_BOT: 'false'
+                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_dev'
+                DEFAULT_ANNOUNCEMENT_MESSAGE: "It's your birthday! 🎉"
+                DISCORD_ERROR_WEBHOOK_ID: ''
+                DISCORD_ERROR_WEBHOOK_TOKEN: ''
+                DISCORD_TOKEN: ''
+                INFLUX_ENABLED: 'false'
+                INFLUX_URL: 'http://localhost:8086'
+                INFLUX_TOKEN: ''
+                INFLUX_ORG: 'Birthdayy'
+                INFLUX_ORG_ANALYTICS_BUCKET: 'dev'
+                LOG_CHANNEL_ADMIN: '1087389133200183366'
+                LOG_CHANNEL_SERVER: '1087389133200183366'
+                OAUTH_COOKIE: 'birthdayy_oauth'
+                OAUTH_DOMAIN_OVERWRITE: '127.0.0.1'
+                OAUTH_REDIRECT_URI: 'http://127.0.0.1:3000/oauth/callback'
+                OAUTH_SCOPE: 'identify applications.commands'
+                REDIS_DB: 0
+                REDIS_HOST: 'localhost'
+                REDIS_PORT: 6379
+                REDIS_PASSWORD: ''
+                REDIS_USERNAME: ''
+                SENTRY_DSN: ''
+          - test:
+                NODE_ENV: test,
+                CLIENT_NAME: 'Birthdayy PTB'
+                CLIENT_VERSION: '2.3.0 Test'
+                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_test'
+                INFLUX_ORG_ANALYTICS_BUCKET: 'test'
+                REDIS_DB: 1
+
+          - prd:
+                NODE_ENV: production,
+                API_ORIGIN: 'https://api.birthdayy.xyz'
+                API_PORT: 443
+                API_PREFIX: '/'
+                CLIENT_NAME: 'Birthdayy'
+                CLIENT_VERSION: '2.3.0'
+                DATABASE_URL: 'mysql://mysql:mysql@localhost:3306/birthdayy_prod'
+                INFLUX_ORG_ANALYTICS_BUCKET: 'prod'
+                REDIS_DB: 2
+                OAUTH_REDIRECT_URI: 'https://api.birthdayy.xyz/oauth/callback'

@@ -21,6 +21,8 @@ Birthday Bot is a Discord bot that manages server members' birthdays.
 
 For configuration we use doppler, you can import the template and modify the configuration directly on it.
 
+[![Import to Doppler](https://raw.githubusercontent.com/DopplerUniversity/app-config-templates/main/doppler-button.svg)](https://dashboard.doppler.com/workplace/template/import?template=https%3A%2F%2Fgithub.com%2FBirthdayyBot%2FBirthdayyBot%2Fblob%2Fmaster%2Fdoppler-template.yaml)
+
 ## Usage
 
 -   Use the `/birthday set [day] [month] <year>` command to record your birthday date.
