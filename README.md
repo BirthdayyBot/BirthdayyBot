@@ -1,30 +1,36 @@
-# BirthdayyBotSapphire
+# Birthday Bot
 
-This is a basic setup of a Discord bot using the [sapphire framework][sapphire] written in TypeScript
+Birthday Bot is a Discord bot that manages server members' birthdays.
 
-## How to use it?
+## Features
 
-### Prerequisite
+-   Records members' birthday dates
+-   Sends automatic birthday messages
+-   Allows users to wish a happy birthday
+-   Manages reminders for upcoming birthdays
 
-```sh
-npm install
-```
+## Installation
 
-### Development
+1. Clone this repository to your local machine.
+2. Make sure you have Node.js and Yarn installed.
+3. Run `yarn install` to install the dependencies.
+4. Import the `template.yaml` file to your doppler account. Update the variables to match your server's configuration.
+5. Run `yarn start` to launch the bot.
 
-This example can be run with `tsc-watch` to watch the files and automatically restart your bot.
+## Configuration
 
-```sh
-npm run watch:start
-```
+For configuration we use doppler, you can import the template and modify the configuration directly on it.
 
-### Production
+## Usage
 
-You can also run the bot with `npm dev`, this will first build your code and then run `node ./dist/index.js`. But this is not the recommended way to run a bot in production.
+-   Use the `/birthday set [day] [month] <year>` command to record your birthday date.
+-   Use the `/birthday list` command to see the list of birthdays for the day.
+-   Use the `/birthday view <member>` command to view a member's birthday.
+
+## Contributing
+
+If you would like to contribute to this project, feel free to open a pull request. Any contribution is welcome!
 
 ## License
 
-Dedicated to the public domain via the [Unlicense], courtesy of the Sapphire Community and its contributors.
-
-[sapphire]: https://github.com/sapphiredev/framework
-[unlicense]: https://github.com/sapphiredev/examples/blob/main/LICENSE.md
+This project is licensed under the MIT License. Please see the [`LICENSE`](LICENSE) file for more information.
