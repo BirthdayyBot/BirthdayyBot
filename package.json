@@ -1,9 +1,12 @@
 {
-	"name": "birthdayy",
+	"name": "@birthdayy/bot",
 	"version": "0.2.3",
 	"description": "Birthday Discord Bot built on Sapphire Framework",
-	"author": "@chillihero",
-	"license": "Apache-2.0",
+	"author": "@nikolaischunk (nikolai@schunk.dev) ",
+	"contributors": [
+		"@swiizyy (contact@wbussat.fr)"
+	],
+	"license": "MIT",
 	"main": "./dist/index.js",
 	"type": "module",
 	"imports": {
