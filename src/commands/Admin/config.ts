@@ -116,8 +116,8 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	public async chatInputRunView(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { guildId } = interaction;
-		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
+		const id = interaction.guildId;
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		const content = await this.viewGenerateContent(interaction, settings);
 		return interaction.reply(content);
@@ -214,11 +214,11 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
-		const { guildId } = interaction;
+		const id = interaction.guildId;
 		const result = await Result.fromAsync(
 			this.container.prisma.guild.upsert({
-				where: { guildId },
-				create: { guildId, ...data },
+				where: { id },
+				create: { id, ...data },
 				update: data,
 				select: null
 			})
@@ -250,7 +250,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		t: TFunction
 	) {
 		const settings = await this.container.prisma.guild.findUnique({
-			where: { guildId: interaction.guildId },
+			where: { id: interaction.guildId },
 			select: { premium: true }
 		});
 

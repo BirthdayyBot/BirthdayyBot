@@ -174,7 +174,7 @@ async function fetchLanguage(context: InternationalizationContext) {
 	if (interactionLocale) return interactionLocale;
 	if (interactionGuildLocale) return interactionGuildLocale;
 	if (guild) {
-		const settings = await container.prisma.guild.findFirst({ where: { guildId: guild.id } });
+		const settings = await container.prisma.guild.findFirst({ where: { id: guild.id } });
 		return settings?.language ?? 'en-US';
 	}
 	return 'en-US';

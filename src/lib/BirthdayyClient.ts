@@ -50,7 +50,7 @@ export class BirthdayyClient extends SapphireClient {
 	 * @param message The message that gives context.
 	 */
 	public fetchLanguage = async (message: InternationalizationContext) => {
-		const guild = await container.prisma.guild.findUnique({ where: { guildId: message.guild?.id } });
+		const guild = await container.prisma.guild.findUnique({ where: { id: message.guild?.id } });
 		return guild ? guild.language : 'en-US';
 	};
 

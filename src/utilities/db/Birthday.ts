@@ -11,9 +11,9 @@ export class Birthday extends Utility {
 			this.prisma.birthday.findMany({
 				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } }
 			}),
-		BirthdayByDateTimezoneAndGuild: (date: Dayjs, timezone: number, guildId: string) => {
+		BirthdayByDateTimezoneAndGuild: (date: Dayjs, timezone: number, id: string) => {
 			return this.prisma.birthday.findMany({
-				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone, guildId } }
+				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone, id } }
 			});
 		},
 		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
@@ -43,7 +43,7 @@ export class Birthday extends Utility {
 	};
 
 	public delete = {
-		GuildById: (guildId: string) => this.prisma.guild.delete({ where: { guildId } }),
+		GuildById: (id: string) => this.prisma.guild.delete({ where: { id } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
 		ByGuildAndUser: (guildId: string, userId: string) =>
 			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } })
@@ -51,32 +51,32 @@ export class Birthday extends Utility {
 
 	private prisma = container.prisma;
 
-	public constructor(context: Utility.Context, options: Utility.Options) {
+	public constructor(context: Utility.LoaderContext, options: Utility.Options) {
 		super(context, {
 			...options,
 			name: 'birthday'
 		});
 	}
 
-	public create = (birthday: string, guildId: string, user: User) =>
+	public create = (birthday: string, id: string, user: User) =>
 		this.prisma.birthday.create({
 			data: {
 				birthday,
 				guild: {
 					connectOrCreate: {
-						create: { guildId },
-						where: { guildId }
+						create: { id },
+						where: { id }
 					}
 				},
 				user: {
 					connectOrCreate: {
 						create: {
-							userId: user.id,
+							id: user.id,
 							discriminator: user.discriminator,
 							username: user.username
 						},
 						where: {
-							userId: user.id
+							id: user.id
 						}
 					}
 				}

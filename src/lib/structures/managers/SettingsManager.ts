@@ -11,7 +11,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	 */
 	public guild: GuildDiscord;
 
-	public guildId: string;
+	public id: string;
 
 	public defaultKey = {
 		announcementChannel: null,
@@ -26,27 +26,27 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	public constructor(guild: GuildDiscord) {
 		super();
 		this.guild = guild;
-		this.guildId = this.guild.id;
+		this.id = this.guild.id;
 	}
 
 	public async create(args?: SettingsManagerCreateData): SettingsManagerReturnAsyncData {
 		const settings = await container.prisma.guild.upsert({
-			create: { ...args, guildId: this.guildId },
-			where: { guildId: this.guildId },
+			create: { ...args, id: this.id },
+			where: { id: this.id },
 			update: { ...args }
 		});
 		return this.insert(settings);
 	}
 
 	public async fetch(): SettingsManagerReturnAsyncData {
-		return super.get(this.guildId) ?? this.create();
+		return super.get(this.id) ?? this.create();
 	}
 
 	public insert(entry: Nullish): null;
 	public insert(entry: Guild): SettingsManagerReturnData;
 	public insert(entry: Guild | Nullish): SettingsManagerReturnData | null {
 		if (!entry) return null;
-		super.set(this.guildId, entry);
+		super.set(this.id, entry);
 		return entry;
 	}
 
@@ -78,10 +78,10 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 }
 
 export type SettingsManagerReturnData = Guild;
-export type SettingsManagerFetchData = SettingsManagerReturnData['guildId'];
+export type SettingsManagerFetchData = SettingsManagerReturnData['id'];
 export type SettingsManagerReturnAsyncData = Promise<SettingsManagerReturnData>;
 
-export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'guildId'>;
+export type SettingsManagerCreateData = Omit<Prisma.GuildCreateInput, 'id'>;
 export type SettingsDefaultKey = keyof Pick<
 	Prisma.GuildCreateInput,
 	| 'announcementChannel'

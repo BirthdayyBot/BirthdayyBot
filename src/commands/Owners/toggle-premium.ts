@@ -26,13 +26,13 @@ export class TogglePremiumCommand extends BirthdayyCommand {
 	}
 
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction) {
-		const guildId = interaction.options.getString('guild-id', true);
+		const id = interaction.options.getString('guild-id', true);
 		const toggle = interaction.options.getBoolean('toggle', true);
 
-		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
+		const guild = await this.container.client.guilds.fetch(id).catch(() => null);
 		if (guild === null) return interaction.reply(interactionProblem('Failed to fetch the guild'));
 
-		await this.container.prisma.guild.update({ where: { guildId }, data: { premium: toggle } });
+		await this.container.prisma.guild.update({ where: { id }, data: { premium: toggle } });
 
 		const embed = new EmbedBuilder()
 			.setDescription(`${toggle ? 'Enabled' : 'Disabled'} premium for guild ${guild} (${guild.id})`)

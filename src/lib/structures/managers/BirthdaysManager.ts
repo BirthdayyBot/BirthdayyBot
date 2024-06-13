@@ -418,7 +418,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const newMessage = await channel.send(options);
 
 		await container.prisma.guild.update({
-			where: { guildId: this.guildId },
+			where: { id: this.guildId },
 			data: {
 				overviewMessage: newMessage.id
 			}

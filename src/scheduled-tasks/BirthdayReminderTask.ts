@@ -230,7 +230,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		// If the role doesn't exist anymore, reset:
 		if (!role) {
 			await container.prisma.guild.update({
-				where: { guildId: data.guildID },
+				where: { id: data.guildID },
 				data: { birthdayRole: null }
 			});
 			return { added: false, message: 'Role not found' };
