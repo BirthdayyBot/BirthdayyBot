@@ -1,9 +1,12 @@
 {
-	"name": "birthdayy",
+	"name": "@birthdayy/bot",
 	"version": "0.2.3",
 	"description": "Birthday Discord Bot built on Sapphire Framework",
-	"author": "@chillihero",
-	"license": "Apache-2.0",
+	"author": "@nikolaischunk (nikolai@schunk.dev) ",
+	"contributors": [
+		"@swiizyy (contact@wbussat.fr)"
+	],
+	"license": "MIT",
 	"main": "./dist/index.js",
 	"type": "module",
 	"imports": {
@@ -68,6 +71,7 @@
 		"@sapphire/cli": "^1.9.3",
 		"@sapphire/eslint-config": "^5.0.5",
 		"@sapphire/eslint-plugin-result": "^2.0.4",
+		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
 		"@types/node": "^20.14.2",
 		"@types/ws": "^8.5.10",
@@ -110,7 +114,7 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
-	"packageManager": "yarn@4.2.2",
+	"packageManager": "yarn@4.3.0",
 	"volta": {
 		"node": "20.14.0"
 	}
