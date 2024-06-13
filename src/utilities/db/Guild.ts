@@ -11,7 +11,7 @@ export class Guild extends Utility {
 		GuildById: (id: string) => this.prisma.guild.findUnique({ where: { id } }),
 		GuildsByIds: (ids: string[]) => this.prisma.guild.findMany({ where: { id: { in: ids } } }),
 		GuildsNotInIds: (ids: string[]) => this.prisma.guild.findMany({ where: { id: { notIn: ids } } }),
-		GuildsByTimezone: (ids: string[], timezone: number) =>
+		GuildsByTimezone: (ids: string[], timezone: string) =>
 			this.prisma.guild.findMany({ where: { id: { in: ids }, timezone } }),
 		GuildsDisabled: (disabled = true) => this.prisma.guild.findMany({ where: { disabled } }),
 		GuildLanguage: (id: string) =>
@@ -74,7 +74,7 @@ export class Guild extends Utility {
 			this.prisma.guild.update({ where: { id }, data: { overviewMessage: messageID } }),
 		LogChannel: (id: string, channelID: string) =>
 			this.prisma.guild.update({ where: { id }, data: { logChannel: channelID } }),
-		Timezone: (id: string, timezone: number) => this.prisma.guild.update({ where: { id }, data: { timezone } }),
+		Timezone: (id: string, timezone: string) => this.prisma.guild.update({ where: { id }, data: { timezone } }),
 		Language: (id: string, language: string) => this.prisma.guild.update({ where: { id }, data: { language } }),
 		BirthdayRole: (id: string, roleID: string) =>
 			this.prisma.guild.update({ where: { id }, data: { birthdayRole: roleID } }),
@@ -170,7 +170,7 @@ export class Guild extends Utility {
 		OverviewMessage: (id: Snowflake) =>
 			this.prisma.guild.update({ where: { id }, data: { overviewMessage: null } }),
 		LogChannel: (id: Snowflake) => this.prisma.guild.update({ where: { id }, data: { logChannel: null } }),
-		Timezone: (id: Snowflake) => this.prisma.guild.update({ where: { id }, data: { timezone: 0 } }),
+		Timezone: (id: Snowflake) => this.prisma.guild.update({ where: { id }, data: { timezone: 'UTC' } }),
 		Language: (id: Snowflake) => this.prisma.guild.update({ where: { id }, data: { language: 'en-US' } }),
 		BirthdayRole: (id: Snowflake) => this.prisma.guild.update({ where: { id }, data: { birthdayRole: null } }),
 		BirthdayPingRole: (id: Snowflake) =>

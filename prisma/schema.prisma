@@ -33,7 +33,7 @@ model Guild {
     birthdayRole        String?    @map("birthday_role") @db.VarChar(19)
     birthdayPingRole    String?    @map("birthday_ping_role") @db.VarChar(19)
     logChannel          String?    @map("log_channel") @db.VarChar(19)
-    timezone            Int        @default(0)
+    timezone            String     @default("UTC")
     premium             Boolean    @default(false)
     language            String     @default("en-US") @db.VarChar(5)
     createdAt           DateTime   @default(now()) @map("created_at")

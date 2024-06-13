@@ -1,3 +1,4 @@
+import { getTimezoneWithOffset } from '#utils/tz';
 import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import type { Dayjs } from 'dayjs';
@@ -9,11 +10,17 @@ export class Birthday extends Utility {
 			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
 		BirthdayByDateAndTimezone: (date: Dayjs, timezone: number) =>
 			this.prisma.birthday.findMany({
-				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone } }
+				where: {
+					birthday: { contains: date.format('-MM-DD') },
+					guild: { timezone: { in: getTimezoneWithOffset(timezone) } }
+				}
 			}),
 		BirthdayByDateTimezoneAndGuild: (date: Dayjs, timezone: number, id: string) => {
 			return this.prisma.birthday.findMany({
-				where: { birthday: { contains: date.format('-MM-DD') }, guild: { timezone, id } }
+				where: {
+					birthday: { contains: date.format('-MM-DD') },
+					guild: { timezone: { in: getTimezoneWithOffset(timezone) }, id }
+				}
 			});
 		},
 		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
