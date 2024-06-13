@@ -7,7 +7,7 @@ import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
-import type { Birthday } from '@prisma/client';
+import { RestrictedMode, type Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
@@ -142,7 +142,16 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		const { announcementChannel, birthdayRole, birthdayPingRole, premium: guildIsPremium } = config;
+		const {
+			announcementChannel,
+			birthdayRole,
+			announcementRestrictedMode,
+			announcementRestrictedRole,
+			birthdayRestrictedMode,
+			birthdayRestrictedRole,
+			birthdayPingRole,
+			premium: guildIsPremium
+		} = config;
 
 		const announcementMessage = config.announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
 
@@ -192,7 +201,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (birthdayRole) {
 			const payload = { guildID: guild.id, userID: member.id, roleID: birthdayRole };
-			eventInfo.birthday_role = await this.handleRole(payload, member, birthdayRole, isTest);
+			eventInfo.birthday_role = await this.handleRole(
+				payload,
+				member,
+				birthdayRole,
+				birthdayRestrictedRole as string[],
+				birthdayRestrictedMode,
+				isTest
+			);
 		}
 
 		if (!announcementChannel) {
@@ -210,6 +226,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 			guildId,
 			announcementChannel,
 			birthdayEmbed.toJSON(),
+			announcementRestrictedMode,
+			announcementRestrictedRole as string[],
+			member,
 			content
 		);
 
@@ -221,6 +240,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 		data: RemoveBirthdayRoleData,
 		member: GuildMember,
 		roleId: string | Nullish,
+		restrictedRole: string[],
+		restrictedMode: RestrictedMode,
 		isTest: boolean
 	): Promise<{ added: boolean; message: string }> {
 		if (isNullish(roleId)) return { added: false, message: 'Role not set' };
@@ -236,6 +257,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return { added: false, message: 'Role not found' };
 		}
 
+		// If the role is prohibited, check if the member has the role:
+		if (restrictedMode === RestrictedMode.PROHIBITED) {
+			if (member.roles.cache.some((r) => restrictedRole.includes(r.id) && r.position >= role.position)) {
+				return { added: false, message: '' };
+			}
+
+			// If the member doesn't have the role, return:
+		} else if (restrictedMode === RestrictedMode.AUTHORIZED) {
+			// If the member doesn't have the role, return:
+			if (!member.roles.cache.some((r) => restrictedRole.includes(r.id) && r.position >= role.position)) {
+				return { added: false, message: 'Not authorized' };
+			}
+		}
+
+		// Fetch the bot's member instance:
 		const me = await member.guild.members.fetchMe();
 
 		// If the role can be given, add it to the user:
@@ -272,12 +308,29 @@ export class BirthdayReminderTask extends ScheduledTask {
 		guildId: Snowflake,
 		channel_id: Snowflake,
 		birthdayEmbed: APIEmbed,
+		restrictedMode: RestrictedMode,
+		restrictedRole: string[],
+		member: GuildMember,
 		content?: string
 	): Promise<{ sent: boolean; message: string }> {
 		const returnData = {
 			sent: false,
 			message: 'Not set'
 		};
+
+		if (restrictedMode === RestrictedMode.PROHIBITED) {
+			if (member.roles.cache.some((r) => restrictedRole.includes(r.id))) {
+				return { sent: false, message: 'Restricted role' };
+			}
+
+			// If the member doesn't have the role, return:
+		} else if (restrictedMode === RestrictedMode.AUTHORIZED) {
+			// If the member doesn't have the role, return:
+			if (!member.roles.cache.some((r) => restrictedRole.includes(r.id))) {
+				return { sent: false, message: 'Not authorized' };
+			}
+		}
+
 		try {
 			const channel = await container.client.channels.fetch(channel_id);
 			if (!isTextBasedChannel(channel)) {
