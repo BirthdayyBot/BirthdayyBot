@@ -8,9 +8,9 @@ export class UserListener extends Listener {
 		if (data.unavailable) return;
 
 		return this.container.prisma.guild.upsert({
-			create: { guildId: data.id, disabled: true },
+			create: { id: data.id, disabled: true },
 			update: { disabled: true },
-			where: { guildId: data.id }
+			where: { id: data.id }
 		});
 	}
 }

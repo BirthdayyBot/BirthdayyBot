@@ -4,6 +4,7 @@ import { join } from 'path';
 
 export const mainFolder = getRootData().root;
 export const rootFolder = join(mainFolder, '..');
+export const srcFolder = join(rootFolder, 'src');
 
 export const ZeroWidthSpace = '\u200B';
 export const LongWidthSpace = '\u3000';

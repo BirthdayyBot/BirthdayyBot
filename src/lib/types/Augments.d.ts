@@ -101,6 +101,7 @@ declare module '@skyra/env-utilities' {
 		REDIS_USERNAME: string;
 
 		DATABASE_URL: string;
+		DIRECT_DATABASE_URL: string;
 		PRISMA_DEBUG_LOGS: BooleanString;
 
 		INFLUX_ENABLED: BooleanString;

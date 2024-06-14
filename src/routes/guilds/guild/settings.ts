@@ -9,9 +9,9 @@ export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(seconds(5), 2, true)
 	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
-		const guildId = request.params.guild;
+		const id = request.params.guild;
 
-		const guild = this.container.client.guilds.cache.get(guildId);
+		const guild = this.container.client.guilds.cache.get(id);
 		if (!guild) return response.error(HttpCodes.BadRequest);
 
 		const member = await guild.members.fetch(request.auth!.id).catch(() => null);
@@ -19,7 +19,7 @@ export class UserRoute extends Route {
 
 		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
 
-		return this.container.prisma.guild.upsert({ where: { guildId }, create: { guildId }, update: {} });
+		return this.container.prisma.guild.upsert({ where: { id }, create: { id }, update: {} });
 	}
 
 	@authenticated()
@@ -51,8 +51,8 @@ export class UserRoute extends Route {
 		try {
 			const data = Object.fromEntries(requestBody.data);
 			const updatedSettings = await this.container.prisma.guild.upsert({
-				where: { guildId: requestBody.guild_id },
-				create: { ...data, guildId: requestBody.guild_id },
+				where: { id: requestBody.guild_id },
+				create: { ...data, id: requestBody.guild_id },
 				update: data
 			});
 

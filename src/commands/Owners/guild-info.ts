@@ -29,17 +29,17 @@ export class GuildInfoCommand extends BirthdayyCommand {
 	public override async chatInputRun(interaction: BirthdayyCommand.Interaction<'cached'>) {
 		if (!OWNERS.includes(interaction.user.id)) return;
 
-		const guildId = interaction.options.getString('guild-id', true);
-		const guild = await this.container.client.guilds.fetch(guildId).catch(() => null);
+		const id = interaction.options.getString('guild-id', true);
+		const guild = await this.container.client.guilds.fetch(id).catch(() => null);
 		const t = await fetchT(interaction);
 
 		if (!guild) return interaction.reply(interactionProblem(t('commands/owners:guildInfoGuildNotFound')));
 
-		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		if (!settings) return interaction.reply(interactionProblem(t('commands/owners:guildInfoSettingsNotFound')));
 
-		const guildBirthdayCount = await this.container.prisma.birthday.count({ where: { guildId } });
+		const guildBirthdayCount = await this.container.prisma.birthday.count({ where: { guildId: id } });
 
 		const infoEmbed = new DefaultEmbedBuilder()
 			.setTitle('GuildInfos')
@@ -116,7 +116,7 @@ export class GuildInfoCommand extends BirthdayyCommand {
 				}
 			);
 
-		const configEmbed = await getSettings(guildId).embedList();
+		const configEmbed = await getSettings(id).embedList();
 		return interaction.reply({
 			content: `GuildInfos for ${guild.name}`,
 			embeds: [infoEmbed.toJSON(), configEmbed.toJSON()]
