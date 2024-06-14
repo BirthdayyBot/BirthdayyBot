@@ -2,9 +2,10 @@ import { DefaultEmbedBuilder } from '#lib/discord';
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
+import { formatBirthdayMessage } from '#utils/common';
 import { ClientColor } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { searchTimeZone } from '#utils/tz';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -63,6 +64,17 @@ export class ConfigCommand extends BirthdayySubcommand {
 		);
 	}
 
+	public override async autocompleteRun(interaction: Command.AutocompleteInteraction) {
+		const timezone = interaction.options.getString('timezone', true);
+		const entries = searchTimeZone(timezone);
+		return interaction.respond(
+			entries.map((entry) => ({
+				name: `${entry.score === 1 ? '⭐' : '📄'} ${entry.value.full}`,
+				value: entry.value.name
+			}))
+		);
+	}
+
 	public async chatInputRunEdit(interaction: BirthdayySubcommand.Interaction<'cached'>) {
 		const entries: [keyof Guild, Guild[keyof Guild]][] = [];
 
@@ -109,15 +121,15 @@ export class ConfigCommand extends BirthdayySubcommand {
 			entries.push(['overviewChannel', result.unwrap()]);
 		}
 
-		const timezone = interaction.options.getInteger('timezone');
-		if (!isNullish(timezone)) entries.push(['timezone', Number(timezone)]);
+		const timezone = interaction.options.getString('timezone');
+		if (!isNullish(timezone)) entries.push(['timezone', timezone]);
 
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
 
 	public async chatInputRunView(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { guildId } = interaction;
-		const settings = await this.container.prisma.guild.findUnique({ where: { guildId } });
+		const id = interaction.guildId;
+		const settings = await this.container.prisma.guild.findUnique({ where: { id } });
 
 		const content = await this.viewGenerateContent(interaction, settings);
 		return interaction.reply(content);
@@ -134,7 +146,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 					birthdayPingRole: null,
 					overviewChannel: null,
 					overviewMessage: null,
-					timezone: 0
+					timezone: 'UTC'
 				};
 				return this.updateDatabase(interaction, data);
 			}
@@ -149,7 +161,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'overviewChannel':
 				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
 			case 'timezone':
-				return this.updateDatabase(interaction, { timezone: 0 });
+				return this.updateDatabase(interaction, { timezone: 'UTC' });
 		}
 	}
 
@@ -183,7 +195,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
 		const birthdayPingRole = settings.birthdayPingRole ? roleMention(settings.birthdayPingRole) : unset;
 		const overviewChannel = settings.overviewChannel ? channelMention(settings.overviewChannel) : unset;
-		const timezone = isNullOrUndefined(settings.timezone) ? unset : TIMEZONE_VALUES[settings.timezone];
+		const timezone = isNullOrUndefined(settings.timezone) ? unset : settings.timezone;
 		const premium = bool[Number(settings.premium)];
 
 		const fieldsTitles: string[] = t('commands/config:viewFieldsTitles', { returnObjects: true });
@@ -214,11 +226,11 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
-		const { guildId } = interaction;
+		const id = interaction.guildId;
 		const result = await Result.fromAsync(
 			this.container.prisma.guild.upsert({
-				where: { guildId },
-				create: { guildId, ...data },
+				where: { id },
+				create: { id, ...data },
 				update: data,
 				select: null
 			})
@@ -250,7 +262,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		t: TFunction
 	) {
 		const settings = await this.container.prisma.guild.findUnique({
-			where: { guildId: interaction.guildId },
+			where: { id: interaction.guildId },
 			select: { premium: true }
 		});
 

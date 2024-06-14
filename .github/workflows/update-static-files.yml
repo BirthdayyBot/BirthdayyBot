@@ -1,0 +1,48 @@
+name: Update Static Files
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 6'
+
+jobs:
+  UpdateData:
+    name: Update All Static Files
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_USER: github-actions[bot]
+      GITHUB_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Use Node.js v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn --immutable
+
+      - name: Configure git
+        run: |
+          git remote set-url origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/${GITHUB_REPOSITORY}.git";
+          git config --local user.email "${GITHUB_EMAIL}";
+          git config --local user.name "${GITHUB_USER}"
+
+      - name: Run the Timezone Extraction script
+        run: node ./scripts/extract-timezone-data.mjs
+      - name: Commit timezone data changes
+        id: timezones
+        run: |
+          git add .;
+          if ! git diff-index --quiet HEAD --; then
+            git commit -sm "refactor: update timezones data";
+            echo "has_commits=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push any commits
+        if: steps.timezones.outputs.has_commits == 'true'
+        run: git push

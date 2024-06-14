@@ -1,7 +1,7 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { TIMEZONE_VALUES, formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
 import { CdnUrls, ClientColor, Emojis } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
 import { isProduction } from '#utils/env';
@@ -69,8 +69,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @returns The current date.
 	 */
 	public async getCurrentDate() {
-		const date = dayjs().tz(TIMEZONE_VALUES[(await this.settings.fetch()).timezone]);
-		return date;
+		const { timezone } = await this.settings.fetch();
+		return dayjs().tz(timezone);
 	}
 
 	/**
@@ -418,7 +418,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const newMessage = await channel.send(options);
 
 		await container.prisma.guild.update({
-			where: { guildId: this.guildId },
+			where: { id: this.guildId },
 			data: {
 				overviewMessage: newMessage.id
 			}

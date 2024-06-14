@@ -16,6 +16,7 @@ import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { isNullish, type Nullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
+import dayjs from 'dayjs';
 import {
 	AttachmentBuilder,
 	DiscordAPIError,
@@ -85,12 +86,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (isCustom) {
 			container.logger.info('[BirthdayTask] Custom Bot task');
-			const guildOffset = await container.utilities.guild.get.GuildTimezone(envParseString('CLIENT_MAIN_GUILD'));
-			if (guildOffset?.timezone !== utcOffset) {
+			const settings = await container.prisma.guild.findUnique({
+				where: { id: envParseString('CLIENT_MAIN_GUILD') },
+				select: { timezone: true }
+			});
+
+			const guildOffset = dayjs().tz(settings?.timezone).utcOffset();
+			if (guildOffset !== utcOffset) {
 				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
-				return container.logger.debug(
-					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`
-				);
 			}
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
@@ -230,7 +233,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		// If the role doesn't exist anymore, reset:
 		if (!role) {
 			await container.prisma.guild.update({
-				where: { guildId: data.guildID },
+				where: { id: data.guildID },
 				data: { birthdayRole: null }
 			});
 			return { added: false, message: 'Role not found' };
