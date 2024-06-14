@@ -9,9 +9,11 @@ import {
 	Message,
 	MessagePayload,
 	userMention,
-	type InteractionReplyOptions
+	type InteractionReplyOptions,
+	type MessageMentionTypes
 } from 'discord.js';
 import { ClientColor } from './constants.js';
+import { type Nullish, isNullishOrEmpty } from '@sapphire/utilities';
 
 /**
  * Picks a random item from an array
@@ -72,4 +74,53 @@ export function createSubcommandMappings(...subcommands: Array<string | Mapps>):
 
 export function snakeToCamel(str: string) {
 	return str.replace(/([-_][a-z])/g, (ltr) => ltr.toUpperCase()).replace(/[^a-zA-Z]/g, '');
+}
+
+export const anyMentionRegExp = /<(@[!&]?|#)(\d{17,19})>/g;
+export const hereOrEveryoneMentionRegExp = /@(?:here|everyone)/;
+
+/**
+ * Extracts mentions from a body of text.
+ * @remark Preserves the mentions in the content, if you want to remove them use `cleanMentions`.
+ * @param input The input to extract mentions from.
+ */
+export function extractDetailedMentions(input: string | Nullish): DetailedMentionExtractionResult {
+	const users = new Set<string>();
+	const roles = new Set<string>();
+	const channels = new Set<string>();
+	const parse = [] as MessageMentionTypes[];
+
+	if (isNullishOrEmpty(input)) {
+		return { users, roles, channels, parse };
+	}
+
+	let result: RegExpExecArray | null;
+	while ((result = anyMentionRegExp.exec(input)) !== null) {
+		switch (result[1]) {
+			case '@':
+			case '@!': {
+				users.add(result[2]);
+				continue;
+			}
+			case '@&': {
+				roles.add(result[2]);
+				continue;
+			}
+			case '#': {
+				channels.add(result[2]);
+				continue;
+			}
+		}
+	}
+
+	if (hereOrEveryoneMentionRegExp.test(input)) parse.push('everyone');
+
+	return { users, roles, channels, parse };
+}
+
+export interface DetailedMentionExtractionResult {
+	users: ReadonlySet<string>;
+	roles: ReadonlySet<string>;
+	channels: ReadonlySet<string>;
+	parse: MessageMentionTypes[];
 }

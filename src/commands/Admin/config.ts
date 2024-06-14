@@ -5,8 +5,9 @@ import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import { TIMEZONE_VALUES, formatBirthdayMessage } from '#utils/common';
 import { ClientColor } from '#utils/constants';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
+import { extractDetailedMentions } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
-import type { Guild } from '@prisma/client';
+import { RestrictedMode, type Guild } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import {
@@ -85,6 +86,18 @@ export class ConfigCommand extends BirthdayySubcommand {
 			entries.push(['announcementMessage', result.unwrap()]);
 		}
 
+		const announcementRestrictedRole = interaction.options.getString('announcement-restricted-role');
+		if (!isNullish(announcementRestrictedRole)) {
+			const result = await this.parseRestrictedRoles(announcementRestrictedRole, t);
+			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
+
+			entries.push(['announcementRestrictedRole', result.unwrap()]);
+		}
+
+		const announcementRestrictedMode = interaction.options.getString('announcement-restricted-mode');
+		if (!isNullish(announcementRestrictedMode))
+			entries.push(['announcementRestrictedMode', announcementRestrictedMode]);
+
 		const birthdayRole = interaction.options.getRole('birthday-role');
 		if (!isNullish(birthdayRole)) {
 			const result = await this.parseRole(interaction, birthdayRole, t);
@@ -92,6 +105,17 @@ export class ConfigCommand extends BirthdayySubcommand {
 
 			entries.push(['birthdayRole', result.unwrap()]);
 		}
+
+		const birthdayRestrictedRole = interaction.options.getString('birthday-restricted-role');
+		if (!isNullish(birthdayRestrictedRole)) {
+			const result = await this.parseRestrictedRoles(birthdayRestrictedRole, t);
+			if (result.isErr()) return interaction.reply({ content: result.unwrapErr(), ephemeral: true });
+
+			entries.push(['birthdayRestrictedRole', result.unwrap()]);
+		}
+
+		const birthdayRestrictedMode = interaction.options.getString('birthday-restricted-mode');
+		if (!isNullish(birthdayRestrictedMode)) entries.push(['birthdayRestrictedMode', birthdayRestrictedMode]);
 
 		const birthdayPingRole = interaction.options.getRole('birthday-ping-role');
 		if (!isNullish(birthdayPingRole)) {
@@ -130,8 +154,12 @@ export class ConfigCommand extends BirthdayySubcommand {
 				const data: Partial<Guild> = {
 					announcementChannel: null,
 					announcementMessage: null,
+					announcementRestrictedMode: RestrictedMode.AUTHORIZED,
+					announcementRestrictedRole: null,
 					birthdayRole: null,
 					birthdayPingRole: null,
+					birthdayRestrictedMode: RestrictedMode.AUTHORIZED,
+					birthdayRestrictedRole: null,
 					overviewChannel: null,
 					overviewMessage: null,
 					timezone: 0
@@ -142,10 +170,18 @@ export class ConfigCommand extends BirthdayySubcommand {
 				return this.updateDatabase(interaction, { announcementChannel: null });
 			case 'announcementMessage':
 				return this.updateDatabase(interaction, { announcementMessage: null });
+			case 'announcementRestrictedMode':
+				return this.updateDatabase(interaction, { announcementRestrictedMode: RestrictedMode.AUTHORIZED });
+			case 'announcementRestrictedRole':
+				return this.updateDatabase(interaction, { announcementRestrictedRole: [] });
 			case 'birthdayRole':
 				return this.updateDatabase(interaction, { birthdayRole: null });
 			case 'birthdayPingRole':
 				return this.updateDatabase(interaction, { birthdayPingRole: null });
+			case 'birthdayRestrictedMode':
+				return this.updateDatabase(interaction, { birthdayRestrictedMode: RestrictedMode.AUTHORIZED });
+			case 'birthdayRestrictedRole':
+				return this.updateDatabase(interaction, { birthdayRestrictedRole: [] });
 			case 'overviewChannel':
 				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
 			case 'timezone':
@@ -180,17 +216,44 @@ export class ConfigCommand extends BirthdayySubcommand {
 			: t('commands/config:viewBirthdayMessagePremiumDisable');
 
 		const announcementChannel = settings.announcementChannel ? channelMention(settings.announcementChannel) : unset;
+		const announcementRestrictedMode = settings.announcementRestrictedMode
+			? RestrictedMode[settings.announcementRestrictedMode]
+			: unset;
 		const birthdayRole = settings.birthdayRole ? roleMention(settings.birthdayRole) : unset;
+		const birthdayRestrictedMode = settings.birthdayRestrictedMode
+			? RestrictedMode[settings.birthdayRestrictedMode]
+			: unset;
 		const birthdayPingRole = settings.birthdayPingRole ? roleMention(settings.birthdayPingRole) : unset;
 		const overviewChannel = settings.overviewChannel ? channelMention(settings.overviewChannel) : unset;
 		const timezone = isNullOrUndefined(settings.timezone) ? unset : TIMEZONE_VALUES[settings.timezone];
 		const premium = bool[Number(settings.premium)];
 
+		const extractedAnnouncementRestrictedRole =
+			settings.announcementRestrictedRole && Array.isArray(settings.announcementRestrictedRole)
+				? settings.announcementRestrictedRole
+				: null;
+		const announcementRestrictedRole = extractedAnnouncementRestrictedRole
+			? extractedAnnouncementRestrictedRole.map((role) => roleMention(role as string)).join(', ')
+			: unset;
+
+		const extractedBirthdayRestrictedRole =
+			settings.announcementRestrictedRole && Array.isArray(settings.birthdayRestrictedRole)
+				? settings.birthdayRestrictedRole
+				: null;
+		const birthdayRestrictedRole = extractedBirthdayRestrictedRole
+			? extractedBirthdayRestrictedRole.map((role) => roleMention(role as string)).join(', ')
+			: unset;
+
 		const fieldsTitles: string[] = t('commands/config:viewFieldsTitles', { returnObjects: true });
 		const fieldsValues: string[] = t('commands/config:viewFieldsValues', {
 			returnObjects: true,
 			announcementChannel,
+			announcementMessage,
+			announcementRestrictedRole,
+			announcementRestrictedMode,
 			birthdayRole,
+			birthdayRestrictedRole,
+			birthdayRestrictedMode,
 			birthdayPingRole,
 			premium,
 			overviewChannel,
@@ -214,12 +277,24 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async updateDatabase(interaction: Command.ChatInputCommandInteraction<'cached'>, data: Partial<Guild>) {
+		const restrictedAnnouncementRoleArray = data.announcementRestrictedRole ?? undefined;
+		const restrictedBirthdayRoleArray = data.birthdayRestrictedRole ?? undefined;
+
 		const { guildId } = interaction;
 		const result = await Result.fromAsync(
 			this.container.prisma.guild.upsert({
 				where: { guildId },
-				create: { guildId, ...data },
-				update: data,
+				create: {
+					guildId,
+					...data,
+					announcementRestrictedRole: restrictedAnnouncementRoleArray,
+					birthdayRestrictedRole: restrictedBirthdayRoleArray
+				},
+				update: {
+					...data,
+					announcementRestrictedRole: restrictedAnnouncementRoleArray,
+					birthdayRestrictedRole: restrictedBirthdayRoleArray
+				},
 				select: null
 			})
 		);
@@ -275,6 +350,14 @@ export class ConfigCommand extends BirthdayySubcommand {
 		return ok(role.id);
 	}
 
+	private async parseRestrictedRoles(message: string, t: TFunction) {
+		const { roles } = extractDetailedMentions(message);
+
+		if (roles.size === 0) return err(t('commands/config:editRoleInvalid'));
+
+		return ok(Array.from(roles));
+	}
+
 	private registerSubcommands(builder: SlashCommandBuilder) {
 		return builder
 			.addSubcommand((builder) => this.registerEditSubcommand(builder))
@@ -296,6 +379,27 @@ export class ConfigCommand extends BirthdayySubcommand {
 					.setMinLength(1)
 					.setMaxLength(512)
 			)
+			.addStringOption((builder) =>
+				applyDescriptionLocalizedBuilder(
+					builder,
+					'commands/config:editOptionsAnnouncementRestrictedModeDescription'
+				)
+					.setName('announcement-restricted-mode')
+					.setChoices(
+						createLocalizedChoice('commands/config:editOptionsAnnouncementRestrictedModeChoiceAuthorized', {
+							value: RestrictedMode.AUTHORIZED
+						}),
+						createLocalizedChoice('commands/config:editOptionsAnnouncementRestrictedModeChoiceProhibited', {
+							value: RestrictedMode.PROHIBITED
+						})
+					)
+			)
+			.addStringOption((builder) =>
+				applyDescriptionLocalizedBuilder(
+					builder,
+					'commands/config:editOptionsAnnouncementRestrictedRoleDescription'
+				).setName('announcement-restricted-role')
+			)
 			.addRoleOption((builder) =>
 				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayRoleDescription') //
 					.setName('birthday-role')
@@ -303,6 +407,27 @@ export class ConfigCommand extends BirthdayySubcommand {
 			.addRoleOption((builder) =>
 				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsBirthdayPingRoleDescription') //
 					.setName('birthday-ping-role')
+			)
+			.addStringOption((builder) =>
+				applyDescriptionLocalizedBuilder(
+					builder,
+					'commands/config:editOptionsBirthdayRestrictedModeDescription'
+				)
+					.setName('birthday-restricted-mode')
+					.setChoices(
+						createLocalizedChoice('commands/config:editOptionsAnnouncementRestrictedModeChoiceAuthorized', {
+							value: RestrictedMode.AUTHORIZED
+						}),
+						createLocalizedChoice('commands/config:editOptionsAnnouncementRestrictedModeChoiceProhibited', {
+							value: RestrictedMode.PROHIBITED
+						})
+					)
+			)
+			.addStringOption((builder) =>
+				applyDescriptionLocalizedBuilder(
+					builder,
+					'commands/config:editOptionsBirthdayRestrictedRoleDescription'
+				).setName('birthday-restricted-role')
 			)
 			.addChannelOption((builder) =>
 				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsOverviewChannelDescription')
@@ -334,9 +459,21 @@ export class ConfigCommand extends BirthdayySubcommand {
 						createLocalizedChoice('commands/config:keyAnnouncementMessage', {
 							value: 'announcementMessage'
 						}),
+						createLocalizedChoice('commands/config:keyAnnouncementRestrictedMode', {
+							value: 'announcementRestrictedMode'
+						}),
+						createLocalizedChoice('commands/config:keyAnnouncementRestrictedRole', {
+							value: 'announcementRestrictedRole'
+						}),
 						createLocalizedChoice('commands/config:keyBirthdayRole', { value: 'birthdayRole' }),
 						createLocalizedChoice('commands/config:keyBirthdayPingRole', {
 							value: 'birthdayPingRole'
+						}),
+						createLocalizedChoice('commands/config:keyBirthdayRestrictedMode', {
+							value: 'birthdayRestrictedMode'
+						}),
+						createLocalizedChoice('commands/config:keyBirthdayRestrictedRole', {
+							value: 'birthdayRestrictedRole'
 						}),
 						createLocalizedChoice('commands/config:keyOverviewChannel', {
 							value: 'overviewChannel'
@@ -356,8 +493,12 @@ export const ConfigApplicationCommandMentions = {
 interface EditConfig {
 	announcementChannel: string | null;
 	announcementMessage?: string;
+	announcementRestrictedMode: RestrictedMode;
+	announcementRestrictedRole: string | null;
 	birthdayRole: string | null;
 	birthdayPingRole: string | null;
+	birthdayRestrictedMode: RestrictedMode;
+	birthdayRestrictedRole: string | null;
 	overviewChannel: string | null;
 	timezone: number;
 }
