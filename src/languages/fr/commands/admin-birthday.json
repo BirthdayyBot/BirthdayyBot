@@ -1,13 +1,17 @@
 {
 	"rootDescription": "Gérer l'anniversaire d'un utilisateur.",
+	"setDescription": "Définir l'anniversaire d'un utilisateur.",
 	"setOptionsDayDescription": "Le jour de l'anniversaire.",
 	"setOptionsMonthDescription": "Le mois de l'anniversaire.",
 	"setOptionsYearDescription": "L'année de l'anniversaire.",
 	"setOptionsUserDescription": "L'utilisateur pour lequel définir l'anniversaire.",
 	"setSuccess": "L'anniversaire de {{ user }} a été défini avec succès au {{ birthday }}.",
 	"setFailure": "Échec de la définition de l'anniversaire de {{ user }}.",
+	"removeDescription": "Supprimer l'anniversaire d'un utilisateur.",
 	"removeOptionsUserDescription": "L'utilisateur pour lequel supprimer l'anniversaire.",
 	"removeSuccess": "L'anniversaire de {{ user }} a été supprimé avec succès.",
 	"removeFailureNoBirthday": "{{ user }} n'a pas d'anniversaire défini.",
+	"testDescription": "Vérifier l'anniversaire d'un utilisateur.",
+	"testOptionsUserDescription": "L'utilisateur pour lequel vérifier l'anniversaire.",
 	"testFailure": "Échec de la vérification de l'anniversaire de {{ user }}."
 }
