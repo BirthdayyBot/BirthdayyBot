@@ -19,7 +19,7 @@ export enum Emojis {
 	ArrowLeft = '<:arrow_left_birthdayy:1102221941223477268>',
 	Plus = '<:plus_birthdayy:1102222100544110712>',
 	Link = '<:link_birthdayy:1102222076380725319>',
-	Exclamation = '<:exclamation_mark_birthdayy:1102222058777223209>',
+	Info = '<:exclamation_mark_birthdayy:1102222058777223209>',
 	Cake = '<:cake_birthdayy:1102221988380020766>',
 	Crown = '<:crown_birthdayy:1102222034458660915>',
 	News = '<:news_birthdayy:1102222080029761618>',

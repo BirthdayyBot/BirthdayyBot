@@ -1,54 +1,22 @@
 {
-    "birthdayName": "anniversaire",
-    "birthdayDescription": "Commandes de gestion d’anniversaire",
-    "setName": "definir",
-    "setDescription": "Définir votre date d'anniversaire sur le serveur.",
-    "set": {
-        "dayName": "jour",
-        "dayDescription": "Quel jour es-tu née ?",
-        "monthName": "mois",
-        "monthDescription": "Quel est votre mois d'anniversaire ?",
-        "yearName": "année",
-        "yearDescription": "En quelle année es-tu né ?",
-        "userName": "utilisateur",
-        "userDescription": "De quel utilisateur veux-tu définir la date de naissance ? - MANAGER ONLY.",
-        "success": "Votre anniversaire a bien été défini au {{birthday}} sur ce serveur.",
-        "success_target": "L'anniversaire de {{target}} a bien été défini au {{birthday}} sur ce serveur",
-        "hasNotPermissionManagesRoles": "Tu n'est pas autorisé à gérer les anniversaires d'autres utilisateurs.",
-        "roleHigher": "You cannot execute this command on someone with a higher role than you!"
-    },
-    "listName": "liste",
-    "listDescription": "Lister tous les anniversaires enregistrés",
-    "list": {
-        "embedTitle": ""
-    },
-    "removeName": "retirer",
-    "removeDescription": "Supprimer votre anniversaire",
-    "remove": {
-        "userName": "user",
-        "userDescription": "Supprimer l'anniversaire pour cette utilisateur - MANAGER ONLY",
-        "success": "Votre anniversaire a été supprimé avec succès.",
-        "success_target": "L'anniversaire de {{target}} à bien été supprimé.",
-        "notRegistered": "Votre anniversaire n'est pas enregistré. Utilisez {{command}} pour l'enregistrer.",
-        "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré.",
-        "hasNotPermissionManagesRoles": "Vous n'avez pas la permission de supprimer des anniversaires",
-        "target": "Vous n'êtes pas autorisé à supprimer l'anniversaire de cet utilisateur."
-    },
-    "showName": "montrer",
-    "showDescription": "Montrer votre anniversaire",
-    "show": {
-        "userName": "utilisateur",
-        "userDescription": "Montrer l'anniversaire de cette utilisateur - MANAGER ONLY",
-        "title": "{{emoji}} Anniversaire",
-        "success": "{{emoji}} Votre anniversaire est défini sûr {{date}}.",
-        "success_target": "{{emoji}} L'anniversaire de {{target}} est défini sûr {{date}}.",
-        "notRegistered": "Votre anniversaire n'est pas enregistré. \nUtilisez {{command}} pour l'enregistrer.",
-        "notRegistered_target": "L'anniversaire de {{target}} n'est pas enregistré."
-    },
-    "testName": "test",
-    "testDescription": "Testez votre configuration d’anniversaire actuelle",
-    "test": {
-        "userName": "utilisateur",
-        "userDescription": "Tester l'anniversaire de cet utilisateur - MANAGER ONLY"
-    }
+    "rootDescription": "Gérer votre anniversaire.",
+    "setDescription": "Définir votre anniversaire.",
+    "setOptionsDayDescription": "Le jour de l'anniversaire.",
+    "setOptionsMonthDescription": "Le mois de l'anniversaire.",
+    "setOptionsYearDescription": "L'année de l'anniversaire.",
+    "setSuccess": "Votre anniversaire a été défini avec succès à {{ birthday }}.",
+    "setFailure": "{{FAILURE}} Échec de la définition de votre anniversaire",
+    "removeDescription": "Supprimer votre anniversaire.",
+    "removeSuccess": "{{SUCCESS}} Votre anniversaire a été supprimé avec succès.",
+	"removeFailure": "💡 Vous n'avez pas d'anniversaire défini.",
+	"listDescription": "Lister les anniversaires.",
+	"listOptionsMonthDescription": "Le mois pour lister les anniversaires.",
+    "listTitle": "Anniversaires de {{ month }}:",
+    "listTitleEmpty": "Aucun anniversaire trouvé pour {{ month }}.",
+	"showDescription": "Afficher votre anniversaire.",
+	"showOptionsUserDescription": "L'utilisateur pour afficher l'anniversaire.",
+	"showNoBirthday": "💡 {{ user }} n'a pas d'anniversaire défini.",
+	"showSelfNoBirthday": "💡 Vous n'avez pas d'anniversaire défini.",
+	"showSelf": "{{SUCCESS}} Votre anniversaire est le {{ birthday }}.",
+	"showBirthday": "L'anniversaire de {{ user }} est le {{ birthday }}."
 }

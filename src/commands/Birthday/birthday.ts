@@ -1,21 +1,22 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { addZeroToSingleDigitNumber, formatDateForDisplay, numberToMonthName } from '#utils/common';
-import { Emojis } from '#utils/constants';
+import { formatDateForDisplay, getDateFromInteraction, numberToMonthName } from '#utils/common';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
-import { resolveTarget } from '#utils/utils';
 import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import type { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, fetchT, resolveKey } from '@sapphire/plugin-i18next';
-import { isNullOrUndefined, isNullish, objectValues } from '@sapphire/utilities';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
+import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { isNullOrUndefined } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
+	ChatInputCommandInteraction,
 	SlashCommandBuilder,
 	SlashCommandIntegerOption,
 	SlashCommandUserOption,
+	User,
 	bold,
 	chatInputApplicationCommandMention
 } from 'discord.js';
@@ -25,109 +26,119 @@ import {
 		{ name: 'list', chatInputRun: 'chatInputRunList' },
 		{ name: 'set', chatInputRun: 'chatInputRunSet' },
 		{ name: 'remove', chatInputRun: 'chatInputRunRemove' },
-		{ name: 'show', chatInputRun: 'chatInputRunShow' },
-		{ name: 'test', chatInputRun: 'chatInputRunTest', preconditions: ['Moderator'] }
+		{ name: 'show', chatInputRun: 'chatInputRunShow' }
 	],
 	runIn: CommandOptionsRunTypeEnum.GuildAny,
 	permissionLevel: PermissionLevels.Everyone
 })
-export class BirthdayCommand extends BirthdayySubcommand {
+export class UserCommand extends BirthdayySubcommand {
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
 		registry.registerChatInputCommand((builder) =>
 			this.registerSubcommands(
-				applyDescriptionLocalizedBuilder(builder, 'commands/birthday:birthdayDescription') //
+				applyDescriptionLocalizedBuilder(builder, 'commands/birthday:rootDescription') //
 					.setName('birthday')
 					.setDMPermission(false)
 			)
 		);
 	}
 
-	public async chatInputRunList(interaction: BirthdayySubcommand.Interaction<'cached'>) {
+	public async chatInputRunList(interaction: ChatInputCommandInteraction<'cached'>) {
 		const birthdayManager = getBirthdays(interaction.guild);
 		await getBirthdays(interaction.guild).fetch();
-		const month = interaction.options.getInteger('month');
+		const month = interaction.options.getInteger('month') ?? dayjs().month() + 1;
 
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
 
-		const title = month
-			? await resolveKey(interaction, 'commands/birthday:list.title.month', options)
-			: await resolveKey(interaction, 'commands/birthday:list.title.next');
+		const title = await resolveKey(interaction, 'commands/birthday:listTitle', options);
 
 		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
 	}
 
-	public async chatInputRunSet(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { options, user } = resolveTarget(interaction);
-		const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));
-		const month = addZeroToSingleDigitNumber(interaction.options.getInteger('month', true));
-		const year = interaction.options.getInteger('year') ?? 'XXXX';
-		const birthday = `${year}-${month}-${day}`;
-		const t = await fetchT(interaction);
-		const newBirthday = await getBirthdays(interaction.guildId).upsert({ birthday, userId: user.id });
+	public async chatInputRunSet(interaction: ChatInputCommandInteraction<'cached'>) {
+		const birthday = getDateFromInteraction(interaction);
+		const newBirthday = await getBirthdays(interaction.guildId).upsert({ birthday, userId: interaction.user.id });
 
-		if (isNullish(newBirthday)) {
-			return interaction.reply(interactionProblem(t('commands/birthday:set.error', { ...options })));
-		}
-
-		const content = t('commands/birthday:set.success', {
-			birthday: formatDateForDisplay(birthday),
-			...options
-		});
-
-		return interaction.reply(interactionSuccess(content));
+		if (isNullOrUndefined(newBirthday)) return this.handleSetFailure(interaction);
+		return this.handleSetSuccess(interaction, newBirthday);
 	}
 
-	public async chatInputRunRemove(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user, options } = resolveTarget(interaction);
+	public async chatInputRunRemove(interaction: ChatInputCommandInteraction<'cached'>) {
+		const { user } = interaction;
 		const result = await getBirthdays(interaction.guildId).remove(user.id);
-		const t = await fetchT(interaction);
 
-		if (isNullish(result)) {
-			const content = t('commands/birthday:remove.notRegistered', {
-				command: BirthdayApplicationCommandMentions.Set,
-				...options
-			});
-			return interaction.reply(interactionProblem(content));
-		}
-
-		const content = t('commands/birthday:remove.success', { ...options });
-
-		return interaction.reply(interactionSuccess(content));
+		if (isNullOrUndefined(result)) return this.handleRemoveFailure(interaction);
+		return this.handleRemoveSuccess(interaction);
 	}
 
-	public async chatInputRunShow(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user, options } = resolveTarget(interaction);
-		const birthday = getBirthdays(interaction.guild).get(user.id);
+	public async chatInputRunShow(interaction: ChatInputCommandInteraction<'cached'>) {
+		const user = interaction.options.getUser('user') ?? interaction.user;
+		const isSelf = user.id === interaction.user.id;
 
-		if (isNullOrUndefined(birthday)) {
-			const content = await resolveKey(interaction, 'commands/birthday:show.notRegistered', { ...options });
-			return interaction.reply(interactionProblem(content));
-		}
+		const result = await Result.fromAsync(await getBirthdays(interaction.guild).fetch(user.id));
 
-		const content = await resolveKey(interaction, 'commands/birthday:show.success', {
-			...options,
-			date: bold(formatDateForDisplay(birthday.birthday)),
-			emoji: Emojis.ArrowRight
+		return result.match({
+			ok: (birthday) => {
+				if (isSelf) return this.handleShowSelfBirthday(interaction, birthday);
+				return this.handleShowBirthday(interaction, birthday, user);
+			},
+			err: () => {
+				if (isSelf) return this.handleShowSelfNoBirthday(interaction, user);
+				return this.handleShowNoBirthday(interaction, user);
+			}
 		});
+	}
 
+	private async handleSetSuccess(interaction: ChatInputCommandInteraction<'cached'>, birthday: Birthday) {
+		const content = await resolveKey(interaction, 'commands/birthday:setSuccess', {
+			birthday: formatDateForDisplay(birthday.birthday)
+		});
 		return interaction.reply(interactionSuccess(content));
 	}
 
-	public async chatInputRunTest(interaction: BirthdayySubcommand.Interaction<'cached'>) {
-		const { user } = resolveTarget(interaction);
-		const birthday = getBirthdays(interaction.guild).get(user.id);
+	private async handleSetFailure(interaction: ChatInputCommandInteraction<'cached'>) {
+		const content = await resolveKey(interaction, 'commands/birthday:setFailure');
+		return interaction.reply(interactionProblem(content));
+	}
 
-		if (isNullOrUndefined(birthday)) {
-			return interaction.reply(interactionProblem('This user has not yet registered his birthday '));
-		}
-
-		const result = await getBirthdays(interaction.guild).announcedBirthday(birthday);
-
-		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
-
+	private async handleShowSelfBirthday(interaction: ChatInputCommandInteraction<'cached'>, birthday: Birthday) {
+		const content = await resolveKey(interaction, 'commands/birthday:showSelf', {
+			birthday: bold(formatDateForDisplay(birthday.birthday))
+		});
 		return interaction.reply(interactionSuccess(content));
+	}
+
+	private async handleShowBirthday(
+		interaction: ChatInputCommandInteraction<'cached'>,
+		birthday: Birthday,
+		user: User
+	) {
+		const content = await resolveKey(interaction, 'commands/birthday:showBirthday', {
+			user,
+			birthday: bold(formatDateForDisplay(birthday.birthday))
+		});
+		return interaction.reply(interactionSuccess(content));
+	}
+
+	private async handleShowSelfNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
+		const content = await resolveKey(interaction, 'commands/birthday:showSelfNoBirthday', { user });
+		return interaction.reply(interactionProblem(content));
+	}
+
+	private async handleShowNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
+		const content = await resolveKey(interaction, 'commands/birthday:showNoBirthday', { user });
+		return interaction.reply(interactionProblem(content));
+	}
+
+	private async handleRemoveSuccess(interaction: ChatInputCommandInteraction<'cached'>) {
+		const content = await resolveKey(interaction, 'commands/birthday:remove.success');
+		return interaction.reply(interactionSuccess(content));
+	}
+
+	private async handleRemoveFailure(interaction: ChatInputCommandInteraction<'cached'>) {
+		const content = await resolveKey(interaction, 'commands/birthday:remove.notRegistered');
+		return interaction.reply(interactionProblem(content));
 	}
 
 	private registerSubcommands(builder: SlashCommandBuilder) {
@@ -135,57 +146,54 @@ export class BirthdayCommand extends BirthdayySubcommand {
 			.addSubcommand((subcommand) => this.registerSetSubCommand(subcommand))
 			.addSubcommand((subcommand) => this.registerRemoveSubCommand(subcommand))
 			.addSubcommand((subcommand) => this.registerListSubCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerShowSubCommand(subcommand))
-			.addSubcommand((subcommand) => this.registerTestSubCommand(subcommand));
+			.addSubcommand((subcommand) => this.registerShowSubCommand(subcommand));
 	}
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:set')
-			.addIntegerOption((option) => this.dayOptions(option, 'commands/birthday:set.day'))
-			.addIntegerOption((option) => this.monthOptions(option, 'commands/birthday:set.month'))
-			.addIntegerOption((option) => this.yearOptions(option, 'commands/birthday:set.year'))
-			.addUserOption((option) => this.userOptions(option, 'commands/birthday:set.user'));
+		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:setDescription')
+			.setName('set')
+			.addIntegerOption((option) => UserCommand.dayOptions(option, 'commands/birthday:setOptionsDayDescription'))
+			.addIntegerOption((option) =>
+				UserCommand.monthOptions(option, 'commands/birthday:setOptionsMonthDescription')
+			)
+			.addIntegerOption((option) =>
+				UserCommand.yearOptions(option, 'commands/birthday:setOptionsYearDescription')
+			);
 	}
 
 	private registerListSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:list').addIntegerOption((option) =>
-			this.monthOptions(option, 'commands/birthday:list.month').setRequired(false)
-		);
+		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:listDescription')
+			.setName('list')
+			.addIntegerOption((option) =>
+				UserCommand.monthOptions(option, 'commands/birthday:listOptionsMonthDescription').setRequired(false)
+			);
 	}
 
 	private registerRemoveSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:remove').addUserOption((option) =>
-			this.userOptions(option, 'commands/birthday:remove.user')
-		);
+		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:removeDescription').setName('remove');
 	}
 
 	private registerShowSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:show').addUserOption((option) =>
-			this.userOptions(option, 'commands/birthday:show.user')
-		);
+		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:showDescription')
+			.setName('show')
+			.addUserOption((option) => UserCommand.userOptions(option, 'commands/birthday:showOptionsUserDescription'));
 	}
 
-	private registerTestSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyLocalizedBuilder(builder, 'commands/birthday:test').addUserOption((option) =>
-			this.userOptions(option, 'commands/birthday:test.user')
-		);
-	}
-
-	private dayOptions(option: SlashCommandIntegerOption, key: string) {
+	public static dayOptions(option: SlashCommandIntegerOption, key: string) {
 		return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);
 	}
 
-	private monthOptions(option: SlashCommandIntegerOption, key: string) {
+	public static monthOptions(option: SlashCommandIntegerOption, key: string) {
 		return applyLocalizedBuilder(option, key).setRequired(true).setAutocomplete(true);
 	}
 
-	private yearOptions(option: SlashCommandIntegerOption, key: string) {
+	public static yearOptions(option: SlashCommandIntegerOption, key: string) {
 		const currentYear = dayjs().year();
 		const minYear = currentYear - 100;
 		return applyLocalizedBuilder(option, key).setMinValue(minYear).setMaxValue(currentYear).setRequired(false);
 	}
 
-	private userOptions(option: SlashCommandUserOption, key: string) {
+	public static userOptions(option: SlashCommandUserOption, key: string) {
 		return applyLocalizedBuilder(option, key).setRequired(false);
 	}
 }
