@@ -24,7 +24,7 @@ export class UserCommand extends BirthdayySubcommand {
 		registry.registerChatInputCommand((builder) =>
 			this.registerSubcommands(
 				applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:rootDescription') //
-					.setName('birthday')
+					.setName('admin-birthday')
 					.setDMPermission(false)
 			)
 		);
@@ -99,7 +99,7 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerRemoveSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:removeDescription')
+		return applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:removeDescription')
 			.setName('remove')
 			.addUserOption((option) =>
 				BirthdayCommand.userOptions(option, 'commands/admin-birthday:removeOptionsUserDescription')
@@ -107,7 +107,7 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerTestSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:testDescription')
+		return applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:testDescription')
 			.setName('test')
 			.addUserOption((option) =>
 				BirthdayCommand.userOptions(option, 'commands/admin-birthday:testOptionsUserDescription')
