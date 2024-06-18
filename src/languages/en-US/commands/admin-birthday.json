@@ -1,0 +1,17 @@
+{
+	"rootDescription": "Manage the birthday of a user.",
+	"setDescription": "Set the birthday of a user.",
+	"setOptionsDayDescription": "The day of the birthday.",
+	"setOptionsMonthDescription": "The month of the birthday.",
+	"setOptionsYearDescription": "The year of the birthday.",
+	"setOptionsUserDescription": "The user to set the birthday for.",
+	"setSuccess": "Successfully set the birthday of {{ user }} to {{ birthday }}.",
+	"setFailure": "Failed to set the birthday of {{ user }}.",
+	"removeDescription": "Remove the birthday of a user.",
+	"removeOptionsUserDescription": "The user to remove the birthday for.",
+	"removeSuccess": "Successfully removed the birthday of {{ user }}.",
+	"removeFailureNoBirthday": "{{ user }} does not have a birthday set.",
+	"testDescription": "Test the birthday of a user.",
+	"testOptionsUserDescription": "The user to test the birthday for.",
+	"testFailure": "Failed to test the birthday of {{ user }}."
+}

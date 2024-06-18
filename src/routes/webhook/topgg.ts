@@ -81,7 +81,7 @@ export class UserRoute extends Route {
 
 	private async sendVoteNotification(user: User) {
 		const embed = new DefaultEmbedBuilder()
-			.setTitle(`${Emojis.Exclamation} New Vote on TopGG!`)
+			.setTitle(`${Emojis.Info} New Vote on TopGG!`)
 			.setDescription(
 				`\`${user.username}#${user.discriminator}\` has **voted** for ${container.client.user!.displayName}! Use \`/vote\` or vote [here](https://top.gg/bot/${container.client.id}/vote) directly.`
 			)

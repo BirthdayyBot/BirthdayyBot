@@ -81,7 +81,7 @@ function parseInternationalizationDefaultVariablesPermissions() {
 function parseInternationalizationDefaultVariablesEmojis() {
 	return {
 		SUCCESS: Emojis.Success,
-		FAIL: Emojis.Fail,
+		FAILURE: Emojis.Fail,
 		PLUS: Emojis.Plus,
 		HEART: Emojis.Heart,
 		ARROW_LEFT: Emojis.ArrowLeft,
@@ -90,7 +90,7 @@ function parseInternationalizationDefaultVariablesEmojis() {
 		PEOPLE: Emojis.People,
 		ALARM: Emojis.Alarm,
 		CAKE: Emojis.Cake,
-		EXCLAMATION: Emojis.Exclamation
+		INFO: Emojis.Info
 	};
 }
 
