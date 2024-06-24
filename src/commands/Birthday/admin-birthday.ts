@@ -89,15 +89,15 @@ export class UserCommand extends BirthdayySubcommand {
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
 		return applyDescriptionLocalizedBuilder(builder.setName('set'), 'commands/admin-birthday:setDescription') //
+			.addUserOption((option) =>
+				registerUserRequiredOption(option, 'commands/admin-birthday:setOptionsUserDescription')
+			)
 			.addIntegerOption((option) => registerDayOption(option, 'commands/admin-birthday:setOptionsDayDescription'))
 			.addIntegerOption((option) =>
 				registerMonthOption(option, 'commands/admin-birthday:setOptionsMonthDescription')
 			)
 			.addIntegerOption((option) =>
 				registerYearOption(option, 'commands/admin-birthday:setOptionsYearDescription')
-			)
-			.addUserOption((option) =>
-				registerUserRequiredOption(option, 'commands/admin-birthday:setOptionsUserDescription')
 			);
 	}
 
