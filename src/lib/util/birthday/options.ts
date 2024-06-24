@@ -6,7 +6,7 @@ const minYear = 1900;
 const maxYear = new Date().getFullYear();
 
 export function registerDayOption(option: SlashCommandIntegerOption, key: string) {
-	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);
+	return applyLocalizedBuilder(option.setName('day'), key).setRequired(true).setMinValue(1).setMaxValue(31);
 }
 
 const localizedMonthChoices = [
@@ -25,17 +25,20 @@ const localizedMonthChoices = [
 ];
 
 export function registerMonthOption(option: SlashCommandIntegerOption, key: string) {
-	return applyLocalizedBuilder(option, key).setRequired(true).setChoices(localizedMonthChoices);
+	return applyLocalizedBuilder(option.setName('month'), key).setRequired(true).setChoices(localizedMonthChoices);
 }
 
 export function registerYearOption(option: SlashCommandIntegerOption, key: string) {
-	return applyLocalizedBuilder(option, key).setRequired(false).setMinValue(minYear).setMaxValue(maxYear);
+	return applyLocalizedBuilder(option.setName('year'), key)
+		.setRequired(false)
+		.setMinValue(minYear)
+		.setMaxValue(maxYear);
 }
 
 export function registerUserOption(option: SlashCommandUserOption, key: string) {
-	return applyLocalizedBuilder(option, key);
+	return applyLocalizedBuilder(option.setName('user'), key);
 }
 
 export function registerUserRequiredOption(option: SlashCommandUserOption, key: string) {
-	return applyLocalizedBuilder(option, key).setRequired(true);
+	return registerUserOption(option, key).setRequired(true);
 }
