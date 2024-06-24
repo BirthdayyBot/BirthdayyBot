@@ -1,6 +1,5 @@
 import { Month } from '#utils/birthday/types';
 import { applyLocalizedBuilder, createLocalizedChoice } from '@sapphire/plugin-i18next';
-import dayjs from 'dayjs';
 import { SlashCommandIntegerOption, SlashCommandUserOption } from 'discord.js';
 
 export function registerDayOption(option: SlashCommandIntegerOption, key: string) {
@@ -28,7 +27,7 @@ export function registerMonthOption(option: SlashCommandIntegerOption, key: stri
 
 export function registerYearOption(option: SlashCommandIntegerOption, key: string) {
 	const minYear = 1900;
-	const maxYear = dayjs().year();
+	const maxYear = new Date().getFullYear();
 	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(minYear).setMaxValue(maxYear);
 }
 
