@@ -6,7 +6,7 @@ import {
 	registerUserOption,
 	registerUserRequiredOption,
 	registerYearOption
-} from '#utils/birthday/registerOptions';
+} from '#utils/birthday';
 import { getDateFromInteraction } from '#utils/common';
 import { interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
