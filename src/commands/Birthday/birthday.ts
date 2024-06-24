@@ -5,7 +5,7 @@ import {
 	registerMonthOption,
 	registerUserOption,
 	registerYearOption
-} from '#utils/birthday/registerOptions';
+} from '#lib/util/birthday/options';
 import { formatDateForDisplay, getDateFromInteraction, numberToMonthName } from '#utils/common';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
@@ -13,15 +13,13 @@ import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
-	SlashCommandIntegerOption,
-	SlashCommandUserOption,
 	User,
 	bold,
 	chatInputApplicationCommandMention
