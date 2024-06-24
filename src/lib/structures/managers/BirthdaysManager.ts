@@ -269,10 +269,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		if (typeof id === 'string') {
 			return this._cache(
-				await container.prisma.birthday.findFirstOrThrow({
+				await container.prisma.birthday.findUniqueOrThrow({
 					where: {
-						guildId: this.guildId,
-						userId: id
+						userId_guildId: {
+							guildId: this.guildId,
+							userId: id
+						}
 					}
 				}),
 				CacheActions.None
