@@ -2,6 +2,9 @@ import { Month } from '#utils/birthday/types';
 import { applyLocalizedBuilder, createLocalizedChoice } from '@sapphire/plugin-i18next';
 import { SlashCommandIntegerOption, SlashCommandUserOption } from 'discord.js';
 
+const minYear = 1900;
+const maxYear = new Date().getFullYear();
+
 export function registerDayOption(option: SlashCommandIntegerOption, key: string) {
 	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);
 }
@@ -26,8 +29,6 @@ export function registerMonthOption(option: SlashCommandIntegerOption, key: stri
 }
 
 export function registerYearOption(option: SlashCommandIntegerOption, key: string) {
-	const minYear = 1900;
-	const maxYear = new Date().getFullYear();
 	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(minYear).setMaxValue(maxYear);
 }
 
