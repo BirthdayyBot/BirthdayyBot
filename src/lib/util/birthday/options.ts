@@ -29,7 +29,7 @@ export function registerMonthOption(option: SlashCommandIntegerOption, key: stri
 }
 
 export function registerYearOption(option: SlashCommandIntegerOption, key: string) {
-	return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(minYear).setMaxValue(maxYear);
+	return applyLocalizedBuilder(option, key).setRequired(false).setMinValue(minYear).setMaxValue(maxYear);
 }
 
 export function registerUserOption(option: SlashCommandUserOption, key: string) {
