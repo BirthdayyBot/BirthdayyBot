@@ -1,6 +1,11 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
-import { registerDayOption, registerMonthOption, registerUserOption, registerYearOption } from '#utils/birthday';
+import {
+	registerDayOption,
+	registerMonthOption,
+	registerUserOption,
+	registerYearOption
+} from '#lib/util/birthday/options';
 import { formatDateForDisplay, getDateFromInteraction, numberToMonthName } from '#utils/common';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
@@ -114,19 +119,21 @@ export class UserCommand extends BirthdayySubcommand {
 		user: User
 	) {
 		const content = await resolveKey(interaction, 'commands/birthday:showBirthday', {
-			user,
+			user: user.toString(),
 			birthday: bold(formatDateForDisplay(birthday.birthday))
 		});
 		return interaction.reply(interactionSuccess(content));
 	}
 
 	private async handleShowSelfNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
-		const content = await resolveKey(interaction, 'commands/birthday:showSelfNoBirthday', { user });
+		const content = await resolveKey(interaction, 'commands/birthday:showSelfNoBirthday', {
+			user: user.toString()
+		});
 		return interaction.reply(interactionProblem(content));
 	}
 
 	private async handleShowNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
-		const content = await resolveKey(interaction, 'commands/birthday:showNoBirthday', { user });
+		const content = await resolveKey(interaction, 'commands/birthday:showNoBirthday', { user: user.toString() });
 		return interaction.reply(interactionProblem(content));
 	}
 
