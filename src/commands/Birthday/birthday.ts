@@ -1,5 +1,11 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
+import {
+	registerDayOption,
+	registerMonthOption,
+	registerUserOption,
+	registerYearOption
+} from '#lib/util/birthday/options';
 import { formatDateForDisplay, getDateFromInteraction, numberToMonthName } from '#utils/common';
 import { interactionProblem, interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
@@ -7,15 +13,13 @@ import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
 import type { Birthday } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
-import { applyDescriptionLocalizedBuilder, applyLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
+import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
 	ChatInputCommandInteraction,
 	SlashCommandBuilder,
-	SlashCommandIntegerOption,
-	SlashCommandUserOption,
 	User,
 	bold,
 	chatInputApplicationCommandMention
@@ -115,19 +119,21 @@ export class UserCommand extends BirthdayySubcommand {
 		user: User
 	) {
 		const content = await resolveKey(interaction, 'commands/birthday:showBirthday', {
-			user,
+			user: user.toString(),
 			birthday: bold(formatDateForDisplay(birthday.birthday))
 		});
 		return interaction.reply(interactionSuccess(content));
 	}
 
 	private async handleShowSelfNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
-		const content = await resolveKey(interaction, 'commands/birthday:showSelfNoBirthday', { user });
+		const content = await resolveKey(interaction, 'commands/birthday:showSelfNoBirthday', {
+			user: user.toString()
+		});
 		return interaction.reply(interactionProblem(content));
 	}
 
 	private async handleShowNoBirthday(interaction: ChatInputCommandInteraction<'cached'>, user: User) {
-		const content = await resolveKey(interaction, 'commands/birthday:showNoBirthday', { user });
+		const content = await resolveKey(interaction, 'commands/birthday:showNoBirthday', { user: user.toString() });
 		return interaction.reply(interactionProblem(content));
 	}
 
@@ -150,51 +156,26 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:setDescription')
-			.setName('set')
-			.addIntegerOption((option) => UserCommand.dayOptions(option, 'commands/birthday:setOptionsDayDescription'))
-			.addIntegerOption((option) =>
-				UserCommand.monthOptions(option, 'commands/birthday:setOptionsMonthDescription')
-			)
-			.addIntegerOption((option) =>
-				UserCommand.yearOptions(option, 'commands/birthday:setOptionsYearDescription')
-			);
+		return applyDescriptionLocalizedBuilder(builder.setName('set'), 'commands/birthday:setDescription') //
+			.addIntegerOption((option) => registerDayOption(option, 'commands/birthday:setOptionsDayDescription'))
+			.addIntegerOption((option) => registerMonthOption(option, 'commands/birthday:setOptionsMonthDescription'))
+			.addIntegerOption((option) => registerYearOption(option, 'commands/birthday:setOptionsYearDescription'));
 	}
 
 	private registerListSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:listDescription')
-			.setName('list')
+		return applyDescriptionLocalizedBuilder(builder.setName('list'), 'commands/birthday:listDescription') //
 			.addIntegerOption((option) =>
-				UserCommand.monthOptions(option, 'commands/birthday:listOptionsMonthDescription').setRequired(false)
+				registerMonthOption(option, 'commands/birthday:listOptionsMonthDescription').setRequired(false)
 			);
 	}
 
 	private registerRemoveSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:removeDescription').setName('remove');
+		return applyDescriptionLocalizedBuilder(builder.setName('remove'), 'commands/birthday:removeDescription');
 	}
 
 	private registerShowSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/birthday:showDescription')
-			.setName('show')
-			.addUserOption((option) => UserCommand.userOptions(option, 'commands/birthday:showOptionsUserDescription'));
-	}
-
-	public static dayOptions(option: SlashCommandIntegerOption, key: string) {
-		return applyLocalizedBuilder(option, key).setRequired(true).setMinValue(1).setMaxValue(31);
-	}
-
-	public static monthOptions(option: SlashCommandIntegerOption, key: string) {
-		return applyLocalizedBuilder(option, key).setRequired(true).setAutocomplete(true);
-	}
-
-	public static yearOptions(option: SlashCommandIntegerOption, key: string) {
-		const currentYear = dayjs().year();
-		const minYear = currentYear - 100;
-		return applyLocalizedBuilder(option, key).setMinValue(minYear).setMaxValue(currentYear).setRequired(false);
-	}
-
-	public static userOptions(option: SlashCommandUserOption, key: string) {
-		return applyLocalizedBuilder(option, key).setRequired(false);
+		return applyDescriptionLocalizedBuilder(builder.setName('show'), 'commands/birthday:showDescription') //
+			.addUserOption((option) => registerUserOption(option, 'commands/birthday:showOptionsUserDescription'));
 	}
 }
 

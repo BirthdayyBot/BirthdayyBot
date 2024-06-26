@@ -2,6 +2,7 @@ import { srcFolder } from '#utils/constants';
 import { cut } from '#utils/common/strings';
 import { readFile } from 'node:fs/promises';
 import dayjs from 'dayjs';
+import { join } from 'node:path';
 
 const tz = new Map<string, TimeZone>();
 
@@ -12,13 +13,13 @@ export const MaximumLength = 100;
 	const tzCountries = new Map<string, TimeZoneCountry>();
 	const tzCountryNames = new Map<string, string>();
 
-	const PathTimeZoneCountry = new URL('./generated/data/tz-country-codes.json', srcFolder);
+	const PathTimeZoneCountry = join(srcFolder, 'generated/data/tz-country-codes.json');
 	for (const entry of JSON.parse(await readFile(PathTimeZoneCountry, 'utf8')) as RawTimeZoneCountry[]) {
 		tzCountries.set(entry.code, { code: entry.code.toLowerCase(), name: entry.name.toLowerCase() });
 		tzCountryNames.set(entry.code, entry.name);
 	}
 
-	const PathTimeZone = new URL('./generated/data/tz.json', srcFolder);
+	const PathTimeZone = join(srcFolder, 'generated/data/tz.json');
 	for (const entry of JSON.parse(await readFile(PathTimeZone, 'utf8')) as RawTimeZone[]) {
 		const countries = entry.codes.map((code) => tzCountries.get(code)!);
 		const countryNames = entry.codes.map((code) => tzCountryNames.get(code)!);

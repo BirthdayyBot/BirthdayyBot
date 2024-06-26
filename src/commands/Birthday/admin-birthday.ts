@@ -1,6 +1,12 @@
 import { BirthdayySubcommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
-import { UserCommand as BirthdayCommand } from '#root/commands/Birthday/birthday';
+import {
+	registerDayOption,
+	registerMonthOption,
+	registerUserOption,
+	registerUserRequiredOption,
+	registerYearOption
+} from '#utils/birthday';
 import { getDateFromInteraction } from '#utils/common';
 import { interactionSuccess } from '#utils/embed';
 import { getBirthdays } from '#utils/functions';
@@ -82,35 +88,30 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private registerSetSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:setDescription')
-			.setName('set')
-			.addIntegerOption((option) =>
-				BirthdayCommand.dayOptions(option, 'commands/admin-birthday:setOptionsDayDescription')
-			)
-			.addIntegerOption((option) =>
-				BirthdayCommand.monthOptions(option, 'commands/admin-birthday:setOptionsMonthDescription')
-			)
-			.addIntegerOption((option) =>
-				BirthdayCommand.yearOptions(option, 'commands/admin-birthday:setOptionsYearDescription')
-			)
+		return applyDescriptionLocalizedBuilder(builder.setName('set'), 'commands/admin-birthday:setDescription') //
 			.addUserOption((option) =>
-				BirthdayCommand.userOptions(option, 'commands/admin-birthday:setOptionsUserDescription')
+				registerUserRequiredOption(option, 'commands/admin-birthday:setOptionsUserDescription')
+			)
+			.addIntegerOption((option) => registerDayOption(option, 'commands/admin-birthday:setOptionsDayDescription'))
+			.addIntegerOption((option) =>
+				registerMonthOption(option, 'commands/admin-birthday:setOptionsMonthDescription')
+			)
+			.addIntegerOption((option) =>
+				registerYearOption(option, 'commands/admin-birthday:setOptionsYearDescription')
 			);
 	}
 
 	private registerRemoveSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:removeDescription')
-			.setName('remove')
+		return applyDescriptionLocalizedBuilder(builder.setName('remove'), 'commands/admin-birthday:removeDescription') //
 			.addUserOption((option) =>
-				BirthdayCommand.userOptions(option, 'commands/admin-birthday:removeOptionsUserDescription')
+				registerUserRequiredOption(option, 'commands/admin-birthday:removeOptionsUserDescription')
 			);
 	}
 
 	private registerTestSubCommand(builder: SlashCommandSubcommandBuilder) {
-		return applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:testDescription')
-			.setName('test')
+		return applyDescriptionLocalizedBuilder(builder.setName('test'), 'commands/admin-birthday:testDescription') //
 			.addUserOption((option) =>
-				BirthdayCommand.userOptions(option, 'commands/admin-birthday:testOptionsUserDescription')
+				registerUserOption(option, 'commands/admin-birthday:testOptionsUserDescription')
 			);
 	}
 }
