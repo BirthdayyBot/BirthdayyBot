@@ -52,7 +52,7 @@
 		"@sapphire/plugin-i18next": "^7.1.2",
 		"@sapphire/plugin-logger": "^4.0.2",
 		"@sapphire/plugin-scheduled-tasks": "^9.1.0",
-		"@sapphire/plugin-subcommands": "^6.0.3",
+		"@sapphire/plugin-subcommands": "^7.0.0",
 		"@sapphire/plugin-utilities-store": "^2.0.2",
 		"@sapphire/ratelimits": "^2.4.9",
 		"@sapphire/utilities": "^3.16.2",
