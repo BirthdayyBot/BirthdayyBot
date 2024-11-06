@@ -47,7 +47,7 @@
 		"@sapphire/duration": "^1.1.2",
 		"@sapphire/fetch": "^3.0.3",
 		"@sapphire/framework": "^5.2.1",
-		"@sapphire/plugin-api": "^6.1.1",
+		"@sapphire/plugin-api": "^7.0.3",
 		"@sapphire/plugin-hmr": "^3.0.1",
 		"@sapphire/plugin-i18next": "^7.1.2",
 		"@sapphire/plugin-logger": "^4.0.2",

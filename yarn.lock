@@ -66,7 +66,7 @@ __metadata:
     "@sapphire/eslint-plugin-result": "npm:^2.0.4"
     "@sapphire/fetch": "npm:^3.0.3"
     "@sapphire/framework": "npm:^5.2.1"
-    "@sapphire/plugin-api": "npm:^6.1.1"
+    "@sapphire/plugin-api": "npm:^7.0.3"
     "@sapphire/plugin-hmr": "npm:^3.0.1"
     "@sapphire/plugin-i18next": "npm:^7.1.2"
     "@sapphire/plugin-logger": "npm:^4.0.2"
@@ -1215,15 +1215,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "@sapphire/plugin-api@npm:6.1.1"
+"@sapphire/plugin-api@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "@sapphire/plugin-api@npm:7.0.3"
   dependencies:
-    "@types/ws": "npm:^8.5.10"
-    tldts: "npm:^6.1.2"
-    tslib: "npm:^2.6.2"
-    undici: "npm:^6.4.0"
-  checksum: 10/b0fb595df0352247261653cd842414cb0271211f79e8318a1bb8da12965a22ec037f2422e58878473efa7b5b50b4de4e1a17a8cc7dbafe221870131b7b45dc5c
+    "@types/ws": "npm:^8.5.13"
+    "@vladfrangu/async_event_emitter": "npm:2.4.6"
+    cookie-es: "npm:^1.2.2"
+    tldts: "npm:^6.1.58"
+    undici: "npm:^6.20.1"
+  checksum: 10/dc639238a770e6015fed5ac0c66a260698e490ac5498a18ccac196d39df81e4c43fd7c920d93cc0ca7c827595360766c3464bb2aafca21f23ac10aaee4705626
   languageName: node
   linkType: hard
 
@@ -1536,12 +1537,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^8.5.10, @types/ws@npm:^8.5.12":
-  version: 8.5.12
-  resolution: "@types/ws@npm:8.5.12"
+"@types/ws@npm:^8.5.10, @types/ws@npm:^8.5.12, @types/ws@npm:^8.5.13":
+  version: 8.5.13
+  resolution: "@types/ws@npm:8.5.13"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/d8a3ddfb5ff8fea992a043113579d61ac1ea21e8464415af9e2b01b205ed19d817821ad64ca1b3a90062d1df1c23b0f586d8351d25ca6728844df99a74e8f76d
+  checksum: 10/21369beafa75c91ae3b00d3a2671c7408fceae1d492ca2abd5ac7c8c8bf4596d513c1599ebbddeae82c27c4a2d248976d0d714c4b3d34362b2ae35b964e2e637
   languageName: node
   linkType: hard
 
@@ -1670,7 +1671,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vladfrangu/async_event_emitter@npm:^2.2.4, @vladfrangu/async_event_emitter@npm:^2.4.6":
+"@vladfrangu/async_event_emitter@npm:2.4.6, @vladfrangu/async_event_emitter@npm:^2.2.4, @vladfrangu/async_event_emitter@npm:^2.4.6":
   version: 2.4.6
   resolution: "@vladfrangu/async_event_emitter@npm:2.4.6"
   checksum: 10/6a329441bbd36bb8bdc8c49f18328abf724834597c8cab56b5741f18fa167a010bb841bc9ec3638b6b73c6692b85d0de724612b0a416b523650574576fd1a197
@@ -2142,6 +2143,13 @@ __metadata:
   bin:
     conventional-commits-parser: cli.mjs
   checksum: 10/3b56a9313127f18c56b7fc0fdb0c49d2184ec18e0574e64580a0d5a3c3e0f3eecfb8bc3131dce967bfe9fd27debd5f42b7fc1f09e8e541e688e1dd2b57f49278
+  languageName: node
+  linkType: hard
+
+"cookie-es@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "cookie-es@npm:1.2.2"
+  checksum: 10/0fd742c11caa185928e450543f84df62d4b2c1fc7b5041196b57b7db04e1c6ac6585fb40e4f579a2819efefd2d6a9cbb4d17f71240d05f4dcd8f74ae81341a20
   languageName: node
   linkType: hard
 
@@ -4685,21 +4693,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tldts-core@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "tldts-core@npm:6.1.2"
-  checksum: 10/9ae2f1e0b842d8206daf7c832d2b82a6feba744124df5884ea9f2a49533fb91dc40b400e53190315717b11d2b441a749892d045edf4978c74fc4e89a955dd53e
+"tldts-core@npm:^6.1.58":
+  version: 6.1.58
+  resolution: "tldts-core@npm:6.1.58"
+  checksum: 10/8dae4470ab6184e4df2c42421ee0dcdafe8c6baff699ee4a75f376d147a3675fff63c680e2c5d7318a3128bd90ae1c9a784ba3511dcd6d8ca5385a29169b29bf
   languageName: node
   linkType: hard
 
-"tldts@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "tldts@npm:6.1.2"
+"tldts@npm:^6.1.58":
+  version: 6.1.58
+  resolution: "tldts@npm:6.1.58"
   dependencies:
-    tldts-core: "npm:^6.1.2"
+    tldts-core: "npm:^6.1.58"
   bin:
     tldts: bin/cli.js
-  checksum: 10/1abac96e56519b5ba074a5f379373ac6827877d7767994e50bb54b2661449b24d87d7c61e288f11e1a30065c08ace9f1f97359d0952cd73f0480de08584d0747
+  checksum: 10/0f36a72a645ff6b09b02e5935a80a0d100c500873520f9a69f33a92a64fe1e0602b008dd9ea959296916187ab2b41ae7e9e93039b3d930cc3031fde90d5ea127
   languageName: node
   linkType: hard
 
@@ -4812,10 +4820,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:6.19.8, undici@npm:^6.4.0":
+"undici@npm:6.19.8":
   version: 6.19.8
   resolution: "undici@npm:6.19.8"
   checksum: 10/19ae4ba38b029a664d99fd330935ef59136cf99edb04ed821042f27b5a9e84777265fb744c8a7abc83f2059afb019446c69a4ebef07bbc0ed6b2de8d67ef4090
+  languageName: node
+  linkType: hard
+
+"undici@npm:^6.20.1":
+  version: 6.20.1
+  resolution: "undici@npm:6.20.1"
+  checksum: 10/68604b53754a95ec89d52efc08fe3e70e333997300c9a5b69f2b6496f1f0f568b2e35adec6442985a7b1d2f7a5648ef5062d1736e4d68082d473cb82177674bc
   languageName: node
   linkType: hard
 
