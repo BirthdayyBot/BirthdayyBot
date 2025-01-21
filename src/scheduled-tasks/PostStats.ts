@@ -1,7 +1,7 @@
 import { Events } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
 import { FetchResultTypes, QueryError, fetch } from '@sapphire/fetch';
-import { MimeTypes } from '@sapphire/plugin-api';
+import type { MimeType } from '@sapphire/plugin-api';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { blueBright, green, red } from 'colorette';
 import { Status } from 'discord.js';
@@ -63,13 +63,14 @@ export class PostStats extends ScheduledTask {
 	}
 
 	public async query(url: string, body: string, token: string | null, list: Lists) {
+		const MimeType: MimeType = 'application/json';
 		try {
 			if (!token) return null;
 			await fetch(
 				url,
 				{
 					body,
-					headers: { 'content-type': MimeTypes.ApplicationJson, authorization: token },
+					headers: { 'content-type': MimeType, authorization: token },
 					method: 'POST'
 				},
 				FetchResultTypes.Result

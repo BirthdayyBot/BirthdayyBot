@@ -8,8 +8,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
-import { cast } from '@sapphire/utilities';
+import { ApiRequest, ApiResponse, Route, type ValidatorFunction } from '@sapphire/plugin-api';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 import { Guild, GuildMember, User } from 'discord.js';
 
@@ -20,17 +19,43 @@ interface TopGGWebhookData {
 	bot: string;
 }
 
-@ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
+const validateTopGGWebhookData: ValidatorFunction<unknown, TopGGWebhookData> = (data) => {
+	if (typeof data !== 'object' || data === null) {
+		throw new Error('Body must be a valid JSON object');
+	}
+
+	const { type, user, query, bot } = data as Partial<TopGGWebhookData>;
+
+	if (type !== 'upvote') {
+		throw new Error('Field "type" must be "upvote"');
+	}
+
+	if (typeof user !== 'string' || user.trim() === '') {
+		throw new Error('Field "user" must be a non-empty string');
+	}
+
+	if (typeof query !== 'string' || query.trim() === '') {
+		throw new Error('Field "query" must be a non-empty string');
+	}
+
+	if (typeof bot !== 'string' || bot.trim() === '') {
+		throw new Error('Field "bot" must be a non-empty string');
+	}
+
+	return { type, user, query, bot }; // Return the validated and typed object
+};
+
+@ApplyOptions<Route.Options>({
+	route: 'webhook/topgg',
+	enabled: envIsDefined('TOPGG_WEBHOOK_SECRET'),
+	methods: ['POST']
+})
 export class UserRoute extends Route {
 	private readonly roleID = '1039089174948626473';
 
 	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
-	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		const body = cast<TopGGWebhookData>(request.body);
-
-		if (!body || body.type !== 'upvote') {
-			return response.end();
-		}
+	public async run(request: ApiRequest, response: ApiResponse) {
+		const body = await request.readValidatedBodyJson(validateTopGGWebhookData);
 
 		try {
 			const guild = container.client.guilds.cache.get(GuildIDEnum.Birthdayy);

@@ -66,7 +66,7 @@ __metadata:
     "@sapphire/eslint-plugin-result": "npm:^2.0.4"
     "@sapphire/fetch": "npm:^3.0.5"
     "@sapphire/framework": "npm:^5.3.2"
-    "@sapphire/plugin-api": "npm:^6.1.1"
+    "@sapphire/plugin-api": "npm:^8.0.0"
     "@sapphire/plugin-hmr": "npm:^3.0.2"
     "@sapphire/plugin-i18next": "npm:^7.1.3"
     "@sapphire/plugin-logger": "npm:^4.0.2"
@@ -1283,15 +1283,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-api@npm:^6.1.1":
-  version: 6.1.1
-  resolution: "@sapphire/plugin-api@npm:6.1.1"
+"@sapphire/plugin-api@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sapphire/plugin-api@npm:8.0.0"
   dependencies:
-    "@types/ws": "npm:^8.5.10"
-    tldts: "npm:^6.1.2"
-    tslib: "npm:^2.6.2"
-    undici: "npm:^6.4.0"
-  checksum: 10/b0fb595df0352247261653cd842414cb0271211f79e8318a1bb8da12965a22ec037f2422e58878473efa7b5b50b4de4e1a17a8cc7dbafe221870131b7b45dc5c
+    "@types/ws": "npm:^8.5.13"
+    "@vladfrangu/async_event_emitter": "npm:2.4.6"
+    cookie-es: "npm:^1.2.2"
+    tldts: "npm:^6.1.70"
+    undici: "npm:^7.2.0"
+  checksum: 10/d823a137b4886b44d2a8341a6756d046628d14d85e8d7ad1a98439da573fd580df4f1e0b34465a211acccbe3d7fce4bc5ae20afd2ff2f8890a478a678b7901ef
   languageName: node
   linkType: hard
 
@@ -1878,7 +1879,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vladfrangu/async_event_emitter@npm:^2.2.4, @vladfrangu/async_event_emitter@npm:^2.4.6":
+"@vladfrangu/async_event_emitter@npm:2.4.6, @vladfrangu/async_event_emitter@npm:^2.2.4, @vladfrangu/async_event_emitter@npm:^2.4.6":
   version: 2.4.6
   resolution: "@vladfrangu/async_event_emitter@npm:2.4.6"
   checksum: 10/6a329441bbd36bb8bdc8c49f18328abf724834597c8cab56b5741f18fa167a010bb841bc9ec3638b6b73c6692b85d0de724612b0a416b523650574576fd1a197
@@ -2323,6 +2324,13 @@ __metadata:
   bin:
     conventional-commits-parser: cli.mjs
   checksum: 10/3b56a9313127f18c56b7fc0fdb0c49d2184ec18e0574e64580a0d5a3c3e0f3eecfb8bc3131dce967bfe9fd27debd5f42b7fc1f09e8e541e688e1dd2b57f49278
+  languageName: node
+  linkType: hard
+
+"cookie-es@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "cookie-es@npm:1.2.2"
+  checksum: 10/0fd742c11caa185928e450543f84df62d4b2c1fc7b5041196b57b7db04e1c6ac6585fb40e4f579a2819efefd2d6a9cbb4d17f71240d05f4dcd8f74ae81341a20
   languageName: node
   linkType: hard
 
@@ -4917,21 +4925,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tldts-core@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "tldts-core@npm:6.1.2"
-  checksum: 10/9ae2f1e0b842d8206daf7c832d2b82a6feba744124df5884ea9f2a49533fb91dc40b400e53190315717b11d2b441a749892d045edf4978c74fc4e89a955dd53e
+"tldts-core@npm:^6.1.73":
+  version: 6.1.73
+  resolution: "tldts-core@npm:6.1.73"
+  checksum: 10/bae2ea553a6a90bfcb6a5babd134e5c2e6ee6482fbe2c53e163d3705cdf84ee9e76210975534e606c8b9bed8834d8c33181cace1a44d0599732fc487d98edb55
   languageName: node
   linkType: hard
 
-"tldts@npm:^6.1.2":
-  version: 6.1.2
-  resolution: "tldts@npm:6.1.2"
+"tldts@npm:^6.1.70":
+  version: 6.1.73
+  resolution: "tldts@npm:6.1.73"
   dependencies:
-    tldts-core: "npm:^6.1.2"
+    tldts-core: "npm:^6.1.73"
   bin:
     tldts: bin/cli.js
-  checksum: 10/1abac96e56519b5ba074a5f379373ac6827877d7767994e50bb54b2661449b24d87d7c61e288f11e1a30065c08ace9f1f97359d0952cd73f0480de08584d0747
+  checksum: 10/fb4992e3d3abe02fa76ce2877dc30d3166e2998b047e32d06749a711339b7204c496862a7e8c7e91fc2cbf22d0cbc3386230aa255ba57bf10a9fffd08256d486
   languageName: node
   linkType: hard
 
@@ -5071,10 +5079,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:6.19.8, undici@npm:^6.4.0":
+"undici@npm:6.19.8":
   version: 6.19.8
   resolution: "undici@npm:6.19.8"
   checksum: 10/19ae4ba38b029a664d99fd330935ef59136cf99edb04ed821042f27b5a9e84777265fb744c8a7abc83f2059afb019446c69a4ebef07bbc0ed6b2de8d67ef4090
+  languageName: node
+  linkType: hard
+
+"undici@npm:^7.2.0":
+  version: 7.2.3
+  resolution: "undici@npm:7.2.3"
+  checksum: 10/92870d186682c19f4b9909e4b6229a88b4e73e6e12d7a3e151033cefb66579bdc1d36e46d97e386161ba0afcd84b718e917fca7b7f08d409d918689343034c09
   languageName: node
   linkType: hard
 
