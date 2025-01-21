@@ -26,8 +26,8 @@ export class UserRoute extends Route {
 	@ratelimit(seconds(1), 2, true)
 	public async [methods.PATCH](request: ApiRequest, response: ApiResponse) {
 		const settingsDataSchema = s.object({
-			guild_id: s.string,
-			data: s.array(s.tuple([s.string, s.unknown]))
+			guild_id: s.string(),
+			data: s.array(s.tuple([s.string(), s.unknown()]))
 		});
 
 		const requestBody = settingsDataSchema.parse(request.body);
