@@ -1,9 +1,9 @@
 import { ClientColor, Emojis } from '#utils/constants';
-import { type Guild, Prisma } from '@prisma/client';
+import { Prisma, type Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { type Nullish } from '@sapphire/utilities';
-import { type APIEmbed, Collection, EmbedBuilder, Guild as GuildDiscord } from 'discord.js';
+import { Collection, EmbedBuilder, Guild as GuildDiscord, type APIEmbed } from 'discord.js';
 
 export class SettingsManager extends Collection<SettingsManagerFetchData, Guild> {
 	/**
@@ -65,7 +65,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 			lng: this.guild.preferredLocale,
 			guild: this.guild,
 			settings
-		}) satisfies APIEmbed;
+		}) as APIEmbed;
 
 		container.logger.debug('SettingsManager -> embedList -> embed', JSON.stringify(embed));
 

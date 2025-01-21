@@ -198,7 +198,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		const timezone = isNullOrUndefined(settings.timezone) ? unset : settings.timezone;
 		const premium = bool[Number(settings.premium)];
 
-		const fieldsTitles: string[] = t('commands/config:viewFieldsTitles', { returnObjects: true });
+		const fieldsTitles = t('commands/config:viewFieldsTitles', { returnObjects: true }) as string[];
 		const fieldsValues: string[] = t('commands/config:viewFieldsValues', {
 			returnObjects: true,
 			announcementChannel,
@@ -207,7 +207,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			premium,
 			overviewChannel,
 			timezone
-		});
+		}) as string[];
 
 		settingsEmbed.addFields([...this.generateEmbedFields(fieldsTitles, fieldsValues)]);
 

@@ -142,7 +142,10 @@ export class Guild extends Utility {
 				}))
 				.catch(async (error: any) => {
 					const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
-					if (!isTextBasedChannel(channel)) return { deletedBirthdays: 0, deletedGuilds: 0 };
+
+					if (!channel || !isTextBasedChannel(channel)!) {
+						return { deletedBirthdays: 0, deletedGuilds: 0 };
+					}
 
 					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
 					await channel.send(
