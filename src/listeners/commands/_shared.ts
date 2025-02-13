@@ -80,7 +80,7 @@ export function generateUnexpectedErrorMessage(
 	}
 }
 
-function getDiscordError(code: RESTJSONErrorCodes) {
+function getDiscordError(code: number) {
 	switch (code) {
 		case RESTJSONErrorCodes.UnknownChannel:
 			return 'errors:genericUnknownChannel';
