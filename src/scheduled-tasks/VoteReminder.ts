@@ -4,14 +4,9 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { EmbedBuilder, Locale, type EmbedField, type Snowflake } from 'discord.js';
 
-interface VoteReminderTaskPayload {
-	local: Locale;
-	memberId: Snowflake;
-}
-
 @ApplyOptions<ScheduledTask.Options>({ name: 'VoteReminderTask', customJobOptions: { removeOnComplete: true } })
 export class VoteReminderTask extends ScheduledTask {
-	public async run(payload: VoteReminderTaskPayload) {
+	public async run(payload: { local: Locale; memberId: Snowflake }) {
 		const user = await this.container.client.users.fetch(payload.memberId).catch(() => null);
 		if (!user) return;
 
@@ -37,8 +32,8 @@ export class VoteReminderTask extends ScheduledTask {
 	private getPremiumFields(t: TFunction): EmbedField {
 		return {
 			name: t('tasks:voteReminderEmbedPremiumFields'),
-			value: t('tasks:voteReminderEmbedPremiumFieldsValue'),
-			inline: false
+			inline: false,
+			value: t('tasks:voteReminderEmbedPremiumFieldsValue')
 		};
 	}
 }

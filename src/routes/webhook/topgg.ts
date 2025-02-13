@@ -1,6 +1,5 @@
 import { authenticated } from '#lib/api/utils';
 import { DefaultEmbedBuilder } from '#lib/discord';
-import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { Emojis, GuildIDEnum } from '#utils/constants';
 import { VOTE_CHANNEL_ID } from '#utils/environment';
 import { getActionRow, getRemindMeComponent } from '#utils/functions';
@@ -84,13 +83,11 @@ export class UserRoute extends Route {
 		const payload = {
 			userID: member.id,
 			guildID: member.guild.id,
-			roleID: this.roleID
-		} satisfies RemoveBirthdayRoleData;
+			roleID: this.roleID,
+			yield: true
+		};
 
-		return container.tasks.create('removeBirthdayRole', payload, {
-			repeated: false,
-			delay: Time.Hour * 12
-		});
+		return container.tasks.create({ name: 'RemoveBirthdayRoleTask', payload }, Time.Hour * 12);
 	}
 
 	private async sendThankYouDM(user: User, guild: Guild) {
