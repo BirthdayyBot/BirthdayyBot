@@ -31,9 +31,9 @@
 		"watch:start": "tsc-watch -b src --onSuccess \"yarn start\"",
 		"clean": "node scripts/clean.mjs",
 		"start": "doppler run -- node --enable-source-maps dist/index.js",
-		"lint": "eslint --fix --ext ts src",
+		"lint": "eslint src --fix",
 		"format": "prettier --write --log-level=warn \"src/**/*.{js,ts,json}\"",
-		"test": "eslint --ext .ts src",
+		"test": "echo \"Error: no test specified\" && exit 1",
 		"update": "yarn upgrade-interactive",
 		"prisma:generate": "npx prisma generate",
 		"prisma:migrate": "npx prisma migrate dev"
@@ -108,7 +108,7 @@
 	},
 	"lint-staged": {
 		"*": "prettier --ignore-unknown --write",
-		"*.{mjs,js,ts}": "eslint --fix --ext mjs,js,ts"
+		"*.{mjs,js,ts}": "eslint src --fix"
 	},
 	"config": {
 		"commitizen": {
