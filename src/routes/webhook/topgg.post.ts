@@ -1,14 +1,12 @@
-import { authenticated } from '#lib/api/utils';
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { Emojis, GuildIDEnum } from '#utils/constants';
 import { VOTE_CHANNEL_ID } from '#utils/environment';
 import { getActionRow, getRemindMeComponent } from '#utils/functions';
-import { ApplyOptions } from '@sapphire/decorators';
 import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { ApiRequest, ApiResponse, Route, type ValidatorFunction } from '@sapphire/plugin-api';
-import { envIsDefined, envParseString } from '@skyra/env-utilities';
+import { Route, type ValidatorFunction } from '@sapphire/plugin-api';
+import { envParseString } from '@skyra/env-utilities';
 import { Guild, GuildMember, User } from 'discord.js';
 
 interface TopGGWebhookData {
@@ -44,26 +42,24 @@ const validateTopGGWebhookData: ValidatorFunction<unknown, TopGGWebhookData> = (
 	return { type, user, query, bot }; // Return the validated and typed object
 };
 
-@ApplyOptions<Route.Options>({
-	route: 'webhook/topgg',
-	enabled: envIsDefined('TOPGG_WEBHOOK_SECRET'),
-	methods: ['POST']
-})
-export class UserRoute extends Route {
+export class TopGGRoute extends Route {
 	private readonly roleID = '1039089174948626473';
 
-	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
-	public async run(request: ApiRequest, response: ApiResponse) {
-		const body = await request.readValidatedBodyJson(validateTopGGWebhookData);
+	public async run(request: Route.Request, response: Route.Response) {
+		if (request.headers.authorization !== envParseString('TOPGG_WEBHOOK_SECRET')) {
+			return response.error('Unauthorized');
+		}
 
 		try {
+			const requestBody = (await request.readBodyJson()) as Record<string, string>;
+			const body = validateTopGGWebhookData(requestBody);
 			const guild = container.client.guilds.cache.get(GuildIDEnum.Birthdayy);
 
-			if (!guild) return response.end();
+			if (!guild) return response.error('Guild not found');
 
 			const member = await guild.members.fetch(body.user).catch(() => null);
 
-			if (!member) return response.end();
+			if (!member) return response.error('Member not found');
 
 			await this.addRoleAndCreateTask(member);
 			await this.sendThankYouDM(member.user, guild);
@@ -71,7 +67,7 @@ export class UserRoute extends Route {
 
 			return response.ok();
 		} catch (error) {
-			return response.end();
+			return response.error('Internal Server Error');
 		}
 	}
 
