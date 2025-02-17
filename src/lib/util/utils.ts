@@ -4,11 +4,12 @@ import { type TFunction } from '@sapphire/plugin-i18next';
 import type { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 import {
 	ChatInputCommandInteraction,
-	CommandInteraction,
 	EmbedBuilder,
 	Message,
 	MessagePayload,
 	userMention,
+	type Interaction,
+	type InteractionEditReplyOptions,
 	type InteractionReplyOptions
 } from 'discord.js';
 import { ClientColor } from './constants.js';
@@ -44,13 +45,29 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
 }
 
 /**
- * It replies to an interaction, and if the interaction has already been replied to, it edits the reply instead
- * @param  interaction - The interaction object that was passed to your command handler.
- * @param  options - The options to pass to the reply method.
- * @returns A promise that resolves to the message that was sent.
+ * Replies to an interaction, or edits the reply if it has already been replied to or deferred.
+ * Ensures type safety and correct handling of interactions.
+ *
+ * @param interaction - The Discord interaction object to reply to.
+ * @param options - The options for the reply or edit.
+ *
+ * @returns A promise that resolves to the reply message or void.
  */
-export function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
-	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+export async function reply(
+	interaction: Interaction,
+	options: string | MessagePayload | InteractionReplyOptions
+): Promise<void> {
+	if (!interaction.isRepliable()) {
+		throw new Error('This interaction cannot be replied to.');
+	}
+
+	if (interaction.replied || interaction.deferred) {
+		// Type assertion ensures only `InteractionEditReplyOptions` compatible fields are passed
+		const editOptions = options as string | MessagePayload | InteractionEditReplyOptions;
+		await interaction.editReply(editOptions);
+	} else {
+		await interaction.reply(options);
+	}
 }
 
 export interface Mapps {
