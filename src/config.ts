@@ -42,6 +42,7 @@ import { join } from 'node:path';
 
 export const OWNERS = envParseArray('CLIENT_OWNERS');
 
+// https://sapphirejs.dev/docs/Guide/plugins/API/getting-started
 function parseApiAuth(): ServerOptionsAuth | undefined {
 	if (!process.env.OAUTH_SECRET) return undefined;
 

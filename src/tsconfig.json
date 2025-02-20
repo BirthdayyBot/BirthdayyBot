@@ -20,8 +20,9 @@
 			"#lib/*": ["lib/*"],
 			"#languages": ["languages/index.js"],
 			"#root/*": ["*"]
-		}
+		},
+		"lib": ["ES2022", "ESNext", "ESNext.Disposable"]
 	},
 	"include": [".", "./**/*.json"],
-	"exclude": ["./tsconfig.json"]
+	"exclude": ["./tsconfig.json, node_modules"]
 }

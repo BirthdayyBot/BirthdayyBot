@@ -17,13 +17,11 @@ declare module 'discord.js' {
 		computeUsers(): Promise<number>;
 	}
 }
-
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
 	}
 }
-
 declare module '@sapphire/framework' {
 	interface Preconditions {
 		Administrator: never;
@@ -42,15 +40,23 @@ declare module '@sapphire/framework' {
 
 declare module '@sapphire/plugin-scheduled-tasks' {
 	interface ScheduledTasks {
-		BirthdayReminderTask: { message: string; role: string } | undefined;
-		removeBirthdayRole: never;
-		VoteReminderTask: never;
+		BirthdayReminderTask: { userId: string; guildId: string; isTest: boolean } | undefined;
+		VoteReminderTask: {
+			local: Locale;
+			memberId: Snowflake;
+		};
+		RemoveBirthdayRoleTask: IRemoveBirthdayRoleTask;
 		CleanDatabaseTask: never;
 		DisplayStats: never;
 		PostStats: never;
 	}
 }
 
+export interface IRemoveBirthdayRoleTask {
+	guildID: string;
+	userID: string;
+	roleID: string;
+}
 declare module '@sapphire/plugin-utilities-store' {
 	export interface Utilities {
 		guild: Guild;
@@ -124,3 +130,5 @@ declare module '@skyra/env-utilities' {
 		DISCORD_BOT_LIST_TOKEN: string;
 	}
 }
+
+import { Locale, Snowflake } from 'discord.js';

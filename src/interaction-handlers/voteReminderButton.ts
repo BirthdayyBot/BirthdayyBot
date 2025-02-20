@@ -27,7 +27,7 @@ export class VoteReminderButton extends InteractionHandler {
 
 		const payload = { memberId: interaction.user.id, local: interaction.locale };
 
-		await this.container.tasks.create('VoteReminderTask', payload, { repeated: false, delay });
+		await this.container.tasks.create({ name: 'VoteReminderTask', payload }, delay);
 
 		return interaction.followUp({
 			content: `I will remind you to vote ${time(

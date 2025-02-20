@@ -1,12 +1,11 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
+import type { IRemoveBirthdayRoleTask } from '#lib/types/Augments.d.ts';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
 import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
-import { getBirthdays } from '#utils/functions/guilds';
-import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
+import { resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -46,14 +45,10 @@ export interface BirthdayEventInfoModel {
 export class BirthdayReminderTask extends ScheduledTask {
 	public async run(payload?: { userId: string; guildId: string; isTest: boolean }) {
 		if (payload) {
-			const birthdays = getBirthdays(payload.guildId);
-			return birthdays.announcedBirthday(await birthdays.fetch(payload.userId));
+			return this.runs(payload);
 		}
 
-		for (const [, guild] of await container.client.guilds.fetch()) {
-			floatPromise(getBirthdays(guild.id).announcedTodayBirthday());
-		}
-		return null;
+		return this.runs();
 	}
 
 	public async runs(birthdayEvent?: { userId: string; guildId: string; isTest: boolean }) {
@@ -221,7 +216,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 	}
 
 	private async handleRole(
-		data: RemoveBirthdayRoleData,
+		data: IRemoveBirthdayRoleTask,
 		member: GuildMember,
 		roleId: string | Nullish,
 		isTest: boolean
@@ -250,7 +245,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 	}
 
 	private async addBirthdayRole(
-		data: RemoveBirthdayRoleData,
+		data: IRemoveBirthdayRoleTask,
 		member: GuildMember,
 		birthdayRole: string,
 		isTest: boolean
@@ -258,16 +253,15 @@ export class BirthdayReminderTask extends ScheduledTask {
 		await member.roles.add(birthdayRole);
 		const delay = isTest ? Time.Second * 30 : Time.Day;
 		await this.container.tasks.create(
-			'removeBirthdayRole',
 			{
-				guildID: data.guildID,
-				roleID: birthdayRole,
-				userID: data.userID
+				name: 'RemoveBirthdayRoleTask',
+				payload: {
+					guildID: data.guildID,
+					roleID: birthdayRole,
+					userID: data.userID
+				}
 			},
-			{
-				repeated: false,
-				delay
-			}
+			delay
 		);
 	}
 
@@ -389,12 +383,15 @@ export class BirthdayReminderTask extends ScheduledTask {
 		});
 
 		if (!schedulerLogThread) {
-			return schedulerReportMessage?.channel.send("Couldn't create a thread!");
+			if (schedulerReportMessage?.channel && isTextBasedChannel(schedulerReportMessage.channel)) {
+				return schedulerReportMessage.channel.send("Couldn't create a thread!");
+			}
+			return container.logger.error("Couldn't create a thread and unable to send a message to the channel.");
 		}
 
 		const embed = new DefaultEmbedBuilder()
 			.setTitle(embedTitle)
-			.setDescription(`Guilds:\n${codeBlock(guildIdsString)}`);
+			.setDescription(`Guilds:\n${codeBlock(guildIdsString.slice(0, 1900))}`);
 
 		await schedulerLogThread.send({ embeds: [embed] });
 
