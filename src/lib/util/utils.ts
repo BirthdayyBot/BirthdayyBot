@@ -32,9 +32,8 @@ export function sendLoadingMessage<T extends GuildMessage | Message>(
 	message: T,
 	t: TFunction
 ): Promise<typeof message> {
-	const embed = new EmbedBuilder()
-		.setDescription(pickRandom(t('system:loadingMessages', { returnObjects: true })))
-		.setColor(ClientColor);
+	const loadingMessage = t('system:loading', { returnObjects: true }) as string[];
+	const embed = new EmbedBuilder().setDescription(pickRandom(loadingMessage)).setColor(ClientColor);
 	return message.reply({ embeds: [embed] }) as Promise<T>;
 }
 
