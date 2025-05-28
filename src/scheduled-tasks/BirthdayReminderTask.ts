@@ -10,7 +10,7 @@ import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promi
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
-import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
+import { isGuildBasedChannel, isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/pieces';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
@@ -404,7 +404,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		function sendReport() {
 			const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
-			if (!isTextBasedChannel(channel)) {
+			if (!isGuildBasedChannel(channel)) {
 				return container.logger.error('[BirthdayTask] Admin log channel not found');
 			}
 
