@@ -2,13 +2,13 @@ import { type FlattenedGuild, flattenGuild, flattenUser } from '#lib/api/ApiTran
 import { authenticated, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, HttpCodes, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions } from '@sapphire/plugin-api';
 
 @ApplyOptions<RouteOptions>({ route: 'users/@me' })
 export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(seconds(5), 2, true)
-	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
+	public async run(request: ApiRequest, response: ApiResponse) {
 		const { client } = this.container;
 		const user = await client.users.fetch(request.auth!.id).catch(() => null);
 		if (user === null) return response.error(HttpCodes.InternalServerError);

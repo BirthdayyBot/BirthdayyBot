@@ -1,10 +1,9 @@
 import { Events } from '#lib/types/Enums';
 import { ApplyOptions } from '@sapphire/decorators';
-import { FetchResultTypes, QueryError, fetch } from '@sapphire/fetch';
-import { MimeTypes } from '@sapphire/plugin-api';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { blueBright, green, red } from 'colorette';
 import { Status } from 'discord.js';
+import { fetch, FetchResultTypes, QueryError } from '@sapphire/fetch';
 
 const header = blueBright('[POST STATS]');
 
@@ -69,7 +68,10 @@ export class PostStats extends ScheduledTask {
 				url,
 				{
 					body,
-					headers: { 'content-type': MimeTypes.ApplicationJson, authorization: token },
+					headers: {
+						'content-type': 'application/json',
+						authorization: token
+					},
 					method: 'POST'
 				},
 				FetchResultTypes.Result

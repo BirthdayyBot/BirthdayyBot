@@ -8,7 +8,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { ApiRequest, ApiResponse, Route, methods } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, Route } from '@sapphire/plugin-api';
 import { cast } from '@sapphire/utilities';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 import { Guild, GuildMember, User } from 'discord.js';
@@ -25,8 +25,8 @@ export class UserRoute extends Route {
 	private readonly roleID = '1039089174948626473';
 
 	@authenticated(envParseString('TOPGG_WEBHOOK_SECRET'))
-	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		const body = cast<TopGGWebhookData>(request.body);
+	public async run(request: ApiRequest, response: ApiResponse) {
+		const body = cast<TopGGWebhookData>(await request.readBody());
 
 		if (!body || body.type !== 'upvote') {
 			return response.end();

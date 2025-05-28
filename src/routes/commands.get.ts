@@ -2,7 +2,7 @@ import { ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Command } from '@sapphire/framework';
-import { ApiRequest, ApiResponse, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, Route, type RouteOptions } from '@sapphire/plugin-api';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { PermissionsBitField } from 'discord.js';
@@ -10,7 +10,7 @@ import { PermissionsBitField } from 'discord.js';
 @ApplyOptions<RouteOptions>({ route: 'commands' })
 export class UserRoute extends Route {
 	@ratelimit(seconds(2), 2)
-	public [methods.GET](request: ApiRequest, response: ApiResponse) {
+	public run(request: ApiRequest, response: ApiResponse) {
 		const { lang, category } = request.query;
 		const { i18n, stores } = this.container;
 		const language = i18n.getT((lang as string) ?? 'en-US');

@@ -3,7 +3,7 @@ import { minutes } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Time } from '@sapphire/duration';
 import { fetch, FetchResultTypes } from '@sapphire/fetch';
-import { ApiRequest, ApiResponse, HttpCodes, methods, MimeTypes, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions } from '@sapphire/plugin-api';
 import { OAuth2Routes, type RESTPostOAuth2AccessTokenResult } from 'discord-api-types/v9';
 import { stringify } from 'node:querystring';
 
@@ -11,8 +11,8 @@ import { stringify } from 'node:querystring';
 export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(minutes(5), 2, true)
-	public async [methods.POST](request: ApiRequest, response: ApiResponse) {
-		const requestBody = request.body as Record<string, string>;
+	public async run(request: ApiRequest, response: ApiResponse) {
+		const requestBody = (await request.readBodyJson()) as Record<string, string>;
 		if (typeof requestBody.action !== 'string') {
 			return response.badRequest();
 		}
@@ -67,7 +67,7 @@ export class UserRoute extends Route {
 						scope: server.auth!.scopes
 					}),
 					headers: {
-						'Content-Type': MimeTypes.ApplicationFormUrlEncoded
+						'Content-Type': 'application/x-www-form-urlencoded'
 					}
 				},
 				FetchResultTypes.JSON

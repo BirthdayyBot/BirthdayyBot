@@ -1,14 +1,16 @@
-import { flattenRole } from '#lib/api/ApiTransformers';
+import { flattenGuild } from '#lib/api/ApiTransformers';
 import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApiRequest, ApiResponse, HttpCodes, methods, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { container } from '@sapphire/framework';
+import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { Routes } from 'discord-api-types/v10';
 
-@ApplyOptions<RouteOptions>({ route: 'guilds/:guild/roles' })
+@ApplyOptions<RouteOptions>({ route: 'guilds/:guild' })
 export class UserRoute extends Route {
 	@authenticated()
 	@ratelimit(seconds(5), 2, true)
-	public async [methods.GET](request: ApiRequest, response: ApiResponse) {
+	public async run(request: ApiRequest, response: ApiResponse) {
 		const guildId = request.params.guild;
 
 		const guild = this.container.client.guilds.cache.get(guildId);
@@ -19,6 +21,7 @@ export class UserRoute extends Route {
 
 		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
 
-		return response.json(guild.roles.cache.map(flattenRole));
+		const emojis = await container.client.rest.get(Routes.guildEmojis(guildId));
+		return response.json({ ...flattenGuild(guild), emojis });
 	}
 }
