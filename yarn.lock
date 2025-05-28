@@ -72,7 +72,7 @@ __metadata:
     "@sapphire/plugin-logger": "npm:^4.0.2"
     "@sapphire/plugin-scheduled-tasks": "npm:^9.1.0"
     "@sapphire/plugin-subcommands": "npm:^7.0.1"
-    "@sapphire/plugin-utilities-store": "npm:^2.0.2"
+    "@sapphire/plugin-utilities-store": "npm:^2.0.3"
     "@sapphire/prettier-config": "npm:^2.0.0"
     "@sapphire/ratelimits": "npm:^2.4.11"
     "@sapphire/ts-config": "npm:^5.0.1"
@@ -1348,10 +1348,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-utilities-store@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@sapphire/plugin-utilities-store@npm:2.0.2"
-  checksum: 10/5ca738580b59730487df18e3a2c1365bf48d5aa491dff30729e81db7b259dc707acd4f7325701421d71453f6a33078b8a409fb687a43f67380e64c0961788d44
+"@sapphire/plugin-utilities-store@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "@sapphire/plugin-utilities-store@npm:2.0.3"
+  checksum: 10/1b9b9290ba4e88858d6270f5eff351029e40f5cc0b2693097fd7c66164ea3a2f33304662cfe711653729d157c77ee5822cb537298384e3e1618b2b76fdcc7fbd
   languageName: node
   linkType: hard
 
