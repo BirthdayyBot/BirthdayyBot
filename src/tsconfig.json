@@ -5,6 +5,7 @@
 		"baseUrl": ".",
 		"outDir": "../dist",
 		"composite": true,
+		"skipLibCheck": true,
 		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
 		"paths": {
 			"#utils/birthday": ["lib/util/birthday/index.js"],
