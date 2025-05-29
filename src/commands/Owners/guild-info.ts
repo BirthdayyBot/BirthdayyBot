@@ -9,7 +9,7 @@ import { getCommandGuilds, getSettings } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT } from '@sapphire/plugin-i18next';
-import type { SlashCommandStringOption } from 'discord.js';
+import { InteractionContextType, type SlashCommandStringOption } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class GuildInfoCommand extends BirthdayyCommand {
@@ -18,7 +18,7 @@ export class GuildInfoCommand extends BirthdayyCommand {
 			(builder) =>
 				applyDescriptionLocalizedBuilder(builder, 'commands/owners:guildInfoDescription')
 					.setName('guild-info')
-					.setDMPermission(false)
+					.setContexts(InteractionContextType.Guild)
 					.addStringOption((option) => this.registerGuildIDCommandOption(option)),
 			{
 				guildIds: await getCommandGuilds('admin')

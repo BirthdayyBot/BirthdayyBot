@@ -30,6 +30,7 @@ import { envParseString } from '@skyra/env-utilities';
 import {
 	ChannelType,
 	EmbedBuilder,
+	InteractionContextType,
 	PermissionFlagsBits,
 	Role,
 	SlashCommandBuilder,
@@ -58,7 +59,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			this.registerSubcommands(
 				applyDescriptionLocalizedBuilder(builder, 'commands/config:rootDescription')
 					.setName('config')
-					.setDMPermission(false)
+					.setContexts(InteractionContextType.Guild)
 					.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 			)
 		);

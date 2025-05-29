@@ -14,7 +14,12 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullish, objectValues } from '@sapphire/utilities';
-import type { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandSubcommandBuilder } from 'discord.js';
+import {
+	InteractionContextType,
+	type ChatInputCommandInteraction,
+	type SlashCommandBuilder,
+	type SlashCommandSubcommandBuilder
+} from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
 	subcommands: [
@@ -31,7 +36,7 @@ export class UserCommand extends BirthdayySubcommand {
 			this.registerSubcommands(
 				applyDescriptionLocalizedBuilder(builder, 'commands/admin-birthday:rootDescription') //
 					.setName('admin-birthday')
-					.setDMPermission(false)
+					.setContexts(InteractionContextType.Guild)
 			)
 		);
 	}

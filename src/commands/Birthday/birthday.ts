@@ -19,6 +19,7 @@ import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
 	ChatInputCommandInteraction,
+	InteractionContextType,
 	SlashCommandBuilder,
 	User,
 	bold,
@@ -41,7 +42,7 @@ export class UserCommand extends BirthdayySubcommand {
 			this.registerSubcommands(
 				applyDescriptionLocalizedBuilder(builder, 'commands/birthday:rootDescription') //
 					.setName('birthday')
-					.setDMPermission(false)
+					.setContexts(InteractionContextType.Guild)
 			)
 		);
 	}

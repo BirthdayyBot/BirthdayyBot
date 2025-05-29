@@ -6,7 +6,7 @@ import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds } from '#utils/functions';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, InteractionContextType } from 'discord.js';
 
 @ApplyOptions<BirthdayyCommand.Options>({ enabled, permissionLevel: PermissionLevels.BotOwner })
 export class CountCommand extends BirthdayyCommand {
@@ -16,7 +16,7 @@ export class CountCommand extends BirthdayyCommand {
 				builder
 					.setDescription('The current count of Guilds, Birthdays and Users')
 					.setName(this.name)
-					.setDMPermission(true),
+					.setContexts(InteractionContextType.Guild),
 			{
 				guildIds: await getCommandGuilds('admin')
 			}
