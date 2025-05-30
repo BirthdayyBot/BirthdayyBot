@@ -18,7 +18,7 @@ import { ChatInputCommandInteraction, type CacheType } from 'discord.js';
 
 /**
  * The base class for all Birthdayy commands.
- * @seealso {@link BirthdayySubcommand} for subcommand support.
+ * @see {@link BirthdayySubcommand} for subcommand support.
  */
 export abstract class BirthdayyCommand extends Command<BirthdayyCommand.Args, BirthdayyCommand.Options> {
 	public readonly permissionLevel: PermissionLevels;

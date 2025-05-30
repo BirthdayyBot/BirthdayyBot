@@ -17,5 +17,6 @@
 	"i18n-ally.keystyle": "nested",
 	"i18n-ally.enabledFrameworks": ["sapphire-i18next"],
 	"i18n-ally.sourceLanguage": "en-US",
-	"i18n-ally.localesPaths": ["src/languages"]
+	"i18n-ally.localesPaths": ["src/languages"],
+	"cSpell.words": ["Birthdayy"]
 }
