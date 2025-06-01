@@ -33,7 +33,7 @@
 		"start": "doppler run -- node --enable-source-maps dist/index.js",
 		"lint": "eslint --fix --ext ts src",
 		"format": "prettier --write --log-level=warn \"src/**/*.{js,ts,json}\"",
-		"test": "eslint --ext .ts src",
+		"test": "vitest run",
 		"update": "yarn upgrade-interactive",
 		"prisma:generate": "npx prisma generate",
 		"prisma:migrate": "npx prisma migrate dev"
@@ -86,7 +86,8 @@
 		"prettier": "^3.5.3",
 		"prisma": "^5.22.0",
 		"tsc-watch": "^7.1.1",
-		"typescript": "^5.7.3"
+		"typescript": "^5.7.3",
+		"vitest": "^3.1.4"
 	},
 	"resolutions": {
 		"@types/node": "^22.15.29",

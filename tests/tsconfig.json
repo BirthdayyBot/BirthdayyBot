@@ -1,0 +1,15 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"types": ["vitest/globals"],
+		"verbatimModuleSyntax": false,
+		"paths": {
+			"#utils/*": ["../src/lib/util/*.js"],
+			"#lib/*": ["../src/lib/*.js"],
+			"#languages": ["../src/languages/index.js"],
+			"#root/*": ["../src/*.js"]
+		}
+	},
+	"include": [".", "../src"]
+}
