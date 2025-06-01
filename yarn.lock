@@ -40,7 +40,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.26.10, @babel/runtime@npm:^7.27.1":
+"@babel/runtime@npm:^7.27.1":
   version: 7.27.4
   resolution: "@babel/runtime@npm:7.27.4"
   checksum: 10/ce2495a1773c6f52c7c201f45a1e5c317f2630ff98bec8caa282d574e25f58b0f87ab6e2e2dba0e24ad819792cb0dff3423f90771635620c1f01ff24e73f770d
@@ -89,7 +89,7 @@ __metadata:
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.4.1"
-    i18next: "npm:v25.1.2"
+    i18next: "npm:25.2.1"
     lint-staged: "npm:^16.1.0"
     prettier: "npm:^3.5.3"
     prisma: "npm:^5.22.0"
@@ -2909,7 +2909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^25.1.2":
+"i18next@npm:25.2.1, i18next@npm:^25.1.2":
   version: 25.2.1
   resolution: "i18next@npm:25.2.1"
   dependencies:
@@ -2920,20 +2920,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10/7abc9dedee928d23c926917fcc640ff45e22320c814f3f254ade74bc255247edd78e8dd58c835bbfe1898489f6cb2e874e547f9fa68a1a6820409c1306dec28c
-  languageName: node
-  linkType: hard
-
-"i18next@npm:v25.1.2":
-  version: 25.1.2
-  resolution: "i18next@npm:25.1.2"
-  dependencies:
-    "@babel/runtime": "npm:^7.26.10"
-  peerDependencies:
-    typescript: ^5
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10/40000d98969c5c76d4271b5ac3fedddc42482717961488bd2d595dc675f1a620f4f29f5f1d7f49c8c8ed4697faa911cfffa31360119a2fbbaf4b92f6dfc587c3
   languageName: node
   linkType: hard
 
