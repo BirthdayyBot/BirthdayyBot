@@ -40,12 +40,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.2":
-  version: 7.23.6
-  resolution: "@babel/runtime@npm:7.23.6"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10/4c4ab16f0361c59fb23956e4d0a29935f1f8a64aa8dd37876ce38355b6f4d8f0e54237aacb89c73b1532def60539ddde2d651523c8fa887b30b19a8cf0c465b0
+"@babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.27.1":
+  version: 7.27.4
+  resolution: "@babel/runtime@npm:7.27.4"
+  checksum: 10/ce2495a1773c6f52c7c201f45a1e5c317f2630ff98bec8caa282d574e25f58b0f87ab6e2e2dba0e24ad819792cb0dff3423f90771635620c1f01ff24e73f770d
   languageName: node
   linkType: hard
 
@@ -68,7 +66,7 @@ __metadata:
     "@sapphire/framework": "npm:^5.3.5"
     "@sapphire/plugin-api": "npm:^8.2.1"
     "@sapphire/plugin-hmr": "npm:^3.0.2"
-    "@sapphire/plugin-i18next": "npm:^7.1.3"
+    "@sapphire/plugin-i18next": "npm:^8.0.0"
     "@sapphire/plugin-logger": "npm:^4.0.2"
     "@sapphire/plugin-scheduled-tasks": "npm:^9.1.0"
     "@sapphire/plugin-subcommands": "npm:^7.0.1"
@@ -1201,15 +1199,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/plugin-i18next@npm:^7.1.3":
-  version: 7.1.3
-  resolution: "@sapphire/plugin-i18next@npm:7.1.3"
+"@sapphire/plugin-i18next@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sapphire/plugin-i18next@npm:8.0.0"
   dependencies:
-    "@sapphire/utilities": "npm:^3.18.0"
+    "@sapphire/utilities": "npm:^3.18.2"
     "@skyra/i18next-backend": "npm:^2.0.5"
-    chokidar: "npm:^4.0.1"
-    i18next: "npm:^23.16.4"
-  checksum: 10/616fab161597018b7bb1916f450e7ae0f76c3634e6a03e5e48d56365784149089c3b476d22ec2000dd39d358db8e0e7c293f2f9e9d82f65af949f956ba1284d5
+    chokidar: "npm:^4.0.3"
+    i18next: "npm:^25.1.2"
+  checksum: 10/d832b40fb2eb8a3648976cb643642dd41914dafd94efc9562e96da9740e74b3ef942530552cef3d62d4461042fcebe723cee9afd014d17cd736b09e6a42ae39e
   languageName: node
   linkType: hard
 
@@ -1904,7 +1902,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^4.0.1":
+"chokidar@npm:^4.0.1, chokidar@npm:^4.0.3":
   version: 4.0.3
   resolution: "chokidar@npm:4.0.3"
   dependencies:
@@ -2911,12 +2909,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^23.16.4, i18next@npm:^23.16.8":
+"i18next@npm:^23.16.8":
   version: 23.16.8
   resolution: "i18next@npm:23.16.8"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
   checksum: 10/d5c38011de4d3b4aa466fac6773520eb28007b9d6138e03432bfbfc0d041c04df45e15c67d96f22cd660088cc9b24d3eda32cddc9fb4c6508c5afada6c2e6290
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^25.1.2":
+  version: 25.2.1
+  resolution: "i18next@npm:25.2.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.27.1"
+  peerDependencies:
+    typescript: ^5
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/7abc9dedee928d23c926917fcc640ff45e22320c814f3f254ade74bc255247edd78e8dd58c835bbfe1898489f6cb2e874e547f9fa68a1a6820409c1306dec28c
   languageName: node
   linkType: hard
 
@@ -4206,13 +4218,6 @@ __metadata:
   version: 0.2.2
   resolution: "reflect-metadata@npm:0.2.2"
   checksum: 10/1c93f9ac790fea1c852fde80c91b2760420069f4862f28e6fae0c00c6937a56508716b0ed2419ab02869dd488d123c4ab92d062ae84e8739ea7417fae10c4745
-  languageName: node
-  linkType: hard
-
-"regenerator-runtime@npm:^0.14.0":
-  version: 0.14.1
-  resolution: "regenerator-runtime@npm:0.14.1"
-  checksum: 10/5db3161abb311eef8c45bcf6565f4f378f785900ed3945acf740a9888c792f75b98ecb77f0775f3bf95502ff423529d23e94f41d80c8256e8fa05ed4b07cf471
   languageName: node
   linkType: hard
 
