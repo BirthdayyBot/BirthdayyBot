@@ -1,5 +1,6 @@
 {
 	"extends": ["@sapphire", "plugin:@sapphire/result/recommended"],
+	"plugins": ["hexagonal-architecture"],
 	"rules": {
 		"@typescript-eslint/no-base-to-string": 0,
 		"@typescript-eslint/no-throw-literal": 0,
@@ -13,6 +14,12 @@
 			"files": ["src/commands/**/*.ts"],
 			"rules": {
 				"@typescript-eslint/require-await": 0
+			}
+		},
+		{
+			"files": ["src/core/**/*.ts"],
+			"rules": {
+				"hexagonal-architecture/enforce": ["error"]
 			}
 		}
 	]
