@@ -56,7 +56,7 @@
 		"@sapphire/plugin-utilities-store": "^2.0.3",
 		"@sapphire/ratelimits": "^2.4.11",
 		"@sapphire/utilities": "^3.18.1",
-		"@sentry/node": "^8.50.0",
+		"@sentry/node": "^9.24.0",
 		"@skyra/env-utilities": "^2.0.1",
 		"bullmq": "^5.34.10",
 		"colorette": "^2.0.20",
