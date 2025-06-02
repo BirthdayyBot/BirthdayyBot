@@ -6,10 +6,3 @@ export interface Identifiable<T = string> {
 	/** The unique identifier for this entity */
 	id: T;
 }
-
-export interface BirthdayIdentifier {
-	/** The user ID associated with this entity */
-	userId: string;
-	/** The guild ID associated with this entity, if applicable */
-	guildId?: string;
-}
