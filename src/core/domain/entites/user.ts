@@ -1,12 +1,29 @@
-import type { Birthday } from '#root/core/domain/entites/birthday';
+import type { Identifiable } from '#root/core/domain/entites/identifiable';
+import type { TimestampedEntity } from '#root/core/domain/entites/timestamped_entity.js';
+import type { WithBirthdays } from '#root/core/domain/entites/with_birthdays';
 
-export interface User {
-	id: string;
+/**
+ * User entity representing a Discord user within the application
+ */
+export interface User extends TimestampedEntity, WithBirthdays, Identifiable {
+	/** Discord username */
 	username?: string;
+	/** Discord discriminator (tag number) */
 	discriminator?: string;
+	/** Indicates whether the user has premium status */
 	premium: boolean;
-	createdAt?: Date;
-	updatedAt?: Date;
-
-	birthday?: Birthday[];
 }
+
+/**
+ * Type for creating a new user
+ * Makes timestamps and related collections optional
+ */
+export type CreateUserData = Omit<User, keyof TimestampedEntity | keyof WithBirthdays> &
+	Partial<TimestampedEntity> &
+	Partial<WithBirthdays>;
+
+/**
+ * Type for updating user data
+ * Excludes identifier and timestamp fields
+ */
+export type UserUpdateData = Partial<Omit<User, 'id' | keyof TimestampedEntity>>;
