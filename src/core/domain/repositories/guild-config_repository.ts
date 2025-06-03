@@ -1,10 +1,10 @@
-import type { CreateGuildConfigData, GuildConfig, GuildConfigUpdateData } from '#domain/entities/guild-config';
-import type { SingleIdRepository } from '#domain/repositories/base_repository';
+import type { GuildConfig } from '#domain/entities/guild/guild-config';
+import type { BaseRepository, Repository } from '#domain/repositories/base_repository';
 
 /**
  * Repository interface for managing guild configurations
  */
-export interface GuildConfigRepository extends SingleIdRepository<GuildConfig> {
+export interface GuildConfigRepository extends BaseRepository<GuildConfig> {
 	/**
 	 * Finds all guilds with premium status
 	 * @returns Array of premium guild configurations
@@ -59,7 +59,7 @@ export interface GuildConfigRepository extends SingleIdRepository<GuildConfig> {
 	 * @param data - The guild configuration data
 	 * @returns The created guild configuration
 	 */
-	create(data: CreateGuildConfigData): Promise<GuildConfig>;
+	create(data: Repository.CreateData<GuildConfig>): Promise<GuildConfig>;
 
 	/**
 	 * Updates a guild configuration
@@ -67,7 +67,7 @@ export interface GuildConfigRepository extends SingleIdRepository<GuildConfig> {
 	 * @param data - The data to update
 	 * @returns The updated guild configuration
 	 */
-	update(guildId: string, data: GuildConfigUpdateData): Promise<GuildConfig>;
+	update(guildId: string, data: Repository.UpdateData<GuildConfig>): Promise<GuildConfig>;
 
 	/**
 	 * Counts guilds by premium status

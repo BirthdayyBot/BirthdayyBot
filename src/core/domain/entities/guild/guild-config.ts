@@ -1,11 +1,9 @@
-import type { Identifiable } from '#root/core/domain/entities/identifiable';
-import type { TimestampedEntity } from '#root/core/domain/entities/timestamped_entity';
-import type { WithBirthdays } from '#root/core/domain/entities/with_birthdays';
+import type { Entity } from '#domain/entities/base/entity';
 
 /**
  * GuildConfig entity representing configuration for a Discord server/guild
  */
-export interface GuildConfig extends TimestampedEntity, WithBirthdays, Identifiable {
+export interface GuildConfig extends Entity {
 	/** ID of the user who invited the bot */
 	inviter: string;
 
@@ -36,17 +34,3 @@ export interface GuildConfig extends TimestampedEntity, WithBirthdays, Identifia
 	/** Whether bot features are disabled in this guild */
 	disabled: boolean;
 }
-
-/**
- * Type for creating a new guild configuration
- * Makes timestamps and related collections optional
- */
-export type CreateGuildConfigData = Omit<GuildConfig, keyof TimestampedEntity | keyof WithBirthdays> &
-	Partial<TimestampedEntity> &
-	Partial<WithBirthdays>;
-
-/**
- * Type for updating guild configuration
- * Excludes identifier and timestamp fields
- */
-export type GuildConfigUpdateData = Partial<Omit<GuildConfig, 'id' | keyof TimestampedEntity>>;
