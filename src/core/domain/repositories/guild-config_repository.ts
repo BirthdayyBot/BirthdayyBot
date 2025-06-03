@@ -1,5 +1,5 @@
-import type { CreateGuildConfigData, GuildConfig, GuildConfigUpdateData } from '#root/core/domain/entites/guild-config';
-import type { SingleIdRepository } from '#root/core/domain/repositories/base_repository';
+import type { CreateGuildConfigData, GuildConfig, GuildConfigUpdateData } from '#domain/entities/guild-config';
+import type { SingleIdRepository } from '#domain/repositories/base_repository';
 
 /**
  * Repository interface for managing guild configurations

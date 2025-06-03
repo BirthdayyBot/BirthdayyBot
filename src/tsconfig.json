@@ -8,6 +8,8 @@
 		"skipLibCheck": true,
 		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
 		"paths": {
+			"#domain/*": ["core/domain/*.js"],
+			"#infrastructure/*": ["core/infrastructure/*.js"],
 			"#utils/birthday": ["lib/util/birthday/index.js"],
 			"#utils/common": ["lib/util/common/index.js"],
 			"#utils/functions": ["lib/util/functions/index.js"],

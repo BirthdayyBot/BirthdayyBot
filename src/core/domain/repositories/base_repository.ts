@@ -1,6 +1,6 @@
-import type { Identifiable } from '#root/core/domain/entites/identifiable';
-import type { OptionalTimestampedEntity, TimestampedEntity } from '#root/core/domain/entites/timestamped_entity.js';
-import type { UserGuildIdentifiable, UserGuildIdentifier } from '#root/core/domain/entites/user_guild_identifiable';
+import type { Identifiable } from '#domain/entities/identifiable';
+import type { OptionalTimestampedEntity, TimestampedEntity } from '#domain/entities/timestamped_entity';
+import type { UserGuildIdentifiable, UserGuildIdentifier } from '#domain/entities/user_guild_identifiable';
 
 /**
  * Common repository utilities and types

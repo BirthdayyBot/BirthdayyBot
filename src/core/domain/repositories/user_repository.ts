@@ -1,5 +1,5 @@
-import type { CreateUserData, User } from '#root/core/domain/entites/user';
-import type { Repository, SingleIdRepository } from '#root/core/domain/repositories/base_repository.js';
+import type { CreateUserData, User } from '#domain/entities/user';
+import type { Repository, SingleIdRepository } from '#domain/repositories/base_repository';
 
 /**
  * Repository interface for managing User entities

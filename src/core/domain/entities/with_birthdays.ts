@@ -1,4 +1,4 @@
-import type { Birthday } from '#root/core/domain/entites/birthday';
+import type { Birthday } from '#root/core/domain/entities/birthday';
 
 /**
  * Interface for entities that can have multiple birthdays associated with them

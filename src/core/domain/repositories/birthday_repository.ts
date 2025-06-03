@@ -1,6 +1,6 @@
-import type { Birthday, BirthdayUpdateData } from '#root/core/domain/entites/birthday';
-import type { UserGuildIdentifier } from '#root/core/domain/entites/user_guild_identifiable';
-import type { CompositeIdRepository } from '#root/core/domain/repositories/base_repository';
+import type { Birthday, BirthdayUpdateData } from '#domain/entities/birthday';
+import type { UserGuildIdentifier } from '#domain/entities/user_guild_identifiable';
+import type { CompositeIdRepository } from '#domain/repositories/base_repository';
 
 /**
  * Repository interface for managing Birthday entities

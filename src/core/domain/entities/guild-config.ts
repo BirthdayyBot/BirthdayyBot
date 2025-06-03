@@ -1,6 +1,6 @@
-import type { Identifiable } from '#root/core/domain/entites/identifiable';
-import type { TimestampedEntity } from '#root/core/domain/entites/timestamped_entity.js';
-import type { WithBirthdays } from '#root/core/domain/entites/with_birthdays';
+import type { Identifiable } from '#root/core/domain/entities/identifiable';
+import type { TimestampedEntity } from '#root/core/domain/entities/timestamped_entity';
+import type { WithBirthdays } from '#root/core/domain/entities/with_birthdays';
 
 /**
  * GuildConfig entity representing configuration for a Discord server/guild
