@@ -1,17 +1,10 @@
 import type { User } from '#domain/entities/user/user';
-import type { BaseRepository } from './base_repository.js';
+import type { BaseRepository } from '#domain/repositories/base_repository';
 
 /**
  * Repository interface for managing User entities
  */
 export interface UserRepository extends BaseRepository<User> {
-	/**
-	 * Finds a user by Discord username
-	 * @param username - The Discord username
-	 * @returns The user if found, null otherwise
-	 */
-	findByUsername(username: string): Promise<User | null>;
-
 	/**
 	 * Finds all premium users
 	 * @returns Array of premium users

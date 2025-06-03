@@ -5,7 +5,7 @@ import type { Entity } from '#domain/entities/base/entity';
  */
 export interface GuildConfig extends Entity {
 	/** ID of the user who invited the bot */
-	inviter: string;
+	inviter?: string;
 
 	/** Channel ID where birthday announcements are posted */
 	announcementChannel?: string;

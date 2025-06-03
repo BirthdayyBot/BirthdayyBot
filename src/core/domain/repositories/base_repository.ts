@@ -33,10 +33,10 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	/**
 	 * Finds or creates an entity
 	 * @param id - The entity identifier
-	 * @param user - Default data to use if user needs to be created
+	 * @param data - Default data to use if user needs to be created
 	 * @returns The found or created user
 	 */
-	findOrCreate(id: TId, user: Repository.CreateData<T> | Repository.UpdateData<T>): Promise<T>;
+	findOrCreate(id: TId, data: Repository.CreateData<T> | Repository.UpdateData<T>): Promise<T>;
 
 	/**
 	 * Updates an existing entity
