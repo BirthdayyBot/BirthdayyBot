@@ -39,6 +39,13 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	findOrCreate(id: TId, data: Repository.CreateData<T> | Repository.UpdateData<T>): Promise<T>;
 
 	/**
+	 * Finds an entity by its identifier
+	 * @param id - The entity identifier
+	 * @returns The found entity or null if not found
+	 */
+	findById(id: TId): Promise<T | null>;
+
+	/**
 	 * Updates an existing entity
 	 * @param id - The entity identifier
 	 * @param data - The partial data to update
