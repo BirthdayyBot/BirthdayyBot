@@ -22,7 +22,7 @@ export namespace Repository {
 	 * Utility type for creating new entities with optional timestamps
 	 * @template T - The entity type
 	 */
-	export type CreateData<T> = Omit<T, keyof TimestampedEntity> & OptionalTimestampedEntity;
+	export type CreateData<T> = Partial<Omit<T, keyof TimestampedEntity> & OptionalTimestampedEntity>;
 }
 
 /**
