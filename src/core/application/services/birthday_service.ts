@@ -41,7 +41,7 @@ export class BirthdayService {
 		if (birthday) {
 			return birthday;
 		}
-		const found = await this.birthdayRepository.findByUserAndGuild(id);
+		const found = await this.birthdayRepository.findById(id);
 		if (!found) {
 			return null;
 		}
