@@ -39,7 +39,7 @@ export class PrismaUserRepository implements UserRepository {
 		return this.prisma.user.count();
 	}
 
-	public async createMany(users: Repository.CreateData<User>[]): Promise<User[]> {
+	public async createMany(users: Repository.CreateManyData<User>): Promise<User[]> {
 		const createdUsers = await this.prisma.user.createManyAndReturn({
 			data: users.map((user) => ({
 				id: user.id,

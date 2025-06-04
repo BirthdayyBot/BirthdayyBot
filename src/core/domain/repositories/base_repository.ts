@@ -22,7 +22,9 @@ export namespace Repository {
 	 * Utility type for creating new entities with optional timestamps
 	 * @template T - The entity type
 	 */
-	export type CreateData<T> = Partial<Omit<T, keyof TimestampedEntity> & OptionalTimestampedEntity>;
+	export type CreateData<T> = Omit<T, 'id' | 'disabled' | 'createdAt' | 'updatedAt'> & OptionalTimestampedEntity;
+
+	export type CreateManyData<T> = T[];
 }
 
 /**
@@ -78,5 +80,5 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param entities - The entity identifier or identifiers
 	 * @returns The found entity or null if not found
 	 */
-	createMany(entities: Repository.CreateData<T>[]): Promise<T[]>;
+	createMany(entities: Repository.CreateManyData<T>): Promise<T[]>;
 }

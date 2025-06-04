@@ -34,7 +34,7 @@ export class PrismaGuildConfigRepository implements GuildConfigRepository {
 		await this.prisma.guild.delete({ where: { id } }).catch(() => {});
 	}
 
-	public async createMany(entities: Repository.CreateData<GuildConfig>[]): Promise<GuildConfig[]> {
+	public async createMany(entities: Repository.CreateManyData<GuildConfig>): Promise<GuildConfig[]> {
 		const created = await this.prisma.guild.createManyAndReturn({
 			data: entities,
 			skipDuplicates: true

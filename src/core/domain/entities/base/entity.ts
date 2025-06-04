@@ -5,6 +5,6 @@ import type { TimestampedEntity } from './timestamped_entity.js';
  * Represents a base entity with an identifier and timestamps.
  * @template T - The type of the entity's identifier.
  */
-export interface Entity extends TimestampedEntity, WithBirthdays {
-	id: string;
+export interface Entity<Id extends string | object = string> extends TimestampedEntity, WithBirthdays {
+	id: Id;
 }
