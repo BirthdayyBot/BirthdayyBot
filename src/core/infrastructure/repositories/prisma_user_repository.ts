@@ -1,5 +1,5 @@
 import type { User } from '#domain/entities/user/user';
-import type { Repository } from '#domain/repositories/base_repository';
+import { type Repository } from '#domain/repositories/base_repository';
 import type { UserRepository } from '#domain/repositories/user_repository';
 import { PrismaClient, type User as PrismaUser } from '@prisma/client';
 
@@ -20,6 +20,14 @@ export class PrismaUserRepository implements UserRepository {
 		await this.prisma.user.delete({
 			where: { id: userId }
 		});
+	}
+
+	public async findById(id: string): Promise<User | null> {
+		const user = await this.prisma.user.findUnique({
+			where: { id }
+		});
+		if (!user) return null;
+		return this.toDomainEntity(user);
 	}
 
 	public async findAll(): Promise<User[]> {

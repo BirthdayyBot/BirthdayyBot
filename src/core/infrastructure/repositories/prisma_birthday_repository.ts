@@ -5,6 +5,14 @@ import type { PrismaClient } from '@prisma/client';
 
 export class PrismaBirthdayRepository implements BirthdayRepository {
 	public constructor(private readonly prisma: PrismaClient) {}
+
+	public async findById(id: BirthdayIdentifier): Promise<Birthday | null> {
+		const birthday = await this.prisma.birthday.findUnique({
+			where: { userId_guildId: id }
+		});
+		return birthday ? birthday : null;
+	}
+
 	public async findByUser(userId: string): Promise<Birthday[]> {
 		return this.prisma.birthday.findMany({
 			where: { userId }

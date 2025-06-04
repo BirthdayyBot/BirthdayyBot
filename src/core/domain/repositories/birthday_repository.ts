@@ -18,12 +18,4 @@ export interface BirthdayRepository<T extends Birthday = Birthday> extends BaseR
 	 * @returns Array of entities for the guild
 	 */
 	findByGuild(guildId: string): Promise<T[]>;
-
-	/**
-	 * Finds a specific entity by user and guild
-	 * @param userId - The Discord user ID
-	 * @param guildId - The Discord guild ID
-	 * @returns The entity for the user in the specified guild, or null if not found
-	 */
-	findByUserAndGuild(id: BirthdayIdentifier): Promise<T | null>;
 }

@@ -2,10 +2,15 @@ import type { TimestampedEntity } from '#domain/entities/base/timestamped_entity
 import type { GuildConfig } from '#domain/entities/guild/guild-config';
 import type { Repository } from '#domain/repositories/base_repository';
 import type { GuildConfigRepository } from '#domain/repositories/guild-config_repository';
-import type { PrismaClient, Guild } from '@prisma/client';
+import type { Guild, PrismaClient } from '@prisma/client';
 
 export class PrismaGuildConfigRepository implements GuildConfigRepository {
 	public constructor(private readonly prisma: PrismaClient) {}
+
+	public async findById(id: string): Promise<GuildConfig | null> {
+		const guild = await this.prisma.guild.findUnique({ where: { id } });
+		return guild ? this.toDomainEntity(guild) : null;
+	}
 
 	public async findOrCreate(
 		id: string,
