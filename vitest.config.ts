@@ -4,6 +4,9 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
 	resolve: {
 		alias: [
+			{ find: /^#application\/(.*)/, replacement: resolve('src/core/application/$1.ts') },
+			{ find: /^#domain\/(.*)/, replacement: resolve('src/core/domain/$1.ts') },
+			{ find: /^#infrastructure\/(.*)/, replacement: resolve('src/core/infrastructure/$1.ts') },
 			{
 				find: '#lib',
 				replacement: '#lib',
