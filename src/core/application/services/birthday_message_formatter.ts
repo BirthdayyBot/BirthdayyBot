@@ -1,7 +1,7 @@
 import { Guild, time, TimestampStyles, User } from 'discord.js';
 import { type Birthday } from '#domain/entities/birthday/birthday';
-import { DateService } from '#root/core/application/services/date_service';
 import { formatTemplate } from '#domain/services/template_formatter';
+import { formatDate, getNextBirthday, getTimestampForDate, parseDateString } from '#domain/services/date_utils';
 
 export interface BirthdayMessageFormatOptions {
 	user: User;
@@ -10,17 +10,23 @@ export interface BirthdayMessageFormatOptions {
 	customPlaceholders?: Record<string, string>;
 }
 
+/**
+ * Formats a birthday message with dynamic placeholders.
+ * @param message The message containing placeholders.
+ * @param options Formatting options (user, guild, birthday, custom placeholders).
+ * @returns The formatted message.
+ */
 export function formatBirthdayMessage(message: string, options: BirthdayMessageFormatOptions): string {
 	const { user, guild, birthday, customPlaceholders } = options;
-	const dateService = new DateService();
 
-	const parsedBirthday = dateService.parse(birthday.birthday);
-	const formattedBirthday = dateService.format(parsedBirthday, 'MMMM Do');
-	const nextBirthday = dateService.getNextBirthday(parsedBirthday);
-	const discordTimestamp = parsedBirthday ? `<t:${Math.floor(parsedBirthday.getTime() / 1000)}:D>` : '';
-	const nextBirthdayTimestamp = nextBirthday ? time(nextBirthday, TimestampStyles.LongDate) : '';
+	const parsedBirthday = parseDateString(birthday.birthday);
 
-	const placeholders: Record<string, string> = {
+	const formattedBirthday = formatDate(parsedBirthday);
+	const nextBirthday = getNextBirthday(parsedBirthday);
+	const nextBirthdayTimestamp = getTimestampForDate(nextBirthday);
+	const discordTimestamp = time(nextBirthday, TimestampStyles.LongDateTime);
+
+	const basePlaceholders: Record<string, string> = {
 		'{{user}}': user.toString(),
 		'{{user.id}}': user.id,
 		'{{user.username}}': user.username,
@@ -30,9 +36,10 @@ export function formatBirthdayMessage(message: string, options: BirthdayMessageF
 		'{{birthday}}': formattedBirthday,
 		'{{birthdayDate}}': birthday.birthday,
 		'{{discordTimestamp}}': discordTimestamp,
-		'{{nextBirthday}}': nextBirthdayTimestamp,
-		...customPlaceholders
+		'{{nextBirthday}}': nextBirthdayTimestamp
 	};
+
+	const placeholders = Object.assign({}, basePlaceholders, customPlaceholders);
 
 	return formatTemplate(message, placeholders);
 }
