@@ -92,16 +92,29 @@ function getSearchScore(id: string, key: string, value: TimeZone) {
 	return score;
 }
 
-export function getCurrentOffset(): number {
+export interface CurrentOffsetResult {
+	utcOffset: number;
+	dateFormatted: string;
+	date: string;
+	timezone?: string;
+}
+
+export function getCurrentOffset(): CurrentOffsetResult | null {
 	const timezones = getTimeZones();
 	const now = dayjs();
+
 	for (const timezone of timezones) {
 		const date = now.tz(timezone.name);
 		if (date.hour() === 0) {
-			return date.utcOffset();
+			return {
+				utcOffset: date.utcOffset(),
+				dateFormatted: date.format('YYYY-MM-DD HH:mm:ss'),
+				date: date.format('MM-DD'),
+				timezone: timezone.name
+			};
 		}
 	}
-	return 0; // Default to 0 if no timezone matches
+	return null;
 }
 
 export function getTimezoneWithOffset(offset: number) {
