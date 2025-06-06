@@ -8,7 +8,15 @@
 export function formatTemplate(template: string, values: Record<string, string>): string {
 	let formatted = template;
 	for (const [key, value] of Object.entries(values)) {
-		formatted = formatted.replace(new RegExp(key, 'g'), value);
+		formatted = formatted.replace(new RegExp(escapeRegExp(key), 'g'), value);
 	}
 	return formatted;
+}
+
+/**
+ * Échappe les caractères spéciaux d'une chaîne pour une utilisation sûre dans une RegExp.
+ * @param str La chaîne à échapper
+ */
+function escapeRegExp(str: string): string {
+	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
