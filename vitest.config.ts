@@ -37,7 +37,24 @@ export default defineConfig({
 	},
 	test: {
 		setupFiles: ['./tests/vitest.setup.ts'],
-		globals: true
+		globals: true,
+		coverage: {
+			provider: 'v8',
+			include: [
+				'src/core/application/**/*.{ts,js}',
+				'src/core/domain/**/*.{ts,js}',
+				'src/core/infrastructure/**/*.{ts,js}',
+				'src/lib/**/*.{ts,js}'
+			],
+			exclude: [
+				'src/core/application/services/birthday_message_formatter.ts',
+				'src/core/infrastructure/services/date.ts',
+				'src/lib/util/common/strings.ts',
+				'src/lib/util/common/index.ts',
+				'src/lib/util/functions/index.ts',
+				'src/lib/util/birthday/index.ts'
+			]
+		}
 	},
 	esbuild: {
 		target: 'es2022'
