@@ -43,18 +43,26 @@ jobs:
       - name: Build code
         run: yarn build
 
-        Testing:
-          name: Testing NodeJS
-          runs-on: ubuntu-latest
-          steps:
-            - name: Checkout Project
-              uses: actions/checkout@v4
-            - name: Use Node.js v22
-              uses: actions/setup-node@v4
-              with:
-                node-version: 22
-                cache: yarn
-            - name: Install Dependencies
-              run: yarn --immutable
-            - name: Run Tests
-              run: yarn test
+  UnitTesting:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+      - name: Use Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn --immutable
+      - name: Generate Prisma types
+        run: yarn prisma:generate
+      - name: Run unit tests
+        run: yarn test --coverage
+      - name: Codecov Upload
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/cobertura-coverage.xml
+          fail_ci_if_error: true
