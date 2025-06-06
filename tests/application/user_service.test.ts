@@ -31,7 +31,7 @@ describe('UserService', () => {
 		service = new UserService(userRepository, cacheManager);
 	});
 
-	it("findOrCreate retourne l'utilisateur depuis le cache ou le repository", async () => {
+	it('findOrCreate returns the user from cache or repository', async () => {
 		(cacheManager.get as any).mockResolvedValueOnce(null);
 		(userRepository.findOrCreate as any).mockResolvedValueOnce(mockUser);
 		const result = await service.findOrCreate('user1', {} as Repository.CreateData<User>);
