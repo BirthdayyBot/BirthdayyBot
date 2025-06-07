@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   Linting:
     name: Linting NodeJS
@@ -42,3 +45,27 @@ jobs:
         run: yarn --immutable
       - name: Build code
         run: yarn build
+
+  UnitTesting:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+      - name: Use Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+      - name: Install Dependencies
+        run: yarn --immutable
+      - name: Generate Prisma types
+        run: yarn prisma:generate
+      - name: Run unit tests
+        run: yarn test --coverage
+      - name: Codecov Upload
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/cobertura-coverage.xml
+          fail_ci_if_error: true

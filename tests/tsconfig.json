@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"types": ["vitest/globals"],
+		"verbatimModuleSyntax": false,
+		"paths": {
+			"#application/*": ["../src/core/application/*.js"],
+			"#domain/*": ["../src/core/domain/*.js"],
+			"#infrastructure/*": ["../src/core/infrastructure/*.js"],
+			"#utils/*": ["../src/lib/util/*.js"],
+			"#lib/*": ["../src/lib/*.js"],
+			"#languages": ["../src/languages/index.js"],
+			"#root/*": ["../src/*.js"]
+		}
+	},
+	"include": [".", "../src"]
+}

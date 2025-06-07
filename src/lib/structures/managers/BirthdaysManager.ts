@@ -1,7 +1,8 @@
+import { formatDateForDisplay, parseInputDate } from '#infrastructure/services/date';
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { formatBirthdayMessage } from '#root/core/application/services/birthday_message_formatter';
 import { CdnUrls, ClientColor, Emojis } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
 import { isProduction } from '#utils/env';
@@ -171,7 +172,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		return Promise.all([
 			this.announceBirthdayInChannel(
-				this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member)
+				this.createOptionsMessageForAnnouncementChannel(await this.settings.fetch(), member, birthday)
 			),
 			this.addCurrentBirthdayChildRole(await this.settings.fetch(), member)
 		]);
@@ -348,13 +349,29 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @param member - The guild member for whom the birthday announcement is being created.
 	 * @returns The message options object with content and embeds.
 	 */
-	private createOptionsMessageForAnnouncementChannel(settings: Settings, member: GuildMember): MessageCreateOptions {
+	private createOptionsMessageForAnnouncementChannel(
+		settings: Settings,
+		member: GuildMember,
+		birthday: Birthday
+	): MessageCreateOptions {
 		const { announcementMessage, birthdayPingRole } = settings;
 
 		const description = announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
 		const embed = new DefaultEmbedBuilder()
 			.setTitle(`${Emojis.News} Birthday Announcement!`)
-			.setDescription(formatBirthdayMessage(description, member))
+			.setDescription(
+				formatBirthdayMessage(description, {
+					user: member.user,
+					guild: this.guild,
+					birthday: {
+						id: {
+							userId: birthday.userId,
+							guildId: this.guildId
+						},
+						...birthday
+					}
+				})
+			)
 			.setThumbnail(CdnUrls.Cake);
 
 		if (birthdayPingRole) return { content: roleMention(birthdayPingRole), embeds: [embed.toJSON()] };
