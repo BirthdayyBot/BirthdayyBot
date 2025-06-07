@@ -14,24 +14,25 @@ export namespace Repository {
 
 	/**
 	 * Utility type for update operations that excludes identifiers and timestamp fields
-	 * @template T - The entity type
+	 * @template DomainEntity - The entity type
 	 */
-	export type UpdateData<T> = Partial<Omit<T, 'id' | keyof TimestampedEntity>>;
+	export type UpdateData<DomainEntity> = Partial<Omit<DomainEntity, 'id' | keyof TimestampedEntity>>;
 
 	/**
 	 * Utility type for creating new entities with optional timestamps
-	 * @template T - The entity type
+	 * @template DomainEntity - The entity type
 	 */
-	export type CreateData<T> = Omit<T, 'id' | 'disabled' | 'createdAt' | 'updatedAt'> & OptionalTimestampedEntity;
+	export type CreateData<DomainEntity> = Omit<DomainEntity, 'id' | 'disabled' | 'createdAt' | 'updatedAt'> &
+		OptionalTimestampedEntity;
 
-	export type CreateManyData<T> = T[];
+	export type CreateManyData<DomainEntity> = DomainEntity[];
 }
 
 /**
  * Base repository interface with common operations for all repositories
- * @template T - The entity type
+ * @template DomainEntity - The entity type
  */
-export interface BaseRepository<T extends TimestampedEntity, TId = string> {
+export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = string> {
 	/**
 	 * Finds or creates an entity
 	 * @param id - The entity identifier
@@ -39,11 +40,15 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found or created user
 	 */
-	findOrCreate<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	findOrCreate<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
 		id: TId,
-		data: Repository.CreateData<T> | Repository.UpdateData<T>,
+		data: Repository.CreateData<DomainEntity> | Repository.UpdateData<DomainEntity>,
 		select?: SelectedFields
-	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T>;
+	): Promise<
+		SelectedFields extends readonly (keyof DomainEntity)[]
+			? Pick<DomainEntity, SelectedFields[number]>
+			: DomainEntity
+	>;
 
 	/**
 	 * Finds an entity by its identifier
@@ -51,10 +56,14 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found entity or null if not found
 	 */
-	findById<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	findById<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
 		id: TId,
 		select?: SelectedFields
-	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T | null>;
+	): Promise<
+		SelectedFields extends readonly (keyof DomainEntity)[]
+			? Pick<DomainEntity, SelectedFields[number]>
+			: DomainEntity | null
+	>;
 
 	/**
 	 * Updates an existing entity
@@ -63,11 +72,15 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the updated entity
 	 * @returns The updated entity
 	 */
-	update<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	update<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
 		id: TId,
-		data: Repository.UpdateData<T>,
+		data: Repository.UpdateData<DomainEntity>,
 		select?: SelectedFields
-	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T | null>;
+	): Promise<
+		SelectedFields extends readonly (keyof DomainEntity)[]
+			? Pick<DomainEntity, SelectedFields[number]>
+			: DomainEntity | null
+	>;
 
 	/**
 	 * Deletes an entity by its identifier
@@ -81,7 +94,7 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param options - Optional pagination parameters
 	 * @returns Array of entities
 	 */
-	findAll(options?: Repository.PaginationOptions): Promise<T[]>;
+	findAll(options?: Repository.PaginationOptions): Promise<DomainEntity[]>;
 
 	/**
 	 * Counts all entities of this type
@@ -94,5 +107,5 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param entities - The entity identifier or identifiers
 	 * @returns The found entity or null if not found
 	 */
-	createMany(entities: Repository.CreateManyData<T>): Promise<T[]>;
+	createMany(entities: Repository.CreateManyData<DomainEntity>): Promise<DomainEntity[]>;
 }
