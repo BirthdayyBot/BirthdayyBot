@@ -1,7 +1,7 @@
 import type { CacheManager } from '#domain/ports/cache_manager';
 
 describe('CacheManager (contract)', () => {
-	class DummyCacheManager implements CacheManager<string, number> {
+	class DummyCacheManager implements CacheManager<number> {
 		private store = new Map<string, number>();
 
 		public get(key: string): number | null {
