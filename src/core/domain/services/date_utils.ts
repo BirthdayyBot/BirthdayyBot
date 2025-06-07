@@ -1,5 +1,3 @@
-// Fonctions utilitaires pures pour la gestion des dates (aucune dépendance technique)
-
 export const monthKeys = [
 	'january',
 	'february',
@@ -30,19 +28,19 @@ export const enum Month {
 	December
 }
 
-export interface ParsedDate {
-	year: number | null;
+export interface ParsedDateInfo {
+	year: number | null; // null for 'XXXX'
 	month: number; // 1-12
 	day: number; // 1-31
 }
 
-export interface ParsedDateString {
+export interface SplitDateResult {
 	year: string; // 'XXXX' or 'YYYY'
 	month: number; // 1-12
 	day: number; // 1-31
 }
 
-export function parseDateString(date: string): ParsedDate {
+export function extractDateComponents(date: string): ParsedDateInfo {
 	const match = /^(\d{4}|XXXX)-(\d{2})-(\d{2})$/.exec(date);
 	if (!match) throw new Error('Invalid date format. Please use "YYYY-MM-DD" or "XXXX-MM-DD".');
 	return {
@@ -52,7 +50,7 @@ export function parseDateString(date: string): ParsedDate {
 	};
 }
 
-export function formatDate(
+export function standardizeDateDisplay(
 	{ year, month, day }: { year: number | null; month: number; day: number },
 	format = 'YYYY-MM-DD'
 ): string {
@@ -62,41 +60,44 @@ export function formatDate(
 	return format.replace('YYYY', y).replace('MM', m).replace('DD', d);
 }
 
-export function isFutureDate({ year, month, day }: ParsedDate, from = new Date()): boolean {
+export function checkIfDateIsInFuture({ year, month, day }: ParsedDateInfo, from = new Date()): boolean {
 	if (year === null) return false;
 	const date = new Date(year, month - 1, day);
 	return date > from;
 }
 
-export function userMonthToServerMonth(userMonth: number): number {
+export function convertUserMonthToServerMonth(userMonth: number): number {
 	if (userMonth < 1 || userMonth > 12) throw new Error('Numéro de mois utilisateur invalide');
 	return userMonth - 1;
 }
 
-export function serverMonthToUserMonth(serverMonth: number): number {
+export function convertServerMonthToUserMonth(serverMonth: number): number {
 	if (serverMonth < 0 || serverMonth > 11) throw new Error('Numéro de mois serveur invalide');
 	return serverMonth + 1;
 }
 
-export function diffInDays(dateA: Date, dateB: Date): number {
+export function calculateDateDifferenceInDays(dateA: Date, dateB: Date): number {
 	const msPerDay = 24 * 60 * 60 * 1000;
 	return Math.floor((dateA.getTime() - dateB.getTime()) / msPerDay);
 }
 
-export function addDays(date: Date, days: number): Date {
+export function incrementDateByDays(date: Date, days: number): Date {
 	const result = new Date(date);
 	result.setDate(result.getDate() + days);
 	return result;
 }
 
-export function getNextBirthday({ month, day }: { month: number; day: number }, from: Date = new Date()): Date {
+export function calculateUpcomingBirthday(
+	{ month, day }: { month: number; day: number },
+	from: Date = new Date()
+): Date {
 	const year = from.getFullYear();
 	const thisYear = new Date(year, month - 1, day);
 	if (thisYear > from) return thisYear;
 	return new Date(year + 1, month - 1, day);
 }
 
-export function getTimestampForDate(date: Date, callback?: (timestamp: number) => string): string {
+export function formatDateToTimestamp(date: Date, callback?: (timestamp: number) => string): string {
 	const timestamp = Math.trunc(date.getTime() / 1000);
 	return typeof callback === 'function' ? callback(timestamp) : timestamp.toString();
 }

@@ -5,7 +5,7 @@ import timezone from 'dayjs/plugin/timezone.js';
 import dayjstimezone from 'dayjs/plugin/timezone.js';
 import { ChatInputCommandInteraction, time, type TimestampStylesString } from 'discord.js';
 import { addZeroToSingleDigitNumber } from '#utils/common';
-import type { ParsedDateString } from '#root/core/domain/services/date_utils.js';
+import type { SplitDateResult } from '#root/core/domain/services/date_utils.js';
 
 dayjs.extend(advancedFormat);
 dayjs.extend(utc);
@@ -35,7 +35,7 @@ export function formatDateForDisplay(date: string, fromHumanFormat = false) {
 	return `${day}. ${numberToMonthName(Number(month))} ${year.includes('XXXX') ? '' : year}`;
 }
 
-export function splitDateString(date: string, separator = '-'): ParsedDateString {
+export function splitDateString(date: string, separator = '-'): SplitDateResult {
 	const [year, month, day] = date.split(separator);
 	return { year, month: Number(month), day: Number(day) };
 }

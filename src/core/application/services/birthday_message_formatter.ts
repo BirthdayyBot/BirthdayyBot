@@ -1,7 +1,12 @@
 import { Guild, time, TimestampStyles, User } from 'discord.js';
 import { type Birthday } from '#domain/entities/birthday/birthday';
 import { formatTemplate } from '#domain/services/template_formatter';
-import { formatDate, getNextBirthday, getTimestampForDate, parseDateString } from '#domain/services/date_utils';
+import {
+	standardizeDateDisplay,
+	calculateUpcomingBirthday,
+	formatDateToTimestamp,
+	extractDateComponents
+} from '#domain/services/date_utils';
 
 export interface BirthdayMessageFormatOptions {
 	user: User;
@@ -19,11 +24,11 @@ export interface BirthdayMessageFormatOptions {
 export function formatBirthdayMessage(message: string, options: BirthdayMessageFormatOptions): string {
 	const { user, guild, birthday, customPlaceholders } = options;
 
-	const parsedBirthday = parseDateString(birthday.birthday);
+	const parsedBirthday = extractDateComponents(birthday.birthday);
 
-	const formattedBirthday = formatDate(parsedBirthday);
-	const nextBirthday = getNextBirthday(parsedBirthday);
-	const nextBirthdayTimestamp = getTimestampForDate(nextBirthday);
+	const formattedBirthday = standardizeDateDisplay(parsedBirthday);
+	const nextBirthday = calculateUpcomingBirthday(parsedBirthday);
+	const nextBirthdayTimestamp = formatDateToTimestamp(nextBirthday);
 	const discordTimestamp = time(nextBirthday, TimestampStyles.LongDateTime);
 
 	const basePlaceholders: Record<string, string> = {
