@@ -1,9 +1,8 @@
-// Service de domaine pur pour le formatage de template
-
 /**
- * Remplace les clés du template par leurs valeurs dans le message.
- * @param template Le message avec des placeholders (ex: {{user}})
- * @param values Un dictionnaire clé/valeur (clé = placeholder, valeur = string)
+ * Format a template string by replacing variables with corresponding values.
+ * @param template The template string containing variables in the format {{variable}}.
+ * @param values An object containing key-value pairs where keys are variable names and values are their replacements.
+ * @returns The formatted string with variables replaced by their corresponding values.
  */
 export function formatTemplate(template: string, values: Record<string, string>): string {
 	let formatted = template;
@@ -14,8 +13,10 @@ export function formatTemplate(template: string, values: Record<string, string>)
 }
 
 /**
- * Échappe les caractères spéciaux d'une chaîne pour une utilisation sûre dans une RegExp.
- * @param str La chaîne à échapper
+ * Escapes special characters in a string to be used in a regular expression.
+ * This is useful for safely replacing variables in a template string.
+ * @param str The string to escape.
+ * @returns The escaped string.
  */
 function escapeRegExp(str: string): string {
 	return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
