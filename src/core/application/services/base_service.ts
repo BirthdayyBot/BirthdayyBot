@@ -14,22 +14,26 @@ export class BaseService<
 		protected readonly cacheManager: C
 	) {}
 
-	public async findOrCreate(
+	public async findOrCreate<T extends readonly (keyof E)[] = readonly (keyof E)[]>(
 		id: Id,
 		defaultData: Repository.CreateData<E>,
-		select?: (keyof E)[]
-	): Promise<Partial<E>> {
+		select?: T
+	): Promise<SelectFields<E, T> | E> {
 		const cacheKey = this.getCacheKey(id);
 		let entity = await this.cacheManager.get(cacheKey);
 		if (!entity) {
-			entity = await this.repository.findOrCreate(id, defaultData);
+			entity = await this.repository.findOrCreate(id, defaultData, select);
 			await this.cacheManager.set(cacheKey, entity);
 		}
 		return select ? this.pickFields(entity, select) : entity;
 	}
 
-	public async update(id: Id, data: Repository.UpdateData<E>, select?: (keyof E)[]): Promise<Partial<E> | null> {
-		const updated = await this.repository.update(id, data);
+	public async update<T extends readonly (keyof E)[] = readonly (keyof E)[]>(
+		id: Id,
+		data: Repository.UpdateData<E>,
+		select?: T
+	): Promise<SelectFields<E, T> | E | null> {
+		const updated = await this.repository.update(id, data, select);
 		const cacheKey = this.getCacheKey(id);
 		if (updated) {
 			await this.cacheManager.invalidate(cacheKey);
@@ -45,11 +49,14 @@ export class BaseService<
 		await this.cacheManager.delete(cacheKey);
 	}
 
-	public async find(id: Id, select?: (keyof E)[]): Promise<Partial<E> | null> {
+	public async find<T extends readonly (keyof E)[] = readonly (keyof E)[]>(
+		id: Id,
+		select?: T
+	): Promise<SelectFields<E, T> | E | null> {
 		const cacheKey = this.getCacheKey(id);
 		let entity = await this.cacheManager.get(cacheKey);
 		if (!entity) {
-			entity = await this.repository.findById(id);
+			entity = await this.repository.findById(id, select);
 			if (!entity) return null;
 			await this.cacheManager.set(cacheKey, entity);
 		}
@@ -75,11 +82,13 @@ export class BaseService<
 		throw new Error(`Invalid ID type for cache key: ${typeof id}`);
 	}
 
-	private pickFields<T>(entity: T, fields: (keyof T)[]): Partial<T> {
-		const result: Partial<T> = {};
+	private pickFields<T, K extends readonly (keyof T)[]>(entity: T, fields: K): Pick<T, K[number]> {
+		const result = {} as Pick<T, K[number]>;
 		for (const key of fields) {
 			result[key] = entity[key];
 		}
 		return result;
 	}
 }
+
+export type SelectFields<E, T extends readonly (keyof E)[]> = Pick<E, T[number]>;

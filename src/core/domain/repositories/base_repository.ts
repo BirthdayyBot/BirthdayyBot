@@ -36,24 +36,38 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * Finds or creates an entity
 	 * @param id - The entity identifier
 	 * @param data - Default data to use if user needs to be created
+	 * @param select - Optional fields to select from the entity
 	 * @returns The found or created user
 	 */
-	findOrCreate(id: TId, data: Repository.CreateData<T> | Repository.UpdateData<T>): Promise<T>;
+	findOrCreate<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+		id: TId,
+		data: Repository.CreateData<T> | Repository.UpdateData<T>,
+		select?: TSelect
+	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T>;
 
 	/**
 	 * Finds an entity by its identifier
 	 * @param id - The entity identifier
+	 * @param select - Optional fields to select from the entity
 	 * @returns The found entity or null if not found
 	 */
-	findById(id: TId): Promise<T | null>;
+	findById<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+		id: TId,
+		select?: TSelect
+	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T | null>;
 
 	/**
 	 * Updates an existing entity
 	 * @param id - The entity identifier
 	 * @param data - The partial data to update
+	 * @param select - Optional fields to select from the updated entity
 	 * @returns The updated entity
 	 */
-	update(id: TId, data: Repository.UpdateData<T>): Promise<T | null>;
+	update<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+		id: TId,
+		data: Repository.UpdateData<T>,
+		select?: TSelect
+	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T | null>;
 
 	/**
 	 * Deletes an entity by its identifier
