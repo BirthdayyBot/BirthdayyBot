@@ -13,19 +13,47 @@ export namespace Repository {
 	}
 
 	/**
-	 * Utility type for update operations that excludes identifiers and timestamp fields
+	 * Utility type for create operations that includes all fields except identifiers and timestamp fields
+	 * @template DomainEntity - The entity type
+	 */
+	export type CreateData<DomainEntity> = Omit<DomainEntity, 'id' | keyof TimestampedEntity> &
+		OptionalTimestampedEntity;
+
+	/**
+	 * Utility type for create operations that includes all fields except identifiers and timestamp fields
+	 * @template DomainEntity - The entity type
+	 */
+	export type CreateManyData<DomainEntity> = DomainEntity[];
+
+	/**
+	 * Utility type for update operations that includes all fields except identifiers and timestamp fields
 	 * @template DomainEntity - The entity type
 	 */
 	export type UpdateData<DomainEntity> = Partial<Omit<DomainEntity, 'id' | keyof TimestampedEntity>>;
 
 	/**
-	 * Utility type for creating new entities with optional timestamps
+	 * Utility type for selecting specific fields from an entity
 	 * @template DomainEntity - The entity type
+	 * @template SelectedFields - The fields to select
 	 */
-	export type CreateData<DomainEntity> = Omit<DomainEntity, 'id' | 'disabled' | 'createdAt' | 'updatedAt'> &
-		OptionalTimestampedEntity;
+	export type SelectedFields<
+		DomainEntity extends TimestampedEntity,
+		SelectedFields extends readonly (keyof DomainEntity)[]
+	> = SelectedFields extends readonly (keyof DomainEntity)[]
+		? Pick<DomainEntity, SelectedFields[number]>
+		: DomainEntity;
 
-	export type CreateManyData<DomainEntity> = DomainEntity[];
+	/**
+	 * Utility type for selecting specific fields from an entity or returning null
+	 * @template DomainEntity - The entity type
+	 * @template SelectedFields - The fields to select
+	 */
+	export type SelectedFieldsOrNull<
+		DomainEntity extends TimestampedEntity,
+		SelectedFields extends readonly (keyof DomainEntity)[]
+	> = SelectedFields extends readonly (keyof DomainEntity)[]
+		? Pick<DomainEntity, SelectedFields[number]> | null
+		: DomainEntity | null;
 }
 
 /**
@@ -66,6 +94,13 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	>;
 
 	/**
+	 * Retrieves all entities of this type
+	 * @param options - Optional pagination parameters
+	 * @returns Array of entities
+	 */
+	findAll(options?: Repository.PaginationOptions): Promise<DomainEntity[]>;
+
+	/**
 	 * Updates an existing entity
 	 * @param id - The entity identifier
 	 * @param data - The partial data to update
@@ -83,20 +118,6 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	>;
 
 	/**
-	 * Deletes an entity by its identifier
-	 * @param id - The entity identifier
-	 * @returns void
-	 */
-	deleteById(id: TId): Promise<void>;
-
-	/**
-	 * Retrieves all entities of this type
-	 * @param options - Optional pagination parameters
-	 * @returns Array of entities
-	 */
-	findAll(options?: Repository.PaginationOptions): Promise<DomainEntity[]>;
-
-	/**
 	 * Counts all entities of this type
 	 * @returns The total count
 	 */
@@ -108,4 +129,11 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	 * @returns The found entity or null if not found
 	 */
 	createMany(entities: Repository.CreateManyData<DomainEntity>): Promise<DomainEntity[]>;
+
+	/**
+	 * Deletes an entity by its identifier
+	 * @param id - The entity identifier
+	 * @returns void
+	 */
+	deleteById(id: TId): Promise<void>;
 }
