@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryCacheManager } from '#infrastructure/cache/in_memory_cache_manager';
 
 describe('InMemoryCacheManager', () => {
-	let cacheManager: InMemoryCacheManager<string, number>;
+	let cacheManager: InMemoryCacheManager<number>;
 
 	beforeEach(() => {
 		cacheManager = new InMemoryCacheManager();
