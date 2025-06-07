@@ -17,7 +17,7 @@ const birthday = {
 
 describe('BirthdayService', () => {
 	let birthdayRepository: BirthdayRepository;
-	let cacheManager: CacheManager<string, Birthday>;
+	let cacheManager: CacheManager<Birthday>;
 	let service: BirthdayService;
 
 	beforeEach(() => {
@@ -32,7 +32,7 @@ describe('BirthdayService', () => {
 			set: vi.fn(),
 			invalidate: vi.fn(),
 			delete: vi.fn()
-		} as any as CacheManager<string, Birthday>;
+		} as any as CacheManager<Birthday>;
 		service = new BirthdayService(birthdayRepository, cacheManager);
 	});
 

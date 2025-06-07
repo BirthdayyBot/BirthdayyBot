@@ -12,7 +12,7 @@ const mockUser: User = {
 
 describe('UserService', () => {
 	let userRepository: UserRepository;
-	let cacheManager: CacheManager<string, User>;
+	let cacheManager: CacheManager<User>;
 	let service: UserService;
 
 	beforeEach(() => {

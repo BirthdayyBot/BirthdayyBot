@@ -20,7 +20,7 @@ const guild = {
 
 describe('GuildConfigService', () => {
 	let birthdayRepository: GuildConfigRepository;
-	let cacheManager: CacheManager<string, GuildConfig>;
+	let cacheManager: CacheManager<GuildConfig>;
 	let service: GuildConfigService;
 
 	beforeEach(() => {
@@ -35,7 +35,7 @@ describe('GuildConfigService', () => {
 			set: vi.fn(),
 			invalidate: vi.fn(),
 			delete: vi.fn()
-		} as any as CacheManager<string, GuildConfig>;
+		} as any as CacheManager<GuildConfig>;
 		service = new GuildConfigService(birthdayRepository, cacheManager);
 	});
 
