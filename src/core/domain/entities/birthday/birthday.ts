@@ -1,0 +1,22 @@
+import type { TimestampedEntity } from '#domain/entities/base/timestamped_entity';
+import type { Entity } from '../base/entity.js';
+
+/**
+ * Birthday entity representing a user's birthday in a specific guild
+ */
+export interface Birthday extends Entity<BirthdayIdentifier>, TimestampedEntity {
+	/** Birthday date in "YYYY-MM-DD" or "XXXX-MM-DD" format */
+	birthday: string;
+	/** Flag indicating if birthday notifications are disabled */
+	disabled: boolean;
+}
+
+/**
+ * Interface for entities that are identified by a combination of user ID and guild ID
+ */
+export interface BirthdayIdentifier {
+	/** The user ID associated with this birthday entity */
+	userId: string;
+	/** The guild ID associated with this entity */
+	guildId: string;
+}

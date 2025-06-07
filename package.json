@@ -10,6 +10,8 @@
 	"main": "./dist/index.js",
 	"type": "module",
 	"imports": {
+		"#domain/*": "./dist/core/domain/*.js",
+		"#infrastructure/*": "./dist/core/infrastructure/*.js",
 		"#utils/birthday": "./dist/lib/util/birthday/index.js",
 		"#utils/common": "./dist/lib/util/common/index.js",
 		"#utils/functions": "./dist/lib/util/functions/index.js",
@@ -33,7 +35,7 @@
 		"start": "doppler run -- node --enable-source-maps dist/index.js",
 		"lint": "eslint --fix --ext ts src",
 		"format": "prettier --write --log-level=warn \"src/**/*.{js,ts,json}\"",
-		"test": "eslint --ext .ts src",
+		"test": "vitest run",
 		"update": "yarn upgrade-interactive",
 		"prisma:generate": "npx prisma generate",
 		"prisma:migrate": "npx prisma migrate dev"
@@ -78,14 +80,17 @@
 		"@types/ws": "^8.18.1",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
+		"@vitest/coverage-v8": "^3.2.2",
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-hexagonal-architecture": "^1.0.3",
 		"eslint-plugin-prettier": "^5.4.1",
 		"lint-staged": "^16.1.0",
 		"prettier": "^3.5.3",
 		"prisma": "^5.22.0",
 		"tsc-watch": "^7.1.1",
-		"typescript": "^5.7.3"
+		"typescript": "^5.7.3",
+		"vitest": "^3.1.4"
 	},
 	"resolutions": {
 		"@types/node": "^22.15.29",
