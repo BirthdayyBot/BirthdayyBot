@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 
 describe('FileCacheManager', () => {
 	let cacheDir: string;
-	let cache: FileCacheManager<string, any>;
+	let cache: FileCacheManager<any>;
 
 	beforeAll(() => {
 		cacheDir = join(__dirname, `test-cache-${randomUUID()}`);
