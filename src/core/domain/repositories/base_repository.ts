@@ -39,11 +39,11 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found or created user
 	 */
-	findOrCreate<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	findOrCreate<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
 		id: TId,
 		data: Repository.CreateData<T> | Repository.UpdateData<T>,
-		select?: TSelect
-	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T>;
+		select?: SelectedFields
+	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T>;
 
 	/**
 	 * Finds an entity by its identifier
@@ -51,10 +51,10 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found entity or null if not found
 	 */
-	findById<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	findById<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
 		id: TId,
-		select?: TSelect
-	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T | null>;
+		select?: SelectedFields
+	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T | null>;
 
 	/**
 	 * Updates an existing entity
@@ -63,11 +63,11 @@ export interface BaseRepository<T extends TimestampedEntity, TId = string> {
 	 * @param select - Optional fields to select from the updated entity
 	 * @returns The updated entity
 	 */
-	update<TSelect extends readonly (keyof T)[] = readonly (keyof T)[]>(
+	update<SelectedFields extends readonly (keyof T)[] = readonly (keyof T)[]>(
 		id: TId,
 		data: Repository.UpdateData<T>,
-		select?: TSelect
-	): Promise<TSelect extends readonly (keyof T)[] ? Pick<T, TSelect[number]> : T | null>;
+		select?: SelectedFields
+	): Promise<SelectedFields extends readonly (keyof T)[] ? Pick<T, SelectedFields[number]> : T | null>;
 
 	/**
 	 * Deletes an entity by its identifier
