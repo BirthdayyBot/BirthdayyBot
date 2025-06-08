@@ -46,7 +46,7 @@
 		"@sapphire/discord.js-utilities": "^7.3.3",
 		"@sapphire/duration": "^1.2.0",
 		"@sapphire/fetch": "^3.0.5",
-		"@sapphire/framework": "^5.3.5",
+		"@sapphire/framework": "^5.3.6",
 		"@sapphire/plugin-api": "^8.2.1",
 		"@sapphire/plugin-hmr": "^3.0.2",
 		"@sapphire/plugin-i18next": "^8.0.0",
@@ -56,9 +56,9 @@
 		"@sapphire/plugin-utilities-store": "^2.0.3",
 		"@sapphire/ratelimits": "^2.4.11",
 		"@sapphire/utilities": "^3.18.2",
-		"@sentry/node": "^9.24.0",
+		"@sentry/node": "^9.27.0",
 		"@skyra/env-utilities": "^2.0.1",
-		"bullmq": "^5.53.1",
+		"bullmq": "^5.53.2",
 		"colorette": "^2.0.20",
 		"dayjs": "^1.11.13",
 		"discord-api-types": "^0.37.117",
@@ -74,7 +74,7 @@
 		"@sapphire/eslint-plugin-result": "^2.0.4",
 		"@sapphire/prettier-config": "^2.0.0",
 		"@sapphire/ts-config": "^5.0.1",
-		"@types/node": "^22.15.29",
+		"@types/node": "^22.15.30",
 		"@types/ws": "^8.18.1",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
@@ -88,7 +88,7 @@
 		"typescript": "^5.7.3"
 	},
 	"resolutions": {
-		"@types/node": "^22.15.29",
+		"@types/node": "^22.15.30",
 		"ansi-regex": "^5.0.1",
 		"discord-api-types": "^0.37.98",
 		"minimist": "^1.2.8"
@@ -115,7 +115,7 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
-	"packageManager": "yarn@4.9.1",
+	"packageManager": "yarn@4.9.2",
 	"volta": {
 		"node": "22.16.0"
 	}
