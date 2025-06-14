@@ -30,30 +30,6 @@ export namespace Repository {
 	 * @template DomainEntity - The entity type
 	 */
 	export type UpdateData<DomainEntity> = Partial<Omit<DomainEntity, 'id' | keyof TimestampedEntity>>;
-
-	/**
-	 * Utility type for selecting specific fields from an entity
-	 * @template DomainEntity - The entity type
-	 * @template SelectedFields - The fields to select
-	 */
-	export type SelectedFields<
-		DomainEntity extends TimestampedEntity,
-		SelectedFields extends readonly (keyof DomainEntity)[]
-	> = SelectedFields extends readonly (keyof DomainEntity)[]
-		? Pick<DomainEntity, SelectedFields[number]>
-		: DomainEntity;
-
-	/**
-	 * Utility type for selecting specific fields from an entity or returning null
-	 * @template DomainEntity - The entity type
-	 * @template SelectedFields - The fields to select
-	 */
-	export type SelectedFieldsOrNull<
-		DomainEntity extends TimestampedEntity,
-		SelectedFields extends readonly (keyof DomainEntity)[]
-	> = SelectedFields extends readonly (keyof DomainEntity)[]
-		? Pick<DomainEntity, SelectedFields[number]> | null
-		: DomainEntity | null;
 }
 
 /**
@@ -68,15 +44,10 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found or created user
 	 */
-	findOrCreate<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
+	findOrCreate(
 		id: TId,
-		data: Repository.CreateData<DomainEntity> | Repository.UpdateData<DomainEntity>,
-		select?: SelectedFields
-	): Promise<
-		SelectedFields extends readonly (keyof DomainEntity)[]
-			? Pick<DomainEntity, SelectedFields[number]>
-			: DomainEntity
-	>;
+		data: Repository.CreateData<DomainEntity> | Repository.UpdateData<DomainEntity>
+	): Promise<DomainEntity>;
 
 	/**
 	 * Finds an entity by its identifier
@@ -84,14 +55,7 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	 * @param select - Optional fields to select from the entity
 	 * @returns The found entity or null if not found
 	 */
-	findById<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
-		id: TId,
-		select?: SelectedFields
-	): Promise<
-		SelectedFields extends readonly (keyof DomainEntity)[]
-			? Pick<DomainEntity, SelectedFields[number]>
-			: DomainEntity | null
-	>;
+	findById(id: TId): Promise<DomainEntity | null>;
 
 	/**
 	 * Retrieves all entities of this type
@@ -107,15 +71,7 @@ export interface BaseRepository<DomainEntity extends TimestampedEntity, TId = st
 	 * @param select - Optional fields to select from the updated entity
 	 * @returns The updated entity
 	 */
-	update<SelectedFields extends readonly (keyof DomainEntity)[] = readonly (keyof DomainEntity)[]>(
-		id: TId,
-		data: Repository.UpdateData<DomainEntity>,
-		select?: SelectedFields
-	): Promise<
-		SelectedFields extends readonly (keyof DomainEntity)[]
-			? Pick<DomainEntity, SelectedFields[number]>
-			: DomainEntity | null
-	>;
+	update(id: TId, data: Repository.UpdateData<DomainEntity>): Promise<DomainEntity | null>;
 
 	/**
 	 * Counts all entities of this type

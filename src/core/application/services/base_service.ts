@@ -14,31 +14,23 @@ export class BaseService<
 		protected readonly cacheManager: CacheStrategy
 	) {}
 
-	public async findOrCreate<T extends readonly (keyof EntityModel)[] = readonly (keyof EntityModel)[]>(
-		id: Id,
-		defaultData: Repository.CreateData<EntityModel>,
-		select?: T
-	): Promise<SelectFields<EntityModel, T> | EntityModel> {
+	public async findOrCreate(id: Id, defaultData: Repository.CreateData<EntityModel>): Promise<EntityModel> {
 		const cacheKey = this.getCacheKey(id);
 		let entity = await this.cacheManager.get(cacheKey);
 		if (!entity) {
-			entity = await this.repository.findOrCreate(id, defaultData, select);
+			entity = await this.repository.findOrCreate(id, defaultData);
 			await this.cacheManager.set(cacheKey, entity);
 		}
-		return select ? this.pickFields(entity, select) : entity;
+		return entity;
 	}
 
-	public async update<T extends readonly (keyof EntityModel)[] = readonly (keyof EntityModel)[]>(
-		id: Id,
-		data: Repository.UpdateData<EntityModel>,
-		select?: T
-	): Promise<SelectFields<EntityModel, T> | EntityModel | null> {
-		const updated = await this.repository.update(id, data, select);
+	public async update(id: Id, data: Repository.UpdateData<EntityModel>): Promise<EntityModel | null> {
+		const updated = await this.repository.update(id, data);
 		const cacheKey = this.getCacheKey(id);
 		if (updated) {
 			await this.cacheManager.invalidate(cacheKey);
 			await this.cacheManager.set(cacheKey, updated);
-			return select ? this.pickFields(updated, select) : updated;
+			return updated;
 		}
 		return null;
 	}
@@ -49,18 +41,15 @@ export class BaseService<
 		await this.cacheManager.delete(cacheKey);
 	}
 
-	public async find<T extends readonly (keyof EntityModel)[] = readonly (keyof EntityModel)[]>(
-		id: Id,
-		select?: T
-	): Promise<SelectFields<EntityModel, T> | EntityModel | null> {
+	public async find(id: Id): Promise<EntityModel | null> {
 		const cacheKey = this.getCacheKey(id);
 		let entity = await this.cacheManager.get(cacheKey);
 		if (!entity) {
-			entity = await this.repository.findById(id, select);
+			entity = await this.repository.findById(id);
 			if (!entity) return null;
 			await this.cacheManager.set(cacheKey, entity);
 		}
-		return select ? this.pickFields(entity, select) : entity;
+		return entity;
 	}
 
 	/**
@@ -73,21 +62,9 @@ export class BaseService<
 	 * getCacheKey({ userId: 'user1', guildId: 'guild1' }); // returns 'serviceName:user1:guild1'
 	 */
 	protected getCacheKey(id: Id): string {
-		if (typeof id === 'string') {
-			return `${this.name}:${id}`;
-		} else if (typeof id === 'object' && id !== null) {
-			const values = Object.values(id);
-			return `${this.name}:${values.join(':')}`;
-		}
-		throw new Error(`Invalid ID type for cache key: ${typeof id}`);
-	}
+		if (typeof id === 'string') return `${this.name}:${id}`;
 
-	private pickFields<T, K extends readonly (keyof T)[]>(entity: T, fields: K): Pick<T, K[number]> {
-		const result = {} as Pick<T, K[number]>;
-		for (const key of fields) {
-			result[key] = entity[key];
-		}
-		return result;
+		return `${this.name}:${Object.values(id).join(':')}`;
 	}
 }
 
