@@ -40,5 +40,7 @@ jobs:
           cache: yarn
       - name: Install Dependencies
         run: yarn --immutable
+      - name: Prisma Generate
+        run: yarn prisma generate
       - name: Build code
         run: yarn build
