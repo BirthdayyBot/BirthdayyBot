@@ -80,7 +80,7 @@
 		"@types/ws": "^8.18.1",
 		"@typescript-eslint/eslint-plugin": "^7.18.0",
 		"@typescript-eslint/parser": "^7.18.0",
-		"@vitest/coverage-v8": "^1.4.0",
+		"@vitest/coverage-v8": "^3.2.4",
 		"eslint": "^8.57.1",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-prettier": "^5.4.1",
@@ -89,7 +89,7 @@
 		"prisma": "^6.10.0",
 		"tsc-watch": "^7.1.1",
 		"typescript": "^5.7.3",
-		"vitest": "^1.4.0"
+		"vitest": "^3.2.4"
 	},
 	"resolutions": {
 		"@types/node": "^22.15.31",
