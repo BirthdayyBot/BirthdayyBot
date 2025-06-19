@@ -7,7 +7,7 @@ interface Properties {
 	discriminator: string | null;
 	premium: boolean;
 	createdAt: Date;
-	updateAt: Date;
+	updatedAt: Date;
 }
 
 export class User extends Entity<Properties> {
