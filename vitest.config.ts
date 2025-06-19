@@ -32,7 +32,6 @@ export default defineConfig({
 		]
 	},
 	test: {
-		setupFiles: ['./tests/vitest.setup.ts'],
 		globals: true,
 		coverage: {
 			// reporter: ['text', 'lcov', 'cobertura'],
