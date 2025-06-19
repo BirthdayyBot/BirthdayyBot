@@ -99,7 +99,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.8.1"
     "@commitlint/config-conventional": "npm:^19.8.1"
     "@influxdata/influxdb-client": "npm:^1.35.0"
-    "@prisma/client": "npm:^6.10.0"
+    "@prisma/client": "npm:^6.10.1"
     "@sapphire/async-queue": "npm:^1.5.5"
     "@sapphire/cli": "npm:^1.9.3"
     "@sapphire/decorators": "npm:^6.2.0"
@@ -120,25 +120,25 @@ __metadata:
     "@sapphire/ratelimits": "npm:^2.4.11"
     "@sapphire/ts-config": "npm:^5.0.1"
     "@sapphire/utilities": "npm:^3.18.2"
-    "@sentry/node": "npm:^9.29.0"
+    "@sentry/node": "npm:^9.30.0"
     "@skyra/env-utilities": "npm:^2.0.1"
-    "@types/node": "npm:^22.15.31"
+    "@types/node": "npm:^22.15.32"
     "@types/ws": "npm:^8.18.1"
     "@typescript-eslint/eslint-plugin": "npm:^7.18.0"
     "@typescript-eslint/parser": "npm:^7.18.0"
     "@vitest/coverage-v8": "npm:^3.2.4"
-    bullmq: "npm:^5.53.3"
+    bullmq: "npm:^5.54.3"
     colorette: "npm:^2.0.20"
     dayjs: "npm:^1.11.13"
     discord-api-types: "npm:^0.37.117"
-    discord.js: "npm:^14.19.3"
+    discord.js: "npm:^14.20.0"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^10.1.5"
-    eslint-plugin-prettier: "npm:^5.4.1"
+    eslint-plugin-prettier: "npm:^5.5.0"
     i18next: "npm:25.2.1"
     lint-staged: "npm:^16.1.2"
     prettier: "npm:^3.5.3"
-    prisma: "npm:^6.10.0"
+    prisma: "npm:^6.10.1"
     reflect-metadata: "npm:^0.2.2"
     tsc-watch: "npm:^7.1.1"
     typescript: "npm:^5.7.3"
@@ -375,9 +375,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/rest@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "@discordjs/rest@npm:2.5.0"
+"@discordjs/rest@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "@discordjs/rest@npm:2.5.1"
   dependencies:
     "@discordjs/collection": "npm:^2.1.1"
     "@discordjs/util": "npm:^1.1.1"
@@ -387,8 +387,8 @@ __metadata:
     discord-api-types: "npm:^0.38.1"
     magic-bytes.js: "npm:^1.10.0"
     tslib: "npm:^2.6.3"
-    undici: "npm:6.21.1"
-  checksum: 10/61184293512ac048634db7ce0f9ef3ba4635e56b80ec093377ef9fc89c310727f2a1ae04c4170c2968e45e9b12cf72de338c5c7f6b6c7bc3eb37d9d3924f40c6
+    undici: "npm:6.21.3"
+  checksum: 10/2bee1f73b0e87de4357af482c95a37db47466b8b855f519b87a0263361f9dafc9cbea7087b91553ed0a8e7202144a73638bbc6d91653464a04babffb72ffe040
   languageName: node
   linkType: hard
 
@@ -399,12 +399,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discordjs/ws@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "@discordjs/ws@npm:1.2.2"
+"@discordjs/ws@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@discordjs/ws@npm:1.2.3"
   dependencies:
     "@discordjs/collection": "npm:^2.1.0"
-    "@discordjs/rest": "npm:^2.5.0"
+    "@discordjs/rest": "npm:^2.5.1"
     "@discordjs/util": "npm:^1.1.0"
     "@sapphire/async-queue": "npm:^1.5.2"
     "@types/ws": "npm:^8.5.10"
@@ -412,7 +412,7 @@ __metadata:
     discord-api-types: "npm:^0.38.1"
     tslib: "npm:^2.6.2"
     ws: "npm:^8.17.0"
-  checksum: 10/1b4b384888540079c138513dc12e99928f0c79d9341291206c26e6ee481e9f6adefcead17f944ea4dc0c4ad179142d0107490a625cb1ba68cc65e7e5cab01eba
+  checksum: 10/35e322c398ea95127a47440810c1def0e55e90ab86e2dc59cedb5402df1485d59d86ae55e29514346c4437b1619c904265d187f93375c6743cd12a3558e7abda
   languageName: node
   linkType: hard
 
@@ -1237,9 +1237,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/client@npm:6.10.0"
+"@prisma/client@npm:^6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/client@npm:6.10.1"
   peerDependencies:
     prisma: "*"
     typescript: ">=5.1.0"
@@ -1248,62 +1248,62 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10/18ff4b1c2b2b2335066a3bbb36067058949a319d1fdc2822bd157a955d5080d96da6cabb9410937e76595a9d02176ec5f818f9648fe8d15f5c909fe57119ba50
+  checksum: 10/2b3eca8767b3cb071125ee28af4f933ba618c36d663740e37c67064c0453bdf0156830b22d7a8fcc64842087f3b6a762df90c15e8e9ed1fd750d8b057cd10cf7
   languageName: node
   linkType: hard
 
-"@prisma/config@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/config@npm:6.10.0"
+"@prisma/config@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/config@npm:6.10.1"
   dependencies:
     jiti: "npm:2.4.2"
-  checksum: 10/388cb5d83602e70eed18500ea42f689cb2aaeece8a249a6bb76c2fd26c355231cea5d00933278302bd8317597a7a73b48758e358a647ba96c9c207b4044a69b0
+  checksum: 10/3cfd2fafd7a58f3af9a45fee002f9fc5e664eb4650c8703685e2e9bc345a77cc12996be1e2926d04f7df69a4515ab8b2f830feaa191c709930684d22833e4e1b
   languageName: node
   linkType: hard
 
-"@prisma/debug@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/debug@npm:6.10.0"
-  checksum: 10/4c862d94b58a50e0d20f3319917994065ad18120628aad888cc3590d3f02d01f8b226c7f4a60d0d552cc6d4395cfa388ac0aabbfdd7800e6df647bbfa52483f2
+"@prisma/debug@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/debug@npm:6.10.1"
+  checksum: 10/dbaadd9534b92cf6445ea66b8763e9de3607ad6d174344e6d623c371dc7a8fa1fbe03d5e7350d0a5f85bc2243911a77a4e7302e5f3f52dbbd46732eeb9470cc6
   languageName: node
   linkType: hard
 
-"@prisma/engines-version@npm:6.10.0-43.aee10d5a411e4360c6d3445ce4810ca65adbf3e8":
-  version: 6.10.0-43.aee10d5a411e4360c6d3445ce4810ca65adbf3e8
-  resolution: "@prisma/engines-version@npm:6.10.0-43.aee10d5a411e4360c6d3445ce4810ca65adbf3e8"
-  checksum: 10/f5358bb0adc90af2ec30e035a2b5315efb454e00c106f54ad8e331a755c46c93d459da60da6afbbc7abab8b397b2a818b41e58057536bdbf5558b790da2d5636
+"@prisma/engines-version@npm:6.10.1-1.9b628578b3b7cae625e8c927178f15a170e74a9c":
+  version: 6.10.1-1.9b628578b3b7cae625e8c927178f15a170e74a9c
+  resolution: "@prisma/engines-version@npm:6.10.1-1.9b628578b3b7cae625e8c927178f15a170e74a9c"
+  checksum: 10/29f0b07713335e9c1cd4e31031164a9b2d81f0f87d0e60e7226db897980c27cf16d23f987f124c4f6488aa424503c42f7ad4ea561eb8d330c08624500835bf97
   languageName: node
   linkType: hard
 
-"@prisma/engines@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/engines@npm:6.10.0"
+"@prisma/engines@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/engines@npm:6.10.1"
   dependencies:
-    "@prisma/debug": "npm:6.10.0"
-    "@prisma/engines-version": "npm:6.10.0-43.aee10d5a411e4360c6d3445ce4810ca65adbf3e8"
-    "@prisma/fetch-engine": "npm:6.10.0"
-    "@prisma/get-platform": "npm:6.10.0"
-  checksum: 10/41baaa4c7574041f681efc009dc30ba786066fd720d0740054a2e1de69c1cba2b271ef5ddddeef6eafbfe7ecc1e9d3988691c29a13c578a84df1e89f6b70bcb3
+    "@prisma/debug": "npm:6.10.1"
+    "@prisma/engines-version": "npm:6.10.1-1.9b628578b3b7cae625e8c927178f15a170e74a9c"
+    "@prisma/fetch-engine": "npm:6.10.1"
+    "@prisma/get-platform": "npm:6.10.1"
+  checksum: 10/38084772912fa61101144f49dc0f4eff154c33fd7e2e5a6b8a5fc6ea1a6ece8dc55fe8a9fb1f36da1c591688e0fa401fedc4949324080256696e06dafbf82a97
   languageName: node
   linkType: hard
 
-"@prisma/fetch-engine@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/fetch-engine@npm:6.10.0"
+"@prisma/fetch-engine@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/fetch-engine@npm:6.10.1"
   dependencies:
-    "@prisma/debug": "npm:6.10.0"
-    "@prisma/engines-version": "npm:6.10.0-43.aee10d5a411e4360c6d3445ce4810ca65adbf3e8"
-    "@prisma/get-platform": "npm:6.10.0"
-  checksum: 10/78fc93bf69a7a669f51839a53e9c93d4891ec825c1a55258052eafed5f3763a4b362055c43130a124dc6aab9bbde3eaf237de93988fc6409e6313c1f75a33b5e
+    "@prisma/debug": "npm:6.10.1"
+    "@prisma/engines-version": "npm:6.10.1-1.9b628578b3b7cae625e8c927178f15a170e74a9c"
+    "@prisma/get-platform": "npm:6.10.1"
+  checksum: 10/1536789cbb625155578538b1240ac68867d313e2c1fbd460d35ee66fc9b2072100ec1305a3c209bd94ecb33f97a180d022098a0f49018abe25622b83395fcc82
   languageName: node
   linkType: hard
 
-"@prisma/get-platform@npm:6.10.0":
-  version: 6.10.0
-  resolution: "@prisma/get-platform@npm:6.10.0"
+"@prisma/get-platform@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/get-platform@npm:6.10.1"
   dependencies:
-    "@prisma/debug": "npm:6.10.0"
-  checksum: 10/a26f13fec555001537b22a633fdcc142546470cf48e7732513320ef79bacf76b681b10b55eeeaaa83567ff287df40e32c8ea6423b6522a0fbff765e9aa6beab9
+    "@prisma/debug": "npm:6.10.1"
+  checksum: 10/62bcc3389b4e03c62efd52ddc113a5e54b0ca9ff0d11ae2a547d7fb4385e6cc0e383398c8da0ab2cda224572ad9a4e8091accc216543f3275edfc8e49ed992ca
   languageName: node
   linkType: hard
 
@@ -1753,16 +1753,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:9.29.0":
-  version: 9.29.0
-  resolution: "@sentry/core@npm:9.29.0"
-  checksum: 10/87b52eedf8ba13e1d0f3d93f990e01c85432d873f854075b54198a14ff998ef63b46ff8e073deb98905b342daa6c252e13f9c68fa3e887ff2ee71c3fb404a60d
+"@sentry/core@npm:9.30.0":
+  version: 9.30.0
+  resolution: "@sentry/core@npm:9.30.0"
+  checksum: 10/2957927aaae6ffafe7f6fffa8bc43631e10d584192fd679ba35b2527ed4f03364f8bebbc0f9a988e3cdb16f67d9fb23f244a796c7851961476270e0ec1dfd57e
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^9.29.0":
-  version: 9.29.0
-  resolution: "@sentry/node@npm:9.29.0"
+"@sentry/node@npm:^9.30.0":
+  version: 9.30.0
+  resolution: "@sentry/node@npm:9.30.0"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/context-async-hooks": "npm:^1.30.1"
@@ -1794,19 +1794,19 @@ __metadata:
     "@opentelemetry/sdk-trace-base": "npm:^1.30.1"
     "@opentelemetry/semantic-conventions": "npm:^1.34.0"
     "@prisma/instrumentation": "npm:6.8.2"
-    "@sentry/core": "npm:9.29.0"
-    "@sentry/opentelemetry": "npm:9.29.0"
+    "@sentry/core": "npm:9.30.0"
+    "@sentry/opentelemetry": "npm:9.30.0"
     import-in-the-middle: "npm:^1.13.1"
     minimatch: "npm:^9.0.0"
-  checksum: 10/df6ca887561b1b7a1e9ad638455a24e4b0c797fb86bad06d0d156c7e6dab25efe098a30499d7144ceb9922a31c9467c1f68d2f20567c1666d7e86fa6e977c41d
+  checksum: 10/20a28dab1ad337bdbce633b74337e743328f1d74c1d81388ec0f9671f17c7d2d29455c05fd3a8b7b8392e22aff9ba78c83100426f39750db32db5e65d5cf8ca9
   languageName: node
   linkType: hard
 
-"@sentry/opentelemetry@npm:9.29.0":
-  version: 9.29.0
-  resolution: "@sentry/opentelemetry@npm:9.29.0"
+"@sentry/opentelemetry@npm:9.30.0":
+  version: 9.30.0
+  resolution: "@sentry/opentelemetry@npm:9.30.0"
   dependencies:
-    "@sentry/core": "npm:9.29.0"
+    "@sentry/core": "npm:9.30.0"
   peerDependencies:
     "@opentelemetry/api": ^1.9.0
     "@opentelemetry/context-async-hooks": ^1.30.1 || ^2.0.0
@@ -1814,7 +1814,7 @@ __metadata:
     "@opentelemetry/instrumentation": ^0.57.1 || ^0.200.0
     "@opentelemetry/sdk-trace-base": ^1.30.1 || ^2.0.0
     "@opentelemetry/semantic-conventions": ^1.34.0
-  checksum: 10/b5d69ed035f8806292e67d7e3de0414a499457ce9b608cc50c94f72f28e6e740d2e2be019ee257fad00b7376057b4f17a6d6ec05dadfbbcbc56d8d9f35c0ee8c
+  checksum: 10/f3a711cc3fff63c0d7525c5d3acc413aae33b532250407a871f0df982ade5f7b17a1ecd5e6b876a7dfafc437579962169e0b7ac48bc700fca4b59f1acaf2530e
   languageName: node
   linkType: hard
 
@@ -1894,12 +1894,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.15.31":
-  version: 22.15.31
-  resolution: "@types/node@npm:22.15.31"
+"@types/node@npm:^22.15.32":
+  version: 22.15.32
+  resolution: "@types/node@npm:22.15.32"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10/999da153fae4687c416421850ebd3c94be75e0dae27ccad192d9a073c7e74baade987d68fc9f082a825c4672bd8a26867636663baad0b9e851baf7b36fb9fdd9
+  checksum: 10/10b4c106d0c512a1d35ec08142bd7fb5cf2e1df93fc5627b3c69dd843dec4be07a47f1fa7ede232ad84762d75a372ea35028b79ee1e753b6f2adecd0b2cb2f71
   languageName: node
   linkType: hard
 
@@ -2421,9 +2421,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^5.53.3":
-  version: 5.53.3
-  resolution: "bullmq@npm:5.53.3"
+"bullmq@npm:^5.54.3":
+  version: 5.54.3
+  resolution: "bullmq@npm:5.54.3"
   dependencies:
     cron-parser: "npm:^4.9.0"
     ioredis: "npm:^5.4.1"
@@ -2432,7 +2432,7 @@ __metadata:
     semver: "npm:^7.5.4"
     tslib: "npm:^2.0.0"
     uuid: "npm:^9.0.0"
-  checksum: 10/5bf26d7d26fecf4babef142037dc58ee1d59eb09fef0044442b62570bb659ab08decec4a65f110fd0b99fce4ad39b9ccd89b68d52f38e746523b323f918bd476
+  checksum: 10/795644a297cf9484a28d157c203b066d403f25a3740a4c53f80d61bacdfd4863830489ec6e41378c48b5d2db460e81d0c58fa6e72b7b8bb86c0aa0f65be54116
   languageName: node
   linkType: hard
 
@@ -2807,24 +2807,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:^14.19.3":
-  version: 14.19.3
-  resolution: "discord.js@npm:14.19.3"
+"discord.js@npm:^14.20.0":
+  version: 14.20.0
+  resolution: "discord.js@npm:14.20.0"
   dependencies:
     "@discordjs/builders": "npm:^1.11.2"
     "@discordjs/collection": "npm:1.5.3"
     "@discordjs/formatters": "npm:^0.6.1"
-    "@discordjs/rest": "npm:^2.5.0"
+    "@discordjs/rest": "npm:^2.5.1"
     "@discordjs/util": "npm:^1.1.1"
-    "@discordjs/ws": "npm:^1.2.2"
+    "@discordjs/ws": "npm:^1.2.3"
     "@sapphire/snowflake": "npm:3.5.3"
     discord-api-types: "npm:^0.38.1"
     fast-deep-equal: "npm:3.1.3"
     lodash.snakecase: "npm:4.1.1"
     magic-bytes.js: "npm:^1.10.0"
     tslib: "npm:^2.6.3"
-    undici: "npm:6.21.1"
-  checksum: 10/c9fd9deb4df8e8797da46d2d75c9eeb02fd55d99043b70c8846996b6f262be743cf6cc52033ed5890a2ceac53537ce9048d3abbc8a358707d5122df4fef874eb
+    undici: "npm:6.21.3"
+  checksum: 10/256e7c52e9c9cf1019b7b7643058b748f22f775dddfd0f302b53113ce40c5604d2cc131bbd8ba7a2edd1f900cb55a719d1accbd16c1ac78faeacf88003530960
   languageName: node
   linkType: hard
 
@@ -3061,9 +3061,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^5.4.0, eslint-plugin-prettier@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "eslint-plugin-prettier@npm:5.4.1"
+"eslint-plugin-prettier@npm:^5.4.0, eslint-plugin-prettier@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "eslint-plugin-prettier@npm:5.5.0"
   dependencies:
     prettier-linter-helpers: "npm:^1.0.0"
     synckit: "npm:^0.11.7"
@@ -3077,7 +3077,7 @@ __metadata:
       optional: true
     eslint-config-prettier:
       optional: true
-  checksum: 10/ad7b1efa996cbd419cbb881182c58bce1c6c35d1cf30186c0e330437c4e551da4599b8c8aa7464b27d43fb57990837698ebaa9d238ba084dc1410f6caf31c000
+  checksum: 10/83210819211ad98f305b719352c151794c8c6403d3888c0f8cca76429bf91235753c15d060eb8097d3872e85e9224b8a46280105e468d8c578e2ca9f253bfa57
   languageName: node
   linkType: hard
 
@@ -4993,12 +4993,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prisma@npm:^6.10.0":
-  version: 6.10.0
-  resolution: "prisma@npm:6.10.0"
+"prisma@npm:^6.10.1":
+  version: 6.10.1
+  resolution: "prisma@npm:6.10.1"
   dependencies:
-    "@prisma/config": "npm:6.10.0"
-    "@prisma/engines": "npm:6.10.0"
+    "@prisma/config": "npm:6.10.1"
+    "@prisma/engines": "npm:6.10.1"
   peerDependencies:
     typescript: ">=5.1.0"
   peerDependenciesMeta:
@@ -5006,7 +5006,7 @@ __metadata:
       optional: true
   bin:
     prisma: build/index.js
-  checksum: 10/224e04221c6ff3f16f8acfcbd7651291fca634996030b45f05fa18645a244a8fb2c5aaf26a354f613ce51d9b5e5c3e384bbe289797a9919cbe54a7bced3a075f
+  checksum: 10/3de8f66935453cf5bcd3e31ae348f79ecd36a6654df64cab613d3b2d39c949b86404dcdfb6646ba9af46185943414f55917cd2b2ce4170a78a4584691c42e6ba
   languageName: node
   linkType: hard
 
@@ -5820,10 +5820,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:6.21.1":
-  version: 6.21.1
-  resolution: "undici@npm:6.21.1"
-  checksum: 10/eeccc07e9073ae8e755fdc0dc8cdfaa426c01ec6f815425c3ecedba2e5394cea4993962c040dd168951714a82f0d001a13018c3ae3ad4534f0fa97afe425c08d
+"undici@npm:6.21.3":
+  version: 6.21.3
+  resolution: "undici@npm:6.21.3"
+  checksum: 10/b6b8f4a90e294c11fabbb174b471a310840695ed0154a44b81e9bb4a08867ed738c8a7eac4eb46c7902d502fbccf03fa2cf2e5f18d9a2218d82e4294e3f74a2b
   languageName: node
   linkType: hard
 
