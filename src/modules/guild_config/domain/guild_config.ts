@@ -7,7 +7,7 @@ interface Properties {
 	updatedAt: Date;
 	disabled: boolean;
 	premium: boolean;
-	locale: string;
+	language: string;
 	timezone: string;
 	announcementChannel: string | null;
 	announcementMessage: string | null;

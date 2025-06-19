@@ -16,13 +16,13 @@ export abstract class BaseRepository<T, K = string> {
 	}
 
 	// CRUD: Delete
-	public async delete(key: K): Promise<void> {
-		await this.deleteFromSource(key);
+	public async delete(key: K): Promise<T | null> {
+		return this.deleteFromSource(key);
 	}
 
 	// Protected functions to be implemented by subclasses
 	protected abstract createInSource(key: K, entity: T): Promise<T>;
 	protected abstract findFromSource(key: K): Promise<T | null>;
 	protected abstract updateInSource(key: K, entity: T): Promise<T>;
-	protected abstract deleteFromSource(key: K): Promise<void>;
+	protected abstract deleteFromSource(key: K): Promise<T | null>;
 }
