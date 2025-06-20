@@ -1,150 +1,72 @@
-import { bento } from '#root/modules/core/services/cache';
-import { prisma } from '#root/modules/core/services/prisma';
+import { Birthday } from '#birthday/domain/birthday';
+import { BirthdayIdentifier } from '#birthday/domain/birthday_identifier';
+import { BaseRepository } from '#core/repository/base_repository';
+import { prisma } from '#core/services/prisma';
 import type { Birthday as PrismaBirthday } from '@prisma/client';
-import { Birthday } from '../domain/birthday.js';
-import { BirthdayIdentifier } from '../domain/birthday_identifier.js';
 
-interface StoreBirthdayDTO {
-	birthday: string;
-}
-
-interface UpdateBirthdayDTO {
-	userId: string;
-	guildId: string;
-	birthday: string;
-	disabled?: boolean;
-}
-
-export class BirthdayRepository {
-	public async allByGuild(guildId: string): Promise<Birthday[]> {
-		const birthdays = await bento.getOrSet({
-			key: `birthdays:${guildId}`,
-			factory: () => {
-				return prisma.birthday.findMany({
-					where: { guildId }
-				});
-			},
-			ttl: 60 * 60 // Cache for 1 hour
+export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birthday, PrismaBirthday> {
+	public override toDomain(entity: {
+		birthday: string;
+		userId: string;
+		guildId: string;
+		disabled: boolean;
+		createdAt: Date;
+		updatedAt: Date;
+	}): Birthday {
+		return Birthday.create({
+			id: BirthdayIdentifier.fromStrings(entity.userId, entity.guildId),
+			birthday: entity.birthday,
+			disabled: entity.disabled,
+			createdAt: entity.createdAt,
+			updatedAt: entity.updatedAt
 		});
-
-		return birthdays.map((birthday) => this.toDomain(birthday));
 	}
 
-	public async allByUser(userId: string): Promise<Birthday[]> {
-		const birthdays = await bento.getOrSet({
-			key: `birthdays:user:${userId}`,
-			factory: () => {
-				return prisma.birthday.findMany({
-					where: { userId }
-				});
-			},
-			ttl: 60 * 60 // Cache for 1 hour
-		});
-		return birthdays.map((birthday) => this.toDomain(birthday));
-	}
-
-	public async findById(id: BirthdayIdentifier): Promise<Birthday | null> {
-		const birthdayRecord = await bento.getOrSet({
-			key: this.getCacheKey(id),
-			factory: () => {
-				return prisma.birthday.findUnique({
-					where: {
-						userId_guildId: {
-							guildId: id.guildId.toString(),
-							userId: id.userId.toString()
-						}
-					}
-				});
-			},
-			ttl: 60 * 60 // Cache for 1 hour
-		});
-
-		if (!birthdayRecord) {
-			return null;
-		}
-
-		return this.toDomain(birthdayRecord);
-	}
-
-	public async create(payload: StoreBirthdayDTO, userId: string, guildId: string): Promise<Birthday> {
-		const birthdayRecord = await prisma.birthday.create({
+	protected createInSource(key: BirthdayIdentifier, entity: Omit<Birthday['props'], 'id'>): Promise<PrismaBirthday> {
+		return prisma.birthday.create({
 			data: {
-				userId,
-				guildId,
-				birthday: payload.birthday
+				userId: key.userId,
+				guildId: key.guildId,
+				birthday: entity.birthday,
+				disabled: entity.disabled
 			}
 		});
-
-		await bento.set({
-			key: this.getCacheKey(BirthdayIdentifier.fromStrings(birthdayRecord.guildId, birthdayRecord.userId)),
-			value: birthdayRecord,
-			ttl: 60 * 60 // Cache for 1 hour
-		});
-
-		return this.toDomain(birthdayRecord);
 	}
 
-	public async update(payload: UpdateBirthdayDTO): Promise<Birthday> {
-		const birthdayRecord = await prisma.birthday.update({
+	protected findFromSource(key: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+		return prisma.birthday.findUnique({
 			where: {
 				userId_guildId: {
-					guildId: payload.guildId,
-					userId: payload.userId
+					userId: key.userId,
+					guildId: key.guildId
 				}
-			},
-			data: {
-				birthday: payload.birthday,
-				disabled: payload.disabled ?? false
 			}
 		});
-
-		if (!birthdayRecord) {
-			throw new Error('Birthday not found');
-		}
-
-		await bento.set({
-			key: this.getCacheKey(BirthdayIdentifier.fromStrings(birthdayRecord.guildId, birthdayRecord.userId)),
-			value: birthdayRecord,
-			ttl: 60 * 60 // Cache for 1 hour
-		});
-
-		return this.toDomain(birthdayRecord);
 	}
 
-	public async delete(guildId: string, userId: string): Promise<Birthday | null> {
-		const birthdayRecord = await prisma.birthday
-			.delete({
-				where: {
-					userId_guildId: {
-						guildId,
-						userId
-					}
+	protected updateInSource(
+		key: BirthdayIdentifier,
+		entity: Partial<Omit<Birthday['props'], 'id'>>
+	): Promise<PrismaBirthday> {
+		return prisma.birthday.update({
+			where: {
+				userId_guildId: {
+					userId: key.userId,
+					guildId: key.guildId
 				}
-			})
-			.catch(() => null);
-
-		if (!birthdayRecord) {
-			return null;
-		}
-
-		await bento.delete({
-			key: this.getCacheKey(BirthdayIdentifier.fromStrings(birthdayRecord.guildId, birthdayRecord.userId))
+			},
+			data: entity
 		});
-
-		return this.toDomain(birthdayRecord);
 	}
 
-	private getCacheKey(id: BirthdayIdentifier): string {
-		return `birthday:${id.guildId.toString()}:${id.userId.toString()}`;
-	}
-
-	private toDomain(birthdayRecord: PrismaBirthday): Birthday {
-		return Birthday.create({
-			id: BirthdayIdentifier.fromStrings(birthdayRecord.guildId, birthdayRecord.userId),
-			birthday: birthdayRecord.birthday,
-			disabled: birthdayRecord.disabled,
-			createdAt: birthdayRecord.createdAt,
-			updatedAt: birthdayRecord.updatedAt
+	protected deleteFromSource(key: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+		return prisma.birthday.delete({
+			where: {
+				userId_guildId: {
+					userId: key.userId,
+					guildId: key.guildId
+				}
+			}
 		});
 	}
 }
