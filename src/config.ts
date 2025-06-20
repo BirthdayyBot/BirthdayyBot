@@ -1,4 +1,4 @@
-import { redisConnetionOptions } from '#core/services/redis';
+import { redisConfigOptions } from '#core/services/redis';
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { getHandler } from '#root/languages/index';
 import { minutes } from '#utils/common';
@@ -201,7 +201,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 }
 
 function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
-	return { connection: redisConnetionOptions };
+	return { connection: redisConfigOptions };
 }
 
 function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {
