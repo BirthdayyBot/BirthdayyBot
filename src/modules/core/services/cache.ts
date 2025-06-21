@@ -3,7 +3,7 @@ import { memoryDriver } from 'bentocache/drivers/memory';
 import { redisBusDriver, redisDriver } from 'bentocache/drivers/redis';
 import { redisConfigOptions } from './redis.js';
 
-export const bento = new BentoCache({
+export const cache = new BentoCache({
 	default: 'memory',
 	stores: {
 		// A first cache store named "myCache" using

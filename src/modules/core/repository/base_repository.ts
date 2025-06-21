@@ -1,6 +1,6 @@
 import type { Entity } from '#core/domain/entity';
 import type { Identifier } from '#core/domain/identifier';
-import { bento } from '#core/services/cache';
+import { cache } from '#core/services/cache';
 import type { CacheProvider } from 'bentocache/types';
 
 /**
@@ -27,7 +27,7 @@ export abstract class BaseRepository<
 > {
 	protected cacheStore?: 'memory' | 'multitier';
 	private readonly name: string;
-	private cache: CacheProvider | typeof bento;
+	private cache: CacheProvider | typeof cache;
 	private readonly ttl: number = 60 * 60;
 
 	/**
@@ -39,7 +39,7 @@ export abstract class BaseRepository<
 	protected constructor(name: string, cacheStore?: 'memory' | 'multitier') {
 		this.name = name;
 		this.cacheStore = cacheStore;
-		this.cache = cacheStore ? bento.use(cacheStore) : bento;
+		this.cache = cacheStore ? cache.use(cacheStore) : cache;
 	}
 
 	/**
