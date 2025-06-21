@@ -1,4 +1,3 @@
-export * from '#utils/common/date';
 export * from '#utils/common/guards';
 export * from '#utils/common/iterators';
 export * from '#utils/common/strings';

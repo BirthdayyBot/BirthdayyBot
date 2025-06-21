@@ -8,6 +8,10 @@
 		"skipLibCheck": true,
 		"tsBuildInfoFile": "../dist/tsconfig.tsbuildinfo",
 		"paths": {
+			"#core/*": ["lib/mobules/core/*"],
+			"#birthday": ["lib/mobules/birthday/*"],
+			"#user/*": ["lib/mobules/user/*"],
+			"#guild_config/*": ["lib/mobules/guild_config/*"],
 			"#utils/birthday": ["lib/util/birthday/index.js"],
 			"#utils/common": ["lib/util/common/index.js"],
 			"#utils/functions": ["lib/util/functions/index.js"],
