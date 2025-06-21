@@ -5,14 +5,7 @@ import { prisma } from '#core/services/prisma';
 import type { Birthday as PrismaBirthday } from '@prisma/client';
 
 export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birthday, PrismaBirthday> {
-	public override toDomain(entity: {
-		birthday: string;
-		userId: string;
-		guildId: string;
-		disabled: boolean;
-		createdAt: Date;
-		updatedAt: Date;
-	}): Birthday {
+	public override toDomain(entity: PrismaBirthday): Birthday {
 		return Birthday.create({
 			id: BirthdayIdentifier.fromStrings(entity.userId, entity.guildId),
 			birthday: entity.birthday,
