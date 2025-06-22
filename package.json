@@ -60,7 +60,7 @@
 		"@sapphire/utilities": "^3.18.2",
 		"@sentry/node": "^9.30.0",
 		"@skyra/env-utilities": "^2.0.1",
-		"bullmq": "^5.54.3",
+		"bullmq": "^5.55.0",
 		"colorette": "^2.0.20",
 		"dayjs": "^1.11.13",
 		"discord-api-types": "^0.37.117",
