@@ -20,31 +20,36 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 		});
 	}
 
-	protected createInSource(key: UserIdentifier, entity: Omit<User['props'], 'id'>): Promise<PrismaUser> {
-		return prisma.user.create({
-			data: {
-				id: key.toString(),
-				...entity
+	protected override async saveToDatabase(entity: User): Promise<PrismaUser> {
+		const { identifier } = entity;
+		const data = {
+			username: entity.props.username,
+			discriminator: entity.props.discriminator,
+			premium: entity.props.premium
+		};
+		return prisma.user.upsert({
+			where: { id: identifier.toString() },
+			update: data,
+			create: {
+				id: identifier.toString(),
+				...data
 			}
 		});
 	}
 
-	protected findFromSource(key: UserIdentifier): Promise<PrismaUser | null> {
-		return prisma.user.findUnique({
-			where: { id: key.toString() }
-		});
+	protected override async removeFromDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
+		return prisma.user
+			.delete({
+				where: { id: identifier.toString() }
+			})
+			.catch(() => null);
 	}
 
-	protected updateInSource(key: UserIdentifier, entity: Partial<Omit<User['props'], 'id'>>): Promise<PrismaUser> {
-		return prisma.user.update({
-			where: { id: key.toString() },
-			data: entity
-		});
-	}
-
-	protected deleteFromSource(key: UserIdentifier): Promise<PrismaUser | null> {
-		return prisma.user.delete({
-			where: { id: key.toString() }
-		});
+	protected async findInDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
+		return prisma.user
+			.findUnique({
+				where: { id: identifier.toString() }
+			})
+			.catch(() => null);
 	}
 }

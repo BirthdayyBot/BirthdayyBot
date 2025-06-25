@@ -6,29 +6,19 @@ import type { CacheProvider } from 'bentocache/types';
 /**
  * Base repository class providing CRUD operations with caching capabilities.
  *
+ * @template EntityIdentifier - Type of the entity identifier, must extend Identifier
  * @template DomainEntity - Type of the domain entity managed by the repository
  * @template DataBaseEntity - Type of the entity's database representation
- * @template EntityIdentifier - Type of the entity identifier, must extend Identifier
- *
- * @example
- * ```typescript
- * class UserRepository extends BaseRepository<User, UserDB, UserId> {
- *   protected async createInSource(id: UserId, entity: UserDB): Promise<User> {
- *     // Implementation
- *   }
- *   // ... other implementations
- * }
- * ```
  */
 export abstract class BaseRepository<
-	EntityIdentifier extends Identifier<any>,
-	DomainEntity extends Entity & { props: Record<string, any> },
-	DataBaseEntity extends Record<string, any>
+	EntityIdentifier extends Identifier<string>,
+	DomainEntity extends Entity<string, { id: EntityIdentifier }>,
+	DataBaseEntity extends Record<string, unknown>
 > {
-	protected cacheStore?: 'memory' | 'multitier';
-	private readonly name: string;
-	private cache: CacheProvider | typeof cache;
-	private readonly ttl: number = 60 * 60;
+	protected readonly cacheStore?: 'memory' | 'multitier';
+	protected readonly cache: CacheProvider | typeof cache;
+	protected readonly name: string;
+	protected readonly ttl: number = 60 * 60;
 
 	/**
 	 * Creates a new repository instance with caching capabilities.
@@ -43,122 +33,98 @@ export abstract class BaseRepository<
 	}
 
 	/**
-	 * Creates an entity and stores it in both the data source and cache.
-	 *
-	 * @param key - Unique identifier for the entity
-	 * @param entity - Entity data to create
-	 * @returns Promise resolving to the created domain entity
-	 * @throws Error if creation fails
+	 * Saves an entity to the database and cache.
+	 * @param entity - The domain entity to save
 	 */
-	public async create(key: EntityIdentifier, entity: Omit<DomainEntity['props'], 'id'>): Promise<DomainEntity> {
-		const created = await this.createInSource(key, entity);
-		await this.cache.set({
-			key: this.getCacheKey(key),
-			value: created,
-			ttl: this.ttl
-		});
-		return this.toDomain(created);
+	public async save(entity: DomainEntity): Promise<DomainEntity> {
+		const key = entity.id;
+		try {
+			return this.cache.getOrSet({
+				key: this.getCacheKey(key),
+				ttl: this.ttl,
+				factory: async () => {
+					const data = await this.saveToDatabase(entity);
+					return this.toDomain(data);
+				}
+			});
+		} catch (error) {
+			// Optionally log error
+			throw new Error(`Failed to save entity: ${error}`);
+		}
 	}
 
 	/**
-	 * Retrieves an entity by its identifier, using cache when available.
-	 *
-	 * @param key - Unique identifier of the entity to find
-	 * @returns Promise resolving to the domain entity if found, null otherwise
-	 * @throws Error if retrieval fails
+	 * Removes an entity from the database and cache.
+	 * @param identifier - The entity identifier
 	 */
-	public async find(key: EntityIdentifier): Promise<DomainEntity | null> {
-		const record = await this.cache.getOrSet({
-			key: this.getCacheKey(key),
-			factory: () => this.findFromSource(key),
-			ttl: this.ttl
-		});
-		return record ? this.toDomain(record) : null;
-	}
-
-	/**
-	 * Updates an entity in both the data source and cache.
-	 *
-	 * @param key - Unique identifier of the entity to update
-	 * @param entity - Updated entity data
-	 * @returns Promise resolving to the updated domain entity
-	 * @throws Error if update fails or entity doesn't exist
-	 */
-	public async update(
-		key: EntityIdentifier,
-		entity: Partial<Omit<DomainEntity['props'], 'id'>>
-	): Promise<DomainEntity> {
-		const updated = await this.updateInSource(key, entity);
-		await this.cache.set({
-			key: this.getCacheKey(key),
-			value: updated,
-			ttl: this.ttl
-		});
-		return this.toDomain(updated);
-	}
-
-	/**
-	 * Deletes an entity from both the data source and cache.
-	 *
-	 * @param key - Unique identifier of the entity to delete
-	 * @returns Promise resolving to the deleted domain entity if successful, null if not found
-	 * @throws Error if deletion fails
-	 */
-	public async delete(key: EntityIdentifier): Promise<DomainEntity | null> {
-		const deleted = await this.deleteFromSource(key);
-		if (deleted) {
+	public async remove(identifier: EntityIdentifier): Promise<DomainEntity | null> {
+		const key = identifier.toString();
+		try {
 			await this.cache.delete({
 				key: this.getCacheKey(key)
 			});
-			return this.toDomain(deleted);
+			const data = await this.removeFromDatabase(identifier);
+			return data ? this.toDomain(data) : null;
+		} catch (error) {
+			// Optionally log error
+			throw new Error(`Failed to remove entity: ${error}`);
 		}
-		return null;
 	}
 
 	/**
-	 * Implementation for creating an entity in the data source.
-	 * @param key - Entity identifier
-	 * @param entity - Entity data to create
-	 * @returns Promise resolving to the created domain entity
+	 * Finds an entity by its identifier, using cache if available.
+	 * @param identifier - The entity identifier
+	 * @returns The domain entity or null if not found
 	 */
-	protected abstract createInSource(
-		key: EntityIdentifier,
-		entity: Omit<DomainEntity['props'], 'id'>
-	): Promise<DataBaseEntity>;
+	public async findById(identifier: EntityIdentifier): Promise<DomainEntity | null> {
+		const key = identifier.toString();
+		try {
+			return await this.cache.getOrSet({
+				key: this.getCacheKey(key),
+				ttl: this.ttl,
+				factory: async () => {
+					const data = await this.findInDatabase(identifier);
+					return data ? this.toDomain(data) : null;
+				}
+			});
+		} catch (error) {
+			// Optionally log error
+			throw new Error(`Failed to find entity: ${error}`);
+		}
+	}
 
 	/**
-	 * Implementation for finding an entity in the data source.
-	 * @param key - Entity identifier to find
-	 * @returns Promise resolving to the domain entity if found, null otherwise
+	 * Persists the entity to the database.
+	 * @param entity - The domain entity
 	 */
-	protected abstract findFromSource(key: EntityIdentifier): Promise<DataBaseEntity | null>;
+	protected abstract saveToDatabase(entity: DomainEntity): Promise<DataBaseEntity>;
 
 	/**
-	 * Implementation for updating an entity in the data source.
-	 * @param key - Entity identifier
-	 * @param entity - Updated entity data
-	 * @returns Promise resolving to the updated domain entity
+	 * Removes the entity from the database.
+	 * @param identifier - The entity identifier
 	 */
-	protected abstract updateInSource(
-		key: EntityIdentifier,
-		entity: Partial<Omit<DomainEntity['props'], 'id'>>
-	): Promise<DataBaseEntity>;
+	protected abstract removeFromDatabase(identifier: EntityIdentifier): Promise<DataBaseEntity | null>;
 
 	/**
-	 * Implementation for deleting an entity from the data source.
-	 * @param key - Entity identifier to delete
-	 * @returns Promise resolving to the deleted domain entity if successful, null if not found
+	 * Finds the entity in the database.
+	 * @param identifier - The entity identifier
+	 * @returns The database entity or null if not found
 	 */
-	protected abstract deleteFromSource(key: EntityIdentifier): Promise<DataBaseEntity | null>;
+	protected abstract findInDatabase(identifier: EntityIdentifier): Promise<DataBaseEntity | null>;
 
 	/**
-	 * Converts a domain entity to its database representation.
-	 * @param entity - Domain entity to convert
-	 * @returns Database entity representation
+	 * Maps a database entity to a domain entity.
+	 * @param entity - The database entity
+	 * @returns The domain entity
 	 */
-	public abstract toDomain(entity: DataBaseEntity): DomainEntity;
+	protected abstract toDomain(entity: DataBaseEntity): DomainEntity;
 
-	private getCacheKey(key: EntityIdentifier): string {
-		return `${this.name}:${key.toString()}`;
+	/**
+	 * Generates a cache key for the entity.
+	 * @param key - The entity identifier as string
+	 * @returns The cache key
+	 */
+	protected getCacheKey(key: string): string {
+		return `${this.name}:${key}`;
 	}
 }

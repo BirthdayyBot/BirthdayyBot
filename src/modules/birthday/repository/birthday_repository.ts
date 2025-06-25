@@ -5,7 +5,33 @@ import { prisma } from '#core/services/prisma';
 import type { Birthday as PrismaBirthday } from '@prisma/client';
 
 export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birthday, PrismaBirthday> {
-	public override toDomain(entity: PrismaBirthday): Birthday {
+	public constructor() {
+		super('birthday', 'multitier');
+	}
+
+	public findByMonth(guildId: string, month: number): Promise<Birthday[]> {
+		return this.cache.getOrSet({
+			key: this.getCacheKey(`month:${guildId}:${month}`),
+			ttl: 3600,
+			factory: async () => {
+				const entities = await this.findMonthInDatabase(guildId, month);
+				return entities.map(this.toDomain.bind(this));
+			}
+		});
+	}
+
+	public findUpcoming(guildId: string, limit = 10): Promise<Birthday[]> {
+		return this.cache.getOrSet({
+			key: this.getCacheKey(`upcoming:${guildId}:${limit}`),
+			ttl: 3600,
+			factory: async () => {
+				const entities = await this.findUpcomingInDatabase(guildId, limit);
+				return entities.map(this.toDomain.bind(this));
+			}
+		});
+	}
+
+	protected override toDomain(entity: PrismaBirthday): Birthday {
 		return Birthday.create({
 			id: BirthdayIdentifier.fromStrings(entity.userId, entity.guildId),
 			birthday: entity.birthday,
@@ -15,51 +41,72 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		});
 	}
 
-	protected createInSource(key: BirthdayIdentifier, entity: Omit<Birthday['props'], 'id'>): Promise<PrismaBirthday> {
-		return prisma.birthday.create({
-			data: {
-				userId: key.userId,
-				guildId: key.guildId,
-				birthday: entity.birthday,
-				disabled: entity.disabled
-			}
-		});
-	}
-
-	protected findFromSource(key: BirthdayIdentifier): Promise<PrismaBirthday | null> {
-		return prisma.birthday.findUnique({
+	protected override async saveToDatabase(entity: Birthday): Promise<PrismaBirthday> {
+		const { identifier } = entity;
+		const data = {
+			birthday: entity.getBirthday(),
+			disabled: entity.isDisabled()
+		};
+		return prisma.birthday.upsert({
 			where: {
 				userId_guildId: {
-					userId: key.userId,
-					guildId: key.guildId
-				}
-			}
-		});
-	}
-
-	protected updateInSource(
-		key: BirthdayIdentifier,
-		entity: Partial<Omit<Birthday['props'], 'id'>>
-	): Promise<PrismaBirthday> {
-		return prisma.birthday.update({
-			where: {
-				userId_guildId: {
-					userId: key.userId,
-					guildId: key.guildId
+					userId: identifier.userId,
+					guildId: identifier.guildId
 				}
 			},
-			data: entity
+			update: data,
+			create: {
+				userId: identifier.userId,
+				guildId: identifier.guildId,
+				...data
+			}
 		});
 	}
 
-	protected deleteFromSource(key: BirthdayIdentifier): Promise<PrismaBirthday | null> {
-		return prisma.birthday.delete({
+	protected override async removeFromDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+		const { userId, guildId } = identifier;
+		try {
+			return await prisma.birthday.delete({
+				where: {
+					userId_guildId: { userId, guildId }
+				}
+			});
+		} catch {
+			return null;
+		}
+	}
+
+	protected override findInDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+		const { userId, guildId } = identifier;
+		return prisma.birthday.findUnique({
 			where: {
-				userId_guildId: {
-					userId: key.userId,
-					guildId: key.guildId
+				userId_guildId: { userId, guildId }
+			}
+		});
+	}
+
+	protected findMonthInDatabase(guildId: string, month: number): Promise<PrismaBirthday[]> {
+		const monthStr = month.toString().padStart(2, '0');
+		return prisma.birthday.findMany({
+			where: {
+				guildId,
+				birthday: {
+					contains: `-${monthStr}-`
 				}
 			}
+		});
+	}
+
+	protected findUpcomingInDatabase(guildId: string, limit: number): Promise<PrismaBirthday[]> {
+		return prisma.birthday.findMany({
+			where: {
+				guildId,
+				disabled: false
+			},
+			orderBy: {
+				birthday: 'asc'
+			},
+			take: limit
 		});
 	}
 }

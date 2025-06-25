@@ -1,24 +1,27 @@
 import type { Identifier } from './identifier.js';
-export interface EntityProperties<T extends string> {
-	id: Identifier<T>;
+
+interface Properties<Name extends string = string> {
+	id: Identifier<Name>;
 }
 
-export abstract class Entity<TProperties extends { id: Identifier<any> } = EntityProperties<string>> {
+export abstract class Entity<Name extends string = string, TProperties extends Properties<Name> = Properties<Name>> {
 	public readonly props: TProperties;
 
 	protected constructor(props: TProperties) {
-		this.props = props;
+		this.props = { ...props };
 	}
 
-	public getIdentifier() {
+	public get id(): string {
+		return this.props.id.toString();
+	}
+
+	public get identifier(): TProperties['id'] {
 		return this.props.id;
 	}
 
-	public equals(object: Entity<TProperties>) {
-		if (this === object) {
-			return true;
-		}
-
-		return this.getIdentifier().equals(object.getIdentifier()) || false;
+	public equals(object?: Entity<Name, TProperties>): boolean {
+		if (!object) return false;
+		if (this === object) return true;
+		return this.identifier.equals(object.identifier);
 	}
 }

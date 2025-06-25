@@ -1,5 +1,8 @@
 import { Entity } from '#root/modules/core/domain/entity.js';
-import type { GuildConfigIdentifier } from '#root/modules/guild_config/domain/guild_config_identifier.js';
+import type {
+	GUILD_CONFIG_IDENTIFIER_TYPE,
+	GuildConfigIdentifier
+} from '#root/modules/guild_config/domain/guild_config_identifier.js';
 
 interface Properties {
 	id: GuildConfigIdentifier;
@@ -19,7 +22,7 @@ interface Properties {
 	inviter: string | null;
 }
 
-export class GuildConfig extends Entity<Properties> {
+export class GuildConfig extends Entity<typeof GUILD_CONFIG_IDENTIFIER_TYPE, Properties> {
 	public get isAnnouncementConfigured() {
 		return Boolean(this.props.announcementChannel && this.props.announcementMessage);
 	}

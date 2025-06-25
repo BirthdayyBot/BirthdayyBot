@@ -1,9 +1,10 @@
 import { Identifier } from '../../core/domain/identifier.js';
 
+export const BIRTHDAY_IDENTIFIER_TYPE = 'BirthdayIdentifier';
 /**
  * Identifier for a birthday, composed of a guild ID and a user ID.
  */
-export class BirthdayIdentifier extends Identifier<'BirthdayIdentifier'> {
+export class BirthdayIdentifier extends Identifier<typeof BIRTHDAY_IDENTIFIER_TYPE> {
 	public constructor(userId: string, guildId: string) {
 		super({ value: BirthdayIdentifier.composeValue(userId, guildId) });
 	}
