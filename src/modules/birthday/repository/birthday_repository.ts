@@ -31,7 +31,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		});
 	}
 
-	protected override toDomain(entity: PrismaBirthday): Birthday {
+	protected toDomain(entity: PrismaBirthday): Birthday {
 		return Birthday.create({
 			id: BirthdayIdentifier.fromStrings(entity.userId, entity.guildId),
 			birthday: entity.birthday,
@@ -41,7 +41,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		});
 	}
 
-	protected override async saveToDatabase(entity: Birthday): Promise<PrismaBirthday> {
+	protected async saveToDatabase(entity: Birthday): Promise<PrismaBirthday> {
 		const { identifier } = entity;
 		const data = {
 			birthday: entity.getBirthday(),
@@ -63,7 +63,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		});
 	}
 
-	protected override async removeFromDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+	protected async removeFromDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
 		const { userId, guildId } = identifier;
 		try {
 			return await prisma.birthday.delete({
@@ -76,7 +76,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		}
 	}
 
-	protected override findInDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
+	protected findInDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
 		const { userId, guildId } = identifier;
 		return prisma.birthday.findUnique({
 			where: {

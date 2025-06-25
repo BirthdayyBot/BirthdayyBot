@@ -9,7 +9,7 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 		super('UserRepository', 'multitier');
 	}
 
-	public override toDomain(entity: PrismaUser): User {
+	public toDomain(entity: PrismaUser): User {
 		return User.create({
 			id: UserIdentifier.fromString(entity.id),
 			username: entity.username,
@@ -20,7 +20,7 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 		});
 	}
 
-	protected override async saveToDatabase(entity: User): Promise<PrismaUser> {
+	protected async saveToDatabase(entity: User): Promise<PrismaUser> {
 		const { identifier } = entity;
 		const data = {
 			username: entity.props.username,
@@ -37,7 +37,7 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 		});
 	}
 
-	protected override async removeFromDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
+	protected async removeFromDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
 		return prisma.user
 			.delete({
 				where: { id: identifier.toString() }

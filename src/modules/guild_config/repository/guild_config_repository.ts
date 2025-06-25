@@ -4,14 +4,10 @@ import { GuildConfig } from '#guild_config/domain/guild_config';
 import { GuildConfigIdentifier } from '#guild_config/domain/guild_config_identifier';
 import type { Guild as PrismaGuildConfig } from '@prisma/client';
 
-function convertNullToUndefined<T>(value: T | null): T | undefined {
-	return value === null ? undefined : value;
-}
-
 function convertsObjectValueNullToUndefined(obj: Record<string, any>): Record<string, any> {
 	const result: Record<string, any> = {};
 	for (const [key, value] of Object.entries(obj)) {
-		result[key] = convertNullToUndefined(value);
+		result[key] = value === null ? undefined : value;
 	}
 	return result;
 }
@@ -25,18 +21,18 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		identifier: GuildConfigIdentifier,
 		key: K,
 		value: GuildConfig['props'][K]
-	): Promise<GuildConfig> {
+	): Promise<GuildConfig | null> {
 		return this.cache.getOrSet({
 			key: this.getCacheKey(`${identifier.toString()}:${key}`),
 			ttl: this.ttl,
 			factory: async () => {
 				const updatedEntity = await this.updateKeyInDatabase(identifier, key, value);
-				return this.toDomain(updatedEntity);
+				return updatedEntity ? this.toDomain(updatedEntity) : null;
 			}
 		});
 	}
 
-	public override toDomain(entity: PrismaGuildConfig): GuildConfig {
+	public toDomain(entity: PrismaGuildConfig): GuildConfig {
 		return GuildConfig.create({
 			id: GuildConfigIdentifier.fromString(entity.id),
 			createdAt: entity.createdAt,
@@ -56,7 +52,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		});
 	}
 
-	protected override async saveToDatabase(entity: GuildConfig): Promise<PrismaGuildConfig> {
+	protected async saveToDatabase(entity: GuildConfig): Promise<PrismaGuildConfig> {
 		const { identifier } = entity;
 
 		return prisma.guild.upsert({
@@ -69,7 +65,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		});
 	}
 
-	protected override async removeFromDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
+	protected async removeFromDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
 		const key = identifier.toString();
 		return prisma.guild
 			.delete({
@@ -78,7 +74,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 			.catch(() => null);
 	}
 
-	protected override async findInDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
+	protected async findInDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
 		const key = identifier.toString();
 		return prisma.guild
 			.findUnique({
@@ -91,13 +87,16 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		identifier: GuildConfigIdentifier,
 		key: K,
 		value: GuildConfig['props'][K]
-	): Promise<PrismaGuildConfig> {
+	): Promise<PrismaGuildConfig | null> {
 		const keyString = identifier.toString();
-		return prisma.guild.update({
-			where: { id: keyString },
-			data: {
-				[key]: value
-			}
-		});
+
+		return prisma.guild
+			.update({
+				where: { id: keyString },
+				data: convertsObjectValueNullToUndefined({
+					[key]: value
+				})
+			})
+			.catch(() => null);
 	}
 }
