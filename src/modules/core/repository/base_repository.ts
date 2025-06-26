@@ -36,7 +36,7 @@ export abstract class BaseRepository<
 	 * Saves an entity to the database and cache.
 	 * @param entity - The domain entity to save
 	 */
-	public async save(entity: DomainEntity): Promise<DomainEntity> {
+	public save(entity: DomainEntity): Promise<DomainEntity> {
 		const key = entity.id;
 		try {
 			return this.cache.getOrSet({

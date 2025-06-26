@@ -20,7 +20,7 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 		});
 	}
 
-	protected async saveToDatabase(entity: User): Promise<PrismaUser> {
+	protected saveToDatabase(entity: User): Promise<PrismaUser> {
 		const { identifier } = entity;
 		const data = {
 			username: entity.props.username,
@@ -38,18 +38,18 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 	}
 
 	protected async removeFromDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
-		return prisma.user
-			.delete({
+		try {
+			return prisma.user.delete({
 				where: { id: identifier.toString() }
-			})
-			.catch(() => null);
+			});
+		} catch {
+			return null;
+		}
 	}
 
-	protected async findInDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
-		return prisma.user
-			.findUnique({
-				where: { id: identifier.toString() }
-			})
-			.catch(() => null);
+	protected findInDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
+		return prisma.user.findUnique({
+			where: { id: identifier.toString() }
+		});
 	}
 }

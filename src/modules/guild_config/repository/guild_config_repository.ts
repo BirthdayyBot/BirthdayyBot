@@ -52,7 +52,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		});
 	}
 
-	protected async saveToDatabase(entity: GuildConfig): Promise<PrismaGuildConfig> {
+	protected saveToDatabase(entity: GuildConfig): Promise<PrismaGuildConfig> {
 		const { identifier } = entity;
 
 		return prisma.guild.upsert({
@@ -65,7 +65,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 		});
 	}
 
-	protected async removeFromDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
+	protected removeFromDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
 		const key = identifier.toString();
 		return prisma.guild
 			.delete({
@@ -74,7 +74,7 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 			.catch(() => null);
 	}
 
-	protected async findInDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
+	protected findInDatabase(identifier: GuildConfigIdentifier): Promise<PrismaGuildConfig | null> {
 		const key = identifier.toString();
 		return prisma.guild
 			.findUnique({

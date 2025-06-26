@@ -41,7 +41,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 		});
 	}
 
-	protected async saveToDatabase(entity: Birthday): Promise<PrismaBirthday> {
+	protected saveToDatabase(entity: Birthday): Promise<PrismaBirthday> {
 		const { identifier } = entity;
 		const data = {
 			birthday: entity.getBirthday(),
@@ -66,7 +66,7 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 	protected async removeFromDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
 		const { userId, guildId } = identifier;
 		try {
-			return await prisma.birthday.delete({
+			return prisma.birthday.delete({
 				where: {
 					userId_guildId: { userId, guildId }
 				}
