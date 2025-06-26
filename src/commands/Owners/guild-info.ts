@@ -1,8 +1,8 @@
+import { getFormattedTimestamp } from '#core/services/date';
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { BirthdayyCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types/Enums';
 import { OWNERS } from '#root/config';
-import { getFormattedTimestamp } from '#utils/common';
 import { interactionProblem } from '#utils/embed';
 import { isNotCustom as enabled } from '#utils/env';
 import { getCommandGuilds, getSettings } from '#utils/functions';

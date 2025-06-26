@@ -1,3 +1,4 @@
+import { redisConfigOptions } from '#core/services/redis';
 import { transformOauthGuildsAndUser } from '#lib/api/utils';
 import { getHandler } from '#root/languages/index';
 import { minutes } from '#utils/common';
@@ -12,14 +13,7 @@ import {
 	type InternationalizationOptions
 } from '@sapphire/plugin-i18next';
 import type { ScheduledTaskHandlerOptions } from '@sapphire/plugin-scheduled-tasks';
-import {
-	envIsDefined,
-	envParseArray,
-	envParseBoolean,
-	envParseInteger,
-	envParseNumber,
-	envParseString
-} from '@skyra/env-utilities';
+import { envIsDefined, envParseArray, envParseBoolean, envParseInteger, envParseString } from '@skyra/env-utilities';
 import {
 	ActivityType,
 	GatewayIntentBits,
@@ -207,17 +201,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 }
 
 function parseBullOptions(): ScheduledTaskHandlerOptions['bull'] {
-	const { REDIS_USERNAME, REDIS_PASSWORD } = process.env;
-
-	return {
-		connection: {
-			port: envParseNumber('REDIS_PORT', 6379),
-			password: REDIS_PASSWORD,
-			host: envParseString('REDIS_HOST', 'localhost'),
-			db: envParseInteger('REDIS_DB'),
-			username: REDIS_USERNAME
-		}
-	};
+	return { connection: redisConfigOptions };
 }
 
 function parseScheduledTasksOptions(): ScheduledTaskHandlerOptions {

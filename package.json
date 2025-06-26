@@ -10,6 +10,10 @@
 	"main": "./dist/index.js",
 	"type": "module",
 	"imports": {
+		"#core/*": "./dist/modules/core/*.js",
+		"#birthday/*": "./dist/modules/birthday/*.js",
+		"#guild_config/*": "./dist/modules/guild_config/*.js",
+		"#user/*": "./dist/modules/user/*.js",
 		"#utils/birthday": "./dist/lib/util/birthday/index.js",
 		"#utils/common": "./dist/lib/util/common/index.js",
 		"#utils/functions": "./dist/lib/util/functions/index.js",
@@ -60,6 +64,7 @@
 		"@sapphire/utilities": "^3.18.2",
 		"@sentry/node": "^9.30.0",
 		"@skyra/env-utilities": "^2.0.1",
+		"bentocache": "^1.4.0",
 		"bullmq": "^5.55.0",
 		"colorette": "^2.0.20",
 		"dayjs": "^1.11.13",

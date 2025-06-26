@@ -1,12 +1,12 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 import type { RemoveBirthdayRoleData } from '#root/scheduled-tasks/RemoveBirthdayRole';
-import { getCurrentOffset, type TimezoneObject } from '#utils/common/date';
 import { CdnUrls, Emojis } from '#utils/constants';
 import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
+import { getCurrentOffset, type CurrentOffsetResult } from '#utils/tz';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -64,8 +64,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 		let currentBirthdays: Birthday[] = [];
 		const current = getCurrentOffset();
-		if (current.utcOffset === undefined) {
-			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
+		if (current === null) {
+			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current);
 			const channel = container.client.channels.cache.get(BOT_ADMIN_LOG);
 			if (!isTextBasedChannel(channel)) {
 				return container.logger.error('BirthdayReminderTask ~ run ~ channel:', channel);
@@ -78,7 +78,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 			return channel.send({ embeds: [embed] });
 		}
-		const { dateFormatted, utcOffset, date: todaysDate } = current;
+		const { dateFormatted, utcOffset } = current;
+
+		const todaysDate = dayjs().utcOffset(utcOffset);
+
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
 			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true }
@@ -344,7 +347,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		eventInfos: BirthdayEventInfoModel[],
 		dateFields: EmbedField[],
 		birthdayCount: number,
-		current: TimezoneObject
+		current: CurrentOffsetResult
 	) {
 		const embedTitle = `BirthdayScheduler Report ${current.dateFormatted} ${current.utcOffset ?? 'undefined'}`;
 		eventInfos.map((eventInfo) => {
