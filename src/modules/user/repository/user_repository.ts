@@ -38,13 +38,12 @@ export class UserRepository extends BaseRepository<UserIdentifier, User, PrismaU
 	}
 
 	protected async removeFromDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {
-		try {
-			return prisma.user.delete({
+		const user = await prisma.user
+			.delete({
 				where: { id: identifier.toString() }
-			});
-		} catch {
-			return null;
-		}
+			})
+			.catch(() => null);
+		return user;
 	}
 
 	protected findInDatabase(identifier: UserIdentifier): Promise<PrismaUser | null> {

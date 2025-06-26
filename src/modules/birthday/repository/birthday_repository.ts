@@ -65,15 +65,16 @@ export class BirthdayRepository extends BaseRepository<BirthdayIdentifier, Birth
 
 	protected async removeFromDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {
 		const { userId, guildId } = identifier;
-		try {
-			return prisma.birthday.delete({
+
+		const birthday = await prisma.birthday
+			.delete({
 				where: {
 					userId_guildId: { userId, guildId }
 				}
-			});
-		} catch {
-			return null;
-		}
+			})
+			.catch(() => null);
+
+		return birthday;
 	}
 
 	protected findInDatabase(identifier: BirthdayIdentifier): Promise<PrismaBirthday | null> {

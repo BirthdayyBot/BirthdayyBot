@@ -90,13 +90,15 @@ export class GuildConfigRepository extends BaseRepository<GuildConfigIdentifier,
 	): Promise<PrismaGuildConfig | null> {
 		const keyString = identifier.toString();
 
-		return prisma.guild
+		const updatedEntity = await prisma.guild
 			.update({
 				where: { id: keyString },
-				data: convertsObjectValueNullToUndefined({
-					[key]: value
-				})
+				data: {
+					[key]: value === null ? undefined : value // Convert null to undefined for Prisma
+				}
 			})
 			.catch(() => null);
+
+		return updatedEntity;
 	}
 }
