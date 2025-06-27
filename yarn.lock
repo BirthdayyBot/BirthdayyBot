@@ -120,24 +120,24 @@ __metadata:
     "@sapphire/ratelimits": "npm:^2.4.11"
     "@sapphire/ts-config": "npm:^5.0.1"
     "@sapphire/utilities": "npm:^3.18.2"
-    "@sentry/node": "npm:^9.30.0"
+    "@sentry/node": "npm:^9.33.0"
     "@skyra/env-utilities": "npm:^2.0.1"
-    "@types/node": "npm:^22.15.32"
+    "@types/node": "npm:^22.15.33"
     "@types/ws": "npm:^8.18.1"
     "@typescript-eslint/eslint-plugin": "npm:^7.18.0"
     "@typescript-eslint/parser": "npm:^7.18.0"
     "@vitest/coverage-v8": "npm:^3.2.4"
-    bullmq: "npm:^5.55.0"
+    bullmq: "npm:^5.56.0"
     colorette: "npm:^2.0.20"
     dayjs: "npm:^1.11.13"
     discord-api-types: "npm:^0.37.117"
-    discord.js: "npm:^14.20.0"
+    discord.js: "npm:^14.21.0"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^10.1.5"
-    eslint-plugin-prettier: "npm:^5.5.0"
+    eslint-plugin-prettier: "npm:^5.5.1"
     i18next: "npm:25.2.1"
     lint-staged: "npm:^16.1.2"
-    prettier: "npm:^3.5.3"
+    prettier: "npm:^3.6.2"
     prisma: "npm:^6.10.1"
     reflect-metadata: "npm:^0.2.2"
     tsc-watch: "npm:^7.1.1"
@@ -1307,14 +1307,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/instrumentation@npm:6.8.2":
-  version: 6.8.2
-  resolution: "@prisma/instrumentation@npm:6.8.2"
+"@prisma/instrumentation@npm:6.10.1":
+  version: 6.10.1
+  resolution: "@prisma/instrumentation@npm:6.10.1"
   dependencies:
     "@opentelemetry/instrumentation": "npm:^0.52.0 || ^0.53.0 || ^0.54.0 || ^0.55.0 || ^0.56.0 || ^0.57.0"
   peerDependencies:
     "@opentelemetry/api": ^1.8
-  checksum: 10/560ba939296ee4e285ba957d3d77d655c16ff3b3befb95f23bbf16fafef7b5f7e6fa5ee6884e3044458c456cb29e27d719f179dcc3c277640056ff7bb0dbce0f
+  checksum: 10/b34f4693449ad3e53facd804b0cb2fedcc86e9d24fa2b1b99b7519adaa61ccf83e5dbb3b50e7766d5c1716e65e57e8222294123a150e63481873c59979c38bd9
   languageName: node
   linkType: hard
 
@@ -1753,16 +1753,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:9.30.0":
-  version: 9.30.0
-  resolution: "@sentry/core@npm:9.30.0"
-  checksum: 10/2957927aaae6ffafe7f6fffa8bc43631e10d584192fd679ba35b2527ed4f03364f8bebbc0f9a988e3cdb16f67d9fb23f244a796c7851961476270e0ec1dfd57e
+"@sentry/core@npm:9.33.0":
+  version: 9.33.0
+  resolution: "@sentry/core@npm:9.33.0"
+  checksum: 10/199e69d99e61631431f0e46fe7bbc014b833dab0e97e2f1d6e63d98e666d105b33edf1aa99798f9a2227ec8745f8a7980f5b362859c14d7f019c110b33eb99ef
   languageName: node
   linkType: hard
 
-"@sentry/node@npm:^9.30.0":
-  version: 9.30.0
-  resolution: "@sentry/node@npm:9.30.0"
+"@sentry/node@npm:^9.33.0":
+  version: 9.33.0
+  resolution: "@sentry/node@npm:9.33.0"
   dependencies:
     "@opentelemetry/api": "npm:^1.9.0"
     "@opentelemetry/context-async-hooks": "npm:^1.30.1"
@@ -1793,20 +1793,20 @@ __metadata:
     "@opentelemetry/resources": "npm:^1.30.1"
     "@opentelemetry/sdk-trace-base": "npm:^1.30.1"
     "@opentelemetry/semantic-conventions": "npm:^1.34.0"
-    "@prisma/instrumentation": "npm:6.8.2"
-    "@sentry/core": "npm:9.30.0"
-    "@sentry/opentelemetry": "npm:9.30.0"
-    import-in-the-middle: "npm:^1.13.1"
+    "@prisma/instrumentation": "npm:6.10.1"
+    "@sentry/core": "npm:9.33.0"
+    "@sentry/opentelemetry": "npm:9.33.0"
+    import-in-the-middle: "npm:^1.14.2"
     minimatch: "npm:^9.0.0"
-  checksum: 10/20a28dab1ad337bdbce633b74337e743328f1d74c1d81388ec0f9671f17c7d2d29455c05fd3a8b7b8392e22aff9ba78c83100426f39750db32db5e65d5cf8ca9
+  checksum: 10/b42f5a72a8a482ece18a34c567847cb63bbcc66c38e2cb9a9341277a1f9ee82763d0881c838827700e001875d97d9f45eb507b25d55506934eefc386b1247b22
   languageName: node
   linkType: hard
 
-"@sentry/opentelemetry@npm:9.30.0":
-  version: 9.30.0
-  resolution: "@sentry/opentelemetry@npm:9.30.0"
+"@sentry/opentelemetry@npm:9.33.0":
+  version: 9.33.0
+  resolution: "@sentry/opentelemetry@npm:9.33.0"
   dependencies:
-    "@sentry/core": "npm:9.30.0"
+    "@sentry/core": "npm:9.33.0"
   peerDependencies:
     "@opentelemetry/api": ^1.9.0
     "@opentelemetry/context-async-hooks": ^1.30.1 || ^2.0.0
@@ -1814,7 +1814,7 @@ __metadata:
     "@opentelemetry/instrumentation": ^0.57.1 || ^0.200.0
     "@opentelemetry/sdk-trace-base": ^1.30.1 || ^2.0.0
     "@opentelemetry/semantic-conventions": ^1.34.0
-  checksum: 10/f3a711cc3fff63c0d7525c5d3acc413aae33b532250407a871f0df982ade5f7b17a1ecd5e6b876a7dfafc437579962169e0b7ac48bc700fca4b59f1acaf2530e
+  checksum: 10/70f74023f20a78bc53465ddef39fae88454a266e4ef1f1060d224dac3c97b65a2a59719c8093ac789789a97fda870d2fc78a2f00bac8e9a1d715527206698516
   languageName: node
   linkType: hard
 
@@ -1894,12 +1894,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.15.32":
-  version: 22.15.32
-  resolution: "@types/node@npm:22.15.32"
+"@types/node@npm:^22.15.33":
+  version: 22.15.33
+  resolution: "@types/node@npm:22.15.33"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10/10b4c106d0c512a1d35ec08142bd7fb5cf2e1df93fc5627b3c69dd843dec4be07a47f1fa7ede232ad84762d75a372ea35028b79ee1e753b6f2adecd0b2cb2f71
+  checksum: 10/5734cbca7fc363f3d6ad191e1be645cc9885d642e9f90688892459f10629cf663d2206e7ed7b255dd476baaa86fb011aa09647e77520958b5993b391f793856f
   languageName: node
   linkType: hard
 
@@ -2421,9 +2421,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^5.55.0":
-  version: 5.55.0
-  resolution: "bullmq@npm:5.55.0"
+"bullmq@npm:^5.56.0":
+  version: 5.56.0
+  resolution: "bullmq@npm:5.56.0"
   dependencies:
     cron-parser: "npm:^4.9.0"
     ioredis: "npm:^5.4.1"
@@ -2432,7 +2432,7 @@ __metadata:
     semver: "npm:^7.5.4"
     tslib: "npm:^2.0.0"
     uuid: "npm:^9.0.0"
-  checksum: 10/b7d36899ab2b8c09a36e489af20a18692219c7cd7508a1621615ca10bfb35b49a4e618f8878aaa7622c232012b377b8a76907365fabd35c21a9c262230f8a2e5
+  checksum: 10/7a009082a4d88804caeac703bbac9e9c82d6d67aec619ad4dd2b6fde3bc2a72d42d4ca5c32636acda76715249f03bd0f2532198da6c6cc13623c8b992d25eb52
   languageName: node
   linkType: hard
 
@@ -2807,9 +2807,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord.js@npm:^14.20.0":
-  version: 14.20.0
-  resolution: "discord.js@npm:14.20.0"
+"discord.js@npm:^14.21.0":
+  version: 14.21.0
+  resolution: "discord.js@npm:14.21.0"
   dependencies:
     "@discordjs/builders": "npm:^1.11.2"
     "@discordjs/collection": "npm:1.5.3"
@@ -2824,7 +2824,7 @@ __metadata:
     magic-bytes.js: "npm:^1.10.0"
     tslib: "npm:^2.6.3"
     undici: "npm:6.21.3"
-  checksum: 10/256e7c52e9c9cf1019b7b7643058b748f22f775dddfd0f302b53113ce40c5604d2cc131bbd8ba7a2edd1f900cb55a719d1accbd16c1ac78faeacf88003530960
+  checksum: 10/6cfba49ac014eedf0c1f507114a75a9e50b156045b4ff61d5068d0f0395c649e2f6133e496221901498a93e33e34b89a2363f68be75ab0112d6bfdc2e58b31e5
   languageName: node
   linkType: hard
 
@@ -3061,9 +3061,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^5.4.0, eslint-plugin-prettier@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "eslint-plugin-prettier@npm:5.5.0"
+"eslint-plugin-prettier@npm:^5.4.0, eslint-plugin-prettier@npm:^5.5.1":
+  version: 5.5.1
+  resolution: "eslint-plugin-prettier@npm:5.5.1"
   dependencies:
     prettier-linter-helpers: "npm:^1.0.0"
     synckit: "npm:^0.11.7"
@@ -3077,7 +3077,7 @@ __metadata:
       optional: true
     eslint-config-prettier:
       optional: true
-  checksum: 10/83210819211ad98f305b719352c151794c8c6403d3888c0f8cca76429bf91235753c15d060eb8097d3872e85e9224b8a46280105e468d8c578e2ca9f253bfa57
+  checksum: 10/4d750c70d97d6ef50776bc0a27eeececaac64792fb50713213c69231ed475aa9822a3d177870300fee537d3e24d0dc8eed1528929cab2d20f6e7ec37484648a3
   languageName: node
   linkType: hard
 
@@ -3690,15 +3690,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-in-the-middle@npm:^1.13.1, import-in-the-middle@npm:^1.8.1":
-  version: 1.14.0
-  resolution: "import-in-the-middle@npm:1.14.0"
+"import-in-the-middle@npm:^1.14.2, import-in-the-middle@npm:^1.8.1":
+  version: 1.14.2
+  resolution: "import-in-the-middle@npm:1.14.2"
   dependencies:
     acorn: "npm:^8.14.0"
     acorn-import-attributes: "npm:^1.9.5"
     cjs-module-lexer: "npm:^1.2.2"
     module-details-from-path: "npm:^1.0.3"
-  checksum: 10/c0b73a5637c0c7ec0ab19d5687a571dc864d90e0603dd45e28939624707def244a5dae402d7dccc1f5fc5b54ffcf18313a071d13048c390a495696d6b9f290fc
+  checksum: 10/45934b366d7f344e1cbfb6141ed93d3c2ced7021d2dd49b0e2474bab4f571e11f7f377c0f510f03e2d4ba61074d64b9f04677497d3f14106c8cc6f44c749f068
   languageName: node
   linkType: hard
 
@@ -4984,12 +4984,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0.0, prettier@npm:^3.5.3":
-  version: 3.5.3
-  resolution: "prettier@npm:3.5.3"
+"prettier@npm:^3.0.0, prettier@npm:^3.5.3, prettier@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "prettier@npm:3.6.2"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/7050c08f674d9e49fbd9a4c008291d0715471f64e94cc5e4b01729affce221dfc6875c8de7e66b728c64abc9352eefb7eaae071b5f79d30081be207b53774b78
+  checksum: 10/1213691706bcef1371d16ef72773c8111106c3533b660b1cc8ec158bd109cdf1462804125f87f981f23c4a3dba053b6efafda30ab0114cc5b4a725606bb9ff26
   languageName: node
   linkType: hard
 
