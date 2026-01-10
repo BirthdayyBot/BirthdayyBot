@@ -1,34 +1,61 @@
 import type { Birthday } from '.prisma/client';
-import { EmbedLimits } from '@sapphire/discord-utilities';
+import { EmbedLimits, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/pieces';
 import { isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { envParseNumber } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
-import { Guild, userMention, type APIEmbed } from 'discord.js';
+import { EmbedBuilder, Guild, userMention, type APIEmbed } from 'discord.js';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { ARROW_RIGHT, IMG_CAKE } from '../provide/environment';
 import { formatDateForDisplay, numberToMonthName } from '../utils/date';
 
-export async function generateBirthdayList(page_id: number, guild: Guild) {
+/**
+ * Generate a PaginatedMessage for interactive birthday list
+ * Use this for slash commands where users can navigate between pages
+ */
+export async function generateBirthdayList(guild: Guild) {
 	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
 
-	if (isNullOrUndefinedOrEmpty(birthdays)) return { embed: await createEmbed(guild, []), components: [] };
+	const paginatedMessage = new PaginatedMessage();
+
+	if (isNullOrUndefinedOrEmpty(birthdays)) {
+		const emptyEmbed = await createEmbed(guild, []);
+		paginatedMessage.addPageEmbed(new EmbedBuilder(generateDefaultEmbed(emptyEmbed)));
+		return paginatedMessage;
+	}
 
 	// sort all birthdays by day and month
 	const sortedBirthdays = sortByDayAndMonth(birthdays);
 	// split the sorted birthdays into multiple lists
 	const splitBirthdayList = getBirthdaysAsLists(sortedBirthdays, envParseNumber('MAX_BIRTHDAYS_PER_SITE', 80));
-	// get the birthdays for the current page
-	const birthdaySplitted = splitBirthdayList.birthdays[getIndexFromPage(page_id)];
-	// TODO: Should only contain the birthdays for the current page (80 birthdays)
 
-	const finalList = prepareBirthdays(birthdaySplitted);
+	// Create a page for each birthday list
+	for (const birthdayPage of splitBirthdayList.birthdays) {
+		const finalList = prepareBirthdays(birthdayPage);
+		const embed = await createEmbed(guild, finalList);
+		paginatedMessage.addPageEmbed(new EmbedBuilder(generateDefaultEmbed(embed)));
+	}
+
+	return paginatedMessage;
+}
+
+/**
+ * Generate a single embed for static display (e.g., overview channel)
+ * This shows all birthdays without pagination
+ */
+export async function generateBirthdayEmbed(guild: Guild) {
+	const birthdays = await container.prisma.birthday.findMany({ where: { guildId: guild.id } });
+
+	if (isNullOrUndefinedOrEmpty(birthdays)) {
+		return generateDefaultEmbed(await createEmbed(guild, []));
+	}
+
+	const sortedBirthdays = sortByDayAndMonth(birthdays);
+	const finalList = prepareBirthdays(sortedBirthdays);
 	const embed = await createEmbed(guild, finalList);
 
-	const components = generateComponents(page_id, splitBirthdayList.listAmount);
-
-	return { embed, components };
+	return generateDefaultEmbed(embed);
 }
 
 /**
@@ -52,6 +79,60 @@ function getBirthdaysAsLists(
 }
 
 /**
+ * Fetch guild member and handle cleanup if member is not found
+ */
+async function fetchMemberAndCleanup(guild: Guild, userId: string, guildIsChilliAttackV2: boolean) {
+	const member = guildIsChilliAttackV2
+		? guild?.members.cache.get(userId) ?? null
+		: await guild?.members.fetch(userId).catch(() => null);
+
+	if (!member && !guildIsChilliAttackV2) {
+		await container.prisma.birthday.delete({ where: { userId_guildId: { guildId: guild.id, userId } } });
+	}
+
+	return member;
+}
+
+/**
+ * Add field to embed if current description exceeds limit
+ */
+function addFieldIfNeeded(embed: APIEmbed, month: string, currentDescription: string, descriptionToAdd: string) {
+	if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
+		embed.fields?.push({ name: month, value: currentDescription });
+		return '';
+	}
+	return currentDescription;
+}
+
+/**
+ * Process a single month's birthdays and add them to the embed
+ */
+async function processMonthBirthdays(
+	guild: Guild,
+	month: string,
+	birthdays: Birthday[],
+	embed: APIEmbed,
+	guildIsChilliAttackV2: boolean,
+) {
+	let currentDescription = '';
+
+	for (const birthday of birthdays) {
+		const { userId, birthday: dateOfTheBirthday } = birthday;
+		const member = await fetchMemberAndCleanup(guild, userId, guildIsChilliAttackV2);
+
+		if (!member && !guildIsChilliAttackV2) continue;
+
+		const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
+		currentDescription = addFieldIfNeeded(embed, month, currentDescription, descriptionToAdd);
+		currentDescription += descriptionToAdd;
+	}
+
+	if (currentDescription.length > 0) {
+		embed.fields?.push({ name: month, value: currentDescription });
+	}
+}
+
+/**
  * Create the embed with the fields etc with the given values
  * @param guild - ID of the guild
  * @param birthdays - Array with all birthdays
@@ -67,96 +148,16 @@ async function createEmbed(guild: Guild, birthdaySortByMonth: { month: string; b
 
 	if (isNullOrUndefinedOrEmpty(birthdaySortByMonth)) return generateDefaultEmbed(embed);
 
-	let currentDescription = '';
 	const guildIsChilliAttackV2 = guild.id === GuildIDEnum.CHILLI_ATTACK_V2;
 
 	for (const birthdayOfTheMonth of birthdaySortByMonth) {
 		const { birthdays, month } = birthdayOfTheMonth;
 		if (isNullOrUndefinedOrEmpty(birthdays)) continue;
-		// For each birthday in current month
-		for (const birthday of birthdays) {
-			const { userId, birthday: dateOfTheBirthday } = birthday;
-			const member = guildIsChilliAttackV2
-				? guild?.members.cache.get(userId) ?? null
-				: await guild?.members.fetch(userId).catch(() => null);
 
-			if (!member && !guildIsChilliAttackV2) {
-				// Delete the birthday if the member is not in the guild
-				await container.prisma.birthday.delete({ where: { userId_guildId: { guildId: guild.id, userId } } });
-				continue;
-			}
-			const descriptionToAdd = `${userMention(userId)} ${formatDateForDisplay(dateOfTheBirthday)}\n`;
-			if (currentDescription.length + descriptionToAdd.length > EmbedLimits.MaximumFieldValueLength) {
-				// If the current description is too long, add it to the embed
-				embed.fields?.push({
-					name: month,
-					value: currentDescription,
-				});
-				currentDescription = '';
-			}
-			currentDescription += descriptionToAdd;
-		}
-		if (currentDescription.length > 0) {
-			// If the current description is not empty, add it to the embed
-			embed.fields?.push({
-				name: month,
-				value: currentDescription,
-			});
-			currentDescription = '';
-		}
+		await processMonthBirthdays(guild, month, birthdays, embed, guildIsChilliAttackV2);
 	}
+
 	return generateDefaultEmbed(embed);
-}
-/**
- *  Generate Components for the Birthday List according to the amount of pages
- * @param page_id - Current page id
- * @param listAmount - Amount of pages
- * @returns Array with all components
- */
-function generateComponents(page_id: number, listAmount: number): any[] {
-	if (listAmount === 1) return [];
-	const innerComponents = [];
-	/*
-    max 5 buttons per row
-    if listAmount is bigger then 5, create multiple rows
-    */
-	// TODO: #45 Create Logic that enables for more then 5 buttons
-	for (let i = 1; i <= listAmount; i++) {
-		if (i > 5) break;
-		const label = `${i}`;
-		const isActive = i === page_id ? true : false;
-		const disabled = isActive ? true : false;
-		const style = isActive ? 1 : 2;
-		innerComponents.push({
-			style,
-			label,
-			custom_id: `birthday_list_page_${i}`,
-			disabled,
-			type: 2,
-		});
-	}
-	const components = [
-		{
-			type: 1,
-			components: innerComponents,
-		},
-	];
-	if (listAmount > 5) {
-		components.push({
-			type: 1,
-			components: [
-				{
-					type: 2,
-					style: 1,
-					label: 'To many birthdays to show all.',
-					disabled: true,
-					custom_id: 'birthday_list_to_many',
-				},
-			],
-		});
-	}
-
-	return components;
 }
 
 interface BirthdaysListWithMonth {
@@ -201,9 +202,4 @@ function sortByDayAndMonth(birthdays: Birthday[]): Birthday[] {
 			? firstBirthdayDate.date() - secondBirthdayDate.date()
 			: firstBirthdayDate.month() - secondBirthdayDate.month();
 	});
-}
-
-// convert page_id into array index
-function getIndexFromPage(page_id: number) {
-	return page_id - 1;
 }
