@@ -33,7 +33,7 @@ RUN npx tsc
 FROM base as production
 
 ENV NODE_ENV="production"
-ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=4096"
+ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=6144"
 
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/prisma ./prisma
