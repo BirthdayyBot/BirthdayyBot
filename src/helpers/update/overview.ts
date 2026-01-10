@@ -1,17 +1,17 @@
 import { container } from '@sapphire/framework';
 import { DiscordAPIError, MessagePayload, type MessageCreateOptions } from 'discord.js';
 import { editMessage, sendMessage } from '../../lib/discord/message';
-import { generateBirthdayList } from '../generate/birthdayList';
+import { generateBirthdayEmbed } from '../generate/birthdayList';
 
 export default async function updateBirthdayOverview(guild_id: string) {
 	const config = await container.utilities.guild.get.GuildConfig(guild_id);
-	if (!config || !config.overviewChannel) return;
+	if (!config?.overviewChannel) return;
 	const { overviewChannel, overviewMessage } = config;
 	const guild = await container.client.guilds.fetch(guild_id);
 
-	const birthdayList = await generateBirthdayList(1, guild);
+	const birthdayEmbed = await generateBirthdayEmbed(guild);
 
-	const options = { ...birthdayList.components, embeds: [birthdayList.embed] };
+	const options = { embeds: [birthdayEmbed] };
 
 	if (overviewMessage) {
 		try {
