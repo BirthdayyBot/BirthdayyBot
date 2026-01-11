@@ -30,7 +30,7 @@ export class AnnouncementChannelCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
 		await thinking(interaction);
 
-		const channel = interaction.options.getChannel<(typeof channelTypes[number])>('channel', true);
+		const channel = interaction.options.getChannel<(typeof channelTypes)[number]>('channel', true);
 
 		if (!canSendEmbeds(channel)) {
 			return reply(
