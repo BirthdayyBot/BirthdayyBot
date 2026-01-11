@@ -398,10 +398,18 @@ function findCurrentMonthPageIndex(
 ): { pageIndex: number; hasBirthdays: boolean } {
 	let pageCounter = 0;
 
-	for (let i = 0; i <= currentMonth; i++) {
-		if (isNullOrUndefinedOrEmpty(birthdaysByMonth[i].birthdays)) continue;
+	if (birthdaysByMonth.length === 0) {
+		return { pageIndex: 0, hasBirthdays: false };
+	}
 
-		const monthPageCount = Math.ceil(birthdaysByMonth[i].birthdays.length / maxBirthdaysPerPage);
+	const upperBound = Math.min(currentMonth, birthdaysByMonth.length - 1);
+
+	for (let i = 0; i <= upperBound; i++) {
+		const monthData = birthdaysByMonth[i];
+
+		if (!monthData || isNullOrUndefinedOrEmpty(monthData.birthdays)) continue;
+
+		const monthPageCount = Math.ceil(monthData.birthdays.length / maxBirthdaysPerPage);
 
 		if (i === currentMonth) {
 			return { pageIndex: pageCounter, hasBirthdays: true };
@@ -423,13 +431,16 @@ function addEmptyMonthNote(
 ): void {
 	if (paginatedMessage.pages.length === 0) return;
 
-	const currentMonthName = numberToMonthName(currentMonth + 1);
-	const firstPageEmbed = paginatedMessage.messages[0];
+	const firstPage = paginatedMessage.pages[0];
 
-	if (firstPageEmbed && 'embeds' in firstPageEmbed && firstPageEmbed.embeds?.[0]) {
-		const embed = firstPageEmbed.embeds[0];
-		if ('description' in embed && typeof embed.description === 'string') {
-			embed.description = `${embed.description}\n\n_Note: No birthdays in ${currentMonthName} - showing ${monthsWithBirthdays[0]}_`;
-		}
+	// Handle only non-function pages that contain embeds
+	if (firstPage && typeof firstPage !== 'function' && 'embeds' in firstPage && firstPage.embeds?.[0]) {
+		const embed = firstPage.embeds[0] as EmbedBuilder;
+		const existingDescription = embed.data.description ?? '';
+		const note = `_Note: No birthdays in ${numberToMonthName(currentMonth + 1)} - showing ${
+			monthsWithBirthdays[0]
+		}_`;
+
+		embed.setDescription(existingDescription ? `${existingDescription}\n\n${note}` : note);
 	}
 }

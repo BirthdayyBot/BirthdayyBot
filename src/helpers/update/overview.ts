@@ -17,11 +17,11 @@ interface EmbedOptions {
 }
 
 interface MessageContext {
-	guild_id: string;
+	guildId: string;
 	guildName?: string;
-	channel_id: string;
+	channelId: string;
 	channelName?: string;
-	message_id?: string;
+	messageId?: string;
 }
 
 /**
@@ -32,7 +32,7 @@ async function resetConfig(guild_id: string, reason: string): Promise<void> {
 		container.utilities.guild.reset.OverviewChannel(guild_id),
 		container.utilities.guild.reset.OverviewMessage(guild_id),
 	]);
-	overviewLogger.warn(`Reset overview configuration: ${reason}`, { guild_id });
+	overviewLogger.warn(`Reset overview configuration: ${reason}`, { guildId: guild_id });
 }
 
 /**
@@ -43,37 +43,43 @@ async function handleDiscordError(
 	context: MessageContext,
 	options: EmbedOptions,
 ): Promise<void> {
-	const { guild_id, channel_id, guildName, channelName } = context;
+	const { guildId, channelId, guildName, channelName } = context;
 
 	// Transient errors - log and skip
 	if (isRateLimitError(error)) {
-		overviewLogger.warn('Rate limited, will retry later', { guild_id, guildName });
+		overviewLogger.warn('Rate limited, will retry later', { guildId, guildName });
 		return;
 	}
 
 	// Message not found - recreate it
 	if (isMessageNotFoundError(error)) {
-		overviewLogger.warn('Message not found, creating new one', { guild_id, guildName, channel_id, channelName });
-		await createOverviewMessage(channel_id, options, context);
+		overviewLogger.warn('Message not found, creating new one', {
+			guildId,
+			guildName,
+			channelId,
+			channelName,
+		});
+		await createOverviewMessage(channelId, options, context);
 		return;
 	}
 
 	// Configuration issues - reset config
 	if (requiresConfigReset(error)) {
 		const reason = isChannelInvalidError(error) ? 'Channel no longer exists' : 'Missing permissions';
-		await resetConfig(guild_id, reason);
+		await resetConfig(guildId, reason);
 		return;
 	}
 
 	// Log other errors with full context
-	overviewLogger.error(
-		`Discord API error: ${error.message}`,
-		{ guild_id, guildName, channel_id, channelName },
-		error,
-	);
+	overviewLogger.error(`Discord API error: ${error.message}`, { guildId, guildName, channelId, channelName }, error);
 
 	if (isEmptyMessageError(error)) {
-		overviewLogger.error('Empty embed detected', { guild_id, guildName, channel_id, channelName });
+		overviewLogger.error('Empty embed detected', {
+			guildId,
+			guildName,
+			channelId,
+			channelName,
+		});
 		container.logger.error('Embed content:', options.embeds[0]);
 	}
 }
@@ -81,23 +87,33 @@ async function handleDiscordError(
 /**
  * Update an existing overview message
  */
-async function updateMessage(message_id: string, options: EmbedOptions, context: MessageContext): Promise<void> {
-	const { guild_id, channel_id, guildName, channelName } = context;
+async function updateMessage(messageId: string, options: EmbedOptions, context: MessageContext): Promise<void> {
+	const { guildId, channelId, guildName, channelName } = context;
 
 	try {
-		await editMessage(channel_id, message_id, options);
-		overviewLogger.success('Updated overview message', { guild_id, guildName, channel_id, channelName });
+		await editMessage(channelId, messageId, options);
+		overviewLogger.success('Updated overview message', {
+			guildId,
+			guildName,
+			channelId,
+			channelName,
+		});
 	} catch (error: unknown) {
 		if (error instanceof DiscordAPIError) {
-			await handleDiscordError(error, { ...context, message_id }, options);
+			await handleDiscordError(error, { ...context, messageId }, options);
 		} else if (error instanceof Error) {
 			overviewLogger.error(
 				`Unexpected error: ${error.message}`,
-				{ guild_id, guildName, channel_id, channelName },
+				{ guildId, guildName, channelId, channelName },
 				error,
 			);
 		} else {
-			overviewLogger.error('Unknown error type', { guild_id, guildName, channel_id, channelName });
+			overviewLogger.error('Unknown error type', {
+				guildId,
+				guildName,
+				channelId,
+				channelName,
+			});
 			container.logger.error('Error details:', error);
 		}
 	}
@@ -107,34 +123,39 @@ async function updateMessage(message_id: string, options: EmbedOptions, context:
  * Create a new overview message and save its ID
  */
 async function createOverviewMessage(
-	channel_id: string,
+	channelId: string,
 	options: EmbedOptions,
-	context: Omit<MessageContext, 'channel_id' | 'message_id'> & { channel_id?: string; channelName?: string },
+	context: Omit<MessageContext, 'channelId' | 'messageId'>,
 ): Promise<void> {
-	const { guild_id, guildName, channelName } = context;
+	const { guildId, guildName, channelName } = context;
 
 	try {
-		const message = await sendMessage(channel_id, options);
+		const message = await sendMessage(channelId, options);
 		if (!message?.inGuild()) return;
 
 		await container.utilities.guild.set.OverviewMessage(message.guildId, message.id);
 		overviewLogger.success('Created new overview message', {
-			guild_id: message.guildId,
+			guildId: message.guildId,
 			guildName,
-			channel_id,
+			channelId,
 			channelName,
 		});
 	} catch (error: unknown) {
 		if (error instanceof DiscordAPIError) {
-			await handleDiscordError(error, { guild_id, guildName, channel_id, channelName }, options);
+			await handleDiscordError(error, { guildId, guildName, channelId, channelName }, options);
 		} else if (error instanceof Error) {
 			overviewLogger.error(
 				`Failed to create message: ${error.message}`,
-				{ guild_id, guildName, channel_id, channelName },
+				{ guildId, guildName, channelId, channelName },
 				error,
 			);
 		} else {
-			overviewLogger.error('Unknown error creating message', { guild_id, guildName, channel_id, channelName });
+			overviewLogger.error('Unknown error creating message', {
+				guildId,
+				guildName,
+				channelId,
+				channelName,
+			});
 			container.logger.error('Error details:', error);
 		}
 	}
@@ -148,29 +169,29 @@ async function createOverviewMessage(
  * - Automatic config cleanup on invalid state
  * - Comprehensive error handling with recovery
  */
-export default async function updateBirthdayOverview(guild_id: string): Promise<void> {
+export default async function updateBirthdayOverview(guildId: string): Promise<void> {
 	// Early exit if no overview channel configured
-	const config = await container.utilities.guild.get.GuildConfig(guild_id);
+	const config = await container.utilities.guild.get.GuildConfig(guildId);
 	if (!config?.overviewChannel) return;
 
 	const { overviewChannel, overviewMessage } = config;
 
 	// Parallel fetch for performance
 	const [guild, channel] = await Promise.all([
-		container.client.guilds.fetch(guild_id).catch(() => null),
+		container.client.guilds.fetch(guildId).catch(() => null),
 		container.client.channels.fetch(overviewChannel).catch(() => null),
 	]);
 
 	// Validate guild exists
 	if (!guild) {
-		overviewLogger.warn(`Guild not found, skipping update`, { guild_id });
+		overviewLogger.warn(`Guild not found, skipping update`, { guildId });
 		return;
 	}
 
 	// Validate channel exists and is text-based
 	if (!channel?.isTextBased()) {
-		overviewLogger.warn('Invalid channel, resetting config', { guild_id, guildName: guild.name });
-		await resetConfig(guild_id, 'Channel is invalid or not text-based');
+		overviewLogger.warn('Invalid channel, resetting config', { guildId, guildName: guild.name });
+		await resetConfig(guildId, 'Channel is invalid or not text-based');
 		return;
 	}
 
@@ -182,17 +203,17 @@ export default async function updateBirthdayOverview(guild_id: string): Promise<
 
 	// Validate embed before sending
 	if (!isEmbedValid(birthdayEmbed)) {
-		overviewLogger.warn('Empty embed generated, skipping update', { guild_id, guildName });
+		overviewLogger.warn('Empty embed generated, skipping update', { guildId, guildName });
 		return;
 	}
 
 	const options: EmbedOptions = { embeds: [birthdayEmbed] };
-	const context: MessageContext = { guild_id, guildName, channel_id: overviewChannel, channelName };
+	const context: MessageContext = { guildId, guildName, channelId: overviewChannel, channelName };
 
 	// Update or create message
 	if (overviewMessage) {
 		await updateMessage(overviewMessage, options, context);
 	} else {
-		await createOverviewMessage(overviewChannel, options, { guild_id, guildName, channelName });
+		await createOverviewMessage(overviewChannel, options, { guildId, guildName, channelName });
 	}
 }

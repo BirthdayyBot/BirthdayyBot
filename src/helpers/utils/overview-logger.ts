@@ -2,13 +2,13 @@ import { container } from '@sapphire/framework';
 import type { DiscordAPIError } from 'discord.js';
 
 export interface LogContext {
-	guild_id?: string;
+	guildId?: string;
 	guildName?: string;
-	channel_id?: string;
+	channelId?: string;
 	channelName?: string;
-	user_id?: string;
+	userId?: string;
 	userName?: string;
-	message_id?: string;
+	messageId?: string;
 }
 
 /**
@@ -24,8 +24,8 @@ export interface LogContext {
  * @example
  * ```ts
  * const logger = new ContextualLogger('[BIRTHDAY REMINDER]');
- * logger.info('Sent birthday message', { guild_id, guildName, user_id, userName });
- * logger.error('Failed to send DM', { user_id, userName }, error);
+ * logger.info('Sent birthday message', { guildId, guildName, userId, userName });
+ * logger.error('Failed to send DM', { userId, userName }, error);
  * ```
  */
 export class ContextualLogger {
@@ -72,18 +72,18 @@ export class ContextualLogger {
 		userInfo?: string;
 	} {
 		let guildInfo: string | undefined;
-		if (context.guild_id) {
-			guildInfo = context.guildName ? `${context.guildName} (${context.guild_id})` : context.guild_id;
+		if (context.guildId) {
+			guildInfo = context.guildName ? `${context.guildName} (${context.guildId})` : context.guildId;
 		}
 
 		let channelInfo: string | undefined;
-		if (context.channel_id) {
-			channelInfo = context.channelName ? `#${context.channelName} (${context.channel_id})` : context.channel_id;
+		if (context.channelId) {
+			channelInfo = context.channelName ? `#${context.channelName} (${context.channelId})` : context.channelId;
 		}
 
 		let userInfo: string | undefined;
-		if (context.user_id) {
-			userInfo = context.userName ? `${context.userName} (${context.user_id})` : context.user_id;
+		if (context.userId) {
+			userInfo = context.userName ? `${context.userName} (${context.userId})` : context.userId;
 		}
 
 		return { guildInfo, channelInfo, userInfo };

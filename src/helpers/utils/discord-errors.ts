@@ -23,7 +23,14 @@ export function isRateLimitError(error: DiscordAPIError): boolean {
 }
 
 export function isEmptyMessageError(error: DiscordAPIError): boolean {
-	return error.message.includes('empty message');
+	// Prefer checking the stable Discord API error code when available
+	if (error.code === RESTJSONErrorCodes.CannotSendAnEmptyMessage) {
+		return true;
+	}
+
+	// Fallback: more robust, case-insensitive string matching on the message
+	const message = (error.message ?? '').toLowerCase();
+	return message.includes('empty message') || message.includes('cannot send an empty message');
 }
 
 /**
