@@ -1,4 +1,4 @@
-FROM node:18.16.1-alpine as base
+FROM node:18.16.1-alpine AS base
 WORKDIR /app
 
 ENV HUSKY=0
@@ -17,7 +17,7 @@ RUN sed -i 's/"postinstall": "husky install .github\/husky"/"postinstall": ""/' 
 
 ENTRYPOINT ["dumb-init", "--"]
 
-FROM base as builder
+FROM base AS builder
 
 ENV NODE_ENV="development"
 
@@ -30,9 +30,12 @@ RUN yarn install --immutable
 RUN npx prisma generate
 RUN npx tsc
 
-FROM base as production
+FROM base AS production
 
 ENV NODE_ENV="production"
+# NOTE: max_old_space_size is intentionally set to 6144 MB to avoid Node.js out-of-memory errors
+# under production workloads. Ensure that runtime environments allocate sufficient memory
+# (e.g., container/host limits) and coordinate any changes here with capacity planning.
 ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=6144"
 
 COPY --chown=node:node --from=builder /app/dist ./dist
@@ -40,12 +43,12 @@ COPY --chown=node:node --from=builder /app/prisma ./prisma
 COPY --chown=node:node --from=builder /app/node_modules/@prisma/client/ ./node_modules/@prisma/client/
 COPY --chown=node:node --from=builder /app/node_modules/.prisma/client/ ./node_modules/.prisma/client/
 
-RUN yarn workspaces focus --all --production
-RUN chown node:node /app/
+RUN yarn workspaces focus --all --production && \
+    chown node:node /app/
 
 ENV NODE_ENV=production
 
 EXPOSE 4000
 
 ENTRYPOINT ["doppler", "run", "--"]
-CMD node dist/index.js
+CMD ["node", "dist/index.js"]
