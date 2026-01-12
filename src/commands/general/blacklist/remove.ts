@@ -27,6 +27,7 @@ export class RemoveCommand extends Command {
 					);
 				}
 			}
+			throw error; // Let Sapphire listener handle it
 		}
 		return reply(
 			interaction,

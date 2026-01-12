@@ -1,4 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { Result } from '@sapphire/result';
 import { isProduction } from '../lib/utils/env';
@@ -10,12 +11,16 @@ import { isProduction } from '../lib/utils/env';
 })
 export class PostStats extends ScheduledTask {
 	public async run() {
-		if (!isProduction) return this.container.logger.error('PostStats task is disabled.');
+		if (!isProduction) {
+			return container.logger.info('[PostStats] Task skipped (not production)');
+		}
 		const result = await Result.fromAsync(this.container.botList.postStats());
 
 		return result.match({
-			ok: () => this.container.logger.info('Successfully posted stats to bot lists.'),
-			err: (error) => this.container.logger.error('[PostStatsError]', error),
+			ok: () => this.container.logger.info('[PostStats] Successfully posted stats to bot lists'),
+			err: (error) => {
+				throw error; // Let Sapphire listener handle it
+			},
 		});
 	}
 }

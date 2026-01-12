@@ -166,18 +166,28 @@ export async function generateBirthdayEmbed(guild: Guild) {
  * @returns The guild member if found, null otherwise
  */
 async function fetchMemberAndCleanup(guild: Guild, userId: string, guildIsChilliAttackV2: boolean) {
-	// Test server: use cache only to avoid API rate limits with fake users
-	// Production servers: fetch from API and clean up if member left the server
-	const member = guildIsChilliAttackV2
-		? guild?.members.cache.get(userId) ?? null
-		: await guild?.members.fetch(userId).catch(() => null);
+	try {
+		// Test server: use cache only to avoid API rate limits with fake users
+		// Production servers: fetch from API and clean up if member left the server
+		const member = guildIsChilliAttackV2
+			? guild?.members.cache.get(userId) ?? null
+			: await guild?.members.fetch(userId).catch(() => null);
 
-	// Only delete birthdays for users who left (except on test server)
-	if (!member && !guildIsChilliAttackV2) {
-		await container.prisma.birthday.delete({ where: { userId_guildId: { guildId: guild.id, userId } } });
+		// Only delete birthdays for users who left (except on test server)
+		if (!member && !guildIsChilliAttackV2) {
+			await container.prisma.birthday.delete({ where: { userId_guildId: { guildId: guild.id, userId } } });
+		}
+
+		return member;
+	} catch (error) {
+		container.errorLogger.handle(error, {
+			logSeverity: 'warn',
+			taskName: 'generateBirthdayList',
+			guildId: guild.id,
+			userId,
+		});
+		return null;
 	}
-
-	return member;
 }
 
 /**
@@ -341,7 +351,11 @@ async function bulkFetchAndCacheMembers(
 	} catch (error) {
 		// If bulk fetch fails (e.g., rate limit, Discord API issue), it's not critical
 		// Individual fetchMemberAndCleanup calls will still work as fallback
-		console.warn('Bulk member fetch failed, falling back to individual fetches:', error);
+		container.errorLogger.handle(error, {
+			logSeverity: 'debug',
+			taskName: 'generateBirthdayList',
+			guildId: guild.id,
+		});
 	}
 }
 

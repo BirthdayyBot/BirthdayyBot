@@ -6,8 +6,11 @@ import { generateBirthdayList } from '../../../helpers/';
 )
 export class ListCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
+		// Defer reply to show user we're processing
+		await interaction.deferReply();
+
 		const paginatedMessage = await generateBirthdayList(interaction.guild);
 
-		await paginatedMessage.run(interaction);
+		return paginatedMessage.run(interaction);
 	}
 }

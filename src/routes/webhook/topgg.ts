@@ -4,14 +4,16 @@ import { container } from '@sapphire/pieces';
 import { ApiRequest, ApiResponse, methods, Route } from '@sapphire/plugin-api';
 import { envIsDefined, envParseString } from '@skyra/env-utilities';
 import type { User } from 'discord.js';
+import { DiscordAPIError, RESTJSONErrorCodes } from 'discord.js';
 import { BOT_NAME, EXCLAMATION, HEART, SUCCESS, VOTE_CHANNEL_ID, VOTE_ROLE_ID } from '../../helpers';
 import { authenticated } from '../../lib/api/utils';
 import { remindMeButton } from '../../lib/components/button';
-import { getGuildInformation, getGuildMember, getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
+import { getUserInfo, sendDMMessage, sendMessage } from '../../lib/discord';
 import { GuildIDEnum } from '../../lib/enum/GuildID.enum';
 import type { APIWebhookTopGG } from '../../lib/model/APIWebhookTopGG.model';
 import type { VoteProvider } from '../../lib/types/VoteProvider.type';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
+import { fromDiscordAPIError } from '../../lib/utils/ErrorLogger';
 import type { RoleRemovePayload } from '../../tasks/BirthdayRoleRemoverTask';
 
 @ApplyOptions<Route.Options>({ route: 'webhook/topgg', enabled: envIsDefined('TOPGG_WEBHOOK_SECRET') })
@@ -37,14 +39,44 @@ export class UserRoute extends Route {
 	private async voteProcess(provider: VoteProvider, userId: string) {
 		const providerInfo = this.getProviderInfo(provider);
 
-		const guild = await getGuildInformation(GuildIDEnum.BIRTHDAYY_HQ);
-		if (!guild) return;
+		let guild;
+		try {
+			guild = await container.client.guilds.fetch(GuildIDEnum.BIRTHDAYY_HQ);
+		} catch (error) {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownGuild) {
+				return;
+			}
+			const discordError = fromDiscordAPIError(error as DiscordAPIError, {
+				guildId: GuildIDEnum.BIRTHDAYY_HQ,
+			});
+			container.errorLogger.handle(discordError, {
+				logSeverity: 'warn',
+				guildId: GuildIDEnum.BIRTHDAYY_HQ,
+			});
+			return;
+		}
 
 		const user = await getUserInfo(userId);
 		if (!user) return;
 
-		const member = await getGuildMember(guild?.id, userId);
-		if (!member) return;
+		let member;
+		try {
+			member = await guild.members.fetch(userId);
+		} catch (error) {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMember) {
+				return;
+			}
+			const discordError = fromDiscordAPIError(error as DiscordAPIError, {
+				guildId: guild.id,
+				userId,
+			});
+			container.errorLogger.handle(discordError, {
+				logSeverity: 'warn',
+				guildId: guild.id,
+				userId,
+			});
+			return;
+		}
 
 		const role = guild.roles.cache.get(VOTE_ROLE_ID);
 		if (!role) return;

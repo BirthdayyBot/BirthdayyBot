@@ -7,7 +7,7 @@ export async function getUserInfo(userId: Snowflake): Promise<User | null> {
 		return user;
 	} catch (error) {
 		if (error instanceof DiscordAPIError) {
-			container.logger.error(`Error fetching user with id ${userId}: ${error.name}`);
+			container.logger.warn(`[getUserInfo] Failed to fetch user ${userId}: ${error.message}`);
 		}
 		return null;
 	}
