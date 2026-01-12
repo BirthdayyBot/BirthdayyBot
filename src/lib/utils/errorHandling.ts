@@ -2,12 +2,30 @@ import { container } from '@sapphire/framework';
 import { codeBlock } from '@sapphire/utilities';
 import * as Sentry from '@sentry/node';
 import { envIsDefined } from '@skyra/env-utilities';
+import { DiscordAPIError } from 'discord.js';
 import type { APIEmbed } from 'discord.js';
 import { DEBUG } from '../../helpers/provide/environment';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { BotColorEnum } from '../enum/BotColor.enum';
 import type { ErrorDefaultSentryScope, ErrorHandlerOptions, RouteApiErrorHandler } from '../types/errorHandling';
 import { isDevelopment } from './env';
+
+/**
+ * Discord API error codes that are expected and should not be reported to Sentry
+ */
+const IGNORED_DISCORD_ERROR_CODES = new Set([
+	10008, // Unknown Message
+	10062, // Unknown interaction
+	50007, // Cannot send messages to this user
+	40003, // Opening direct messages too fast
+]);
+
+export function isExpectedDiscordError(error: Error): boolean {
+	if (error instanceof DiscordAPIError) {
+		return IGNORED_DISCORD_ERROR_CODES.has(error.code as number);
+	}
+	return false;
+}
 
 export function logErrorToContainer({
 	error,
@@ -17,9 +35,9 @@ export function logErrorToContainer({
 }
 
 export function defaultScope({ scope, error, sentrySeverityLevel }: ErrorDefaultSentryScope) {
-	scope.setFingerprint([error.name, error.message]),
-		scope.setTransactionName(error.name),
-		scope.setLevel(sentrySeverityLevel);
+	scope.setFingerprint([error.name, error.message]);
+	scope.setTransactionName(error.name);
+	scope.setLevel(sentrySeverityLevel);
 	return Sentry.captureException(error);
 }
 
@@ -57,18 +75,18 @@ function sendErrorMessageToUser({ interaction, error }: Pick<ErrorHandlerOptions
 
 	const errorMessageEmbed = generateDefaultEmbed({
 		title: 'An error has occured',
-		description: `${codeBlock(`js`, errorString)}`,
+		description: codeBlock('js', errorString),
 		color: BotColorEnum.BIRTHDAYY_DEV,
 	});
 
 	if (interaction.replied || interaction.deferred) {
-		interaction
-			.editReply({ embeds: [errorMessageEmbed] })
-			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
+		interaction.editReply({ embeds: [errorMessageEmbed] }).catch(() => {
+			// Silently ignore if we can't edit or send message (message deleted, DM blocked, etc.)
+		});
 	} else {
-		interaction
-			.reply({ embeds: [errorMessageEmbed], ephemeral: true })
-			.catch(() => interaction.user.send({ embeds: [errorMessageEmbed] }));
+		interaction.reply({ embeds: [errorMessageEmbed], ephemeral: true }).catch(() => {
+			// Silently ignore if we can't reply or send DM
+		});
 	}
 
 	sendErrorMessageToAdmin(errorMessageEmbed);
@@ -86,7 +104,10 @@ export function handleCommandErrorAndSendToUser({
 	loggerSeverityLevel,
 	sentrySeverityLevel,
 }: ErrorHandlerOptions): void {
-	if (envIsDefined('SENTRY_DSN')) captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel });
+	// Don't report expected Discord API errors to Sentry
+	if (!isExpectedDiscordError(error) && envIsDefined('SENTRY_DSN')) {
+		captureCommandErrorToSentry({ interaction, error, sentrySeverityLevel });
+	}
 	if (DEBUG) logErrorToContainer({ error, loggerSeverityLevel });
 	return sendErrorMessageToUser({ interaction, error });
 }
