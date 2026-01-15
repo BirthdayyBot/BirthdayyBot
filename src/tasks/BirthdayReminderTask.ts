@@ -18,14 +18,15 @@ import {
 	type EmbedField,
 	type Snowflake,
 } from 'discord.js';
+import { RESTJSONErrorCodes } from 'discord-api-types/v9';
 import { logAll } from '../helpers/provide/config';
 import { BOT_ADMIN_LOG, DEBUG, IMG_CAKE, MAIN_DISCORD, NEWS } from '../helpers/provide/environment';
 import { getCurrentOffset } from '../helpers/utils/date';
-import { getGuildInformation, getGuildMember } from '../lib/discord';
 import { sendMessage } from '../lib/discord/message';
 import type { BirthdayEventInfoModel, TimezoneObject } from '../lib/model';
 import { generateDefaultEmbed } from '../lib/utils/embed';
 import { isCustom } from '../lib/utils/env';
+import { fromDiscordAPIError } from '../lib/utils/ErrorLogger';
 import type { RoleRemovePayload } from './BirthdayRoleRemoverTask';
 
 @ApplyOptions<ScheduledTask.Options>({ name: 'BirthdayReminderTask', pattern: '0 * * * *' })
@@ -39,7 +40,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 		let currentBirthdays: Birthday[] = [];
 		const current = getCurrentOffset();
 		if (current.utcOffset === undefined) {
-			container.logger.error('BirthdayReminderTask ~ run ~ current.utcOffset:', current.utcOffset);
+			container.logger.warn('[BirthdayReminderTask] current.utcOffset is undefined');
 			await sendMessage(BOT_ADMIN_LOG, {
 				embeds: [
 					generateDefaultEmbed({
@@ -48,7 +49,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 					}),
 				],
 			});
-			return this.container.logger.warn('[BirthdayTask] Timzone Object not correctly generated');
+			return;
 		}
 		const { dateFormatted, utcOffset, date: todaysDate } = current;
 		const dateFields = [
@@ -60,7 +61,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 			container.logger.info('[BirthdayTask] Custom Bot task');
 			const guildOffset = await this.container.utilities.guild.get.GuildTimezone(MAIN_DISCORD);
 			if (guildOffset?.timezone !== utcOffset) {
-				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
+				if (!guildOffset) {
+					container.logger.warn('[BirthdayReminderTask] No Guild Offset found');
+					return;
+				}
 				return container.logger.debug(
 					`[BirthdayTask Custom] Not current Offset. Current Offset [${utcOffset}] GuildOffset [${guildOffset.timezone}]`,
 				);
@@ -78,7 +82,6 @@ export class BirthdayReminderTask extends ScheduledTask {
 		}
 
 		if (!currentBirthdays.length) {
-			currentBirthdays;
 			await this.sendBirthdaySchedulerReport([], dateFields, 0, current);
 			return this.container.logger.info(
 				`[BirthdayTask] No Birthdays Today. Date: ${dateFormatted}, offset: ${current.utcOffset}`,
@@ -127,24 +130,56 @@ export class BirthdayReminderTask extends ScheduledTask {
 			premium: guildIsPremium,
 		} = config;
 
-		const guild = await getGuildInformation(guildId);
+		const guild = await container.client.guilds.fetch(guildId).catch((error) => {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownGuild) {
+				return null;
+			}
+			const discordError = fromDiscordAPIError(error as DiscordAPIError, { guildId });
+			container.errorLogger.handle(discordError, {
+				logSeverity: 'warn',
+				taskName: 'BirthdayReminderTask',
+				guildId,
+			});
+			return null;
+		});
 		if (!guild) {
 			eventInfo.error = 'Guild not found';
 			if (!guildIsPremium) {
 				// TODO: Clean up in #407
 				await this.container.utilities.guild.update.DisableGuildAndBirthdays(guildId, true).catch((error) => {
-					this.container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+					container.errorLogger.handle(error, {
+						logSeverity: 'error',
+						taskName: 'BirthdayReminderTask',
+						guildId,
+					});
 				});
 				eventInfo.error += ' - Guild & Birthdays disabled';
 			}
 			return eventInfo;
 		}
-		const member = await getGuildMember(guildId, userId);
+		const member = await guild.members.fetch(userId).catch((error) => {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMember) {
+				return null;
+			}
+			const discordError = fromDiscordAPIError(error as DiscordAPIError, { guildId, userId });
+			container.errorLogger.handle(discordError, {
+				logSeverity: 'warn',
+				taskName: 'BirthdayReminderTask',
+				guildId,
+				userId,
+			});
+			return null;
+		});
 		if (!member) {
 			eventInfo.error = 'Member not found';
 			if (!isTest && !guildIsPremium) {
 				await this.container.utilities.birthday.delete.ByGuildAndUser(guildId, userId).catch((error) => {
-					this.container.logger.error('[BirthdayTask] Error deleting birthday', error);
+					container.errorLogger.handle(error, {
+						logSeverity: 'error',
+						taskName: 'BirthdayReminderTask',
+						guildId,
+						userId,
+					});
 				});
 				eventInfo.error += ' - Birthday deleted';
 			}
@@ -233,7 +268,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 				} else {
 					returnData.message = error.message;
 				}
-				this.container.logger.error("COULDN'T ADD BIRTHDAY ROLE TO BIRTHDAY CHILD\n", error.message);
+				container.logger.warn(`[BirthdayReminderTask] Failed to add birthday role: ${error.message}`, {
+					guildId,
+					userId: member.id,
+				});
 			}
 			return returnData;
 		}
@@ -272,10 +310,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 				} else {
 					returnData.message = error.message;
 				}
-				container.logger.warn(
-					"COULDN'T SEND THE BIRTHDAY ANNOUNCEMENT FOR THE BIRTHDAY CHILD\n",
-					error.message,
-				);
+				container.logger.warn(`[BirthdayReminderTask] Failed to send announcement: ${error.message}`, {
+					guildId,
+				});
 			}
 
 			return returnData;
