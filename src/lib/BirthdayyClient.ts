@@ -3,8 +3,10 @@ import { container, SapphireClient } from '@sapphire/framework';
 import { getRootData } from '@sapphire/pieces';
 import { envIsDefined, envParseNumber, envParseString } from '@skyra/env-utilities';
 import { WebhookClient } from 'discord.js';
-import { join } from 'path';
+import { join } from 'node:path';
 import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '../config';
+import { ErrorLogger } from './utils/ErrorLogger';
+import { WebhookAdminNotificationStrategy } from './utils/strategies/WebhookAdminNotificationStrategy';
 
 export class BirthdayyClient extends SapphireClient {
 	public constructor() {
@@ -13,7 +15,14 @@ export class BirthdayyClient extends SapphireClient {
 		this.registerPaths();
 
 		container.prisma = new PrismaClient();
-		container.webhook = WEBHOOK_ERROR ? new WebhookClient(WEBHOOK_ERROR) : null;
+		container.errorLogger = new ErrorLogger({ enableSentry: envIsDefined('SENTRY_DSN') });
+
+		// Setup admin notification strategy if webhook is available
+		if (WEBHOOK_ERROR) {
+			const webhook = new WebhookClient(WEBHOOK_ERROR);
+			const webhookStrategy = new WebhookAdminNotificationStrategy(webhook);
+			container.errorLogger.setAdminNotificationStrategy(webhookStrategy);
+		}
 	}
 
 	private registerPaths() {

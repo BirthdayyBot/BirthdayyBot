@@ -61,6 +61,12 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 	};
 }
 
+// Job cleanup configuration constants
+const COMPLETED_JOB_AGE_SECONDS = 3600; // 1 hour
+const COMPLETED_JOB_MAX_COUNT = 100;
+const FAILED_JOB_AGE_SECONDS = 86400; // 1 day
+const FAILED_JOB_MAX_COUNT = 50;
+
 function parseBullOptions(): QueueOptions {
 	return {
 		connection: {
@@ -69,6 +75,10 @@ function parseBullOptions(): QueueOptions {
 			host: envParseString('REDIS_HOST'),
 			db: envParseNumber('REDIS_DB'),
 			username: envParseString('REDIS_USERNAME'),
+		},
+		defaultJobOptions: {
+			removeOnComplete: { age: COMPLETED_JOB_AGE_SECONDS, count: COMPLETED_JOB_MAX_COUNT },
+			removeOnFail: { age: FAILED_JOB_AGE_SECONDS, count: FAILED_JOB_MAX_COUNT },
 		},
 	};
 }

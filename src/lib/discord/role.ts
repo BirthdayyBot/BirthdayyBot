@@ -25,13 +25,11 @@ export async function addRoleToUser(user_id: string, role_id: string, guild_id: 
 	} catch (error: any) {
 		if (error instanceof DiscordAPIError) {
 			if (error.message.includes('Missing Permissions')) {
-				container.logger.error(
-					`Failed to add role cause I am missing Permissions! Guild: ${guild_id} User: ${user_id} Role: ${role_id}`,
-				);
+				container.logger.warn(`[addRoleToUser] Missing permissions in guild ${guild_id}`);
 				return;
 			}
-			container.logger.error(`Failed to add role: ${error.message}`);
 		}
-		container.logger.error(error);
+		// Unexpected error - let it propagate to Sapphire listener
+		throw error;
 	}
 }

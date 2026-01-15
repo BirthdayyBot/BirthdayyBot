@@ -1,11 +1,11 @@
 import { Command, RegisterSubCommand } from '@kaname-png/plugin-subcommands-advanced';
 import { Result } from '@sapphire/result';
 import { channelMention, ChannelType } from 'discord.js';
-import { generateBirthdayList } from '../../../helpers/generate/birthdayList';
+import { generateBirthdayEmbed } from '../../../helpers/generate/birthdayList';
 import { hasBotChannelPermissions } from '../../../helpers/provide/permission';
 import { reply } from '../../../helpers/send/response';
 import thinking from '../../../lib/discord/thinking';
-import { generateDefaultEmbed, interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
+import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 @RegisterSubCommand('config', (builder) =>
 	builder
@@ -36,12 +36,10 @@ export class OverviewChannelCommand extends Command {
 			);
 		}
 
-		const birthdayList = await generateBirthdayList(1, interaction.guild);
-		const birthdayListEmbed = generateDefaultEmbed(birthdayList.embed);
+		const birthdayEmbed = await generateBirthdayEmbed(interaction.guild);
 
 		const message = await channel.send({
-			embeds: [birthdayListEmbed],
-			components: birthdayList.components,
+			embeds: [birthdayEmbed],
 		});
 
 		const result = await Result.fromAsync(() =>

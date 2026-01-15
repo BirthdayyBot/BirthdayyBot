@@ -30,6 +30,7 @@ export class AddCommand extends Command {
 					);
 				}
 			}
+			throw error; // Let Sapphire listener handle it
 		}
 		return reply(interaction, interactionSuccess(`Added ${userMention(blacklistUser.id)} to the blacklist.`, true));
 	}

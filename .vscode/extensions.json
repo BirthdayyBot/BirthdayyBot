@@ -4,6 +4,7 @@
 		"editorconfig.editorconfig",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
-		"vivaxy.vscode-conventional-commits"
+        "vivaxy.vscode-conventional-commits",
+        "doppler.doppler-vscode"
 	]
 }

@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client';
+import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import { codeBlock } from '@sapphire/utilities';
 import type { Snowflake } from 'discord.js';
@@ -52,7 +53,10 @@ export class Guild extends Utility {
 					deletedGuilds: guilds.length,
 				}))
 				.catch((error: any) => {
-					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					container.errorLogger.handle(error, {
+						logSeverity: 'error',
+						taskName: 'Guild.get.ByLastUpdatedDisabled',
+					});
 					return { deletedBirthdays: 0, deletedGuilds: 0 };
 				}),
 		GuildCount: () => this.prisma.guild.count({ where: { disabled: false } }),
@@ -143,7 +147,10 @@ export class Guild extends Utility {
 					deletedGuilds: deletedGuilds.count,
 				}))
 				.catch(async (error: any) => {
-					this.container.logger.error(`[Guild][DeleteByLastUpdated] ${JSON.stringify(error)}`);
+					container.errorLogger.handle(error, {
+						logSeverity: 'error',
+						taskName: 'Guild.delete.ByLastUpdatedDisabled',
+					});
 					await sendMessage(BOT_ADMIN_LOG, {
 						content: `**[ERROR][DeleteByLastUpdated]**\n${codeBlock(JSON.stringify(error))}`,
 					});

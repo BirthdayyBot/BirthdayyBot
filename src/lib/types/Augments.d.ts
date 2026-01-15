@@ -1,10 +1,10 @@
 import type { PrismaClient } from '@prisma/client';
 import type { ArrayString, BooleanString, IntegerString, NumberString } from '@skyra/env-utilities';
-import type { WebhookClient } from 'discord.js';
 import type { Birthday } from '../../utilities/db/Birthday';
 import type { Blacklist } from '../../utilities/db/Blacklist';
 import type { Guild } from '../../utilities/db/Guild';
 import type { User } from '../../utilities/db/User';
+import type { ErrorLogger } from '../utils/ErrorLogger';
 
 declare module '@skyra/env-utilities' {
 	interface Env {
@@ -27,7 +27,7 @@ declare module '@skyra/env-utilities' {
 		BOT_NAME: string;
 		BOT_AVATAR: string;
 		BOT_COLOR: IntegerString;
-		MAX_BIRTHDAYS_PER_SITE: NumberString;
+		MAX_BIRTHDAYS_PER_PAGE: NumberString;
 		MAIN_DISCORD: string;
 
 		// Voting
@@ -68,7 +68,7 @@ declare module '@skyra/env-utilities' {
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: PrismaClient;
-		webhook: WebhookClient | null;
+		errorLogger: ErrorLogger;
 	}
 }
 

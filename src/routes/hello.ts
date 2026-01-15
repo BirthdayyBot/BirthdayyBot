@@ -1,4 +1,5 @@
 import { type ApiRequest, type ApiResponse, methods, Route } from '@sapphire/plugin-api';
+import { container } from '@sapphire/framework';
 import { sendMessage } from '../lib/discord';
 import { ApplyOptions } from '@sapphire/decorators';
 
@@ -13,6 +14,7 @@ export class UserRoute extends Route {
 			await sendMessage('1063771496436207658', 'Hello World');
 			response.json({ message: 'Sent Discord Message' });
 		} catch (error) {
+			container.errorLogger.handle(error, { logSeverity: 'error' });
 			response.statusCode = 500;
 			response.json({ message: 'Failed to send Discord Message' });
 		}

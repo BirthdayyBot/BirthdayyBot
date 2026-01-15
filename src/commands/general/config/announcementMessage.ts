@@ -37,16 +37,8 @@ export class AnnouncementMessageCommand extends Command {
 			);
 		}
 		this.container.logger.info('MESSAGE: ', message);
-		try {
-			await this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message);
-			return reply(interaction, interactionSuccess('You have successfully updated the announcement message.'));
-		} catch (error) {
-			this.container.logger.info('AnnouncementMessageCommand ~ overridechatInputRun ~ error:', error);
-			return reply(
-				interaction,
-				interactionProblem('An error occurred while trying to update the config. Please try again later.'),
-			);
-		}
+		await this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message);
+		return reply(interaction, interactionSuccess('You have successfully updated the announcement message.'));
 
 		/* 		const result = await Result.fromAsync(async () =>
 			this.container.utilities.guild.set.AnnouncementMessage(interaction.guildId, message),

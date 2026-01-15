@@ -155,7 +155,7 @@ export function getCurrentOffset(): TimezoneObject {
 			return timezoneObject;
 		}
 	}
-	container.logger.warn('getCurrentOffset ~ Could not find timezone offset');
+	container.logger.warn('[getCurrentOffset] Could not find timezone offset, using UTC');
 	timezoneObject = {
 		date: dayjs(),
 		dateFormatted: dayjs().format('YYYY-MM-DD'),
