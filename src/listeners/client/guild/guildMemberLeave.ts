@@ -18,8 +18,7 @@ export class UserEvent extends Listener {
 		} catch (error: any) {
 			if (error instanceof DiscordAPIError) {
 				container.logger.warn(
-					`[GuildMemberLeave] [GID: ${guildId}] [UID ${userId}] Could not remove birthday from left user: `,
-					error.message,
+					`[GuildMemberLeave] Failed to remove birthday for user ${userId} in guild ${guildId}: ${error.message}`,
 				);
 			}
 		}

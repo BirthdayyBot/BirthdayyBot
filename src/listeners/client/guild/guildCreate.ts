@@ -63,8 +63,7 @@ export class UserEvent extends Listener<typeof Events.GuildCreate> {
 				return userId;
 			} catch (error) {
 				if (error instanceof DiscordAPIError) {
-					container.logger.error(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error.message}`);
-					return undefined;
+					container.logger.warn(`[GetBotInviter] ${guild.name} (${guild.id}) - ${error.message}`);
 				}
 				return undefined;
 			}

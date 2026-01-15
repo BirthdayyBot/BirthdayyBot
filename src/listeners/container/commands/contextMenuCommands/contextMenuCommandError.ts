@@ -1,15 +1,12 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, type ContextMenuCommandErrorPayload } from '@sapphire/framework';
-import { handleCommandErrorAndSendToUser } from '../../../../lib/utils/errorHandling';
+import { container, Events, Listener, type ContextMenuCommandErrorPayload } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({ event: Events.ContextMenuCommandError })
 export class ContextMenuCommandErrorEvent extends Listener<typeof Events.ContextMenuCommandError> {
 	public run(error: Error, payload: ContextMenuCommandErrorPayload) {
-		return handleCommandErrorAndSendToUser({
-			error,
+		return container.errorLogger.handle(error, {
+			logSeverity: 'error',
 			interaction: payload.interaction,
-			loggerSeverityLevel: 'error',
-			sentrySeverityLevel: 'error',
 		});
 	}
 }

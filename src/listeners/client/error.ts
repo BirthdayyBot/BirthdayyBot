@@ -1,22 +1,14 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import * as Sentry from '@sentry/node';
-import { logErrorToContainer } from '../../lib/utils/errorHandling';
-import { envIsDefined } from '@skyra/env-utilities';
+import { container, Events, Listener } from '@sapphire/framework';
 
+/**
+ * Global error listener for uncaught exceptions
+ */
 @ApplyOptions<Listener.Options>({ event: Events.Error })
-export class ErrorEvent extends Listener<typeof Events.Error> {
+export class GlobalErrorListener extends Listener<typeof Events.Error> {
 	public run(error: Error) {
-		const SendErrorToSentry = () =>
-			Sentry.withScope((scope) => {
-				scope.setLevel('error');
-				scope.setFingerprint([error.name]);
-				scope.setTransactionName('ErrorEvent');
-				Sentry.captureException(error);
-			});
-
-		if (envIsDefined('SENTRY_DSN')) return SendErrorToSentry;
-
-		return logErrorToContainer({ error, loggerSeverityLevel: 'error' });
+		container.errorLogger.handle(error, {
+			logSeverity: 'error',
+		});
 	}
 }
