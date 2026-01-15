@@ -13,6 +13,7 @@ export async function reply(
 ) {
 	if (interaction.replied || interaction.deferred) {
 		const editOptions = typeof options === 'string' ? options : { ...options, flags: undefined };
+
 		return interaction.editReply(editOptions);
 	}
 	return interaction.reply(options);
