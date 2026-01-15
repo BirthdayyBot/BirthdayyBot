@@ -1,12 +1,12 @@
-import type * as Sentry from '@sentry/node';
-import type { container } from '@sapphire/pieces';
+import type { Command } from '@sapphire/framework';
 import type { ApiRequest, ApiResponse } from '@sapphire/plugin-api';
-import type { ChatInputCommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+import type * as Sentry from '@sentry/node';
+import type { ErrorType } from './errors';
 
 export interface ErrorHandlerOptions {
-	interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction;
+	interaction: Command.ChatInputCommandInteraction | Command.ContextMenuCommandInteraction;
 	error: Error;
-	loggerSeverityLevel: keyof Omit<typeof container.logger, 'LogLevel' | 'write' | 'has'>;
+	loggerSeverityLevel: ErrorType;
 	sentrySeverityLevel: Sentry.SeverityLevel;
 }
 
@@ -18,6 +18,6 @@ export interface ErrorDefaultSentryScope {
 
 export type RouteApiErrorHandler = {
 	error: Error;
-	loggerSeverityLevel: keyof Omit<typeof container.logger, 'LogLevel' | 'write' | 'has'>;
+	loggerSeverityLevel: ErrorType;
 	sentrySeverityLevel: Sentry.SeverityLevel;
 } & { request: ApiRequest; response: ApiResponse };
