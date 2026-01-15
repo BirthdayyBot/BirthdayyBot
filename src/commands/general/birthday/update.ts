@@ -5,7 +5,6 @@ import { bold, userMention } from 'discord.js';
 import { formatDateForDisplay, getDateFromInteraction, reply } from '../../../helpers';
 import updateBirthdayOverview from '../../../helpers/update/overview';
 import { BIRTHDAY_REGISTER, monthChoices } from '../../../lib/commands';
-import thinking from '../../../lib/discord/thinking';
 import { interactionProblem, interactionSuccess } from '../../../lib/utils/embed';
 
 const currentYear = dayjs().year();
@@ -39,7 +38,8 @@ const minYear = currentYear - 100;
 )
 export class UpdateCommand extends Command {
 	public override async chatInputRun(interaction: Command.ChatInputInteraction<'cached'>) {
-		await thinking(interaction);
+		await interaction.deferReply();
+
 		const targetUser = interaction.options.getUser('user') ?? interaction.user;
 		const { guildId, memberPermissions } = interaction;
 		const authorIsTarget = interaction.user.id === targetUser.id;

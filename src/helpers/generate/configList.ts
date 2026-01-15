@@ -1,58 +1,68 @@
 import type { Guild as PrismaGuild } from '@prisma/client';
 import { container } from '@sapphire/framework';
-import type { APIEmbed, Guild, Snowflake } from 'discord.js';
+import type { APIEmbed, APIEmbedField, Guild } from 'discord.js';
+import { channelMention, roleMention, userMention } from 'discord.js';
 
 import { objectEntries } from '@sapphire/utilities';
-import { channelMention, roleMention, userMention, type APIEmbedField } from 'discord.js';
-import { getGuildInformation } from '../../lib/discord';
 import { generateDefaultEmbed } from '../../lib/utils/embed';
 import { ARROW_RIGHT, PLUS } from '../provide';
 
-interface ConfigListOptions {
-	guild?: Guild;
-}
+export default async function generateConfigList(guild: Guild): Promise<APIEmbed> {
+	try {
+		const embedFields = await generateFields(guild.id);
 
-export default async function generateConfigList(guildId: Snowflake, options: ConfigListOptions): Promise<APIEmbed> {
-	const embedFields = await generateFields(guildId);
-	const guildInfo: Guild | null = options.guild ? options.guild : await getGuildInformation(guildId);
-	if (!guildInfo) {
+		return generateDefaultEmbed({
+			title: `Config List - ${guild.name}`,
+			description: 'Use /config `<setting>` `<value>` to change any setting',
+			fields: embedFields,
+		});
+	} catch (error) {
+		container.errorLogger.handle(error, {
+			logSeverity: 'warn',
+			guildId: String(guild),
+		});
+
 		return {
-			title: `Config List - ${guildId}`,
-			description: 'Guild Not Found, please report this to the developer',
+			title: `Config List - ${guild.name}`,
+			description: 'An error occurred while loading guild config',
 		};
 	}
-	return generateDefaultEmbed({
-		title: `Config List - ${guildInfo.name}`,
-		description: 'Use /config `<setting>` `<value>` to change any setting',
-		fields: embedFields,
-	});
 }
 async function generateFields(guildId: string): Promise<APIEmbedField[]> {
-	let config = await container.prisma.guild.findUnique({
-		where: { guildId },
-		select: {
-			birthdayRole: true,
-			birthdayPingRole: true,
-			announcementChannel: true,
-			announcementMessage: true,
-			overviewChannel: true,
-			timezone: true,
-			language: true,
-			premium: true,
-		},
-	});
+	try {
+		let config = await container.prisma.guild.findUnique({
+			where: { guildId },
+			select: {
+				birthdayRole: true,
+				birthdayPingRole: true,
+				announcementChannel: true,
+				announcementMessage: true,
+				overviewChannel: true,
+				timezone: true,
+				language: true,
+				premium: true,
+			},
+		});
 
-	if (!config) config = await container.utilities.guild.create({ guildId });
+		config ??= await container.utilities.guild.create({ guildId });
 
-	return objectEntries(config).map(([name, value]) => {
-		const valueString = getValueString(name, value);
-		const nameString = getNameString(name);
-		return {
-			name: nameString,
-			value: valueString,
-			inline: false,
-		};
-	});
+		return objectEntries(config).map(([name, value]) => {
+			const valueString = getValueString(name, value);
+			const nameString = getNameString(name);
+			return {
+				name: nameString,
+				value: valueString,
+				inline: false,
+			};
+		});
+	} catch (error) {
+		container.errorLogger.handle(error, {
+			logSeverity: 'warn',
+			guildId,
+		});
+
+		return [];
+	}
 
 	function getValueString(name: keyof PrismaGuild, value: string | number | boolean | null) {
 		if (value === null) {
