@@ -8,19 +8,15 @@ import { envIsDefined } from '@skyra/env-utilities';
 
 const client = new BirthdayyClient();
 
-async function main() {
-	try {
-		if (envIsDefined('SENTRY_DSN')) Sentry.init(SENTRY_OPTIONS);
-		await container.prisma.$connect();
-		await client.login();
-	} catch (error) {
-		container.logger.error(error);
-		await container.prisma.$disconnect();
-		client.destroy();
-		process.exit(1);
-	}
-}
+if (envIsDefined('SENTRY_DSN')) Sentry.init(SENTRY_OPTIONS);
 
-main().catch((error) => {
+try {
+	await container.prisma.$connect();
+	// Login to the Discord gateway
+	await client.login();
+} catch (error) {
+	await container.prisma.$disconnect();
 	container.logger.error(error);
-});
+	await client.destroy();
+	process.exit(1);
+}

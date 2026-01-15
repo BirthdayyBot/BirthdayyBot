@@ -1,5 +1,5 @@
 import type { ChatInputOrContextMenuCommandInteraction } from '@sapphire/discord.js-utilities';
-import type { InteractionEditReplyOptions, InteractionReplyOptions, MessagePayload } from 'discord.js';
+import type { InteractionReplyOptions } from 'discord.js';
 
 /**
  * It replies to an interaction, and if the interaction has already been replied to, it edits the reply instead
@@ -12,8 +12,8 @@ export async function reply(
 	options: string | InteractionReplyOptions,
 ) {
 	if (interaction.replied || interaction.deferred) {
-		const editOptions: string | MessagePayload | InteractionEditReplyOptions =
-			typeof options === 'string' ? options : { ...options };
+		const editOptions = typeof options === 'string' ? options : { ...options, flags: undefined };
+
 		return interaction.editReply(editOptions);
 	}
 	return interaction.reply(options);
