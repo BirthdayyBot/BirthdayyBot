@@ -2,9 +2,9 @@ import './lib/setup/start';
 
 import { container } from '@sapphire/pieces';
 import * as Sentry from '@sentry/node';
+import { envIsDefined } from '@skyra/env-utilities';
 import { SENTRY_OPTIONS } from './config';
 import { BirthdayyClient } from './lib/BirthdayyClient';
-import { envIsDefined } from '@skyra/env-utilities';
 
 const client = new BirthdayyClient();
 
@@ -15,8 +15,8 @@ try {
 	// Login to the Discord gateway
 	await client.login();
 } catch (error) {
+	container.errorLogger.handle(error, { logSeverity: 'error' });
 	await container.prisma.$disconnect();
-	container.logger.error(error);
 	await client.destroy();
 	process.exit(1);
 }
