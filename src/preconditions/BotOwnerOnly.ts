@@ -2,24 +2,32 @@ import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
 import { BOT_OWNER } from '../helpers/provide/environment';
 
-export class OwnerOwnlyPrecondition extends Precondition {
-	#message = 'This command can only be used by the bot owner.';
+/**
+ * Ensures the user is the bot owner
+ * @example
+ * \\@ApplyOptions<CommandOptions>({
+ *   preconditions: ['BotOwnerOnly']
+ * })
+ */
+export class BotOwnerOnlyPrecondition extends Precondition {
+	readonly #message = 'This command can only be used by the bot owner.';
+	readonly #identifier = 'BotOwnerOnlyPrecondition';
 
 	public override chatInputRun(interaction: CommandInteraction) {
-		return this.doOwnerCheck(interaction.user.id);
+		return this.checkOwnerStatus(interaction.user.id);
 	}
 
 	public override contextMenuRun(interaction: ContextMenuCommandInteraction) {
-		return this.doOwnerCheck(interaction.user.id);
+		return this.checkOwnerStatus(interaction.user.id);
 	}
 
 	public override messageRun(message: Message) {
-		return this.doOwnerCheck(message.author.id);
+		return this.checkOwnerStatus(message.author.id);
 	}
 
-	private doOwnerCheck(userId: Snowflake) {
+	private checkOwnerStatus(userId: Snowflake) {
 		return BOT_OWNER.includes(userId)
 			? this.ok()
-			: this.error({ identifier: 'IsNotOwner', message: this.#message });
+			: this.error({ identifier: this.#identifier, message: this.#message });
 	}
 }

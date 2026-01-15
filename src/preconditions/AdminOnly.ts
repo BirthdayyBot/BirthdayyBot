@@ -2,22 +2,30 @@ import { Precondition } from '@sapphire/framework';
 import type { CommandInteraction, ContextMenuCommandInteraction, Message, Snowflake } from 'discord.js';
 import { isBotAdmin } from '../lib/utils/helper';
 
-export class OwnerOwnlyPrecondition extends Precondition {
-	#message = 'This command can only be used by the bot admins.';
+/**
+ * Ensures the user is a bot administrator
+ * @example
+ * \\@ApplyOptions<CommandOptions>({
+ *   preconditions: ['AdminOnly']
+ * })
+ */
+export class AdminOnlyPrecondition extends Precondition {
+	readonly #message = 'This command can only be used by bot administrators.';
+	readonly #identifier = 'AdminOnlyPrecondition';
 
 	public override chatInputRun(interaction: CommandInteraction) {
-		return this.doAdminCheck(interaction.user.id);
+		return this.checkAdminStatus(interaction.user.id);
 	}
 
 	public override contextMenuRun(interaction: ContextMenuCommandInteraction) {
-		return this.doAdminCheck(interaction.user.id);
+		return this.checkAdminStatus(interaction.user.id);
 	}
 
 	public override messageRun(message: Message) {
-		return this.doAdminCheck(message.author.id);
+		return this.checkAdminStatus(message.author.id);
 	}
 
-	private doAdminCheck(userId: Snowflake) {
-		return isBotAdmin(userId) ? this.ok() : this.error({ identifier: 'IsNotBotAdmin', message: this.#message });
+	private checkAdminStatus(userId: Snowflake) {
+		return isBotAdmin(userId) ? this.ok() : this.error({ identifier: this.#identifier, message: this.#message });
 	}
 }
