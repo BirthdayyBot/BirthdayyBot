@@ -122,7 +122,7 @@ __metadata:
     "@sapphire/utilities": "npm:^3.18.2"
     "@sentry/node": "npm:^9.40.0"
     "@skyra/env-utilities": "npm:^2.0.1"
-    "@types/node": "npm:^22.16.5"
+    "@types/node": "npm:^24.10.11"
     "@types/ws": "npm:^8.18.1"
     "@typescript-eslint/eslint-plugin": "npm:^7.18.0"
     "@typescript-eslint/parser": "npm:^7.18.0"
@@ -1913,12 +1913,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.16.5":
-  version: 22.16.5
-  resolution: "@types/node@npm:22.16.5"
+"@types/node@npm:^24.10.11":
+  version: 24.10.11
+  resolution: "@types/node@npm:24.10.11"
   dependencies:
-    undici-types: "npm:~6.21.0"
-  checksum: 10/ba45b5c9113cbc5edb12960fcfe7e80db2c998af5c1931264240695b27d756570d92462150b95781bd67a03aa82111cc970ab0f4504eb99213edff8bf425354e
+    undici-types: "npm:~7.16.0"
+  checksum: 10/ff7124058917a0f658637ac0137a3906c83c1dc78928228d8045a06ae8b6a02c1f15bf1fbe86c8d6f1839ccdd6033f3d79d615493f196f54b9130c50a65a64fa
   languageName: node
   linkType: hard
 
@@ -5832,10 +5832,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.21.0":
-  version: 6.21.0
-  resolution: "undici-types@npm:6.21.0"
-  checksum: 10/ec8f41aa4359d50f9b59fa61fe3efce3477cc681908c8f84354d8567bb3701fafdddf36ef6bff307024d3feb42c837cf6f670314ba37fc8145e219560e473d14
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10/db43439f69c2d94cc29f75cbfe9de86df87061d6b0c577ebe9bb3255f49b22c50162a7d7eb413b0458b6510b8ca299ac7cff38c3a29fbd31af9f504bcf7fbc0d
   languageName: node
   linkType: hard
 
