@@ -38,7 +38,8 @@
 		"test:coverage": "vitest run --coverage",
 		"update": "yarn upgrade-interactive",
 		"prisma:generate": "npx prisma generate",
-		"prisma:migrate": "npx prisma migrate dev"
+		"prisma:migrate": "npx prisma migrate dev",
+		"prisma:studio": "doppler run -- npx prisma studio"
 	},
 	"dependencies": {
 		"@influxdata/influxdb-client": "^1.35.0",

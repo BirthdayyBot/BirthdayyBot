@@ -95,6 +95,12 @@ After Postgres is running and Doppler has `DATABASE_URL`/`DIRECT_DATABASE_URL` s
 doppler run -- yarn prisma:migrate
 ```
 
+## View the database (Prisma Studio)
+
+```bash
+yarn prisma:studio
+```
+
 ## Install deps + run the bot
 
 ```bash
@@ -124,4 +130,8 @@ doppler run -- yarn dev
 ```bash
 podman compose down -v
 podman compose up -d postgres redis
+```
+
+```
+
 ```
