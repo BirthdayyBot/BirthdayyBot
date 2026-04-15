@@ -1,11 +1,13 @@
 import { isDevelopment } from '#utils/env';
-import { ClientColor, Emojis } from '#utils/constants';
+import { DefaultEmbedBuilder } from '#lib/discord';
+import { Emojis } from '#utils/constants';
+import { BOT_ADMIN_LOG } from '#utils/environment';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Events, Listener, Piece, Store, container } from '@sapphire/framework';
 import { type TFunction } from '@sapphire/plugin-i18next';
+import { isTextBasedChannel } from '@sapphire/discord.js-utilities';
 import { isNullish } from '@sapphire/utilities';
 import { blue, gray, green, magenta, magentaBright, red, white, yellow } from 'colorette';
-import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ once: true, event: Events.ClientReady })
 export class UserEvent extends Listener {
@@ -14,7 +16,7 @@ export class UserEvent extends Listener {
 	public async run() {
 		this.printBanner();
 		this.printStoreDebugInformation();
-		await this.sendOnlineWebhook();
+		await this.sendOnlineMessage();
 	}
 
 	private printBanner() {
@@ -37,15 +39,14 @@ ${isDevelopment ? ` ${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}
 		);
 	}
 
-	private async sendOnlineWebhook() {
-		const webhook = this.container.client.webhookLog;
-		if (!webhook) return;
+	private async sendOnlineMessage() {
+		const channel = this.container.client.channels.cache.get(BOT_ADMIN_LOG);
+		if (!isTextBasedChannel(channel)) return;
 
 		const { user } = this.container.client;
 		const version = process.env.CLIENT_VERSION ?? 'unknown';
 
-		const embed = new EmbedBuilder()
-			.setColor(ClientColor)
+		const embed = new DefaultEmbedBuilder()
 			.setDescription(`${Emojis.Online} **Online**`)
 			.addFields(
 				{ name: 'Version', value: version, inline: true },
@@ -55,10 +56,10 @@ ${isDevelopment ? ` ${blc('<')}${llc('/')}${blc('>')} ${llc('DEVELOPMENT MODE')}
 			.setTimestamp();
 
 		try {
-			await webhook.send({ embeds: [embed] });
+			await channel.send({ embeds: [embed] });
 		} catch (error) {
-			// Don't fail startup if webhook is misconfigured / missing perms:
-			container.logger.warn('[Ready] Failed to send online webhook:', error);
+			// Don't fail startup if channel is missing perms:
+			container.logger.warn('[Ready] Failed to send online message:', error);
 		}
 	}
 
