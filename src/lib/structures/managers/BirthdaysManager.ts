@@ -57,6 +57,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	private _timer: NodeJS.Timeout | null = null;
 
+	/**
+	 * Tracks when each cached entry was last (re)cached/touched.
+	 * Used to evict entries after a fixed TTL to avoid unbounded memory growth.
+	 */
+	private readonly _cacheTouchedAt = new Map<string, number>();
+
 	public constructor(guild: Guild, settings: SettingsManager) {
 		super();
 		this.guild = guild;
@@ -166,7 +172,9 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @returns A promise that resolves when the birthday has been announced.
 	 */
 	public async announcedBirthday(birthday: Birthday): Promise<[Message<boolean> | null, Role | null]> {
-		const member = this.guild.members.resolve(birthday.userId);
+		const member =
+			this.guild.members.resolve(birthday.userId) ??
+			(await this.guild.members.fetch(birthday.userId).catch(() => null));
 		if (!member) return [null, null];
 
 		return Promise.all([
@@ -245,6 +253,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				return birthday;
 			} finally {
 				super.delete(userId);
+				this._cacheTouchedAt.delete(userId);
 			}
 		} catch {
 			return null;
@@ -307,17 +316,29 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		if (!entries) return null;
 
 		const parsedEntries = Array.isArray(entries) ? entries : [entries];
+		const now = Date.now();
 
 		for (const entry of parsedEntries) {
 			super.set(entry.userId, entry);
+			this._cacheTouchedAt.set(entry.userId, now);
 		}
 		if (type === CacheActions.Insert) this._count! += parsedEntries.length;
 
 		if (!this._timer) {
 			this._timer = setInterval(() => {
-				super.sweep(() => Date.now() > Date.now() + Time.Minute * 15);
-				if (!super.size) this._timer = null;
-			}, 1000);
+				const sweepNow = Date.now();
+				const ttlMs = Time.Minute * 15;
+				super.sweep((_value, key) => {
+					const touchedAt = this._cacheTouchedAt.get(key);
+					const shouldDelete = typeof touchedAt === 'number' ? sweepNow - touchedAt > ttlMs : true;
+					if (shouldDelete) this._cacheTouchedAt.delete(key);
+					return shouldDelete;
+				});
+				if (!super.size) {
+					this._timer = null;
+					this._cacheTouchedAt.clear();
+				}
+			}, Time.Second * 10);
 		}
 
 		if (Array.isArray(entries)) {
