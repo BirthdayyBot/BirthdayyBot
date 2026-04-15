@@ -1,5 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener, LogLevel } from '@sapphire/framework';
+import { Events, Listener } from '@sapphire/framework';
+import { DEBUG } from '#utils/environment';
 import { cyan } from 'colorette';
 import {
 	ApplicationCommandOptionType,
@@ -11,13 +12,22 @@ import {
 
 @ApplyOptions<Listener.Options>({ event: Events.InteractionCreate })
 export class UserListener extends Listener<typeof Events.InteractionCreate> {
+	private readonly seenInteractionIds = new Set<string>();
+
 	public run(interaction: Interaction) {
+		// De-dupe in case multiple interaction events fire/loggers attach.
+		if (this.seenInteractionIds.has(interaction.id)) return;
+		this.seenInteractionIds.add(interaction.id);
+		// Avoid unbounded growth in long-running processes.
+		if (this.seenInteractionIds.size > 1_000) this.seenInteractionIds.clear();
+
 		if (interaction.isChatInputCommand()) return this.logChatInput(interaction);
 		if (interaction.isContextMenuCommand()) return this.logContextMenu(interaction);
 	}
 
 	public override onLoad() {
-		this.enabled = this.container.logger.has(LogLevel.Debug);
+		// Always enabled (including production). Verbosity controlled by DEBUG env.
+		this.enabled = true;
 		return super.onLoad();
 	}
 
@@ -30,8 +40,14 @@ export class UserListener extends Listener<typeof Events.InteractionCreate> {
 			? `${interaction.guild?.name ?? 'Unknown'}[${cyan(interaction.guildId)}]`
 			: cyan('Direct Messages');
 
-		const options = serializeChatInputOptions(interaction.options.data);
-		this.container.logger.debug(`${shard} - ${commandName} ${author} ${sentAt}`, options);
+		// Always log the command. Only include full option payload when DEBUG=true.
+		if (DEBUG) {
+			const options = serializeChatInputOptions(interaction.options.data);
+			this.container.logger.debug(`${shard} - ${commandName} ${author} ${sentAt}\n${options}`);
+			return;
+		}
+
+		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
 	}
 
 	private logContextMenu(interaction: ContextMenuCommandInteraction) {
@@ -43,17 +59,21 @@ export class UserListener extends Listener<typeof Events.InteractionCreate> {
 			? `${interaction.guild?.name ?? 'Unknown'}[${cyan(interaction.guildId)}]`
 			: cyan('Direct Messages');
 
-		this.container.logger.debug(
-			`${shard} - ${commandName} ${author} ${sentAt}`,
-			JSON.stringify(
-				{
-					commandType: interaction.commandType,
-					targetId: interaction.targetId
-				},
-				null,
-				2
-			)
-		);
+		if (DEBUG) {
+			this.container.logger.debug(
+				`${shard} - ${commandName} ${author} ${sentAt}\n${JSON.stringify(
+					{
+						commandType: interaction.commandType,
+						targetId: interaction.targetId
+					},
+					null,
+					2
+				)}`
+			);
+			return;
+		}
+
+		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
 	}
 }
 

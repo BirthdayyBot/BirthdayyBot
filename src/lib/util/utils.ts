@@ -9,6 +9,7 @@ import {
 	Message,
 	MessagePayload,
 	userMention,
+	type InteractionEditReplyOptions,
 	type InteractionReplyOptions
 } from 'discord.js';
 import { ClientColor } from './constants.js';
@@ -49,8 +50,15 @@ export function resolveTarget(interaction: ChatInputCommandInteraction) {
  * @param  options - The options to pass to the reply method.
  * @returns A promise that resolves to the message that was sent.
  */
-export function reply(interaction: CommandInteraction, options: string | MessagePayload | InteractionReplyOptions) {
-	return interaction[interaction.replied || interaction.deferred ? 'editReply' : 'reply'](options);
+export function reply(
+	interaction: CommandInteraction,
+	options: string | MessagePayload | InteractionReplyOptions | InteractionEditReplyOptions
+) {
+	if (interaction.replied || interaction.deferred) {
+		return interaction.editReply(options as string | MessagePayload | InteractionEditReplyOptions);
+	}
+
+	return interaction.reply(options as string | MessagePayload | InteractionReplyOptions);
 }
 
 export interface Mapps {

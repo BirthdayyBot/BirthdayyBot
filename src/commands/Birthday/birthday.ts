@@ -55,10 +55,13 @@ export class UserCommand extends BirthdayySubcommand {
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
-
-		const title = await resolveKey(interaction, 'commands/birthday:listTitle', options);
-
-		return birthdayManager.sendPaginatedBirthdays(interaction, birthdays, title);
+		return birthdayManager.sendPaginatedBirthdays(
+			interaction,
+			birthdays,
+			'commands/birthday:listTitle',
+			options,
+			'commands/birthday:listTitle_empty'
+		);
 	}
 
 	public async chatInputRunSet(interaction: ChatInputCommandInteraction<'cached'>) {

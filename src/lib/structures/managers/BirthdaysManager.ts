@@ -38,6 +38,15 @@ enum CacheActions {
 }
 
 export class BirthdaysManager extends Collection<string, Birthday> {
+	/**
+	 * Ensure methods like `filter()` return a plain Collection.
+	 * Discord.js Collection methods construct `this.constructor[Symbol.species]()` with no args,
+	 * which would otherwise break because `BirthdaysManager` requires constructor parameters.
+	 */
+	public static override get [Symbol.species]() {
+		return Collection;
+	}
+
 	public guildId: string;
 
 	/**
@@ -105,7 +114,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @returns An array of birthdays with the specified month.
 	 */
 	public findBirthdayWithMonth(month: number) {
-		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() === month).toJSON();
+		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() + 1 === month).toJSON();
 	}
 
 	/**
@@ -142,12 +151,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		interaction: ChatInputCommandInteraction | Message,
 		birthdays: Birthday[],
 		key: string,
-		options?: TOptions
+		options?: TOptions,
+		emptyKey?: string
 	) {
 		const defaultEmbed = this.generateDefaultBirthdayListEmbed();
 
 		if (isNullOrUndefinedOrEmpty(birthdays)) {
-			const description = await resolveKey(interaction, key, { ...options, context: 'empty' });
+			const description = await resolveKey(interaction, emptyKey ?? key, options);
 			const messageOptions: MessageEditOptions = {
 				embeds: [defaultEmbed.setDescription(description).toJSON()]
 			};
@@ -157,11 +167,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				: interaction.reply(interactionSuccess(description));
 		}
 
+		const now = await this.getCurrentDate().catch(() => dayjs());
+
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
 			.setTemplate(defaultEmbed.toJSON())
 			.setTitleField(await resolveKey(interaction, key, options))
 			.setItems(this.sortBirthdaysByMonthAndDay(birthdays))
-			.formatItems(this.formatBirthdayItem)
+			.formatItems((birthday) => this.formatBirthdayItem(birthday, now))
 			.setItemsPerPage(20);
 		return paginatedBirthdays.make().run(interaction);
 	}
@@ -211,6 +223,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	public async upsert(args: Omit<Prisma.BirthdayUncheckedCreateInput, 'guildId'>): Promise<Birthday | null> {
 		try {
+			// Birthday has a required FK to User; ensure the user exists first.
+			await container.prisma.user.upsert({
+				where: { id: args.userId },
+				update: {},
+				create: { id: args.userId }
+			});
+
 			const birthday = await container.prisma.birthday.upsert({
 				where: {
 					userId_guildId: {
@@ -455,17 +474,17 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @param birthday - The birthday object to format.
 	 * @returns The formatted string representation of the birthday item.
 	 */
-	private formatBirthdayItem = async (birthday: Birthday) => {
+	private formatBirthdayItem(birthday: Birthday, now: dayjs.Dayjs) {
 		// example: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
 		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
 		const age = dayjs().diff(date, 'year');
 		const formattedDate = formatDateForDisplay(birthday.birthday);
 		const ageText = age === 1 ? 'year' : 'years';
 		const ageFormatted = `${age} ${ageText}`;
-		const emoji = date.isSame(await this.getCurrentDate(), 'date') ? Emojis.Cake : '';
+		const emoji = date.isSame(now, 'date') ? Emojis.Cake : '';
 		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
 		return text;
-	};
+	}
 
 	/**
 	 * Generates a paginated list of birthdays as an array of EmbedBuilders.
@@ -476,6 +495,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const birthdaysList = await container.prisma.birthday.findMany({ where: { guildId: this.guildId } });
 
 		if (isNullOrUndefinedOrEmpty(birthdaysList)) return [this.createEmptyPaginatedBirthdayListEmbed()];
+
+		const now = await this.getCurrentDate().catch(() => dayjs());
 
 		const sortedBirthdays = this.sortBirthdaysByMonthAndDay(birthdaysList);
 
@@ -488,7 +509,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				if (isProduction) await this.remove(birthday.userId);
 				return false;
 			})
-			.map((b) => this.formatBirthdayItem(b))
+			.map((b) => this.formatBirthdayItem(b, now))
 			.join('\n');
 
 		const textChunks = this.splitTextIntoChunks(descriptionText, 2000);

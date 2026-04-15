@@ -2,20 +2,18 @@ import { container } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import {
 	type APIActionRowComponent,
-	type APIMessageActionRowComponent,
+	type APIButtonComponent,
 	ButtonStyle,
 	ComponentType,
 	OAuth2Scopes,
 	PermissionFlagsBits
 } from 'discord.js';
 
-export function getActionRow(
-	...components: APIMessageActionRowComponent[]
-): APIActionRowComponent<APIMessageActionRowComponent> {
+export function getActionRow(...components: APIButtonComponent[]): APIActionRowComponent<APIButtonComponent> {
 	return { type: ComponentType.ActionRow, components };
 }
 
-export function getSupportComponent(label: string): APIMessageActionRowComponent {
+export function getSupportComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -25,7 +23,7 @@ export function getSupportComponent(label: string): APIMessageActionRowComponent
 	};
 }
 
-export function getInviteComponent(label: string): APIMessageActionRowComponent {
+export function getInviteComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -35,7 +33,7 @@ export function getInviteComponent(label: string): APIMessageActionRowComponent 
 	};
 }
 
-export function getGitHubComponent(label: string): APIMessageActionRowComponent {
+export function getGitHubComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -45,7 +43,7 @@ export function getGitHubComponent(label: string): APIMessageActionRowComponent 
 	};
 }
 
-export function getPremiumComponent(label: string): APIMessageActionRowComponent {
+export function getPremiumComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -55,7 +53,7 @@ export function getPremiumComponent(label: string): APIMessageActionRowComponent
 	};
 }
 
-export function getDocumentationComponent(label: string): APIMessageActionRowComponent {
+export function getDocumentationComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -65,7 +63,7 @@ export function getDocumentationComponent(label: string): APIMessageActionRowCom
 	};
 }
 
-export function getWebsiteComponent(label: string): APIMessageActionRowComponent {
+export function getWebsiteComponent(label: string): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Link,
@@ -77,7 +75,7 @@ export function getWebsiteComponent(label: string): APIMessageActionRowComponent
 
 export const remindMeComponentCustomId = 'vote-reminder-button';
 
-export function getRemindMeComponent(t: TFunction): APIMessageActionRowComponent {
+export function getRemindMeComponent(t: TFunction): APIButtonComponent {
 	return {
 		type: ComponentType.Button,
 		style: ButtonStyle.Primary,
@@ -87,7 +85,7 @@ export function getRemindMeComponent(t: TFunction): APIMessageActionRowComponent
 	};
 }
 
-export function getRemindMeDisabledComponent(t: TFunction): APIMessageActionRowComponent {
+export function getRemindMeDisabledComponent(t: TFunction): APIButtonComponent {
 	return {
 		...getRemindMeComponent(t),
 		disabled: true

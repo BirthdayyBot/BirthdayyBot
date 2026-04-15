@@ -12,7 +12,13 @@
 	"listDescription": "Lister les anniversaires.",
 	"listOptionsMonthDescription": "Le mois pour lister les anniversaires.",
     "listTitle": "Anniversaires de {{ month }}:",
-    "listTitleEmpty": "Aucun anniversaire trouvé pour {{ month }}.",
+    "listTitle_empty": "Aucun anniversaire trouvé pour {{ month }}.",
+    "list": {
+        "embedList": {
+            "title": "Anniversaires",
+            "footer": "Utilisez /birthday set pour enregistrer votre anniversaire."
+        }
+    },
 	"showDescription": "Afficher votre anniversaire.",
 	"showOptionsUserDescription": "L'utilisateur pour afficher l'anniversaire.",
 	"showNoBirthday": "💡 {{ user }} n'a pas d'anniversaire défini.",

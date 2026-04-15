@@ -13,18 +13,18 @@ export function registerDayOption(option: SlashCommandIntegerOption, key: string
 }
 
 const localizedMonthChoices = [
-	createLocalizedChoice('months:January', { value: Month.January }),
-	createLocalizedChoice('months:February', { value: Month.February }),
-	createLocalizedChoice('months:March', { value: Month.March }),
-	createLocalizedChoice('months:Apr', { value: Month.April }),
-	createLocalizedChoice('months:May', { value: Month.May }),
-	createLocalizedChoice('months:June', { value: Month.June }),
-	createLocalizedChoice('months:July', { value: Month.July }),
-	createLocalizedChoice('months:August', { value: Month.August }),
-	createLocalizedChoice('months:September', { value: Month.September }),
-	createLocalizedChoice('months:October', { value: Month.October }),
-	createLocalizedChoice('months:November', { value: Month.November }),
-	createLocalizedChoice('months:December', { value: Month.December })
+	createLocalizedChoice('globals:months.0', { value: Month.January }),
+	createLocalizedChoice('globals:months.1', { value: Month.February }),
+	createLocalizedChoice('globals:months.2', { value: Month.March }),
+	createLocalizedChoice('globals:months.3', { value: Month.April }),
+	createLocalizedChoice('globals:months.4', { value: Month.May }),
+	createLocalizedChoice('globals:months.5', { value: Month.June }),
+	createLocalizedChoice('globals:months.6', { value: Month.July }),
+	createLocalizedChoice('globals:months.7', { value: Month.August }),
+	createLocalizedChoice('globals:months.8', { value: Month.September }),
+	createLocalizedChoice('globals:months.9', { value: Month.October }),
+	createLocalizedChoice('globals:months.10', { value: Month.November }),
+	createLocalizedChoice('globals:months.11', { value: Month.December })
 ];
 
 export function registerMonthOption(option: SlashCommandIntegerOption, key: string) {

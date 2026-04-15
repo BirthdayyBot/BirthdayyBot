@@ -12,7 +12,13 @@
 	"listDescription": "List birthdays.",
 	"listOptionsMonthDescription": "The month to list birthdays for.",
     "listTitle": "Birthdays for {{ month }}:",
-    "listTitleEmpty": "No birthdays found for {{ month }}.",
+    "listTitle_empty": "No birthdays found for {{ month }}.",
+    "list": {
+        "embedList": {
+            "title": "Birthdays",
+            "footer": "Use /birthday set to register your birthday."
+        }
+    },
 	"showDescription": "Show your birthday.",
 	"showOptionsUserDescription": "The user to show the birthday for.",
 	"showNoBirthday": "💡 {{ user }} does not have a birthday set.",

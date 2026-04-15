@@ -48,13 +48,14 @@ export function parseInputDate(date: string | Date): Date {
 	let inputDate: Date;
 
 	if (typeof date === 'string') {
-		// Ensure the input date string is in 'XXXX-MM-DD' format
-		if (!/^(\d{4}\/\d{2}\/\d{2})$/.test(date)) {
-			throw new Error('Invalid date format. Please use "XXXX-MM-DD".');
+		// Supports 'YYYY-MM-DD' / 'YYYY/MM/DD' and 'XXXX-MM-DD' / 'XXXX/MM/DD'
+		const normalized = date.replaceAll('/', '-');
+		if (!/^(\d{4}|XXXX)-\d{2}-\d{2}$/.test(normalized)) {
+			throw new Error('Invalid date format. Please use "YYYY-MM-DD" or "XXXX-MM-DD".');
 		}
 
-		// Replace 'XXXX' with '2000' and parse as Date
-		inputDate = new Date(date.replace('XXXX', '2000'));
+		// Replace 'XXXX' with a stable year and parse as Date
+		inputDate = new Date(normalized.replace('XXXX', '2000'));
 	} else if (date instanceof Date) {
 		// Use the provided Date object
 		inputDate = date;
@@ -100,7 +101,7 @@ export function getFormattedTimestamp(discordTimestamp: number, style: Timestamp
 
 export function getDateFromInteraction(interaction: ChatInputCommandInteraction) {
 	const day = addZeroToSingleDigitNumber(interaction.options.getInteger('day', true));
-	const month = addZeroToSingleDigitNumber(interaction.options.getString('month', true));
+	const month = addZeroToSingleDigitNumber(interaction.options.getInteger('month', true));
 	const year = interaction.options.getInteger('year', false) ?? 'XXXX';
 
 	return `${year}-${month}-${day}`;
