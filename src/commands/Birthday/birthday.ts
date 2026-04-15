@@ -60,7 +60,7 @@ export class UserCommand extends BirthdayySubcommand {
 			birthdays,
 			'commands/birthday:listTitle',
 			options,
-			'commands/birthday:listTitle_empty'
+			'commands/birthday:listTitleEmpty'
 		);
 	}
 
@@ -142,12 +142,12 @@ export class UserCommand extends BirthdayySubcommand {
 	}
 
 	private async handleRemoveSuccess(interaction: ChatInputCommandInteraction<'cached'>) {
-		const content = await resolveKey(interaction, 'commands/birthday:remove.success');
+		const content = await resolveKey(interaction, 'commands/birthday:removeSuccess');
 		return interaction.reply(interactionSuccess(content));
 	}
 
 	private async handleRemoveFailure(interaction: ChatInputCommandInteraction<'cached'>) {
-		const content = await resolveKey(interaction, 'commands/birthday:remove.notRegistered');
+		const content = await resolveKey(interaction, 'commands/birthday:removeFailure');
 		return interaction.reply(interactionProblem(content));
 	}
 

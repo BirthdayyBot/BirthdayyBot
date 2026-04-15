@@ -80,7 +80,8 @@ export class UserCommand extends BirthdayySubcommand {
 
 		const result = await getBirthdays(interaction.guild).announcedBirthday(birthday);
 
-		const content = result ? objectValues(result).join('\n') : 'Birthday Test Run';
+		const contentFromResult = result ? objectValues(result).filter(Boolean).join('\n') : '';
+		const content = contentFromResult.trim().length > 0 ? contentFromResult : 'Birthday Test Run';
 
 		return interaction.reply(interactionSuccess(content));
 	}

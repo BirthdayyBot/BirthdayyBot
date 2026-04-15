@@ -59,7 +59,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	public async embedList() {
 		const settings = await this.fetch();
 		const t = await fetchT(this.guild);
-		const embed = t('commands/config:list.embedList', {
+		const embed = t('commands/config:listEmbed', {
 			returnObjects: true,
 			defaultValue: 'null',
 			lng: this.guild.preferredLocale,

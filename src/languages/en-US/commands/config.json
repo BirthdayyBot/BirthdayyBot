@@ -3,6 +3,37 @@
     "viewDescription": "View the current configuration",
     "viewEmbedTitle": "**Current settings**:",
     "viewEmbedDescription": "Use /config edit `<config>` `<value>` to change any setting",
+    "listEmbed": {
+        "title": "Settings",
+        "description": "Current configuration for {{guild.name}}",
+        "fields": [
+            {
+                "name": "Announcement Channel",
+                "value": "{{ARROW_RIGHT}} {{settings.announcementChannel}}",
+                "inline": false
+            },
+            {
+                "name": "Birthday Role",
+                "value": "{{ARROW_RIGHT}} {{settings.birthdayRole}}",
+                "inline": false
+            },
+            {
+                "name": "Mention Role",
+                "value": "{{ARROW_RIGHT}} {{settings.birthdayPingRole}}",
+                "inline": false
+            },
+            {
+                "name": "Overview Channel",
+                "value": "{{ARROW_RIGHT}} {{settings.overviewChannel}}",
+                "inline": false
+            },
+            {
+                "name": "Timezone",
+                "value": "{{ARROW_RIGHT}} {{settings.timezone}}",
+                "inline": false
+            }
+        ]
+    },
     "viewFieldsTitles": [
         "Announcement Channel",
         "Birthday Role",

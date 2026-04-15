@@ -14,7 +14,7 @@ import {
 } from '@sapphire/discord.js-utilities';
 import { Time } from '@sapphire/duration';
 import { container } from '@sapphire/framework';
-import { resolveKey, type TOptions } from '@sapphire/plugin-i18next';
+import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { chunk, isNullOrUndefinedOrEmpty, isNullish } from '@sapphire/utilities';
 import dayjs from 'dayjs';
 import {
@@ -130,13 +130,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @param includeImage - Whether to include an image in the embed. Defaults to true.
 	 * @returns The generated embed.
 	 */
-	public generateDefaultBirthdayListEmbed(includeImage: boolean = true) {
-		const t = container.i18n.getT(this.guild.preferredLocale);
+	public async generateDefaultBirthdayListEmbed(includeImage: boolean = true) {
+		const t = await fetchT(this.guild);
 		return new EmbedBuilder()
-			.setTitle(t('commands/birthday:list.embedList.title'))
+			.setTitle(t('commands/birthday:listEmbedTitle'))
 			.setColor(ClientColor)
 			.setThumbnail(includeImage ? CdnUrls.Cake : null)
-			.setFooter({ text: t('commands/birthday:list.embedList.footer') });
+			.setFooter({ text: t('commands/birthday:listEmbedFooter') });
 	}
 
 	/**
@@ -154,7 +154,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		options?: TOptions,
 		emptyKey?: string
 	) {
-		const defaultEmbed = this.generateDefaultBirthdayListEmbed();
+		const defaultEmbed = await this.generateDefaultBirthdayListEmbed();
 
 		if (isNullOrUndefinedOrEmpty(birthdays)) {
 			const description = await resolveKey(interaction, emptyKey ?? key, options);

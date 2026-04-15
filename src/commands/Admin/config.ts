@@ -20,7 +20,6 @@ import {
 } from '@sapphire/framework';
 import {
 	applyDescriptionLocalizedBuilder,
-	applyLocalizedBuilder,
 	createLocalizedChoice,
 	fetchT,
 	type TFunction
@@ -283,7 +282,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 	}
 
 	private async parseRoleMention(role: Role, t: TFunction) {
-		if (!role.mentionable) return err(t('commands/config:editRoleMentionable', { role: roleMention(role.id) }));
+		if (!role.mentionable) return err(t('commands/config:editRoleNotMentionable', { role: roleMention(role.id) }));
 
 		return ok(role.id);
 	}
@@ -337,7 +336,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 		return applyDescriptionLocalizedBuilder(builder, 'commands/config:resetDescription')
 			.setName('reset')
 			.addStringOption((builder) =>
-				applyLocalizedBuilder(builder, 'commands/config:resetOptionsKey')
+				applyDescriptionLocalizedBuilder(builder.setName('key'), 'commands/config:resetOptionsKeyDescription')
 					.setRequired(true)
 					.setChoices(
 						createLocalizedChoice('commands/config:resetOptionsKeyChoicesAll', { value: 'all' }),
