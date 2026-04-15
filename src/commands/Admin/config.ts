@@ -321,7 +321,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 					.setName('overview-channel')
 					.addChannelTypes(ChannelType.GuildText)
 			)
-			.addIntegerOption((builder) =>
+			.addStringOption((builder) =>
 				applyDescriptionLocalizedBuilder(builder, 'commands/config:editOptionsTimezoneDescription')
 					.setName('timezone')
 					.setAutocomplete(true)
@@ -371,7 +371,7 @@ interface EditConfig {
 	birthdayRole: string | null;
 	birthdayPingRole: string | null;
 	overviewChannel: string | null;
-	timezone: number;
+	timezone: string;
 }
 
 type ResetConfig = 'all' | keyof EditConfig;

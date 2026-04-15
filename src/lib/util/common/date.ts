@@ -11,8 +11,15 @@ dayjs.extend(dayjstimezone);
 export interface TimezoneObject {
 	date: import('dayjs').Dayjs;
 	dateFormatted: string;
-	utcOffset?: keyof typeof TIMEZONE_VALUES;
-	timezone?: typeof TIMEZONE_VALUES;
+	/**
+	 * Current timezone offset in **minutes** (Dayjs-compatible).
+	 * Example: UTC-5 => -300
+	 */
+	utcOffset?: number;
+	/**
+	 * Representative IANA timezone name for this offset hour bucket.
+	 */
+	timezone?: string;
 }
 
 export function formatDateForDisplay(date: string, fromHumanFormat = false) {
@@ -68,18 +75,20 @@ export function parseInputDate(date: string | Date): Date {
 
 export function getCurrentOffset(): TimezoneObject {
 	let timezoneObject: TimezoneObject;
-	for (let offset = -11; offset <= 12; offset++) {
+	for (let offsetHours = -11; offsetHours <= 12; offsetHours++) {
+		const offsetMinutes = offsetHours * 60;
+
 		// Get the current time in the UTC offset timezone
-		const hourWithHourZero = offset === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(offset).hour();
-		const today = offset === 0 ? dayjs().tz('UTC') : dayjs().utcOffset(offset);
+		const hourWithHourZero = offsetHours === 0 ? dayjs().tz('UTC').hour() : dayjs().utcOffset(offsetMinutes).hour();
+		const today = offsetHours === 0 ? dayjs().tz('UTC') : dayjs().utcOffset(offsetMinutes);
 
 		// If the current time is 0, set the UTC offset as the hourZeroTimezone
 		if (hourWithHourZero === 0) {
 			timezoneObject = {
 				date: today,
 				dateFormatted: today.format('YYYY/MM/DD'),
-				utcOffset: offset,
-				timezone: TIMEZONE_VALUES[offset]
+				utcOffset: offsetMinutes,
+				timezone: TIMEZONE_VALUES[offsetHours]
 			};
 			return timezoneObject;
 		}

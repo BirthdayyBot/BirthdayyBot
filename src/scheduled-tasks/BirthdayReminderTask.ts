@@ -7,6 +7,7 @@ import { isCustom } from '#utils/env';
 import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
+import { normalizeGuildTimezone } from '#utils/tz';
 import type { Birthday } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -78,10 +79,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 			return channel.send({ embeds: [embed] });
 		}
-		const { dateFormatted, utcOffset, date: todaysDate } = current;
+		const { dateFormatted, utcOffset: utcOffsetMinutes, date: todaysDate } = current;
 		const dateFields = [
 			{ name: 'Date', value: inlineCode(dateFormatted), inline: true },
-			{ name: 'UTC Offset', value: inlineCode(utcOffset.toString()), inline: true }
+			{ name: 'UTC Offset', value: inlineCode(utcOffsetMinutes.toString()), inline: true }
 		];
 
 		if (isCustom) {
@@ -91,17 +92,21 @@ export class BirthdayReminderTask extends ScheduledTask {
 				select: { timezone: true }
 			});
 
-			const guildOffset = dayjs().tz(settings?.timezone).utcOffset();
-			if (guildOffset !== utcOffset) {
-				if (!guildOffset) return container.logger.error('[BirthdayTask] No Guild Offset found');
+			const normalized = normalizeGuildTimezone(settings?.timezone).timezone;
+			const guildOffsetMinutes = dayjs().tz(normalized).utcOffset();
+			if (guildOffsetMinutes !== utcOffsetMinutes) {
+				if (!guildOffsetMinutes) return container.logger.error('[BirthdayTask] No Guild Offset found');
 			}
 			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateTimezoneAndGuild(
 				todaysDate,
-				utcOffset,
+				utcOffsetMinutes,
 				envParseString('CLIENT_MAIN_GUILD')
 			);
 		} else {
-			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(todaysDate, utcOffset);
+			currentBirthdays = await container.utilities.birthday.get.BirthdayByDateAndTimezone(
+				todaysDate,
+				utcOffsetMinutes
+			);
 		}
 
 		if (!currentBirthdays.length) {
@@ -144,6 +149,14 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
+		}
+		{
+			const normalized = normalizeGuildTimezone(config.timezone);
+			if (normalized.legacyOffsetHours !== undefined) {
+				await container.utilities.guild.set.Timezone(guildId, normalized.timezone).catch((error: unknown) => {
+					container.logger.warn('[BirthdayTask] Failed to migrate legacy guild timezone', error);
+				});
+			}
 		}
 		const { announcementChannel, birthdayRole, birthdayPingRole, premium: guildIsPremium } = config;
 

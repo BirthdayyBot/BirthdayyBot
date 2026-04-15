@@ -5,6 +5,7 @@ import { formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#ut
 import { CdnUrls, ClientColor, Emojis } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
 import { isProduction } from '#utils/env';
+import { normalizeGuildTimezone } from '#utils/tz';
 import { Prisma, type Birthday, type Guild as Settings } from '@prisma/client';
 import {
 	PaginatedFieldMessageEmbed,
@@ -85,7 +86,8 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	public async getCurrentDate() {
 		const { timezone } = await this.settings.fetch();
-		return dayjs().tz(timezone);
+		// Ensure legacy offset strings never break date calculations.
+		return dayjs().tz(normalizeGuildTimezone(timezone).timezone);
 	}
 
 	/**

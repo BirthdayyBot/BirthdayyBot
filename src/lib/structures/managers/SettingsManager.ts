@@ -1,4 +1,5 @@
 import { ClientColor, Emojis } from '#utils/constants';
+import { normalizeGuildTimezone } from '#utils/tz';
 import { Prisma, type Guild } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
@@ -20,7 +21,7 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 		birthdayRole: null,
 		logChannel: null,
 		overviewChannel: null,
-		timezone: 0
+		timezone: 'UTC'
 	};
 
 	public constructor(guild: GuildDiscord) {
@@ -39,7 +40,23 @@ export class SettingsManager extends Collection<SettingsManagerFetchData, Guild>
 	}
 
 	public async fetch(): SettingsManagerReturnAsyncData {
-		return super.get(this.id) ?? this.create();
+		const existing = super.get(this.id);
+		const settings = existing ?? (await this.create());
+
+		const normalized = normalizeGuildTimezone(settings.timezone);
+		if (normalized.legacyOffsetHours !== undefined && settings.timezone !== normalized.timezone) {
+			// Persist migration in background; still return normalized value immediately.
+			void container.utilities.guild.set.Timezone(this.id, normalized.timezone).catch((error: unknown) => {
+				container.logger.warn('[SettingsManager] Failed to migrate legacy guild timezone', error);
+			});
+		}
+
+		if (settings.timezone !== normalized.timezone) {
+			const patched = { ...settings, timezone: normalized.timezone };
+			return this.insert(patched);
+		}
+
+		return settings;
 	}
 
 	public insert(entry: Nullish): null;

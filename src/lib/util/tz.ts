@@ -1,5 +1,6 @@
 import { srcFolder } from '#utils/constants';
 import { cut } from '#utils/common/strings';
+import { TIMEZONE_VALUES } from '#utils/common/timezone';
 import { readFile } from 'node:fs/promises';
 import dayjs from 'dayjs';
 import { join } from 'node:path';
@@ -66,6 +67,45 @@ export function getTimeZone(id: string) {
 	return tz.get(id.toLowerCase()) ?? null;
 }
 
+export interface NormalizedGuildTimezone {
+	timezone: string;
+	legacyOffsetHours?: number;
+}
+
+/**
+ * Normalizes a guild timezone.
+ *
+ * - Accepts IANA timezone strings (e.g. "Europe/Berlin")
+ * - Accepts legacy UTC-offset strings (e.g. "-5", "0", "12") and maps via `TIMEZONE_VALUES`
+ *
+ * Returns a valid IANA timezone string (or "UTC" as a safe fallback).
+ */
+export function normalizeGuildTimezone(input: string | null | undefined): NormalizedGuildTimezone {
+	if (!input) return { timezone: 'UTC' };
+
+	const trimmed = input.trim();
+	if (trimmed.length === 0) return { timezone: 'UTC' };
+
+	// Legacy format: "-12".."12" stored as string
+	if (/^-?\d{1,2}$/.test(trimmed)) {
+		const offsetHours = Number.parseInt(trimmed, 10);
+		if (Number.isInteger(offsetHours) && offsetHours >= -12 && offsetHours <= 12) {
+			const mapped = TIMEZONE_VALUES[offsetHours];
+			const validated = mapped && getTimeZone(mapped) ? mapped : 'UTC';
+			return { timezone: validated, legacyOffsetHours: offsetHours };
+		}
+	}
+
+	// Allow plain "UTC" regardless of tz database contents
+	if (trimmed.toUpperCase() === 'UTC') return { timezone: 'UTC' };
+
+	// Validate against bundled tz database, and return canonical casing from data.
+	const zone = getTimeZone(trimmed);
+	if (zone) return { timezone: zone.name };
+
+	return { timezone: 'UTC' };
+}
+
 export function searchTimeZone(id: string): readonly TimeZoneSearchResult[] {
 	if (id.length === 0) return defaults;
 	if (id.length > MaximumLength) return [];
@@ -92,10 +132,16 @@ function getSearchScore(id: string, key: string, value: TimeZone) {
 	return score;
 }
 
-export function getTimezoneWithOffset(offset: number) {
+/**
+ * Returns all IANA timezones whose *current* offset matches `offsetMinutes`.
+ *
+ * Note: `dayjs().tz(...).utcOffset()` returns **minutes**.
+ * Example: UTC-5 => -300
+ */
+export function getTimezoneWithOffset(offsetMinutes: number) {
 	const timezones = Array.from(tz.values()).filter((timezone) => {
-		const utcOffset = dayjs().tz(timezone.name).utcOffset();
-		return utcOffset === offset;
+		const zoneOffsetMinutes = dayjs().tz(timezone.name).utcOffset();
+		return zoneOffsetMinutes === offsetMinutes;
 	});
 	return timezones.map((timezone) => timezone.name);
 }
