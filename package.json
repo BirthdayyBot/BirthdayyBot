@@ -63,7 +63,7 @@
 		"bullmq": "^5.56.5",
 		"colorette": "^2.0.20",
 		"dayjs": "^1.11.13",
-		"discord-api-types": "^0.37.117",
+		"discord-api-types": "^0.38.46",
 		"discord.js": "^14.21.0",
 		"i18next": "25.3.2",
 		"reflect-metadata": "^0.2.2"
@@ -94,7 +94,7 @@
 	"resolutions": {
 		"@types/node": "^22.16.5",
 		"ansi-regex": "^5.0.1",
-		"discord-api-types": "^0.37.98",
+		"discord-api-types": "^0.38.46",
 		"minimist": "^1.2.8"
 	},
 	"engines": {
