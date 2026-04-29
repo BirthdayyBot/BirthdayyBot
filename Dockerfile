@@ -38,7 +38,7 @@ COPY --chown=node:node src/ src/
 COPY --chown=node:node ./prisma ./prisma
 
 RUN yarn install --immutable
-RUN yarn dlx prisma generate
+RUN yarn prisma:generate
 RUN yarn run build
 
 # ================ #
