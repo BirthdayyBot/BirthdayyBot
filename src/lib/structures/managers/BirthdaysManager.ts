@@ -1,7 +1,7 @@
 import { DefaultEmbedBuilder } from '#lib/discord';
 import { SettingsManager } from '#lib/structures/managers';
 import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
-import { formatBirthdayMessage, formatDateForDisplay, parseInputDate } from '#utils/common/index';
+import { formatBirthdayMessage, formatDateForDisplay } from '#utils/common/index';
 import { CdnUrls, ClientColor, Emojis } from '#utils/constants';
 import { interactionSuccess } from '#utils/embed';
 import { isProduction } from '#utils/env';
@@ -116,7 +116,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 * @returns An array of birthdays with the specified month.
 	 */
 	public findBirthdayWithMonth(month: number) {
-		return this.filter(({ birthday }) => parseInputDate(birthday).getMonth() + 1 === month).toJSON();
+		return this.filter(({ birthday }) => BirthdaysManager.getBirthdayParts(birthday)?.month === month).toJSON();
 	}
 
 	/**
@@ -206,12 +206,17 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	public sortBirthdaysByMonthAndDay(birthdays: Birthday[]) {
 		return birthdays.sort((firstBirthday, secondBirthday) => {
-			const firstBirthdayDate = dayjs(firstBirthday.birthday);
-			const secondBirthdayDate = dayjs(secondBirthday.birthday);
+			const firstParts = BirthdaysManager.getBirthdayParts(firstBirthday.birthday);
+			const secondParts = BirthdaysManager.getBirthdayParts(secondBirthday.birthday);
 
-			return firstBirthdayDate.month() === secondBirthdayDate.month()
-				? firstBirthdayDate.date() - secondBirthdayDate.date()
-				: firstBirthdayDate.month() - secondBirthdayDate.month();
+			// Invalid entries sort last, but remain visible (so data issues are surfaced).
+			if (!firstParts && !secondParts) return 0;
+			if (!firstParts) return 1;
+			if (!secondParts) return -1;
+
+			return firstParts.month === secondParts.month
+				? firstParts.day - secondParts.day
+				: firstParts.month - secondParts.month;
 		});
 	}
 
@@ -463,13 +468,32 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	 */
 	private formatBirthdayItem(birthday: Birthday, now: dayjs.Dayjs) {
 		// example: @Swiizyy#0001 - 30. november 2002 (21 years) :cake_birthdayy:
-		const date = dayjs(birthday.birthday.replaceAll(/-/g, '/'));
-		const age = dayjs().diff(date, 'year');
 		const formattedDate = formatDateForDisplay(birthday.birthday);
-		const ageText = age === 1 ? 'year' : 'years';
-		const ageFormatted = `${age} ${ageText}`;
-		const emoji = date.isSame(now, 'date') ? Emojis.Cake : '';
-		const text = `${userMention(birthday.userId)} - ${formattedDate} (${ageFormatted}) ${emoji}`;
+		const parts = BirthdaysManager.getBirthdayParts(birthday.birthday);
+
+		let ageSuffix = '';
+		let isToday = false;
+
+		if (parts) {
+			const safeYear = parts.year ?? 2000;
+			const stable = new Date(safeYear, parts.month - 1, parts.day);
+			const isValid = stable.getMonth() + 1 === parts.month && stable.getDate() === parts.day;
+
+			if (isValid) {
+				const date = dayjs(stable);
+				isToday = date.month() === now.month() && date.date() === now.date();
+
+				// Only show age when the year is known.
+				if (parts.year !== null) {
+					const age = dayjs().diff(date, 'year');
+					const ageText = age === 1 ? 'year' : 'years';
+					ageSuffix = ` (${age} ${ageText})`;
+				}
+			}
+		}
+
+		const emoji = isToday ? Emojis.Cake : '';
+		const text = `${userMention(birthday.userId)} - ${formattedDate}${ageSuffix} ${emoji}`;
 		return text;
 	}
 
@@ -536,5 +560,22 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 			.setThumbnail(CdnUrls.Cake);
 
 		return embed;
+	}
+
+	private static getBirthdayParts(birthday: string): { month: number; day: number; year: number | null } | null {
+		const normalized = birthday.replaceAll('/', '-');
+		const match = /^(\d{4}|XXXX)-(\d{2})-(\d{2})$/.exec(normalized);
+		if (!match) return null;
+
+		const yearRaw = match[1]!;
+		const month = Number(match[2]!);
+		const day = Number(match[3]!);
+		if (!Number.isInteger(month) || !Number.isInteger(day) || month < 1 || month > 12 || day < 1 || day > 31)
+			return null;
+
+		const year = yearRaw === 'XXXX' ? null : Number(yearRaw);
+		if (year !== null && (!Number.isInteger(year) || year < 1)) return null;
+
+		return { year, month, day };
 	}
 }

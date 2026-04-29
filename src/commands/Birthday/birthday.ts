@@ -51,7 +51,6 @@ export class UserCommand extends BirthdayySubcommand {
 		const birthdayManager = getBirthdays(interaction.guild);
 		await getBirthdays(interaction.guild).fetch();
 		const month = interaction.options.getInteger('month') ?? dayjs().month() + 1;
-
 		const birthdays = month ? birthdayManager.findBirthdayWithMonth(month) : birthdayManager.findTeenNextBirthday();
 
 		const options = { month: numberToMonthName(Number(month)), context: month ? 'month' : '' };
