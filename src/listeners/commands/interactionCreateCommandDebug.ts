@@ -40,14 +40,14 @@ export class UserListener extends Listener<typeof Events.InteractionCreate> {
 			? `${interaction.guild?.name ?? 'Unknown'}[${cyan(interaction.guildId)}]`
 			: cyan('Direct Messages');
 
-		// Always log the command. Only include full option payload when DEBUG=true.
+		// Always log the command at INFO (even in production).
+		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
+
+		// When DEBUG=true, emit additional details at DEBUG level.
 		if (DEBUG) {
 			const options = serializeChatInputOptions(interaction.options.data);
-			this.container.logger.debug(`${shard} - ${commandName} ${author} ${sentAt}\n${options}`);
-			return;
+			this.container.logger.debug(`${shard} - ${commandName} options\n${options}`);
 		}
-
-		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
 	}
 
 	private logContextMenu(interaction: ContextMenuCommandInteraction) {
@@ -59,9 +59,11 @@ export class UserListener extends Listener<typeof Events.InteractionCreate> {
 			? `${interaction.guild?.name ?? 'Unknown'}[${cyan(interaction.guildId)}]`
 			: cyan('Direct Messages');
 
+		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
+
 		if (DEBUG) {
 			this.container.logger.debug(
-				`${shard} - ${commandName} ${author} ${sentAt}\n${JSON.stringify(
+				`${shard} - ${commandName} details\n${JSON.stringify(
 					{
 						commandType: interaction.commandType,
 						targetId: interaction.targetId
@@ -70,10 +72,7 @@ export class UserListener extends Listener<typeof Events.InteractionCreate> {
 					2
 				)}`
 			);
-			return;
 		}
-
-		this.container.logger.info(`${shard} - ${commandName} ${author} ${sentAt}`);
 	}
 }
 
