@@ -25,7 +25,6 @@ import {
 	type TFunction
 } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined, isNullish } from '@sapphire/utilities';
-import { envParseString } from '@skyra/env-utilities';
 import {
 	ChannelType,
 	EmbedBuilder,
@@ -122,7 +121,10 @@ export class ConfigCommand extends BirthdayySubcommand {
 		}
 
 		const timezone = interaction.options.getString('timezone');
-		if (!isNullish(timezone)) entries.push(['timezone', timezone]);
+		if (!isNullish(timezone)) {
+			const parsed = Number.parseInt(timezone, 10);
+			if (!Number.isNaN(parsed)) entries.push(['timezone', parsed]);
+		}
 
 		return this.updateDatabase(interaction, Object.fromEntries(entries));
 	}
@@ -141,19 +143,19 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'all': {
 				const data: Partial<Guild> = {
 					announcementChannel: null,
-					announcementMessage: null,
+					announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE,
 					birthdayRole: null,
 					birthdayPingRole: null,
 					overviewChannel: null,
 					overviewMessage: null,
-					timezone: 'UTC'
+					timezone: 0
 				};
 				return this.updateDatabase(interaction, data);
 			}
 			case 'announcementChannel':
 				return this.updateDatabase(interaction, { announcementChannel: null });
 			case 'announcementMessage':
-				return this.updateDatabase(interaction, { announcementMessage: null });
+				return this.updateDatabase(interaction, { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE });
 			case 'birthdayRole':
 				return this.updateDatabase(interaction, { birthdayRole: null });
 			case 'birthdayPingRole':
@@ -161,7 +163,7 @@ export class ConfigCommand extends BirthdayySubcommand {
 			case 'overviewChannel':
 				return this.updateDatabase(interaction, { overviewChannel: null, overviewMessage: null });
 			case 'timezone':
-				return this.updateDatabase(interaction, { timezone: 'UTC' });
+				return this.updateDatabase(interaction, { timezone: 0 });
 		}
 	}
 
@@ -360,9 +362,15 @@ export class ConfigCommand extends BirthdayySubcommand {
 }
 
 export const ConfigApplicationCommandMentions = {
-	Edit: chatInputApplicationCommandMention('config', 'edit', envParseString('COMMANDS_CONFIG_ID')),
-	View: chatInputApplicationCommandMention('config', 'view', envParseString('COMMANDS_CONFIG_ID')),
-	Reset: chatInputApplicationCommandMention('config', 'reset', envParseString('COMMANDS_CONFIG_ID'))
+	Edit: process.env.COMMANDS_CONFIG_ID
+		? chatInputApplicationCommandMention('config', 'edit', process.env.COMMANDS_CONFIG_ID)
+		: inlineCode('/config edit'),
+	View: process.env.COMMANDS_CONFIG_ID
+		? chatInputApplicationCommandMention('config', 'view', process.env.COMMANDS_CONFIG_ID)
+		: inlineCode('/config view'),
+	Reset: process.env.COMMANDS_CONFIG_ID
+		? chatInputApplicationCommandMention('config', 'reset', process.env.COMMANDS_CONFIG_ID)
+		: inlineCode('/config reset')
 } as const;
 
 interface EditConfig {

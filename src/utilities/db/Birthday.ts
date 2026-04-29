@@ -1,4 +1,3 @@
-import { getTimezoneWithOffset } from '#utils/tz';
 import { container } from '@sapphire/framework';
 import { Utility } from '@sapphire/plugin-utilities-store';
 import type { Dayjs } from 'dayjs';
@@ -10,40 +9,30 @@ export class Birthday extends Utility {
 			this.prisma.birthday.findMany({ where: { birthday: { contains: date.format('-MM-DD') } } }),
 		BirthdayByDateAndTimezone: (date: Dayjs, timezoneOffsetMinutes: number) => {
 			const legacyOffsetHours = Math.trunc(timezoneOffsetMinutes / 60);
-			const legacyOffsetString = String(legacyOffsetHours);
 			return this.prisma.birthday.findMany({
 				where: {
 					birthday: { contains: date.format('-MM-DD') },
 					guild: {
-						OR: [
-							{ timezone: { in: getTimezoneWithOffset(timezoneOffsetMinutes) } },
-							{ timezone: legacyOffsetString }
-						]
+						timezone: legacyOffsetHours
 					}
 				}
 			});
 		},
 		BirthdayByDateTimezoneAndGuild: (date: Dayjs, timezoneOffsetMinutes: number, id: string) => {
 			const legacyOffsetHours = Math.trunc(timezoneOffsetMinutes / 60);
-			const legacyOffsetString = String(legacyOffsetHours);
 			return this.prisma.birthday.findMany({
 				where: {
 					birthday: { contains: date.format('-MM-DD') },
 					guild: {
 						id,
-						OR: [
-							{ timezone: { in: getTimezoneWithOffset(timezoneOffsetMinutes) } },
-							{ timezone: legacyOffsetString }
-						]
+						timezone: legacyOffsetHours
 					}
 				}
 			});
 		},
 		BirthdaysByGuildId: (guildId: string) => this.prisma.birthday.findMany({ where: { guildId } }),
 		BirthdayByUserAndGuild: (guildId: string, userId: string) =>
-			this.prisma.birthday.findUnique({
-				where: { userId_guildId: { guildId, userId } }
-			}),
+			this.prisma.birthday.findFirst({ where: { guildId, userId } }),
 		BirthdaysNotDisabled: (guildId: string) =>
 			this.prisma.birthday.findMany({ where: { guildId, disabled: false } }),
 		BirthdayCountByGuildId: (guildId: string) =>
@@ -54,22 +43,16 @@ export class Birthday extends Utility {
 
 	public update = {
 		BirthdayDisabled: (guildId: string, userId: string, disabled: boolean) =>
-			this.prisma.birthday.update({
-				where: { userId_guildId: { guildId, userId } },
-				data: { disabled }
-			}),
+			this.prisma.birthday.updateMany({ where: { guildId, userId }, data: { disabled } }),
 		BirthdayByUserAndGuild: (guildId: string, userId: string, birthday: string) =>
-			this.prisma.birthday.update({
-				where: { userId_guildId: { guildId, userId } },
-				data: { birthday }
-			})
+			this.prisma.birthday.updateMany({ where: { guildId, userId }, data: { birthday } })
 	};
 
 	public delete = {
 		GuildById: (id: string) => this.prisma.guild.delete({ where: { id } }),
 		ByDisabledGuilds: () => this.prisma.guild.deleteMany({ where: { disabled: true } }),
 		ByGuildAndUser: (guildId: string, userId: string) =>
-			this.prisma.birthday.delete({ where: { userId_guildId: { guildId, userId } } })
+			this.prisma.birthday.deleteMany({ where: { guildId, userId } })
 	};
 
 	private prisma = container.prisma;

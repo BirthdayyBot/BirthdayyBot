@@ -3,6 +3,7 @@ import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { s } from '@sapphire/shapeshift';
 import { ApplyOptions } from '@sapphire/decorators';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 
 @ApplyOptions<RouteOptions>({ name: 'guildSettingsPost', route: 'guilds/:guild/settings' })
 export class UserRoute extends Route {
@@ -36,7 +37,7 @@ export class UserRoute extends Route {
 			const data = Object.fromEntries(requestBody.data);
 			const updatedSettings = await this.container.prisma.guild.upsert({
 				where: { id: requestBody.guild_id },
-				create: { ...data, id: requestBody.guild_id },
+				create: { announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE, ...data, id: requestBody.guild_id },
 				update: data
 			});
 

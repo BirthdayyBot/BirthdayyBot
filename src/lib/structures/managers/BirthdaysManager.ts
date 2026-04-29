@@ -232,19 +232,13 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 				create: { id: args.userId }
 			});
 
-			const birthday = await container.prisma.birthday.upsert({
-				where: {
-					userId_guildId: {
-						guildId: this.guildId,
-						userId: args.userId
-					}
-				},
-				update: args,
-				create: {
-					...args,
-					guildId: this.guildId
-				}
+			const existing = await container.prisma.birthday.findFirst({
+				where: { guildId: this.guildId, userId: args.userId }
 			});
+
+			const birthday = existing
+				? await container.prisma.birthday.update({ where: { id: existing.id }, data: args })
+				: await container.prisma.birthday.create({ data: { ...args, guildId: this.guildId } });
 			await this.updateBirthdayOverview();
 			return this._cache(birthday, CacheActions.Insert);
 		} catch (error) {
@@ -262,14 +256,12 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 	public async remove(userId: string) {
 		try {
 			try {
-				const birthday = await container.prisma.birthday.delete({
-					where: {
-						userId_guildId: {
-							guildId: this.guildId,
-							userId
-						}
-					}
+				const existing = await container.prisma.birthday.findFirst({
+					where: { guildId: this.guildId, userId }
 				});
+				const birthday = existing
+					? await container.prisma.birthday.delete({ where: { id: existing.id } })
+					: null;
 				await this.updateBirthdayOverview();
 				return birthday;
 			} finally {
@@ -299,14 +291,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 
 		if (typeof id === 'string') {
 			return this._cache(
-				await container.prisma.birthday.findUniqueOrThrow({
-					where: {
-						userId_guildId: {
-							guildId: this.guildId,
-							userId: id
-						}
-					}
-				}),
+				await container.prisma.birthday.findFirstOrThrow({ where: { guildId: this.guildId, userId: id } }),
 				CacheActions.None
 			);
 		}

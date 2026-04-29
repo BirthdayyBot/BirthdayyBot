@@ -2,6 +2,7 @@ import { authenticated, canManage, ratelimit } from '#lib/api/utils';
 import { seconds } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApiRequest, ApiResponse, HttpCodes, Route, type RouteOptions } from '@sapphire/plugin-api';
+import { DEFAULT_ANNOUNCEMENT_MESSAGE } from '#root/config';
 
 @ApplyOptions<RouteOptions>({ name: 'guildSettingsGet', route: 'guilds/:guild/settings' })
 export class UserRoute extends Route {
@@ -18,6 +19,10 @@ export class UserRoute extends Route {
 
 		if (!(await canManage(guild, member))) return response.error(HttpCodes.Forbidden);
 
-		return this.container.prisma.guild.upsert({ where: { id }, create: { id }, update: {} });
+		return this.container.prisma.guild.upsert({
+			where: { id },
+			create: { id, announcementMessage: DEFAULT_ANNOUNCEMENT_MESSAGE },
+			update: {}
+		});
 	}
 }

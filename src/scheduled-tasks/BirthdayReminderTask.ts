@@ -150,14 +150,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		{
-			const normalized = normalizeGuildTimezone(config.timezone);
-			if (normalized.legacyOffsetHours !== undefined) {
-				await container.utilities.guild.set.Timezone(guildId, normalized.timezone).catch((error: unknown) => {
-					container.logger.warn('[BirthdayTask] Failed to migrate legacy guild timezone', error);
-				});
-			}
-		}
+		// Production DB stores timezone as a numeric offset hour (legacy format).
+		// Do not attempt to migrate it to an IANA string at runtime.
 		const { announcementChannel, birthdayRole, birthdayPingRole, premium: guildIsPremium } = config;
 
 		const announcementMessage = config.announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;

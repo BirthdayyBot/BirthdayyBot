@@ -80,10 +80,16 @@ export interface NormalizedGuildTimezone {
  *
  * Returns a valid IANA timezone string (or "UTC" as a safe fallback).
  */
-export function normalizeGuildTimezone(input: string | null | undefined): NormalizedGuildTimezone {
+export function normalizeGuildTimezone(input: string | number | null | undefined): NormalizedGuildTimezone {
 	if (!input) return { timezone: 'UTC' };
 
-	const trimmed = input.trim();
+	if (typeof input === 'number' && Number.isInteger(input) && input >= -12 && input <= 12) {
+		const mapped = TIMEZONE_VALUES[input];
+		const validated = mapped && getTimeZone(mapped) ? mapped : 'UTC';
+		return { timezone: validated, legacyOffsetHours: input };
+	}
+
+	const trimmed = String(input).trim();
 	if (trimmed.length === 0) return { timezone: 'UTC' };
 
 	// Legacy format: "-12".."12" stored as string
