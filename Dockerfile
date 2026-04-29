@@ -54,6 +54,7 @@ ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=4096"
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
 COPY --chown=node:node --from=builder /usr/src/app//prisma ./prisma
 COPY --chown=node:node --from=builder /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=builder /usr/src/app/src/generated/data ./src/generated/data
 RUN chown node:node /usr/src/app/
 
 USER node
