@@ -15,7 +15,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum, Result } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, resolveKey } from '@sapphire/plugin-i18next';
 import { isNullOrUndefined } from '@sapphire/utilities';
-import { envParseString } from '@skyra/env-utilities';
 import dayjs from 'dayjs';
 import {
 	ChatInputCommandInteraction,
@@ -23,7 +22,8 @@ import {
 	SlashCommandBuilder,
 	User,
 	bold,
-	chatInputApplicationCommandMention
+	chatInputApplicationCommandMention,
+	inlineCode
 } from 'discord.js';
 
 @ApplyOptions<BirthdayySubcommand.Options>({
@@ -184,9 +184,19 @@ export class UserCommand extends BirthdayySubcommand {
 }
 
 export const BirthdayApplicationCommandMentions = {
-	List: chatInputApplicationCommandMention('birthday', 'list', envParseString('COMMANDS_BIRTHDAY_ID')),
-	Set: chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID')),
-	Remove: chatInputApplicationCommandMention('birthday', 'remove', envParseString('COMMANDS_BIRTHDAY_ID')),
-	Show: chatInputApplicationCommandMention('birthday', 'show', envParseString('COMMANDS_BIRTHDAY_ID')),
-	Test: chatInputApplicationCommandMention('birthday', 'test', envParseString('COMMANDS_BIRTHDAY_ID'))
+	List: process.env.COMMANDS_BIRTHDAY_ID
+		? chatInputApplicationCommandMention('birthday', 'list', process.env.COMMANDS_BIRTHDAY_ID)
+		: inlineCode('/birthday list'),
+	Set: process.env.COMMANDS_BIRTHDAY_ID
+		? chatInputApplicationCommandMention('birthday', 'set', process.env.COMMANDS_BIRTHDAY_ID)
+		: inlineCode('/birthday set'),
+	Remove: process.env.COMMANDS_BIRTHDAY_ID
+		? chatInputApplicationCommandMention('birthday', 'remove', process.env.COMMANDS_BIRTHDAY_ID)
+		: inlineCode('/birthday remove'),
+	Show: process.env.COMMANDS_BIRTHDAY_ID
+		? chatInputApplicationCommandMention('birthday', 'show', process.env.COMMANDS_BIRTHDAY_ID)
+		: inlineCode('/birthday show'),
+	Test: process.env.COMMANDS_BIRTHDAY_ID
+		? chatInputApplicationCommandMention('birthday', 'test', process.env.COMMANDS_BIRTHDAY_ID)
+		: inlineCode('/birthday test')
 } as const;

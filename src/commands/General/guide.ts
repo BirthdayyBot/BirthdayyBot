@@ -4,8 +4,7 @@ import { ClientColor } from '#utils/constants';
 import { getActionRow, getDocumentationComponent, getInviteComponent } from '#utils/functions';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { applyDescriptionLocalizedBuilder, fetchT, type TFunction } from '@sapphire/plugin-i18next';
-import { envParseString } from '@skyra/env-utilities';
-import { chatInputApplicationCommandMention, EmbedBuilder } from 'discord.js';
+import { chatInputApplicationCommandMention, EmbedBuilder, inlineCode } from 'discord.js';
 
 export class GuideCommand extends BirthdayyCommand {
 	public override async registerApplicationCommands(registry: ApplicationCommandRegistry) {
@@ -29,7 +28,9 @@ export class GuideCommand extends BirthdayyCommand {
 	}
 
 	private getStartedField(t: TFunction) {
-		const command = chatInputApplicationCommandMention('birthday', 'set', envParseString('COMMANDS_BIRTHDAY_ID'));
+		const command = process.env.COMMANDS_BIRTHDAY_ID
+			? chatInputApplicationCommandMention('birthday', 'set', process.env.COMMANDS_BIRTHDAY_ID)
+			: inlineCode('/birthday set');
 		return {
 			name: t('commands/general:guideEmbedFieldsStartedTitle'),
 			value: t('commands/general:guideEmbedFieldsStartedValue', { command })
