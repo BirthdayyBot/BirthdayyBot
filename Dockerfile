@@ -40,6 +40,7 @@ COPY --chown=node:node ./prisma ./prisma
 RUN yarn install --immutable
 RUN yarn prisma:generate
 RUN yarn run build
+RUN yarn workspaces focus --all --production
 
 # ================ #
 #   Runner Stage   #
@@ -52,11 +53,7 @@ ENV NODE_OPTIONS="--enable-source-maps --max_old_space_size=4096"
 
 COPY --chown=node:node --from=builder /usr/src/app/dist dist
 COPY --chown=node:node --from=builder /usr/src/app//prisma ./prisma
-COPY --chown=node:node --from=builder /usr/src/app/node_modules/@prisma/client/ ./node_modules/@prisma/client/
-COPY --chown=node:node --from=builder /usr/src/app/node_modules/.prisma/client/ ./node_modules/.prisma/client/
-
-
-RUN yarn workspaces focus --all --production
+COPY --chown=node:node --from=builder /usr/src/app/node_modules ./node_modules
 RUN chown node:node /usr/src/app/
 
 USER node
