@@ -27,6 +27,9 @@
 	"scripts": {
 		"build": "tsc -b src",
 		"dev": "yarn build && yarn start",
+		"dev:infra": "sh -lc 'podman compose -f docker-compose.dev.yml up -d || podman-compose -f docker-compose.dev.yml up -d'",
+		"dev:prisma": "yarn prisma:generate",
+		"dev:bot": "doppler run -- yarn dev",
 		"watch": "tsc -b src -w",
 		"watch:start": "tsc-watch -b src --onSuccess \"yarn start\"",
 		"clean": "node scripts/clean.mjs",
@@ -37,8 +40,9 @@
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
 		"update": "yarn upgrade-interactive",
-		"prisma:generate": "npx prisma generate",
-		"prisma:migrate": "npx prisma migrate dev",
+		"prisma:generate": "doppler run -- npx prisma generate",
+		"prisma:push": "doppler run -- npx prisma db push",
+		"prisma:migrate": "doppler run -- npx prisma migrate dev",
 		"prisma:studio": "doppler run -- npx prisma studio"
 	},
 	"dependencies": {

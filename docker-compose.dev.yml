@@ -1,0 +1,38 @@
+services:
+  mysql:
+    image: mysql:8.4.0
+    container_name: birthdayy-mysql-local
+    environment:
+      MYSQL_DATABASE: birthdayy
+      MYSQL_USER: birthdayy
+      MYSQL_PASSWORD: birthdayy
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-dev-data-local:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1', '-uroot', '-proot']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    container_name: birthdayy-redis-local
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-dev-data-local:/data
+    command: ['redis-server', '--appendonly', 'yes']
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  mysql-dev-data-local:
+  redis-dev-data-local:
