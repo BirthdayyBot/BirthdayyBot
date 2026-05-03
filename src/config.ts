@@ -258,12 +258,37 @@ export const CLIENT_OPTIONS: ClientOptions = {
 		level: envParseString('NODE_ENV') === 'production' ? LogLevel.Info : LogLevel.Debug
 	},
 	shards: 'auto',
-	makeCache: Options.cacheEverything(),
+	makeCache: Options.cacheWithLimits({
+		// Channels and roles: kept (needed for announcements and birthday role assignment)
+		// GuildMemberManager: unlimited — GuildMemberFetchQueue populates this on startup;
+		// the API route (user.get.ts) also relies on cache.has() for guild membership checks.
+		// A sweeper below evicts non-bot members to reclaim memory over time.
+		GuildMemberManager: Infinity,
+		MessageManager: 50,
+		// Not used by this bot (no matching intents or no code references):
+		PresenceManager: 0,
+		VoiceStateManager: 0,
+		GuildBanManager: 0,
+		GuildStickerManager: 0,
+		GuildScheduledEventManager: 0,
+		StageInstanceManager: 0,
+		AutoModerationRuleManager: 0,
+		ThreadMemberManager: 0,
+		ReactionManager: 0,
+		ReactionUserManager: 0
+	}),
 	sweepers: {
 		...Options.DefaultSweeperSettings,
 		messages: {
 			interval: minutes.toSeconds(3),
 			lifetime: minutes.toSeconds(15)
+		},
+		// Evict non-bot members every 30 min; the birthday task fetches them on demand anyway.
+		// Note: user.get.ts uses cache.has() — if the API route is active, it may return
+		// incomplete guild lists for users swept before their next interaction.
+		guildMembers: {
+			interval: minutes.toSeconds(30),
+			filter: () => (member) => member.id !== member.client.user?.id
 		}
 	},
 	i18n: parseInternationalizationOptions(),

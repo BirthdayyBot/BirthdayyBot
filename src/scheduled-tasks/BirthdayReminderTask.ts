@@ -8,7 +8,7 @@ import { BOT_ADMIN_LOG, DEBUG } from '#utils/environment';
 import { getBirthdays } from '#utils/functions/guilds';
 import { floatPromise, resolveOnErrorCodesDiscord } from '#utils/functions/promises';
 import { normalizeGuildTimezone } from '#utils/tz';
-import type { Birthday } from '@prisma/client';
+import type { Birthday, Prisma } from '@prisma/client';
 import type { PrismaClientUnknownRequestError } from '@prisma/client/runtime/library.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { isGuildBasedChannel, isTextBasedChannel } from '@sapphire/discord.js-utilities';
@@ -34,6 +34,22 @@ import {
 	type Snowflake
 } from 'discord.js';
 
+const guildConfigSelect = {
+	id: true,
+	birthdayRole: true,
+	birthdayPingRole: true,
+	announcementChannel: true,
+	announcementMessage: true,
+	overviewChannel: true,
+	logChannel: true,
+	overviewMessage: true,
+	timezone: true,
+	language: true,
+	premium: true
+} satisfies Prisma.GuildSelect;
+
+type GuildConfig = Prisma.GuildGetPayload<{ select: typeof guildConfigSelect }>;
+
 export interface BirthdayEventInfoModel {
 	userId: string;
 	guildId: string;
@@ -51,8 +67,10 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return birthdays.announcedBirthday(await birthdays.fetch(payload.userId));
 		}
 
-		for (const [, guild] of await container.client.guilds.fetch()) {
-			floatPromise(getBirthdays(guild.id).announcedTodayBirthday());
+		const guilds = [...(await container.client.guilds.fetch()).values()];
+		for (let i = 0; i < guilds.length; i += 10) {
+			const batch = guilds.slice(i, i + 10);
+			await Promise.all(batch.map((g) => floatPromise(getBirthdays(g.id).announcedTodayBirthday())));
 		}
 		return null;
 	}
@@ -128,30 +146,93 @@ export class BirthdayReminderTask extends ScheduledTask {
 	}
 
 	private async birthdayReminderLoop(birthdays: Birthday[]): Promise<BirthdayEventInfoModel[]> {
-		const eventInfos = [];
+		if (DEBUG) container.logger.debug(`[BirthdayTask] Processing ${birthdays.length} birthday(s)`);
+
+		// 1 query for all guild configs instead of N queries (N+1 → 1)
+		const guildIds = [...new Set(birthdays.map((b) => b.guildId))];
+		const configs = await container.prisma.guild.findMany({
+			where: { id: { in: guildIds } },
+			select: guildConfigSelect
+		});
+		const configMap = new Map(configs.map((c) => [c.id, c]));
+
+		// Group birthdays by guild so we fetch each Guild object only once
+		const byGuild = new Map<string, Birthday[]>();
 		for (const birthday of birthdays) {
-			if (DEBUG)
-				container.logger.debug(
-					`[BirthdayTask] Birthday loop: ${birthdays.indexOf(birthday) + 1}/${birthdays.length}`
-				);
-			const eventInfo = await this.birthdayEvent(birthday.userId, birthday.guildId, false);
-			eventInfos.push(eventInfo);
+			const arr = byGuild.get(birthday.guildId) ?? [];
+			arr.push(birthday);
+			byGuild.set(birthday.guildId, arr);
 		}
-		return eventInfos;
+
+		const results = await Promise.all(
+			[...byGuild.entries()].map(([guildId, gBirthdays]) =>
+				this.processGuildBirthdays(guildId, gBirthdays, configMap.get(guildId) ?? null)
+			)
+		);
+		return results.flat();
 	}
 
-	private async birthdayEvent(userId: string, guildId: string, isTest: boolean): Promise<BirthdayEventInfoModel> {
+	private async processGuildBirthdays(
+		guildId: string,
+		birthdays: Birthday[],
+		config: GuildConfig | null
+	): Promise<BirthdayEventInfoModel[]> {
+		if (!config) {
+			return birthdays.map((b) => ({ userId: b.userId, guildId, error: 'Guild Config not found' }));
+		}
+
+		// Fetch the Discord Guild once for all birthdays in this guild
+		const guild = await resolveOnErrorCodesDiscord(
+			container.client.guilds.fetch(guildId),
+			RESTJSONErrorCodes.UnknownGuild
+		);
+
+		if (!guild) {
+			const eventInfos: BirthdayEventInfoModel[] = birthdays.map((b) => ({
+				userId: b.userId,
+				guildId,
+				error: 'Guild not found'
+			}));
+			if (!config.premium) {
+				// TODO: Clean up in #407
+				await container.utilities.guild.update
+					.DisableGuildAndBirthdays(guildId, true)
+					.catch((error: PrismaClientUnknownRequestError) => {
+						container.logger.error('[BirthdayTask] Error disabling guild and birthdays', error);
+					});
+				for (const e of eventInfos) e.error += ' - Guild & Birthdays disabled';
+			}
+			return eventInfos;
+		}
+
+		// Fetch the bot's own member once per guild (needed for role position checks)
+		const me = await guild.members.fetchMe().catch(() => null);
+
+		// Process all birthdays in this guild in parallel (member fetches are per-user)
+		return Promise.all(
+			birthdays.map((birthday) => this.birthdayEvent(birthday.userId, guildId, false, config, guild, me))
+		);
+	}
+
+	private async birthdayEvent(
+		userId: string,
+		guildId: string,
+		isTest: boolean,
+		prefetchedConfig?: GuildConfig | null,
+		prefetchedGuild?: Guild | null,
+		prefetchedMe?: GuildMember | null
+	): Promise<BirthdayEventInfoModel> {
 		const eventInfo: BirthdayEventInfoModel = {
 			userId,
 			guildId
 		};
-		const config = await container.utilities.guild.get.GuildConfig(guildId);
+		// Production DB stores timezone as a numeric offset hour (legacy format).
+		// Do not attempt to migrate it to an IANA string at runtime.
+		const config = prefetchedConfig ?? (await container.utilities.guild.get.GuildConfig(guildId));
 		if (!config) {
 			eventInfo.error = 'Guild Config not found';
 			return eventInfo;
 		}
-		// Production DB stores timezone as a numeric offset hour (legacy format).
-		// Do not attempt to migrate it to an IANA string at runtime.
 		const { announcementChannel, birthdayRole, birthdayPingRole, premium: guildIsPremium } = config;
 
 		const announcementMessage = config.announcementMessage ?? DEFAULT_ANNOUNCEMENT_MESSAGE;
@@ -160,10 +241,9 @@ export class BirthdayReminderTask extends ScheduledTask {
 		if (birthdayPingRole) content = roleMention(birthdayPingRole);
 		if (birthdayPingRole === guildId) content = '@everyone';
 
-		const guild = await resolveOnErrorCodesDiscord(
-			container.client.guilds.fetch(guildId),
-			RESTJSONErrorCodes.UnknownGuild
-		);
+		const guild =
+			prefetchedGuild ??
+			(await resolveOnErrorCodesDiscord(container.client.guilds.fetch(guildId), RESTJSONErrorCodes.UnknownGuild));
 
 		if (!guild) {
 			eventInfo.error = 'Guild not found';
@@ -202,7 +282,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 
 		if (birthdayRole) {
 			const payload = { guildID: guild.id, userID: member.id, roleID: birthdayRole };
-			eventInfo.birthday_role = await this.handleRole(payload, member, birthdayRole, isTest);
+			eventInfo.birthday_role = await this.handleRole(payload, member, birthdayRole, isTest, prefetchedMe);
 		}
 
 		if (!announcementChannel) {
@@ -231,7 +311,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 		data: RemoveBirthdayRoleData,
 		member: GuildMember,
 		roleId: string | Nullish,
-		isTest: boolean
+		isTest: boolean,
+		prefetchedMe?: GuildMember | null
 	): Promise<{ added: boolean; message: string }> {
 		if (isNullish(roleId)) return { added: false, message: 'Role not set' };
 
@@ -246,7 +327,7 @@ export class BirthdayReminderTask extends ScheduledTask {
 			return { added: false, message: 'Role not found' };
 		}
 
-		const me = await member.guild.members.fetchMe();
+		const me = prefetchedMe ?? (await member.guild.members.fetchMe());
 
 		// If the role can be given, add it to the user:
 		if (me.roles.highest.position > role.position) {
@@ -289,7 +370,8 @@ export class BirthdayReminderTask extends ScheduledTask {
 			message: 'Not set'
 		};
 		try {
-			const channel = await container.client.channels.fetch(channel_id);
+			const channel =
+				container.client.channels.cache.get(channel_id) ?? (await container.client.channels.fetch(channel_id));
 			if (!isTextBasedChannel(channel)) {
 				returnData.message = 'Channel not Text Based';
 				return returnData;

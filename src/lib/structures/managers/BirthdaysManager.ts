@@ -172,7 +172,7 @@ export class BirthdaysManager extends Collection<string, Birthday> {
 		const now = await this.getCurrentDate().catch(() => dayjs());
 
 		const paginatedBirthdays = new PaginatedFieldMessageEmbed<Birthday>()
-			.setTemplate(defaultEmbed.toJSON())
+			.setTemplate(defaultEmbed)
 			.setTitleField(await resolveKey(interaction, key, options))
 			.setItems(this.sortBirthdaysByMonthAndDay(birthdays))
 			.formatItems((birthday) => this.formatBirthdayItem(birthday, now))

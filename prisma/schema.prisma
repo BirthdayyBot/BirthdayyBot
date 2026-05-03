@@ -21,6 +21,8 @@ model Birthday {
     @@index([userId])
     @@index([guildId])
     @@index([birthday])
+    @@index([birthday, guildId])
+    @@index([birthday, disabled])
     @@map("birthday")
 }
 
