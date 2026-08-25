@@ -99,7 +99,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.8.1"
     "@commitlint/config-conventional": "npm:^19.8.1"
     "@influxdata/influxdb-client": "npm:^1.35.0"
-    "@prisma/client": "npm:^6.12.0"
+    "@prisma/client": "npm:^7.10.0"
     "@sapphire/async-queue": "npm:^1.5.5"
     "@sapphire/cli": "npm:^1.9.3"
     "@sapphire/decorators": "npm:^6.2.0"
@@ -1237,18 +1237,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^6.12.0":
-  version: 6.12.0
-  resolution: "@prisma/client@npm:6.12.0"
+"@prisma/client-runtime-utils@npm:7.10.0":
+  version: 7.10.0
+  resolution: "@prisma/client-runtime-utils@npm:7.10.0"
+  checksum: 10/f802d31e0b4bcc563a78a5fe5e5577018e0ce97a18f1846654a0505a536e80e2641a5e3cfa260ee00a2bcfe12430e0a26cbcbe2f4082434e7e0bb794251fb05f
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:^7.10.0":
+  version: 7.10.0
+  resolution: "@prisma/client@npm:7.10.0"
+  dependencies:
+    "@prisma/client-runtime-utils": "npm:7.10.0"
   peerDependencies:
     prisma: "*"
-    typescript: ">=5.1.0"
+    typescript: ">=5.4.0"
   peerDependenciesMeta:
     prisma:
       optional: true
     typescript:
       optional: true
-  checksum: 10/d17af2c64352018d715003d4bc27cfb50ed089ea82b940a82a67964589a95718e9930c99f7d3b42c30c6c3e3388a75d0f58f1b8fcce54baab62410f46b17eee1
+  checksum: 10/9dae91743d5948340ad990ed49531cabfad694870e1668f9ca16415ab9d68462dbb6e1640fbbdeb1877b066dff63d4f86aa1089df0787976014d42ff31d06c4e
   languageName: node
   linkType: hard
 
