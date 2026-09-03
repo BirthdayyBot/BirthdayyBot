@@ -2,7 +2,7 @@ services:
   influx:
     command: 'influxd run --bolt-path /var/lib/influxdb2/influxd.bolt --engine-path /var/lib/influxdb2/engine --store bolt'
     container_name: influxdb
-    image: 'influxdb:2.7-alpine'
+    image: 'influxdb:2.9-alpine'
     networks:
       - birthdayy
     ports:
@@ -18,7 +18,7 @@ services:
   ## To be deleted when switching from MySQL to PostgreSQL
   mysql:
     container_name: mysql
-    image: 'mysql:9.3'
+    image: 'mysql:9.7'
     networks:
       - birthdayy
     ports:
