@@ -135,7 +135,7 @@ __metadata:
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-prettier: "npm:^5.5.3"
-    i18next: "npm:25.3.2"
+    i18next: "npm:26.4.2"
     lint-staged: "npm:^16.1.2"
     prettier: "npm:^3.6.2"
     prisma: "npm:^6.12.0"
@@ -3669,7 +3669,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:25.3.2, i18next@npm:^25.1.2":
+"i18next@npm:26.4.2":
+  version: 26.4.2
+  resolution: "i18next@npm:26.4.2"
+  peerDependencies:
+    typescript: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10/7cf060a81682a63d0900c584b03a25557da88afcefebca613ca24c2a1af1322cdf606ba3dffa2d3900b3cf0fa6c3a945d89a0e50517d1b76ac5acb070ac76173
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^25.1.2":
   version: 25.3.2
   resolution: "i18next@npm:25.3.2"
   dependencies:
