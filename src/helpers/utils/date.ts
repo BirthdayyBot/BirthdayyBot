@@ -83,8 +83,24 @@ export function extractDayAndMonth(inputDate: string) {
 }
 
 export function isDateString(date: string): boolean {
-	const regex = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
-	return regex.test(date);
+    const regex = /^(\d{4}|X{4})-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/;
+
+    if (!regex.test(date)) {
+        return false;
+    }
+
+    const [yearString, monthString, dayString] = date.split('-');
+    const year = yearString === 'XXXX' ? 2000 : Number(yearString);
+    const month = Number(monthString);
+    const day = Number(dayString);
+
+    const validationDate = new Date(year, month - 1, day);
+
+    return (
+        validationDate.getFullYear() === year &&
+        validationDate.getMonth() + 1 === month &&
+        validationDate.getDate() === day
+    );
 }
 
 export const TIMEZONE_VALUES: Record<number, string> = {
